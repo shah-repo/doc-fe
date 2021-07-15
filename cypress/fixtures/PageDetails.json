@@ -1,368 +1,324 @@
 {
   "pageDetails": [
     {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2020-09-07T08:38:37.765Z",
-    "id": "c25f3a8f-e32f-4b05-9b43-0b98f2241af1",
-    "category": "Parts",
-    "addNewBtnLabel": "Add new Part",
-    "columns": []
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2020-09-07T08:38:37.765Z",
-    "id": "2abf1482-ed4a-45de-a6fa-417877d7c400",
-    "category": "Receive",
-    "addNewBtnLabel": "Add new Receiving",
-    "columns": []
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2020-09-07T08:38:37.765Z",
-    "id": "f6cb39ec-c034-4a47-b876-a8f1dd4451dc",
-    "category": "Work Order",
-    "addNewBtnLabel": "Add new Work Order",
-    "columns": []
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2021-02-11T11:34:23.219Z",
-    "id": "683fc6d9-c6de-4ce9-8455-cc339a78fb0d",
-    "category": "Purchase Order",
-    "addNewBtnLabel": "Add new Purchase Order",
-    "columns": [
-      {
-        "label": "PO #",
-        "showOnWeb": true,
-        "fieldName": "irrelevant",
-        "valuePath": "document.docId",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "DOCUMENT_REVISION_VERSION",
-        "label": "Version",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.version",
-        "sourcePath": "revisionStage:revision",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "PO_STATUS_FROM_PURCHASE_ORDER",
-        "label": "PO Status",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.po_status",
-        "sourcePath": "formDocument.formTemplate.schema",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "SUPPLIER_NAME_FROM_PURCHASE_ORDER",
-        "label": "Supplier",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.supplier",
-        "sourcePath": "formDocument.formTemplate.schema",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "PO_PART_NUMBER_FROM_PURCHASE_ORDER",
-        "label": "Part Number",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.po_partNumber",
-        "sourcePath": "formDocument.formTemplate.schema",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "PO_AMOUNT_FROM_PURCHASE_ORDER",
-        "label": "Amount",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.po_amount",
-        "sourcePath": "formDocument.formTemplate.schema",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Requestor",
-        "showOnWeb": true,
-        "fieldName": "irrelevant",
-        "valuePath": "owner.user.name",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "EFFECTIVE_DATE_AS_ISSUE_DATE",
-        "label": "Issue Date",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.issueDate",
-        "sourcePath": "changeRequest.effectiveDate",
-        "showOnAndroid": true
-      }
-    ]
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2021-02-11T11:34:23.219Z",
-    "id": "85c6838f-3e62-40e8-8e35-95fa320b78a9",
-    "category": "Lot",
-    "addNewBtnLabel": "Add new Lot",
-    "columns": [
-      {
-        "fn": "WORK_ORDER_DOCID_FROM_REFERENCES",
-        "label": "WOID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.wo_id",
-        "sourcePath": "referenceTo",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "DOC_ID_FROM_AUTOCOMPLETE",
-        "label": "P/N",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.lhr_subassembly",
-        "sourcePath": "formInput.lhr_subassembly",
-        "showOnAndroid": true
-      },
-      {
-        "label": "QTY",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "formInput.lhr_initial_quantity",
-        "sourcePath": "formInput.lhr_initial_quantity",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "WORK_ORDER_PRIORITY_FROM_REFERENCES",
-        "label": "Status",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.wo_priority",
-        "sourcePath": "referenceTo",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "USER_NAMES_FROM_LIST_OF_EMPLOYEES",
-        "label": "Assigned To",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.operators",
-        "sourcePath": "document.operators",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "WORK_ORDER_STATUS_FROM_REFERENCES",
-        "label": "Status",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.wo_status",
-        "sourcePath": "referenceTo",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "WORK_ORDER_DUE_DATE_FROM_REFERENCES",
-        "label": "Due Date",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.wo_due_date",
-        "sourcePath": "referenceTo",
-        "showOnAndroid": true
-      }
-    ]
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2021-02-11T11:34:23.219Z",
-    "id": "7aae7c1e-2c7d-4921-b8dc-75070fd2f735",
-    "category": "Record",
-    "addNewBtnLabel": "Create a record",
-    "columns": [
-      {
-        "label": "ID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "document.docId",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "DOCUMENT_REVISION_VERSION",
-        "label": "Revision",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.revision",
-        "sourcePath": "revisionStage:revision",
-        "showOnAndroid": true
-      },
-      {
-        "label": "State",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "status",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Title",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "name",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Owner",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "owner.user.name",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Release Date",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "releasedAt",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "FORM_DOC_ID",
-        "label": "Form ID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.formDocId",
-        "sourcePath": "irrelevant",
-        "showOnAndroid": true
-      }
-    ]
-  },
-  {
-    "createdAt": "2020-09-07T08:38:37.765Z",
-    "updatedAt": "2021-02-11T11:34:23.219Z",
-    "id": "5a2f6384-a4a7-46b1-9f4e-4b31b1b86214",
-    "category": "Supplier",
-    "addNewBtnLabel": "Add Supplier",
-    "columns": [
-      {
-        "label": "Supplier ID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "document.docId",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Supplier Name",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "name",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Supplier Level",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "formInput.supplier-level-khcjco9j",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Supplier Status",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "formInput.is-this-supplier-ready-to-be-evaluated-khl6f3we",
-        "showOnAndroid": true
-      },
-      {
-        "label": "State",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "displayStatus",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Owner",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "owner.user.name",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Approval ID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "changeRequest.crId",
-        "showOnAndroid": true
-      }
-    ]
-  },
-  {
-    "createdAt": "2020-11-24T10:30:28.447Z",
-    "updatedAt": "2021-02-11T11:34:23.219Z",
-    "id": "9da13b80-84e4-4564-9a7b-440503d9d8b1",
-    "category": "Equipment",
-    "addNewBtnLabel": "Add new Equipment",
-    "columns": [
-      {
-        "label": "ID",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "document.docId",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "DOCUMENT_REVISION_VERSION",
-        "label": "Revision",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.revision",
-        "sourcePath": "revisionStage:revision",
-        "showOnAndroid": true
-      },
-      {
-        "label": "State",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "status",
-        "showOnAndroid": true
-      },
-      {
-        "label": "Title",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "name",
-        "showOnAndroid": true
-      },
-      {
-        "label": "EFT Owner",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "owner.user.name",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "CALIBRATION_DUE_DATE_EQ",
-        "label": "Cal Due Date",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.cali_due_date",
-        "sourcePath": "irrelevant",
-        "showOnAndroid": true
-      },
-      {
-        "fn": "PM_DUE_DATE_EQ",
-        "label": "PM Due Date",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "precalc.pm_due_date",
-        "sourcePath": "irrelevant",
-        "showOnAndroid": true
-      },
-      {
-        "label": "EQ Status",
-        "fieldName": "irrelevant",
-        "showOnWeb": true,
-        "valuePath": "formInput.fb-default-eq-status",
-        "sourcePath": "formInput.fb-default-eq-status",
-        "showOnAndroid": true
-      }
-    ]
-  }
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2020-09-07T08:38:37.765Z",
+      "id": "c25f3a8f-e32f-4b05-9b43-0b98f2241af1",
+      "category": "Parts",
+      "addNewBtnLabel": "Add new Part",
+      "columns": []
+    },
+    {
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2020-09-07T08:38:37.765Z",
+      "id": "2abf1482-ed4a-45de-a6fa-417877d7c400",
+      "category": "Receive",
+      "addNewBtnLabel": "Add new Receiving",
+      "columns": []
+    },
+    {
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2021-02-11T11:34:23.219Z",
+      "id": "683fc6d9-c6de-4ce9-8455-cc339a78fb0d",
+      "category": "Purchase Order",
+      "addNewBtnLabel": "Add new Purchase Order",
+      "columns": [
+        {
+          "label": "PO #",
+          "showOnWeb": true,
+          "fieldName": "irrelevant",
+          "valuePath": "document.docId",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "DOCUMENT_REVISION_VERSION",
+          "label": "Version",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.version",
+          "sourcePath": "revisionStage:revision",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "PO_STATUS_FROM_PURCHASE_ORDER",
+          "label": "PO Status",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.po_status",
+          "sourcePath": "formDocument.formTemplate.schema",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "SUPPLIER_NAME_FROM_PURCHASE_ORDER",
+          "label": "Supplier",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.supplier",
+          "sourcePath": "formDocument.formTemplate.schema",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "PO_PART_NUMBER_FROM_PURCHASE_ORDER",
+          "label": "Part Number",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.po_partNumber",
+          "sourcePath": "formDocument.formTemplate.schema",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "PO_AMOUNT_FROM_PURCHASE_ORDER",
+          "label": "Amount",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.po_amount",
+          "sourcePath": "formDocument.formTemplate.schema",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Requestor",
+          "showOnWeb": true,
+          "fieldName": "irrelevant",
+          "valuePath": "owner.user.name",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "EFFECTIVE_DATE_AS_ISSUE_DATE",
+          "label": "Issue Date",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.issueDate",
+          "sourcePath": "changeRequest.effectiveDate",
+          "showOnAndroid": true
+        }
+      ]
+    },
+    {
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2021-02-11T11:34:23.219Z",
+      "id": "85c6838f-3e62-40e8-8e35-95fa320b78a9",
+      "category": "Lot",
+      "addNewBtnLabel": "Add new Lot",
+      "columns": [
+        {
+          "fn": "DOC_ID_FROM_AUTOCOMPLETE",
+          "label": "P/N",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.lhr_subassembly",
+          "sourcePath": "formInput.lhr_subassembly",
+          "showOnAndroid": true
+        },
+        {
+          "label": "QTY",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "formInput.lhr_initial_quantity",
+          "sourcePath": "formInput.lhr_initial_quantity",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "USER_NAMES_FROM_LIST_OF_EMPLOYEES",
+          "label": "Assigned To",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.operators",
+          "sourcePath": "document.operators",
+          "showOnAndroid": true
+        }
+      ]
+    },
+    {
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2021-02-11T11:34:23.219Z",
+      "id": "7aae7c1e-2c7d-4921-b8dc-75070fd2f735",
+      "category": "Record",
+      "addNewBtnLabel": "Create a record",
+      "columns": [
+        {
+          "label": "ID",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "document.docId",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "DOCUMENT_REVISION_VERSION",
+          "label": "Revision",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.revision",
+          "sourcePath": "revisionStage:revision",
+          "showOnAndroid": true
+        },
+        {
+          "label": "State",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "status",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Title",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "name",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Owner",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "owner.user.name",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Release Date",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "releasedAt",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "FORM_DOC_ID",
+          "label": "Form ID",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.formDocId",
+          "sourcePath": "irrelevant",
+          "showOnAndroid": true
+        }
+      ]
+    },
+    {
+      "createdAt": "2020-09-07T08:38:37.765Z",
+      "updatedAt": "2021-02-11T11:34:23.219Z",
+      "id": "5a2f6384-a4a7-46b1-9f4e-4b31b1b86214",
+      "category": "Supplier",
+      "addNewBtnLabel": "Add Supplier",
+      "columns": [
+        {
+          "label": "Supplier ID",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "document.docId",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Supplier Name",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "name",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Supplier Level",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "formInput.supplier-level-khcjco9j",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Supplier Status",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "formInput.is-this-supplier-ready-to-be-evaluated-khl6f3we",
+          "showOnAndroid": true
+        },
+        {
+          "label": "State",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "displayStatus",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Owner",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "owner.user.name",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Approval ID",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "changeRequest.crId",
+          "showOnAndroid": true
+        }
+      ]
+    },
+    {
+      "createdAt": "2020-11-24T10:30:28.447Z",
+      "updatedAt": "2021-02-11T11:34:23.219Z",
+      "id": "9da13b80-84e4-4564-9a7b-440503d9d8b1",
+      "category": "Equipment",
+      "addNewBtnLabel": "Add new Equipment",
+      "columns": [
+        {
+          "label": "ID",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "document.docId",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "DOCUMENT_REVISION_VERSION",
+          "label": "Revision",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.revision",
+          "sourcePath": "revisionStage:revision",
+          "showOnAndroid": true
+        },
+        {
+          "label": "State",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "status",
+          "showOnAndroid": true
+        },
+        {
+          "label": "Title",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "name",
+          "showOnAndroid": true
+        },
+        {
+          "label": "EFT Owner",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "owner.user.name",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "CALIBRATION_DUE_DATE_EQ",
+          "label": "Cal Due Date",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.cali_due_date",
+          "sourcePath": "irrelevant",
+          "showOnAndroid": true
+        },
+        {
+          "fn": "PM_DUE_DATE_EQ",
+          "label": "PM Due Date",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "precalc.pm_due_date",
+          "sourcePath": "irrelevant",
+          "showOnAndroid": true
+        },
+        {
+          "label": "EQ Status",
+          "fieldName": "irrelevant",
+          "showOnWeb": true,
+          "valuePath": "formInput.fb-default-eq-status",
+          "sourcePath": "formInput.fb-default-eq-status",
+          "showOnAndroid": true
+        }
+      ]
+    }
   ]
 }

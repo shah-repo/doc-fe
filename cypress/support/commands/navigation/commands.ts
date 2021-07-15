@@ -156,7 +156,6 @@ Cypress.Commands.add("navigToWorkOrders", () => {
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.MANUFACTURING,
-      NavigationItems.WORK_ORDERS,
     ],
   });
 });
