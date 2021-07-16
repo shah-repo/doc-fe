@@ -828,7 +828,10 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New document from form description" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drEnterDocumentDescription({ description: "New document from form description" });
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Fill TextField and check for autosave", () => {
