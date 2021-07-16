@@ -159,7 +159,6 @@ UN-0090,REQ-2670,Part 11 Compliance,Audit trail,"The system shall use of secure,
 UN-0090,REQ-2680,Part 11 Compliance,Audit trail,The audit trail shall ensure that previously recorded information are not deleted or obscured and available for review through revision history
 UN-0090,REQ-2690,Part 11 Compliance,Retention of records,The audit trail documentation shall be retained for a period at least as long as that required for the subject electronic records.
 UN-0001,REQ-3920,Part 11 Compliance,Audit trail and e-signatures,"The System shall provide the ability to produce the entire content of the record in human-readable form, ielectronic signatures."
-,,,,add audit trails as a future enhancement.
 UN-0001,REQ-3930,Part 11 Compliance,Authorised user access,The system shall restrict access to authorized users.
 UN-0001,REQ-3940,Part 11 Compliance,Unique ID enforcement,"The system shall enforce unique User IDs or a similarly secure mechanism (e.g., fingerprint)."
 UN-0001,REQ-3950,Part 11 Compliance,Password storage,The system shall store passwords in a non-human-readable form.
@@ -205,7 +204,3 @@ UN-0020,REQ-4360,Record Control,Approvals,The System shall control the individua
 UN-0020,REQ-4370,Record Control,Audit trail,"The System shall create an electronic record and audit trail, including the date and electronic signature of the individual(s) approving the record (including for record creation and record corrections)."
 UN-0020,REQ-4390,Record Control,Approvals,The System shall allow correction of records to be reviewed and approved by designated individuals or roles
 UN-0020,REQ-4400,Record Control,Change records ,The System shall ensure that change records include the date when the change is approved and released.
-UN-0090,REQ-2590,User/Group Management,Group landing page,The system shall only list the first 15 names of a group
-UN-0011,REQ-4210,Document Control,General,"The System shall allow for the control of documents required by the Quality Management system (creation, approval, control, change, obsolescence). "
-UN-0020,REQ-4330,Record Control,QMS records,The System shall allow for the control of records required by the Quality Management system
-UN-0020,REQ-4380,Record Control,Obsolete records,The System shall ensure that records cannot be obsoleted once a record has been approved and released.
