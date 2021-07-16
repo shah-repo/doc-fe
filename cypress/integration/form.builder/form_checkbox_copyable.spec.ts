@@ -239,6 +239,7 @@ context("Copyable Checkbox test", () => {
       });
 
       it("Add Blank Template Form", () => {
+        SystemRequirement("FB-1200");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
