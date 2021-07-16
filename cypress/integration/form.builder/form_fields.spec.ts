@@ -220,10 +220,12 @@ context("FORM Field test", () => {
       });
 
       it("Add Blank Template Form", () => {
+        SystemRequirement("FB-1170, FB-1180");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
         cy.fbAddNewFieldButton();
+        cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
         cy.fbMouseOverByLabel({ label: "fb-blank-template" } );
       });
 
@@ -527,6 +529,7 @@ context("FORM Field test", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
         cy.fbClickButton({ el: "dialog-close" });
+        cy.contains("image.jpg").should("exist");
       });
 
       it("Verify Quantity attributes", () => {
@@ -706,8 +709,8 @@ context("FORM Field test", () => {
           .find("input[name^=fb-quantity-]").should("have.value", "1");
       });
 
-      it("there should be no edit for Quantity field", () => {
-        SystemRequirement("FB-1300");
+      it("there should be no edit for field", () => {
+        SystemRequirement("FB-1210, FB-1300");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
@@ -725,6 +728,13 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
+      it("Edit Blank Template field", () => {
+        SystemRequirement("FB-1180");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
+        cy.fbAddNewFieldButton();
+      });
+
       it("Save form", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -732,6 +742,11 @@ context("FORM Field test", () => {
       it("Verify updated Quantity field", () => {
         cy.get("[data-cy=\"fb-quantity1\"]").should("exist");
         cy.get("[data-cy=\"fb-quantity1\"]").should("have.text", "fb-quantity1");
+      });
+
+      it("Verify updated Blank Template field", () => {
+        cy.get("[data-cy=\"fb-blank-template1\"]").should("exist");
+        cy.get("[data-cy=\"fb-blank-template1\"]").should("have.text", "fb-blank-template1");
       });
 
       it("Approve and release FORM document", () => {
@@ -772,6 +787,12 @@ context("FORM Field test", () => {
       it("Verify Not to edit Quantity field", () => {
         SystemRequirement("FB-1280");
         cy.get("[data-cy=\"fb-quantity1\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Blank Template field", () => {
+        SystemRequirement("FB-1190");
+        cy.get("[data-cy=\"fb-blank-template1\"]").parentsUntil(".MuiFormControl-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
     });
