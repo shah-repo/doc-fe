@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -10,6 +10,27 @@ import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
+
+const INITIAL_VALUES = {
+  placeholder: "",
+  editorProperties: [],
+  // common
+  formValuesRules: {},
+  hidden: false,
+  outputDisabled: false,
+  rulesObject: {},
+  deleted: false,
+  deleteInFormDisabled: false,
+  validationMode: "default",
+  validationAttribute: "",
+  sampleItemsIndicator: {
+    enabled: false,
+    id: "",
+    sampleSection: false,
+    serialNumber: 0,
+  },
+  rules: "",
+};
 
 export const withFBInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -59,13 +80,64 @@ export const withFBInput = <T extends FBInputProps>(
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
-    defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
+
+    const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
+      // This are shared default values for all of the fields
+      if (!initialValues || isEmpty(initialValues)) {
+        return;
+      }
+      const {
+        hidden,
+        formValuesRules,
+        outputDisabled,
+        rulesObject,
+        deleted,
+        deleteInFormDisabled,
+        validationMode,
+        sampleItemsIndicator,
+        validationAttribute,
+        rules,
+      } = initialValues || {};
+
+      if (!hidden) {
+        formState?.setFieldValue("hidden", INITIAL_VALUES.hidden, withState, omitFormValue);
+      }
+      if (!formValuesRules) {
+        formState?.setFieldValue("formValuesRules", INITIAL_VALUES.formValuesRules, withState, omitFormValue);
+      }
+      if (!outputDisabled) {
+        formState?.setFieldValue("outputDisabled", INITIAL_VALUES.outputDisabled, withState, omitFormValue);
+      }
+      if (!rulesObject) {
+        formState?.setFieldValue("rulesObject", INITIAL_VALUES.rulesObject, withState, omitFormValue);
+      }
+      if (!deleted) {
+        formState?.setFieldValue("deleted", INITIAL_VALUES.deleted, withState, omitFormValue);
+      }
+      if (!deleteInFormDisabled) {
+        formState?.setFieldValue("deleteInFormDisabled", INITIAL_VALUES.deleteInFormDisabled, withState, omitFormValue);
+      }
+      if (!validationMode) {
+        formState?.setFieldValue("validationMode", INITIAL_VALUES.validationMode, withState, omitFormValue);
+      }
+      if (!sampleItemsIndicator) {
+        formState?.setFieldValue("sampleItemsIndicator", INITIAL_VALUES.sampleItemsIndicator, withState, omitFormValue);
+      }
+      if (!validationAttribute) {
+        formState?.setFieldValue("validationAttribute", INITIAL_VALUES.validationAttribute, withState, omitFormValue);
+      }
+      if (!rules) {
+        formState?.setFieldValue("rules", INITIAL_VALUES.rules, withState, omitFormValue);
+      }
+    };
+
+    defaultValue = setDefaultValue();
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -128,6 +200,8 @@ export const withFBInput = <T extends FBInputProps>(
         },
       };
       const transDefault = (value[type || ""] || value.default)();
+      setCommonDefaultValues(formState.initialValues);
+
       if (isTranslation(transDefault)) {
         return intl.formatMessage({ id: transDefault });
       }

@@ -61,6 +61,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         editorProperties,
         uniqueSchemaItem,
         placeholder,
+        validationAttribute,
+        rules,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
@@ -68,10 +70,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
-      let rules = validators && toStringRules?.(validators);
+      let formRules = validators && toStringRules?.(validators);
       if (type === "eqmaintenance") {
-        const eqRules = [rules, "eq_maintenance_required"];
-        rules = compact(eqRules).join(",");
+        const eqRules = [formRules, "eq_maintenance_required"];
+        formRules = compact(eqRules).join(",");
       }
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
@@ -80,7 +82,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
-      formValues.rules = rules;
+      formValues.rules = formRules || rules;
 
       workspaceState?.setSchemaItemAt({
         index,
@@ -90,7 +92,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
-        validationAttribute: (label as string) || placeholder,
+        validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
     };
