@@ -200,9 +200,9 @@ class FBWorkspaceState extends FBSchemaState {
       method: "get",
     }, (data, error) => {
       if (error) {
-        this.documentRevApi.onError(error);
+        this.loadDocumentRevApi.onError(error);
       } else {
-        this.documentRevApi.onSuccess();
+        this.loadDocumentRevApi.onSuccess();
         const { formInput = {} } = data ?? {};
         this.formInput = formInput;
         map(formInput, (value, key) => {

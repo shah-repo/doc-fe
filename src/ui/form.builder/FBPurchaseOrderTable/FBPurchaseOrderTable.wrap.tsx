@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 
@@ -52,7 +53,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         });
       }
       formState?.setFieldValue(name, { items, ...calculation });
-      loading = purchaseOrderState?.loading;
+      loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
     });
 
     React.useEffect(() => {
@@ -64,6 +65,21 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState?.getPartsVersion();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const receivedName = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
+    const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
+
+    if (receivedItems) {
+      items = items?.map( (item) => {
+        const id = item.partNumber || item.id;
+        const received = getReceivedQuantity(receivedItems, id) || item.received;
+
+        return {
+          ...item,
+          received,
+        };
+      });
+    }
 
     return Component({
       ...(props as T),
