@@ -23,7 +23,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     dateOfExchangeRate: "",
   };
 
-  public partApi = new FBRequest<DocumentRevision, null>(FBEndpoint.FetchDocumentRevision);
+  public partApi = new FBRequest<DocumentRevision, null>();
 
   public getPartsVersion = () => {
     const parts = this.items.filter( (item) => item.partNumber);
@@ -41,7 +41,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
 
     this.partApi.set({
-      urlValues: {  documentId: part.partNumber },
+      url: `${FBEndpoint.DocumentRevisionsUrl}/${part.partNumber}`,
       method: "get",
     }, (data, error) => {
       if (error) {
