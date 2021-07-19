@@ -59,7 +59,7 @@ Cypress.Commands.add("recAPICreateReceivable", (params: {
 });
 
 Cypress.Commands.add("recCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
 });
@@ -83,7 +83,6 @@ Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev,
     CyRoutes.GetAutocompleteOptions], () => {

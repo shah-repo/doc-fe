@@ -471,7 +471,6 @@ context("Receivable list test", () => {
     it("Enter first receivable on list", () => {
       // SystemRequirement("REQ-1780");
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.EmployeesGet,
         CyRoutes.GetAutocompleteOptions,
         CyRoutes.GetFieldLocks], () => {
         cy.recClickOnFirstReceivableOnList();

@@ -235,7 +235,6 @@ context("Record inline history Flow", () => {
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet,
           CyRoutes.DocPreview,
           CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
@@ -265,7 +264,6 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
@@ -333,7 +331,6 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
             CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
