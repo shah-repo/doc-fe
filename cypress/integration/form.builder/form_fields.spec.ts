@@ -494,6 +494,15 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "dialog-close" });
       });
 
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0770");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
       it("Verify Select Field attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
@@ -710,9 +719,19 @@ context("FORM Field test", () => {
       });
 
       it("there should be no edit for field", () => {
-        SystemRequirement("FB-1210, FB-1300");
+        SystemRequirement("FB-1210, FB-1300, FB-0760");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0800");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
       });
 
       it("Close Preview dialog", () => {
@@ -794,6 +813,21 @@ context("FORM Field test", () => {
         SystemRequirement("FB-1190");
         cy.get("[data-cy=\"fb-blank-template1\"]").parentsUntil(".MuiFormControl-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Hyperlink field", () => {
+        SystemRequirement("FB-0740");
+        cy.get("[name^=fb-hyperlink-]").parent().parent().parent()
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0780");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
       });
     });
   });
