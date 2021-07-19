@@ -67,6 +67,8 @@ export enum FBAutocompleteAsyncOption {
   docRevByDoc = "31",
   docParts = "32",
   releasedEquipment = "33",
+  releasedFormDocuments = "34",
+  outputDocumentTypes = "35",
 }
 
 export interface FBAutocompleteAsyncConstructor {
