@@ -1,10 +1,11 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, difference, filter, find, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { GroupType } from "../../../state/ducks/auth/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
@@ -48,17 +49,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
 
-    isIncluded = (group: FBRequiredApprover): boolean => {
-      let included = false;
-
-      map(poApprovalsState?.getApprovals, (x) =>
-        includesApprover(group, (x.approverId as string)) ? included = true : "");
-      return included;
-    };
+    isIncluded = (group: FBRequiredApprover): boolean =>
+      (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
 
     function concatApprovals(approval?: FBInlineApprovalBody) {
       if (!approval) { return; }
-      if (approval.status === "REJECTED" || approval.status === "APPROVED") {
+      if (approval.status === ApprovalStatus.Rejected || approval.status === ApprovalStatus.Approved) {
         window.location.reload();
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
@@ -127,8 +123,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const checkGroups = (id: string) => {
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
-      const poamGroups = approversGroups.filter((group) => group.type === "PURCHASE_APPROVAL");
-      const damGroups = approversGroups.filter((group) => group.type === "REVISION_APPROVAL");
+      const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
+      const damGroups = approversGroups.filter((group) => group.type === GroupType.REVISION_APPROVAL);
 
       if (isEmpty(poApprovalsState.checkedGroups)) {
         const groupToSign = minBy(poamGroups, "documentStage");
