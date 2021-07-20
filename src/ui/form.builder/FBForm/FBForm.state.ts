@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, last, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockData, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { SMStore, SMUrl } from "../../../App";
@@ -17,8 +17,10 @@ class FBFormState extends FBSchemaState {
   public validatorRules: Record<string, FBValidationRelatedRules[]> = {};
   public validationRelatedRules: Record<string, FBValidationRelatedRules[]> = {};
   public includeLocking = false;
-  public unlockQueue: string[] = [];
   public expireLocks: Record<string, string> = {};
+
+  // Naming? Don't know, don't ask!
+  @observable isBackdropOpen = false;
 
   // TO BBE REMOVED!
   public workspaceState?: FBWorkspaceState;
@@ -268,11 +270,13 @@ class FBFormState extends FBSchemaState {
     inputState.setAutosaveValue(cloneDeep(formValue));
   };
 
-  public lockFields = (
+  public lockField = (
     body: Partial<FBLockBody>,
     fieldName: string
   ) => {
     if (!this.includeLocking) { return; }
+    if (this.locked?.get(fieldName)?.locked) { return; }
+    set(this, "isBackdropOpen", true);
     this.locked.set(fieldName, {
       ...this.locked.get(fieldName),
       fieldName,
@@ -289,7 +293,10 @@ class FBFormState extends FBSchemaState {
         lock: { id = undefined } = {},
         documentRevision: { owner: { user: { email: ownerName = undefined } = {} } = {} } = {},
       } = data || {};
-      if (!id) { return; }
+      if (!id) {
+        set(this, "isBackdropOpen", false);
+        return;
+      }
       this.locked.set(fieldName, {
         ...this.locked.get(fieldName),
         locked: true,
@@ -297,36 +304,24 @@ class FBFormState extends FBSchemaState {
         lockId: id,
         ownerName: ownerName || this.workspaceState?.currentUser?.email,
       });
-      this.unlockFields();
+      set(this, "isBackdropOpen", false);
     });
   };
 
   public unlockField = (fieldName?: string) => {
     if (!this.includeLocking) { return; }
     if (!fieldName) { return; }
-    if (!this.unlockQueue.includes(fieldName)) {
-      this.unlockQueue.push(fieldName);
-    }
-    this.unlockFields();
-  };
-
-  private unlockFields = () => {
-    const name = last(this.unlockQueue);
-    if (!name) { return; }
-    const lockedData = this.locked.get(name);
+    const lockedData = this.locked.get(fieldName);
     const { lockId: id } = lockedData || {};
-    if (!id || isEmpty(id)) {
-      this.unlockQueue.pop();
-      return;
-    }
+    if (!id || isEmpty(id)) { return; }
 
     SMStore.post({
       url: SMStore.templateUrl(SMUrl.lockFieldsExpire, { id }),
     }, (_data, error) => {
-      if (error) { return; }
-      this.unlockQueue.pop();
-      this.unlockFields();
-      this.locked.set(name, {
+      if (error) {
+        return;
+      }
+      this.locked.set(fieldName, {
         ...lockedData,
         locked: false,
         lockId: undefined,

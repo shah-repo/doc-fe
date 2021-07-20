@@ -1,6 +1,6 @@
 import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import { smStoreClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../../..";
+import { smStoreClient, SMStoreError, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../../..";
 import { store } from "../../../../state/store";
 import { toastError } from "../../../../ui/components/notifications";
 
@@ -58,7 +58,7 @@ class SMStore implements SMStoreProps {
     }
     this.loading.set(url, true);
     let authorization = "";
-    const { password } = (body as SMStorePassword) || {};
+    const password = body?.["password"];
     const { employeeId, sessionId } = store.getState().auth.user;
 
     if (password) {
@@ -94,8 +94,8 @@ class SMStore implements SMStoreProps {
         this.loading.set(url, false);
       })
       .catch((error) => {
-        let { message } = error;
-        const { statusCode } = error;
+        let { message = "" } = error || {};
+        const { statusCode = "" } = error || {};
         if (isArray(message) && has(first(message), "message")) {
           message = join(get(first(message), "message"), "\n");
         } else {

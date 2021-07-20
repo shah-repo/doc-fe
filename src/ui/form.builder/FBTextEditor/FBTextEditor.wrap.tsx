@@ -32,7 +32,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     autoFocus,
     autoScrollTo,
     shouldNotAutosaveOnBlur = false,
-    locked,
     ...props
   }: T) => {
 
@@ -129,9 +128,10 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     }
 
     function handleLockFocus() {
+      if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [name]: true,
@@ -140,6 +140,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
         documentRevisionId: id,
       }, name);
     }
+
     function handleLockBlur() {
       formState?.unlockField(name);
     }
@@ -172,14 +173,24 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       onEditorStateChange?.(htmlToEditorState(value));
     };
 
-    onBlur = () => {
+    onBlur = (ev) => {
       // If onBlur method is called from options menu open trigger
       if (textEditorState?.preserveFocus) { return; }
+      if (formState?.isBackdropOpen) {
+        ev.target.focus();
+        return;
+      }
       handleMask?.(true);
       if (withState) {
         formState?.setFieldValue(name, formState.getFieldValue(name), true, omitFormValue);
       }
       if (autoFocus || autoScrollTo || shouldNotAutosaveOnBlur) { return; }
+      if (!textEditorState) { return; }
+      if (!editorState) { return; }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let htmlContent = draftToHtml(convertToRaw(textEditorState.editorState!.getCurrentContent())).trim();
+      (htmlContent === emptyHtmlContent) && (htmlContent = "");
+      if (formState?.getFieldValue(name) === htmlContent) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 
@@ -208,7 +219,6 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
       disabled,
       withState,
       omitFormValue,
-      locked,
     });
   };
 
