@@ -23,6 +23,7 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
       <FBCheckbox
         label="form.builder.range"
         name="editorConfig.rangeOption"
+        defaultChecked={false}
         withState
         gutter={false}
       />
@@ -31,18 +32,21 @@ const FBEditorTextFieldWithRange: React.FunctionComponent<FBEditorTextFieldWithR
         label="form.builder.critical.to.quality"
         name="editorConfig.criticalToQuality"
         gutter={false}
+        defaultChecked={false}
       />
       <FBCheckbox
         label="form.builder.inspection"
         name="editorConfig.inspection"
         gutter={false}
         withState
+        defaultChecked={false}
       />
       <FBCheckbox
         label="form.builder.pass.value"
         name="editorConfig.passValue"
         gutter={false}
         withState
+        defaultChecked={false}
       />
       <Box display="flex">
         <FBRange

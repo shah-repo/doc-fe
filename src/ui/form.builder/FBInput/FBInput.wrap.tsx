@@ -14,6 +14,7 @@ import { withFBOnChange } from "./FBInput.onchange";
 const INITIAL_VALUES = {
   placeholder: "",
   editorProperties: [],
+  options: [],
   // common
   formValuesRules: {},
   hidden: false,
@@ -137,6 +138,19 @@ export const withFBInput = <T extends FBInputProps>(
       }
     };
 
+    const setSpecificDefaultValue = (
+      initialValues: Dictionary<any> | null,
+      property: string,
+    ) => {
+      if (!initialValues || isEmpty(initialValues)) {
+        return;
+      }
+      if (get(initialValues, property)) {
+        return;
+      }
+      formState?.setFieldValue(property, get(INITIAL_VALUES, property), withState, omitFormValue);
+    };
+
     defaultValue = setDefaultValue();
 
     // Set validation scheme. This is union of scheme & comps configs.
@@ -201,6 +215,10 @@ export const withFBInput = <T extends FBInputProps>(
       };
       const transDefault = (value[type || ""] || value.default)();
       setCommonDefaultValues(formState.initialValues);
+
+      (name === "editorProperties") && setSpecificDefaultValue(formState.initialValues, "editorProperties");
+      (name === "placeholder") && setSpecificDefaultValue(formState.initialValues, "placeholder");
+      (name === "options") && setSpecificDefaultValue(formState.initialValues, "options");
 
       if (isTranslation(transDefault)) {
         return intl.formatMessage({ id: transDefault });
