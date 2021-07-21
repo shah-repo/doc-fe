@@ -3,6 +3,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 
@@ -64,6 +65,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState?.getPartsVersion();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    if (workspaceState?.document?.status) {
+      disabled = !isDocumentRevisionInDraft(workspaceState?.document?.status)
+      || !isDocumentRevisionPendingChange(workspaceState?.document?.status);
+    }
 
     return Component({
       ...(props as T),
