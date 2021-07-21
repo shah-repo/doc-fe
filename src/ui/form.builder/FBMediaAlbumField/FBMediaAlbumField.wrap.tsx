@@ -146,6 +146,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
             mediaAlbumFieldState.fromUpload = false;
+          } else {
+            workspaceState?.saveDocRev(formState?.getValues());
           }
         }
       );
