@@ -63,6 +63,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         placeholder,
         validationAttribute,
         rules,
+        defaultValue,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
@@ -71,10 +72,16 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
       let formRules = validators && toStringRules?.(validators);
+
+      // Inidvidual field flag setup
       if (type === "eqmaintenance") {
         const eqRules = [formRules, "eq_maintenance_required"];
         formRules = compact(eqRules).join(",");
       }
+      if (type === "blanktplform" && !defaultValue) {
+        formValues.defaultValue = [];
+      }
+
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
       if (isOutput && !workspaceState?.isMode("formDesign")) {
