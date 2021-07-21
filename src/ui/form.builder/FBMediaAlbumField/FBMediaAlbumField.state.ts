@@ -9,7 +9,7 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  @observable public finishedUpload = false;
+  public finishedUpload = false;
   public filesUploaded: FBAttachment[] = [];
   public fieldName: string | undefined;
 
