@@ -909,6 +909,7 @@ context("Autosave on blur", () => {
       cy.get("[name^=\"fb-quantity-\"]").type("2");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
+        cy.unClick();
       });
     });
 
@@ -992,6 +993,7 @@ context("Autosave on blur", () => {
     it("Enter FB range and check for autosave", () => {
       cy.get("[name*=\"fb-range-\"]").type("2");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
         cy.unClick();
       });
     });
