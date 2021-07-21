@@ -934,6 +934,7 @@ context("Autosave on blur", () => {
       cy.get("[name^=\"fb-timer-\"]").type("5");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
+        cy.unClick();
       });
     });
 

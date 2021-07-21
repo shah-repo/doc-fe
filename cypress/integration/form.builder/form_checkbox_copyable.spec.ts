@@ -450,27 +450,19 @@ context("Copyable Checkbox test", () => {
 
     it("Add Quantities value", () => {
       SystemRequirement("FB-1260");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=\"q-wi-ch-\"]").type("1");
-      });
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=\"q-wo-ch-\"]").type("1");
-      });
+      cy.get("[name^=\"q-wi-ch-\"]").typeFieldLock("1");
+      cy.get("[name^=\"q-wo-ch-\"]").typeFieldLock("1");
     });
 
     it("Add Timers value", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value", { force: true });
-      });
+      cy.get("[name^=\"t-wi-ch-\"]").typeFieldLock("t-wi-ch-value", { force: true });
       cy.unClick();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value", { force: true });
-      });
+      cy.get("[name^=\"t-wo-ch-\"]").typeFieldLock("t-wo-ch-value", { force: true });
     });
 
     it("Add 'TextField with range' value", () => {
-      cy.get("[name^=\"twr-wi-ch-\"]").type("2");
-      cy.get("[name^=\"twr-wo-ch-\"]").type("2");
+      cy.get("[name^=\"twr-wi-ch-\"]").typeFieldLock("2");
+      cy.get("[name^=\"twr-wo-ch-\"]").typeFieldLock("2");
     });
 
     it("Add Date pickers value", () => {
