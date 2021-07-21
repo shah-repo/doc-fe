@@ -140,9 +140,10 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
+        if (!lhrStepIndex) { return; }
         if (schemaItem) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          workspaceState!.schema![lhrStepIndex!] = {
+          workspaceState!.schema![lhrStepIndex] = {
             ...schemaItem,
             editorConfig: {
               ...schemaItem?.editorConfig,
@@ -161,6 +162,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     }
 
     function handleCancel() {
+      if (parentFormState?.isBackdropOpen) { return; }
       handleUnlockField();
       dialogState?.closeDialog();
     }

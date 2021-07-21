@@ -94,8 +94,8 @@ class SMStore implements SMStoreProps {
         this.loading.set(url, false);
       })
       .catch((error) => {
-        let { message } = error;
-        const { statusCode } = error;
+        let { message = "" } = error || {};
+        const { statusCode = "" } = error || {};
         if (isArray(message) && has(first(message), "message")) {
           message = join(get(first(message), "message"), "\n");
         } else {

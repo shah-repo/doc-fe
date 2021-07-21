@@ -1,4 +1,4 @@
-import { FBFileFieldState, FBInputProps } from "..";
+import { FBFileFieldState, FBInputProps, FBProviderProps } from "..";
 
 export interface FBFile {
   file: File;
@@ -6,6 +6,7 @@ export interface FBFile {
 
 export type FBFileFieldProps =
 & Pick<FBInputProps, "name" | "multiple" | "disabled" | "gutter">
+& Pick<FBProviderProps, "formState">
 & {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
   onUploadClick?: () => void;

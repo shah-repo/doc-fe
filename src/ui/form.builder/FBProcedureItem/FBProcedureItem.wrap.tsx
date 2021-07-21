@@ -34,7 +34,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       if (!id) { return; }
       if (!name) { return; }
       const namePart = `${name}.${type}`;
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [namePart]: true,
@@ -45,7 +45,9 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     }
 
     function onClose() {
+      if (formState?.isBackdropOpen) { return; }
       formState?.unlockField(`${name}.${type}`);
+      dialogState?.closeDialog();
     }
 
     // MARK: @methods
@@ -84,7 +86,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
         loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
       }
       value = get(procedureState, type);
-      disabled = disabled || formState?.locked.get(`${name}.${type}`)?.locked;
+      disabled = disabled || formState?.locked.get(`${name}.${type}`)?.locked || formState?.isBackdropOpen;
       locked = formState?.locked.get(`${name}.${type}`)?.locked;
     });
 
