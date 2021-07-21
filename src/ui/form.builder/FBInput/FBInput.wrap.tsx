@@ -11,10 +11,11 @@ import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
-const INITIAL_VALUES = {
+export const INITIAL_VALUES = {
   placeholder: "",
   editorProperties: [],
   options: [],
+  actions: [],
   // common
   formValuesRules: {},
   hidden: false,
@@ -80,6 +81,7 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+    const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
 
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
@@ -214,11 +216,12 @@ export const withFBInput = <T extends FBInputProps>(
         },
       };
       const transDefault = (value[type || ""] || value.default)();
-      setCommonDefaultValues(formState.initialValues);
+      isDesignMode && setCommonDefaultValues(formState.initialValues);
 
       (name === "editorProperties") && setSpecificDefaultValue(formState.initialValues, "editorProperties");
       (name === "placeholder") && setSpecificDefaultValue(formState.initialValues, "placeholder");
       (name === "options") && setSpecificDefaultValue(formState.initialValues, "options");
+      (name === "actions") && setSpecificDefaultValue(formState.initialValues, "actions");
 
       if (isTranslation(transDefault)) {
         return intl.formatMessage({ id: transDefault });
