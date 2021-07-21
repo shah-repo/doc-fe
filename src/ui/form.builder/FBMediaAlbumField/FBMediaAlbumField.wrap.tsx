@@ -121,7 +121,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       () => mediaAlbumFieldState?.finishedUpload,
       (data) => {
         if (!data) { return; }
-        if (autosave) {
+        if (autosave && mediaAlbumFieldState?.fromUpload) {
           workspaceState?.saveDocRev(formState?.getValues());
           mediaAlbumFieldState!.finishedUpload = false;
         }
