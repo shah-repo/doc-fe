@@ -732,12 +732,12 @@ context("Equipment maintenance test", () => {
       });
 
       it("Verify 'CAL DUE DATE'", () => {
-        SystemRequirement("REQ-2840");
+        SystemRequirement("REQ-2840", "REQ-2910");
         cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
       });
 
       it("Verify 'PM DUE DATE'", () => {
-        SystemRequirement("REQ-2840");
+        SystemRequirement("REQ-2840", "REQ-2910");
         cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
       });
 
@@ -757,6 +757,7 @@ context("Equipment maintenance test", () => {
 
     context("Verify maintenance document in equipment", () => {
       it("Select 'Equipment calibration document'", () => {
+        SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
           cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
           cy.wait(2000);
@@ -764,12 +765,16 @@ context("Equipment maintenance test", () => {
       });
 
       it("Check Calibration document existance", () => {
-        cy.get("div[data-cy=\"maintenanceHistory\"]")
+        SystemRequirement("REQ-2900");
+        cy.get("[data-cy=\"maintenanceHistory\"]")
           .eq(1)
-          .contains("MR-00002 - Calibration document");
+          .should("contain", "MR-00002 - Calibration document")
+          .and("contain", ADMIN_USER.name)
+          .and("contain", "RELEASED");
       });
 
       it("Check calibration status is in complience for next 5 days", () => {
+        SystemRequirement("REQ-2900", "REQ-2910");
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(5, "days")
           .format("ddd MMMM D YYYY");
@@ -779,6 +784,7 @@ context("Equipment maintenance test", () => {
       });
 
       it("Verify status is 'Released'", () => {
+        SystemRequirement("REQ-2900");
         cy.drCheckDocumentStatus({ status: "Released" });
       });
     });

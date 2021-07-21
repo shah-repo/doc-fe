@@ -62,6 +62,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     console.log("Ignoring 'Connection was closed abnormally' error");
     return false;
   }
+
+  if (err.message.includes("Cannot read property 'data' of undefined")) {
+    // eslint-disable-next-line no-console
+    console.log("Ignoring 'Cannot read property 'data' of undefined' error");
+    return false;
+  }
   return true;
 });
 

@@ -27,9 +27,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     }
 
     onDatePickerClick = () => {
+      if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [name]: true,
@@ -39,7 +40,11 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       }, name);
     };
 
-    onDatePickerClose = () => formState?.unlockField(name);
+    onDatePickerClose = () => {
+      setTimeout(() => {
+        formState?.unlockField(name);
+      }, 1000);
+    };
 
     return Component({
       ...(props as T),

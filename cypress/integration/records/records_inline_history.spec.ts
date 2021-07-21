@@ -206,10 +206,13 @@ context("Record inline history Flow", () => {
       });
 
       it("Select 'One' value on radiobutton", () => {
+        SystemRequirement("FB-0900");
+        SystemRequirement("FB-0960");
         cy.fbSelectRadioButtonValue({ value: "One" });
       });
 
       it("Select 'SelectOne' value on select field", () => {
+        SystemRequirement("FB-0870");
         cy.fbSelectFieldValue({ value: "SelectOne" });
       });
 
@@ -258,6 +261,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Approve first Inline Approval", () => {
+          SystemRequirement("REQ-4400");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
@@ -269,6 +273,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
+          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbUnSelectCheckboxValue( "Red", "Green" );
             cy.unClick();
@@ -276,6 +281,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Check 'Blue' value on checkbox", () => {
+          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbSelectCheckboxValue( "Blue" );
             cy.unClick();

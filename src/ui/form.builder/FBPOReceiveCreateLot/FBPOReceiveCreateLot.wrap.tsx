@@ -19,8 +19,10 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
   }: T) => {
     const dispatch = useDispatch();
 
+
     const { dialogState, formState, workspaceState, poReceiveState } = FB.useStores();
     const receivableId = workspaceState?.document?.id as string;
+
     const createLotState = FB.useRef<FBPOReceiveCreateLotState>(
       FBPOReceiveCreateLotState,
       { receivableId, item }

@@ -5,8 +5,8 @@ import { FB, FBPOReceiveFormProps } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
+
 
 export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
   Component: React.FunctionComponent<T>,
@@ -23,6 +23,8 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
     const documentId = workspaceState?.documentId as string;
     const name = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
+
+
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
       FBPOReceiveFormState,
       { groupOptions, item, documentId }
@@ -82,7 +84,9 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
     };
 
+
     return Component({
+      item,
       ...(props as T),
       handleCancel: dialogState?.closeDialog,
       handleReceive,

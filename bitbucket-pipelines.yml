@@ -572,7 +572,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/21.7.1:
+    release/21.7.2:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

@@ -6,7 +6,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 
 export const withFBPOReceive = <T extends FBPOReceiveProps>(
@@ -58,13 +58,18 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
 
     const handleLot = (e: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => {
       e.stopPropagation();
-      dialogState?.config({
-        open: true,
-        maxWidth: "sm",
-        title: "form.builder.po.create.a.lot",
-        content: <FBPOReceiveCreateLot {...{ item }} />,
-        actions: <FBPOReceiveCreateLotActions {...{ item }} />,
-      });
+      if (item?.status && item?.status !== DocumentRevisionStatus.Released) {
+        toastError(intl.formatMessage({ id: "form.builder.po.create.a.lot.error" }));
+      } else {
+        dialogState?.config({
+          open: true,
+          maxWidth: "sm",
+          title: "form.builder.po.create.a.lot",
+          content: <FBPOReceiveCreateLot {...{ item }} />,
+          actions: <FBPOReceiveCreateLotActions {...{ item }} />,
+        });
+      }
+
     };
 
     function setSchemaItem(item: FBSchemaProps): FBPOReceiveItemProps {

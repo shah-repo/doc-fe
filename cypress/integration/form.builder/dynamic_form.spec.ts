@@ -96,6 +96,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Select 'Text Field' field", () => {
+      SystemRequirement("FB-0290");
       cy.fbSelectTextField();
     });
 
@@ -200,6 +201,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
+      SystemRequirement("FB-0280");
+      SystemRequirement("FB-0340");
       cy.get("[data-cy*=\"new-text-field-2\"]").typeFieldLock("Some text for Text field");
     });
 

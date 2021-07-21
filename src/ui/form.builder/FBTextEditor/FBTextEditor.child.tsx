@@ -43,7 +43,8 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
         data-cy={name}
       >
         <Editor
-          {...{ editorRef, editorState, onEditorStateChange, toolbar, onBlur }}
+          onBlur={(ev) => onBlur?.(ev)}
+          {...{ editorRef, editorState, onEditorStateChange, toolbar }}
           {...!isEmpty(options) && {
             toolbarCustomButtons: [
               <FBTextEditorOptions

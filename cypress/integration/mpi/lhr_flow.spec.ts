@@ -1078,6 +1078,7 @@ context("LHR flow", () => {
 
     it("Select 'R&D' build type", () => {
       SystemRequirement("REQ-3190");
+      cy.unClick();
       cy.get("[value=\"R&D\"]").check();
     });
 

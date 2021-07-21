@@ -828,7 +828,10 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New document from form description" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drEnterDocumentDescription({ description: "New document from form description" });
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Fill TextField and check for autosave", () => {
@@ -852,6 +855,8 @@ context("Autosave on blur", () => {
     });
 
     it("Fill text editor field and check for autosave", () => {
+      SystemRequirement("FB-0540");
+      SystemRequirement("FB-0600");
       cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Test description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -904,6 +909,7 @@ context("Autosave on blur", () => {
       cy.get("[name^=\"fb-quantity-\"]").type("2");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
+        cy.unClick();
       });
     });
 
@@ -927,6 +933,7 @@ context("Autosave on blur", () => {
     it("Enter Timer value and check for autosave", () => {
       cy.get("[name^=\"fb-timer-\"]").type("5");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
         cy.unClick();
       });
     });
@@ -987,6 +994,7 @@ context("Autosave on blur", () => {
     it("Enter FB range and check for autosave", () => {
       cy.get("[name*=\"fb-range-\"]").type("2");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
         cy.unClick();
       });
     });

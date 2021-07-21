@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBForm, FBPOReceiveFormProps, FBTextField } from "..";
 import { FormContext } from "../../components/forms/FormContext";
+import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
 
 
 const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
@@ -55,4 +56,4 @@ const FBPOReceiveForm: React.FunctionComponent<FBPOReceiveFormProps> = ({
   </FBForm>
 );
 
-export default FBPOReceiveForm;
+export default withFBPOReceiveForm(FBPOReceiveForm);

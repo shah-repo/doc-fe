@@ -1,4 +1,5 @@
 import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
@@ -36,6 +37,7 @@ export interface FBPurchaseOrderItem {
   received?: number;
   receivedList?: any[];
   type: FBPurchaseOrderItemType;
+  status?: DocumentRevisionStatus;
 }
 
 export interface FBPurchaseOrderCalculation {

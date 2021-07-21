@@ -3,9 +3,12 @@ import { AttachFile } from "@material-ui/icons";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { FieldInputProps, Formik, FormikProps } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
 import { LINE_TYPES } from "../../../../state/ducks/attachments/constants";
+import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { ApplicationState } from "../../../../state/reducers";
 import { changeRequestFormOnScreenContext } from "../../../change.request/form/ChangeRequestForm.container";
 import { documentRevisionTypeGroupsFromDocListContext } from "../../../documentRevision/DocumentRevisionsManager.container";
 import useAsync from "../../../hooks/useAsync";
@@ -74,6 +77,9 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const isChangeRequestFormOnScreenContext = React.useContext(changeRequestFormOnScreenContext);
   const documentRevisionTypeGroupFromDocList = React.useContext(documentRevisionTypeGroupsFromDocListContext);
   const isRecord = documentRevisionTypeGroupFromDocList === DOC_TYPE_GROUP_OPTION.RECORD;
+  const documentTypeCanRedline = Boolean(useSelector((state: ApplicationState) =>
+    documentTypeSelectors.getDocumentTypeById(state, form.values.document.documentType.id))?.canRedLine);
+
   const openDialog = () => {
     async.reset();
     dialog.open();
@@ -87,7 +93,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const renderForm = () => (
     <AttachmentLineTypeForm
-      {...{ field, upload, form, name, multiple, disabled, isUploading, onChange }}
+      {...{ field, upload, form, name, multiple, disabled, isUploading, onChange, documentTypeCanRedline }}
       onCancel= {closeDialog}
     />
   );

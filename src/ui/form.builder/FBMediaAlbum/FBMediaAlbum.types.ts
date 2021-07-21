@@ -1,5 +1,5 @@
 import { BoxProps } from "@material-ui/core";
-import { FBMediaAlbumFieldProps, FBMediaAlbumState, FBWorkspaceMode } from "..";
+import { FBMediaAlbumFieldProps, FBMediaAlbumState, FBProviderProps, FBWorkspaceMode } from "..";
 
 export type FBMediaAlbumMode = "carousel" | "gallery";
 
@@ -14,6 +14,7 @@ export interface FBMediaProps {
 
 export type FBMediaAlbumProps =
   & Pick<BoxProps, "height" | "width">
+  & Pick<FBProviderProps, "formState">
   & Pick<FBMediaAlbumFieldProps,
   | "collection"
   | "removeMedia"

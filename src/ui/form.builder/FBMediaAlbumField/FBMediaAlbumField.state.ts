@@ -9,7 +9,8 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  public filesUploaded: Id[] = [];
+  public finishedUpload = false;
+  public filesUploaded: FBAttachment[] = [];
   public fieldName: string | undefined;
 
   @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
@@ -79,8 +80,26 @@ class FBMediaAlbumFieldState {
       url: FBEndpoint.AttachmentUpload,
       body: { file } as FBFile,
       method: "post",
+    }, (data, error) => {
+      if (error) {
+        this.attachmentApi.onError(error);
+      }
+      if (data) {
+        this.filesUploaded.push(data);
+        this.attachmentApi.setData(data);
+        this.attachmentApi.onSuccess();
+      }
     });
     this.upload(files);
+  };
+
+
+  public downloadUploadedList = () => {
+    const file = this.filesUploaded.pop();
+    if (!file) {
+      return;
+    }
+    this.download(file);
   };
 
   public download = (file: FBAttachment) => {
@@ -95,8 +114,12 @@ class FBMediaAlbumFieldState {
           ...file,
           url: data.url,
         });
+        this.attachmentDownloadApi.setData(data);
         this.addFileId(file.id);
         this.filesApi.onSuccess();
+        if (!this.filesUploaded.length) {
+          this.finishedUpload = true;
+        }
       }
       if (error) {
         this.attachmentDownloadApi.onError(error);

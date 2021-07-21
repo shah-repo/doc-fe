@@ -31,13 +31,16 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 
     function removeLock() {
       if (fileUploadEl?.nodeValue?.length) { return; }
-      formState?.unlockField(name);
+      setTimeout(() => {
+        formState?.unlockField(name);
+      }, 1000);
     }
 
     function handleLockField() {
+      if (formState?.isBackdropOpen) { return; }
       if (!id) { return; }
       if (!name) { return; }
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [name]: true,
@@ -47,7 +50,9 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       }, name);
     }
 
-    onUploadClick = () => handleLockField();
+    onUploadClick = () => {
+      handleLockField();
+    };
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const eventFiles = get(event, "currentTarget.files", []);
@@ -79,6 +84,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       ...(props as T),
       onUploadClick,
       onChange,
+      formState,
       loading: fileFieldState?.loading,
       name,
     }));
