@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -8,6 +10,8 @@ import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
+let dateOfStepCompletion;
+let dateOfStepCompletionOneMinuteLater;
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -590,6 +594,11 @@ context("PO test", () => {
       cy.poAddPOButtonClick();
     });
 
+    it("Check line items have unique IDs", () => {
+      SystemRequirement("REQ-1380");
+      cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
+    });
+
     it("Check currency options dropdown", () => {
       SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
@@ -657,8 +666,18 @@ context("PO test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Check PO status contains 'Open', 'Closed', 'Cancelled'", () => {
+        SystemRequirement("REQ-1470");
+        cy.get("[id$=\"select-po-status-built-in\"]").eq(0).click();
+        cy.get("ul[role=listbox]>li").should("contain", "Open")
+          .and("contain", "Closed")
+          .and("contain", "Cancelled");
+        cy.unClick();
+      });
+
       it("Select 'Open' for PO status", () => {
-        cy.poSelectPOStatus({ status: "Open" });
+        cy.get("[id$=\"po-status-built-in\"]").eq(0).click();
+        cy.get("ul[role=listbox]>li").contains("Open").click();
       });
 
       it("Save PO document", () => {
@@ -686,12 +705,28 @@ context("PO test", () => {
       });
 
       it("Click 'Approve' button", () => {
+        dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
+          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
           CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
+      });
+
+      it("Check if approver ID and date time are recorded", () => {
+        SystemRequirement("REQ-1540", "REQ-1550");
+        cy.get("[name*='fb-po-approvals-']>div").eq(4).should("contain", USERS[1].name)
+          .and("contain", "Approved")
+          .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
+      });
+
+      it("Check if PO state is blank", () => {
+        SystemRequirement("REQ-1560");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .should("have.text", ("Revision" + String.fromCharCode(160) + "1"));
       });
     });
   });
@@ -829,6 +864,7 @@ context("PO test", () => {
     });
 
     it("Select 'Closed' for PO status", () => {
+      SystemRequirement("REQ-1670");
       cy.poSelectPOStatus({ status: "Closed" });
     });
 
@@ -857,7 +893,71 @@ context("PO test", () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });
+
+    it("Check PO status is 'Closed'", () => {
+      SystemRequirement("REQ-1670");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Closed");
+    });
   });
+
+  context("Revise PO and Cancel it", () => {
+    it("Click on 'Revise PO'", () => {
+      SystemRequirement("REQ-1600");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select 'Cancel PO' revision stage", () => {
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Cancel PO" });
+    });
+
+    it("Select 'Cancelled' for PO status", () => {
+      SystemRequirement("REQ-1660");
+      cy.poSelectPOStatus({ status: "Cancelled" });
+    });
+
+    it("Save PO", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
+      });
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      });
+    });
+
+    it("Click 'Void' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[name=\"voidDescription\"]").type("Voiding");
+        cy.get("[data-cy=\"fb-control-btn\"]").last().click();
+      });
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
+    });
+
+    it("Check PO status is 'Cancelled'", () => {
+      SystemRequirement("REQ-1660");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Cancelled");
+    });
+  });
+
 
   context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
     it("Turn off autosave", () => {
@@ -952,16 +1052,16 @@ context("PO test", () => {
       cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
     });
 
-    it("Check if number of displayed filtered items is '2'", () => {
-      SystemRequirement("REQ-1200");
-      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
-    });
-
     it("Clear filter", () => {
       SystemRequirement("REQ-1190");
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
         cy.filterClear();
       });
+    });
+
+    it("Check if number of displayed filtered items is '2'", () => {
+      SystemRequirement("REQ-1200");
+      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
     });
 
     it("Enter all fields to check if all filter fields are working", () => {
