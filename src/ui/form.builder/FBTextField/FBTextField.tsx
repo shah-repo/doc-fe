@@ -19,11 +19,10 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
   dataCy,
   mode,
   className,
-  locked,
   value,
   ...props
 }) => (
-  <FBInput {...props} {...{ error, defaultValue, locked }} type={inputType as FBInputType}>
+  <FBInput {...props} {...{ error, defaultValue }} type={inputType as FBInputType}>
     {mode === "preview" && (
       <Box>{defaultValue}</Box>
     )}
@@ -32,6 +31,8 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
         data-cy={dataCy ? dataCy : props.name}
         label=""
         variant="outlined"
+        onBlur={(ev) => onBlur?.(ev)}
+        onFocus={(ev) => onFocus?.(ev)}
         inputProps={{
           ...inputProps,
           ...(type === "number") && {
@@ -39,8 +40,6 @@ const FBTextField: React.FunctionComponent<FBTextFieldProps> = ({
           },
         }}
         {...{
-          onBlur,
-          onFocus,
           type,
           rows,
           error,

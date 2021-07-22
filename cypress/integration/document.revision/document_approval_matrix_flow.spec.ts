@@ -323,6 +323,7 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
+      SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
@@ -600,6 +601,7 @@ context("Document Approval Matrix Flow", () => {
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
       SystemRequirement("REQ-0660", "REQ-0670");
+      SystemRequirement("REQ-2780", "REQ-4390");
       cy.drAMCheckRole({ stage: "admStage", index: 2 });
     });
 

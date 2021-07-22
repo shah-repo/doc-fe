@@ -1271,7 +1271,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Parts' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "parts", length: 1 });
+      cy.fbVerifyAutocompleteElementLength({ el: "parts", length: 2 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo);
     });
 

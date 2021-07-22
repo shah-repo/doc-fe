@@ -260,6 +260,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Approve first Inline Approval", () => {
+          SystemRequirement("REQ-4400");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([

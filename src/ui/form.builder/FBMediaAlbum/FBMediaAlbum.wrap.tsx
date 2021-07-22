@@ -43,9 +43,10 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     });
 
     onClick = () => {
+      if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [name]: true,
@@ -76,6 +77,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       onClick,
       setMediaMode,
       mediaAlbumState,
+      formState,
       workspaceMode,
       hiddenContainer,
       actionsDisabled,

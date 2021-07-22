@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -727,6 +728,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
+        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -822,6 +824,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
+        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -938,6 +941,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
+        SystemRequirement("FB-1350");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 

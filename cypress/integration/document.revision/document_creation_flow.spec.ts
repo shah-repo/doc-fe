@@ -41,6 +41,7 @@ context("Document Creation Flow", () => {
                 documentTypeAcronym: "TDT-",
                 group: "OTHER",
                 isQms: true,
+                canRedLine: true,
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -383,98 +384,114 @@ context("Document Creation Flow", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Change owner of document", () => {
-      SystemRequirement("REQ-0340");
-      cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
-    });
+    context("Check document type redLine option", () => {
+      it("Open attachment upload dialog", () => {
+        cy.get("[id=AttachmentFieldPresenter-linkButton]").click();
+      });
 
-    it("Logs user that ownership was changed to", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: "Tester1!",
+      it("Verify there is no option to upload redline attachment", () => {
+        cy.get("[id=AttachmentFieldPresenter-linkButton-red-line]").should("not.exist");
+      });
+
+      it("Close attachment upload dialog", () => {
+        cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").click();
       });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on specific document 'CP-00002'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
-    });
-
-    it("Verify owner", () => {
-      cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
-    });
-
-    it("Logs with admin", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
+    context("Verify ownership mechanism", () => {
+      it("Change owner of document", () => {
+        SystemRequirement("REQ-0340");
+        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
       });
-    });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on specific document 'CP-00002'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
-    });
-
-    it("Change owner of document by admin", () => {
-      SystemRequirement("REQ-0340");
-      cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
-    });
-
-    it("Logs user that ownership was changed to", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
+      it("Logs user that ownership was changed to", () => {
+        cy.authLogin({
+          email: USERS[3].email,
+          password: "Tester1!",
+        });
       });
-    });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
 
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    it("Click on specific document 'CP-00002'", () => {
-      cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
-    });
+      it("Click on specific document 'CP-00002'", () => {
+        cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
+      });
 
-    it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    });
+      it("Verify owner", () => {
+        cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
+      });
 
-    it("Clicks on revise document", () => {
-      SystemRequirement("REQ-0150");
-      cy.drClickReviseDocument();
-    });
+      it("Logs with admin", () => {
+        cy.authLogin({
+          email: USERS[1].email,
+          password: "Tester1!",
+        });
+      });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
 
-    it("Cancel draft document", () => {
-      SystemRequirement("REQ-0350");
-      cy.drCancelDraftButton();
-    });
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    it("Check document status is 'Canceled'", () => {
-      SystemRequirement("REQ-0350");
-      cy.drCheckDocumentStatus({ status: "Canceled" });
+      it("Click on specific document 'CP-00002'", () => {
+        cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
+      });
+
+      it("Change owner of document by admin", () => {
+        SystemRequirement("REQ-0340");
+        cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
+      });
+
+      it("Logs user that ownership was changed to", () => {
+        cy.authLogin({
+          email: USERS[2].email,
+          password: "Tester1!",
+        });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on specific document 'CP-00002'", () => {
+        cy.drClickOnSpecificDocFromList({ item: "CP-00002" });
+      });
+
+      it("Approves and releases document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Clicks on revise document", () => {
+        SystemRequirement("REQ-0150");
+        cy.drClickReviseDocument();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Cancel draft document", () => {
+        SystemRequirement("REQ-0350");
+        cy.drCancelDraftButton();
+      });
+
+      it("Check document status is 'Canceled'", () => {
+        SystemRequirement("REQ-0350");
+        cy.drCheckDocumentStatus({ status: "Canceled" });
+      });
     });
   });
 });

@@ -117,18 +117,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => reaction(
-      () => mediaAlbumFieldState?.finishedUpload,
-      (data) => {
-        if (!data) { return; }
-        if (autosave) {
-          workspaceState?.saveDocRev(formState?.getValues());
-          mediaAlbumFieldState!.finishedUpload = false;
-        }
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
 
     React.useEffect(() => {
       reaction(
@@ -145,8 +133,13 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            mediaAlbumFieldState.fromUpload = false;
-          } else {
+            mediaAlbumFieldState!.fromUpload = false;
+            if (mediaAlbumFieldState?.finishedUpload) {
+              workspaceState?.saveDocRev(formState?.getValues());
+              mediaAlbumFieldState!.finishedUpload = false;
+            }
+          }
+          else {
             workspaceState?.saveDocRev(formState?.getValues());
           }
         }

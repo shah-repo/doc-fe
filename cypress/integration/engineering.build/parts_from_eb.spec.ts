@@ -303,6 +303,7 @@ context("Parts from EB flow test", () => {
 
       it("Check if Approved date exists", () => {
         SystemRequirement("REQ-1010");
+        SystemRequirement("REQ-4320");
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
       });
 
@@ -409,6 +410,7 @@ context("Parts from EB flow test", () => {
 
       it("Check if Approved date exists", () => {
         SystemRequirement("REQ-1010");
+        SystemRequirement("REQ-4320");
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
       });
 
@@ -503,6 +505,7 @@ context("Parts from EB flow test", () => {
 
       it("Check if Approved date exists", () => {
         SystemRequirement("REQ-1010");
+        SystemRequirement("REQ-4320");
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
       });
 

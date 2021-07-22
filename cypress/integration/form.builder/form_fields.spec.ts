@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -219,14 +220,17 @@ context("FORM Field test", () => {
       });
 
       it("Add Blank Template Form", () => {
+        SystemRequirement("FB-1170, FB-1180");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
         cy.fbAddNewFieldButton();
+        cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
         cy.fbMouseOverByLabel({ label: "fb-blank-template" } );
       });
 
       it("Add Quantity", () => {
+        SystemRequirement("FB-1270");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
@@ -490,6 +494,15 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "dialog-close" });
       });
 
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0770");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
       it("Verify Select Field attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
@@ -525,6 +538,7 @@ context("FORM Field test", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
         cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
         cy.fbClickButton({ el: "dialog-close" });
+        cy.contains("image.jpg").should("exist");
       });
 
       it("Verify Quantity attributes", () => {
@@ -688,6 +702,132 @@ context("FORM Field test", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
         cy.fbVerifyCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
         cy.fbClickButton({ el: "dialog-close" });
+      });
+    });
+
+    context("Check fields in Preview Mode", () => {
+      it("Open Preview dialog", () => {
+        cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      });
+
+      it("Add and check Quantity field", () => {
+        SystemRequirement("FB-1340");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").clear().type("1");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-quantity-]").should("have.value", "1");
+      });
+
+      it("there should be no edit for field", () => {
+        SystemRequirement("FB-1210, FB-1300, FB-0760");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0800");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
+      it("Close Preview dialog", () => {
+        cy.fbClickButton({ el: "dialog-close" });
+      });
+    });
+
+    context("Edit and verify Form fields", () => {
+      it("Edit Quantity field", () => {
+        SystemRequirement("FB-1270");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity1" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Edit Blank Template field", () => {
+        SystemRequirement("FB-1180");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Verify updated Quantity field", () => {
+        cy.get("[data-cy=\"fb-quantity1\"]").should("exist");
+        cy.get("[data-cy=\"fb-quantity1\"]").should("have.text", "fb-quantity1");
+      });
+
+      it("Verify updated Blank Template field", () => {
+        cy.get("[data-cy=\"fb-blank-template1\"]").should("exist");
+        cy.get("[data-cy=\"fb-blank-template1\"]").should("have.text", "fb-blank-template1");
+      });
+
+      it("Approve and release FORM document", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
+    context("Create Clinical Protocol doc", () => {
+      it("Click New button", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enter title", () => {
+        cy.drEnterDocumentTitle({ name: "test title" });
+      });
+
+      it("Enter description", () => {
+        cy.drEnterDocumentDescription({ description: "test description" });
+      });
+
+      it("Enter Quantity field value", () => {
+        SystemRequirement("FB-1320");
+        cy.get("input[name^=\"fb-quantity-\"]").type("1");
+      });
+
+      it("Click Save button", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Verify Clinical Protocol doc values", () => {
+      it("Verify Quantity values", () => {
+        cy.get("input[name^=\"fb-quantity-\"]").should("have.value", "1");
+      });
+
+      it("Verify Not to edit Quantity field", () => {
+        SystemRequirement("FB-1280");
+        cy.get("[data-cy=\"fb-quantity1\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Blank Template field", () => {
+        SystemRequirement("FB-1190");
+        cy.get("[data-cy=\"fb-blank-template1\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Hyperlink field", () => {
+        SystemRequirement("FB-0740");
+        cy.get("[name^=fb-hyperlink-]").parent().parent().parent()
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify location linked on Hyperlink", () => {
+        SystemRequirement("FB-0780");
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[name^=fb-hyperlink-]").click();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
       });
     });
   });
