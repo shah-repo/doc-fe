@@ -1,7 +1,9 @@
-import { compact, filter, isString, kebabCase, size, union } from "lodash";
+/* eslint-disable max-len */
+import { compact, filter, isEmpty, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
+import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
@@ -40,7 +42,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
-        workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchema));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES }));
+        workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
     }
@@ -64,6 +67,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute,
         rules,
         defaultValue,
+        editorConfig,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
@@ -80,6 +84,17 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       }
       if (type === "blanktplform" && !defaultValue) {
         formValues.defaultValue = [];
+      }
+      if (type === "mpiprocedure"  && (!editorConfig || isEmpty(editorConfig))) {
+        formValues.editorConfig = {
+          attachments: [],
+          description: "",
+          equipment: [],
+          materials: [],
+        };
+      }
+      if (type === "lhrstep" && !editorConfig) {
+        formValues.editorConfig = {};
       }
 
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
