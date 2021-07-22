@@ -3,12 +3,9 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-<<<<<<< HEAD
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
-import { getReceivedQuantity } from "../FBPOReceive/utils";
-=======
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
->>>>>>> develop
+import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 
@@ -72,7 +69,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-<<<<<<< HEAD
 
     if (isReceivable) {
       const receivedName = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
@@ -80,17 +76,15 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       items = items?.map( (item) => {
         const id = item.partNumber || item.id;
         const received = getReceivedQuantity(receivedItems, id) || 0;
-
         return {
           ...item,
           received,
         };
       });
-=======
+    }
     if (workspaceState?.document?.status) {
       disabled = !isDocumentRevisionInDraft(workspaceState?.document?.status)
       || !isDocumentRevisionPendingChange(workspaceState?.document?.status);
->>>>>>> develop
     }
 
     return Component({

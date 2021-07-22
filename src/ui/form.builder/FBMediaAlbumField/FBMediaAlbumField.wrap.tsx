@@ -133,7 +133,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-<<<<<<< HEAD
             mediaAlbumFieldState!.fromUpload = false;
             if (mediaAlbumFieldState?.finishedUpload) {
               workspaceState?.saveDocRev(formState?.getValues());
@@ -141,10 +140,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
             }
           }
           else {
-=======
-            mediaAlbumFieldState.fromUpload = false;
-          } else {
->>>>>>> develop
             workspaceState?.saveDocRev(formState?.getValues());
           }
         }
