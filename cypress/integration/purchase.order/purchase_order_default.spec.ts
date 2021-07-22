@@ -5,12 +5,12 @@
 import moment from "moment";
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
-import { purchaseOrderDefaultSchema } from "./default_po_schema";
 
 let createdCompany;
 let loginResponse;
