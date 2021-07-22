@@ -12,7 +12,6 @@ export enum NavigationItems{
   SUPPLIER_LIST = "supplierList",
   RECEIVING = "receiving",
   MANUFACTURING = "manufacturing",
-  WORK_ORDERS = "workOrders",
   LOTS = "lots",
   PARTS = "parts",
   INSPECTION = "inspection",

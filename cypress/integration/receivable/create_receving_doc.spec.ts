@@ -745,8 +745,7 @@ context("Create receivable test", () => {
           SystemRequirement("REQ-1860");
           cy.get("[data-cy=\"form.builder.request.approve\"]").click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });

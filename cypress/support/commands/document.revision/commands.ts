@@ -309,10 +309,10 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApprovers];
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {

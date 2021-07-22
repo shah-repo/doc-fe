@@ -1015,7 +1015,9 @@ context("Autosave on blur", () => {
     //   cy.get("[data-cy=\"assigned\"]").type(`${USERS[1].email}{downarrow}{enter}`);
     //   cy.xpath("//input[@name]/ ../div/button").eq(1).click().wait(200);
     //   // eslint-disable-next-line max-len
-    //   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
+    //   cy.xpath(
+    // "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
+    // ).last()
     //     .click().wait(300);
     //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).click({ force: true });
     // });

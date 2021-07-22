@@ -866,7 +866,6 @@ context("Procedure and parts flow test", () => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
               CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.GetRequiredApprovers], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
@@ -1001,7 +1000,6 @@ context("Procedure and parts flow test", () => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
               CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.GetRequiredApprovers], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
@@ -1010,10 +1008,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Approve and release the part", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () =>
-          {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
 

@@ -406,7 +406,6 @@ context("Copyable Checkbox test", () => {
     it("Select Record Type: 'Engineering Build'", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
-        CyRoutes.EmployeesGet,
         CyRoutes.AvailableMaintenanceForms], () => {
         cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
       });

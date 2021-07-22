@@ -7,7 +7,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -487,15 +486,6 @@ context("Inspection flow", () => {
                   type: "CATEGORY",
                   label: "Parts",
                   category: "Parts",
-                  restrictedToUsersWithTags: [
-                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
-                  ],
-                },
-                {
-                  icon: "/navigation_icons/todo.svg",
-                  type: "CATEGORY",
-                  label: "Work Orders",
-                  category: "Work Order",
                   restrictedToUsersWithTags: [
                     GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
                   ],
@@ -1266,9 +1256,7 @@ context("Inspection flow", () => {
       });
 
       it("Approve inspection document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-          cy.ebApprove();
-        });
+        cy.ebApprove();
       });
 
       it("Check status is 'Released'", () => {
