@@ -47,7 +47,6 @@ export const withFBInput = <T extends FBInputProps>(
     showErrorMsg = true,
     deleted,
     isInputOwner,
-    locked,
     lockOwnerName,
     ...props
   }: T) => {
@@ -139,10 +138,10 @@ export const withFBInput = <T extends FBInputProps>(
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
     // Locked state
-    locked = formState?.locked.get(name)?.locked;
-    lockOwnerName = formState?.locked.get(name)?.ownerName;
-    if (ownerName !== lockOwnerName) {
-      disabled = disabled || locked;
+    const lockedData = formState?.locked.get(name);
+    lockOwnerName = lockedData?.ownerName;
+    if (lockOwnerName && (ownerName !== lockOwnerName)) {
+      disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
     }
 
     if (isClone) {
@@ -150,8 +149,7 @@ export const withFBInput = <T extends FBInputProps>(
         name,
         disabled,
         onChange,
-        onBlur,
-        locked,
+        ...(type !== "textfield" && { onBlur }),
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
@@ -212,6 +210,7 @@ export const withFBInput = <T extends FBInputProps>(
       ...(props as T),
       onChange,
       onBlur,
+      formState,
       includeContext,
       isInputOwner,
       validationMode,
@@ -239,7 +238,6 @@ export const withFBInput = <T extends FBInputProps>(
       omitFormValue,
       deleted,
       isOutput,
-      locked,
       lockOwnerName,
     });
   };

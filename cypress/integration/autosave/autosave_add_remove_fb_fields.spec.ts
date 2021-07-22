@@ -626,6 +626,7 @@ context("Autosave on add and remove FB fields", () => {
     });
 
     it("Remove TextField", () => {
+      SystemRequirement("FB-0200");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbRemoveLastAddedItem();
       });

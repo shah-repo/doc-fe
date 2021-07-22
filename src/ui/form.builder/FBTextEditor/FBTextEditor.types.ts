@@ -8,7 +8,7 @@ export type FBTextEditorProps =
   editorRef?: (ref: HTMLInputElement) => void;
   handleMask?: (masked: boolean) => void;
   onOptionsChange?: (value: string) => void;
-  onBlur?: () => void;
+  onBlur?: (ev: any) => void;
   onKeyDown?: (e: KeyboardEvent) => void;
   textEditorState?: FBTextEditorState;
   editorReference?: HTMLInputElement;

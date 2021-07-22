@@ -36,11 +36,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     );
 
     isTranslation(placeholder) && (placeholder = intl.formatMessage({ id: placeholder }));
-
     onFocus = () => {
+      if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
       if (!id) { return; }
-      formState?.lockFields({
+      formState?.lockField({
         fields: [{
           formInput: [{
             [name]: true,
@@ -48,6 +48,19 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         }],
         documentRevisionId: id,
       }, name);
+    };
+
+    const onBlur = (ev) => {
+      if (formState?.isBackdropOpen) {
+        ev.target.focus();
+        return;
+      }
+      if (ev?.target?.type === "number" && ev?.target?.step === ".01") {
+        ev.target.value = Math.abs(ev.target?.value).toFixed(2).toString();
+      }
+      if (!name) { return; }
+      formState?.unlockField(name);
+      formState?.setFieldAutosave(name);
     };
 
     useEffect(() => reaction(
@@ -61,6 +74,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
     return Component({
       ...(props as T),
       onFocus,
+      onBlur,
       multiline,
       placeholder,
       disabled,

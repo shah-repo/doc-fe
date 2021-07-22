@@ -1129,7 +1129,9 @@ context("Inspection flow", () => {
 
   context("Create Inspection document", () => {
     it("Create inspection from Form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
     it("Enters title 'Inspection Document'", () => {
@@ -1162,84 +1164,86 @@ context("Inspection flow", () => {
 
     context("Fill samples with values", () => {
       it("Insert height for 'SAMPLE-1'", () => {
-        cy.get("input[name^=height]").eq(0).type("30");
+        cy.get("input[name^=height]").eq(0).typeFieldLock("30");
       });
 
       it("Insert width for 'SAMPLE-1'", () => {
-        cy.get("input[name^=width]").eq(0).type("30");
+        cy.get("input[name^=width]").eq(0).typeFieldLock("30");
       });
 
       it("Insert height for 'SAMPLE-2'", () => {
-        cy.get("input[name^=height]").eq(1).type("40");
+        cy.get("input[name^=height]").eq(1).typeFieldLock("40");
       });
 
       it("Insert width for 'SAMPLE-2'", () => {
-        cy.get("input[name^=width]").eq(1).type("40");
+        cy.get("input[name^=width]").eq(1).typeFieldLock("40");
       });
 
       it("Insert height for 'SAMPLE-3'", () => {
-        cy.get("input[name^=height]").eq(2).type("50");
+        cy.get("input[name^=height]").eq(2).typeFieldLock("50");
       });
 
       it("Insert width for 'SAMPLE-3'", () => {
-        cy.get("input[name^=width]").eq(2).type("50");
+        cy.get("input[name^=width]").eq(2).typeFieldLock("50");
       });
 
       it("Insert height for 'SAMPLE-4'", () => {
-        cy.get("input[name^=height]").eq(3).type("60");
+        cy.get("input[name^=height]").eq(3).typeFieldLock("60");
       });
 
       it("Insert width for 'SAMPLE-4'", () => {
-        cy.get("input[name^=width]").eq(3).type("60");
+        cy.get("input[name^=width]").eq(3).typeFieldLock("60");
       });
 
       it("Insert height for 'SAMPLE-5'", () => {
-        cy.get("input[name^=height]").eq(4).type("70");
+        cy.get("input[name^=height]").eq(4).typeFieldLock("70");
       });
 
       it("Insert width for 'SAMPLE-5'", () => {
-        cy.get("input[name^=width]").eq(4).type("70");
+        cy.get("input[name^=width]").eq(4).typeFieldLock("70");
       });
 
       it("Insert height for 'SAMPLE-6'", () => {
-        cy.get("input[name^=height]").eq(5).type("80");
+        cy.get("input[name^=height]").eq(5).typeFieldLock("80");
       });
 
       it("Insert width for 'SAMPLE-6'", () => {
-        cy.get("input[name^=width]").eq(5).type("80");
+        cy.get("input[name^=width]").eq(5).typeFieldLock("80");
       });
     });
 
     context("Fill lot summary", () => {
       it("Fill 'Accepted' textfield", () => {
-        cy.get("[name=lot_summary_accepted]").type("1");
+        cy.get("[name=lot_summary_accepted]").typeFieldLock("1");
       });
 
       it("Fill 'Scrapped' textfield", () => {
-        cy.get("[name=lot_summary_scrapped]").type("1");
+        cy.get("[name=lot_summary_scrapped]").typeFieldLock("1");
       });
 
       it("Fill 'Rework' textfield", () => {
-        cy.get("[name=lot_summary_rework]").type("4");
+        cy.get("[name=lot_summary_rework]").typeFieldLock("4");
       });
 
       it("Fill 'Use As Is' textfield", () => {
-        cy.get("[name=lot_summary_use_as_is]").type("2");
+        cy.get("[name=lot_summary_use_as_is]").typeFieldLock("2");
       });
 
       it("Fill 'Return To Vendor' textfield", () => {
-        cy.get("[name=lot_summary_return_to_vendor]").type("1");
+        cy.get("[name=lot_summary_return_to_vendor]").typeFieldLock("1");
       });
 
       it("Fill 'Restricted Use' textfield", () => {
-        cy.get("[name=lot_summary_restricted_use]").type("3");
+        cy.get("[name=lot_summary_restricted_use]").typeFieldLock("3");
       });
     });
 
 
     context("Release Inspection document", () => {
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
       });
 
       it("Add approvals", () => {

@@ -1,7 +1,7 @@
 import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBProviderProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
@@ -78,6 +78,7 @@ export type FBInputProps =
   & FBOptionProps
   & FBEditorOptionsProps
   & Pick<AutocompleteProps, "multiple">
+  & Pick<FBProviderProps, "formState">
   & Pick<BaseTextFieldProps,
     | "children"
     | "error"
@@ -187,10 +188,6 @@ export type FBInputProps =
      * @cfg {Bool} If true scroll to el on render.
      */
     autoScrollTo?: boolean;
-    /**
-     * @cfg {Bool} If true field is disabled.
-     */
-    locked?: boolean;
 
     /**
      * @cfg {string} Username that holds the lock.
