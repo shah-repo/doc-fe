@@ -444,7 +444,6 @@ context("PO test with default enlil form", () => {
         });
 
         it("Select 'Credit Card' for Terms", () => {
-          SystemRequirement("REQ-1250");
           cy.get("div[id*=terms]").click();
           cy.get("ul[role=listbox]>li").contains("Credit Card").click();
         });
