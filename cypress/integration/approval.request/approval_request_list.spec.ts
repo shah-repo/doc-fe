@@ -360,7 +360,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by document title", () => {
-        SystemRequirement("REQ-0790");
+        SystemRequirement("REQ-0790", "REQ-2290");
         cy.alVerifyFilterByTitle({ title: approvalRequestName });
       });
     });
