@@ -224,8 +224,8 @@ Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
 });
 
 Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
-  cy.get("[class=\"MuiTableRow-root\"]").eq(1).contains(params.firstId).should("exist");
-  cy.get("[class=\"MuiTableRow-root\"]").eq(2).contains(params.secondId).should("exist");
+  cy.get("[data-cy=\"poItemIndex\"]").eq(0).should("have.text", params.firstId);
+  cy.get("[data-cy=\"poItemIndex\"]").eq(1).should("have.text", params.secondId);
 });
 
 Cypress.Commands.add("poAMEnterLevelName", (params: {name: string}) => {
