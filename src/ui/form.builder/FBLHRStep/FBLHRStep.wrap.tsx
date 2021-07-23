@@ -112,7 +112,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
-        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) => item.type === "mpiprocedure");
+        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) =>
+          item.type === "mpiprocedure" && !item.deleted);
         const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
