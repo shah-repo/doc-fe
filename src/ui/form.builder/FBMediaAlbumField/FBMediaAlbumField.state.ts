@@ -9,7 +9,6 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  public finishedUpload = false;
   public filesUploaded: File[] = [];
   public fieldName: string | undefined;
 
@@ -29,7 +28,9 @@ class FBMediaAlbumFieldState {
     return (
       this.attachmentApi.loading ||
       this.attachmentsApi.loading ||
-      this.filesApi.loading
+      this.filesApi.loading ||
+      this.attachmentDownloadApi.loading ||
+      Boolean(this.filesUploaded.length)
     );
   }
 
@@ -67,6 +68,14 @@ class FBMediaAlbumFieldState {
   };
 
   public upload = (files: File[] | undefined) => {
+    if (!files) {
+      return;
+    }
+    this.filesUploaded = [...files];
+    this.uploadFile(files);
+  };
+
+  private uploadFile = (files: File[] | undefined) => {
     if (isUndefined(files) || files.length === 0) {
       return;
     }
@@ -86,12 +95,11 @@ class FBMediaAlbumFieldState {
         this.filesUploaded.pop();
       }
       if (data) {
-
         this.attachmentApi.setData(data);
         this.attachmentApi.onSuccess();
       }
     });
-    this.upload(files);
+    this.uploadFile(files);
   };
 
   public download = (file: FBAttachment) => {
@@ -102,18 +110,13 @@ class FBMediaAlbumFieldState {
       method: "get",
     }, (data, error) => {
       this.filesUploaded.pop();
-      if (!this.filesUploaded.length) {
-        this.finishedUpload = true;
-      }
       if (data) {
-
         this.addFile({
           ...file,
           url: data.url,
         });
-        this.attachmentDownloadApi.setData(data);
         this.addFileId(file.id);
-        this.filesApi.onSuccess();
+        this.attachmentDownloadApi.onSuccess();
       }
       if (error) {
         this.attachmentDownloadApi.onError(error);

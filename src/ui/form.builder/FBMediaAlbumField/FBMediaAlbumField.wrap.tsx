@@ -80,7 +80,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
-      mediaAlbumFieldState!.filesUploaded = validFiles;
       mediaAlbumFieldState?.upload(validFiles);
     };
 
@@ -132,16 +131,16 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
             }
           }
           formState?.setFieldValue(name, files, true, isTemplate);
+
           if (mediaAlbumFieldState?.fromUpload) {
-            mediaAlbumFieldState!.fromUpload = false;
-            if (mediaAlbumFieldState?.finishedUpload) {
-              mediaAlbumFieldState!.finishedUpload = false;
+            if (!mediaAlbumFieldState?.filesUploaded.length) {
+              mediaAlbumFieldState!.fromUpload = false;
               workspaceState?.saveDocRev(formState?.getValues());
             }
-          }
-          else {
+          } else {
             workspaceState?.saveDocRev(formState?.getValues());
           }
+
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
