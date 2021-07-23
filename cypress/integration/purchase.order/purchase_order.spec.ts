@@ -506,6 +506,15 @@ context("PO test", () => {
       });
     });
 
+    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
+      SystemRequirement("REQ-1400");
+      cy.poAddPOButtonClick();
+      cy.get("p[class*='MuiFormHelperText-root']>span")
+        .contains("The Part Number field is required when Supplier Part Number is empty.");
+      cy.get("p[class*='MuiFormHelperText-root']>span")
+        .contains("The Supplier Part Number field is required when Part Number is empty.");
+    });
+
     it("Select Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00004 - 1" });
@@ -728,6 +737,63 @@ context("PO test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
           .should("have.text", ("Revision" + String.fromCharCode(160) + "1"));
       });
+    });
+  });
+
+  context("Revise PO and Close it", () => {
+    it("Click on 'Revise PO'", () => {
+      SystemRequirement("REQ-1600");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select 'Correct PO' revision stage", () => {
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Correct PO" });
+    });
+
+    it("Select 'Close' for PO status", () => {
+      SystemRequirement("REQ-1670");
+      cy.poSelectPOStatus({ status: "Close" });
+    });
+
+    it("Save PO", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
+      });
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      SystemRequirement("REQ-1490");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
+    });
+
+    it("Check PO status is 'Closed'", () => {
+      SystemRequirement("REQ-1670");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Closed");
     });
   });
 
@@ -1067,7 +1133,7 @@ context("PO test", () => {
     it("Enter all fields to check if all filter fields are working", () => {
       SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
-        docId: "POT-00001", version: "1", poStatus: "Open", supplier: "Supplier",
+        docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
         partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       }).wait(2000);
     });
@@ -1088,7 +1154,7 @@ context("PO test", () => {
     it("Check if all filter values persist after changing landing page", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
-        docId: "POT-00001", version: "1", poStatus: "Open", supplier: "Supplier",
+        docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
         partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       });
     });
