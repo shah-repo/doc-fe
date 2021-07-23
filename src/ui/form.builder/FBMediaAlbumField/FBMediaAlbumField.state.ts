@@ -9,8 +9,7 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  public finishedUpload = false;
-  public filesUploaded: FBAttachment[] = [];
+  @observable public filesUploaded: File[] = [];
   public fieldName: string | undefined;
 
   @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
@@ -29,7 +28,8 @@ class FBMediaAlbumFieldState {
     return (
       this.attachmentApi.loading ||
       this.attachmentsApi.loading ||
-      this.filesApi.loading
+      this.filesApi.loading ||
+      this.attachmentDownloadApi.loading
     );
   }
 
@@ -67,6 +67,14 @@ class FBMediaAlbumFieldState {
   };
 
   public upload = (files: File[] | undefined) => {
+    if (!files) {
+      return;
+    }
+    this.filesUploaded = [...files];
+    this.uploadFile(files);
+  };
+
+  private uploadFile = (files: File[] | undefined) => {
     if (isUndefined(files) || files.length === 0) {
       return;
     }
@@ -83,23 +91,14 @@ class FBMediaAlbumFieldState {
     }, (data, error) => {
       if (error) {
         this.attachmentApi.onError(error);
+        this.filesUploaded.pop();
       }
       if (data) {
-        this.filesUploaded.push(data);
         this.attachmentApi.setData(data);
         this.attachmentApi.onSuccess();
       }
     });
-    this.upload(files);
-  };
-
-
-  public downloadUploadedList = () => {
-    const file = this.filesUploaded.pop();
-    if (!file) {
-      return;
-    }
-    this.download(file);
+    this.uploadFile(files);
   };
 
   public download = (file: FBAttachment) => {
@@ -109,17 +108,14 @@ class FBMediaAlbumFieldState {
       url: `${ATTACHMENT_ROOT_URL}/${file.id}/download${queryParams}`,
       method: "get",
     }, (data, error) => {
+      this.filesUploaded.pop();
       if (data) {
         this.addFile({
           ...file,
           url: data.url,
         });
-        this.attachmentDownloadApi.setData(data);
         this.addFileId(file.id);
-        this.filesApi.onSuccess();
-        if (!this.filesUploaded.length) {
-          this.finishedUpload = true;
-        }
+        this.attachmentDownloadApi.onSuccess();
       }
       if (error) {
         this.attachmentDownloadApi.onError(error);

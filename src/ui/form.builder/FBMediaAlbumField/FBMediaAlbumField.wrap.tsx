@@ -80,7 +80,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
-
       mediaAlbumFieldState?.upload(validFiles);
     };
 
@@ -89,7 +88,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         () => workspaceState?.formInputSync?.get(name),
         (value) => {
           const syncIds = value;
-          const syncValue = map(syncIds, (syncFile) => toJS(syncFile.id));
+          const syncValue = map(syncIds, (syncFile) => syncFile.id ? toJS(syncFile.id) : syncFile);
           const filesIds = map(mediaAlbumFieldState?.files, "id");
           const addedFiles: string[] = [];
           map(union(filesIds, syncValue), (fileId) => {
@@ -111,7 +110,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       () => mediaAlbumFieldState?.attachmentApi.data,
       (data) => {
         if (!data) { return; }
-        mediaAlbumFieldState?.downloadUploadedList();
+        mediaAlbumFieldState?.download(data);
         mediaAlbumFieldState!.fromUpload = true;
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,14 +132,10 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            mediaAlbumFieldState!.fromUpload = false;
-            if (mediaAlbumFieldState?.finishedUpload) {
+            if (!mediaAlbumFieldState?.filesUploaded.length) {
+              mediaAlbumFieldState!.fromUpload = false;
               workspaceState?.saveDocRev(formState?.getValues());
-              mediaAlbumFieldState!.finishedUpload = false;
             }
-          }
-          else {
-            workspaceState?.saveDocRev(formState?.getValues());
           }
         }
       );
@@ -155,7 +150,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     }
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
-      loading = mediaAlbumFieldState?.loading;
+      loading = mediaAlbumFieldState?.loading || Boolean(mediaAlbumFieldState?.filesUploaded.length);
       collection = mediaAlbumFieldState?.collection;
     });
 
