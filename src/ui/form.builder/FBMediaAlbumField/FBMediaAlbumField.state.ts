@@ -9,7 +9,7 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
-  public filesUploaded: File[] = [];
+  @observable public filesUploaded: File[] = [];
   public fieldName: string | undefined;
 
   @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
@@ -29,8 +29,7 @@ class FBMediaAlbumFieldState {
       this.attachmentApi.loading ||
       this.attachmentsApi.loading ||
       this.filesApi.loading ||
-      this.attachmentDownloadApi.loading ||
-      Boolean(this.filesUploaded.length)
+      this.attachmentDownloadApi.loading
     );
   }
 

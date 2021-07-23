@@ -88,7 +88,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         () => workspaceState?.formInputSync?.get(name),
         (value) => {
           const syncIds = value;
-          const syncValue = map(syncIds, (syncFile) => toJS(syncFile.id));
+          const syncValue = map(syncIds, (syncFile) => syncFile.id ? toJS(syncFile.id) : syncFile);
           const filesIds = map(mediaAlbumFieldState?.files, "id");
           const addedFiles: string[] = [];
           map(union(filesIds, syncValue), (fileId) => {
@@ -131,16 +131,12 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
             }
           }
           formState?.setFieldValue(name, files, true, isTemplate);
-
           if (mediaAlbumFieldState?.fromUpload) {
             if (!mediaAlbumFieldState?.filesUploaded.length) {
               mediaAlbumFieldState!.fromUpload = false;
               workspaceState?.saveDocRev(formState?.getValues());
             }
-          } else {
-            workspaceState?.saveDocRev(formState?.getValues());
           }
-
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,7 +150,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     }
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
-      loading = mediaAlbumFieldState?.loading;
+      loading = mediaAlbumFieldState?.loading || Boolean(mediaAlbumFieldState?.filesUploaded.length);
       collection = mediaAlbumFieldState?.collection;
     });
 

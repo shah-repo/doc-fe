@@ -43,6 +43,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
       () => procedureState?.value,
       (data) => {
         formState?.setFieldValue(name, data);
+        if (data?.attachments) { return; }
         workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
