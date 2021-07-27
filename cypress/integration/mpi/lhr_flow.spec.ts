@@ -862,12 +862,6 @@ context("LHR flow", () => {
               category: "Equipment",
             },
             {
-              icon: "/navigation_icons/lhr_icon.svg",
-              type: "CATEGORY",
-              label: "LHR",
-              category: "Lhr",
-            },
-            {
               icon: "/navigation_icons/supplier-menu.svg",
               menu: [
                 {
@@ -930,6 +924,15 @@ context("LHR flow", () => {
                   type: "CATEGORY",
                   label: "Lots",
                   category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
                   restrictedToUsersWithTags: [
                     GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
                   ],
