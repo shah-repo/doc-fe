@@ -42,8 +42,8 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     React.useEffect(() => reaction(
       () => procedureState?.value,
       (data) => {
+        if (isEqual(formState?.getFieldValue(name), data)) { return; }
         formState?.setFieldValue(name, data);
-        if (data?.attachments) { return; }
         workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
