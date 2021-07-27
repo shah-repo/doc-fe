@@ -177,7 +177,7 @@ context("Record inline Flow", () => {
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock("First entry");
           cy.unClick();
         });
       });
@@ -185,8 +185,8 @@ context("Record inline Flow", () => {
       it("Enter text 'First entry' in second textfield for inline", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"second-textfield-for-inline\"]")
-            .click().type("First entry");
+          cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+            .typeFieldLock("First entry");
           cy.unClick();
         });
       });
@@ -240,7 +240,7 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").type(", Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock(", Second entry");
         });
 
         it("Save record", () => {
@@ -282,7 +282,7 @@ context("Record inline Flow", () => {
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Third entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock(", Third entry");
         });
 
         it("Save record", () => {
