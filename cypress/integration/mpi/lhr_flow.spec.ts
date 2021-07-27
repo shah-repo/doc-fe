@@ -3,6 +3,7 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -814,6 +815,258 @@ context("LHR flow", () => {
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         });
+      });
+    });
+
+    it("[API]API request for updating company navigation", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          navigation: [
+            {
+              icon: "/navigation_icons/dashboard.svg",
+              path: "/",
+              type: "LINK",
+              label: "Dashboard",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/document.svg",
+                  path: "/document_revision",
+                  type: "LINK",
+                  label: "Document List",
+                },
+                {
+                  icon: "/navigation_icons/cr.svg",
+                  path: "/change_request",
+                  type: "LINK",
+                  label: "Approval Requests",
+                },
+                {
+                  icon: "/navigation_icons/text-paper.svg",
+                  type: "CATEGORY",
+                  label: "Records",
+                  category: "Record",
+                },
+              ],
+              type: "MENU",
+              label: "Document Control",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              type: "CATEGORY",
+              label: "Equipment",
+              category: "Equipment",
+            },
+            {
+              icon: "/navigation_icons/supplier-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/supplier-list.svg",
+                  type: "CATEGORY",
+                  label: "Supplier List",
+                  category: "Supplier",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Supplier Management",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/receipt_list.svg",
+              type: "CATEGORY",
+              label: "Purchase Orders",
+              category: "Purchase Order",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/cart-simple-in.svg",
+              type: "CATEGORY",
+              label: "Receiving",
+              category: "Receive",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/tools.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/icon_parts.svg",
+                  type: "CATEGORY",
+                  label: "Parts",
+                  category: "Parts",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/todo.svg",
+                  type: "CATEGORY",
+                  label: "Work Orders",
+                  category: "Work Order",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/tag-check.svg",
+                  type: "CATEGORY",
+                  label: "Lots",
+                  category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Manufacturing",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/group-management.svg",
+              path: "/group_management",
+              type: "LINK",
+              label: "Group Management",
+              restrictedToUsersWithTags: [
+                GroupTag.GROUP_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/user-management.svg",
+              path: "/user_management",
+              type: "LINK",
+              label: "User Management",
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              path: "/document_type_management",
+              type: "LINK",
+              label: "Document Type Management",
+              restrictedToUsersWithTags: [
+                GroupTag.DOCUMENT_TYPE_MANAGEMENT,
+              ],
+            },
+          ],
+        },
+      }).then(() => {
+        done();
+      });
+    });
+
+    it("[API]API request for updating page details", (done: any) => {
+      cy.cmpUpdatePageDetails({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          category: "Lhr",
+          addNewBtnLabel: "Create New Lhr",
+          columns: [
+            {
+              fn: "LHR_SUBTITLE",
+              label: "LSHS subtitle",
+              fieldName: "irrelevant",
+              showOnWeb: false,
+              valuePath: "precalc.lshs_subtitle",
+              sourcePath: "irrelevant",
+              showOnAndroid: false,
+            },
+            {
+              label: "LOT #",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lshs_subtitle.lot.label",
+              sourcePath: "irrelevant",
+              showOnAndroid: false,
+            },
+            {
+              label: "State",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "status",
+              showOnAndroid: true,
+            },
+            {
+              label: "Owner",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "owner.user.name",
+              showOnAndroid: true,
+            },
+            {
+              label: "Part Number/Rev",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lshs_subtitle.part.label",
+              showOnAndroid: true,
+            },
+            {
+              label: "Completion Date",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "releasedAt",
+              showOnAndroid: true,
+            },
+            {
+              label: "Start Quantity",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "formInput.lhr_initial_quantity",
+              showOnAndroid: true,
+            },
+            {
+              fn: "LHR_END_QUANTITY",
+              label: "End Quantity",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lhr_end_accepted_quantity",
+              sourcePath: "irrelevant",
+              showOnAndroid: true,
+            },
+            {
+              fn: "FORM_DOC_ID",
+              label: "Template",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.formDocId",
+              sourcePath: "irrelevant",
+              showOnAndroid: true,
+            },
+            {
+              label: "ID",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "document.docId",
+              showOnAndroid: true,
+            },
+          ],
+        },
+      }).then(() => {
+        done();
       });
     });
   });
