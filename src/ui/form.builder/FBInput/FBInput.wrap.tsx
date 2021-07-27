@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { first, get, includes, isArray, isBoolean, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -10,6 +11,36 @@ import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
+
+// Initial values only some of the fields have
+export const INDIVIDUAL_INITIAL_VALUES = {
+  placeholder: "",
+  options: [],
+  actions: [],
+  paragraph: "",
+};
+
+// Initial values all the fields share
+export const COMMON_INITIAL_VALUES = {
+  formValuesRules: {},
+  hidden: false,
+  outputDisabled: false,
+  rulesObject: {},
+  deleted: false,
+  deleteInFormDisabled: false,
+  validationMode: "default",
+  validationAttribute: "",
+  sampleItemsIndicator: {
+    enabled: false,
+    id: "",
+    sampleSection: false,
+    serialNumber: 0,
+  },
+  rules: "",
+  applicableOn: [],
+  applicableValidationSchema: true,
+  editorProperties: [],
+};
 
 export const withFBInput = <T extends FBInputProps>(
   Component: React.FunctionComponent<T>
@@ -57,14 +88,92 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+    const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
 
-    defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
+
+    const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
+      // This sets shared default values for all of the fields
+      if (!initialValues || isEmpty(initialValues)) {
+        return;
+      }
+      const {
+        hidden,
+        formValuesRules,
+        outputDisabled,
+        rulesObject,
+        deleted,
+        deleteInFormDisabled,
+        validationMode,
+        sampleItemsIndicator,
+        validationAttribute,
+        rules,
+        applicableOn,
+        applicableValidationSchema,
+        editorProperties,
+      } = initialValues || {};
+
+      if (!hidden) {
+        formState?.setFieldValue("hidden", COMMON_INITIAL_VALUES.hidden, withState, omitFormValue);
+      }
+      if (!formValuesRules) {
+        formState?.setFieldValue("formValuesRules", COMMON_INITIAL_VALUES.formValuesRules, withState, omitFormValue);
+      }
+      if (!outputDisabled) {
+        formState?.setFieldValue("outputDisabled", COMMON_INITIAL_VALUES.outputDisabled, withState, omitFormValue);
+      }
+      if (!rulesObject) {
+        formState?.setFieldValue("rulesObject", COMMON_INITIAL_VALUES.rulesObject, withState, omitFormValue);
+      }
+      if (!deleted) {
+        formState?.setFieldValue("deleted", COMMON_INITIAL_VALUES.deleted, withState, omitFormValue);
+      }
+      if (!deleteInFormDisabled) {
+        formState?.setFieldValue("deleteInFormDisabled", COMMON_INITIAL_VALUES.deleteInFormDisabled, withState, omitFormValue);
+      }
+      if (!validationMode) {
+        formState?.setFieldValue("validationMode", COMMON_INITIAL_VALUES.validationMode, withState, omitFormValue);
+      }
+      if (!sampleItemsIndicator) {
+        formState?.setFieldValue("sampleItemsIndicator", COMMON_INITIAL_VALUES.sampleItemsIndicator, withState, omitFormValue);
+      }
+      if (!validationAttribute) {
+        formState?.setFieldValue("validationAttribute", COMMON_INITIAL_VALUES.validationAttribute, withState, omitFormValue);
+      }
+      if (!rules) {
+        formState?.setFieldValue("rules", COMMON_INITIAL_VALUES.rules, withState, omitFormValue);
+      }
+      if (!applicableOn) {
+        formState?.setFieldValue("applicableOn", COMMON_INITIAL_VALUES.applicableOn, withState, omitFormValue);
+      }
+      if (!applicableValidationSchema) {
+        formState?.setFieldValue("applicableValidationSchema", COMMON_INITIAL_VALUES.applicableValidationSchema, withState, omitFormValue);
+      }
+      if (!editorProperties) {
+        formState?.setFieldValue("editorProperties", COMMON_INITIAL_VALUES.editorProperties, withState, omitFormValue);
+      }
+    };
+
+    const setSpecificDefaultValue = (
+      initialValues: Dictionary<any> | null,
+      property: string,
+    ) => {
+      // This sets individual default values for the specific fields
+      if (!initialValues || isEmpty(initialValues)) {
+        return;
+      }
+      if (get(initialValues, property)) {
+        return;
+      }
+      formState?.setFieldValue(property, get(INDIVIDUAL_INITIAL_VALUES, property), withState, omitFormValue);
+    };
+
+    defaultValue = setDefaultValue();
 
     // Set validation scheme. This is union of scheme & comps configs.
     useEffect(() => {
@@ -127,6 +236,13 @@ export const withFBInput = <T extends FBInputProps>(
         },
       };
       const transDefault = (value[type || ""] || value.default)();
+      isDesignMode && setCommonDefaultValues(formState.initialValues);
+
+      (name === "placeholder") && setSpecificDefaultValue(formState.initialValues, "placeholder");
+      (name === "options") && setSpecificDefaultValue(formState.initialValues, "options");
+      (name === "actions") && setSpecificDefaultValue(formState.initialValues, "actions");
+      (name === "paragraph") && setSpecificDefaultValue(formState.initialValues, "paragraph");
+
       if (isTranslation(transDefault)) {
         return intl.formatMessage({ id: transDefault });
       }

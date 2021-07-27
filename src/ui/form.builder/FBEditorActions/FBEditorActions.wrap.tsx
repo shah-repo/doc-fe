@@ -1,7 +1,9 @@
-import { compact, filter, isString, kebabCase, size, union } from "lodash";
+/* eslint-disable max-len */
+import { compact, filter, isEmpty, isString, kebabCase, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
+import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
@@ -40,7 +42,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if (!workspaceState?.getSchemaItemAt(index) && additionalSchema) {
-        workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchema));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES }));
+        workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
     }
@@ -61,6 +64,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         editorProperties,
         uniqueSchemaItem,
         placeholder,
+        validationAttribute,
+        rules,
+        defaultValue,
+        editorConfig,
       } = formValues;
 
       // If schema item type is unique and we have already added it into scheme
@@ -68,11 +75,28 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
-      let rules = validators && toStringRules?.(validators);
+      let formRules = validators && toStringRules?.(validators);
+
+      // Inidvidual field flag setup
       if (type === "eqmaintenance") {
-        const eqRules = [rules, "eq_maintenance_required"];
-        rules = compact(eqRules).join(",");
+        const eqRules = [formRules, "eq_maintenance_required"];
+        formRules = compact(eqRules).join(",");
       }
+      if (type === "blanktplform" && !defaultValue) {
+        formValues.defaultValue = [];
+      }
+      if (type === "mpiprocedure"  && (!editorConfig || isEmpty(editorConfig))) {
+        formValues.editorConfig = {
+          attachments: [],
+          description: "",
+          equipment: [],
+          materials: [],
+        };
+      }
+      if (type === "lhrstep" && !editorConfig) {
+        formValues.editorConfig = {};
+      }
+
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 
       if (isOutput && !workspaceState?.isMode("formDesign")) {
@@ -80,7 +104,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
-      formValues.rules = rules;
+      formValues.rules = formRules || rules;
 
       workspaceState?.setSchemaItemAt({
         index,
@@ -90,7 +114,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
-        validationAttribute: (label as string) || placeholder,
+        validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
     };
