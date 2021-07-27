@@ -303,6 +303,12 @@ context("Record inline Flow", () => {
 
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).click();
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).click();
+          });
           cy.recApproveAndReleaseInlineRecord();
         });
       });

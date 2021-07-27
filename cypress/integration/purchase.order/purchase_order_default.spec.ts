@@ -402,9 +402,12 @@ context("PO test with default enlil form", () => {
 
         it("Check history entry", () => {
           SystemRequirement("REQ-1630");
-          cy.drSelectHistoryTab();
-          cy.get("div[class*=makeStyles-dateContainer]>div").should("have.text", USERS[1].name);
-          cy.get("div[class*=makeStyles-dateContainer]>time")
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+          });
+          cy.wait(500);
+          cy.get("div[data-cy=\"owner-0\"]").should("have.text", USERS[1].name);
+          cy.get("time[data-cy=\"time-0\"]")
             .should("have.text", (poCreationDate1 || poCreationDate2));
         });
 
@@ -505,6 +508,8 @@ context("PO test with default enlil form", () => {
         it("Enter 'Nothing to comment' inside PO dialog box", () => {
           cy.get("div[style=\"width: 100%; height: 100%;\"]").click();
           cy.get("div[contenteditable=true]").eq(1).type("Nothing to comment");
+          cy.unClick();
+          cy.wait(300);
           cy.unClick();
         });
 
