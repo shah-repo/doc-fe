@@ -19,7 +19,7 @@ export enum ApprovalStatus {
   Rejected = "REJECTED",
 }
 
-export interface Approval {
+interface Approval {
   id: string;
   status: ApprovalStatus;
   approver: User;
