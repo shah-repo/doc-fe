@@ -42,6 +42,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     React.useEffect(() => reaction(
       () => procedureState?.value,
       (data) => {
+        if (isEqual(formState?.getFieldValue(name), data)) { return; }
         formState?.setFieldValue(name, data);
         workspaceState?.saveDocRev(formState?.getValues());
       }

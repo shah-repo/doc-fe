@@ -2,6 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -9,6 +11,9 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
+let supplierDocumentType;
+let adminEmployee;
+let group;
 
 context("Create company via API and create Suppliers document", () => {
   it("[API] Creates company", (done: any) => {
@@ -36,12 +41,14 @@ context("Create company via API and create Suppliers document", () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+        supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
         done();
       });
     });
   });
 
-  it("[API] Login second tester", (done: any) => {
+  it("[API] Login admin tester", (done: any) => {
     cy.authApiLogin({
       email: USERS[1].email,
       password: "Tester1!",
@@ -49,6 +56,46 @@ context("Create company via API and create Suppliers document", () => {
       loginResponse = response;
       multipleCompanies = loginResponse.employees.length > 1 ? true : false;
       done();
+    });
+  });
+
+  it("[API]Creates suplier document", (done: any) => {
+    cy.grpGetGroupByName({
+      sessionId: loginResponse.sessionId,
+      employeeId: adminEmployee.id,
+      groupName: "Everyone",
+    }).then((response) => {
+      group = response;
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Test Supplier Document</p>",
+          document: {
+            docId: "SUP-00004",
+            documentType: {
+              id: supplierDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "API supplier",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => {
+        done();
+      });
     });
   });
 
@@ -144,6 +191,7 @@ context("Create company via API and create Suppliers document", () => {
   it("Clear filter", () => {
     SystemRequirement("REQ-2310");
     cy.filterClear().wait(300);
+    cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
   });
 
   it("Click on existing supplier file from list", () => {

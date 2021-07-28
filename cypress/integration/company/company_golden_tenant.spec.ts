@@ -591,11 +591,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
-      cy.get("[name^=type-of-document-to-be-created-]").eq(0).click();
+      cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
     });
 
     it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-      cy.get("[name^=default-revision-stage-]").eq(0).click();
+      cy.get("[name^=default-revision-stage-]").eq(0).check();
     });
 
     it("Upload JSON Form", () => {
@@ -623,7 +623,7 @@ context("Create company with golden tenant", () => {
 
     it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
     });
@@ -658,15 +658,15 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").type("Second document");
+      cy.get("[data-cy^=document-title-]").typeFieldLock("Second document");
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
-      cy.get("[name^=type-of-document-to-be-created-]").eq(1).click();
+      cy.get("[name^=type-of-document-to-be-created-]").eq(1).check();
     });
 
     it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-      cy.get("[name^=default-revision-stage-]").eq(0).click();
+      cy.get("[name^=default-revision-stage-]").eq(0).check();
     });
 
     it("Enters document description 'Second document description'", () => {
@@ -681,12 +681,12 @@ context("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.get("[name^=training-required-]").eq(1).check();
     });
 
     it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
     });

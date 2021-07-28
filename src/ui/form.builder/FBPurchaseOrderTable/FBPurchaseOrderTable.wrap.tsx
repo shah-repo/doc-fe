@@ -64,7 +64,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         () => formState?.setFieldAutosave(name)
       );
 
-      purchaseOrderState?.getPartsVersion();
+      if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
