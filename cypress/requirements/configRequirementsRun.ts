@@ -26,7 +26,11 @@ export const REQUIREMENTS_CONFIG_RUN: ConfigRequirements = {
     {
       extract: true,
       sourcePath: "generalCSV/list.csv",
+<<<<<<< HEAD
       outputPath: "cache/general",
+=======
+      outputPath: "requirements/cache/general",
+>>>>>>> release/21.7.2
       outputFolderName: "general",
       outputFileName: "general.json",
       extractModules: true,
