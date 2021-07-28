@@ -410,12 +410,13 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).type("10");
+      cy.get("[name*=\"frequency\"]").eq(0).typeFieldLock("10");
     });
 
     it("Type preventative maintenance instruction", () => {
       cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
         .type("Instructions for preventative maintenance");
+      cy.unClick();
     });
 
     it("Select document 'Yes' for calibration required", () => {
@@ -428,12 +429,13 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).type("5");
+      cy.get("[name*=\"frequency\"]").eq(1).typeFieldLock("5");
     });
 
     it("Type preventative maintenance instruction", () => {
       cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
         .type("Instructions for calibration");
+      cy.unClick();
     });
 
     it("Save document", () => {
@@ -766,7 +768,8 @@ context("Equipment maintenance test", () => {
 
       it("Check Calibration document existance", () => {
         SystemRequirement("REQ-2900");
-        cy.get("[data-cy=\"maintenanceHistory\"]")
+        cy.wait(5000);
+        cy.get("[data-cy=maintenanceHistory]")
           .eq(1)
           .should("contain", "MR-00002 - Calibration document")
           .and("contain", ADMIN_USER.name)
