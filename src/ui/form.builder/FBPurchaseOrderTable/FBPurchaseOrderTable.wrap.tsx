@@ -4,7 +4,6 @@ import React from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
@@ -81,10 +80,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           received,
         };
       });
-    }
-    if (workspaceState?.document?.status) {
-      disabled = !isDocumentRevisionInDraft(workspaceState?.document?.status)
-      || !isDocumentRevisionPendingChange(workspaceState?.document?.status);
     }
 
     return Component({

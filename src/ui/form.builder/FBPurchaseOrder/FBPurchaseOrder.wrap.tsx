@@ -1,6 +1,5 @@
 import React from "react";
 import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
@@ -19,8 +18,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
-    const { status: documentStatus } = workspaceState?.document || {};
-    const isDocumentReleased = documentStatus === DocumentRevisionStatus.Released;
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
@@ -29,7 +26,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
-      if (disabled && isDocumentReleased) {
+      if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {
         return;
       }
       purchaseOrderState?.setItemTotalAmount(item);

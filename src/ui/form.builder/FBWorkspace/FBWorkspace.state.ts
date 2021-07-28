@@ -74,6 +74,14 @@ class FBWorkspaceState extends FBSchemaState {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
+  public get isDraft(): boolean {
+    return this.document?.status === DocumentRevisionStatus.Draft;
+  }
+
+  public get isPendingChange(): boolean {
+    return this.document?.status === DocumentRevisionStatus.PendingChange;
+  }
+
   public get isDeprecated(): boolean {
     return this.document?.status === DocumentRevisionStatus.Deprecated;
   }
