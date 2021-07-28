@@ -662,6 +662,23 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add new Text Editor field", () => {
+      SystemRequirement("FB-0570");
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
+      cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add new Date picker field", () => {
+      SystemRequirement("FB-0660");
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Edit Quantity field", () => {
       SystemRequirement("FB-1290");
       cy.contains("quantity").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
@@ -683,6 +700,20 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Edit Text Editor field", () => {
+      SystemRequirement("FB-0570");
+      cy.contains("fb-text-editor").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Date picker field", () => {
+      SystemRequirement("FB-0660");
+      cy.contains("fb-datepicker").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker1" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Click 'Save' button", () => {
       cy.unClick();
       cy.drClickCreateDocumentWithApiCallForForms();
@@ -698,6 +729,14 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Hyperlink field", () => {
       cy.get("[name^=fb-hyperlink-]").should("have.text", "fb-hyperlink1");
+    });
+
+    it("Verify Text Editor field", () => {
+      cy.get("[data-cy=fb-text-editor1]").should("have.text", "fb-text-editor1");
+    });
+
+    it("Verify Date picker field", () => {
+      cy.get("[data-cy=fb-datepicker1]").should("have.text", "fb-datepicker1");
     });
   });
 });
