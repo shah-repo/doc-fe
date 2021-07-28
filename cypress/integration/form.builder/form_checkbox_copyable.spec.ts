@@ -301,23 +301,6 @@ context("Copyable Checkbox test", () => {
         cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
       });
 
-      it("Add Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wi-ch" } );
-      });
-
-      it("Add Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wo-ch" } );
-      });
-
       it("Add Approval Matrix with checkboxes", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
@@ -473,13 +456,6 @@ context("Copyable Checkbox test", () => {
       cy.get(".MuiPickersDay-daySelected").click();
     });
 
-    it("Add Purchase Orders value", () => {
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").click();
-      cy.get("[data-value=EUR]").click();
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").click();
-      cy.get("[data-value=EUR]").click();
-    });
-
     it("Select Autocompletes", () => {
       SystemRequirement("FB-0520");
       cy.get("[data-cy^=\"ac-wi-ch-\"]").click().type("test title{downarrow}{enter}");
@@ -595,12 +571,7 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Date pickers values", () => {
       cy.get("input[name^=\"dp-wi-ch-\"]").invoke("val").should("not.be.empty");
-      cy.get("input[name^=\"dp-wo-ch-\"]").should("have.value", "");
-    });
-
-    it("Verify Purchase Orders values", () => {
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").should("have.text", "EUR €");
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").should("have.text", "USD $");
+      cy.get("input[name^=\"dp-wo-ch-\"]").invoke("val").should("not.be.empty");
     });
 
     it("Verify Autocompletes values", () => {
