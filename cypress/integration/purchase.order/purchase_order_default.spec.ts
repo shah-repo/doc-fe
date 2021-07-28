@@ -390,8 +390,8 @@ context("PO test with default enlil form", () => {
       it("Click on 'Create PO' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY HH:mm A");
-          poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY HH:mm A");
+          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
         });
       });
 
@@ -508,7 +508,7 @@ context("PO test with default enlil form", () => {
         it("Enter 'Nothing to comment' inside PO dialog box", () => {
           cy.get("div[style=\"width: 100%; height: 100%;\"]").click();
           cy.get("div[contenteditable=true]").eq(1).type("Nothing to comment");
-          cy.unClick();
+          cy.get("[data-cy=Comments]").click();
           cy.wait(300);
           cy.unClick();
         });
