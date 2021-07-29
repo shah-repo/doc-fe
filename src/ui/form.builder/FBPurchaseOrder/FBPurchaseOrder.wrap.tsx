@@ -33,11 +33,9 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
-
     useObserver(() => {
       disabled = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
     });
-
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {
