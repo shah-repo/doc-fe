@@ -85,7 +85,7 @@ AttachmentIconProps
   }, []);
 
   const isTransferred = isNewVersion ||
-  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1].id  ?
+  lastReleasedDocRevId !== formDocuments?.documentRevisions[formDocuments?.documentRevisions.length - 1]?.id  ?
   docRevById[lastReleasedDocRevId]?.attachments?.some((e) => e.id === attachment?.id) : false;
 
   const deleteButtonRenderer = canDeleteFile && (
