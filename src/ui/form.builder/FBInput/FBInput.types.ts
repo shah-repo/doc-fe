@@ -1,7 +1,7 @@
 import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { AutocompleteProps } from "@material-ui/lab/Autocomplete";
 import { Dictionary } from "lodash";
-import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBSchemaState } from "..";
+import { FBEditorOptionsProps, FBEditorPropertiesType, FBEditorValidationMode, FBInlineApprovalRole, FBInputState, FBLabelProps, FBOptionProps, FBProviderProps, FBSchemaState } from "..";
 import { Employee } from "../../../state/ducks/company/types";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { FBValidatorConfigProps } from "../types/validation/validatorDialog";
@@ -33,7 +33,6 @@ export type FBInputType =
   | "schemaselect"
   | "paragraph"
   | "documentRevisions"
-  | "testRequirement"
   | "instructionsmediaupload"
   | "evidencemediaupload"
   | "purchaseorder"
@@ -50,8 +49,6 @@ export type FBInputType =
   | "requestapproval"
   | "instructionsdocument"
   | "selectdocument"
-  | "selectrequirement"
-  | "testRequirement"
   | "hellosign"
   | "customcontrol"
   | "poApprovalMatrix"
@@ -81,6 +78,7 @@ export type FBInputProps =
   & FBOptionProps
   & FBEditorOptionsProps
   & Pick<AutocompleteProps, "multiple">
+  & Pick<FBProviderProps, "formState">
   & Pick<BaseTextFieldProps,
     | "children"
     | "error"
@@ -109,11 +107,11 @@ export type FBInputProps =
     validationMode?: FBEditorValidationMode;
     includeSelectedSchema?: boolean;
     paragraph?: string;
-    testRequirement?: string;
     isTemplate?: boolean;
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
      */
@@ -190,18 +188,20 @@ export type FBInputProps =
      * @cfg {Bool} If true scroll to el on render.
      */
     autoScrollTo?: boolean;
+
+    /**
+     * @cfg {string} Username that holds the lock.
+     */
+    lockOwnerName?: string;
   };
 
 export const OmitInputClones: FBInputType[] = [
   "section",
-  "fileupload",
   "documentRevisions",
   "approvers",
   "approval",
   "blanktplform",
-  "inlineapproval",
   "approvals",
-  "texteditor",
   "procedure",
   "mpiprocedure",
   "procedurediff",

@@ -314,7 +314,6 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
@@ -323,38 +322,30 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Service' select option", () => {
-      // SystemRequirement("REQ-1390");
-      // SystemRequirement("REQ-1420");
       cy.poSelectOption({ optionName: "service" });
     });
 
     it("Enter ServiceID", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterServiceID({ serviceId: "SRV123" });
     });
 
     it("Enter Description", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterDescription({ description: "Description for SRV123" });
     });
 
     it("Enter Quantity Ordered", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterQuantityOrdered({ quantity: "1" });
     });
 
     it("Select Units", () => {
-      // SystemRequirement("REQ-1420");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      // SystemRequirement("REQ-1420");
       cy.poSelectGLCode();
     });
 
     it("Enter number of Units", () => {
-      // SystemRequirement("REQ-1420");
       cy.poNumberOfUnits({ number: "190" });
     });
 
@@ -377,12 +368,12 @@ context("PO approval test", () => {
     });
 
     it("Check if error message says that approvers are not present", () => {
-      // SystemRequirement("REQ-1500");
+      SystemRequirement("REQ-1500");
       cy.poAMCheckForAlertMessage();
     });
 
     it("Check if selected approver has approval signature right by his name", () => {
-      // SystemRequirement("REQ-1510");
+      SystemRequirement("REQ-1510");
       cy.poAMCheckIfApproverHasApprovalSign();
       cy.unClick();
     });
@@ -400,12 +391,14 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+      SystemRequirement("REQ-1520");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
 
     it("Click on 'Withdraw Submission' button", () => {
+      SystemRequirement("REQ-1530");
       cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.EmployeesGet,
@@ -415,7 +408,6 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      // SystemRequirement("REQ-1290");
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
     });
 
@@ -424,38 +416,30 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Service' select option", () => {
-      // SystemRequirement("REQ-1390");
-      // SystemRequirement("REQ-1420");
       cy.poSelectOption({ optionName: "service" });
     });
 
     it("Enter ServiceID", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterServiceID({ serviceId: "SRV234" });
     });
 
     it("Enter Description", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterDescription({ description: "Description for SRV234" });
     });
 
     it("Enter Quantity Ordered", () => {
-      // SystemRequirement("REQ-1420");
       cy.poEnterQuantityOrdered({ quantity: "1" });
     });
 
     it("Select Units", () => {
-      // SystemRequirement("REQ-1420");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      // SystemRequirement("REQ-1420");
       cy.poSelectGLCode();
     });
 
     it("Enter number of Units", () => {
-      // SystemRequirement("REQ-1420");
       cy.poNumberOfUnits({ number: "190" });
     });
 
@@ -476,7 +460,7 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -497,8 +481,10 @@ context("PO approval test", () => {
     });
 
     it("Check for PO notification on dashboard", () => {
-      SystemRequirement("REQ-2150");
+      SystemRequirement("REQ-2150", "REQ-3860", "REQ-2210");
       cy.arCheckDashboardPONotificationExistance({ shouldExist: true });
+      cy.get("[data-cy=\"pendingActionsPO\"]").should("contain.text", "PURCHASE ORDER: PO-00001, Rev A")
+        .and("contain.text", USERS[2].name).and("contain.text", "$380.00");
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {

@@ -106,7 +106,12 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // On transition
     React.useEffect(() => reaction(
       () => approvalsState?.transitionApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        if (data?.status === DocumentStatus.Draft) {
+          window.location.reload();
+        }
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

@@ -4,17 +4,20 @@ import AppsIcon from "@material-ui/icons/Apps";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import { truncate } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import { FBMediaAlbumProps, FBMediaCarousel, FBMediaGallery, FBProvider, FBTooltip } from "..";
 import Text from "../../components/Text";
 import { withFBMediaAlbum } from "./FBMediaAlbum.wrap";
 
 const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
+  onClick,
   setMediaFieldMode,
   onFileUploadChange,
   setMediaMode,
   removeMedia,
   mediaAlbumState,
+  formState,
   actionsDisabled,
   workspaceMode,
   collection,
@@ -24,6 +27,7 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
   title,
   mode,
   autosave,
+  uploadDisabled,
   ...props
 }) => (
   <FBProvider {...{ mediaAlbumState }}>
@@ -65,16 +69,20 @@ const FBMediaAlbum: React.FunctionComponent<FBMediaAlbumProps> = ({
           </IconButton>
         </Box>
         <Box pl={0.3}>
-          <IconButton size="small" disabled={actionsDisabled}>
-            {loading && <CircularProgress size={20} />}
-            {!loading && (
-              <label htmlFor={`fb-mediaalbum-upload-${name}`}>
-                <Tooltip title={<Text message="form.builder.upload" />}>
-                  <CloudUploadIcon />
-                </Tooltip>
-              </label>
+          <Observer>
+            {() => (
+              <IconButton size="small" disabled={actionsDisabled || uploadDisabled || formState?.isBackdropOpen}>
+                {loading && <CircularProgress size={20} />}
+                {!loading && (
+                  <label htmlFor={`fb-mediaalbum-upload-${name}`} >
+                    <Tooltip title={<Text message="form.builder.upload" />}>
+                      <CloudUploadIcon  onClick={onClick} />
+                    </Tooltip>
+                  </label>
+                )}
+              </IconButton>
             )}
-          </IconButton>
+          </Observer>
         </Box>
         <Box pl={0.3}>
           <IconButton size="small" disabled={actionsDisabled} onClick={setMediaFieldMode}>

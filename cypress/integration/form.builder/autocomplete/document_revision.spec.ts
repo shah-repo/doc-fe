@@ -167,7 +167,7 @@ context("Autocomplete 'Document Revision' test", () => {
         });
 
         context("Preview FORM document", () => {
-          it("Click Form Review", () => {
+          it("Click Form preview", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
           });
         });
@@ -220,6 +220,18 @@ context("Autocomplete 'Document Revision' test", () => {
 
         it("Verify count of 'Document Revisions' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("have.length", (arDocCount + 1));
+        });
+
+        it(`Select ${documentRevisionTitle}`, () => {
+          SystemRequirement("FB-0530");
+          cy.get(".MuiAutocomplete-popper ul li").contains(documentRevisionTitle).click();
+        });
+
+        it(`Verify value ${documentRevisionTitle}`, () => {
+          SystemRequirement("FB-0530");
+          cy.get("input[data-cy^=test-label]").eq(1)
+            .invoke("attr", "value")
+            .should("contain", documentRevisionTitle);
         });
       });
     });

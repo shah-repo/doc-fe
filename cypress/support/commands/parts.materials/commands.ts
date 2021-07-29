@@ -91,7 +91,10 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).click();
+  cy.unClick();
+  cy.wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -99,7 +102,10 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
 Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").type(params.equipment);
+  cy.unClick();
+  cy.wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });

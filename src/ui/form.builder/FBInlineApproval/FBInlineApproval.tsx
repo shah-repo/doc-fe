@@ -6,12 +6,9 @@ import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInl
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 
-const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
+const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
-  approvalTransition,
   requestAllApprovals,
-  dialogState,
-  inlineApprovalState,
   label = "form.builder.approvers",
   approvals = [],
   currentUser,
@@ -25,69 +22,64 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   name,
   shouldShowApprovals,
   shouldShowRequestAllApprovals,
-  rules,
-  ...props
-}) => (
-  <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
-    <FBDialog />
-    <FBInlineApprovalSocket {...{ name }} />
-    <FBInput {...props} {...{ name, rules }} type="inlineapproval">
-      <Box
-        py={1}
-        mb={4}
-        mt={1}
-        display="flex"
-        border={1}
-        borderLeft={0}
-        borderRight={0}
-        borderTop={0}
-        borderColor={isApproved ? Colors.light_green : Colors.medium_red}
-      >
-        {isApproved && <CheckCircleIcon style={{ color: Colors.light_green }} />}
-        {!isApproved && <ErrorIcon style={{ color: Colors.medium_red }} />}
-        <Box ml={1} width="100%" display="flex" mt={0.3}>
-          {isApproved && <FBText locale="form.builder.approved" />}
-          {!isApproved && (
-            <>
-              <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.pending" />
-              <FBText boxProps={{ fontSize: "caption.fontSize", mt: 0.2 }} locale="form.builder.approval.instruction" />
-            </>
-          )}
-        </Box>
+}) =>
+  <>
+    <Box
+      py={1}
+      mb={4}
+      mt={1}
+      display="flex"
+      border={1}
+      borderLeft={0}
+      borderRight={0}
+      borderTop={0}
+      borderColor={isApproved ? Colors.light_green : Colors.medium_red}
+    >
+      {isApproved && <CheckCircleIcon style={{ color: Colors.light_green }} />}
+      {!isApproved && <ErrorIcon style={{ color: Colors.medium_red }} />}
+      <Box ml={1} width="100%" display="flex" mt={0.3}>
+        {isApproved && <FBText locale="form.builder.approved" />}
+        {!isApproved && (
+          <>
+            <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.pending" />
+            <FBText boxProps={{ fontSize: "caption.fontSize", mt: 0.2 }} locale="form.builder.approval.instruction" />
+          </>
+        )}
       </Box>
-      {options && !isPreview && (
-        <FBAutocomplete
-          {...{ label, disabled, options, loading }}
-          name={`fb-ia-${name}`}
-          multiple
-          withState
-          autosave
-          optionLabelKey="user.email"
-          labelPrefixRoot="user.name"
-          optionValueKey="id"
-          groupByKey="listGroup"
-          gutter={false}
-        />
-      )}
-      <Box my={1}>
-        <FBApprovalAudit {...{ name, type, index }} />
-      </Box>
-      {shouldShowApprovals && (
-        <Box mt={approvals.length ? 1 : 0}>
-          <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
-            {(approval: FBInlineApprovalBody, index) => (
-              <Box
-                key={`fb-ia-info-${approval.id}-${index}`}
-                pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-              >
-                {approval.approver?.user.name}
-                {approval.status && approval.status !== "DRAFT" && (
-                  <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
-                )}
-                {currentUser === approval.approver?.user.id
+    </Box>
+    {options && !isPreview && (
+      <FBAutocomplete
+        {...{ label, disabled, options, loading }}
+        name={`fb-ia-${name}`}
+        multiple
+        withState
+        autosave
+        optionLabelKey="user.email"
+        labelPrefixRoot="user.name"
+        optionValueKey="id"
+        groupByKey="listGroup"
+        gutter={false}
+      />
+    )}
+    <Box my={1}>
+      <FBApprovalAudit {...{ name, type, index }} />
+    </Box>
+    {shouldShowApprovals && (
+      <Box mt={approvals.length ? 1 : 0}>
+        <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
+          {(approval: FBInlineApprovalBody, index) => (
+            <Box
+              key={`fb-ia-info-${approval.id}-${index}`}
+              pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+            >
+              {approval.approver?.user.name}
+              {approval.status && approval.status !== "DRAFT" && (
+                <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
+              )}
+              {currentUser === approval.approver?.user.id
               && (
                 <Box flexGrow={1} textAlign="right">
                   <FBButton
@@ -99,10 +91,10 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                   />
                 </Box>
               )}
-              </Box>
-            )}
-          </FBMapWrapper>
-          {shouldShowRequestAllApprovals &&
+            </Box>
+          )}
+        </FBMapWrapper>
+        {shouldShowRequestAllApprovals &&
             <Box flexGrow={1} textAlign="right">
               <FBButton
                 style={{ margin: 0 }}
@@ -112,9 +104,24 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
                 onClick={() => requestAllApprovals?.(name)}
               />
             </Box>
-          }
-        </Box>
-      )}
+        }
+      </Box>
+    )}</>;
+
+
+const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
+  dialogState,
+  name,
+  inlineApprovalState,
+  rules,
+  disabled,
+  ...props
+}) => (
+  <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
+    <FBDialog />
+    <FBInlineApprovalSocket {...{ name }} />
+    <FBInput {...props} {...{ name, rules }} type="inlineapproval">
+      <FBInlineApprovalChild {...props} {...{ name }}/>
     </FBInput>
   </FBProvider>
 );

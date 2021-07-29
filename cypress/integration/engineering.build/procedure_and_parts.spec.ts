@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -706,7 +707,10 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetProposedDocId,
+        CyRoutes.PostDocRev,
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drCreateNewDocumentFromForm();
       });
     });
@@ -719,11 +723,12 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
           cy.drClickCreateDocumentWithoutApiCall();
-          cy.unClick();
         });
+        cy.wait(500);
       });
 
       it("Add approver to approvals", () => {
+        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -819,6 +824,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
+        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -910,6 +916,10 @@ context("Procedure and parts flow test", () => {
       cy.ebClickClone();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     context("Add materials and equipments", () => {
       it("Remove 'Materials document'", () => {
         cy.xpath("//div[@data-cy=\"form.builder.procedure.materials.title\"]/../div[3]/button").eq(1).click();
@@ -932,9 +942,12 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        });
+        SystemRequirement("FB-1350");
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Save EB", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 

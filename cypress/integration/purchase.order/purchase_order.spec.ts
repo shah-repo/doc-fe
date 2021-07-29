@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -8,6 +10,8 @@ import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
+let dateOfStepCompletion;
+let dateOfStepCompletionOneMinuteLater;
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
@@ -51,6 +55,181 @@ context("PO test", () => {
                 group: "PART",
                 category: "Parts",
                 isQms: true,
+              },
+              {
+                documentTypeName: "Purchase Order test",
+                documentTypeAcronym: "POT-",
+                group: "PO",
+                category: "Purchase Order",
+                isQms: true,
+                privateNumberPool: true,
+                needsSignature: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                  D: {
+                    label: "Description",
+                    visible: true,
+                    required: false,
+                  },
+                  E: {
+                    visible: false,
+                    required: true,
+                  },
+                  F: {
+                    visible: false,
+                    required: true,
+                  },
+                  G: {
+                    visible: false,
+                    required: false,
+                  },
+                  I: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  J: {
+                    visible: false,
+                  },
+                  K: {
+                    label: "Cancel PO",
+                    visible: true,
+                  },
+                  L: {
+                    label: "Correct PO",
+                    visible: true,
+                  },
+                  M: {
+                    label: "Type of Change",
+                    visible: true,
+                    required: true,
+                  },
+                  N: {
+                    label: "Add Approvers",
+                    visible: false,
+                    required: false,
+                  },
+                  O: {
+                    label: "PO History",
+                    visible: true,
+                  },
+                  R: {
+                    visible: false,
+                  },
+                  S: {
+                    label: "Revise PO",
+                    visible: true,
+                  },
+                  V: {
+                    label: "Create PO",
+                    visible: true,
+                  },
+                  A1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  A2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  A3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  A4: {
+                    visible: false,
+                  },
+                  A5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  A6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P1: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                  P2: {
+                    label: "Void",
+                    visible: true,
+                  },
+                  P3: {
+                    label: "History",
+                    visible: true,
+                  },
+                  P4: {
+                    visible: false,
+                  },
+                  P5: {
+                    label: "Pending Approval",
+                    visible: true,
+                  },
+                  P6: {
+                    label: "Draft",
+                    visible: true,
+                  },
+                },
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                ],
               },
             ],
             acctCodes: ["code 1"],
@@ -163,43 +342,11 @@ context("PO test", () => {
     });
 
     it("Click on 'Purchase Order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Add supplier form builder field", () => {
-      cy.fbSelectCustomFieldToAdd({ name: "Supplier" });
-    });
-
-    it("Fill label field with 'Supplier'", () => {
-      cy.fbEnterLabel({ label: "Supplier" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
     });
 
     it("Click create document after filling document", () => {
@@ -324,13 +471,13 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poClickCreatePO();
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
     });
 
-    it("Check for PO ID uniqueness - ID should be PO-00001", () => {
+    it("Check for PO ID uniqueness - ID should be POT-00001", () => {
       SystemRequirement("REQ-1270");
-      cy.poCheckStatus( "PO-00001" );
+      cy.poCheckStatus( "POT-00001" );
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -339,7 +486,7 @@ context("PO test", () => {
 
     it("Click on existing PO that was created before", () => {
       SystemRequirement("REQ-1370", "REQ-1210");
-      cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
+      cy.poClickOnSpecificPOFromList({ item: "POT-00001" });
     });
 
     it("Check status of PO should be Draft", () => {
@@ -353,9 +500,19 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
+    });
+
+    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
+      SystemRequirement("REQ-1400");
+      cy.poAddPOButtonClick();
+      cy.get("p[class*='MuiFormHelperText-root']>span")
+        .contains("The Part Number field is required when Supplier Part Number is empty.");
+      cy.get("p[class*='MuiFormHelperText-root']>span")
+        .contains("The Supplier Part Number field is required when Part Number is empty.");
     });
 
     it("Select Part Number", () => {
@@ -403,6 +560,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
+      SystemRequirement("REQ-1360");
       cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
@@ -443,6 +601,11 @@ context("PO test", () => {
 
     it("Click on 'Add' inside PO dialog box", () => {
       cy.poAddPOButtonClick();
+    });
+
+    it("Check line items have unique IDs", () => {
+      SystemRequirement("REQ-1380");
+      cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
     });
 
     it("Check currency options dropdown", () => {
@@ -508,6 +671,24 @@ context("PO test", () => {
         cy.drEnterDocumentDescription({ description: "New Purchase Order" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Check PO status contains 'Open', 'Closed', 'Cancelled'", () => {
+        SystemRequirement("REQ-1470");
+        cy.get("[id$=\"select-po-status-built-in\"]").eq(0).click();
+        cy.get("ul[role=listbox]>li").should("contain", "Open")
+          .and("contain", "Closed")
+          .and("contain", "Cancelled");
+        cy.unClick();
+      });
+
+      it("Select 'Open' for PO status", () => {
+        cy.get("[id$=\"po-status-built-in\"]").eq(0).click();
+        cy.get("ul[role=listbox]>li").contains("Open").click();
+      });
+
       it("Save PO document", () => {
         SystemRequirement("REQ-1290");
         cy.wrapWithWaitOnApiCalls(
@@ -526,19 +707,93 @@ context("PO test", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        SystemRequirement("REQ-1490");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
 
       it("Click 'Approve' button", () => {
+        dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
+          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet], () => {
+          CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
+
+      it("Check if approver ID and date time are recorded", () => {
+        SystemRequirement("REQ-1540", "REQ-1550");
+        cy.get("[name*='fb-po-approvals-']>div").eq(4).should("contain", USERS[1].name)
+          .and("contain", "Approved")
+          .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
+      });
+
+      it("Check if PO state is blank", () => {
+        SystemRequirement("REQ-1560");
+        cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
+          .should("have.text", ("Revision" + String.fromCharCode(160) + "1"));
+      });
+    });
+  });
+
+  context("Revise PO and Close it", () => {
+    it("Click on 'Revise PO'", () => {
+      SystemRequirement("REQ-1600");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select 'Correct PO' revision stage", () => {
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Correct PO" });
+    });
+
+    it("Select 'Close' for PO status", () => {
+      SystemRequirement("REQ-1670");
+      cy.poSelectPOStatus({ status: "Close" });
+    });
+
+    it("Save PO", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
+      });
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      SystemRequirement("REQ-1490");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+      });
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
+    });
+
+    it("Check PO status is 'Closed'", () => {
+      SystemRequirement("REQ-1670");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Closed");
     });
   });
 
@@ -549,13 +804,13 @@ context("PO test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poClickCreatePO();
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
     });
 
-    it("Check for PO ID uniqueness - ID should be PO-00002", () => {
+    it("Check for PO ID uniqueness - ID should be POT-00002", () => {
       SystemRequirement("REQ-1270");
-      cy.poCheckStatus( "PO-00002" );
+      cy.poCheckStatus( "POT-00002" );
     });
 
     it("Check status of PO should be Draft", () => {
@@ -564,6 +819,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
     });
 
@@ -625,7 +881,7 @@ context("PO test", () => {
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy^=\"supplier-\"]").type("SUP-00004{downarrow}{enter}");
+      cy.get("[data-cy=\"po-supplier-built-in\"]").type("SUP-00004{downarrow}{enter}");
     });
 
     it("Check currency options dropdown", () => {
@@ -669,6 +925,15 @@ context("PO test", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order with Service item" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Closed' for PO status", () => {
+      SystemRequirement("REQ-1670");
+      cy.poSelectPOStatus({ status: "Closed" });
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -690,13 +955,82 @@ context("PO test", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.EmployeesGet], () => {
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });
+
+    it("Check PO status is 'Closed'", () => {
+      SystemRequirement("REQ-1670");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Closed");
+    });
   });
 
+  context("Revise PO and Cancel it", () => {
+    it("Click on 'Revise PO'", () => {
+      SystemRequirement("REQ-1600");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select 'Cancel PO' revision stage", () => {
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Cancel PO" });
+    });
+
+    it("Select 'Cancelled' for PO status", () => {
+      SystemRequirement("REQ-1660");
+      cy.poSelectPOStatus({ status: "Cancelled" });
+    });
+
+    it("Save PO", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
+      });
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      });
+    });
+
+    it("Click 'Void' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[name=\"voidDescription\"]").type("Voiding");
+        cy.get("[data-cy=\"fb-control-btn\"]").last().click();
+      });
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+      });
+    });
+
+    it("Check PO status is 'Cancelled'", () => {
+      SystemRequirement("REQ-1660");
+      cy.get("[id$=\"select-po-status-built-in\"]").should("have.text", "Cancelled");
+    });
+  });
+
+
   context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -718,23 +1052,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Purchase Order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order test" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -761,7 +1079,10 @@ context("PO test", () => {
 
     it("Check if two options are available when two forms with PO exist", () => {
       SystemRequirement("REQ-1260");
-      cy.poCheckIfFormPopUpIsActive("New Purchase Order Form", "New Purchase Order Form 2");
+      cy.poCheckIfFormPopUpIsActive({
+        type: "Purchase Order test",
+        list: ["New Purchase Order Form", "New Purchase Order Form 2"],
+      });
     });
 
     it("Close dialog box", () => {
@@ -772,7 +1093,7 @@ context("PO test", () => {
   context("Check for Landing page columns and values", () => {
     it("Check if most recent added item is fist on list", () => {
       SystemRequirement("REQ-1180");
-      cy.filterGetFirstValueFromList({ value: "PO-00002" });
+      cy.filterGetFirstValueFromList({ value: "POT-00002" });
     });
 
     it("Check for Landing page default columns", () => {
@@ -787,19 +1108,14 @@ context("PO test", () => {
   });
 
   context("Test the filter inside PO", () => {
-    it("Enter version number 'A' inside filter", () => {
+    it("Enter version number '1' inside filter", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterPOVersion({ version: "A" });
+        cy.filterPOVersion({ version: "1" });
       });
     });
 
     it("Check if item with right version is displayed", () => {
-      cy.poCheckForSpecificPOItemValue({ itemValue: "A" });
-    });
-
-    it("Check if number of displayed filtered items is '2", () => {
-      SystemRequirement("REQ-1200");
-      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
+      cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
     });
 
     it("Clear filter", () => {
@@ -809,12 +1125,22 @@ context("PO test", () => {
       });
     });
 
+    it("Check if number of displayed filtered items is '2'", () => {
+      SystemRequirement("REQ-1200");
+      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
+    });
+
     it("Enter all fields to check if all filter fields are working", () => {
-      SystemRequirement("REQ-1150");
+      SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
+        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       }).wait(2000);
+    });
+
+    it("Check if number of displayed filtered items is '1'", () => {
+      SystemRequirement("REQ-1200");
+      cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "1" });
     });
 
     it("Navigate to Document List", () => {
@@ -828,8 +1154,8 @@ context("PO test", () => {
     it("Check if all filter values persist after changing landing page", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
-        docId: "PO-00001", version: "2", poStatus: "WIP", supplier: "Test",
-        partNumber: "PRT-0004", amount: "10", owner: "tester", issueDate: "10/10/2020",
+        docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
+        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
       });
     });
 

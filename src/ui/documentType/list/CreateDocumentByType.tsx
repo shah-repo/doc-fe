@@ -101,7 +101,7 @@ export const useHandleCreateDoc = () => {
       setForm(selectedForm);
       return;
     }
-    if (outputDocumentTypes.length === 1 && !(outputDocumentTypes[0] as any)?.documentTypeAcronym?.startsWith("RC")) {
+    if (outputDocumentTypes.length === 1) {
       fetchDocIdAsync.start(fetchDocIdAction, (outputDocumentTypes[0] as any)?.id, fetchDocIdAsync);
       setForm(selectedForm);
       return;
@@ -128,7 +128,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const getDocTypesByCategory = useActionCreator(documentTypeActions.getDocTypesByCategory);
   const getDocRevByIds = useActionCreator(documentTypeActions.getDocTypeIds);
 
-  const formIds = useSelector(documentTypeSelectors.formIds);
+  const formIds = useSelector(documentTypeSelectors.docRevTypeForms);
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypesByCategory);
   const { isVisible, label, tooltipConfig } = useCreateDocumentByTypeButton(documentTypeId);
 
@@ -137,9 +137,6 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
-  const isSupplier = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.SUPPLIER;
-  const isReceivable = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECEIVABLE;
-  const isWorkOrder = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.WORK_ORDER;
 
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
@@ -152,7 +149,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     setErrorMessage(undefined);
-  }, [documentTypeId]);
+  }, [categoryName, documentTypeId]);
 
   const idAsync = useAsync<DocumentTypeById>({
     onSuccess: () => {
@@ -254,23 +251,24 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     if (!isEmpty(tableData)) {
       return tableData.map((e) => {
         const h = headers.map((column) => {
-          if (moment(get(e, column.key, ""), moment.ISO_8601, true).isValid()) {
-            return {
-              [column.key]: getFormattedDateString(get(e, column.key, ""), MomentFormats.MonthDateYear),
-            };
-          }
-          if (isSupplier || isReceivable || isWorkOrder) {
-            if (column.key === "owner") {
+          const columnValue =  get(e, column.key, "");
+
+          switch (column.key) {
+            case "owner":
               return { [column.key]: get(e, "owner.user.name") || "" };
-            }
-            if (column.key === "docId") {
+            case "docId":
               return { [column.key]: get(e, "document.docId") || "" };
-            }
-            if (column.key === "changeRequest") {
+            case "changeRequest":
               return { [column.key]: get(e, "changeRequest.crId") || "" };
-            }
+            default:
+              if (moment(columnValue, moment.ISO_8601, true).isValid()) {
+                return {
+                  [column.key]: getFormattedDateString(columnValue, MomentFormats.MonthDateYear),
+                };
+              } else {
+                return { [column.key]: columnValue };
+              }
           }
-          return { [column.key]: get(e, column.key) || "" };
         });
         const rows = h.reduce(function(result, current) {
           return Object.assign(result, current);

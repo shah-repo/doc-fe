@@ -109,6 +109,7 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA,
     DOC_TYPE_GROUP_OPTION.ENGINEERING_BUILD,
     DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
+    DOC_TYPE_GROUP_OPTION.EXPORTABLE,
   ],
   PI: [
     DOC_TYPE_GROUP_OPTION.FORM,
@@ -176,6 +177,8 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.RECEIVABLE,
     DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT,
     DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN,
+    DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
+    DOC_TYPE_GROUP_OPTION.RECORD,
   ],
   EQUIPMENT: [
     DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT,
@@ -236,6 +239,7 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
     DOC_TYPE_GROUP_OPTION.GENERATE_LOT_ON_DOC_REV_CREATE,
     DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
+    DOC_TYPE_GROUP_OPTION.EXPORTABLE,
   ],
 };
 
@@ -278,6 +282,7 @@ export interface DocumentType {
 
 interface DocumentForms {
   id: string;
+  docId?: string;
 }
 
 export interface DocumentTypeByIdForm {
@@ -344,12 +349,13 @@ export enum InputFieldType{
   DOC_ID = "F",
   TRAINING = "G",
   ATTACHMENTS = "H",
-  REVISION_SELECTION = "M",
+  REVISION_CHANGE_SELECTION = "M",
   NEXT_REVISION = "I",
   NEXT_REVISION_STAGE = "J",
   OBSOLETE = "K",
   ADM_CHANGE = "L",
   OPERATORS = "U",
+  REVISION_SELECTION = "W",
 }
 
 // Copied from BE repo: src/modules/documentTypes/interfaces/fieldConfig.interface.ts

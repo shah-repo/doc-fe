@@ -47,6 +47,7 @@ export const withFBInput = <T extends FBInputProps>(
     showErrorMsg = true,
     deleted,
     isInputOwner,
+    lockOwnerName,
     ...props
   }: T) => {
 
@@ -55,6 +56,7 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     defaultValue = setDefaultValue();
     helperText = formState?.errors.get(name) || helperText;
@@ -135,16 +137,26 @@ export const withFBInput = <T extends FBInputProps>(
     const isClone = !includes(OmitInputClones, type) && !isUndefined(child) && !hidden;
     disabled = (!FB.isConsideredEmptyInput(workspaceState?.document?.formInput?.[name]) && !isInputOwner) || disabled;
 
+    // Locked state
+    const lockedData = formState?.locked.get(name);
+    lockOwnerName = lockedData?.ownerName;
+    if (lockOwnerName && (ownerName !== lockOwnerName)) {
+      disabled = disabled || lockedData?.locked || formState?.isBackdropOpen;
+    }
+
     if (isClone) {
       children = cloneElement(child as React.ReactElement, {
         name,
         disabled,
         onChange,
-        onBlur,
+        ...(type !== "textfield" && { onBlur }),
         ...(withState && type !== "autocomplete" && { value }),
         ...(type === "textfield" && { error }),
         ...(type !== "datepicker" && type !== "autocomplete" && !isBoolean(defaultValue) && { defaultValue }),
-        ...(workspaceState?.mode === "preview" && name !== "password" && { className: FBClasses.inputPreview }),
+        ...(workspaceState?.mode === "preview"
+            && name !== "password"
+            && formState?.workspaceMode !== "form"
+            && { className: FBClasses.inputPreview }),
         ...(!isInputOwner && { className: FBClasses.nonOwner }),
       });
     }
@@ -198,6 +210,7 @@ export const withFBInput = <T extends FBInputProps>(
       ...(props as T),
       onChange,
       onBlur,
+      formState,
       includeContext,
       isInputOwner,
       validationMode,
@@ -225,6 +238,7 @@ export const withFBInput = <T extends FBInputProps>(
       omitFormValue,
       deleted,
       isOutput,
+      lockOwnerName,
     });
   };
 

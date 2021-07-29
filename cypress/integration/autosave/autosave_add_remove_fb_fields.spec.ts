@@ -135,12 +135,19 @@ context("Autosave on add and remove FB fields", () => {
     });
 
     it("Add Text Editor", () => {
+      SystemRequirement("FB-0550");
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
+    });
+
+    it("Verify you can't enter data to Text Editor", () => {
+      SystemRequirement("FB-0590");
+      cy.xpath("//div[starts-with(@data-cy, \"fb-text-editor-\")]/../div[2]/div")
+        .should("not.have.attr", "contenteditable");
     });
 
     it("Add Date picker", () => {
@@ -281,17 +288,6 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Add Test Requirement", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Test Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-test-req" });
-      cy.get("[data-cy=\"testRequirement\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add Procedure", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Procedure" });
@@ -423,17 +419,6 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Add Instructions 'Select Requirement(s)'", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Select Requirement" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-req" });
-      cy.get("[data-cy=\"options\"]")
-        .type("Visual Alarm Indicator - The system shall use color as a visual indication of{downarrow}{enter}");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
-
     it("Add Actions 'Action Button'", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
@@ -544,12 +529,6 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Remove Test Requirement", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbRemoveLastAddedItem();
-      });
-    });
-
     it("Remove Procedure", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbRemoveLastAddedItem();
@@ -640,12 +619,6 @@ context("Autosave on add and remove FB fields", () => {
       });
     });
 
-    it("Remove 'Select Requirement(s)'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.fbRemoveLastAddedItem();
-      });
-    });
-
     it("Remove 'Action Button'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbRemoveLastAddedItem();
@@ -653,6 +626,7 @@ context("Autosave on add and remove FB fields", () => {
     });
 
     it("Remove TextField", () => {
+      SystemRequirement("FB-0200");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbRemoveLastAddedItem();
       });

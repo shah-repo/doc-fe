@@ -34,6 +34,7 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
+      typeFieldLock(thingToTypeIn: string, options?: any): Chainable<Subject>;
     }
   }
 }
@@ -147,7 +148,6 @@ Cypress.Commands.add("unClick", () => {
   cy.get("body").click( 10, 10, { force: true });
 });
 
-
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
   (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
@@ -196,5 +196,14 @@ Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
   else {
     return originalFn(element, text, options);
   }
+});
+
+Cypress.Commands.add("typeFieldLock", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
+    cy.wrap(subject).click();
+  });
+  cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
+    cy.wrap(subject).type(thingToTypeIn, options).unClick();
+  });
 });
 

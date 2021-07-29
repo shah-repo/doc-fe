@@ -5,6 +5,7 @@ import faker from "faker";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -72,6 +73,7 @@ context("Sign up user flow", () => {
 
     context("Fill in user attributes", () => {
       it("Enters e-mail", () => {
+        SystemRequirement("REQ-3940");
         cy.usrEnterEmail({ email: emailOfUserToSignUp });
       });
 
@@ -91,18 +93,22 @@ context("Sign up user flow", () => {
 
   context("Activate user", () => {
     it("Verify activation email", () => {
+      SystemRequirement("REQ-4110");
       cy.imapGetActivationLink({ userEmail: emailOfUserToSignUp });
     });
 
     it("Enter password", () => {
+      SystemRequirement("REQ-4110");
       cy.authEnterSignUpPassword({ password: "Tester1!" });
     });
 
     it("Enter password for confirmation", () => {
+      SystemRequirement("REQ-4110");
       cy.authEnterSignUpConfirmPassword({ password: "Tester1!" });
     });
 
     it("Click 'SIGN IN'", () => {
+      SystemRequirement("REQ-4110");
       cy.authClickSignIn();
     });
 

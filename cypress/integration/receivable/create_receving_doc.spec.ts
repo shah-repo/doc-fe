@@ -5,7 +5,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -28,6 +30,18 @@ let createdRecivableFormDocument;
 let receivableDocumentType;
 
 context("Create receivable test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -41,12 +55,186 @@ context("Create receivable test", () => {
             companyAdminEmail: ADMIN_USER.email,
             importerEmail: IMPORTER_USER.email,
             users: [FIRST_USER, SECOND_USER, THIRD_USER],
-            documentTypes: [],
+            documentTypes: [              {
+              documentTypeName: "Purchase Order test",
+              documentTypeAcronym: "POT-",
+              group: "PO",
+              category: "Purchase Order",
+              isQms: true,
+              privateNumberPool: true,
+              needsSignature: true,
+              fieldsConfig: {
+                C: {
+                  visible: false,
+                  required: false,
+                },
+                D: {
+                  label: "Description",
+                  visible: true,
+                  required: false,
+                },
+                E: {
+                  visible: false,
+                  required: true,
+                },
+                F: {
+                  visible: false,
+                  required: true,
+                },
+                G: {
+                  visible: false,
+                  required: false,
+                },
+                I: {
+                  label: "Revise PO",
+                  visible: true,
+                },
+                J: {
+                  visible: false,
+                },
+                K: {
+                  label: "Cancel PO",
+                  visible: true,
+                },
+                L: {
+                  label: "Correct PO",
+                  visible: true,
+                },
+                M: {
+                  label: "Type of Change",
+                  visible: true,
+                  required: true,
+                },
+                N: {
+                  label: "Add Approvers",
+                  visible: false,
+                  required: false,
+                },
+                O: {
+                  label: "PO History",
+                  visible: true,
+                },
+                R: {
+                  visible: false,
+                },
+                S: {
+                  label: "Revise PO",
+                  visible: true,
+                },
+                V: {
+                  label: "Create PO",
+                  visible: true,
+                },
+                A1: {
+                  label: "Draft",
+                  visible: true,
+                },
+                A2: {
+                  label: "Void",
+                  visible: true,
+                },
+                A3: {
+                  label: "History",
+                  visible: true,
+                },
+                A4: {
+                  visible: false,
+                },
+                A5: {
+                  label: "Pending Approval",
+                  visible: true,
+                },
+                A6: {
+                  label: "Draft",
+                  visible: true,
+                },
+                P1: {
+                  label: "Draft",
+                  visible: true,
+                },
+                P2: {
+                  label: "Void",
+                  visible: true,
+                },
+                P3: {
+                  label: "History",
+                  visible: true,
+                },
+                P4: {
+                  visible: false,
+                },
+                P5: {
+                  label: "Pending Approval",
+                  visible: true,
+                },
+                P6: {
+                  label: "Draft",
+                  visible: true,
+                },
+              },
+              schema: [
+                {
+                  name: "po-status-built-in",
+                  type: "select",
+                  index: 0,
+                  label: "PO Status",
+                  options: [
+                    {
+                      text: "Open",
+                      value: "Open",
+                    },
+                    {
+                      text: "Closed",
+                      value: "Closed",
+                    },
+                    {
+                      text: "Cancelled",
+                      value: "Cancelled",
+                    },
+                  ],
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  validationAttribute: "PO Status",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "po-supplier-built-in",
+                  type: "supplier",
+                  index: 1,
+                  label: "Supplier ",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationMode: "default",
+                  validationAttribute: "Supplier",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+                {
+                  name: "po-items-built-in",
+                  type: "purchaseorder",
+                  index: 2,
+                  label: "Purchase Order",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  validationAttribute: "Purchase Order",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
+                },
+              ],
+            }],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
+          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -107,13 +295,69 @@ context("Create receivable test", () => {
                 outputDocumentTypes: [{
                   id: purchaseOrderDocumentType[0].id,
                 }],
-                schema: [{
-                  index: 0,
-                  type: "purchaseorder",
-                  label: "PO",
-                  name: "po-kdpqvhc7",
-                  applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-                }],
+                schema: [
+                  {
+                    name: "po-status-built-in",
+                    type: "select",
+                    index: 0,
+                    label: "PO Status",
+                    options: [
+                      {
+                        text: "Open",
+                        value: "Open",
+                      },
+                      {
+                        text: "Closed",
+                        value: "Closed",
+                      },
+                      {
+                        text: "Cancelled",
+                        value: "Cancelled",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "PO Status",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-supplier-built-in",
+                    type: "supplier",
+                    index: 1,
+                    label: "Supplier ",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Supplier",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "po-items-built-in",
+                    type: "purchaseorder",
+                    index: 2,
+                    label: "Purchase Order",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "poapprovals",
+                    deleteDisabled: false,
+                    name: "fb-po-approvals-kqqix31p",
+                    uniqueSchemaItem: true,
+                    index: 3,
+                  },
+                ],
               },
 
             },
@@ -141,7 +385,7 @@ context("Create receivable test", () => {
                   description: "API PO document",
                   revisionChangeType: RevisionChangeType.NextRevision,
                   document: {
-                    docId: "PO-00001",
+                    docId: "POT-00001",
                     documentType: {
                       id: purchaseOrderDocumentType[0].id,
                     },
@@ -156,9 +400,9 @@ context("Create receivable test", () => {
                     },
                   },
                   formInput: {
-                    "po-kdpqvhc7": {
+                    "po-items-built-in": {
                       items: [{
-                        id: "kdpr51z9",
+                        id: "kqqj708c",
                         type: "service",
                         date: (new Date()).toISOString(),
                         tax: false,
@@ -184,6 +428,7 @@ context("Create receivable test", () => {
                       totalInUSD: "150.00",
                       dateOfExchangeRate: "",
                     },
+                    "po-status-built-in": "Open",
                   },
                 },
                 employeeId: adminEmployee.id,
@@ -210,7 +455,7 @@ context("Create receivable test", () => {
                       description: "API PO document 2",
                       revisionChangeType: RevisionChangeType.NextRevision,
                       document: {
-                        docId: "PO-00002",
+                        docId: "POT-00002",
                         documentType: {
                           id: purchaseOrderDocumentType[0].id,
                         },
@@ -225,7 +470,7 @@ context("Create receivable test", () => {
                         },
                       },
                       formInput: {
-                        "po-kdpqvhc7": {
+                        "po-items-built-in": {
                           items: [{
                             id: "kdpr51z9",
                             type: "service",
@@ -271,6 +516,7 @@ context("Create receivable test", () => {
                           totalInUSD: "380.00",
                           dateOfExchangeRate: "",
                         },
+                        "po-status-built-in": "Open",
                       },
                     },
                     employeeId: adminEmployee.id,
@@ -334,6 +580,14 @@ context("Create receivable test", () => {
                               applicableOn: [
                                 "ON_STATE_TO_IN_REVIEW",
                               ],
+                            },
+                            {
+                              label: "form.builder.approvals",
+                              type: "poapprovals",
+                              deleteDisabled: false,
+                              name: "fb-po-approvals-kqqix31p",
+                              uniqueSchemaItem: true,
+                              index: 2,
                             }],
                           },
                         },
@@ -402,14 +656,14 @@ context("Create receivable test", () => {
 
       context("Check for search and selecting PO", () => {
         it("Search for API PO document and select it", () => {
-          // SystemRequirement("REQ-1800");
+          SystemRequirement("REQ-1800");
           cy.recSelectPo({ poTitle: "API PO document 2" });
         });
       });
 
       context("Check selected PO is loaded and displayed in receivable", () => {
         it("Verify PO 'API PO document 2' is displayed", () => {
-          // SystemRequirement("REQ-1810");
+          SystemRequirement("REQ-1810");
           const poItems: PurchaseOrderItem[] = [{
             index: 1,
             partNumber: "",
@@ -419,7 +673,6 @@ context("Create receivable test", () => {
             units: "hours",
             dateRequired: "",
             unitPrice: "$40.00",
-            totalPrice: "$200.00",
           },
           {
             index: 2,
@@ -430,7 +683,6 @@ context("Create receivable test", () => {
             units: "hours",
             dateRequired: "",
             unitPrice: "$30.00",
-            totalPrice: "$180.00",
           }];
           cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
         });
@@ -438,7 +690,7 @@ context("Create receivable test", () => {
 
       context("Verify receivable creation", () => {
         it("Verify adding attachments", () => {
-          // SystemRequirement("REQ-1980");
+          SystemRequirement("REQ-1980");
           cy.atchUploadAttachment({ fileName: "test.docx" });
         });
 
@@ -453,12 +705,12 @@ context("Create receivable test", () => {
         });
 
         it("Verify receivable status is 'Draft'", () => {
-          // SystemRequirement("REQ-1870");
+          SystemRequirement("REQ-1870");
           cy.drCheckDocumentStatus({ status: "Draft" });
         });
 
         it("Verify owner change", () => {
-          // SystemRequirement("REQ-1990");
+          SystemRequirement("REQ-1990");
           cy.drChangeOwnerFromMenu({ employee: SECOND_USER.name });
         });
       });
@@ -472,9 +724,36 @@ context("Create receivable test", () => {
           cy.recCreateNew();
         });
 
-        it("Click 'Create document' on empty receivable form", () => {
-          // SystemRequirement("REQ-1860");
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        it("Add an Approval", () => {
+          cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+          });
+        });
+
+        it("Save PO", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Click 'Submit for Approval' button", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          });
+        });
+
+        it("Click 'Approve' button", () => {
+          SystemRequirement("REQ-1860");
+          cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+            cy.get("[data-cy=\"common.confirm\"]").click();
+          });
+        });
+
+        it("Verify receivable status is 'Current'", () => {
+          // SystemRequirement("REQ-1870");
+          cy.drCheckDocumentStatus({ status: "Current" });
         });
       });
     });

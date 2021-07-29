@@ -4,7 +4,7 @@ import { action, observable, set } from "mobx";
 class FBTextEditorState {
   // MARK: @observables
   @observable public editorState?: EditorState;
-  @observable public masked?: boolean;
+  @observable public masked?: boolean = true;
 
   // MARK: @config
   public editorReference?: HTMLInputElement;

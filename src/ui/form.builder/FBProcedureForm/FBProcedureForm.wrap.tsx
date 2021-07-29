@@ -29,10 +29,18 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     disabled,
     mode,
     lhrStepIndex,
+    name,
     ...props
   }: T) => {
     // MARK: @config
-    const { procedureState, mpiProcedureState, dialogState, lhrStepState, workspaceState } = FB.useStores();
+    const {
+      procedureState,
+      mpiProcedureState,
+      dialogState,
+      lhrStepState,
+      workspaceState,
+      formState: parentFormState,
+    } = FB.useStores();
 
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
     procedureFormState = FB.useRef<FBProcedureFormState>(FBProcedureFormState, {
@@ -41,6 +49,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     const isDocumentMPI = checkIsDocumentMPI(workspaceState?.document?.document.documentType.groupOptions);
     const isDocumentMPIOutput = checkIsDocumentMPIOutput(workspaceState?.document?.document.documentType.groupOptions);
     const isRedlineActive = useSelector(companySelectors.getRedlineActive);
+
 
     const schemaItem = workspaceState?.getSchemaItemAt(lhrStepIndex);
     const config: Partial<Record<keyof typeof FBProcedureItemType, (() => void)>> = {
@@ -61,6 +70,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
@@ -124,14 +134,16 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
+        if (!lhrStepIndex) { return; }
         if (schemaItem) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          workspaceState!.schema![lhrStepIndex!] = {
+          workspaceState!.schema![lhrStepIndex] = {
             ...schemaItem,
             editorConfig: {
               ...schemaItem?.editorConfig,
@@ -150,7 +162,13 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     }
 
     function handleCancel() {
+      if (parentFormState?.isBackdropOpen) { return; }
+      handleUnlockField();
       dialogState?.closeDialog();
+    }
+
+    function handleUnlockField() {
+      parentFormState?.unlockField(`${name}.${type}`);
     }
 
     function handleFilter(
@@ -190,7 +208,9 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       partLoading = procedureFormState?.partsApi.loading;
       lotLoading = procedureFormState?.lotsApi.loading;
       // disabled while adding or editing material/eq
-      disabled = formState?.inputState.get("LHRTparameter")?.value || initialValues?.LHRTparameter;
+      disabled = formState?.inputState.get("LHRTparameter")?.value ||
+      Boolean(formState?.getFieldValue("LHRTparameter") ||
+        initialValues?.LHRTparameter);
     });
 
     return Component({
@@ -209,6 +229,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       disabled,
       mode,
       isDocumentMPI,
+      name,
     });
   };
 

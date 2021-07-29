@@ -74,6 +74,10 @@ class FBWorkspaceState extends FBSchemaState {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
+  public get isDeprecated(): boolean {
+    return this.document?.status === DocumentRevisionStatus.Deprecated;
+  }
+
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
     return Boolean(docId && !isEmpty(docId));
@@ -88,6 +92,7 @@ class FBWorkspaceState extends FBSchemaState {
     const { version = 0, revision = 0, outputRevision = false } = this.document || {};
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
+
 
   @computed public get active(): boolean {
     return this.mode !== "none";
@@ -116,6 +121,8 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
+
+  @action public getFieldByName = (name: string) => this.document?.formInput?.[name];
 
   @action public isMode = (mode: FBWorkspaceMode | FBWorkspaceMode[]): boolean => {
     if (isArray(mode)) {
@@ -193,9 +200,9 @@ class FBWorkspaceState extends FBSchemaState {
       method: "get",
     }, (data, error) => {
       if (error) {
-        this.documentRevApi.onError(error);
+        this.loadDocumentRevApi.onError(error);
       } else {
-        this.documentRevApi.onSuccess();
+        this.loadDocumentRevApi.onSuccess();
         const { formInput = {} } = data ?? {};
         this.formInput = formInput;
         map(formInput, (value, key) => {

@@ -35,8 +35,6 @@ export type FBEditorElementType =
   | "instructionsdocument"
   | "selectdocument"
   | "teststep"
-  | "testRequirement"
-  | "selectrequirement"
   | "dynamiccontrol";
 
 export type FBEditorModeType = "create" | "update";

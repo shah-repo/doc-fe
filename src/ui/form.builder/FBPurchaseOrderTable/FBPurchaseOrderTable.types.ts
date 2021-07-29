@@ -2,7 +2,7 @@ import { FBCurrency, FBInputProps, FBPurchaseOrderCalculation, FBPurchaseOrderIt
 
 export type FBPurchaseOrderTableProps =
 & Pick<FBInputProps, "name" | "disabled">
-& Pick<FBPurchaseOrderProps, "handleItem" | "disabled" | "mode">
+& Pick<FBPurchaseOrderProps, "handleItem" | "handleLot" | "disabled" | "mode">
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
   handleCurrencyChange?: (ev, value) => void;
@@ -25,7 +25,7 @@ export type FBPurchaseOrderTableDetailsProps =
 >;
 
 export type FBPurchaseOrderTableSumProps =
-& Pick<FBPurchaseOrderTableProps,  "handleItem" | "classes" | "items" | "calculation">;
+& Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode">;
 
 export type FBPurchaseOrderTableTotalProps =
 & Pick<FBPurchaseOrderTableProps,  "handleShippingCost" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
@@ -39,7 +39,8 @@ export enum FBPurchaseOrderDetailsProduct {
   received = "form.builder.field.received",
   units = "form.builder.field.units",
   formattedDate = "form.builder.field.date.required",
-  unitPrice = "form.builder.field.unit.price"
+  unitPrice = "form.builder.field.unit.price",
+  lots = "form.builder.field.lots",
 }
 
 export enum FBPurchaseOrderDetailsService {
@@ -51,7 +52,8 @@ export enum FBPurchaseOrderDetailsService {
   received = "form.builder.field.received",
   units = "form.builder.field.units",
   formattedDate = "form.builder.field.date.required",
-  unitPrice = "form.builder.field.unit.price"
+  unitPrice = "form.builder.field.unit.price",
+  lots = "form.builder.field.lots",
 }
 
 export interface FBCurrencyOption {

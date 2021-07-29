@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { filter, get, isEmpty, join, map } from "lodash";
-import { reaction } from "mobx";
+import { filter, get, isEmpty, join, map, union } from "lodash";
+import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -62,6 +62,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!ids || isEmpty(ids)) { return; }
       mediaAlbumFieldState?.getFiles(ids);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Handle image upload
@@ -79,31 +80,31 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
-
       mediaAlbumFieldState?.upload(validFiles);
     };
 
-    // useEffect(() => {
-    //   reaction(
-    //     () => workspaceState?.formInputSync?.get(name),
-    //     (value) => {
-    //       const syncValue = value as string[];
-    //       const filesIds = map(mediaAlbumFieldState?.files, "id");
-    //       const addedFiles: string[] = [];
-    //       map(union(filesIds, syncValue), (fileId) => {
-    //         mediaAlbumFieldState!.fromUpload = false;
-    //         if (!syncValue.includes(fileId)) {
-    //           mediaAlbumFieldState?.removeFile(fileId);
-    //         } else {
-    //           addedFiles.push(fileId);
-    //         }
-    //       });
-    //       if (addedFiles.length === 0) { return; }
-    //       mediaAlbumFieldState?.getFiles(addedFiles);
-    //     }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    //   );
-    // }, []);
+    useEffect(() => {
+      reaction(
+        () => workspaceState?.formInputSync?.get(name),
+        (value) => {
+          const syncIds = value;
+          const syncValue = map(syncIds, (syncFile) => syncFile.id ? toJS(syncFile.id) : syncFile);
+          const filesIds = map(mediaAlbumFieldState?.files, "id");
+          const addedFiles: string[] = [];
+          map(union(filesIds, syncValue), (fileId) => {
+            mediaAlbumFieldState!.fromUpload = false;
+            if (!syncValue.includes(fileId)) {
+              mediaAlbumFieldState?.removeFile(fileId);
+            } else {
+              addedFiles.push(fileId);
+            }
+          });
+          if (addedFiles.length === 0) { return; }
+          mediaAlbumFieldState?.getFiles(addedFiles);
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => reaction(
       () => mediaAlbumFieldState?.attachmentApi.data,
@@ -114,6 +115,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
 
     React.useEffect(() => {
       reaction(
@@ -130,8 +132,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           }
           formState?.setFieldValue(name, files, true, isTemplate);
           if (mediaAlbumFieldState?.fromUpload) {
-            mediaAlbumFieldState.fromUpload = false;
-            if (autosave) {
+            if (!mediaAlbumFieldState?.filesUploaded.length) {
+              mediaAlbumFieldState!.fromUpload = false;
               workspaceState?.saveDocRev(formState?.getValues());
             }
           }
@@ -148,7 +150,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     }
     useObserver(() => {
       mode = mediaAlbumFieldState?.mode;
-      loading = mediaAlbumFieldState?.loading;
+      loading = mediaAlbumFieldState?.loading || Boolean(mediaAlbumFieldState?.filesUploaded.length);
       collection = mediaAlbumFieldState?.collection;
     });
 
