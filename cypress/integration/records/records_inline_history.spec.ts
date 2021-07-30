@@ -332,9 +332,11 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          // cy.wait(3000);
         });
 
         it("Navigate to released document", () => {

@@ -742,7 +742,7 @@ context("PO test", () => {
   context("Revise PO and Close it", () => {
     it("Click on 'Revise PO'", () => {
       SystemRequirement("REQ-1600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
       });
     });
@@ -967,7 +967,7 @@ context("PO test", () => {
   context("Revise PO and Cancel it", () => {
     it("Click on 'Revise PO'", () => {
       SystemRequirement("REQ-1600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
       });
     });
