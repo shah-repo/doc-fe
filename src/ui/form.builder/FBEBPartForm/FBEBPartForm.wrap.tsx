@@ -32,7 +32,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
     // MARK: @methods
     onDialogConfirm = () => {
       const formValue = formState.getValues();
-      ebPartState?.addNewPartChild(formValue as unknown as EBPartPostBody);
+      ebPartState?.addNewPartChild(formValue as EBPartPostBody);
       onDialogClose?.();
     };
 
