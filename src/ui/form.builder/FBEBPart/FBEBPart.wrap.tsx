@@ -4,7 +4,6 @@ import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { EBPartRequestBody, FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState, PartType } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 export const withFBEBPart = <T extends FBEBPartProps>(
   Component: React.FunctionComponent<T>,
@@ -71,9 +70,7 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         if (!childPartId || (childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
         const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
         const body = {
-          formInput: omit(formState?.getValues(),
-            [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-              "childrenPartsForRevise"]),
+          formInput: omit(formState?.getValues(), "childrenPartsForRevise"),
           childrenParts,
         };
 

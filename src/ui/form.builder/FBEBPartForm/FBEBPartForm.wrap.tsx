@@ -1,9 +1,8 @@
-import { first, omit } from "lodash";
+import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { EBPartPostBody, FB, FBEBPartFormActions, FBEBPartFormProps, FBFormState } from "..";
-import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 export const withFBEBPartForm = <T extends FBEBPartFormProps>(
   Component: React.FunctionComponent<T>,
@@ -32,9 +31,7 @@ export const withFBEBPartForm = <T extends FBEBPartFormProps>(
 
     // MARK: @methods
     onDialogConfirm = () => {
-      const formValue = omit(formState?.getValues(),
-        Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-      );
+      const formValue = formState.getValues();
       ebPartState?.addNewPartChild(formValue as unknown as EBPartPostBody);
       onDialogClose?.();
     };
