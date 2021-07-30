@@ -236,7 +236,8 @@ context("Record inline history Flow", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.DocPreview,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.GetDocAggregatedAudit,
+          CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -265,7 +266,8 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
