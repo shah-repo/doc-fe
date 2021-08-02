@@ -481,6 +481,39 @@ context("LHR flow", () => {
       });
     });
 
+    it("[API]Create unreleased part document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>unreleased part document</p>",
+          document: {
+            docId: "CS-00010",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Unreleased part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => {
+        done();
+      });
+    });
+
     it("[API]Create material two", () => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -1131,8 +1164,8 @@ context("LHR flow", () => {
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
-        it("Add 'Material three' to step #1", () => {
-          SystemRequirement("REQ-3100");
+        it("Add 'Material parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
           cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
         });
 
@@ -1142,9 +1175,9 @@ context("LHR flow", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
         });
 
-        it("Add 'Equipment three' to step #1", () => {
-          SystemRequirement("REQ-3130");
-          cy.mpiAddEquipmentToStep({ checkParameter: true, numbOfStep: 1, equipment: "Equipment three" });
+        it("Add 'Equipment parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
+          cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
         });
       });
 
@@ -1220,6 +1253,11 @@ context("LHR flow", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify Part lists only released parts", () => {
+        SystemRequirement("REQ-3820");
+        cy.wait(5000);
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
@@ -1321,6 +1359,7 @@ context("LHR flow", () => {
     });
 
     it("Check lot number", () => {
+      SystemRequirement("REQ-3180");
       cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
     });
 
@@ -1348,6 +1387,7 @@ context("LHR flow", () => {
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
+      SystemRequirement("REQ-3180");
       cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01RD");
     });
 
@@ -1505,6 +1545,7 @@ context("LHR flow", () => {
       });
 
       it("Try submitting for approval with uncompleted LHRs #2", () => {
+        SystemRequirement("REQ-3300");
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         cy.checkToastMessageContains({ message: "Every LHR step needs to be completed" });
       });
@@ -1634,6 +1675,7 @@ context("LHR flow", () => {
 
     context("Release LHR", () => {
       it("Submit LHR for approval", () => {
+        SystemRequirement("REQ-3300");
         cy.pmSubmitForApproval();
       });
 
