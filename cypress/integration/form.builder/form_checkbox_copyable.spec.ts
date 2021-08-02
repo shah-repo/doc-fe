@@ -634,6 +634,16 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add new Autocomplete field", () => {
+      SystemRequirement("FB-0480");
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.fbAddNewFieldButton();
+    });
+
     it("Add new Text Editor field", () => {
       SystemRequirement("FB-0570");
       cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
@@ -672,6 +682,13 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Edit Autocomplete field", () => {
+      SystemRequirement("FB-0480");
+      cy.contains("fb-autocomplete").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Edit Text Editor field", () => {
       SystemRequirement("FB-0570");
       cy.contains("fb-text-editor").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
@@ -701,6 +718,10 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Hyperlink field", () => {
       cy.get("[name^=fb-hyperlink-]").should("have.text", "fb-hyperlink1");
+    });
+
+    it("Verify Autocomplete field", () => {
+      cy.get("[data-cy=fb-autocomplete1]").should("have.text", "fb-autocomplete1");
     });
 
     it("Verify Text Editor field", () => {

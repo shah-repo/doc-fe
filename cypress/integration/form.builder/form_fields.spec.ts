@@ -119,6 +119,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Autocomplete", () => {
+        SystemRequirement("FB-0470");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
@@ -738,7 +739,7 @@ context("FORM Field test", () => {
       });
 
       it("there should be no edit for field", () => {
-        SystemRequirement("FB-1210, FB-1300, FB-0760, FB-0580, FB-0670");
+        SystemRequirement("FB-1210, FB-1300, FB-0760, FB-0490, FB-0580, FB-0670");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
@@ -773,6 +774,13 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
+      it("Edit Autocomplete field", () => {
+        SystemRequirement("FB-0470");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
+        cy.fbAddNewFieldButton();
+      });
+
       it("Save form", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -785,6 +793,11 @@ context("FORM Field test", () => {
       it("Verify updated Blank Template field", () => {
         cy.get("[data-cy=\"fb-blank-template1\"]").should("exist");
         cy.get("[data-cy=\"fb-blank-template1\"]").should("have.text", "fb-blank-template1");
+      });
+
+      it("Verify updated Autocomplete field", () => {
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("exist");
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("have.text", "fb-autocomplete1");
       });
 
       it("Approve and release FORM document", () => {
@@ -810,6 +823,11 @@ context("FORM Field test", () => {
       it("Enter Quantity field value", () => {
         SystemRequirement("FB-1320");
         cy.get("input[name^=\"fb-quantity-\"]").type("1");
+      });
+
+      it("Select Autocomplete field value", () => {
+        SystemRequirement("FB-0510");
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").click().type("test title{downarrow}{enter}");
       });
 
       it("Enter Date picker field value", () => {
@@ -857,6 +875,10 @@ context("FORM Field test", () => {
         });
         cy.get("[name^=fb-hyperlink-]").click();
         cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
+      it("Verify Autocomplete values", () => {
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").parent().invoke("text").should("not.be.empty");
       });
 
       it("Verify Not to edit Text Editor field", () => {
