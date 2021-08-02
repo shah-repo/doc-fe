@@ -115,7 +115,6 @@ export const withFBInput = <T extends FBInputProps>(
         rules,
         applicableOn,
         applicableValidationSchema,
-        editorProperties,
       } = initialValues || {};
 
       if (!hidden) {
@@ -153,9 +152,6 @@ export const withFBInput = <T extends FBInputProps>(
       }
       if (!applicableValidationSchema) {
         formState?.setFieldValue("applicableValidationSchema", COMMON_INITIAL_VALUES.applicableValidationSchema, withState, omitFormValue);
-      }
-      if (!editorProperties) {
-        formState?.setFieldValue("editorProperties", COMMON_INITIAL_VALUES.editorProperties, withState, omitFormValue);
       }
     };
 
