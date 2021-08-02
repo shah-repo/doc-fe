@@ -560,7 +560,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
-      SystemRequirement("REQ-1360");
+      SystemRequirement("REQ-1360", "FB-0030");
       cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
@@ -637,6 +637,7 @@ context("PO test", () => {
     });
 
     context("Add Supplier to PO", () => {
+      SystemRequirement("FB-0030");
       it("Click 'Create A New Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
@@ -818,7 +819,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      SystemRequirement("REQ-1360");
+      SystemRequirement("REQ-1360", "FB-0030");
       cy.poAddNewFieldItem();
     });
 
