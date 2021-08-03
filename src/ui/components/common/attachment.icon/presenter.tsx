@@ -77,7 +77,7 @@ AttachmentIconProps
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId].attachments)) {
+    if ((!lastReleasedDocRevId || docRevById[lastReleasedDocRevId]?.attachments)) {
       return;
     }
     dispatch(documentRevisionsActions.load(lastReleasedDocRevId));
