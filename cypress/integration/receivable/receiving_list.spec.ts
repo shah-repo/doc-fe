@@ -428,14 +428,13 @@ context("Receivable list test", () => {
     });
 
     it.skip("Verify receivable list defaults to show receivables in DRAFT status", () => {
-      SystemRequirement("REQ-1720");
+      // SystemRequirement("REQ-1720");
       cy.recVerifyStartingFilter();
     });
   });
 
   context("Check for displaying default columns", () => {
     it("Verify receivable id is present", () => {
-      SystemRequirement("REQ-1680");
       cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
     });
 
@@ -444,17 +443,14 @@ context("Receivable list test", () => {
     // });
 
     it("Verify owner is present", () => {
-      SystemRequirement("REQ-1680");
       cy.recVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify record state is present", () => {
-      SystemRequirement("REQ-1680");
       cy.recVerifyFilterByState({ state: "DRAFT" });
     });
 
     // it.skip("Verify approval date is present", () => {
-    //   // SystemRequirement("REQ-1680");
     //   cy.recVerifyFilterByState({ state: "DRAFT" });
     //   fail;
     // });
