@@ -427,10 +427,10 @@ context("Receivable list test", () => {
       cy.navigToReceivableList();
     });
 
-    it.skip("Verify receivable list defaults to show receivables in DRAFT status", () => {
-      // SystemRequirement("REQ-1720");
-      cy.recVerifyStartingFilter();
-    });
+    // it.skip("Verify receivable list defaults to show receivables in DRAFT status", () => {
+    //   // SystemRequirement("REQ-1720");
+    //   cy.recVerifyStartingFilter();
+    // });
   });
 
   context("Check for displaying default columns", () => {
