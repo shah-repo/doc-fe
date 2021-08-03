@@ -734,6 +734,39 @@ context("Procedure and parts flow test", () => {
         });
       });
 
+      it("Verify step can be added", () => {
+        SystemRequirement("REQ-2970");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"form.builder.add.step\"]").click();
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+      });
+
+      it("Remove step", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
+      });
+
+      it("Add textfield to eb", () => {
+        SystemRequirement("REQ-2980");
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Textfield for eb test" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.fbAddField();
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("have.text", "Textfield for eb test");
+      });
+
+      it("Remove textfield", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("not.exist");
+      });
+
       it("Add material document", () => {
         cy.pmAddMaterialDocumentToProcedure({
           materialDoc: "Part document",
@@ -833,10 +866,12 @@ context("Procedure and parts flow test", () => {
 
     context("Verify change from previous build", () => {
       it("Click 'Show changes from previous build'", () => {
+        SystemRequirement("REQ-3030");
         cy.pmToggleChangesFromPrevBuild();
       });
 
       it("Verify 'New Material for procedure' is added to materials", () => {
+        SystemRequirement("REQ-3030");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(0)
           .should("contain.text", "New Material for procedure")
           .should("contain.text", "Qty: 3")
