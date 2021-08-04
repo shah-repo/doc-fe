@@ -20,7 +20,7 @@ let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
 
-context("LHR flow", () => {
+context("Mpi Template", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -312,7 +312,6 @@ context("LHR flow", () => {
       });
 
       context("Add FB components", () => {
-        SystemRequirement("REQ-3120");
         it("Add TextField", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
@@ -446,6 +445,7 @@ context("LHR flow", () => {
         });
 
         it("Add Text field with range", () => {
+          SystemRequirement("REQ-3120");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
           cy.fbEnterNameValue({ name: "label", value: "fb-range" });
@@ -511,7 +511,6 @@ context("LHR flow", () => {
       });
 
       context("Add FB components", () => {
-        SystemRequirement("REQ-3160");
         it("Add TextField", () => {
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
@@ -645,6 +644,7 @@ context("LHR flow", () => {
         });
 
         it("Add Text field with range", () => {
+          SystemRequirement("REQ-3160");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
           cy.fbEnterNameValue({ name: "label", value: "fb-range" });
