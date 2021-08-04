@@ -1188,7 +1188,6 @@ context("LHR flow", () => {
       });
 
       context("Verify clone Step #1", () => {
-
         it("Clone Step #1", () => {
           SystemRequirement("REQ-3070");
           cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
@@ -1201,9 +1200,11 @@ context("LHR flow", () => {
         });
 
         it("Verify image of clone of Step #1", () => {
-          cy.contains("Step #2").parentsUntil("li")
-            .find("[data-cy=\"mediaUploadField\"]")
-            .should("have.text", "image");
+          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(6).click();
+          cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+            const attachName = $el.text();
+            expect(attachName).to.be.oneOf(["image", "test_image"]);
+          });
         });
 
         it("Verify materials of clone of Step #1", () => {
