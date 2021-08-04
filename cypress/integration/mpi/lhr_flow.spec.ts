@@ -36,6 +36,8 @@ let dateOfStep1CompletionOneMinuteLater;
 let dateOfStep2Completion;
 let dateOfStep2CompletionOneMinuteLater;
 let dateOfStep2CompletionOneMinuteBefore;
+let developersGroup;
+let secondEmployee;
 
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
@@ -311,6 +313,7 @@ context("LHR flow", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Subassembly");
@@ -851,6 +854,32 @@ context("LHR flow", () => {
       });
     });
 
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }],
+          tags: [...developersGroup.body[0].tags,
+            GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+            GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
+          ],
+        },
+      });
+    });
+
     it("[API]API request for updating company navigation", (done: any) => {
       cy.cmpUpdateCompany({
         employeeId: adminEmployee.id,
@@ -1255,7 +1284,7 @@ context("LHR flow", () => {
             .should("have.text", "ET-00003 - Equipment one");
           cy.contains("Step #2").parentsUntil("li")
             .find("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
-            .should("have.text", "B: ET-00008 - Equipment three ");
+            .should("have.text", "B: Equipment parameter ");
         });
       });
 
@@ -1465,13 +1494,47 @@ context("LHR flow", () => {
       cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01RD");
     });
 
-    context("Verify adding of form builder elem", () => {
-      it("Click add form builder and verify ", () => {
-        cy.poAddDateRequired();
-      });
-    });
+    // context("Verify adding of form builder elem", () => {
+    //   it("Click add form builder and verify ", () => {
+    //     cy.poAddDateRequired();
+    //   });
+    // });
 
     context("Complete first step in LHR", () => {
+      context("Add operator and login it for work on LHRs", () => {
+        it("Click on sidebar permission icon to add Operators", () => {
+          cy.get("[data-cy='permission-icon']").click();
+        });
+
+        it(`Assign operator '${USERS[2].name}'`, () => {
+          SystemRequirement("REQ-3200");
+          cy.drAssignDocumentTo({ username: USERS[2].name });
+        });
+
+        it(`Logout user '${USERS[1].name}'`, () => {
+          cy.authLogout();
+        });
+
+        it(`Login user '${USERS[2].name}'`, () => {
+          cy.authLogin({ email: USERS[2].email, password: "Tester1!" });
+        });
+
+        it("Selects company", () => {
+          cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        });
+
+        it("Navigate to LHR landing page", () => {
+          SystemRequirement("REQ-3350");
+          cy.navigToLHR();
+        });
+
+        it("Select created LHR record", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+            cy.dlSelectFirstDocument();
+          });
+        });
+      });
+
       context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           SystemRequirement("REQ-3210");
@@ -1501,7 +1564,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3220");
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).click();
           });
         });
 
@@ -1516,6 +1579,7 @@ context("LHR flow", () => {
         });
 
         it("Approve step", () => {
+          SystemRequirement("REQ-3230");
           cy.ebApprove();
           dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
           dateOfStep1CompletionOneMinuteLater = moment().add(1, "minutes")
