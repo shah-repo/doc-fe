@@ -426,7 +426,7 @@ definitions:
     - step: &DEPLOY_PROD2
         <<: *COMMON_DEPLOY
         name: Deploy to Prod2
-        deployment: Demo
+        deployment: Prod2
         script:
           - ./aws/bash_scripts/publish.sh "prod2"
         trigger: manual
@@ -572,7 +572,7 @@ pipelines:
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
 
-    release/21.7.2:
+    release/21.8:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

@@ -15,6 +15,7 @@ import { RequestType } from "../../../components/common/owner.changer/helpers/ty
 import CopyEBButton from "../../../components/forms/CopyEBButton";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../hooks/useShouldUpgradeToLatest";
 import { isOperator } from "../../DocumentRevisionDisplay.container";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../helpers/checkDocumentGroup";
@@ -137,10 +138,16 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput", omit(newInput, ["partType", "childForRevise"]));
+          formik.setFieldValue("formInput",
+            omit(newInput,
+              [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
+                "partType", "childForRevise"]));
         } else {
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput", omit(formState?.getValues(), ["partType", "childForRevise"]));
+          formik.setFieldValue("formInput",
+            omit(formState?.getValues(),
+              [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
+                "partType", "childForRevise"]));
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", schema);

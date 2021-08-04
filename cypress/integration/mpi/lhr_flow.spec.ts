@@ -3,6 +3,7 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -239,7 +240,7 @@ context("LHR flow", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: false,
-                    deleteInFormDisabled: true,
+                    deleteInFormDisabled: false,
                     applicableValidationSchema: true,
                   },
                   {
@@ -816,6 +817,258 @@ context("LHR flow", () => {
         });
       });
     });
+
+    it("[API]API request for updating company navigation", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          navigation: [
+            {
+              icon: "/navigation_icons/dashboard.svg",
+              path: "/",
+              type: "LINK",
+              label: "Dashboard",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/document.svg",
+                  path: "/document_revision",
+                  type: "LINK",
+                  label: "Document List",
+                },
+                {
+                  icon: "/navigation_icons/cr.svg",
+                  path: "/change_request",
+                  type: "LINK",
+                  label: "Approval Requests",
+                },
+                {
+                  icon: "/navigation_icons/text-paper.svg",
+                  type: "CATEGORY",
+                  label: "Records",
+                  category: "Record",
+                },
+              ],
+              type: "MENU",
+              label: "Document Control",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              type: "CATEGORY",
+              label: "Equipment",
+              category: "Equipment",
+            },
+            {
+              icon: "/navigation_icons/supplier-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/supplier-list.svg",
+                  type: "CATEGORY",
+                  label: "Supplier List",
+                  category: "Supplier",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Supplier Management",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/receipt_list.svg",
+              type: "CATEGORY",
+              label: "Purchase Orders",
+              category: "Purchase Order",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/cart-simple-in.svg",
+              type: "CATEGORY",
+              label: "Receiving",
+              category: "Receive",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/tools.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/icon_parts.svg",
+                  type: "CATEGORY",
+                  label: "Parts",
+                  category: "Parts",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/todo.svg",
+                  type: "CATEGORY",
+                  label: "Work Orders",
+                  category: "Work Order",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/tag-check.svg",
+                  type: "CATEGORY",
+                  label: "Lots",
+                  category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Manufacturing",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/group-management.svg",
+              path: "/group_management",
+              type: "LINK",
+              label: "Group Management",
+              restrictedToUsersWithTags: [
+                GroupTag.GROUP_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/user-management.svg",
+              path: "/user_management",
+              type: "LINK",
+              label: "User Management",
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              path: "/document_type_management",
+              type: "LINK",
+              label: "Document Type Management",
+              restrictedToUsersWithTags: [
+                GroupTag.DOCUMENT_TYPE_MANAGEMENT,
+              ],
+            },
+          ],
+        },
+      }).then(() => {
+        done();
+      });
+    });
+
+    it("[API]API request for updating page details", (done: any) => {
+      cy.cmpUpdatePageDetails({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          category: "Lhr",
+          addNewBtnLabel: "Create New Lhr",
+          columns: [
+            {
+              fn: "LHR_SUBTITLE",
+              label: "LSHS subtitle",
+              fieldName: "irrelevant",
+              showOnWeb: false,
+              valuePath: "precalc.lshs_subtitle",
+              sourcePath: "irrelevant",
+              showOnAndroid: false,
+            },
+            {
+              label: "LOT #",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lshs_subtitle.lot.label",
+              sourcePath: "irrelevant",
+              showOnAndroid: false,
+            },
+            {
+              label: "State",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "status",
+              showOnAndroid: true,
+            },
+            {
+              label: "Owner",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "owner.user.name",
+              showOnAndroid: true,
+            },
+            {
+              label: "Part Number/Rev",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lshs_subtitle.part.label",
+              showOnAndroid: true,
+            },
+            {
+              label: "Completion Date",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "releasedAt",
+              showOnAndroid: true,
+            },
+            {
+              label: "Start Quantity",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "formInput.lhr_initial_quantity",
+              showOnAndroid: true,
+            },
+            {
+              fn: "LHR_END_QUANTITY",
+              label: "End Quantity",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.lhr_end_accepted_quantity",
+              sourcePath: "irrelevant",
+              showOnAndroid: true,
+            },
+            {
+              fn: "FORM_DOC_ID",
+              label: "Template",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "precalc.formDocId",
+              sourcePath: "irrelevant",
+              showOnAndroid: true,
+            },
+            {
+              label: "ID",
+              fieldName: "irrelevant",
+              showOnWeb: true,
+              valuePath: "document.docId",
+              showOnAndroid: true,
+            },
+          ],
+        },
+      }).then(() => {
+        done();
+      });
+    });
   });
 
   context("Login user", () => {
@@ -873,6 +1126,16 @@ context("LHR flow", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
+        it("Add attachment", () => {
+          SystemRequirement("REQ-3090");
+          cy.contains("Step #1").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").click();
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+
         it("Add 'Material one' to step #1", () => {
           SystemRequirement("REQ-3100");
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
@@ -901,6 +1164,16 @@ context("LHR flow", () => {
           cy.mpiAddStep();
         });
 
+        it("Add attachment", () => {
+          SystemRequirement("REQ-3090");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").click();
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+
         it("Fill step #2 description", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
         });
@@ -911,6 +1184,60 @@ context("LHR flow", () => {
 
         it("Add 'Equipment two' to step #2", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+        });
+      });
+
+      context("Verify clone Step #1", () => {
+        it("Clone Step #1", () => {
+          SystemRequirement("REQ-3070");
+          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+        });
+
+        it("Verify description of clone of Step #1", () => {
+          cy.xpath("//div[contains(@data-cy, 'description')]/../div[2]")
+            .eq(2)
+            .should("have.text", "Description of step one");
+        });
+
+        it("Verify image of clone of Step #1", () => {
+          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(6).click();
+          cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+            const attachName = $el.text();
+            expect(attachName).to.be.oneOf(["image", "test_image"]);
+          });
+        });
+
+        it("Verify materials of clone of Step #1", () => {
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
+            .should("have.text", "MT-00004 - Material one | Qty: 3 each");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
+            .should("have.text", "A: Parameter for material three | Qty: None ");
+        });
+
+        it("Verify equipments of clone of Step #1", () => {
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
+            .should("have.text", "ET-00003 - Equipment one");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
+            .should("have.text", "B: ET-00008 - Equipment three ");
+        });
+      });
+
+      context("Verify remove Step", () => {
+        it("Check step count before remove", () => {
+          cy.get("[data-cy=\"form.builder.step.number\"]").should("have.length", 3);
+        });
+
+        it("remove Step #2", () => {
+          SystemRequirement("REQ-3080");
+          cy.contains("Step #2").parentsUntil("li").find("[data-cy=\"remove-schema-item\"]").click({ force: true });
+        });
+
+        it("Check step count after remove", () => {
+          cy.get("[data-cy=\"form.builder.step.number\"]").should("have.length", 2);
         });
       });
 
@@ -1061,7 +1388,6 @@ context("LHR flow", () => {
     it("Click create new document from LHRt", () => {
       SystemRequirement("REQ-3170");
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.EmployeesGet,
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.GetAutocompleteOptions], () => {
         cy.drCreateNewDocumentFromForm();
@@ -1109,7 +1435,7 @@ context("LHR flow", () => {
       context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           SystemRequirement("REQ-3210");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).click();
           });
           cy.wait(500);
@@ -1207,7 +1533,7 @@ context("LHR flow", () => {
 
     context("Navigate back to LHR to start second LHRs", () => {
       it("Navigate to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhrDocUrl);
         });
         cy.wait(500);
@@ -1261,7 +1587,7 @@ context("LHR flow", () => {
     context("Complete LHRs #2 in LHR", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).click();
         });
         cy.wait(500);
@@ -1342,7 +1668,7 @@ context("LHR flow", () => {
 
     context("Navigate to LHR to release it", () => {
       it("Navigate to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhrDocUrl);
         });
       });

@@ -492,15 +492,6 @@ context("Inspection flow", () => {
                   ],
                 },
                 {
-                  icon: "/navigation_icons/todo.svg",
-                  type: "CATEGORY",
-                  label: "Work Orders",
-                  category: "Work Order",
-                  restrictedToUsersWithTags: [
-                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
-                  ],
-                },
-                {
                   icon: "/navigation_icons/tag-check.svg",
                   type: "CATEGORY",
                   label: "Lots",
@@ -1266,9 +1257,7 @@ context("Inspection flow", () => {
       });
 
       it("Approve inspection document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-          cy.ebApprove();
-        });
+        cy.ebApprove();
       });
 
       it("Check status is 'Released'", () => {

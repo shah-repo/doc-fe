@@ -296,5 +296,32 @@
     "root": "",
     "includeRevision": "displayRevision",
     "hidden": false
+  },
+  {
+    "id": "34",
+    "label": "Released Form Document Revisions",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "root": "",
+    "includeRevision": "displayRevision",
+    "hidden": false
+  },
+  {
+    "id": "35",
+    "label": "Output Document types",
+    "valueKey": "id",
+    "labelKey": "documentTypeName",
+    "root": "",
+    "hidden": false
+  },
+  {
+    "id": "36",
+    "label": "Documents eligible for training",
+    "valueKey": "id",
+    "labelKey": "documentRevisions.name",
+    "labelPrefixRoot": "docId",
+    "root": "",
+    "hidden": false
   }
 ]

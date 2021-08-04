@@ -1,10 +1,11 @@
-import { find, get, isUndefined, keyBy, map } from "lodash";
+import { find, get, isUndefined, keyBy, map, omit } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, StartMpiBody } from "..";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 class FBLHRStepState {
   // MARK: @api
@@ -37,15 +38,20 @@ class FBLHRStepState {
     if (findItem) {
       const params = map(this.editedParameters, (param) => {
         if (param.paramsId === item.paramsId) {
-          return item;
+          return omit(item, [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })]);
         }
         return param;
       });
-      set(this, "editedParameters", keyBy( params, "paramsId"));
+      set(this, "editedParameters", keyBy(params, "paramsId"));
       set(this, type, items);
+
       return;
     }
-    set(this, "editedParameters", keyBy({ ...this.editedParameters, item }, "paramsId") );
+    const paramsToSet = {
+      ...this.editedParameters,
+      item: omit(item, [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })]),
+    };
+    set(this, "editedParameters", keyBy(paramsToSet, "paramsId") );
     set(this, type, items);
   };
 

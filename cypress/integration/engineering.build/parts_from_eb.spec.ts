@@ -223,7 +223,6 @@ context("Parts from EB flow test", () => {
         it("Clicks on 'Add new part' button", () => {
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.GetRequiredApprovers,
-            CyRoutes.EmployeesGet,
             CyRoutes.DocPreview], () => {
             cy.ptClickCreateNewPart();
           });
@@ -280,6 +279,12 @@ context("Parts from EB flow test", () => {
     });
 
     context("Choose a part and submit for approval", () => {
+      it("Verify 'Existing Revision' and 'New Revision' options exist", () => {
+        SystemRequirement("REQ-2960");
+        cy.get("input[value=\"documentRevision\"]").parentsUntil("div").should("have.text", "Existing Revision");
+        cy.get("input[value=\"document\"]").parentsUntil("div").should("have.text", "New Revision");
+      });
+
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
           cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
@@ -287,7 +292,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -376,6 +381,7 @@ context("Parts from EB flow test", () => {
         });
 
         it("Create the part", () => {
+          SystemRequirement("REQ-2950");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
@@ -393,7 +399,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -424,10 +430,12 @@ context("Parts from EB flow test", () => {
   context("Clone EB", () => {
     context("Create the next build of EB", () => {
       it("Click Clone EB button", () => {
+        SystemRequirement("REQ-3000");
         cy.ebClickClone();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
+        SystemRequirement("REQ-3000");
         cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00005 - " + NEW_PART_NAME);
       });
     });
@@ -438,7 +446,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.EmployeesGet], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
         });
       });
@@ -464,7 +472,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
@@ -519,7 +527,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });

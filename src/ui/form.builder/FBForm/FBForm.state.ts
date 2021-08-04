@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, setWith, values } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockData, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
 import { SMStore, SMUrl } from "../../../App";
@@ -113,7 +113,7 @@ class FBFormState extends FBSchemaState {
     if (!fieldName) { return; }
     value = cloneDeep(value);
     if (!omitFormValue) {
-      setWith(this.values, fieldName, value);
+      lodashSet(this.values, fieldName, value);
     }
     this.setValidationValue(fieldName, value);
     if (!withState) { return; }

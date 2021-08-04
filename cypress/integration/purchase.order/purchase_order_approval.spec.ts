@@ -400,9 +400,7 @@ context("PO approval test", () => {
     it("Click on 'Withdraw Submission' button", () => {
       SystemRequirement("REQ-1530");
       cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.EmployeesGet,
-        CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
       });
     });
