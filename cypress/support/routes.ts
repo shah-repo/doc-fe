@@ -83,6 +83,7 @@ export enum CyRoutes {
   PostFieldLocks = "PostFieldLocks",
   ExpireFieldLocks = "ExpireFieldLocks",
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
+  PostReceivable = "PostReceivable",
 }
 
 export const routes: ICyRoutes =   {
@@ -110,6 +111,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/employees",
+    },
+  },
+  PostReceivable: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/receivable/*/create_lot",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   ArAudit: {
