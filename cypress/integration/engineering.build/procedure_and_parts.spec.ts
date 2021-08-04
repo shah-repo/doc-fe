@@ -830,7 +830,7 @@ context("Procedure and parts flow test", () => {
       it("Verify materials are copied", () => {
         SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #21080301 | Qty: 2 gram");
+          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
           .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
       });
@@ -921,7 +921,7 @@ context("Procedure and parts flow test", () => {
       it("Verify materials are copied", () => {
         SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(2).should("contain.text", "PRT-00005 - Part document");
+          .eq(2).should("contain.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
           .eq(3).should("have.text", "Free text material | Test | Qty: 3 pounds");
       });
