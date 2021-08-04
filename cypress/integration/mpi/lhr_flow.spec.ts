@@ -240,7 +240,7 @@ context("LHR flow", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: false,
-                    deleteInFormDisabled: true,
+                    deleteInFormDisabled: false,
                     applicableValidationSchema: true,
                   },
                   {
@@ -1159,6 +1159,16 @@ context("LHR flow", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
+        it("Add attachment", () => {
+          SystemRequirement("REQ-3090");
+          cy.contains("Step #1").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").click();
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+
         it("Add 'Material one' to step #1", () => {
           SystemRequirement("REQ-3100");
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
@@ -1187,6 +1197,16 @@ context("LHR flow", () => {
           cy.mpiAddStep();
         });
 
+        it("Add attachment", () => {
+          SystemRequirement("REQ-3090");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").click();
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+
         it("Fill step #2 description", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
         });
@@ -1197,6 +1217,60 @@ context("LHR flow", () => {
 
         it("Add 'Equipment two' to step #2", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+        });
+      });
+
+      context("Verify clone Step #1", () => {
+        it("Clone Step #1", () => {
+          SystemRequirement("REQ-3070");
+          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+        });
+
+        it("Verify description of clone of Step #1", () => {
+          cy.xpath("//div[contains(@data-cy, 'description')]/../div[2]")
+            .eq(2)
+            .should("have.text", "Description of step one");
+        });
+
+        it("Verify image of clone of Step #1", () => {
+          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(6).click();
+          cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+            const attachName = $el.text();
+            expect(attachName).to.be.oneOf(["image", "test_image"]);
+          });
+        });
+
+        it("Verify materials of clone of Step #1", () => {
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
+            .should("have.text", "MT-00004 - Material one | Qty: 3 each");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
+            .should("have.text", "A: Parameter for material three | Qty: None ");
+        });
+
+        it("Verify equipments of clone of Step #1", () => {
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
+            .should("have.text", "ET-00003 - Equipment one");
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
+            .should("have.text", "B: ET-00008 - Equipment three ");
+        });
+      });
+
+      context("Verify remove Step", () => {
+        it("Check step count before remove", () => {
+          cy.get("[data-cy=\"form.builder.step.number\"]").should("have.length", 3);
+        });
+
+        it("remove Step #2", () => {
+          SystemRequirement("REQ-3080");
+          cy.contains("Step #2").parentsUntil("li").find("[data-cy=\"remove-schema-item\"]").click({ force: true });
+        });
+
+        it("Check step count after remove", () => {
+          cy.get("[data-cy=\"form.builder.step.number\"]").should("have.length", 2);
         });
       });
 

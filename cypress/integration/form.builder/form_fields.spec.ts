@@ -119,6 +119,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Autocomplete", () => {
+        SystemRequirement("FB-0470");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
@@ -718,8 +719,27 @@ context("FORM Field test", () => {
           .find("input[name^=fb-quantity-]").should("have.value", "1");
       });
 
+      it("Add and check Text Editor field", () => {
+        SystemRequirement("FB-0620");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[data-cy^=\"fb-text-editor-\"]").find("div[contenteditable]")
+          .click({ force: true }).type("fb-text-editor-value");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[data-cy^=\"fb-text-editor-\"]").parent().find("p")
+          .should("have.text", "fb-text-editor-value");
+      });
+
+      it("Add and check Date picker field", () => {
+        SystemRequirement("FB-0710");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-datepicker-]").parent().find("button").click();
+        cy.get(".MuiPickersDay-daySelected").click();
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-datepicker-]").invoke("val").should("not.be.empty");
+      });
+
       it("there should be no edit for field", () => {
-        SystemRequirement("FB-1210, FB-1300, FB-0760");
+        SystemRequirement("FB-1210, FB-1300, FB-0760, FB-0490, FB-0580, FB-0670");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
@@ -754,6 +774,13 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
+      it("Edit Autocomplete field", () => {
+        SystemRequirement("FB-0470");
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
+        cy.fbAddNewFieldButton();
+      });
+
       it("Save form", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -766,6 +793,11 @@ context("FORM Field test", () => {
       it("Verify updated Blank Template field", () => {
         cy.get("[data-cy=\"fb-blank-template1\"]").should("exist");
         cy.get("[data-cy=\"fb-blank-template1\"]").should("have.text", "fb-blank-template1");
+      });
+
+      it("Verify updated Autocomplete field", () => {
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("exist");
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("have.text", "fb-autocomplete1");
       });
 
       it("Approve and release FORM document", () => {
@@ -793,6 +825,17 @@ context("FORM Field test", () => {
         cy.get("input[name^=\"fb-quantity-\"]").type("1");
       });
 
+      it("Select Autocomplete field value", () => {
+        SystemRequirement("FB-0510");
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").click().type("test title{downarrow}{enter}");
+      });
+
+      it("Enter Date picker field value", () => {
+        SystemRequirement("FB-0690");
+        cy.get("input[name^=\"fb-datepicker-\"]").parent().find("button").click({ force: true });
+        cy.get(".MuiPickersDay-daySelected").click();
+      });
+
       it("Click Save button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -801,6 +844,10 @@ context("FORM Field test", () => {
     context("Verify Clinical Protocol doc values", () => {
       it("Verify Quantity values", () => {
         cy.get("input[name^=\"fb-quantity-\"]").should("have.value", "1");
+      });
+
+      it("Verify Date picker values", () => {
+        cy.get("input[name^=\"fb-datepicker-\"]").invoke("val").should("not.be.empty");
       });
 
       it("Verify Not to edit Quantity field", () => {
@@ -828,6 +875,22 @@ context("FORM Field test", () => {
         });
         cy.get("[name^=fb-hyperlink-]").click();
         cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
+      it("Verify Autocomplete values", () => {
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").parent().invoke("text").should("not.be.empty");
+      });
+
+      it("Verify Not to edit Text Editor field", () => {
+        SystemRequirement("FB-0560");
+        cy.get("[data-cy=\"fb-text-editor\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Date picker field", () => {
+        SystemRequirement("FB-0650");
+        cy.get("[data-cy=\"fb-datepicker\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
     });
   });

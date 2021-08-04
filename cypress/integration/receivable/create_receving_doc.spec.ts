@@ -649,7 +649,7 @@ context("Create receivable test", () => {
     context("Fill out receivable document form", () => {
       context("Check list of open PO-s", () => {
         it("Check there is two open PO-s available to select", () => {
-          // SystemRequirement("REQ-1790");
+          SystemRequirement("REQ-1790");
           cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
         });
       });
@@ -695,12 +695,11 @@ context("Create receivable test", () => {
         });
 
         it("Fill custom text field added in receivable form", () => {
-          // SystemRequirement("REQ-1880");
           cy.get("input[type=textfield]").type("Custom field");
         });
 
-        it("Click 'Create document' ", () => {
-          // SystemRequirement("REQ-1770");
+        it("Click 'Create document' on receiving lading page", () => {
+          SystemRequirement("REQ-1770");
           cy.recClickCreateDocumentWithApiCall();
         });
 
@@ -751,7 +750,6 @@ context("Create receivable test", () => {
         });
 
         it("Verify receivable status is 'Current'", () => {
-          // SystemRequirement("REQ-1870");
           cy.drCheckDocumentStatus({ status: "Current" });
         });
       });
