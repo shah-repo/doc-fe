@@ -687,7 +687,15 @@ context("Create receivable test", () => {
           cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
         });
       });
-
+      context("Check for if part numer/description received for items exists", () => {
+        it("Check for part number/description", () => {
+          SystemRequirement("REQ-1930");
+          cy.get("[data-cy=poItems]").eq(0).should("contain.text", "trasportinID")
+            .and("contain.text", "transporting products");
+          cy.get("[data-cy=poItems]").eq(1).should("contain.text", "cleaningID")
+            .and("contain.text", "office cleaning");
+        });
+      });
       context("Verify receivable creation", () => {
         it("Verify adding attachments", () => {
           SystemRequirement("REQ-1980");
