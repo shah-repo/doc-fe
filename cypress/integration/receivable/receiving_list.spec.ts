@@ -489,6 +489,7 @@ context("Receivable list test", () => {
     });
 
     it("Add approval", () => {
+      cy.wait(3000);
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
@@ -505,7 +506,7 @@ context("Receivable list test", () => {
 
     it("Check if ID and date time are recorded when approving", () => {
       SystemRequirement("REQ-2050", "REQ-2060");
-      cy.get("[data-cy=\"form.builder.approvals\"]>div").eq(4).should("contain", USERS[1].name)
+      cy.get("[id=\"Presenter-FBWorkspace\"]>div>div>div").eq(6).should("contain", USERS[1].name)
         .and("contain", "Approved")
         .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
     });
