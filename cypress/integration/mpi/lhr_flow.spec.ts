@@ -31,6 +31,7 @@ let mpiDocument;
 let mpiDocumentType;
 let createdPartDocument;
 let lhrDocUrl;
+let lhrs1DocUrl;
 let dateOfStep1Completion;
 let dateOfStep1CompletionOneMinuteLater;
 let dateOfStep2Completion;
@@ -38,6 +39,9 @@ let dateOfStep2CompletionOneMinuteLater;
 let dateOfStep2CompletionOneMinuteBefore;
 let developersGroup;
 let secondEmployee;
+let createdLotsFormDocument;
+let formDocumentType;
+let CSLDocumentType;
 
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
@@ -319,6 +323,8 @@ context("LHR flow", () => {
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Subassembly");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specifications Lot");
           done();
         });
       });
@@ -854,6 +860,111 @@ context("LHR flow", () => {
       });
     });
 
+    it("[API]Create Lots form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Lots Form document</p>",
+          document: {
+            docId: "FM-00008",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Lots form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: CSLDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "lot_quantity",
+                type: "quantity",
+                index: 0,
+                label: "Quantity Received",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [
+
+                ],
+                validationAttribute: "Quantity Received",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "expiry-date",
+                type: "datepicker",
+                index: 1,
+                label: "Expiry Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "Expiry Date",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "100-inspection-override",
+                type: "checkboxgroup",
+                index: 2,
+                label: "100% Inspection Override",
+                options: [
+                  {
+                    text: "100% Inspection Override",
+                    value: "100% Inspection Override",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                editorProperties: [],
+                validationAttribute: "100% Inspection Override",
+                applicableValidationSchema: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-ki5yh7ba",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLotsFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLotsFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
     it("[API]Get group", (done: any) => {
       cy.grpGetGroupByName({
         groupName: "Developers",
@@ -1150,6 +1261,70 @@ context("LHR flow", () => {
     });
   });
 
+  context("Create lot document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Navigate to Records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Click on Create new", () => {
+      cy.poClickCreatePO();
+    });
+
+    it("Select 'Component Specifications Lot' from the dropdown", () => {
+      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+      cy.wait(500);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+        cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+      });
+    });
+
+    it("Add lot title", () => {
+      cy.drEnterDocumentTitle({ name: "Component specification lot document" });
+    });
+
+    it("Select 'Part document' in references", () => {
+      cy.drSelectReferences( "Material one" );
+    });
+
+    it("Enter quantity received", () => {
+      cy.get("[name=\"lot_quantity\"]").type("12");
+    });
+
+    it("Check 100% override", () => {
+      cy.get("[value=\"100% Inspection Override\"]").check();
+    });
+
+    it("Add 'Expiry Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.wait(5000);
+    });
+
+    it("Add an Approval'", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.unClick();
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+
+    it("Verify status is 'Released'", () => {
+      cy.drCheckDocumentStatus({ status: "Released" });
+    });
+  });
+
   context("Create MPI document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -1358,11 +1533,6 @@ context("LHR flow", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Verify Part lists only released parts", () => {
-        SystemRequirement("REQ-3820");
-        cy.wait(5000);
-      });
-
       it("Select 'Part document' for Part to be Manufactured", () => {
         SystemRequirement("REQ-3131");
         cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
@@ -1400,6 +1570,22 @@ context("LHR flow", () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
+
+        it("Verify indicator for parametrized Material", () => {
+          SystemRequirement("REQ-3630");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
+            .should("have.text", "A: Parameter for material three | Qty: None ");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]").parent().parent()
+            .should("have.css", "background-color", "rgb(252, 222, 222)");
+        });
+
+        it("Verify indicator for parametrized Equipment", () => {
+          SystemRequirement("REQ-3630");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]")
+            .should("have.text", "B: Equipment parameter ");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title.id\"]").parent().parent()
+            .should("have.css", "background-color", "rgb(252, 222, 222)");
+        });
       });
 
       context("Try to release LHRt without parameters expecting validation error", () => {
@@ -1410,6 +1596,7 @@ context("LHR flow", () => {
         });
 
         it("Approve and release LHRt document", () => {
+          SystemRequirement("REQ-3640");
           cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
           cy.checkToastMessageContains({ message: "Parameters from MPI are not defined" });
           cy.get("[data-cy=ApproveAndRelease-cancelButton]").click();
@@ -1445,6 +1632,7 @@ context("LHR flow", () => {
         });
 
         it("Approve and release LHRt document", () => {
+          SystemRequirement("REQ-3640");
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
@@ -1461,9 +1649,21 @@ context("LHR flow", () => {
       });
     });
 
+    it("Verify LHR title", () => {
+      SystemRequirement("REQ-3310");
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-docId").should("have.text", "LHR-00004");
+    });
+
+    it("Verify current released part is 'rev 1'", () => {
+      SystemRequirement("REQ-3820");
+      cy.get("[data-cy=\"lhr-selected-part\"]")
+        .should("have.attr", "value", "CS-00005 - rev 1 - Part document");
+    });
+
     it("Check lot number", () => {
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
     });
 
     it("Enter initial quantity", () => {
@@ -1491,14 +1691,8 @@ context("LHR flow", () => {
         lhrDocUrl = url;
       });
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
     });
-
-    // context("Verify adding of form builder elem", () => {
-    //   it("Click add form builder and verify ", () => {
-    //     cy.poAddDateRequired();
-    //   });
-    // });
 
     context("Complete first step in LHR", () => {
       context("Add operator and login it for work on LHRs", () => {
@@ -1529,7 +1723,10 @@ context("LHR flow", () => {
         });
 
         it("Select created LHR record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.DocPreview,
+            CyRoutes.DocRevPreview,
+            CyRoutes.GetAutocompleteOptions], () => {
             cy.dlSelectFirstDocument();
           });
         });
@@ -1548,6 +1745,12 @@ context("LHR flow", () => {
           cy.cmpTurnOffAutosave();
         });
 
+        it("Verify LHRs title", () => {
+          SystemRequirement("REQ-3320");
+          cy.get("#HeaderInfo-subtitle")
+            .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
+        });
+
         it("Enter 'Start quntity' for LHRs #1", () => {
           cy.get("[name=\"lhrs-start-quantity\"]").typeFieldLock("10");
         });
@@ -1558,6 +1761,35 @@ context("LHR flow", () => {
 
         it("Enter 'Rejected quntity' for LHRs #1", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("2");
+        });
+
+        it("Click 'select lot' for 'Material One' ", () => {
+          cy.get("[data-cy=\"form.builder.select\"]")
+            .eq(0)
+            .click({ force: true });
+        });
+
+        it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
+          cy.get("input[data-cy=usedOverride]").click();
+          cy.get("ul[role=listbox]>li").contains(`LOT #${lotDateSuffix}01`).click();
+        });
+
+        it("Select quantity in lot dialog", () => {
+          cy.get("input[name=\"quantity\"]").type("5");
+        });
+
+        it("Click 'SAVE' on select lot dialog", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
+            cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+              .eq(0)
+              .click();
+          });
+        });
+
+        it("Verify LOT is selected for 'Material One'", () => {
+          SystemRequirement("REQ-3340");
+          cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
+            .should("contain.text", `LOT #${lotDateSuffix}01`);
         });
 
         it("Add an Approval", () => {
@@ -1629,18 +1861,76 @@ context("LHR flow", () => {
           });
 
           it("Verify status is completed", () => {
+            cy.url().then((url: any) => {
+              lhrs1DocUrl = url;
+            });
             cy.drCheckDocumentStatus({ status: "Completed" });
+          });
+
+          it("Verify user who completed LHRs", () => {
+            SystemRequirement("REQ-3240");
+            cy.get("div[id=Presenter-FBWorkspace]>div").eq(-2).find("div>div:nth-child(5)")
+              .should("contain.text", USERS[2].name);
           });
         });
       });
     });
 
-    context("Navigate back to LHR to start second LHRs", () => {
-      it("Navigate to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhrDocUrl);
+    context("Verify anyone can make corrections to the LHRs after completing", () => {
+      context("Login second user", () => {
+        it(`Logout user '${USERS[2].name}'`, () => {
+          cy.authLogout();
         });
-        cy.wait(500);
+
+        it(`Login user '${USERS[3].name}'`, () => {
+          cy.authLogin({ email: USERS[3].email, password: "Tester1!" });
+        });
+
+        it("Selects company", () => {
+          cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        });
+      });
+
+      context("Navigate to completed LHRs", () => {
+        it("Navig to LHRs #1", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.visit(lhrs1DocUrl);
+          });
+        });
+
+        it("Navig to LHRs #1", () => {
+          cy.wait(10000);
+        });
+      });
+    });
+
+    context("Login admin user", () => {
+      it(`Logout user '${USERS[2].name}'`, () => {
+        cy.authLogout();
+      });
+
+      it(`Login user '${USERS[1].name}'`, () => {
+        cy.authLogin({ email: USERS[1].email, password: "Tester1!" });
+      });
+
+      it("Selects company", () => {
+        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      });
+    });
+
+    context("Navigate back to LHR to start second LHRs", () => {
+      it("Navigate to LHR landing page", () => {
+        SystemRequirement("REQ-3350");
+        cy.navigToLHR();
+      });
+
+      it("Select created LHR record", () => {
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.DocPreview,
+          CyRoutes.DocRevPreview,
+          CyRoutes.GetAutocompleteOptions], () => {
+          cy.dlSelectFirstDocument();
+        });
       });
 
       it("Verify date of completion LHRs #1", () => {
@@ -1674,7 +1964,7 @@ context("LHR flow", () => {
       });
 
       it("Check lot number", () => {
-        cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "01");
+        cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
       });
 
       it("Verify owner is added as approver", () => {
@@ -1823,6 +2113,28 @@ context("LHR flow", () => {
 
       it("Verify status is 'Released'", () => {
         cy.drCheckDocumentStatus({ status: "Released" });
+      });
+
+      it("Verify revision is specified on conneted Part document", () => {
+        SystemRequirement("REQ-3330");
+        cy.get("[data-cy=\"lhr-selected-part\"]")
+          .should("have.attr", "value", "CS-00005 - rev 1 - Part document");
+      });
+    });
+
+    context("Verify LHRt is on document list", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Filter document list by title 'LHRt document'", () => {
+        cy.dlFilterByDocTitle({ docTitle: "LHRt document" });
+      });
+
+      it("Verify LHRt document is present on list", () => {
+        SystemRequirement("REQ-3360");
+        cy.get("div[title]").eq(0).should("have.text", "LHRt document");
+        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
   });

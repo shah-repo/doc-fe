@@ -84,6 +84,7 @@ export enum CyRoutes {
   ExpireFieldLocks = "ExpireFieldLocks",
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
   PostReceivable = "PostReceivable",
+  PostLHRs = "PostLHRs",
 }
 
 export const routes: ICyRoutes =   {
@@ -117,6 +118,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/receivable/*/create_lot",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  PostLHRs: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/lhr/lhrs/*/use_override",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
