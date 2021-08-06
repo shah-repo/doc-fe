@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -25,6 +26,8 @@ let createdPOFormDocument;
 let createdPODocument;
 let createdRecivableFormDocument;
 let createdReceivable1;
+let dateOfStepCompletion;
+let dateOfStepCompletionOneMinuteLater;
 
 context("Receivable list test", () => {
   before(() => {
@@ -486,6 +489,7 @@ context("Receivable list test", () => {
     });
 
     it("Add approval", () => {
+      cy.wait(3000);
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
@@ -494,11 +498,25 @@ context("Receivable list test", () => {
     });
 
     it("Approve receivable", () => {
+      dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+      dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
+        .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
       cy.ebApprove();
+    });
+
+    it("Check if ID and date time are recorded when approving", () => {
+      SystemRequirement("REQ-2050", "REQ-2060");
+      cy.get("[id=\"Presenter-FBWorkspace\"]>div>div>div").eq(6).should("contain", USERS[1].name)
+        .and("contain", "Approved")
+        .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
     });
 
     it("Verify status", () => {
       cy.drCheckDocumentStatus({ status: "Current" });
+    });
+    it("Verify version history after modified", () => {
+      SystemRequirement("REQ-2110");
+      cy.get("[data-cy=\"timeline-icon\"]").click();
     });
   });
 
