@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import { compact, filter, isEmpty, isString, kebabCase, size, union } from "lodash";
+import { compact, filter, isEmpty, isString, kebabCase, omit, size, union } from "lodash";
 import React from "react";
-import { FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
+import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
@@ -110,7 +110,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         index,
         type,
         name: `${kebabCase(label as string)}-${FB.uniqid}`,
-        ...formValues,
+        ...omit(formValues, editorPropertiesFlags),
         ...isString(options) && stringToOptions && { options: stringToOptions(options, editorProperties) },
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
