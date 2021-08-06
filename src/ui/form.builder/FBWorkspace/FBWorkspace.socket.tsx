@@ -1,6 +1,5 @@
 import React from "react";
-import { FB, FBLockBody } from "..";
-import { SMStore, SMUrl } from "../../../App";
+import { FB } from "..";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
@@ -40,13 +39,13 @@ const FBWorkspaceSocket: React.FunctionComponent<{}> = () => {
   };
 
   const loadLockedFields = () => {
-    SMStore.get<FBLockBody, null>({
-      url: SMStore.templateUrl(SMUrl.lockedFields, { id }),
-    });
+    // SMStore.get<FBLockBody, null>({
+    //   url: SMStore.templateUrl(SMUrl.lockedFields, { id }),
+    // });
   };
 
   const loadDocumentRevision = () => {
-    workspaceState?.loadDocRev();
+    // workspaceState?.loadDocRev();
   };
 
   useMqttSubscription(subscribe, unsubscribe);
