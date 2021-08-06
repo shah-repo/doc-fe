@@ -514,10 +514,6 @@ context("Receivable list test", () => {
     it("Verify status", () => {
       cy.drCheckDocumentStatus({ status: "Current" });
     });
-    it("Verify version history after modified", () => {
-      SystemRequirement("REQ-2110");
-      cy.get("[data-cy=\"timeline-icon\"]").click();
-    });
   });
 
   context("Verify last edited receivable is first on list", () => {
