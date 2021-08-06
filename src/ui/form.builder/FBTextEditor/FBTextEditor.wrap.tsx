@@ -1,5 +1,6 @@
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { useFormikContext } from "formik";
 import htmlToDraft from "html-to-draftjs";
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
@@ -44,6 +45,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     const emptyHtmlContent = "<p></p>";
     formValue = formState?.getFieldValue(name);
     textEditorState = FB.useRef(FBTextEditorState, htmlToEditorState(formValue));
+    const formik = useFormikContext();
     // const { submitForm } = useFormContext();
     // form preview mode just disables the text editor
     // preview mode pulls a new style
@@ -198,7 +200,7 @@ export const withFBTextEditor = <T extends FBTextEditorProps>(
     useObserver(() => {
       editorState = textEditorState?.editorState;
       masked = textEditorState?.masked;
-      disabled = disabled || formState?.locked.get(name)?.locked;
+      disabled = disabled || formik?.isSubmitting || formState?.locked.get(name)?.locked;
     });
 
     return Component({
