@@ -426,7 +426,7 @@ definitions:
     - step: &DEPLOY_PROD2
         <<: *COMMON_DEPLOY
         name: Deploy to Prod2
-        deployment: Demo
+        deployment: Production2
         script:
           - ./aws/bash_scripts/publish.sh "prod2"
         trigger: manual
