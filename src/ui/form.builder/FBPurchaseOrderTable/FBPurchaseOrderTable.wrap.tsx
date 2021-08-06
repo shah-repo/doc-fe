@@ -13,6 +13,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 ) => {
   const Comp = ({
     handleShippingCost,
+    handleTaxChange,
     handleCurrencyChange,
     handleDelete,
     classes,
@@ -34,6 +35,15 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       const { target: { value = 0 } = {} } = ev || {};
       const abs = Math.abs(value).toFixed(2).toString();
       purchaseOrderState?.setShippingCost(abs);
+      ev.target.value = value;
+    };
+
+    handleTaxChange = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = "" } = {} } = ev || {};
+      const matchNumbers = (val) => Number(val.match(/\d+/g).join(""));
+      let fieldValue = (matchNumbers(value) / 100).toFixed(2).toString();
+      value.endsWith("%") && (fieldValue = `${fieldValue}%`);
+      purchaseOrderState?.setTax(fieldValue);
       ev.target.value = value;
     };
 
@@ -85,6 +95,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     return Component({
       ...(props as T),
       handleShippingCost,
+      handleTaxChange,
       handleCurrencyChange,
       handleDelete,
       classes,

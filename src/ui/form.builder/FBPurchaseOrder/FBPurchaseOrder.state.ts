@@ -5,7 +5,6 @@ import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseO
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { TAX_RATE } from "../helpers/constants";
 import { FBCurrency } from "./FBPurchaseOrder.types";
 
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
@@ -88,6 +87,14 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
+  @action public setTax = (tax?: string) => {
+    if (!tax) {
+      return;
+    }
+    set(this.calculation, "tax", tax);
+    this.calculateCost();
+  };
+
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87
     // on change is triggered twice
@@ -139,24 +146,31 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public calculateCost = () => {
+    const taxField: any = this.calculation.tax || ""; // TODO: update type
+
+    const isTaxPercent = taxField.endsWith("%");
+    const taxFieldValue = Number(parseFloat(taxField.match(/\d+/g).join(""))) / 100;
+    let tax = isTaxPercent ? 0 : taxFieldValue;
+
     const sum = (this.items || []).reduce(
       (agg, item: any) => {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
-        let tax = agg.tax;
-        item.tax && (tax += orderCost * TAX_RATE);
+        if (item.tax && isTaxPercent) {
+          tax += subTotal * (taxFieldValue / 100);
+        }
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
     const shippingCost = this.calculation.shippingCost || 0;
-    const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    const totalAmount = tax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.calculation.exchangeRate;
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(sum.tax),
-      totalAmount: this.formatCost(totalAmount),
+      tax: taxField,
       shippingCost: this.formatCost(shippingCost),
+      totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
     });
   };
