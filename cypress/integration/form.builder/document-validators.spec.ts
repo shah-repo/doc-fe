@@ -743,7 +743,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).typeFieldLock("added");
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
     });
   });
 
