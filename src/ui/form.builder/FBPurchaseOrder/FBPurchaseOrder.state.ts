@@ -146,10 +146,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public calculateCost = () => {
-    const taxField: any = this.calculation.tax || ""; // TODO: update type
+    const taxField: string = this.calculation.tax || "";
 
     const isTaxPercent = taxField.endsWith("%");
-    const taxFieldValue = Number(parseFloat(taxField.match(/\d+/g).join(""))) / 100;
+    const taxFieldValue = parseFloat(taxField);
     let tax = isTaxPercent ? 0 : taxFieldValue;
 
     const sum = (this.items || []).reduce(
@@ -157,14 +157,16 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
         if (item.tax && isTaxPercent) {
-          tax += subTotal * (taxFieldValue / 100);
+          tax += orderCost * (taxFieldValue / 100);
         }
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
+
     const shippingCost = this.calculation.shippingCost || 0;
     const totalAmount = tax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.calculation.exchangeRate;
+
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),

@@ -40,11 +40,15 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = "" } = {} } = ev || {};
-      const matchNumbers = (val) => Number(val.match(/\d+/g).join(""));
-      let fieldValue = (matchNumbers(value) / 100).toFixed(2).toString();
-      value.endsWith("%") && (fieldValue = `${fieldValue}%`);
+      const taxInputPattern = /([0-9\.]+)/g;
+      let fieldValue: string = (
+        value
+          .match(taxInputPattern)
+          .join("")
+          .replace(/(.*)\./, (item) => item.replace(/\./g, "") + ".")
+      );
+      fieldValue = value.endsWith("%") ? `${fieldValue}%` : `${fieldValue}`;
       purchaseOrderState?.setTax(fieldValue);
-      ev.target.value = value;
     };
 
     handleCurrencyChange = (ev, currency) =>
