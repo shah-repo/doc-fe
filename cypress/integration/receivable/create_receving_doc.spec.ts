@@ -690,7 +690,7 @@ context("Create receivable test", () => {
       context("Check for if part numer/description received for items exists", () => {
         it("Check for part number/description", () => {
           SystemRequirement("REQ-1930");
-          cy.get("[data-cy=serviceId]").eq(0).should("contain.text", "trasportinID");
+          cy.get("[data-cy=serviceId]").eq(0).should("contain.text", "transportingID");
           cy.get("[data-cy=description]").eq(0).should("contain.text", "transporting products");
           cy.get("[data-cy=serviceId]").eq(1).should("contain.text", "cleaningID");
           cy.get("[data-cy=description]").eq(1).should("contain.text", "office cleaning");
