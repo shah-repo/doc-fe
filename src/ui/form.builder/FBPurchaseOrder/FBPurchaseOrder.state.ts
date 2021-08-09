@@ -6,7 +6,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBCurrency } from "./FBPurchaseOrder.types";
-import {TAX_RATE} from "../helpers/constants";
+import { TAX_RATE } from "../helpers/constants";
 
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
@@ -14,7 +14,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
     tax: "0.00",
-    taxField: "0.00",
+    taxField: "",
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
@@ -153,8 +153,6 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   @action public calculateCost = () => {
     const taxField: string = this.calculation.taxField || `${TAX_RATE}`;
-    // eslint-disable-next-line no-console
-    console.log("calculateCost: ", { taxField });
 
     const isTaxPercent = taxField.endsWith("%");
     const taxFieldValue = parseFloat(taxField);

@@ -50,7 +50,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           name={`${name}.tax`}
           gutter={false}
           size="small"
-          value={calculation?.taxField}
+          value={calculation?.taxField || calculation?.tax}
           inputProps={{
             style: { textAlign: "right", padding: "5px 20px 5px 5px" },
             min: "0",
