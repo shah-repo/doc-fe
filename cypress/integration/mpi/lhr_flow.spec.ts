@@ -1813,9 +1813,6 @@ context("LHR flow", () => {
         it("Approve step", () => {
           SystemRequirement("REQ-3230");
           cy.ebApprove();
-          dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
-          dateOfStep1CompletionOneMinuteLater = moment().add(1, "minutes")
-            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         });
 
         context("Check equipment and materials from MPI are present", () => {
@@ -1891,21 +1888,66 @@ context("LHR flow", () => {
         });
       });
 
-      context("Navigate to completed LHRs", () => {
+      context("Navigate to LHRs #1 and revise it", () => {
         it("Navig to LHRs #1", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.visit(lhrs1DocUrl);
           });
         });
 
-        it("Navig to LHRs #1", () => {
-          cy.wait(10000);
+        it("Click Revise on LHRs #1", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("[data-cy=\"updateRecord\"]").click();
+          });
+        });
+
+        it("Click on redline", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("#Redline").click();
+          });
+        });
+
+        it("Update step #1 description", () => {
+          cy.get("div[contenteditable]").eq(0).click({ force: true }).type(" updated!");
+          cy.wait(500);
+          cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).click();
+        });
+
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Add an Approval", () => {
+          cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).click();
+          });
+        });
+
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Complete step", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve step", () => {
+          SystemRequirement("REQ-3250");
+          cy.ebApprove();
+          dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          dateOfStep1CompletionOneMinuteLater = moment().add(1, "minutes")
+            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         });
       });
     });
 
     context("Login admin user", () => {
-      it(`Logout user '${USERS[2].name}'`, () => {
+      it(`Logout user '${USERS[3].name}'`, () => {
         cy.authLogout();
       });
 
@@ -1941,6 +1983,12 @@ context("LHR flow", () => {
               .oneOf(["Step completed | " + dateOfStep1Completion,
                 "Step completed | " + dateOfStep1CompletionOneMinuteLater]);
           });
+      });
+
+      it("Verify LHRs #1 redline indicator", () => {
+        SystemRequirement("REQ-3280");
+        cy.get("input[data-cy=\"lhrstep-built-in\"]")
+          .should("have.css", "background-color", "rgb(252, 222, 222)");
       });
 
       it("Verify Owner is required approver on LHR", () => {
@@ -2119,6 +2167,67 @@ context("LHR flow", () => {
         SystemRequirement("REQ-3330");
         cy.get("[data-cy=\"lhr-selected-part\"]")
           .should("have.attr", "value", "CS-00005 - rev 1 - Part document");
+      });
+    });
+
+    context("Verify anyone can revise completed LHR", () => {
+      context("Login admin user", () => {
+        it(`Logout user '${USERS[1].name}'`, () => {
+          cy.authLogout();
+        });
+
+        it(`Login user '${USERS[3].name}'`, () => {
+          cy.authLogin({ email: USERS[3].email, password: "Tester1!" });
+        });
+
+        it("Selects company", () => {
+          cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        });
+      });
+
+      context("Revise LHR", () => {
+        it("Navigate to LHR", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.visit(lhrDocUrl);
+          });
+        });
+
+        it("Click Revise on LHR", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("[data-cy=\"updateRecord\"]").click();
+          });
+        });
+
+        it("Change Build Type to 'R&D'", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.get("[value=\"R&D\"]").check();
+          });
+        });
+
+        it("Check lot number", () => {
+          cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
+        });
+      });
+
+      context("Release LHR", () => {
+        it("Add owner to approver list", () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+        });
+
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+
+        it("Complete step", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve step", () => {
+          SystemRequirement("REQ-3260");
+          cy.ebApprove();
+        });
       });
     });
 
