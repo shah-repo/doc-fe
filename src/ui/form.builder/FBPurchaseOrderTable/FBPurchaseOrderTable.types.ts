@@ -12,6 +12,7 @@ export type FBPurchaseOrderTableProps =
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
+  taxField?: string;
   loading?: boolean;
 };
 
@@ -30,7 +31,7 @@ export type FBPurchaseOrderTableSumProps =
 & Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode">;
 
 export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps, "handleShippingCost" | "handleTaxChange" |
-"handleTaxBlur" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
+"handleTaxBlur" | "handleCurrencyChange" | "calculation" | "taxField" | "disabled" | "name">;
 
 export enum FBPurchaseOrderDetailsProduct {
   index = "form.builder.item",

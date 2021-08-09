@@ -14,7 +14,6 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
     tax: "0.00",
-    taxField: "",
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
@@ -89,16 +88,11 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
-  @action public setTax = (taxField?: string) => {
-    this.setTaxField(taxField);
-    this.calculateCost();
-  };
-
-  @action public setTaxField = (taxField?: string) => {
-    if (!taxField) {
+  @action public setTax = (tax?: string) => {
+    if (!tax) {
       return;
     }
-    set(this.calculation, "taxField", taxField);
+    set(this.calculation, "tax", tax);
   };
 
   @action public setCurrency = async (currency: FBCurrency) => {
@@ -151,12 +145,12 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "items", filter(this.items, (itm) => itm.id !== item.id));
   };
 
-  @action public calculateCost = () => {
-    const taxField: string = this.calculation.taxField || `${TAX_RATE}`;
+  @action public calculateCost = (taxField?: string) => {
+    taxField = taxField || TAX_RATE;
 
-    const isTaxPercent = taxField.endsWith("%");
-    const taxFieldValue = parseFloat(taxField);
-    let tax = isTaxPercent ? 0 : taxFieldValue;
+    const isTaxPercent = !!taxField?.endsWith("%");
+    const taxFieldValue: number = parseFloat(taxField);
+    let tax: number = isTaxPercent ? 0 : taxFieldValue;
 
     const sum = (this.items || []).reduce(
       (agg, item: any) => {
@@ -176,8 +170,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
-      tax,
-      taxField,
+      tax: this.formatCost(tax),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),

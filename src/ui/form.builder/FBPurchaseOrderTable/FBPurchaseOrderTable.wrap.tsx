@@ -1,6 +1,6 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -26,6 +26,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
 
+    const [taxField, setTaxField] = useState("");
+
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
@@ -47,12 +49,14 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           (/(.*)\./), (item) => item.replace(/\./g, "") + "."
         ) || "0";
       fieldValue = value.endsWith("%") ? `${fieldValue}%` : `${fieldValue}`;
-      purchaseOrderState?.setTax(fieldValue);
+      setTaxField(fieldValue);
+      purchaseOrderState?.calculateCost(fieldValue);
     };
 
     handleTaxBlur = () => {
-      const tax = Number((purchaseOrderState?.calculation.tax) || 0).toFixed(2);
-      purchaseOrderState?.setTaxField(tax);
+      const tax = String(Number(purchaseOrderState?.calculation.tax || 0).toFixed(2));
+      setTaxField(tax);
+      purchaseOrderState?.setTax(tax);
     };
 
     handleCurrencyChange = (ev, currency) =>
@@ -109,6 +113,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleDelete,
       classes,
       calculation,
+      taxField,
       loading,
       disabled,
       items,
