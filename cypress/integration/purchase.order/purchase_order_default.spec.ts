@@ -452,7 +452,7 @@ context("PO test with default enlil form", () => {
         });
 
         it("Enter '1' for Quotation Number", () => {
-          cy.get("input[name^=quotation-number]").typeFieldLock("1");
+          cy.get("input[name^=quotation-number]").type("1");
         });
 
         it("Select Order Date", () => {
@@ -514,7 +514,7 @@ context("PO test with default enlil form", () => {
         });
 
         it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
-          cy.get("[name^=contact-email]").typeFieldLock("contact.us@gmail.com");
+          cy.get("[name^=contact-email]").type("contact.us@gmail.com");
         });
 
         it("Add an Approval", () => {
@@ -543,7 +543,7 @@ context("PO test with default enlil form", () => {
           cy.get("[data-cy=\"form.builder.request.approve\"]").click();
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+            CyRoutes.EmployeesGet], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
