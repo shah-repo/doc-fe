@@ -6,6 +6,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBCurrency } from "./FBPurchaseOrder.types";
+import {TAX_RATE} from "../helpers/constants";
 
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
@@ -13,6 +14,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public items: FBPurchaseOrderItem[] = [];
   @observable public calculation: FBPurchaseOrderCalculation = {
     tax: "0.00",
+    taxField: "0.00",
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
@@ -87,12 +89,16 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
-  @action public setTax = (tax?: string) => {
-    if (!tax) {
+  @action public setTax = (taxField?: string) => {
+    this.setTaxField(taxField);
+    this.calculateCost();
+  };
+
+  @action public setTaxField = (taxField?: string) => {
+    if (!taxField) {
       return;
     }
-    set(this.calculation, "tax", tax);
-    this.calculateCost();
+    set(this.calculation, "taxField", taxField);
   };
 
   @action public setCurrency = async (currency: FBCurrency) => {
@@ -146,7 +152,9 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public calculateCost = () => {
-    const taxField: string = this.calculation.tax || "";
+    const taxField: string = this.calculation.taxField || `${TAX_RATE}`;
+    // eslint-disable-next-line no-console
+    console.log("calculateCost: ", { taxField });
 
     const isTaxPercent = taxField.endsWith("%");
     const taxFieldValue = parseFloat(taxField);
@@ -170,7 +178,8 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
-      tax: taxField,
+      tax,
+      taxField,
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),

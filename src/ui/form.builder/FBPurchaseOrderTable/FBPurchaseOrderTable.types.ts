@@ -6,6 +6,7 @@ export type FBPurchaseOrderTableProps =
 & {
   handleShippingCost?: (ev: React.ChangeEvent<any>) => any;
   handleTaxChange?: (ev: React.ChangeEvent<any>) => void;
+  handleTaxBlur?: (ev: React.ChangeEvent<any>) => void;
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
   classes?: Record<"root" | "table", string>;
@@ -28,8 +29,8 @@ export type FBPurchaseOrderTableDetailsProps =
 export type FBPurchaseOrderTableSumProps =
 & Pick<FBPurchaseOrderTableProps,  "handleItem" | "handleLot" | "classes" | "items" | "calculation" | "mode">;
 
-export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps,
-    "handleShippingCost" | "handleTaxChange" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
+export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps, "handleShippingCost" | "handleTaxChange" |
+"handleTaxBlur" | "handleCurrencyChange" | "calculation" | "disabled" | "name">;
 
 export enum FBPurchaseOrderDetailsProduct {
   index = "form.builder.item",
