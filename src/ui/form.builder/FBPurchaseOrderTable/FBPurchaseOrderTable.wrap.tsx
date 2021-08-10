@@ -26,9 +26,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
 
-    const [taxField, setTaxField] = useState("");
-
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
@@ -44,10 +43,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = "" } = {} } = ev || {};
       const taxInputPattern = /([0-9\.]+)/g;
-      let fieldValue: string =
-        value?.match(taxInputPattern)?.join("")?.replace(
-          (/(.*)\./), (item) => item.replace(/\./g, "") + "."
-        ) || "0";
+      let fieldValue: string = value?.match(taxInputPattern)?.join("")
+        .replace((/(.*)\./), (item) => item.replace(/\./g, "") + ".") || "0";
       fieldValue = value.endsWith("%") ? `${fieldValue}%` : `${fieldValue}`;
       setTaxField(fieldValue);
       purchaseOrderState?.calculateCost(fieldValue);
