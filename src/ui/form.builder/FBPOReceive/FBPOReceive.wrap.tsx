@@ -96,6 +96,11 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
         prior[get(a, "type", "other")]! - prior[get(b, "type", "other")]!);
 
       schema = schema.reduce((reduced: FBSchemaProps[], item) => {
+        if (item.name && !(/requestor|po-supplier-built-in|po-items-built-in/.test(item.name)
+        && item.type !== "section")) {
+          return reduced;
+        }
+
         if (last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
           reduced.push({ type: "section", label: "form.builder.purchaseorder" });
         }
