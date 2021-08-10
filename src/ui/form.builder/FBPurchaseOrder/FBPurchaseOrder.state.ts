@@ -5,8 +5,8 @@ import { FB, FBPurchaseOrderCalculation, FBPurchaseOrderConstructor, FBPurchaseO
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
-import { FBCurrency } from "./FBPurchaseOrder.types";
 import { TAX_RATE } from "../helpers/constants";
+import { FBCurrency } from "./FBPurchaseOrder.types";
 
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
@@ -156,9 +156,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       (agg, item: any) => {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
-        if (item.tax && isTaxPercent) {
-          tax += orderCost * (taxFieldValue / 100);
-        }
+        (item.tax && isTaxPercent) && (tax += orderCost * (taxFieldValue / 100));
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
