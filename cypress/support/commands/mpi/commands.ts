@@ -15,6 +15,12 @@ declare global {
         material: string;
         quntity: string;
         unit: string;}): Chainable;
+      lhrsAddMaterialDocumentToStep(params:
+      {checkParameter?: boolean;
+        numbOfStep: integer;
+        material: string;
+        quntity: string;
+        unit: string;}): Chainable;
       mpiAddMaterialParameterToStep(params: {numbOfStep: integer; material: string}): Chainable;
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
@@ -48,6 +54,22 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
   });
   cy.get("[name=\"LHRTparameter\"]").uncheck();
+  cy.get("[data-cy=\"title\"]").click();
+  cy.get("ul[role=listbox]>li").contains(params.material).click();
+  cy.get("[name=\"quantity\"]").type(params.quntity);
+  cy.get("[data-cy=\"unit\"]").click();
+  cy.get("ul[role=listbox]>li").contains(params.unit).click();
+  cy.get("[data-cy=\"form.builder.save\"]").click();
+});
+
+Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
+  numbOfStep: integer;
+  material: string;
+  quntity: string;
+  unit: string;}) => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
+  });
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=listbox]>li").contains(params.material).click();
   cy.get("[name=\"quantity\"]").type(params.quntity);

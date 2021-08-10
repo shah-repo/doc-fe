@@ -1536,8 +1536,22 @@ context("LHR flow", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         SystemRequirement("REQ-3131");
         cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").click();
+        });
+      });
+
+      context("Enable notes in LHR step", () => {
+        it("Click edit on LHR step", () => {
+          cy.get("[data-cy=\"edit-schema-item\"]").eq(2).click({ force: true });
+        });
+
+        it("Check 'Include Notes' checkbox", () => {
+          cy.get("input[value=\"includeNotes\"]").check();
+        });
+
+        it("Save changes made to field", () => {
+          cy.get("[data-cy=\"common.add\"]").click();
         });
       });
 
@@ -1684,6 +1698,18 @@ context("LHR flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+    });
+
+    it("Add note to'End Quantity'", () => {
+      SystemRequirement("REQ-3290");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetNotes, () => {
+        cy.get("#fb-notes").click();
+      });
+      cy.get("[name=\"noteText\"]").type("Quantity will be auto populated");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostNotes, () => {
+        cy.get("#send-icon").click();
+      });
+      cy.get("[data-cy=\"dialog-close\"]").click();
     });
 
     it("Check lot number", () => {
@@ -2052,55 +2078,120 @@ context("LHR flow", () => {
         cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("3");
       });
 
-      it("Add an Approval", () => {
-        SystemRequirement("REQ-3220");
-        cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+      context("Redline LHRs after it is stated and not completed", () => {
+        it("Click on redline", () => {
+          SystemRequirement("REQ-3650");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+            cy.get("#Redline").click();
+          });
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Update step #1 description", () => {
+          SystemRequirement("REQ-3270");
+          cy.get("div[contenteditable]").eq(0).click({ force: true }).type(" updated!");
+          cy.wait(500);
+          cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).click();
+        });
+
+        it("Add attachment 'image.jpg'", () => {
+          SystemRequirement("REQ-3270");
+          cy.elUploadAttachment({
+            fileName: "image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          });
+        });
+
+        it("Add 'Material three' to materials", () => {
+          SystemRequirement("REQ-3270");
+          cy.lhrsAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material three", quntity: "3", unit: "Each" });
+        });
+
+        it("Add 'Equipment three' to equipments", () => {
+          SystemRequirement("REQ-3270");
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment three" });
+        });
+
+        it("Remove attachment from step #1", () => {
+          SystemRequirement("REQ-3270");
+          cy.get("[data-cy=\"mediaUploadField\"] svg").eq(3).click({ force: true });
+        });
+
+        it("Remove 'Material one' from materials", () => {
+          SystemRequirement("REQ-3270");
+          cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
+            .eq(1).parent().parent().find("svg").eq(1)
+            .click();
+        });
+
+        it("Remove 'Equipment three' from equipments", () => {
+          SystemRequirement("REQ-3270");
+          cy.get("[data-cy=\"form.builder.lhrs.procedure.equipment.title\"]")
+            .eq(1).parent().parent().find("svg").eq(1)
+            .click();
+        });
+
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
         });
       });
 
-      it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+      context("Complete LHRs #2", () => {
+        it("Add an Approval", () => {
+          SystemRequirement("REQ-3220");
+          cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+          });
         });
-      });
 
-      it("Complete step", () => {
-        cy.pmSubmitForApproval();
-      });
+        it("Click save document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
 
-      it("Approve step", () => {
-        cy.ebApprove();
-        dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
-        dateOfStep2CompletionOneMinuteLater = moment().add(1, "minutes")
-          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
-        dateOfStep2CompletionOneMinuteBefore = moment().subtract(1, "minutes")
-          .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        it("Complete step", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve step", () => {
+          cy.ebApprove();
+          dateOfStep2Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          dateOfStep2CompletionOneMinuteLater = moment().add(1, "minutes")
+            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          dateOfStep2CompletionOneMinuteBefore = moment().subtract(1, "minutes")
+            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        });
       });
 
       context("Check equipment and materials from MPI created with API are present", () => {
         it("Check description of step #1 in LHRs", () => {
           cy.xpath("//div[@data-cy=\"mpi-procedure-built-in.description\"]/../div[2]")
-            .should("have.text", "Description of MPI step created with API");
+            .should("have.text", "Description of MPI step created with API updated!");
         });
 
         it("Check materials of step #1 in LHRs #2", () => {
           cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
             .eq(0)
-            .should("have.text", "MT-00004 - Material one - rev 1 | Qty: 8 sets");
+            .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 16 boxes");
           cy.get("[data-cy=\"form.builder.lhrs.procedure.materials.title\"]")
             .eq(1)
-            .should("have.text", "MT-00006 - Material two - rev 1 | Qty: 16 boxes");
+            .should("have.text", "MT-00007 - Material three - rev 1 | Qty: 24 each");
         });
 
         it("Check equipment of step #1 in LHRs #2", () => {
           cy.get("[data-cy$=\"equipment.title\"]")
             .eq(0)
-            .should("have.text", "ET-00003 - Equipment one - rev 1");
+            .should("have.text", "ET-00007 - Equipment two - rev 1");
           cy.get("[data-cy$=\"equipment.title\"]")
             .eq(1)
-            .should("have.text", "ET-00007 - Equipment two - rev 1");
+            .should("have.text", "ET-00008 - Equipment three - rev 1");
         });
 
         it("Verify status is completed", () => {

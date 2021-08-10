@@ -85,6 +85,8 @@ export enum CyRoutes {
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
   PostReceivable = "PostReceivable",
   PostLHRs = "PostLHRs",
+  GetNotes = "GetNotes",
+  PostNotes = "PostNotes",
 }
 
 export const routes: ICyRoutes =   {
@@ -128,6 +130,26 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/lhr/lhrs/*/use_override",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  GetNotes: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/notes*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  PostNotes: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/notes",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
