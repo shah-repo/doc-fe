@@ -467,7 +467,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
-        SystemRequirement("REQ-0560");
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
@@ -485,12 +484,10 @@ context("LHR Upgrade", () => {
         });
 
         it("Add 'Part document' to step #1", () => {
-          SystemRequirement("REQ-3100");
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
         });
 
         it("Add 'Equipment one' to step #1", () => {
-          SystemRequirement("REQ-3130");
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
         });
       });
@@ -537,7 +534,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Select 'LHRt' document type", () => {
-        SystemRequirement("REQ-3140");
         cy.drSelectDocumentType({ documentType: "LHR template" });
       });
 
@@ -546,7 +542,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Select 'Lot History Record Test' output document type", () => {
-        SystemRequirement("REQ-3140");
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
       });
 
@@ -555,7 +550,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        SystemRequirement("REQ-3131");
         cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").click();
@@ -589,7 +583,6 @@ context("LHR Upgrade", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      SystemRequirement("REQ-3170");
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.GetAutocompleteOptions], () => {
@@ -602,7 +595,6 @@ context("LHR Upgrade", () => {
     });
 
     it("Select 'R&D' build type", () => {
-      SystemRequirement("REQ-3190");
       cy.unClick();
       cy.get("[value=\"R&D\"]").check();
     });
@@ -655,6 +647,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Verfiy banner should not be present", () => {
+      SystemRequirement("REQ-3460");
       cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
     });
   });
@@ -668,7 +661,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Click 'START MPI'", () => {
-        SystemRequirement("REQ-3210");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).click();
         });
@@ -692,7 +684,6 @@ context("LHR Upgrade", () => {
       });
 
       it("Add an Approval", () => {
-        SystemRequirement("REQ-3220");
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
@@ -749,6 +740,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Verfiy banner should not be present", () => {
+      SystemRequirement("REQ-3450");
       cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
     });
   });
