@@ -16,5 +16,6 @@ export enum NavigationItems{
   PARTS = "parts",
   INSPECTION = "inspection",
   DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
-  SUPPLIER_MANAGEMENT = "supplierManagement"
+  SUPPLIER_MANAGEMENT = "supplierManagement",
+  LHR = "lhr"
 }

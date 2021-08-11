@@ -263,7 +263,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by AR ID", () => {
-        SystemRequirement("REQ-0770", "REQ-0750", "REQ-4640");
+        SystemRequirement("REQ-0770", "REQ-0750", "REQ-4640", "REQ-3390");
         cy.alVerifyFilterByArId({ arId: "AR99999" });
       });
 
@@ -371,7 +371,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filters are cleared", () => {
-        SystemRequirement("REQ-0810", "REQ-4660");
+        SystemRequirement("REQ-0810", "REQ-4660", "REQ-3400");
         cy.alVerifyFilterClear();
       });
     });
