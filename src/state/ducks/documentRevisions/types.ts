@@ -279,6 +279,7 @@ export interface ApproveAndReleaseRequest {
   effectiveDate?: string;
   documentType: Id;
   formDocument: Id;
+  password: string;
 }
 
 export interface FinalizeAndReleaseRequest {

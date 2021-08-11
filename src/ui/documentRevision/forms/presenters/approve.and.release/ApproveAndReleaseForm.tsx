@@ -21,6 +21,7 @@ import { FBFormState, FBSchemaProps } from "../../../../form.builder";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
 import { styles } from "./ApproveAndRelease.styles";
+import InputField from "../../../../components/forms/fields/Input";
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
@@ -190,6 +191,16 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }}
         />
       )}
+      <InputField
+        label="transition.action.password"
+        name="password"
+        inputProps={{
+          type: "password",
+          autoComplete: "new-password",
+          style: { marginTop: "0" },
+        }}
+        validate={validator(required)}
+      />
       {selectedInvalid && (
         <Box mt={-3} mb={3} color={Colors.medium_blue}>
           <Text translation="document.revision.tpl.invalid" />
