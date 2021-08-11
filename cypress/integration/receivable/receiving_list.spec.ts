@@ -474,16 +474,15 @@ context("Receivable list test", () => {
     });
 
     it("Click on update record", () => {
-      cy.recClickUpdateRecord();
-    });
-
-    it("Click on save record", () => {
-      cy.recClickSaveBtn();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.recClickUpdateRecord();
+      });
     });
 
     it("Add approval", () => {
-      cy.wait(3000);
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
     });
 
     it("Submit for approval", () => {
