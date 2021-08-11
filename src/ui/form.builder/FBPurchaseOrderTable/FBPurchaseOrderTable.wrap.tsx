@@ -1,6 +1,6 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useState } from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -13,6 +13,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 ) => {
   const Comp = ({
     handleShippingCost,
+    handleTaxChange,
+    handleTaxBlur,
     handleCurrencyChange,
     handleDelete,
     classes,
@@ -25,6 +27,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   }: T) => {
 
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
@@ -35,6 +38,22 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       const abs = Math.abs(value).toFixed(2).toString();
       purchaseOrderState?.setShippingCost(abs);
       ev.target.value = value;
+    };
+
+    handleTaxChange = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = "" } = {} } = ev || {};
+      const taxInputPattern = /([0-9\.]+)/g;
+      let fieldValue: string = value?.match(taxInputPattern)?.join("")
+        .replace((/(.*)\./), (item) => item.replace(/\./g, "") + ".") || "0";
+      fieldValue = value.endsWith("%") ? `${fieldValue}%` : `${fieldValue}`;
+      setTaxField(fieldValue);
+      purchaseOrderState?.calculateCost(fieldValue);
+    };
+
+    handleTaxBlur = () => {
+      const tax = String(Number(purchaseOrderState?.calculation.tax || 0).toFixed(2));
+      setTaxField(tax);
+      purchaseOrderState?.setTax(tax);
     };
 
     handleCurrencyChange = (ev, currency) =>
@@ -85,10 +104,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     return Component({
       ...(props as T),
       handleShippingCost,
+      handleTaxChange,
+      handleTaxBlur,
       handleCurrencyChange,
       handleDelete,
       classes,
       calculation,
+      taxField,
       loading,
       disabled,
       items,

@@ -88,6 +88,13 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.calculateCost();
   };
 
+  @action public setTax = (tax?: string) => {
+    if (!tax) {
+      return;
+    }
+    set(this.calculation, "tax", tax);
+  };
+
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87
     // on change is triggered twice
@@ -138,25 +145,32 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "items", filter(this.items, (itm) => itm.id !== item.id));
   };
 
-  @action public calculateCost = () => {
+  @action public calculateCost = (taxField?: string) => {
+    taxField = taxField || TAX_RATE;
+
+    const isTaxPercent = !!taxField?.endsWith("%");
+    const taxFieldValue: number = parseFloat(taxField);
+    let tax: number = isTaxPercent ? 0 : taxFieldValue;
+
     const sum = (this.items || []).reduce(
       (agg, item: any) => {
         const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
         const subTotal = agg.subTotal + orderCost;
-        let tax = agg.tax;
-        item.tax && (tax += orderCost * TAX_RATE);
+        (item.tax && isTaxPercent) && (tax += orderCost * (taxFieldValue / 100));
         return { subTotal, tax };
       }, { tax: 0, subTotal: 0 },
     );
+
     const shippingCost = this.calculation.shippingCost || 0;
-    const totalAmount = sum.tax + sum.subTotal + Number(shippingCost);
+    const totalAmount = tax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.calculation.exchangeRate;
+
     set(this, "calculation", {
       ...this.calculation,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(sum.tax),
-      totalAmount: this.formatCost(totalAmount),
+      tax: this.formatCost(tax),
       shippingCost: this.formatCost(shippingCost),
+      totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
     });
   };
