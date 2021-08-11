@@ -479,7 +479,7 @@ context("Create receivable test", () => {
                             capitalEquipment: false,
                             isTraceabilityRequired: false,
                             description: "transporting products",
-                            serviceId: "transporting",
+                            serviceId: "transportingID",
                             units: "hours",
                             order: 5,
                             glCode: "code 1",
@@ -497,7 +497,7 @@ context("Create receivable test", () => {
                             capitalEquipment: false,
                             isTraceabilityRequired: false,
                             description: "office cleaning",
-                            serviceId: "cleaning",
+                            serviceId: "cleaningID",
                             units: "hours",
                             order: 6,
                             glCode: "code 1",
@@ -687,7 +687,15 @@ context("Create receivable test", () => {
           cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
         });
       });
-
+      context("Check for if part numer/description received for items exists", () => {
+        it("Check for part number/description", () => {
+          SystemRequirement("REQ-1930");
+          cy.get("[data-cy=serviceId]").eq(0).should("contain.text", "transportingID");
+          cy.get("[data-cy=description]").eq(0).should("contain.text", "transporting products");
+          cy.get("[data-cy=serviceId]").eq(1).should("contain.text", "cleaningID");
+          cy.get("[data-cy=description]").eq(1).should("contain.text", "office cleaning");
+        });
+      });
       context("Verify receivable creation", () => {
         it("Verify adding attachments", () => {
           SystemRequirement("REQ-1980");
