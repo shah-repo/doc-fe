@@ -304,9 +304,7 @@ context("LHR Upgrade", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
-          // materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Subassembly");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
-          // mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           done();
         });
       });
@@ -639,7 +637,7 @@ context("LHR Upgrade", () => {
     });
   });
 
-  context("Verfiy banner on LHR after change Part", () => {
+  context("Verfiy banner and Part on LHR after change Part", () => {
     it("Navigate to LHR", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(lhrDocUrl);
@@ -649,6 +647,11 @@ context("LHR Upgrade", () => {
     it("Verfiy banner should not be present", () => {
       SystemRequirement("REQ-3460");
       cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
+    });
+
+    it("LHR should hold first version of Part", () => {
+      SystemRequirement("REQ-3460");
+      cy.get("input[data-cy=\"lhr-selected-part\"]").should("have.value", "PRT-00005 - rev 1 - Part document");
     });
   });
 
@@ -732,7 +735,7 @@ context("LHR Upgrade", () => {
     });
   });
 
-  context("Verfiy banner on LHR after change MPI", () => {
+  context("Verfiy banner and MPI on LHR after change MPI", () => {
     it("Navigate to LHR", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(lhrDocUrl);
@@ -742,6 +745,12 @@ context("LHR Upgrade", () => {
     it("Verfiy banner should not be present", () => {
       SystemRequirement("REQ-3450");
       cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
+    });
+
+    it("LHR should hold first version of MPI", () => {
+      SystemRequirement("REQ-3450");
+      cy.get("[name=\"lhrstep-built-in\"]").trigger("mouseover");
+      cy.get("input[data-cy=\"lhrstep-built-in\"]").should("have.value", "PI-00002 - MPI document");
     });
   });
 });
