@@ -1,149 +1,128 @@
-UN #,REQ #,Module,Sub-Module,Requirement
-,FB-0010,Form builder,Creating a form,This user shall be able to use the form builder capabilities in order to create / update forms for specialized use
-,FB-0020,Form builder,Adding components to a form,"In general terms, the form builder shall allow the user to embed specialized components depending on the mode the form is in"
-,FB-0030,Form builder,Form modes ,"The system shall allow any form to be presented in four different modes:
-1. Form Edit Design Mode: used to create the form (Add controls, remove controls, define validation rules for the control, manipulation of field config and properties of the control)
-2. Form Edit mode: used to add data to the fields of an output record of an existing form in the system in order to complete a specific intended record, e.g. Purchase Order or LHR, (strictly adding data to an existing controls defined in the parent form)
-3. Form Edit mode with design capabilities: used to modify the output record of an existing form for a given use case (Part specifications, Engineering Builds, Equipment, redline..etc.), (able to modify the record to include new controls, or update properties of existing controls)
-4. Preview mode, this is a test mode intended to allow the user to simulate the creation of a new record without actually saving the data."
-,FB-0040,Form builder,Adding components to a form,The system shall embed form controls based on the output type selected for a form 
-,FB-0050,Form builder,Field configurations for a component ,"The system shall allow the user to customise ""field configurations"" for a component (such as label, placeholder, row numbers etc)"
-,FB-0060,Form builder,Adding rules to components ,The system shall give the user the option of implementing rules around form builder components 
-,FB-0070,Form builder Rules,Flag,"The system shall display a warning flag specific to the rule set for a component, which will not allow the user to proceed with the form until the deviation that triggered the flag is resolved"
-,FB-0080,Form builder Rules,Adding rules to components ,The system shall allow the user to implement default rules 
-,FB-0090,Form builder Rules,Adding rules to components ,"The system shall allow the user to implement rules that will show/ hide, enable/disable fields added to a form when conditional rules are used on those fields"
-,FB-0100,Form builder Rules,required,The system shall provide a mechanism for the user to set a rule that will generate a flag if no data is entered in the conditional field
-,FB-0110,Form builder Rules,"required_if:anotherfield,value",The system shall provide a mechanism for the user to set a rule that will generate a flag if a linked field is equal to a specific value. 
-,FB-0120,Form builder Rules,"required_if_in:anotherfield,[value]",The system shall provide a mechanism for the user to set a rule that will generate a flag if a linked field includes multiple specified values. 
-,FB-0130,Form builder Rules,"required_with:foo,bar,…","The system shall provide a mechanism for the user to set a rule that will generate a flag on that field if a linked field has any value. (eg. if field A linked to field B has any value, field B on which this rule is implemented needs to have some value)"
-,FB-0140,Form builder Rules,"required_without:foo,bar,…","The system shall provide a mechanism for the user to set a rule that will generate a flag on that field if a linked field is blank. (eg. if field A linked to field B is blank, field B on which this rule is implemented needs to have some value)"
-,FB-0150,Form builder Rules,required_document_status:value,"If an applicable option is selected for the Dropdown in an Autocomplete field, a required flag is displayed if the specified document status is not selected. Note: This rule/ scenario applies only to the Autocomplete component. "
-,FB-0160,Form builder Rules,required_document_type:value,"If ""Document Revision"" is selected from the dropdown in an Autocomplete field, a required flag is displayed if the specified document type is not selected. Note: This rule/ scenario applies only to the Autocomplete component. It is not applicable to any other component, or to other dropdown options within the Autocomplete component"
-,FB-0170,Form builder capabilities,Form builder component capabilities,The system shall ensure that each form builder control gives the user the ability to rearrange form builder components once added to a form
-,FB-0180,Form builder capabilities,Form builder component capabilities,The system shall ensure that an applicable form builder control gives the user the option of copying form builder components once added to a form
-,FB-0190,Form builder capabilities,Form builder component capabilities,The system shall ensure that each form builder control gives the user the option of revising form builder components once added to a form
-,FB-0200,Form builder capabilities,Form builder component capabilities,The system shall ensure that each form builder control gives the user the option of deleting form builder components once added to a form
-,FB-0210,Form builder capabilities,Form builder component capabilities,"The system shall allow the user to add/ edit/ modify all available controls in the Form Edit Design Mode, and Form Edit mode with Design capabilities"
-,FB-0220,Form builder capabilities,Form builder component capabilities,The system shall not permit the user to populate data in the fields in the Form Edit Design Mode
-,FB-0230,Form builder capabilities,Form builder component capabilities,The system shall not permit the user to add/ edit/ modify fields in the Form Execution mode and Preview mode
-,FB-0240,Form builder capabilities,Form builder component capabilities,The system shall permit the user to preview the created form without saving it in the Preview mode
-,FB-0250,Form builder capabilities,Form builder component capabilities,"The system shall maintain audit trail for changes made to any fields in Form Edit Design Mode, and Form Edit mode with Design capabilities during revisions after Release"
-,FB-0260,Form builder capabilities,Paid form builder component services,"The system will implement certain paid FB controls services like Hellosign, Dropbox and any future components on request by the customer after acceptance of the related terms and conditions"
-,FB-0270,Form builder capabilities,Form builder component capabilities,The system shall provide a way for the user to create a custom form builder component
-,FB-0280,Form builder components ,Text Field,The system shall provide a mechanism for the user to enter Text values in a field
-,FB-0290,Form builder components ,Text Field,The system shall provide a mechanism for the user to add and edit a Text Field in the Form Edit Design Mode
-,FB-0300,Form builder components ,Text Field,The system shall provide a mechanism for the user to not add and edit a Text Field in the Form Execution mode
-,FB-0310,Form builder components ,Text Field,The system shall provide a mechanism for the user to have the ability to add and edit a Text Field in  the Form Edit Mode with Design capabilities
-,FB-0320,Form builder components ,Text Field,The system shall provide a mechanism for the user to add and edit a Text Field in  the Preview mode
-,FB-0330,Form builder components ,Text Field,The system shall provide a mechanism for the user to not have the ability to populate data in a Text Field in Form Edit Design mode
-,FB-0340,Form builder components ,Text Field,The system shall provide a mechanism for the user to populate data in a Text Field in Form Execution Mode
-,FB-0350,Form builder components ,Text Field,The system shall provide a mechanism for the user to populate data in a Text Field in the Form Edit mode with Design capabilities mode
-,FB-0360,Form builder components ,Text Field,The system shall provide a mechanism for the user to to populate data in a Text Field in the Preview mode
-,FB-0370,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to create a checkbox field where multiple options can be selected in a field
-,FB-0380,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to add and edit a Checkbox Group field in Form Edit Design Mode
-,FB-0390,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to to add and edit a Checkbox Group field in Form Execution mode
-,FB-0400,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to add and edit a Checkbox Group field in Form Edit mode with Design capabilities Mode
-,FB-0410,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to not be able to add and edit a Checkbox Group field in the Preview Mode
-,FB-0420,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to not be able to select/ unselect values in a Checkbox Group field in the Form design mode
-,FB-0430,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to select/ unselect values in a Checkbox Group field in the Form Execution mode
-,FB-0440,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to select/ unselect values in a Checkbox Group field in the Form edit mode with design capabilities
-,FB-0450,Form builder components ,Checkbox group,The system shall provide a mechanism for the user to select/ unselect values in a Checkbox Group field in the preview mode
-,FB-0460,Form builder components ,Autocomplete,The system shall provide a mechanism for the user to select an item from a dropdown list of Enlil items in a field
-,FB-0470,Form builder components ,Autocomplete,The system shall provide a mechanism for the user to add and edit an Autocomplete field in Form Edit Design Mode
-,FB-0480,Form builder components ,Autocomplete,The user will have the ability to add and edit an Autocomplete field in Form Edit Mode with Design capabilities
-,FB-0490,Form builder components ,Autocomplete,The system shall provide a mechanism for the user to not be able to add and edit an Autocomplete field in Preview Mode
-,FB-0500,Form builder components ,Autocomplete,The system shall provide a mechanism for the user to not be able to select an item from the dropdown in an Autocomplete field in the Form Edit Design Mode
-,FB-0510,Form builder components ,Autocomplete,The user will have the ability to select an item from the dropdown  in an Autocomplete field in the Form Execution Mode
-,FB-0520,Form builder components ,Autocomplete,The user will have the ability to select an item from the dropdown  in an Autocomplete field in the Form Edit Mode with Design Capabilities
-,FB-0530,Form builder components ,Autocomplete,The user will have the ability to select an item from the dropdown  in an Autocomplete field in the Preview mode
-,FB-0540,Form builder components ,Text Editor,The system shall provide a mechanism for the user to enter rich text in a field
-,FB-0550,Form builder components ,Text Editor,The user will have the ability to add and edit a Text Editor Field in Form Edit Design Mode
-,FB-0560,Form builder components ,Text Editor,The system shall provide a mechanism for the user to not be able to add and edit a Text Editor Field in Form Execution Mode
-,FB-0570,Form builder components ,Text Editor,The user will have the ability to add and edit a Text Editor Field in Form Edit Mode with Design Capabilities
-,FB-0580,Form builder components ,Text Editor,The system shall provide a mechanism for the user to not be able to add and edit a Text Editor Field in Preview mode
-,FB-0590,Form builder components ,Text Editor,The system shall provide a mechanism for the user to not be able to populate data in a Text Editor Field in the Form Edit Design Mode
-,FB-0600,Form builder components ,Text Editor,The user will have the ability to populate data in a Text Editor Field in the Form Execution Mode
-,FB-0610,Form builder components ,Text Editor,The user will have the ability to populate data in a Text Editor Field in the Form Edit Mode with Design Capabilities
-,FB-0620,Form builder components ,Text Editor,The user will have the ability to populate data in a Text Editor Field in the Preview Mode
-,FB-0630,Form builder components ,Date Picker ,The system shall provide a mechanism for the user to select a date in a field
-,FB-0640,Form builder components ,Date Picker ,The user will have the ability to add and edit a Date Picker field in Form Edit Design
-,FB-0650,Form builder components ,Date Picker ,The system shall provide a mechanism for the user to not be able to add and edit a Date Picker field in Form Execution mode
-,FB-0660,Form builder components ,Date Picker ,The user will have the ability to add and edit a Date Picker field in Form Edit Mode with Design capabilities
-,FB-0670,Form builder components ,Date Picker ,The system shall provide a mechanism for the user to not be able to add and edit a Date Picker field in the preview mode
-,FB-0680,Form builder components ,Date Picker ,The system shall provide a mechanism for the user to not be able to select a date in a Date Picker field in the form Edit Design Mode
-,FB-0690,Form builder components ,Date Picker ,The user will have the ability to select a date in a Date Picker field in the Form Execution Mode
-,FB-0700,Form builder components ,Date Picker ,The user will have the ability to select a date in a Date Picker field in the Form Edit Mode with Design capabilities
-,FB-0710,Form builder components ,Date Picker ,The user will have the ability to select a date in a Date Picker field in the Preview mode
-,FB-0720,Form builder components ,Hyperlink,The system shall provide a mechanism for the user to add a hyperlink to a form
-,FB-0730,Form builder components ,Hyperlink,The user will have the ability to add and edit a Hyperlink in Form Edit Design Mode
-,FB-0740,Form builder components ,Hyperlink,The system shall provide a mechanism for the user to not be able to add and edit a Hyperlink in Form Execution Mode
-,FB-0750,Form builder components ,Hyperlink,The user will have the ability to add and edit a Hyperlink Form Edit Mode with Design capabilities 
-,FB-0760,Form builder components ,Hyperlink,The system shall provide a mechanism for the user to not be able to add and edit a Hyperlink in the Preview Mode
-,FB-0770,Form builder components ,Hyperlink,The user will have the ability to access the location linked on the Hyperlink in Form Edit Design Mode
-,FB-0780,Form builder components ,Hyperlink,The user will have the ability to access the location linked on the Hyperlink in Form Execution Mode
-,FB-0790,Form builder components ,Hyperlink,The user will have the ability to access the location linked on the Hyperlink in Form Edit Mode with Design Capabilities
-,FB-0800,Form builder components ,Hyperlink,The user will have the ability to access the location linked on the Hyperlink in the Preview Mode
-,FB-0810,Form builder components ,Select,The system shall provide a mechanism for the user to select from a list of preset options in a field
-,FB-0820,Form builder components ,Select,The user will have the ability to add and edit a Select field in Form Edit Design Mode and Form Edit Mode with Design capabilities only
-,FB-0830,Form builder components ,Select,The system shall provide a mechanism for the user to not be able to add and edit a Select field in Form Execution Mode
-,FB-0840,Form builder components ,Select,The user will have the ability to add and edit a Select field in Form Edit Mode with Design capabilities only
-,FB-0850,Form builder components ,Select,The system shall provide a mechanism for the user to not be able to add and edit a Select field in the Preview mode
-,FB-0860,Form builder components ,Select,The system shall provide a mechanism for the user to not be able to select from options in the Select field in the Form Edit Design Mode
-,FB-0870,Form builder components ,Select,The user will have the ability to select from options in the Select field in the Form Execution mode
-,FB-0880,Form builder components ,Select,The user will have the ability to select from options in the Select field in the Form Edit mode with Design Capabilities
-,FB-0890,Form builder components ,Select,The user will have the ability to select from options in the Select field in the Preview mode
-,FB-0900,Form builder components ,Radio Button Group,The system shall provide a mechanism for the user to select a single value from a list of options in a field
-,FB-0910,Form builder components ,Radio Button Group,The user will have the ability to add and edit a Radio Button Group field in Form Edit Design Mode
-,FB-0920,Form builder components ,Radio Button Group,The system shall provide a mechanism for the user to not be able to add and edit a Radio Button Group field in Form Execution mode
-,FB-0930,Form builder components ,Radio Button Group,The user will have the ability to add and edit a Radio Button Group field in Form Edit Mode with Design capabilities
-,FB-0940,Form builder components ,Radio Button Group,The system shall provide a mechanism for the user to not be able to add and edit a Radio Button Group field in Form Execution mode
-,FB-0950,Form builder components ,Radio Button Group,The system shall provide a mechanism for the user to not be able to select a single option from those available in the Radio Button Group field in the Form Edit Design Mode
-,FB-0960,Form builder components ,Radio Button Group,The user will have the ability to select a single option from those available in the Radio Button Group field in the Form Execution Mode
-,FB-0970,Form builder components ,Radio Button Group,The user will have the ability to select a single option from those available in the Radio Button Group field in the Form Edit with Design capabilities mode
-,FB-0980,Form builder components ,Radio Button Group,The user will have the ability to select a single option from those available in the Radio Button Group in the Preview Mode
-,FB-0990,Form builder components ,Paragraph,The system shall provide a mechanism for the user enter rich text in a field to display a line in the form 
-,FB-1000,Form builder components ,Paragraph,The user will have the ability to add and edit a Paragraph field in Form Edit Design Mode
-,FB-1010,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to add and edit a Paragraph field in Form Execution Mode
-,FB-1020,Form builder components ,Paragraph,The user will have the ability to add and edit a Paragraph field in Form Edit Mode with Design  capabilities
-,FB-1030,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to add and edit a Paragraph field in Preview Mode
-,FB-1040,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to populate data in a Paragraph field in the Form Edit Design Mode
-,FB-1050,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to populate data in a Paragraph field in the Form Execution Mode
-,FB-1060,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to populate data in a Paragraph field in the Form Edit Mode with Design Capabilities
-,FB-1070,Form builder components ,Paragraph,The system shall provide a mechanism for the user to not be able to populate data in a Paragraph field in the Preview Mode
-,FB-1080,Form builder components ,File Upload,The system shall provide a mechanism for the user to upload files to a field
-,FB-1090,Form builder components ,File Upload,The user will have the ability to add and edit a File Upload field in Form Edit Design Mode
-,FB-1100,Form builder components ,File Upload,The system shall provide a mechanism for the user to not be able to add and edit a File Upload field in Form Execution Mode
-,FB-1110,Form builder components ,File Upload,The user will have the ability to add and edit a File Upload field in Form Edit Mode with Design  capabilities
-,FB-1120,Form builder components ,File Upload,The system shall provide a mechanism for the user to not be able to add and edit a File Upload field in Preview Mode
-,FB-1130,Form builder components ,File Upload,The user will have the ability to upload a file in the File Upload field in the Form Edit Design Mode
-,FB-1140,Form builder components ,File Upload,The user will have the ability to upload a file in the File Upload field in the Form Execution Mode
-,FB-1150,Form builder components ,File Upload,The user will have the ability to upload a file in the File Upload field in the Form Edit Mode with Design Capabilities
-,FB-1160,Form builder components ,File Upload,The user will have the ability to upload a file in the File Upload field in the Preview Mode 
-,FB-1170,Form builder components ,Blank Template Form,The system shall provide a mechanism for the user to add a field where files can be uploaded to a field
-,FB-1180,Form builder components ,Blank Template Form,The user will have the ability to add and edit a Blank Template Field in the Form Edit Design Mode
-,FB-1190,Form builder components ,Blank Template Form,The system shall provide a mechanism for the user to not be able to add and edit a Blank Template Field in Form Execution Mode
-,FB-1200,Form builder components ,Blank Template Form,The user will have the ability to add and edit a Blank Template Field in Form Edit mode with Design Capabilities
-,FB-1210,Form builder components ,Blank Template Form,The system shall provide a mechanism for the user to not be able to add and edit a Blank Template Field in the Preview Mode
-,FB-1220,Form builder components ,Blank Template Form,The system shall provide a mechanism for the user to not be able to upload a document to a Blank Template field in the Form Edit Design Mode
-,FB-1230,Form builder components ,Blank Template Form,The user will have the ability to upload a document to a Blank Template field in the Form Execution mode
-,FB-1240,Form builder components ,Blank Template Form,The system shall provide a mechanism for the user to not be able to upload a document to a Blank Template field in the Form Edit Mode with Design Capabilities 
-,FB-1250,Form builder components ,Blank Template Form,The user will have the ability to upload a document to a Blank Template field in the Preview Mode
-,FB-1260,Form builder components ,Quantity,The system shall provide a mechanism for the user to add quantities to a field 
-,FB-1270,Form builder components ,Quantity,The user will have the ability to add and edit a Quantity field in the Form Edit Design mode
-,FB-1280,Form builder components ,Quantity,The system shall provide a mechanism for the user to not be able to add and edit a Quantity field in Form Execution mode
-,FB-1290,Form builder components ,Quantity,The user will have the ability to add and edit a Quantity field in the Form Edit Mode with design capabilities
-,FB-1300,Form builder components ,Quantity,The system shall provide a mechanism for the user to not be able to add and edit a Quantity field in Preview Mode
-,FB-1310,Form builder components ,Quantity,The user will have the ability to add quantities to the Quantity field in the Form Edit design mode
-,FB-1320,Form builder components ,Quantity,The user will have the ability to add quantities to the Quantity field in the Form Execution mode
-,FB-1330,Form builder components ,Quantity,The user will have the ability to add quantities to the Quantity field in the Form Edit mode with Design capabilities
-,FB-1340,Form builder components ,Quantity,The user will have the ability to add quantities to the Quantity field in the Preview Mode
-,FB-1350,Form builder components ,Approval,The system shall provide a mechanism for the user to add approvers to a field 
-,FB-1360,Form builder components ,Approval,The user will have the ability to add and edit an Approval Matrix in 
-,FB-1370,Form builder components ,Approval,
-,FB-1380,Form builder components ,Approval,
-,FB-1390,Form builder components ,Approval,
-,FB-1400,Form builder components ,Approval,The user will have the ability to add approvers to the Approval Matrix in
-,FB1410,Form builder components ,Approval,
-,FB-1420,Form builder components ,Approval,
-,FB-1430,Form builder components ,Approval,
-,FB-1440,Form builder components ,Inline Approvals,
+,REQ #,Module,Sub-Module,Requirement
+UN-0070,REQ-2810,Training,Training,"The system shall display the following default columns on the landing page for the Training Records list: Doc ID, Revision, Title, Trainee, Assigned Date, Due Date and Completed On (e.g. this list defines content, not column header names)"
+UN-0070,REQ-2820,Training,Training,The system shall allow the user to filter the displayed Training Records List for each of the columns displayed on the landing page
+UN-0070,REQ-2830,Training,Training,The system should provide a mechanism to export the Training List (e.g. to a .csv format)
+UN-0070,REQ-4410,Training,Training item,"The system shall have the Training option available for any Enlil item that is a document and is in the ""Approved"" or ""Released"" state."
+UN-0070,REQ-4420,Training,Training item,"The system shall not have the Training option available for any Enlil item that is a document but is in the ""Draft"", ""In Review"", ""Pending Change"", ""Voided"", ""Obsolete"" or ""Superseded"" State"
+UN-0070,REQ-4430,Training,Self training ,The system shall allow any user to train on any Enlil item that is available for Training 
+UN-0070,REQ-4440,Training,Training curriculum ,"The system shall enable the user to create a ""Training Curriculum"" "
+UN-0070,REQ-4450,Training,Training Curriculum lifecycle,"The system shall ensure that the ""Training Curriculum"" follows the Enlil Document life cycle. Approvals for the TC follows adding approvers to the Approval block and submitting for approval. "
+UN-0070,REQ-4460,Training,Adding Enlil items to a Training curriculum,"The system shall allow the Trainer to add applicable Enlil items as training material on the ""Training curriculum"""
+UN-0070,REQ-4470,Training,Adding Trainees to a Training curriculum,"The system shall allow the Trainer to add users or user groups as trainees on the ""Training curriculum"""
+UN-0070,REQ-4480,Training,Default training expiration,"The system shall set a completed Training to ""Expired"" after 365 days of the trainee completing it, unless specified otherwise "
+UN-0070,REQ-4490,Training,Predefining validity of training,"The system shall allow the user to set a predefined period for a completed ""Training"" to expire"
+UN-0070,REQ-4500,Training,One time training,The system shall allow the user to choose to not set the validity for a One time training since it is expected to never expire
+UN-0070,REQ-4510,Training,Forced training ,"The system shall allow the user to be able to choose whether or not to ""force"" a trainee to complete a Training. In case of a forced training, the validity of any previously completed training expires and the Trainee is ""forced"" to complete it again "
+UN-0070,REQ-4520,Training,Default training completion period,The system shall allow the user to complete any assigned training within 30 days
+UN-0070,REQ-4530,Training,Overdue training,"The system shall generate an ""Overdue"" alert if the user does not complete their assigned training within the training due period "
+UN-0070,REQ-4540,Training,Training validity ,The system shall allow the Trainer to set the validity of a Training curriculum for Training plans and Forced Trainings
+UN-0070,REQ-4550,Training,Training curriculum,"The “Training Curriculum” can be revised to add new users, or to update new Enlil documents that are to be included in the training plan. "
+UN-0070,REQ-4560,Training,Training notifications ,"The system must generate notifications for only the newly added users in case new users are added to the ""Training curriculum"""
+UN-0070,REQ-4570,Training,Training notifications ,The system must generate notifications for all users in the Training curriculum that are not trained on that item in case new Enlil documents are added to the Training Curriculum
+UN-0070,REQ-4580,Training,Training notifications ,The system shall generate a Training notification for all users in the Training plan that are not trained on a revised item in case the Enlil Document in a Training curriculum undergoes a major revision
+UN-0070,REQ-4590,Training,Training curriculum,The system shall allow Enlil documents to be added to the Training curriculum by Doc ID and not Doc Rev. (Note- this is so that the curriculum automatically pulls the latest Revision for the trainee to be trained on.) 
+UN-0070,REQ-4600,Training,Landing page,"The Training Records module shall contain a list view of all trainings assigned to and completed by Trainees, for each revision of the Enlil document they are trained on. "
+UN-0120,REQ-3040,Process Instructions,Creating MPI/ QPI,The system shall allow the user to create an Process Instruction (PI) which can be an MPI (Manufacturing Process Instruction) or a QPI (Quality Process Instruction)
+UN-0120,REQ-3050,Process Instructions,PI Lifecycle,The Process Instruction (PI) shall follow the document lifecycle 
+UN-0120,REQ-3060,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add a step/ multiple steps to the Process Instruction (PI)
+UN-0120,REQ-3070,Process Instructions,Creating MPI/ QPI,The system shall allow the user to clone a step in the Process Instruction (PI)
+UN-0120,REQ-3080,Process Instructions,Creating MPI/ QPI,The system shall allow the user to remove a step in the Process Instruction (PI)
+UN-0120,REQ-3090,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add attachments to each step in the Process Instruction (PI)
+UN-0120,REQ-3100,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Material to the Process Instruction (PI) specifying the Part ID, Quantity and Unit"
+UN-0120,REQ-3130,Process Instructions,Creating MPI/ QPI,The system shall allow the user to add Equipment to the Process Instruction (PI)
+UN-0120,REQ-3120,Process Instructions,Creating MPI/ QPI,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range, as required to the Process Instruction (PI) template"
+UN-0130,REQ-3131,LHR,Creating the LHRt,The system shall allow the user to select the Part (Document and not Rev) to be manufactured in the LHRt
+UN-0130,REQ-3140,LHR,Creating the LHRt,The system shall allow the user to create an LHR template with output type LHR
+UN-0130,REQ-3150,LHR,Creating the LHRt,The system shall provide a mechanism for the user to add LHR step component
+UN-0130,REQ-3160,LHR,Creating the LHRt,"The system shall allow the user to add Form builder components (Text field, Checkbox group, Autocomplete, Text Editor, Date Picker, Hyperlink, Select Field, Radio button group, Paragraph, File Upload, Blank template form, Quantity, Instructions media upload, Evidence media upload, PI procedure, Text field with range), as required, to the LHR template"
+UN-0130,REQ-3170,LHR,Initiating an LHR,The system shall provide a mechanism for the user to initiate an LHR
+UN-0130,REQ-3180,LHR,Lot number within the LHR,"The system shall generate a LOT number for the a LOT # as YYMMDD##ab 
+where, ##- denotes sequentially changing digits (indicative of new lots, reset to 01 on a daily basis) and 
+ab=RD if it is an R&D lot 
+ab= would be an empty value if it is a production lot"
+UN-0130,REQ-3190,LHR,Lot number within the LHR,The system shall provide a mechanism for the user to differentiate between R&D and Production Builds through the Lot number
+UN-0130,REQ-3200,LHR,Initiating an LHR,The system shall provide a mechanism for the user to add operators to the LHR
+UN-0130,REQ-3210,LHR,Using the LHR,The system shall provide a mechanism for the user to start executing a step in the build
+UN-0130,REQ-3220,LHR,Approvals for the LHR step,The system shall provide a mechanism to add approvers for the LHR step
+UN-0130,REQ-3230,LHR,Using the LHR,The system shall provide a mechanism for the assigned operator/ operators to complete a step
+UN-0130,REQ-3240,LHR,,The system shall display the e-signature of the operator/ operators that have completed a step
+UN-0130,REQ-3250,LHR,Corrections to the LHR step,The system shall allow anyone to make corrections to the LHRS after completing the LHRS
+UN-0130,REQ-3260,LHR,Corrections to the LHR,The system shall allow anyone to make corrections to the LHR after completing the LHR
+UN-0130,REQ-3270,LHR,Redlines to the LHRS,The system shall provide a mechanism for anyone to make Redlines (Correction of text/ remove and add material/ remove and add attachments) to the LHRS
+UN-0130,REQ-3280,LHR,Redlines to the LHRS,The system shall provide a mechanism to indicate if a step has been redlined in the LHR view
+UN-0130,REQ-3290,LHR,Notes in the LHR,The system shall provide a mechanism for the user to make notes in a field
+UN-0130,REQ-3300,LHR,Releasing the LHR,The system shall provide a mechanism to complete and release the LHR record only after all the Steps are completed and approved
+UN-0130,REQ-3310,LHR,LHR title,The LHR bar should display the LHR number and LOT number 
+UN-0130,REQ-3320,LHR,LHR step title,"The LHR step bar should be “LOT# LHR#, Part Number with Rev,"
+UN-0130,REQ-3330,LHR,,The Lot shall be associated with a specific Part Revision
+UN-0130,REQ-3340,LHR,LHR step,The system shall allow the user to select any released lot associated with a component while adding Material to the LHR step
+UN-0130,REQ-3350,LHR,LHR Menu,The LHR shall have its own landing page
+UN-0130,REQ-3360,LHR,LHR templates,The LHR templates shall be displayed in the Document List
+UN-0130,REQ-3370,LHR,LHR Landing page,"The landing page for the LHR shall display Lot number, Part number/ Rev, Completion Date, Start Quantity, Template, and LHR ID"
+UN-0130,REQ-3380,LHR,LHR Landing page,The system should provide a mechanism to export the LHR List (e.g. to a .csv format)
+UN-0130,REQ-3390,LHR,LHR Landing page,The system shall allow the user to filter the displayed LHR list for each of the columns displayed on the landing page
+UN-0130,REQ-3400,LHR,LHR Landing page,The system shall provide a mechanism to clear all LHR List filters
+UN-0130,REQ-3450,LHR,LHR and MPI during upgrade,The LHR should not suggest upgrades for MPIs if the MPI is revised or updated after the build is complete. The LHR needs to hold the MPI used in the build
+UN-0130,REQ-3460,LHR,LHR during upgrade,The LHR should not suggest upgrades for Parts to be Manufactured if that Part is revised or updated after the build is started. The LHR in progress needs to point to the same Part to be Manufactured that it started with. 
+UN-0130,REQ-3470,LHR,Training,The system shall allow a user trained on an MPI to access any LHR that uses that MPI until Redlines are made to the MPI
+UN-0130,REQ-3480,LHR,Training,The system shall automatically add users trained on an MPI to the operators list
+UN-0130,REQ-3620,LHR,Parameterization,The system shall allow the user to define PI parameters by adding the description in free text to represent Equipment or Materials. These parameters will be defined later in the LHRT that uses that PI.
+UN-0130,REQ-3630,LHR,Parameterization,The system shall indicate when a Material or Equipment is parameterized in the LHR Template
+UN-0130,REQ-3640,LHR,Parameterization,The system shall allow the user to release the LHRT only after the required parameter selections have been made
+UN-0130,REQ-3650,LHR,Redlines to the LHRS,The system shall allow the owner to make Redlines to the LHRS after the LHRS is Started and before the LHRS is Completed.
+UN-0130,REQ-3660,LHR,Selecting Material Lots and EQ items at the LHRS ,The system shall allow the user to pick Equipment and Lots for Material at the LHRS
+UN-130,REQ-3820,LHR,Parts used in LHR ,The system shall use the current released part when the LHR is created
+UN-0040,REQ-1680,Receiving,Receiving Landing Page,"The system shall display the following default columns on the landing page of the Receiving module: Receipt ID, Receipt Record State, Received By, Owner, PO number, Receipt Date, Supplier, Receipt Status, PO Status"
+UN-0040,REQ-1690,Receiving,Receiving Landing Page,The system should support export the receiving list from the landing page
+UN-0040,REQ-1710,Receiving,Receiving Landing Page,The system shall allow the user to filter the displayed receiving records for each of the columns displayed on the landing page
+UN-0040,REQ-1730,Receiving,Receiving Landing Page,The system shall maintain Receiving list filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0040,REQ-1740,Receiving,Receiving Landing Page,The system shall default to the Receiving record list being sorted by most recent first (by most recent edited)
+UN-0040,REQ-1750,Receiving,Receiving Landing Page,The system shall provide a mechanism to clear Receiving list filters
+UN-0040,REQ-1760,Receiving,Receiving Landing Page,The system shall display the number of Receiving Records displayed that match the filter settings
+UN-0040,REQ-1770,Receiving,Receiving Landing Page,The system shall allow users to receive line items from the Receiving landing page
+UN-0040,REQ-1780,Receiving,Receiving Landing Page,The system shall allow the user to open a receiving record from the receiving landing page
+UN-0040,REQ-1790,Receiving,Receive materials associated with a PO,The system shall the user to receive items against an Open PO and generate a receiving record.
+UN-0040,REQ-1800,Receiving,Receive materials associated with a PO,The system shall allow the user to search and select from a list of open PO's
+UN-0040,REQ-1810,Receiving,Receive materials associated with a PO,The system shall load and display the PO selected by the user
+UN-0040,REQ-1820,Receiving,Receive materials associated with a PO,The system shall allow the user to receive multiple lots against a line item of an open PO as part of a single receiving event
+UN-0040,REQ-1830,Receiving,Receive materials associated with a PO,The system shall allow for the creation of multiple receiving records against an open PO
+UN-0040,REQ-1840,Receiving,Receive materials associated with a PO,The system shall update the PO to reflect the cumulative quantity received of the particular line item against that PO in the Qty Received field. 
+UN-0040,REQ-1860,Receiving,Creating a Receivable Record without a PO,The system shall allow the user to receive material without a PO and generate a receiving record.
+UN-0040,REQ-1870,Receiving,Receiving record,"The system shall create a receiving record, in Draft state when receiving materials"
+UN-0040,REQ-1890,Receiving,Receiving record,The system shall generate a unique record ID when a receiving record is created. 
+UN-0040,REQ-1900,Receiving,Receiving record,The system shall allow the record owner to save a receiving record in Draft state and complete it at a later time
+UN-0040,REQ-1920,Receiving,Receiving record,"The system shall automatically populate the Supplier (for items received against a PO),"
+UN-0040,REQ-1930,Receiving,Receiving record,The system shall automatically populate the part number/description received for items received against a PO
+UN-0040,REQ-1940,Receiving,Receiving record,The system shall automatically maintain reference to the lots created in the receiving record
+UN-0040,REQ-1950,Receiving,Receiving record,The system shall allow the user to enter the Quantity received
+UN-0040,REQ-1980,Receiving,Receiving record,The system shall allow the record owner to attach packing slips and other documentation to the receiving record.
+UN-0040,REQ-1990,Receiving,Receiving record,"The system shall allow the record owner to change the owner, following confirmation with a dialog."
+UN-0042,REQ-2010,Receiving,Creating a lot,The system shall allow the record owner to create a lot from the receiving record 
+UN-0042,REQ-2020,Receiving,Creating a lot,The system shall automatically create a reference to the Receiving Record and PO when a new lot record is created.
+UN-0040,REQ-2040,Receiving,Approving a Receivable,The system shall allow the record owner to release the record without requiring a signature for approval
+UN-0040,REQ-2050,Receiving,Approving a Receivable,The system shall capture the ID of the user(s) approving a receiving record
+UN-0040,REQ-2060,Receiving,Approving a Receivable,The system shall capture the date and time of the approval
+UN-0040,REQ-2070,Receiving,Revising a Receiving record,The system shall allow users to revise a Receiving record
+UN-0040,REQ-2080,Receiving,Approving a Receivable,The system shall utilize minor revisions to capture corrections to a record
+UN-0040,REQ-2100,Receiving,Revising a Receiving record,The system shall capture the ID and date of the user who completed the update
+UN-0040,REQ-2110,Receiving,Revising a Receiving record,The system shall maintain version history of the Receivable when modified
+UN-0040,REQ-3840,Receiving,Enlil Item Lifecycle,A Receiving record created in the system shall follow the Record lifecycle
+UN-0040,REQ-3850,Receiving,Receiving against a Service ,The system shall not display the Create Lot button for items received agaist a service 
+UN-0040,REQ-3890,Receiving,Receiving against a line item,The system shall allow the user to only receive once against a line item in an RC
+UN-0110,REQ-2950,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to create a new part from within the engineering build record
+UN-0110,REQ-2960,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to select an existing part number revision or a new part number revision for the Engineering Build
+UN-0110,REQ-2970,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new step from the Engineering Build record
+UN-0110,REQ-2980,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to add a new FB component from within the Engineering Build record
+UN-0110,REQ-2990,Engineering Build,Engineering Build,"The step of the engineering build should allow the user to capture the step details, any media (both static and video), material and equipment required"
+UN-0110,REQ-3000,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone an Engineering Build record
+UN-0110,REQ-3010,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to clone a step from within the Engineering Build record
+UN-0110,REQ-3020,Engineering Build,Engineering Build,"When cloning (a step or an engineering build), the system shall automatically keep/transfer any data (including attachment) on the cloned step or cloned engineering build"
+UN-0110,REQ-3030,Engineering Build,Engineering Build,The system shall provide a mechanism for the user to compare cloned Engineering Build record
+UN-0110,REQ-4620,Engineering Build,Engineering Build,"The system shall display the following default columns on the landing page of the Engineering Build module: EB ID, Revision, State, Title, Owner, Released Date, Form ID, Part ID"
+UN-0110,REQ-4630,Engineering Build,Engineering Build,The system should support export the Engineering builds list from the landing page
+UN-0110,REQ-4640,Engineering Build,Engineering Build,The system shall allow the user to filter the displayed Enginering builds for each of the columns displayed on the landing page
+UN-0110,REQ-4650,Engineering Build,Engineering Build,The system shall maintain filter settings during an Enlil session when navigating away from and back to the Engineering Build landing page
+UN-0110,REQ-4660,Engineering Build,Engineering Build,The system shall provide a mechanism to clear Engineering build list filters
+UN-0110,REQ-4670,Engineering Build,Engineering Build,The system shall display the number of Engineering Builds displayed that match the filter settings
+UN-0070,REQ-4680,Training,Training,"The system shall display the following default columns on the landing page of the Training Curriculum sub module: Training Curriculum ID, Document Title, Owner, State"
+UN-0070,REQ-4690,Training,Training,The system shall allow the user to filter the displayed Training Curriculum List for each of the columns displayed on the landing page

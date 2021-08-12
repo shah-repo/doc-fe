@@ -1427,7 +1427,11 @@ context("LHR flow", () => {
       context("Verify clone Step #1", () => {
         it("Clone Step #1", () => {
           SystemRequirement("REQ-3070");
-          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachments,
+            CyRoutes.GetAttachmentsAttached ], () => {
+            cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+          });
+          cy.wait(6000);
         });
 
         it("Verify description of clone of Step #1", () => {
@@ -1789,7 +1793,7 @@ context("LHR flow", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("2");
         });
 
-        it("Click 'select lot' for 'Material One' ", () => {
+        it("Click 'SELECT' for 'Material One' ", () => {
           cy.get("[data-cy=\"form.builder.select\"]")
             .eq(0)
             .click({ force: true });
@@ -1812,10 +1816,35 @@ context("LHR flow", () => {
           });
         });
 
+        it("Click 'SELECT' for 'Equipment one' ", () => {
+          cy.get("[data-cy=\"form.builder.select\"]")
+            .eq(2)
+            .click({ force: true });
+        });
+
+        it("Select 'Equipment one'", () => {
+          cy.get("[data-cy=\"usedOverride\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Equipment one").click();
+        });
+
+        it("Click 'SAVE' on select equipment dialog", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
+            cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+              .eq(0)
+              .click();
+          });
+        });
+
         it("Verify LOT is selected for 'Material One'", () => {
-          SystemRequirement("REQ-3340");
+          SystemRequirement("REQ-3340", "REQ-3660");
           cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
             .should("contain.text", `LOT #${lotDateSuffix}01`);
+        });
+
+        it("Verify Equipment is selected for 'Equipment one'", () => {
+          SystemRequirement("REQ-3660");
+          cy.get("div[data-cy=\"form.builder.mpi.part.selection.equipment\"]")
+            .should("have.text", "ET-00003");
         });
 
         it("Add an Approval", () => {
