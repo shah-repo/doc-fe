@@ -11,6 +11,7 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 }};
 
 export enum CyRoutes {
+  GetAttachmentsAttached = "GetAttachmentsAttached",
   GetAttachments = "GetAttachments",
   EmployeesGet = "EmployeesGet",
   EmployeesPost = "EmployeesPost",
@@ -87,6 +88,7 @@ export enum CyRoutes {
   PostLHRs = "PostLHRs",
   GetNotes = "GetNotes",
   PostNotes = "PostNotes",
+  GetReceivableQuantity = "GetReceivableQuantity",
 }
 
 export const routes: ICyRoutes =   {
@@ -154,6 +156,16 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 30 * 1000,
       requestTimeout: 30 * 1000,
+    },
+  },
+  GetReceivableQuantity: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/documents/receivable_quantity/*",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   ArAudit: {
@@ -460,8 +472,18 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/attachments*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 50 * 1000,
+      requestTimeout: 50 * 1000,
+    },
+  },
+  GetAttachmentsAttached: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/attachments/*/download*",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   UploadAttachmentMediaUpload: {
