@@ -1427,7 +1427,11 @@ context("LHR flow", () => {
       context("Verify clone Step #1", () => {
         it("Clone Step #1", () => {
           SystemRequirement("REQ-3070");
-          cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachments,
+            CyRoutes.GetAttachmentsAttached ], () => {
+            cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).click();
+          });
+          cy.wait(6000);
         });
 
         it("Verify description of clone of Step #1", () => {

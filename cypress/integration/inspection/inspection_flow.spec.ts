@@ -1157,10 +1157,12 @@ context("Inspection flow", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.wait(5000);
     });
 
     it("Add 'Expiry Date'", () => {
       cy.poAddDateRequired();
+      cy.wait(5000);
     });
 
     context("Fill samples with values", () => {

@@ -219,10 +219,12 @@ context("Approval request landing page test", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "Draft" });
+      cy.wait(5000);
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.wait(3000);
     });
 
     it("Send to review", () => {

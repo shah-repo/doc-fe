@@ -797,27 +797,37 @@ context("Procedure and parts flow test", () => {
         cy.pmAddFreeTextEquipment({ equipment: "Free text equipment" });
       });
 
-      it("Upload attachment 'image.jpg'", () => {
+      it("Upload attachment 'video.mp4'", () => {
+        SystemRequirement("REQ-2990");
         cy.get("[data-cy=\"albumMediaButton\"]").click();
-        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "video.mp4" });
+        });
+      });
+
+      it("Upload attachment 'image.jpg'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "image.jpg" });
+        });
       });
 
       it("Upload attachment 'test.docx'", () => {
-        cy.pmUploadAttachment({ fileName: "test.docx" });
-      });
-
-      it("Upload attachment 'video.mp4'", () => {
-        SystemRequirement("REQ-2990");
-        cy.pmUploadAttachment({ fileName: "video.mp4" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "test.docx" });
+        });
       });
     });
 
     context("Verify 'Clone Step' feature", () => {
       it("Click 'Clone Step'", () => {
         SystemRequirement("REQ-3010");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev,
+          CyRoutes.GetAttachments,
+          CyRoutes.GetAttachmentsAttached,
+          CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.clone.step\"]").click();
         });
+        cy.wait(10000);
       });
 
       it("Verify description is copied", () => {
@@ -833,6 +843,7 @@ context("Procedure and parts flow test", () => {
           .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
           .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
+        cy.wait(5000);
       });
 
       it("Verify equipments are copied", () => {
@@ -1049,6 +1060,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {
@@ -1183,6 +1196,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {

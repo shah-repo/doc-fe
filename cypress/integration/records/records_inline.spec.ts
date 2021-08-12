@@ -200,7 +200,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAggregatedAudit],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
@@ -215,12 +215,14 @@ context("Record inline Flow", () => {
 
       it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+        cy.wait(5000);
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+        cy.wait(2000);
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -245,6 +247,7 @@ context("Record inline Flow", () => {
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(5000);
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -256,6 +259,7 @@ context("Record inline Flow", () => {
 
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.wait(2000);
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
@@ -287,6 +291,7 @@ context("Record inline Flow", () => {
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(5000);
         });
 
         it("Approve Inline Approval", () => {
