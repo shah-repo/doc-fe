@@ -18,7 +18,7 @@ export const getLatesReferenceVersion = (reference: SmartReference[] | undefined
 
 const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
   const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
-  const revs = revisions.filter((rev) => rev.revisionStage === highestStage);
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && !isDocumentRevisionCanceled(rev.status));
   return revs;
 };
 
