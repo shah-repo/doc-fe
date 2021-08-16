@@ -221,7 +221,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Blank Template Form", () => {
-        SystemRequirement("FB-1170, FB-1180");
+        SystemRequirement("FB-1170", "FB-1180");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
@@ -739,7 +739,7 @@ context("FORM Field test", () => {
       });
 
       it("there should be no edit for field", () => {
-        SystemRequirement("FB-1210, FB-1300, FB-0760, FB-0490, FB-0580, FB-0670");
+        SystemRequirement("FB-1210", "FB-1300", "FB-0760", "FB-0490", "FB-0580", "FB-0670");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
