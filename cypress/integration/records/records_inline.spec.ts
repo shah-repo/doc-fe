@@ -177,7 +177,7 @@ context("Record inline Flow", () => {
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock("First entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type("First entry");
           cy.unClick();
         });
       });
@@ -186,7 +186,7 @@ context("Record inline Flow", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
-            .typeFieldLock("First entry");
+            .type("First entry");
           cy.unClick();
         });
       });
@@ -242,7 +242,7 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock(", Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type(", Second entry");
         });
 
         it("Save record", () => {
@@ -286,7 +286,7 @@ context("Record inline Flow", () => {
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").typeFieldLock(", Third entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type(", Third entry");
         });
 
         it("Save record", () => {
@@ -308,10 +308,10 @@ context("Record inline Flow", () => {
 
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).click();
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).click();
           });
           cy.recApproveAndReleaseInlineRecord();
