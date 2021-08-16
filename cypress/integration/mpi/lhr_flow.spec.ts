@@ -1575,7 +1575,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3150");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbAddNewFieldButton();
           });
         });
@@ -1584,7 +1584,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });

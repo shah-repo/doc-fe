@@ -822,9 +822,7 @@ context("FORM Field test", () => {
 
       it("Enter Quantity field value", () => {
         SystemRequirement("FB-1320");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostFieldLocks, () => {
-          cy.get("input[name^=\"fb-quantity-\"]").type("1");
-        });
+        cy.get("input[name^=\"fb-quantity-\"]").type("1");
       });
 
       it("Select Autocomplete field value", () => {
