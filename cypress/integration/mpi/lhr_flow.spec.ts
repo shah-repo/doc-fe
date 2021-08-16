@@ -1441,7 +1441,7 @@ context("LHR flow", () => {
         });
 
         it("Verify image of clone of Step #1", () => {
-          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(6).click();
+          cy.get(" [data-cy=\"mediaUploadField\"]").eq(1).find("svg").eq(0).click();
           cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
             const attachName = $el.text();
             expect(attachName).to.be.oneOf(["image", "test_image"]);
@@ -1575,7 +1575,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3150");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
             cy.fbAddNewFieldButton();
           });
         });
@@ -1584,7 +1584,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
@@ -1607,12 +1607,6 @@ context("LHR flow", () => {
       });
 
       context("Try to release LHRt without parameters expecting validation error", () => {
-        it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
-        });
-
         it("Approve and release LHRt document", () => {
           SystemRequirement("REQ-3640");
           cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
@@ -1817,9 +1811,11 @@ context("LHR flow", () => {
         });
 
         it("Click 'SELECT' for 'Equipment one' ", () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(2)
-            .click({ force: true });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.get("[data-cy=\"form.builder.select\"]")
+              .eq(2)
+              .click({ force: true });
+          });
         });
 
         it("Select 'Equipment one'", () => {
