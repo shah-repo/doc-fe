@@ -163,6 +163,7 @@ context("Record inline history Flow", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(5000);
       });
 
       it("Approve and release document", () => {
@@ -226,6 +227,7 @@ context("Record inline history Flow", () => {
 
       it("Save record", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(5000);
       });
     });
 
@@ -236,7 +238,8 @@ context("Record inline history Flow", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.DocPreview,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.GetDocAggregatedAudit,
+          CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -265,7 +268,8 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
@@ -302,6 +306,7 @@ context("Record inline history Flow", () => {
 
         it("Save record", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.wait(4000);
         });
 
         it("Count number of elements in approval history", () => {
@@ -329,12 +334,15 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.wait(2000);
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          // cy.wait(3000);
         });
 
         it("Navigate to released document", () => {

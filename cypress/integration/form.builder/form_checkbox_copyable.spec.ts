@@ -472,6 +472,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select radio button of with copyableValue checkbox Equipment Maintenance", () => {
+      SystemRequirement("FB-0030");
       cy.get("input[name^=\"eq-wi-ch-\"]").eq(-1).click();
     });
 
@@ -618,7 +619,7 @@ context("Copyable Checkbox test", () => {
 
   context("Add, Edit and Verify fields", () => {
     it("Add new Quantity field", () => {
-      SystemRequirement("FB-1290");
+      SystemRequirement("FB-1290", "FB-0030");
       cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
       cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "quantity" });

@@ -7,6 +7,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -1156,10 +1157,12 @@ context("Inspection flow", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.wait(5000);
     });
 
     it("Add 'Expiry Date'", () => {
       cy.poAddDateRequired();
+      cy.wait(5000);
     });
 
     context("Fill samples with values", () => {
