@@ -1,0 +1,34 @@
+[
+  {
+    "text": "Draft",
+    "value": "Draft"
+  },
+  {
+    "text": "WIP",
+    "value": "WIP"
+  },
+  {
+    "text": "Released",
+    "value": "Released"
+  },
+  {
+    "text": "Superseded",
+    "value": "Superseded"
+  },
+  {
+    "text": "Archived",
+    "value": "Archived"
+  },
+  {
+    "text": "In Review",
+    "value": "In Review"
+  },
+  {
+    "text": "Pending Change",
+    "value": "Pending Change"
+  },
+  {
+    "text": "Approved",
+    "value": "Approved"
+  }
+]
