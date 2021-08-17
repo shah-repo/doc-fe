@@ -1,34 +1,28 @@
 [
   {
-    "text": "Draft",
-    "value": "Draft"
+    "value": "DRAFT",
+    "text": "Draft"
+  }, {
+    "value": "PENDING_CHANGE",
+    "text": "Pending Change"
+  }, {
+    "value": "IN_REVIEW",
+    "text": "In Review"
+  }, {
+    "value": "RELEASED",
+    "text": "Released"
+  }, {
+    "value": "DEPRECATED",
+    "text": "Deprecated"
+  }, {
+    "value": "OBSOLETE",
+    "text": "Obsolete"
+  }, {
+    "value": "CANCELED",
+    "text": "Canceled"
   },
   {
-    "text": "WIP",
-    "value": "WIP"
-  },
-  {
-    "text": "Released",
-    "value": "Released"
-  },
-  {
-    "text": "Superseded",
-    "value": "Superseded"
-  },
-  {
-    "text": "Archived",
-    "value": "Archived"
-  },
-  {
-    "text": "In Review",
-    "value": "In Review"
-  },
-  {
-    "text": "Pending Change",
-    "value": "Pending Change"
-  },
-  {
-    "text": "Approved",
-    "value": "Approved"
+    "value": "APPROVED",
+    "text": "Approved"
   }
 ]

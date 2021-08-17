@@ -1,8 +1,8 @@
-import { FBEditorProps } from "..";
-import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import { useSelector } from "react-redux";
+import { FBEditorLHRStepProps } from "..";
+import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 
-export const withFBEditorLHRStep = <T extends FBEditorProps>(
+export const withFBEditorLHRStep = <T extends FBEditorLHRStepProps>(
   Component: React.FunctionComponent<T>,
 ) => {
 
@@ -14,12 +14,8 @@ export const withFBEditorLHRStep = <T extends FBEditorProps>(
     ...props
   }: T) => {
 
-    const options = useSelector(
+    documentTypeOptions = useSelector(
       documentTypeSelectors.getDocumentTypeFormOptions,
-    );
-
-    documentTypeOptions = options.map((e) =>
-      ({ value: e.id, text: e.documentTypeName })
     );
 
     return Component({

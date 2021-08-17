@@ -93,23 +93,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
           materials: [],
         };
       }
-      if (type === "lhrstep") {
-        if (!formValues.editorConfig.filters) {
-          formValues.editorConfig = { filters: [] };
-        } else {
-          formValues.editorConfig = {
-            filters: [
-              {
-                type: "DocType",
-                values: formValues.editorConfig.filters.docType ? formValues.editorConfig.filters.docType : [],
-              },
-              {
-                type: "RevisionStatus",
-                values: formValues.editorConfig.filters.revisionStatus ? formValues.editorConfig.filters.revisionStatus : [],
-              },
-            ],
-          };
-        }
+      if (type === "lhrstep" && !formValues.editorConfig.filters) {
+        formValues.editorConfig = { filters: {} };
       }
 
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }

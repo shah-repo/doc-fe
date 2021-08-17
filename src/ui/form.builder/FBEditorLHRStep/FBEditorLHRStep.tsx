@@ -1,10 +1,10 @@
 import { InputAdornment } from "@material-ui/core";
 import React from "react";
-import { FBAutocomplete, FBData, FBEditor, FBEditorProps, FBTextField } from "..";
+import { FBAutocomplete, FBData, FBEditor, FBEditorLHRStepProps, FBTextField } from "..";
 import Text from "../../components/Text";
 import { withFBEditorLHRStep } from "./FBEditorLHRStep.wrap";
 
-const FBEditorLHRStep: React.FunctionComponent<FBEditorProps> = ({
+const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
   children,
   includeDefaultValue,
   inputProps: { type, index, stepIndex } = {},
@@ -36,9 +36,9 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorProps> = ({
     <FBAutocomplete
       label="common.document.types"
       options={documentTypeOptions}
-      optionLabelKey="text"
-      optionValueKey="value"
-      name="editorConfig.filters.docType"
+      optionLabelKey="documentTypeName"
+      optionValueKey="id"
+      name="editorConfig.filters.documentType"
       key={`fb-editor-${type}-${index}`}
       multiple={true}
       defaultValue={inputProps?.editorConfig?.filters[0].values}
