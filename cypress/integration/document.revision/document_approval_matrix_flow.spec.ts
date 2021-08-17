@@ -713,6 +713,10 @@ context("Document Approval Matrix Flow", () => {
       cy.drAddApprover({ name: INDIVIDUAL_USER.name });
     });
 
+    it("Type password in Approve and Release dialog", () => {
+      cy.get("input[name=password]").type("Tester1!");
+    });
+
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ReleaseDocRev,

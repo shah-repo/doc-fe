@@ -722,7 +722,6 @@ context("Procedure and parts flow test", () => {
       it("Enters description 'EB description'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
-          cy.drClickCreateDocumentWithoutApiCall();
         });
         cy.wait(500);
       });

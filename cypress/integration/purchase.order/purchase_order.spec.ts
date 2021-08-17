@@ -628,7 +628,7 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckAmount({ number: "$1.95" });
+      cy.poCheckTax({ number: "1.95" });
     });
 
     it("Check Total value", () => {

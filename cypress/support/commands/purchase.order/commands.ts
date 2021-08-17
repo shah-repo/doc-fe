@@ -56,6 +56,7 @@ declare global {
       poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
+      poCheckTax(params: {number: string}): Chainable<Subject>;
     }
   }
 }
@@ -169,6 +170,10 @@ Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
   cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
+  cy.get("[name=\"po-items-built-in.tax\"]").should("have.attr", "value", params.number);
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
