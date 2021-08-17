@@ -1,5 +1,4 @@
 import { FBFormProps } from "..";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBLockProps =
 & Pick<FBFormProps, "children">
@@ -17,12 +16,12 @@ export interface FBLockBody {
   expiresAt?: string;
 }
 
-export interface FBLockData {
-  documentRevision: DocumentRevision;
-  lock: {
-    id: string;
-  };
-}
+// export interface FBLockData {
+//   documentRevision: DocumentRevision;
+//   lock: {
+//     id: string;
+//   };
+// }
 
 export interface FBLockValue {
   fieldName?: string;

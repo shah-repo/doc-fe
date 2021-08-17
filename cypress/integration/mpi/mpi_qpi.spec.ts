@@ -337,6 +337,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
+        SystemRequirement("REQ-3040");
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
@@ -401,6 +402,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Select 'Quantity Process Instructions Test' document type", () => {
+        SystemRequirement("REQ-3040");
         cy.drSelectDocumentType({ documentType: "Quantity Process Instructions Test" });
       });
 

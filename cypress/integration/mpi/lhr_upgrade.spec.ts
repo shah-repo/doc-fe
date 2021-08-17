@@ -589,7 +589,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").typeFieldLock("10");
+      cy.get("[name=\"lhr_initial_quantity\"]").type("10");
     });
 
     it("Select 'R&D' build type", () => {
@@ -675,15 +675,15 @@ context("LHR Upgrade", () => {
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").typeFieldLock("10");
+        cy.get("[name=\"lhrs-start-quantity\"]").type("10");
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").typeFieldLock("8");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").type("8");
       });
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").type("2");
       });
 
       it("Add an Approval", () => {

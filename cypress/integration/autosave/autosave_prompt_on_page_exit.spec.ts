@@ -131,7 +131,9 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Type 'Test description' inside title field", () => {
-      cy.drEnterDocumentDescription({ description: "Test description" });
+      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
+        .clear().type("Test description");
+      cy.get("[data-cy=field-description]>label").click();
     });
 
     it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", () => {

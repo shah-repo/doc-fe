@@ -1441,7 +1441,7 @@ context("LHR flow", () => {
         });
 
         it("Verify image of clone of Step #1", () => {
-          cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(6).click();
+          cy.get(" [data-cy=\"mediaUploadField\"]").eq(1).find("svg").eq(0).click();
           cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
             const attachName = $el.text();
             expect(attachName).to.be.oneOf(["image", "test_image"]);
@@ -1575,7 +1575,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3150");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
           cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbAddNewFieldButton();
           });
         });
@@ -1584,7 +1584,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
@@ -1607,12 +1607,6 @@ context("LHR flow", () => {
       });
 
       context("Try to release LHRt without parameters expecting validation error", () => {
-        it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
-        });
-
         it("Approve and release LHRt document", () => {
           SystemRequirement("REQ-3640");
           cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
@@ -1685,7 +1679,7 @@ context("LHR flow", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").typeFieldLock("10");
+      cy.get("[name=\"lhr_initial_quantity\"]").type("10");
     });
 
     it("Select 'R&D' build type", () => {
@@ -1782,15 +1776,15 @@ context("LHR flow", () => {
         });
 
         it("Enter 'Start quntity' for LHRs #1", () => {
-          cy.get("[name=\"lhrs-start-quantity\"]").typeFieldLock("10");
+          cy.get("[name=\"lhrs-start-quantity\"]").type("10");
         });
 
         it("Enter 'Accepted quntity' for LHRs #1", () => {
-          cy.get("[name=\"lhrs-accepted-quantity\"]").typeFieldLock("8");
+          cy.get("[name=\"lhrs-accepted-quantity\"]").type("8");
         });
 
         it("Enter 'Rejected quntity' for LHRs #1", () => {
-          cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("2");
+          cy.get("[name=\"lhrs-rejected-quantity\"]").type("2");
         });
 
         it("Click 'SELECT' for 'Material One' ", () => {
@@ -1817,9 +1811,11 @@ context("LHR flow", () => {
         });
 
         it("Click 'SELECT' for 'Equipment one' ", () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(2)
-            .click({ force: true });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.get("[data-cy=\"form.builder.select\"]")
+              .eq(2)
+              .click({ force: true });
+          });
         });
 
         it("Select 'Equipment one'", () => {
@@ -2096,15 +2092,15 @@ context("LHR flow", () => {
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").typeFieldLock("8");
+        cy.get("[name=\"lhrs-start-quantity\"]").type("8");
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").typeFieldLock("5");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").type("5");
       });
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("3");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").type("3");
       });
 
       context("Redline LHRs after it is stated and not completed", () => {
