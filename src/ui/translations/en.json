@@ -344,6 +344,7 @@
   "common.due.by": "Due by",
   "common.server.automation": "Server Automation",
   "common.document.types": "Document Types",
+  "common.revision.statuses": "Revision Statuses",
   "common.add.document.type": "Add Document Type",
   "common.export.dam.details": "Export DAM Details",
   "common.add.page.details": "Add Page Details",

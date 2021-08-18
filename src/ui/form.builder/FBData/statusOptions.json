@@ -1,0 +1,36 @@
+[
+  {
+    "value": "DRAFT",
+    "text": "Draft"
+  }, {
+    "value": "PENDING_CHANGE",
+    "text": "Pending Change"
+  }, {
+    "value": "IN_REVIEW",
+    "text": "In Review"
+  }, {
+    "value": "RELEASED",
+    "text": "Released"
+  }, {
+    "value": "DEPRECATED",
+    "text": "Deprecated"
+  }, {
+    "value": "OBSOLETE",
+    "text": "Obsolete"
+  }, {
+    "value": "CANCELED",
+    "text": "Canceled"
+  },
+  {
+    "value": "APPROVED",
+    "text": "Approved"
+  },
+  {
+    "value": "SUBMITTED",
+    "text": "Submitted"
+  },
+  {
+    "value": "VOIDED",
+    "text": "Voided"
+  }
+]
