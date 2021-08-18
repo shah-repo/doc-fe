@@ -180,6 +180,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       data: DocumentRevision[],
     ) {
       const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
+      if (documentType.length === 0 && revisionStatus.length === 0) { return data; }
       const options = data?.filter((docRev) => {
         const {
           status = "",

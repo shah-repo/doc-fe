@@ -41,7 +41,6 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
       name="editorConfig.filters.documentType"
       key={`fb-editor-${type}-${index}`}
       multiple={true}
-      defaultValue={inputProps?.editorConfig?.filters[0].values}
     />
 
     <FBAutocomplete
@@ -52,7 +51,6 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
       name="editorConfig.filters.revisionStatus"
       key={`fb-editor-${type}-${index}`}
       multiple={true}
-      defaultValue={inputProps?.editorConfig?.filters[1].values}
     />
     {children}
   </FBEditor>

@@ -24,5 +24,13 @@
   {
     "value": "APPROVED",
     "text": "Approved"
+  },
+  {
+    "value": "SUBMITTED",
+    "text": "Submitted"
+  },
+  {
+    "value": "VOIDED",
+    "text": "Voided"
   }
 ]
