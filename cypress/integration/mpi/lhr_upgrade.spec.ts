@@ -51,47 +51,6 @@ context("LHR Upgrade", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "LHR Step Test",
-                documentTypeAcronym: "LHRS-",
-                group: "PI_INSTANCE",
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: false,
-                  },
-                  F: {
-                    visible: false,
-                    required: false,
-                  },
-                  N: {
-                    label: "Complete Step",
-                    visible: true,
-                  },
-                  U: {
-                    label: "Operators",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Completed",
-                    visible: true,
-                  },
-                },
-              },
-              {
                 documentTypeName: "Lot History Record Test",
                 documentTypeAcronym: "LHR-",
                 group: "LHR",

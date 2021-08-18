@@ -97,8 +97,8 @@ context("Autocomplete 'Lots' test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select 'Component Specifications Lot' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Component Specifications Lot" });
+      it("Select 'Component Specification Lot' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
       });
 
       it("Click create document", () => {
@@ -114,19 +114,19 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Create 'Lots'", () => {
-      it("Navigate to Records", () => {
-        cy.navigToRecords();
+      it("Navigate to Lots", () => {
+        cy.navigToLots();
       });
 
       it("Click on Create new", () => {
         cy.poClickCreatePO();
       });
 
-      it("Select 'Component Specifications Lot' from the dropdown", () => {
+      it("Select 'Component Specification Lot' from the dropdown", () => {
         cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
         cy.wait(500);
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
-          cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+          cy.get("div[id^=react-select]").contains("Component Specification Lot").click();
         });
       });
 
@@ -140,6 +140,10 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Enter quantity received", () => {
         cy.get("[name=\"lot_quantity\"]").type("12");
+      });
+
+      it("Enter Usable Quantity", () => {
+        cy.get("[name=\"lot_usable_quantity\"]").type("12");
       });
 
       it("Check 100% override", () => {
