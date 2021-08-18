@@ -96,6 +96,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       if (type === "lhrstep" && !editorConfig) {
         formValues.editorConfig = {};
       }
+      // Have to set editorProperties here so it doesn't override manually set values
+      if (!editorProperties) {
+        formValues.editorProperties = COMMON_INITIAL_VALUES.editorProperties;
+      }
 
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }
 

@@ -479,7 +479,7 @@ context("Create receivable test", () => {
                             capitalEquipment: false,
                             isTraceabilityRequired: false,
                             description: "transporting products",
-                            serviceId: "transporting",
+                            serviceId: "transportingID",
                             units: "hours",
                             order: 5,
                             glCode: "code 1",
@@ -497,7 +497,7 @@ context("Create receivable test", () => {
                             capitalEquipment: false,
                             isTraceabilityRequired: false,
                             description: "office cleaning",
-                            serviceId: "cleaning",
+                            serviceId: "cleaningID",
                             units: "hours",
                             order: 6,
                             glCode: "code 1",
@@ -649,7 +649,7 @@ context("Create receivable test", () => {
     context("Fill out receivable document form", () => {
       context("Check list of open PO-s", () => {
         it("Check there is two open PO-s available to select", () => {
-          // SystemRequirement("REQ-1790");
+          SystemRequirement("REQ-1790");
           cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
         });
       });
@@ -687,7 +687,15 @@ context("Create receivable test", () => {
           cy.recVerifyPOIsDisplayed({ loadedPoItems: poItems });
         });
       });
-
+      context("Check for if part numer/description received for items exists", () => {
+        it("Check for part number/description", () => {
+          SystemRequirement("REQ-1930");
+          cy.get("[data-cy=serviceId]").eq(0).should("contain.text", "transportingID");
+          cy.get("[data-cy=description]").eq(0).should("contain.text", "transporting products");
+          cy.get("[data-cy=serviceId]").eq(1).should("contain.text", "cleaningID");
+          cy.get("[data-cy=description]").eq(1).should("contain.text", "office cleaning");
+        });
+      });
       context("Verify receivable creation", () => {
         it("Verify adding attachments", () => {
           SystemRequirement("REQ-1980");
@@ -695,12 +703,11 @@ context("Create receivable test", () => {
         });
 
         it("Fill custom text field added in receivable form", () => {
-          // SystemRequirement("REQ-1880");
           cy.get("input[type=textfield]").type("Custom field");
         });
 
-        it("Click 'Create document' ", () => {
-          // SystemRequirement("REQ-1770");
+        it("Click 'Create document' on receiving lading page", () => {
+          SystemRequirement("REQ-1770");
           cy.recClickCreateDocumentWithApiCall();
         });
 
@@ -745,13 +752,13 @@ context("Create receivable test", () => {
           SystemRequirement("REQ-1860");
           cy.get("[data-cy=\"form.builder.request.approve\"]").click();
           cy.get("input[name=\"password\"]").type("Tester1!");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+            CyRoutes.EmployeesGet], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
 
         it("Verify receivable status is 'Current'", () => {
-          // SystemRequirement("REQ-1870");
           cy.drCheckDocumentStatus({ status: "Current" });
         });
       });

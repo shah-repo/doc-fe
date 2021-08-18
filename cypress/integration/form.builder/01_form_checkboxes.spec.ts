@@ -940,7 +940,7 @@ context("Checkboxes test", () => {
     });
 
     it("Open Preview dialog", () => {
-      SystemRequirement("FB-0240");
+      SystemRequirement("FB-0240", "FB-0030");
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
 

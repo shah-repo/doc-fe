@@ -734,6 +734,43 @@ context("Procedure and parts flow test", () => {
         });
       });
 
+      it("Verify step can be added", () => {
+        SystemRequirement("REQ-2970");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"form.builder.add.step\"]").click();
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+      });
+
+      it("Remove step", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
+      });
+
+      it("Add textfield to eb", () => {
+        SystemRequirement("REQ-2980");
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Textfield for eb test" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.fbAddField();
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("have.text", "Textfield for eb test");
+      });
+
+      it("Remove textfield", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("not.exist");
+      });
+
+      it("Enter description to step #1", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
+      });
+
       it("Add material document", () => {
         cy.pmAddMaterialDocumentToProcedure({
           materialDoc: "Part document",
@@ -760,13 +797,77 @@ context("Procedure and parts flow test", () => {
         cy.pmAddFreeTextEquipment({ equipment: "Free text equipment" });
       });
 
-      it("Upload attachment 'image.jpg'", () => {
+      it("Upload attachment 'video.mp4'", () => {
+        SystemRequirement("REQ-2990");
         cy.get("[data-cy=\"albumMediaButton\"]").click();
-        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "video.mp4" });
+        });
+      });
+
+      it("Upload attachment 'image.jpg'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "image.jpg" });
+        });
       });
 
       it("Upload attachment 'test.docx'", () => {
-        cy.pmUploadAttachment({ fileName: "test.docx" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "test.docx" });
+        });
+      });
+    });
+
+    context("Verify 'Clone Step' feature", () => {
+      it("Click 'Clone Step'", () => {
+        SystemRequirement("REQ-3010");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev,
+          CyRoutes.GetAttachments,
+          CyRoutes.GetAttachmentsAttached,
+          CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"form.builder.clone.step\"]").click();
+        });
+        cy.wait(10000);
+      });
+
+      it("Verify description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .eq(1)
+          .should("have.text", "Step #1 description");
+      });
+
+      it("Verify materials are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
+        cy.wait(5000);
+      });
+
+      it("Verify equipments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(4).should("have.text", "ET-00003 - Equipment document ");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(5).should("have.text", "Free text equipment ");
+      });
+
+      it("Verify attachments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(5).click();
+        cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+          const attachName = $el.text();
+          expect(attachName).to.be.oneOf(["image", "test", "video"]);
+        });
+      });
+
+      it("Remove step", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
       });
     });
 
@@ -796,6 +897,62 @@ context("Procedure and parts flow test", () => {
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
       cy.ebClickClone();
+    });
+
+    context("Verify 'Clone EB' feature copied EB", () => {
+      it("Verify title is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"Title-field\"]")
+          .should("have.text", "EB document");
+      });
+
+      it("Verify description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[id=field-description] div[data-editor]")
+          .should("have.text", "EB description");
+      });
+
+      it("Verify part revision", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("input[value=document]").should("have.attr", "checked");
+      });
+
+      it("Verify part document is same", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=childForRevise]")
+          .should("have.attr", "value", "PRT-00006 - Part for EB document");
+      });
+
+      it("Verify step description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .should("have.text", "Step #1 description");
+      });
+
+      it("Verify materials are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(2).should("contain.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(3).should("have.text", "Free text material | Test | Qty: 3 pounds");
+      });
+
+      it("Verify equipments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(2).should("have.text", "ET-00003 - Equipment document ");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(3).should("have.text", "Free text equipment ");
+      });
+
+      it("Verify attachments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(1).click();
+        cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+          const attachName = $el.text();
+          expect(attachName).to.be.oneOf(["image", "test", "video"]);
+        });
+      });
     });
 
     context("Add materials and equipments", () => {
@@ -833,10 +990,12 @@ context("Procedure and parts flow test", () => {
 
     context("Verify change from previous build", () => {
       it("Click 'Show changes from previous build'", () => {
+        SystemRequirement("REQ-3030");
         cy.pmToggleChangesFromPrevBuild();
       });
 
       it("Verify 'New Material for procedure' is added to materials", () => {
+        SystemRequirement("REQ-3030");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(0)
           .should("contain.text", "New Material for procedure")
           .should("contain.text", "Qty: 3")
@@ -901,6 +1060,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {
@@ -1035,6 +1196,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {

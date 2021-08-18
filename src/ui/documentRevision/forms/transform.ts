@@ -4,19 +4,21 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
 export const getLatesReferenceVersion = (reference: SmartReference[] | undefined) => {
-  const highestReference = maxBy(reference, (ref) => ref?.fromDocRev?.version);
+  const removedCancelledReference = reference?.filter( (ref) =>
+    !isDocumentRevisionCanceled(ref.fromDocRev?.status));
+  const highestReference = maxBy(removedCancelledReference, (ref) => ref?.fromDocRev?.version);
   return highestReference;
 };
 
 const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
   const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
-  const revs = revisions.filter((rev) => rev.revisionStage === highestStage);
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && !isDocumentRevisionCanceled(rev.status));
   return revs;
 };
 

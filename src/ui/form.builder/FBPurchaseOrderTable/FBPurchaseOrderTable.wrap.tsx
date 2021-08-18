@@ -113,7 +113,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     React.useEffect(() => {
       reaction(
-        () => purchaseOrderState?.calculation,
+        () => formState?.getInputState(name || "")?.value,
         () => formState?.setFieldAutosave(name)
       );
       reaction(
