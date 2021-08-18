@@ -201,7 +201,7 @@ export const withFBInput = <T extends FBInputProps>(
         )
       );
 
-      (isUndefined(hidden) && validationMode === "visibility") && (hidden = isUnderMode);
+      (validationMode === "visibility") && (hidden = isUnderMode);
       (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
 
