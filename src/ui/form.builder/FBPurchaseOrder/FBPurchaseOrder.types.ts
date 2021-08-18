@@ -6,6 +6,7 @@ export type FBPurchaseOrderProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
+  handleReceiveAll: (items?: FBPurchaseOrderItem[]) => any;
   handleLot?: (e?: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => void;
   purchaseOrderState?: FBPurchaseOrderState;
   dialogState?: FBDialogState;

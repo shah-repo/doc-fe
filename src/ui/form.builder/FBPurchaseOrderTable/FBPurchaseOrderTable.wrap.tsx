@@ -1,12 +1,16 @@
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
+// import { useDispatch } from "react-redux";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+// import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
+
+/* eslint-disable no-console */
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -17,6 +21,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleTaxBlur,
     handleCurrencyChange,
     handleDelete,
+    handleReceiveAll,
     classes,
     calculation,
     loading,
@@ -26,6 +31,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
 
+    // const dispatch = useDispatch();
+    // const { purchaseOrderState, formState, poReceiveState, workspaceState } = FB.useStores();
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
     const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -64,6 +71,33 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
     };
 
+    handleReceiveAll = () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      items?.forEach((item) => (item.received = item?.order));
+      purchaseOrderState?.setItems(items);
+      // const formInput = workspaceState?.document?.formInput;
+      // const selectPoKey = formInput
+      //   && Object.keys(formInput).find((key) => key.startsWith("select-po"));
+      //
+      // if (selectPoKey) {
+      //   const receivedItemsInputForm = {
+      //     [selectPoKey]: {
+      //       receivedItems: items?.map((item) => ({
+      //         id: item.partNumber,
+      //         received: item?.order,
+      //       })) || [],
+      //     },
+      //   };
+      //
+      //   await poReceiveState?.setPOId(poReceiveState?.data?.id);
+      //   dispatch(documentRevisionsActions.update(
+      //       workspaceState?.document?.id as string,
+      //       { formInput: receivedItemsInputForm }
+      //   ));
+      // }
+    };
+
     useObserver(() => {
       calculation = purchaseOrderState?.calculation;
       items = purchaseOrderState?.items;
@@ -80,6 +114,10 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     React.useEffect(() => {
       reaction(
         () => purchaseOrderState?.calculation,
+        () => formState?.setFieldAutosave(name)
+      );
+      reaction(
+        () => purchaseOrderState?.items,
         () => formState?.setFieldAutosave(name)
       );
 
@@ -108,6 +146,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleTaxBlur,
       handleCurrencyChange,
       handleDelete,
+      handleReceiveAll,
       classes,
       calculation,
       taxField,

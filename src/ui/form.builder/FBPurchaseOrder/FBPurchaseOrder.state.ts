@@ -145,6 +145,13 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "items", filter(this.items, (itm) => itm.id !== item.id));
   };
 
+  @action public setItems = (items?: FBPurchaseOrderItem[]) => {
+    if (!items) {
+      return;
+    }
+    set(this, "items", items);
+  };
+
   @action public calculateCost = (taxField?: string) => {
     taxField = taxField || TAX_RATE;
 

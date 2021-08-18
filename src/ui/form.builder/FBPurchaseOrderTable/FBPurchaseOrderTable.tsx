@@ -1,4 +1,4 @@
-import { TableBody } from "@material-ui/core";
+import { Button, TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -6,6 +6,7 @@ import React from "react";
 import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
+import Text from "../../components/Text";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
   handleShippingCost,
@@ -15,6 +16,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   handleDelete,
   handleItem,
   handleLot,
+  handleReceiveAll,
   classes,
   calculation,
   taxField,
@@ -42,6 +44,15 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         <FBTableCell colSpan={3} style={{ verticalAlign: "baseline" }}>
           <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode }} />
         </FBTableCell>
+      </TableRow>
+      <TableRow>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleReceiveAll}
+        >
+          <Text translation="form.builder.receive" />
+        </Button>
       </TableRow>
       {mode === "form" && (
         <FBPurchaseOrderTableTotal {...{
