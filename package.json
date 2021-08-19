@@ -135,7 +135,6 @@
     "@types/yup": "0.26.27",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
-    "@welldone-software/why-did-you-render": "^6.1.4",
     "axios-mock-adapter": "1.17.0",
     "bbrun": "^0.10.1",
     "class-transformer": "^0.2.3",
