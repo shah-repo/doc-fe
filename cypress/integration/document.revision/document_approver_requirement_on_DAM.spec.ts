@@ -109,18 +109,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
-    it("Open add field dialogue", () => {
-      cy.fbAddNewField();
-    });
-
-    it("Select 'Approval Matrix'", () => {
-      cy.fbSelectApprovalMatrix();
-    });
-
-    it("Add 'Approval Matrix' field", () => {
-      cy.fbAddField();
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
