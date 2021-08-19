@@ -319,9 +319,10 @@
     "id": "36",
     "label": "Documents eligible for training",
     "valueKey": "id",
-    "labelKey": "documentRevisions.name",
+    "labelKey": "name",
     "labelPrefixRoot": "docId",
     "root": "",
+    "includeRevision": "displayRevision",
     "hidden": false
   }
 ]
