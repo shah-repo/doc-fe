@@ -558,6 +558,13 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
+    demo:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO
+
     sandbox:
       - parallel:
           - step: *RUN_TESTS
@@ -571,13 +578,6 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
-
-    release/21.8:
-      - parallel:
-          - step: *RUN_TESTS
-          - step: *RUN_LINTER
-          - step: *BUILD_DEMO
-      - step: *DEPLOY_DEMO
 
     ENC-7137-dropbox-company-button:
       - step: *BUILD_DEV2
