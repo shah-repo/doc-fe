@@ -11,6 +11,7 @@ import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
+  filterOptions,
   name,
   isOutput,
   startMpi,
@@ -61,7 +62,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             shouldReloadOnInit
             withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
             disabled={isOutput || !isDraft}
-            {...{ name, loading }}
+            {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
               background: Colors.light_red,
               border: `1px solid ${Colors.error_red}`,

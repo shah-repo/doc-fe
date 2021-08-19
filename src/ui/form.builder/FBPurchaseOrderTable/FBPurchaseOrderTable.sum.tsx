@@ -34,7 +34,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
             key={`fb-po-item-${item.id}-${index}`}
             onClick={() => handleItem && handleItem(item)}
           >
-            {mode === "preview" && !item?.serviceId &&
+            {mode === "preview" && !(item?.type === "service") &&
               <FBTableCell align="right">
                 <Button
                   variant="contained"

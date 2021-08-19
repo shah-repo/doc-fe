@@ -156,15 +156,13 @@ context("Document Operators Access Test", () => {
     });
 
     it("Enter description 'Test Part description'", () => {
-      cy.drEnterDocumentDescription({ description: "Test Part description" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "Test Part description" });
+      });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click Create document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 

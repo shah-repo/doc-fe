@@ -198,18 +198,6 @@ context("Document Approval Matrix Flow", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
-    it("open add field dialogue", () => {
-      cy.fbAddNewField();
-    });
-
-    it("select 'Approval Matrix'", () => {
-      cy.fbSelectApprovalMatrix();
-    });
-
-    it("add 'Approval Matrix' field", () => {
-      cy.fbAddField();
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
@@ -711,6 +699,10 @@ context("Document Approval Matrix Flow", () => {
     it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
       SystemRequirement("REQ-4270");
       cy.drAddApprover({ name: INDIVIDUAL_USER.name });
+    });
+
+    it("Type password in Approve and Release dialog", () => {
+      cy.get("input[name=password]").type("Tester1!");
     });
 
     it("'Approve and Release' the document", () => {
