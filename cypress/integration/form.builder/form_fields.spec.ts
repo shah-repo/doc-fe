@@ -321,7 +321,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Text field with range", () => {
-        SystemRequirement("FB-0090", "FB-0100", "FB-0110", "FB-0160");
+        SystemRequirement("FB-0100", "FB-0110", "FB-0160");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
