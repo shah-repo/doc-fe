@@ -728,7 +728,6 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -981,7 +980,6 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        SystemRequirement("FB-1350");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
@@ -1102,7 +1100,6 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        SystemRequirement("FB-1350");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
