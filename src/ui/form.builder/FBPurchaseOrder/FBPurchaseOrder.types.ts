@@ -54,7 +54,7 @@ export interface FBPurchaseOrderCalculation {
 
 export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 & {
-  items?: FBPurchaseOrderItem[];
+  items: FBPurchaseOrderItem[];
 };
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {

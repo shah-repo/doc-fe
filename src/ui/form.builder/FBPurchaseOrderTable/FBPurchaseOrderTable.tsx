@@ -4,12 +4,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import Text from "../../components/Text";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
-import Text from "../../components/Text";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
-  handleShippingCost,
+  handleShippingCostChange,
+  handleShippingCostBlur,
   handleTaxChange,
   handleTaxBlur,
   handleCurrencyChange,
@@ -56,7 +57,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       </TableRow>
       {mode === "form" && (
         <FBPurchaseOrderTableTotal {...{
-          handleShippingCost,
+          handleShippingCostChange,
+          handleShippingCostBlur,
           handleTaxChange,
           handleTaxBlur,
           handleCurrencyChange,
