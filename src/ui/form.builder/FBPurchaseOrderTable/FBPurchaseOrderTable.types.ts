@@ -10,7 +10,6 @@ export type FBPurchaseOrderTableProps =
   handleTaxBlur?: (ev: React.ChangeEvent<any>) => void;
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
-  handleReceiveAll?: () => void;
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;

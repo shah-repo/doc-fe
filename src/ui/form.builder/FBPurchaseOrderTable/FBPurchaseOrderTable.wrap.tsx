@@ -23,7 +23,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleTaxBlur,
     handleCurrencyChange,
     handleDelete,
-    handleReceiveAll,
     classes,
     calculation,
     loading,
@@ -33,8 +32,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     ...props
   }: T) => {
 
-    // const dispatch = useDispatch();
-    // const { purchaseOrderState, formState, poReceiveState, workspaceState } = FB.useStores();
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
     const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -82,36 +79,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       !disabled && purchaseOrderState && purchaseOrderState.deleteItem(index);
     };
 
-    handleReceiveAll = () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      items?.forEach((item) => (item.received = item?.order));
-      // formState?.omitFieldValue(name);
-      purchaseOrderState?.setItems(items);
-      // formState?.setFieldValue(name, { items, ...purchaseOrderState?.calculation });
-
-      // const formInput = workspaceState?.document?.formInput;
-      // const selectPoKey = formInput
-      //   && Object.keys(formInput).find((key) => key.startsWith("select-po"));
-      //
-      // if (selectPoKey) {
-      //   const receivedItemsInputForm = {
-      //     [selectPoKey]: {
-      //       receivedItems: items?.map((item) => ({
-      //         id: item.partNumber,
-      //         received: item?.order,
-      //       })) || [],
-      //     },
-      //   };
-      //
-      //   await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      //   dispatch(documentRevisionsActions.update(
-      //       workspaceState?.document?.id as string,
-      //       { formInput: receivedItemsInputForm }
-      //   ));
-      // }
-    };
-
     useObserver(() => {
       calculation = omit(purchaseOrderState?.value, "items");
       items = purchaseOrderState?.value.items;
@@ -121,40 +88,19 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           item.lots = lots?.map((lot) => lot.fromDocument?.docId).join(", ");
         });
       }
-      // formState?.setFieldValue(name, { items, ...calculation });
       loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
     });
 
     useEffect(() => reaction(
       () => purchaseOrderState?.value,
       (value) => {
-        // const formValue = formState?.getFieldValue(name);
-        // if (isEqual(items, get(formValue, "items"))) { return; }
         formState?.setFieldValue(name, value, true);
         workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // useEffect(() => reaction(
-    //   () => purchaseOrderState?.calculation,
-    //   (calculation) => {
-    //     const formValue = formState?.getFieldValue(name);
-    //     if (isEqual(calculation, omit(formValue, "items"))) { return; }
-    //     formState?.setFieldValue(name, {
-    //       ...formState.getFieldValue(name),
-    //       ...calculation,
-    //     }, true);
-    //   }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // ), []);
-
     useEffect(() => {
-      // reaction(
-      //   () => formState?.getInputState(name || "")?.value,
-      //   () => formState?.setFieldAutosave(name)
-      // );
-
       if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -181,7 +127,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleTaxBlur,
       handleCurrencyChange,
       handleDelete,
-      handleReceiveAll,
       classes,
       calculation,
       taxField,

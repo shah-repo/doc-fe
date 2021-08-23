@@ -7,13 +7,14 @@ import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
   handleLot,
+  handleReceiveAll,
   purchaseOrderState,
   dialogState,
   gutter = true,
   mode = "form",
   label,
   disabled,
-  autosave,
+  isReceivable,
   name,
 }) => (
   <FBProvider {...{ purchaseOrderState, dialogState }}>
@@ -22,6 +23,14 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
       <Box mb={gutter ? 5 : 0}>
         {mode === "form" && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode }} />
+        {isReceivable && (
+          <FBButton
+            variant="outlined"
+            color="primary"
+            label="form.builder.receive"
+            onClick={handleReceiveAll}
+          />
+        )}
         {!disabled && (
           <FBButton
             fullWidth={true}

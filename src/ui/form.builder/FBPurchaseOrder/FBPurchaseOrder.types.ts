@@ -6,11 +6,13 @@ export type FBPurchaseOrderProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
-  handleReceiveAll: (items?: FBPurchaseOrderItem[]) => any;
+  handleReceiveAll?: () => any;
   handleLot?: (e?: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => void;
   purchaseOrderState?: FBPurchaseOrderState;
   dialogState?: FBDialogState;
   mode?: FBPurchaseOrderMode;
+  isReceivable?: boolean;
+  receivableName?: string;
 };
 
 type FBPurchaseOrderItemType = "product" | "service";
