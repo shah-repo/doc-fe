@@ -7,7 +7,7 @@ UN #,REQ #,Module,Sub-Module,Requirement
 ,FB-0060,Form builder capabilities,FB component,The system shall allow the user to define and select a from a set of description options for a formbuilder component added to a form
 ,FB-0070,Form builder capabilities,FB component,The system shall allow the user to define a URL for a formbuilder component added to a form
 ,FB-0080,Form builder capabilities,FB component,The system shall allow the user to choose a form for a formbuilder component added to a form
-,FB-0090,Form builder capabilities,FB component,The system shall allow the user to define the range for a formbuilder component added to a form
+,FB-0090,Form builder capabilities,FB component,The system shall allow the user to define the range for a Text Field with Range component added to a form
 ,FB-0100,Form builder capabilities,FB component,The system shall allow the user to select the critical to quality option for a formbuilder component added to a form
 ,FB-0110,Form builder capabilities,FB component,The system shall allow the user to select the inspection option for a formbuilder component added to a form
 ,FB-0120,Form builder capabilities,FB component,The system shall allow the user to add a selectable “Other” option for a formbuilder component added to a form
@@ -19,13 +19,10 @@ UN #,REQ #,Module,Sub-Module,Requirement
 ,FB-0180,Form builder capabilities,FB component,The system shall allow the user to set the component to deletion disabled = true. Any enlil object created using a form with this component will disable the removal of that component even if the output type supports schema changes. 
 ,FB-0190,Form builder capabilities,FB component,The system shall allow values entered in the output object of a form to be duplicated to a clone of that object when the Copyable value checkbox is selected in the form.
 ,FB-0200,Form builder capabilities,FB component,The system shall allow the user to add notes to the output object of a form when the include notes checkbox is selected
-,FB-0210,Form builder Rules,FB component rules,"The user shall define if the control will be:
-When “validation is true” then it is Flagged with the indicator that it is required
-When “validation is true” then it is Disabled when the textbox control is not required
-When “validation is true” then it is Hidden when the textbox control is not required"
-,FB-0220,Form builder Rules,FB component rules,When “validation is true” then it is Flagged with the indicator that it is required
-,FB-0230,Form builder Rules,FB component rules,When “validation is true” then it is Disabled when the textbox control is not required
-,FB-0240,Form builder Rules,FB component rules,When “validation is true” then it is Hidden when the textbox control is not required
+,FB-0210,Form builder Rules,FB component rules,The user shall define if the control will be: (a) When “validation is true” then it is Flagged with the indicator that it is required; (b) When “validation is true” then it is Disabled when the textbox control is not required; (c) When “validation is true” then it is Hidden when the textbox control is not required
+,FB-0220,Form builder Rules,FB component rules,The system shall provide a mechanism for the user to set a rule that will flag the formbuilder component if no data is entered
+,FB-0230,Form builder Rules,FB component rules,The system shall provide a mechanism for the user to set a rule that will flag the formbuilder component if another field is equal to a specific value.
+,FB-0240,Form builder Rules,FB component rules,The system shall provide a mechanism for the user to set a rule that will flag the formbuilder component if a different linked checkbox group field matches multiple pre-specified values
 ,FB-0250,Form builder Rules,FB component rules,"The system shall provide a mechanism for the user to set a rule that will flag the formbuilder component if a different linked field has any value. (eg. if field A linked to field B has any value, field B on which this rule is implemented needs to have some value)"
 ,FB-0260,Form builder Rules,FB component rules,"The system shall provide a mechanism for the user to set a rule that will flag the field if a different linked field is blank. (eg. if field A linked to field B is blank, field B on which this rule is implemented needs to have some value)"
 ,FB-0270,Form builder Rules,FB component rules,"If an applicable option is selected for the Dropdown in an Autocomplete field, a required flag is displayed if the specified document status is not selected. Note: This rule/ scenario applies only to the Autocomplete component"
