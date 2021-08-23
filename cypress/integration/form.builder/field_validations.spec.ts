@@ -254,17 +254,19 @@ context("Field validations test", () => {
     });
 
     context("Check required textfield", () => {
-      SystemRequirement("FB-0210");
       it("Verify field is not required when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[data-cy^=required-text-field]").parent().parent().find("p")
           .should("not.exist");
       });
 
       it("Insert text in Normal text field", () => {
+        SystemRequirement("FB-0210");
         cy.get("[name^=normal-text-field]").type("test required text field");
       });
 
       it("Verify field is required when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[data-cy^=required-text-field]").parent().parent().find("p")
           .should("have.text", "The Required text field field is required when Normal text field is not empty.");
       });
@@ -275,36 +277,41 @@ context("Field validations test", () => {
     });
 
     context("Check show/hide textfield", () => {
-      SystemRequirement("FB-0210");
       it("Verify field is not visible when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[data-cy^=show-hide-text-field]").should("not.exist");
       });
 
       it("Insert text in Normal text field", () => {
+        SystemRequirement("FB-0210");
         cy.get("[name^=normal-text-field]").type("test show/hide text field");
       });
 
       it("Verify field is visible when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[data-cy^=show-hide-text-field]").parent().parent().find("p")
           .should("have.text", "The Show/hide text field field is required when Normal text field is not empty.");
       });
 
       it("Clear text in Normal text field", () => {
+        SystemRequirement("FB-0210");
         cy.get("[name^=normal-text-field]").clear();
       });
     });
 
     context("Check enable/disable textfield", () => {
-      SystemRequirement("FB-0210");
       it("Verify field is disabled when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[name^=enable-disable-text-field]").should("have.attr", "disabled");
       });
 
       it("Insert text in Normal text field", () => {
+        SystemRequirement("FB-0210");
         cy.get("[name^=normal-text-field]").type("test enable/disable text field");
       });
 
       it("Verify field is not disabled when Normal text field is empty", () => {
+        SystemRequirement("FB-0210");
         cy.get("[data-cy^=enable-disable-text-field]").parent().parent().find("p")
           .should("have.text", "The Enable/disable text field field is required when Normal text field is not empty.");
       });
