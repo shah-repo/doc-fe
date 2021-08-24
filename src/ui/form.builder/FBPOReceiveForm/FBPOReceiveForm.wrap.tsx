@@ -68,7 +68,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       };
       const hasNoReference = isEmpty(workspaceState.document?.referenceTo.find(
         (e) => e.id === poReceiveState?.data?.document.id));
-      poReceiveFormState.addReceiveQuantity(
+      poReceiveState?.addReceiveQuantity(
         workspaceState.id,
         {
           formInput: receivedItemsInput,
