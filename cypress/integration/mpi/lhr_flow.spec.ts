@@ -1455,6 +1455,7 @@ context("LHR flow", () => {
         });
 
         it("Check 'Include Notes' checkbox", () => {
+          SystemRequirement("FB-0200");
           cy.get("input[value=\"includeNotes\"]").check();
         });
 
