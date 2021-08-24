@@ -1,6 +1,6 @@
 import { template } from "lodash";
 import { action } from "mobx";
-import { FBPOReceiveFormConstructor, FBPurchaseOrderItem, ReceiveQuantityBody } from "..";
+import { FBPOReceiveFormConstructor, FBPurchaseOrderItem } from "..";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { documentPreviewPath } from "../../document.revision/utils/paths";
@@ -10,8 +10,7 @@ import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-class FBPOReceiveFormState  {
-  public receiveQuantityAPI = new FBRequest<null, ReceiveQuantityBody>(FBEndpoint.PatchDocumentRevision);
+class FBPOReceiveFormState {
   public docIdAPI: FBRequest<any, any> = new FBRequest();
   public createLotAPI: FBRequest<any, any> = new FBRequest();
   public releasedLfpoAPI: FBRequest<any, any> = new FBRequest();
@@ -33,16 +32,6 @@ class FBPOReceiveFormState  {
     this.docIdAPI.setUrl(url);
     this.fetchLfpoDocs();
   }
-
-  public addReceiveQuantity = (docRevId?: string, body?: ReceiveQuantityBody) => {
-    if (!docRevId) { return; }
-    this.receiveQuantityAPI.set({
-      url: FBEndpoint.PatchDocumentRevision,
-      urlValues: { docRevId },
-      body,
-      method: "patch",
-    });
-  };
 
   @action public async submit(values: any, poDocumentId?: string) {
     if (!this.releasedLfpoAPI.data || this.releasedLfpoAPI.data?.length === 0) {
