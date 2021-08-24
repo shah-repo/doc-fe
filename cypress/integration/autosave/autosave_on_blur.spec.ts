@@ -821,9 +821,10 @@ context("Autosave on blur", () => {
   context("Create document from form and test autosave on blur", () => {
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
+      cy.wait(2000);
     });
 
     it("Enters title 'New document from form'", () => {
@@ -831,7 +832,7 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "New document from form description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
@@ -839,7 +840,8 @@ context("Autosave on blur", () => {
 
     it("Fill TextField and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-textfield-]").typeFieldLock("Test field");
+        cy.get("[name^=fb-textfield-]").type("Test field");
+        cy.unClick();
       });
     });
 

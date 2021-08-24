@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -13,9 +13,11 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { DRAWER_WIDTH } from "../../app/Navigation.styles";
+import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
+import useActionCreator from "../../hooks/useActionCreator";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
@@ -73,12 +75,15 @@ DocumentRevisionFormContainerProps
   lastSavedTimestamp,
 }) => {
   const bannerPortal = React.useRef(null);
+  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
+
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
@@ -223,7 +228,11 @@ DocumentRevisionFormContainerProps
   );
 
   return (
-    <React.Fragment>
+    <AsyncGate
+      asyncState={loadAsyncState}
+      asyncAction={loadAction}
+      startActionOnMount={true}
+    >
       <div ref={bannerPortal}
         style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }} />
       <Grid style={{ background: Colors.light_gray }} >
@@ -241,7 +250,7 @@ DocumentRevisionFormContainerProps
           {render}
         </Formik>
       </Grid>
-    </React.Fragment>
+    </AsyncGate>
   );
 };
 

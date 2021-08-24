@@ -219,10 +219,12 @@ context("Approval request landing page test", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "Draft" });
+      cy.wait(5000);
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.wait(3000);
     });
 
     it("Send to review", () => {
@@ -263,7 +265,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by AR ID", () => {
-        SystemRequirement("REQ-0770", "REQ-0750");
+        SystemRequirement("REQ-0770", "REQ-0750", "REQ-4640", "REQ-3390");
         cy.alVerifyFilterByArId({ arId: "AR99999" });
       });
 
@@ -328,7 +330,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify approval counter on document list", () => {
-        SystemRequirement("REQ-0820");
+        SystemRequirement("REQ-0820", "REQ-4670");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -360,7 +362,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filter by document title", () => {
-        SystemRequirement("REQ-0790", "REQ-2290");
+        SystemRequirement("REQ-0790", "REQ-2290", "REQ-4650");
         cy.alVerifyFilterByTitle({ title: approvalRequestName });
       });
     });
@@ -371,7 +373,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Verify filters are cleared", () => {
-        SystemRequirement("REQ-0810");
+        SystemRequirement("REQ-0810", "REQ-4660", "REQ-3400");
         cy.alVerifyFilterClear();
       });
     });

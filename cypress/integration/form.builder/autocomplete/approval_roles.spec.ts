@@ -107,19 +107,6 @@ context("Autocomplete 'Approval Roles' test", () => {
         cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
       });
 
-      it("Add Approval Matrix", () => {
-        cy.fbAddNewField();
-        cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
-      });
-
-      it("Click 'Add' button", () => {
-        cy.fbAddNewFieldButton();
-      });
-
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-
       it("Click Save button", () => {
         cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
       });

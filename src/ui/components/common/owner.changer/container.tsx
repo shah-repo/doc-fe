@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { userManagementActions } from "../../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { ApplicationState } from "../../../../state/reducers";
-import { AsyncStatus } from "../../../../state/types";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -24,9 +23,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 
   const dialog = useDialog();
   const openDialog = () => {
-    if (getEmployees.asyncState.status === AsyncStatus.Idle) {
-      getEmployees.start(getEmployeeAction, null, getEmployees);
-    }
+    getEmployees.reset();
     dialog.open();
   };
 
@@ -76,6 +73,7 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 
 
   useEffect(() => {
+    getEmployees.start(getEmployeeAction, null, getEmployees);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

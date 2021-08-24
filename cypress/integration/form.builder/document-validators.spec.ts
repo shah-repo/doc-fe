@@ -272,7 +272,7 @@ context("Validators tests", () => {
     });
 
     it("Fill in document type as Form", () => {
-      SystemRequirement("FB-0010");
+      SystemRequirement("FB-0010", "FB-0030");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
   });
@@ -320,6 +320,7 @@ context("Validators tests", () => {
     });
 
     it("Open validations", () => {
+      SystemRequirement("FB-0030");
       cy.fbOpenValidation();
     });
 
@@ -335,6 +336,7 @@ context("Validators tests", () => {
 
   context("Add 'Required' validation on 'Autocomplete multiselect'", () => {
     it("Open add field dialogue", () => {
+      SystemRequirement("FB-0030");
       cy.fbClickAddNewHiddenBtn();
     });
 
@@ -743,7 +745,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).typeFieldLock("added");
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
     });
   });
 

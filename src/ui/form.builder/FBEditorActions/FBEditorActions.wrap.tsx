@@ -93,8 +93,12 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
           materials: [],
         };
       }
-      if (type === "lhrstep" && !editorConfig) {
-        formValues.editorConfig = {};
+      if (type === "lhrstep" && !formValues.editorConfig.filters) {
+        formValues.editorConfig = { filters: {} };
+      }
+      // Have to set editorProperties here so it doesn't override manually set values
+      if (!editorProperties) {
+        formValues.editorProperties = COMMON_INITIAL_VALUES.editorProperties;
       }
 
       if (isUnique && !formValues.name) { return dialogState?.closeDialog(); }

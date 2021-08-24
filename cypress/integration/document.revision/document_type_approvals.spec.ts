@@ -318,18 +318,6 @@ context("Check DAM enforcement rules for document types", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
-    it("open add field dialogue", () => {
-      cy.fbAddNewField();
-    });
-
-    it("select 'Approval Matrix'", () => {
-      cy.fbSelectApprovalMatrix();
-    });
-
-    it("add 'Approval Matrix' field", () => {
-      cy.fbAddField();
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });

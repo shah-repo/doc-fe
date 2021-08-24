@@ -8,8 +8,11 @@ import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCost,
+  handleTaxChange,
+  handleTaxBlur,
   handleCurrencyChange,
   calculation,
+  taxField,
   disabled,
   name,
 }) => (
@@ -44,11 +47,19 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
     <TableRow>
       <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FormattedNumber
-          value={Number(calculation?.tax)}
-          // eslint-disable-next-line react/style-prop-object
-          style="currency"
-          currency={calculation?.currency}
+        <FBTextField
+          name={`${name}.tax`}
+          gutter={false}
+          size="small"
+          value={taxField || calculation?.tax}
+          inputProps={{
+            style: { textAlign: "right", padding: "5px 20px 5px 5px" },
+            min: "0",
+            onChange: handleTaxChange,
+            onBlur: handleTaxBlur,
+          }}
+          rules="min:0"
+          {...{ disabled }}
         />
       </FBTableCell>
     </TableRow>

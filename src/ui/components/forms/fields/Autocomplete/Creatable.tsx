@@ -64,9 +64,10 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
     }
   };
 
-  const onBlur = () => {
+  const onBlur = async () => {
     if (formikValue !== inputValue) {
-      setFieldValue(name, inputValue);
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      await setFieldValue(name, inputValue);
     }
     submitForm();
   };

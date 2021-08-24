@@ -12,6 +12,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    filterOptions,
     name = "",
     index,
     loading,
@@ -175,6 +176,23 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       formState?.getInputState(name)?.setRender();
     };
 
+    function handleFilter(
+      data: DocumentRevision[],
+    ) {
+      const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
+      if (documentType.length === 0 && revisionStatus.length === 0) { return data; }
+      const options = data?.filter((docRev) => {
+        const {
+          status = "",
+          document: { documentType: { id: docTypeId = "" } = {} } = {},
+        } = docRev || {};
+        return revisionStatus.includes(status) && documentType.includes(docTypeId);
+      });
+      return options;
+    }
+
+    filterOptions = (options) => handleFilter(options);
+
     // MARK: @observer
     useObserver(() => {
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
@@ -187,6 +205,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     return Component({
       ...(props as T),
+      filterOptions,
       name,
       isOutput,
       startMpi,
