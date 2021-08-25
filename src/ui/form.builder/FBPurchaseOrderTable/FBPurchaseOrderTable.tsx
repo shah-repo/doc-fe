@@ -8,7 +8,8 @@ import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
-  handleShippingCost,
+  handleShippingCostChange,
+  handleShippingCostBlur,
   handleTaxChange,
   handleTaxBlur,
   handleCurrencyChange,
@@ -45,7 +46,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       </TableRow>
       {mode === "form" && (
         <FBPurchaseOrderTableTotal {...{
-          handleShippingCost,
+          handleShippingCostChange,
+          handleShippingCostBlur,
           handleTaxChange,
           handleTaxBlur,
           handleCurrencyChange,

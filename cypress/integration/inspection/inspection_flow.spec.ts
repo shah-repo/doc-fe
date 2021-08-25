@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1094,6 +1095,7 @@ context("Inspection flow", () => {
         });
 
         it("Add 'Height field'", () => {
+          SystemRequirement("FB-0090");
           cy.fbClickAddNewHiddenBtn();
           cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
           cy.fbEnterLabel({ label: "Height" });

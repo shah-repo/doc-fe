@@ -155,7 +155,6 @@ context("Autocomplete 'Approval requests' test", () => {
           });
 
           it("Verify autocomplete is disabled in form edit mode", () => {
-            SystemRequirement("FB-0500");
             cy.get("input[data-cy^=test-label]")
               .should("have.attr", "autocomplete", "disabled");
             cy.get("input[data-cy^=test-label]")

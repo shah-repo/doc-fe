@@ -65,7 +65,7 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     };
 
     getOptionDisabled = (option: DocumentRevision) => {
-      const selectedParts = map(purchaseOrderState?.items, "partNumber");
+      const selectedParts = map(purchaseOrderState?.value.items, "partNumber");
       return includes(selectedParts, option.id);
     };
 
