@@ -15,14 +15,14 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
   const [value, setValue] = React.useState<string | number>(defaultValue || "");
 
   React.useEffect(() => {
-    setValue(defaultValue || "");
+    !value && setValue(defaultValue || "");
   }, [defaultValue]);
 
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
-    if (!queryGetter) { return; }
     const query = event.target.value;
     setValue(query);
 
+    if (!queryGetter) { return; }
     const finalQuery = searchQueryString({ query, searchValueGetter });
     queryGetter(dataKey, finalQuery);
   };
@@ -33,6 +33,7 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
       value={value}
       name={dataKey}
       onChange={handleChange}
+      onClick={(e) => e.stopPropagation()}
       margin="normal"
       InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
       inputProps={{ "data-lpignore": true }}
