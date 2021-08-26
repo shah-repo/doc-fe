@@ -25,7 +25,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     searchOptions,
     omitSearch,
     cellHref,
-    sortable = true,
+    sortable,
   } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
