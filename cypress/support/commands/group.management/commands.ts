@@ -299,6 +299,7 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
     cy.get("#groupName").type(params.name);
   });
+  cy.wait(1000);
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
   cy.grpCloseDialog();
 });
