@@ -88,13 +88,14 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           item.lots = lots?.map((lot) => lot.fromDocument?.docId).join(", ");
         });
       }
+      formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
       loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
     });
 
     useEffect(() => reaction(
       () => purchaseOrderState?.value,
       (value) => {
-        formState?.setFieldValue(name, value, true);
+        formState?.setFieldValue(name, value);
         workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
