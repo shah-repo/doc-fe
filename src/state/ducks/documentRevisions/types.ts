@@ -16,6 +16,7 @@ export enum DocumentRevisionStatus {
   InReview = "IN_REVIEW",
   Released = "RELEASED",
   Approved = "APPROVED",
+  Rejected = "REJECTED",
   Deprecated = "DEPRECATED",
   Obsolete = "OBSOLETE",
   Canceled = "CANCELED",

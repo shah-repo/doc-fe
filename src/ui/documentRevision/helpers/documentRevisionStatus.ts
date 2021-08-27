@@ -5,6 +5,7 @@ export const getIsLastVersionObsolete = (formDocuments: Document) =>
   some(formDocuments.documentRevisions, ["status", DocumentRevisionStatus.Obsolete ]);
 
 export const isDocumentRevisionInDraft = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Draft], documentRevisionStatus);
+export const isDocumentRevisionApprovedOrRejected = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Approved, DocumentRevisionStatus.Rejected], documentRevisionStatus);
 export const isDocumentRevisionInReview = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.InReview], documentRevisionStatus);
 export const isDocumentRevisionCanceled = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Canceled], documentRevisionStatus);
 export const isDocumentRevisionDeprecated = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Deprecated], documentRevisionStatus);

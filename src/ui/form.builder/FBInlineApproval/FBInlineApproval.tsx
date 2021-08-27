@@ -5,6 +5,7 @@ import React from "react";
 import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
+import { isDocumentRevisionApprovedOrRejected } from "../../documentRevision/helpers/documentRevisionStatus";
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
@@ -67,44 +68,57 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
     {shouldShowApprovals && (
       <Box mt={approvals.length ? 1 : 0}>
         <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
-          {(approval: FBInlineApprovalBody, index) => (
-            <Box
-              key={`fb-ia-info-${approval.id}-${index}`}
-              pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-            >
-              {approval.approver?.user.name}
-              {approval.status && approval.status !== "DRAFT" && (
-                <Box color={Colors.gray}> | {FBInlineApprovalStatusIdent[approval.status]}</Box>
-              )}
-              {currentUser === approval.approver?.user.id
-              && (
-                <Box flexGrow={1} textAlign="right">
-                  <FBButton
-                    disabled={disabled || approval.status === "APPROVED"}
-                    label="form.builder.request.approve"
-                    size="small"
-                    style={{ fontSize: "11px" }}
-                    onClick={() => onApproveClick?.(approval.id || "")}
-                  />
+          {(approval: FBInlineApprovalBody, index) => {
+            const isApprovedOrRejected = isDocumentRevisionApprovedOrRejected(approval.status);
+            return (
+              <Box mb={4}>
+                <Box
+                  key={`fb-ia-info-${approval.id}-${index}`}
+                  pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                >
+                  {<Box fontWeight="bold">{
+                    isApprovedOrRejected ? approval.approverName :  approval.approver?.user.name
+                  }</Box>}
+                  {approval.status && approval.approverGroup && (
+                    <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
+                  )}
+                  {approval.status && (
+                    <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
+                  )}
+                  {currentUser === approval.approver?.user.id
+                  && (
+                    <Box flexGrow={1} textAlign="right">
+                      <FBButton
+                        disabled={disabled || approval.status === "APPROVED"}
+                        label="form.builder.request.approve"
+                        size="small"
+                        style={{ fontSize: "11px" }}
+                        onClick={() => onApproveClick?.(approval.id || "")}
+                      />
+                    </Box>
+                  )}
                 </Box>
-              )}
-            </Box>
-          )}
+                <Box mt={1}>
+                  { isApprovedOrRejected ? approval.approverEmail : approval.approver?.user.email }
+                </Box>
+                {shouldShowRequestAllApprovals &&
+                  <Box flexGrow={1} textAlign="right">
+                    <FBButton
+                      style={{ margin: 0 }}
+                      label="form.builder.request.approval"
+                      variant="text"
+                      color="primary"
+                      onClick={() => requestAllApprovals?.(name)}
+                    />
+                  </Box>
+                }
+              </Box>
+            );
+          }}
         </FBMapWrapper>
-        {shouldShowRequestAllApprovals &&
-            <Box flexGrow={1} textAlign="right">
-              <FBButton
-                style={{ margin: 0 }}
-                label="form.builder.request.approval"
-                variant="text"
-                color="primary"
-                onClick={() => requestAllApprovals?.(name)}
-              />
-            </Box>
-        }
       </Box>
     )}</>;
 
