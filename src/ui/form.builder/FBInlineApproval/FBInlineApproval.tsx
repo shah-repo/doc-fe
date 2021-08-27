@@ -17,12 +17,12 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   isPreview,
   index,
   type,
-  disabled,
   options,
   loading,
   name,
   shouldShowApprovals,
   shouldShowRequestAllApprovals,
+  disabled,
 }) =>
   <>
     <Box
@@ -128,7 +128,6 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   name,
   inlineApprovalState,
   rules,
-  disabled,
   ...props
 }) => (
   <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
