@@ -143,7 +143,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   public calculateCost = (taxField?: string): FBPurchaseOrderValue => {
-    taxField = taxField || this.value.tax || TAX_RATE;
+    if (!taxField && toNumber(this.value.tax) > 0) {
+      taxField = this.value.tax;
+    }
+    taxField = taxField || TAX_RATE;
 
     const isTaxPercent = !!taxField?.endsWith("%");
     const taxFieldValue: number = parseFloat(taxField);

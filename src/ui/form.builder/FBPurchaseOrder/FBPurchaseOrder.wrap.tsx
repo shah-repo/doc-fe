@@ -31,10 +31,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
-    if (!formValue) {
-      formState?.getFieldValue(name, purchaseOrderState?.value);
-    }
-
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {
         return;
