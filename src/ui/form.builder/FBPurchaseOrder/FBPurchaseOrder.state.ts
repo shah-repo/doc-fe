@@ -113,12 +113,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
     try {
       const data = await this.exchangeRate.fetch();
-      set(this, "value", {
-        ...this.calculateCost(),
-        currency,
-        exchangeRate: parseFloat(data.rate.toFixed(2)),
-        dateOfExchangeRate: moment().format("LL"),
-      });
+      this.value.currency = currency;
+      this.value.exchangeRate = parseFloat(data.rate.toFixed(2));
+      this.value.dateOfExchangeRate = moment().format("LL");
+      set(this, "value", { ...this.calculateCost() });
     } catch (e) {
       setToUsd();
     }
@@ -143,9 +141,6 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   public calculateCost = (taxField?: string): FBPurchaseOrderValue => {
-    if (!taxField && toNumber(this.value.tax) > 0) {
-      taxField = this.value.tax;
-    }
     taxField = taxField || TAX_RATE;
 
     const isTaxPercent = !!taxField?.endsWith("%");
