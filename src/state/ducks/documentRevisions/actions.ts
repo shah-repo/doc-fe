@@ -180,12 +180,14 @@ const applyTransition = (
 
 const approveAndReleaseNonQms = (
   id: string,
+  password: string,
   body: any,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
   method: "post",
   data: body,
+  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
     dispatch(loadDocument(docRev.document.id));
