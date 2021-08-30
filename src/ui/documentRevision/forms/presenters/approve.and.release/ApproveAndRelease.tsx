@@ -304,13 +304,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     async.start(
       releaseAction,
       id,
+      password,
       {
         approversWithSignatures,
         effectiveDate,
         documentType: { id: documentType },
         formDocument: { id: formDocument },
       },
-      password,
       async,
     );
   };
