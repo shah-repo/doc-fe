@@ -34,6 +34,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
   }: T) => {
 
     const { workspaceState, formState } = FB.useStores();
+    const { document: { id = "" } = {} } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
     const redlineActive = useSelector(companySelectors.getRedlineActive);
@@ -62,23 +63,36 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       if (!ids || isEmpty(ids)) { return; }
       mediaAlbumFieldState?.getFiles(ids);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+      mediaAlbumFieldState?.getAllAttachments(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
 
     // Handle image upload
     onFileUploadChange = (event: React.FormEvent<HTMLInputElement>) => {
       const eventFiles = get(event, "currentTarget.files", []);
       const invalidFiles: string[] = [];
+      const duplicateNamedFiles: string[] = [];
 
       const validFiles: File[] = filter(eventFiles, (file) => {
         const fileName = get(file, "name", "");
+        const name = fileName.split(".")[0];
+
+        const fileNameAlreadyExists = mediaAlbumFieldState?.existingFileNames.includes(name);
         const type = fileName.split(".").pop();
         (type === "doc") && (invalidFiles.push(fileName));
-        return type !== "doc";
+        (fileNameAlreadyExists) && (duplicateNamedFiles.push(fileName));
+        return type !== "doc" && !fileNameAlreadyExists;
       });
 
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
+      }
+
+      if (!isEmpty(duplicateNamedFiles)) {
+        toastError(`Files with duplicate names are not accepted. Invalid files: ${join(duplicateNamedFiles, ", ")}`);
       }
       mediaAlbumFieldState?.upload(validFiles);
     };
@@ -91,6 +105,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           const syncValue = map(syncIds, (syncFile) => syncFile.id ? toJS(syncFile.id) : syncFile);
           const filesIds = map(mediaAlbumFieldState?.files, "id");
           const addedFiles: string[] = [];
+
           map(union(filesIds, syncValue), (fileId) => {
             mediaAlbumFieldState!.fromUpload = false;
             if (!syncValue.includes(fileId)) {
@@ -116,6 +131,19 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      // After attachment upload, form save is triggered
+      // When saving is done we need to fetch all attachments
+      // To have updated list for the next uploading event
+      () => workspaceState?.documentRevApi.loading,
+      (loading) => {
+        if (loading) {
+          return;
+        }
+        mediaAlbumFieldState?.getAllAttachments(id);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     React.useEffect(() => {
       reaction(
