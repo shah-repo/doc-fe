@@ -232,13 +232,13 @@ const createAndRelease = (
   handlers,
 });
 
-const updateAccess = (id: string, body: SecurityList, handlers: Handlers<DocumentRevision>):
-ApiAction<DocumentRevision, SecurityList> => apiActionWithCallbacks({
+const updateAccess = (id: string, body: SecurityList, handlers: Handlers<Document>):
+ApiAction<Document, SecurityList> => apiActionWithCallbacks({
   url: `${DOCUMENT_ROOT_URL}/${id}/update_security`,
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
-    dispatch(documentRevisionSet(documentRevision));
+    dispatch(documentSet(documentRevision));
   },
   handlers,
 });

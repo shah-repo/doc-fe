@@ -60,7 +60,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     React.useEffect(() => {
       reaction(
-        () => purchaseOrderState?.calculation,
+        () => formState?.getInputState(name || "")?.value,
         () => formState?.setFieldAutosave(name)
       );
 
@@ -75,7 +75,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       items = items?.map( (item) => {
         const id = item.partNumber || item.id;
         const received = getReceivedQuantity(receivedItems, id) || 0;
-
         return {
           ...item,
           received,

@@ -272,7 +272,6 @@ context("Validators tests", () => {
     });
 
     it("Fill in document type as Form", () => {
-      SystemRequirement("FB-0010");
       cy.drSelectDocumentType({ documentType: "Form" });
     });
   });
@@ -301,12 +300,11 @@ context("Validators tests", () => {
 
   context("Add 'Required' validation on 'Checkboxes'", () => {
     it("Open add field dialogue", () => {
-      SystemRequirement("FB-0020");
       cy.fbAddNewField();
     });
 
     it("Create 'Checkboxes'", () => {
-      SystemRequirement("FB-0370");
+      SystemRequirement("FB-0040");
       cy.fbSelectCustomFieldToAdd({ name: "Checkbox group" });
     });
 
@@ -315,7 +313,7 @@ context("Validators tests", () => {
     });
 
     it("Add options to checbox group", () => {
-      SystemRequirement("FB-0370");
+      SystemRequirement("FB-0040");
       cy.fbGroupOptions("First", "Second", "Third");
     });
 
@@ -324,7 +322,7 @@ context("Validators tests", () => {
     });
 
     it(`Make 'Order' field required`, () => {
-      SystemRequirement("FB-0100");
+      SystemRequirement("FB-0220");
       cy.get("[data-cy=\"fb-control-required\"]").click();
     });
 
@@ -343,7 +341,7 @@ context("Validators tests", () => {
     });
 
     it(`Give label to 'Autocomplete' as 'Required doctypes'`, () => {
-      SystemRequirement("FB-0050");
+      SystemRequirement("FB-0010");
       cy.fbEnterLabel({ label: "Required doctypes" });
     });
 
@@ -356,17 +354,16 @@ context("Validators tests", () => {
     });
 
     it("Open validations", () => {
-      SystemRequirement("FB-0050");
       cy.fbOpenValidation();
     });
 
     it("Mark as 'Required If In'", () => {
-      SystemRequirement("FB-0050", "FB-0120");
+      SystemRequirement("FB-0240");
       cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").click();
     });
 
     it(`Select 'Order' field`, () => {
-      SystemRequirement("FB-0120");
+      SystemRequirement("FB-0240");
       cy.get("[data-cy=\"validators.required_if_in.name\"]").type(`Order{downarrow}{enter}`);
     });
 
@@ -406,7 +403,6 @@ context("Validators tests", () => {
     });
 
     it("Verify you can't enter data to textfield", () => {
-      SystemRequirement("FB-0330");
       cy.get(`[data-cy^='${requiredFieldSelector}'] input`).should("have.attr", "disabled");
     });
   });
@@ -430,12 +426,12 @@ context("Validators tests", () => {
     });
 
     it("Mark as 'Required If'", () => {
-      SystemRequirement("FB-0110");
+      SystemRequirement("FB-0230");
       cy.get("[data-cy=\"fb-control-required_if:anotherfield,value\"]").click();
     });
 
     it(`Select '${requiredFieldLabel}' field`, () => {
-      SystemRequirement("FB-0110");
+      SystemRequirement("FB-0230");
       cy.get("[data-cy=\"validators.required_if.name\"]").type(`${requiredFieldLabel}{downarrow}{enter}`);
     });
 
@@ -468,7 +464,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it("Mark as 'Required With'", () => {
-      SystemRequirement("FB-0130");
+      SystemRequirement("FB-0250");
       cy.get("[data-cy=\"fb-control-required_with:foo,bar,...\"]").click();
     });
 
@@ -477,7 +473,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it(`Make '${requiredWithFieldLabel}' field required, if 'Required doctypes' 
-field is not empty': Add text field`, () => {
+    field is not empty': Add text field`, () => {
       cy.fbAddField();
     });
 
@@ -501,12 +497,12 @@ field is not empty': Add text field`, () => {
     });
 
     it("Mark as 'Required Without'", () => {
-      SystemRequirement("FB-0140");
+      SystemRequirement("FB-0260");
       cy.get("[data-cy=\"fb-control-required_without:foo,bar,...\"]").click();
     });
 
     it(`Select '${requiredWithFieldLabel}' field`, () => {
-      SystemRequirement("FB-0140");
+      SystemRequirement("FB-0260");
       cy.get("[data-cy=\"validators.required_without.name\"]").click();
       cy.get("ul[role=listbox]>li").contains(requiredWithFieldLabel).click();
     });
@@ -540,12 +536,12 @@ field is empty: Add text field`, () => {
     });
 
     it("Mark as 'Required Document Status'", () => {
-      SystemRequirement("FB-0150");
+      SystemRequirement("FB-0270");
       cy.get("[data-cy=\"fb-control-required_document_status:value\"]").click();
     });
 
     it("Select Released status", () => {
-      SystemRequirement("FB-0150");
+      SystemRequirement("FB-0270");
       cy.get("[data-cy=\"validators.required_document_status.name\"]").type("Draft{downarrow}{enter}");
     });
 
@@ -577,12 +573,12 @@ field is empty: Add text field`, () => {
     });
 
     it("Mark as 'Required Document Type'", () => {
-      SystemRequirement("FB-0160");
+      SystemRequirement("FB-0280");
       cy.get("[data-cy=\"fb-control-required_document_type:value\"]").click();
     });
 
     it("Select Clinical Protocol", () => {
-      SystemRequirement("FB-0160");
+      SystemRequirement("FB-0280");
       cy.get("[data-cy=\"validators.required_document_type.name\"]").type("Clinical Protocol{downarrow}{enter}");
     });
 
@@ -659,12 +655,10 @@ field is empty: Add text field`, () => {
     });
 
     it("Check returned errors are not empty", () => {
-      SystemRequirement("FB-0070");
       cy.checkToastMessageIsNotEmpty({ exists: true });
     });
 
     it("Check returned toast error message", () => {
-      SystemRequirement("FB-0070");
       cy.checkToastMessageContains({
         message: "The Order is a required field." +
         ",The Name is a required field." +
@@ -743,7 +737,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).typeFieldLock("added");
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
     });
   });
 
@@ -763,7 +757,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      SystemRequirement("FB-0130");
+      SystemRequirement("FB-0250");
       cy.get(`[data-cy^="required-doctypes"]`).click();
       cy.get("ul[role=listbox]>li").contains("Equipment").click();
     });

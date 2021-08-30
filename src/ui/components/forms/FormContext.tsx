@@ -7,6 +7,7 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/do
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../form.builder/FBInput/FBInput.wrap";
 import { SubmitFormRelation } from "./FormContext.types";
 
 export const FormContext = React.createContext({ submitOnChange: false });
@@ -41,7 +42,8 @@ export const useFormContext = () => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
+        formik.setFieldValue("formInput", omit(formState?.getValues(),
+          Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })));
         if (workspaceState.mode === "formDesign" && isOutputSchema()) {
           formik.setFieldValue("schema", schema);
         }

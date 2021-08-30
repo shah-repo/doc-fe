@@ -104,6 +104,7 @@ context("Checkboxes test", () => {
 
     context("Add Fields with Checkboxes", () => {
       it("Add TextField with checkboxes", () => {
+        SystemRequirement("FB-0180");
         cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
         cy.get("[data-cy=\"form.builder.add.field\"]").click();
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
@@ -594,6 +595,7 @@ context("Checkboxes test", () => {
     });
 
     it("Verify TextField with 'Deletion Disabled' checkbox", () => {
+      SystemRequirement("FB-0180");
       cy.fbVerifyElementClass({
         name: "textfield-wi-ch-", el: "remove-schema-item",
         class: "MuiSvgIcon-colorDisabled",
@@ -940,7 +942,6 @@ context("Checkboxes test", () => {
     });
 
     it("Open Preview dialog", () => {
-      SystemRequirement("FB-0240");
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
 

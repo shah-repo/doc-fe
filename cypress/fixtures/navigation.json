@@ -1,4 +1,5 @@
-{"navigationItems": [
+{
+  "navigationItems": [
     {
       "icon": "/navigation_icons/dashboard.svg",
       "path": "/",
@@ -81,15 +82,6 @@
           "type": "CATEGORY",
           "label": "Parts",
           "category": "Parts"
-        },
-        {
-          "icon": "/navigation_icons/todo.svg",
-          "type": "CATEGORY",
-          "label": "Work Orders",
-          "category": "Work Order",
-          "restrictedToUsersWithTags": [
-            "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES"
-          ]
         },
         {
           "icon": "/navigation_icons/tag-check.svg",

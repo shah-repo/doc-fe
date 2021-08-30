@@ -73,6 +73,7 @@ export const withFBProcedure = <T extends FBProcedureProps>(
           ...procedureState.value,
           description,
         };
+        workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

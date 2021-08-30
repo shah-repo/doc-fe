@@ -68,6 +68,10 @@ declare global {
         employeeId: string;
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
+      cmpUpdatePageDetails(params: {
+        employeeId: string;
+        sessionId: string;
+        payload: any;}): Chainable<Subject>;
       cmpAdminUpdateCompany(params: {
         companyId: string;
         sessionId: string;
@@ -186,6 +190,22 @@ Cypress.Commands.add("cmpUpdateCompany", (
   cy.request({
     method: "PATCH",
     url: `${CONFIG.BE_URL}/api/v1/company/mine`,
+    body: params.payload,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
+
+Cypress.Commands.add("cmpUpdatePageDetails", (
+  params: {
+    employeeId: string;
+    sessionId: string;
+    payload: any;
+  }) => {
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/page_details`,
     body: params.payload,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,

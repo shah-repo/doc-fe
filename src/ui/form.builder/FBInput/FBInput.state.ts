@@ -5,7 +5,7 @@ import { FBInputConstructor, FBInputType } from "..";
 class FBInputState {
   public static omitLabel: FBInputType[] = ["checkbox", "radio", "hyperlink", "section"];
   // Set value on blur
-  public static omitOnChange: FBInputType[] = ["textfield", "texteditor"];
+  public static omitOnChange: FBInputType[] = ["textfield", "texteditor", "purchaseorder"];
   public autosavePrevValue?: any;
   @observable public value: any;
   @observable public includeContext = false;

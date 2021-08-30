@@ -98,6 +98,7 @@ context("FORM Field test", () => {
 
     context("Create FORM document with Form fields", () => {
       it("Add TextField", () => {
+        SystemRequirement("FB-0020", "FB-0030");
         cy.fbAddNewField();
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
@@ -109,6 +110,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Checkbox group", () => {
+        SystemRequirement("FB-0120");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
@@ -119,6 +121,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Autocomplete", () => {
+        SystemRequirement("FB-0140", "FB-0150");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
@@ -131,6 +134,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Text Editor", () => {
+        SystemRequirement("FB-0060", "FB-0170", "FB-0180", "FB-0190");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
@@ -150,12 +154,11 @@ context("FORM Field test", () => {
       });
 
       it("Verify you can't add value to date picker in form edit design mode", () => {
-        SystemRequirement("FB-0680");
         cy.get("input[name^=fb-datepicker]").should("have.attr", "disabled");
       });
 
       it("Add Hyperlink", () => {
-        SystemRequirement("FB-0720");
+        SystemRequirement("FB-0070");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
         cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
@@ -166,6 +169,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Select Field", () => {
+        SystemRequirement("FB-0130");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
@@ -178,7 +182,6 @@ context("FORM Field test", () => {
       });
 
       it("Verify data can't be entered to select field in form edit design mode", () => {
-        SystemRequirement("FB-0860");
         cy.get("input[name^=fb-select-field]").should("have.attr", "type", "hidden");
       });
 
@@ -194,14 +197,12 @@ context("FORM Field test", () => {
 
 
       it("Verify radio buttons can't be selected", () => {
-        SystemRequirement("FB-0950");
         cy.get("input[name^=fb-radiobutton-group]").eq(0).should("have.attr", "disabled");
         cy.get("input[name^=fb-radiobutton-group]").eq(1).should("have.attr", "disabled");
         cy.get("input[name^=fb-radiobutton-group]").eq(2).should("have.attr", "disabled");
       });
 
       it("Add Paragraph", () => {
-        SystemRequirement("FB-0990");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
         cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
@@ -220,7 +221,6 @@ context("FORM Field test", () => {
       });
 
       it("Add Blank Template Form", () => {
-        SystemRequirement("FB-1170, FB-1180");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
@@ -230,7 +230,6 @@ context("FORM Field test", () => {
       });
 
       it("Add Quantity", () => {
-        SystemRequirement("FB-1270");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
@@ -311,6 +310,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Equipment", () => {
+        SystemRequirement("FB-0080");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
         cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
@@ -321,6 +321,7 @@ context("FORM Field test", () => {
       });
 
       it("Add Text field with range", () => {
+        SystemRequirement("FB-0100", "FB-0110", "FB-0160");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Text field with range" });
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
@@ -495,7 +496,7 @@ context("FORM Field test", () => {
       });
 
       it("Verify location linked on Hyperlink", () => {
-        SystemRequirement("FB-0770");
+
         cy.window().then((win) => {
           cy.spy(win, "open").as("redirect");
         });
@@ -711,21 +712,36 @@ context("FORM Field test", () => {
       });
 
       it("Add and check Quantity field", () => {
-        SystemRequirement("FB-1340");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-quantity-]").clear().type("1");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-quantity-]").should("have.value", "1");
       });
 
+      it("Add and check Text Editor field", () => {
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[data-cy^=\"fb-text-editor-\"]").find("div[contenteditable]")
+          .click({ force: true }).type("fb-text-editor-value");
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("[data-cy^=\"fb-text-editor-\"]").parent().find("p")
+          .should("have.text", "fb-text-editor-value");
+      });
+
+      it("Add and check Date picker field", () => {
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-datepicker-]").parent().find("button").click();
+        cy.get(".MuiPickersDay-daySelected").click();
+        cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+          .find("input[name^=fb-datepicker-]").invoke("val").should("not.be.empty");
+      });
+
       it("there should be no edit for field", () => {
-        SystemRequirement("FB-1210, FB-1300, FB-0760");
         cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
 
       it("Verify location linked on Hyperlink", () => {
-        SystemRequirement("FB-0800");
+
         cy.window().then((win) => {
           cy.spy(win, "open").as("redirect");
         });
@@ -741,16 +757,20 @@ context("FORM Field test", () => {
 
     context("Edit and verify Form fields", () => {
       it("Edit Quantity field", () => {
-        SystemRequirement("FB-1270");
         cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
         cy.fbEnterNameValue({ name: "label", value: "fb-quantity1" });
         cy.fbAddNewFieldButton();
       });
 
       it("Edit Blank Template field", () => {
-        SystemRequirement("FB-1180");
         cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Edit Autocomplete field", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
         cy.fbAddNewFieldButton();
       });
 
@@ -766,6 +786,11 @@ context("FORM Field test", () => {
       it("Verify updated Blank Template field", () => {
         cy.get("[data-cy=\"fb-blank-template1\"]").should("exist");
         cy.get("[data-cy=\"fb-blank-template1\"]").should("have.text", "fb-blank-template1");
+      });
+
+      it("Verify updated Autocomplete field", () => {
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("exist");
+        cy.get("[data-cy=\"fb-autocomplete1\"]").should("have.text", "fb-autocomplete1");
       });
 
       it("Approve and release FORM document", () => {
@@ -789,12 +814,21 @@ context("FORM Field test", () => {
       });
 
       it("Enter Quantity field value", () => {
-        SystemRequirement("FB-1320");
         cy.get("input[name^=\"fb-quantity-\"]").type("1");
+      });
+
+      it("Select Autocomplete field value", () => {
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").click().type("test title{downarrow}{enter}");
+      });
+
+      it("Enter Date picker field value", () => {
+        cy.get("input[name^=\"fb-datepicker-\"]").parent().find("button").click({ force: true });
+        cy.get(".MuiPickersDay-daySelected").click();
       });
 
       it("Click Save button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(3000);
       });
     });
 
@@ -803,31 +837,45 @@ context("FORM Field test", () => {
         cy.get("input[name^=\"fb-quantity-\"]").should("have.value", "1");
       });
 
+      it("Verify Date picker values", () => {
+        cy.get("input[name^=\"fb-datepicker-\"]").invoke("val").should("not.be.empty");
+      });
+
       it("Verify Not to edit Quantity field", () => {
-        SystemRequirement("FB-1280");
         cy.get("[data-cy=\"fb-quantity1\"]").parentsUntil(".MuiFormControl-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
 
       it("Verify Not to edit Blank Template field", () => {
-        SystemRequirement("FB-1190");
         cy.get("[data-cy=\"fb-blank-template1\"]").parentsUntil(".MuiFormControl-root")
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
 
       it("Verify Not to edit Hyperlink field", () => {
-        SystemRequirement("FB-0740");
         cy.get("[name^=fb-hyperlink-]").parent().parent().parent()
           .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
 
       it("Verify location linked on Hyperlink", () => {
-        SystemRequirement("FB-0780");
         cy.window().then((win) => {
           cy.spy(win, "open").as("redirect");
         });
         cy.get("[name^=fb-hyperlink-]").click();
         cy.get("@redirect").should("be.calledWith", "https://google.com");
+      });
+
+      it("Verify Autocomplete values", () => {
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").parent().invoke("text").should("not.be.empty");
+      });
+
+      it("Verify Not to edit Text Editor field", () => {
+        cy.get("[data-cy=\"fb-text-editor\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
+      });
+
+      it("Verify Not to edit Date picker field", () => {
+        cy.get("[data-cy=\"fb-datepicker\"]").parentsUntil(".MuiFormControl-root")
+          .should("not.have.descendants", "[data-cy=edit-schema-item]");
       });
     });
   });

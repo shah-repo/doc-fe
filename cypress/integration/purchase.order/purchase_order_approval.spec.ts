@@ -392,7 +392,7 @@ context("PO approval test", () => {
 
     it("Create document in 'Pending approval' state", () => {
       SystemRequirement("REQ-1520");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -400,9 +400,7 @@ context("PO approval test", () => {
     it("Click on 'Withdraw Submission' button", () => {
       SystemRequirement("REQ-1530");
       cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.EmployeesGet,
-        CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
       });
     });
@@ -460,7 +458,7 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });

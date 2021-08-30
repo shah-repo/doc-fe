@@ -1,6 +1,6 @@
 import { FBDialogState, FBFormProps, FBInputProps, FBSchemaComponentProps } from "..";
 
-export type FBEditorValidationMode = "disabled" | "visibility";
+export type FBEditorValidationMode = "disabled" | "visibility" | "default";
 
 export type FBEditorValidationProps =
 & Pick<FBFormProps, "initialValues">

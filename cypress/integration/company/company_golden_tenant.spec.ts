@@ -573,7 +573,7 @@ context("Create company with golden tenant", () => {
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -587,7 +587,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'First document'", () => {
-      cy.get("[data-cy^=document-title-]").typeFieldLock("First document");
+      cy.get("[data-cy^=document-title-]").type("First document");
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
@@ -644,7 +644,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -658,7 +658,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").typeFieldLock("Second document");
+      cy.get("[data-cy^=document-title-]").type("Second document");
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
@@ -707,7 +707,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -722,17 +722,17 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-name-]").typeFieldLock(newCompanyName);
+      cy.get("[name^=company-name-]").type(newCompanyName);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-abbreviation-]").typeFieldLock(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-admin-email-]").typeFieldLock(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").type(USERS[1].email);
     });
 
     it("Upload DOM JSON", () => {
@@ -775,8 +775,7 @@ context("Create company with golden tenant", () => {
 
     it("Approve and release document - create company", () => {
       SystemRequirement("REQ-3600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });

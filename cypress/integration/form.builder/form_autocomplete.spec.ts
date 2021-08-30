@@ -1218,7 +1218,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document revisions' in the list", () => {
-      SystemRequirement("FB-0460");
+      SystemRequirement("FB-0050");
       cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 12 });
     });
 
@@ -1236,7 +1236,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 29 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 30 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {

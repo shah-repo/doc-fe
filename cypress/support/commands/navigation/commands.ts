@@ -25,6 +25,7 @@ declare global {
       navigToEquipment(): Chainable<Subject>;
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
+      navigToLHR(): Chainable<Subject>;
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
     }
   }
@@ -94,6 +95,18 @@ Cypress.Commands.add("navigToLots", () => {
   });
 });
 
+Cypress.Commands.add("navigToLHR", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.MANUFACTURING,
+        NavigationItems.LHR,
+      ],
+    });
+  });
+});
+
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
@@ -156,7 +169,6 @@ Cypress.Commands.add("navigToWorkOrders", () => {
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.MANUFACTURING,
-      NavigationItems.WORK_ORDERS,
     ],
   });
 });

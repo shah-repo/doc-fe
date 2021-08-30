@@ -1,8 +1,9 @@
-import { filter, flattenDeep, get, unionBy } from "lodash";
+import { filter, flattenDeep, get, omit, unionBy } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBProcedureItemConfig, FBProcedureItemType, FBProcedureValue } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 class FBProcedureState {
   // MARK: @config
@@ -30,7 +31,10 @@ class FBProcedureState {
   }
 
   // MARK: @actions
-  @action public addItem = (item: FBProcedureItemConfig, type: FBProcedureItemType, allSteps?: any) => {
+  @action public addItem = (addedItem: FBProcedureItemConfig, type: FBProcedureItemType, allSteps?: any) => {
+    let item = omit(addedItem,
+      Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })) as FBProcedureItemConfig;
+
     if (item.LHRTparameter) {
       let nextId = item.id.charCodeAt(0);
       const materials = allSteps?.filter((item) => item.editorConfig?.materials).map(

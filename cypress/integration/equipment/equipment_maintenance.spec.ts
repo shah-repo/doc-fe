@@ -410,7 +410,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).typeFieldLock("10");
+      cy.get("[name*=\"frequency\"]").eq(0).type("10");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -429,7 +429,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).typeFieldLock("5");
+      cy.get("[name*=\"frequency\"]").eq(1).type("5");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -512,7 +512,7 @@ context("Equipment maintenance test", () => {
 
         it("Select 'Equipment maintenance document'", () => {
           SystemRequirement("REQ-2870");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
             cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
           });
         });
@@ -582,7 +582,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
       cy.wait(15000);
@@ -599,7 +599,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
       });
     });
@@ -683,7 +683,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
       cy.wait(15000);

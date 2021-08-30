@@ -214,7 +214,6 @@ context("Document Operators Access Test", () => {
     it("Open new document", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
-        CyRoutes.EmployeesGet,
         CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drCreateNewDocumentFromForm();
       });

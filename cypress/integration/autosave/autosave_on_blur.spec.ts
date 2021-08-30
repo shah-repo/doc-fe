@@ -821,9 +821,10 @@ context("Autosave on blur", () => {
   context("Create document from form and test autosave on blur", () => {
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
+      cy.wait(2000);
     });
 
     it("Enters title 'New document from form'", () => {
@@ -831,7 +832,7 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "New document from form description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
@@ -839,7 +840,8 @@ context("Autosave on blur", () => {
 
     it("Fill TextField and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-textfield-]").typeFieldLock("Test field");
+        cy.get("[name^=fb-textfield-]").type("Test field");
+        cy.unClick();
       });
     });
 
@@ -858,8 +860,6 @@ context("Autosave on blur", () => {
     });
 
     it("Fill text editor field and check for autosave", () => {
-      SystemRequirement("FB-0540");
-      SystemRequirement("FB-0600");
       cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Test description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -1018,7 +1018,9 @@ context("Autosave on blur", () => {
     //   cy.get("[data-cy=\"assigned\"]").type(`${USERS[1].email}{downarrow}{enter}`);
     //   cy.xpath("//input[@name]/ ../div/button").eq(1).click().wait(200);
     //   // eslint-disable-next-line max-len
-    //   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
+    //   cy.xpath(
+    // "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
+    // ).last()
     //     .click().wait(300);
     //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).click({ force: true });
     // });

@@ -163,6 +163,7 @@ context("Record inline history Flow", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(5000);
       });
 
       it("Approve and release document", () => {
@@ -198,7 +199,7 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").typeFieldLock("First entry");
+        cy.get("[data-cy^=\"textfield-for-inline\"]").type("First entry");
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
@@ -206,13 +207,10 @@ context("Record inline history Flow", () => {
       });
 
       it("Select 'One' value on radiobutton", () => {
-        SystemRequirement("FB-0900");
-        SystemRequirement("FB-0960");
         cy.fbSelectRadioButtonValue({ value: "One" });
       });
 
       it("Select 'SelectOne' value on select field", () => {
-        SystemRequirement("FB-0870");
         cy.fbSelectFieldValue({ value: "SelectOne" });
       });
 
@@ -226,6 +224,7 @@ context("Record inline history Flow", () => {
 
       it("Save record", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(5000);
       });
     });
 
@@ -235,9 +234,9 @@ context("Record inline history Flow", () => {
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet,
           CyRoutes.DocPreview,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.GetDocAggregatedAudit,
+          CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -246,7 +245,7 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.get("[data-cy^=\"textfield-for-inline\"]").typeFieldLock(", <b> Second entry </b>");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").type(", <b> Second entry </b>");
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
@@ -266,14 +265,13 @@ context("Record inline history Flow", () => {
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
-          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbUnSelectCheckboxValue( "Red", "Green" );
             cy.unClick();
@@ -281,7 +279,6 @@ context("Record inline history Flow", () => {
         });
 
         it("Check 'Blue' value on checkbox", () => {
-          SystemRequirement("FB-0430");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbSelectCheckboxValue( "Blue" );
             cy.unClick();
@@ -304,6 +301,7 @@ context("Record inline history Flow", () => {
 
         it("Save record", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.wait(4000);
         });
 
         it("Count number of elements in approval history", () => {
@@ -331,13 +329,15 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.wait(2000);
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          // cy.wait(3000);
         });
 
         it("Navigate to released document", () => {

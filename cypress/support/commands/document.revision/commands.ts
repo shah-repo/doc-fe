@@ -212,6 +212,7 @@ Cypress.Commands.add("drClearDocumentTitle", () => {
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
   cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear().type(params.description);
+  cy.wait(1000);
   cy.get("[data-cy=field-description]>label").click().wait(1000);
 });
 
@@ -309,10 +310,10 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.EmployeesGet, CyRoutes.GetRequiredApprovers];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApprovers];
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {

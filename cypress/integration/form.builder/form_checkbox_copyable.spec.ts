@@ -258,7 +258,6 @@ context("Copyable Checkbox test", () => {
       });
 
       it("Add Blank Template Form", () => {
-        SystemRequirement("FB-1200");
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
         cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
         cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
@@ -299,23 +298,6 @@ context("Copyable Checkbox test", () => {
         cy.fbEnterNameValue({ name: "label", value: "t-wo-ch" });
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
-      });
-
-      it("Add Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wi-ch" } );
-      });
-
-      it("Add Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wo-ch" } );
       });
 
       it("Add Approval Matrix with checkboxes", () => {
@@ -406,18 +388,16 @@ context("Copyable Checkbox test", () => {
     it("Select Record Type: 'Engineering Build'", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev,
-        CyRoutes.EmployeesGet,
         CyRoutes.AvailableMaintenanceForms], () => {
         cy.get("#MultipleFormTemplate-selectDocForm").type("Engineering Build{downarrow}{enter}");
       });
     });
 
     it("Add TextFields value", () => {
-      SystemRequirement("FB-0350");
       cy.unClick();
-      cy.get("[name^=\"textfield-wi-ch-\"]").typeFieldLock("textfield-wi-ch-value", { force: true });
+      cy.get("[name^=\"textfield-wi-ch-\"]").type("textfield-wi-ch-value", { force: true });
       cy.unClick();
-      cy.get("[name^=\"textfield-wo-ch-\"]").typeFieldLock("textfield-wo-ch-value", { force: true });
+      cy.get("[name^=\"textfield-wo-ch-\"]").type("textfield-wo-ch-value", { force: true });
       cy.unClick();
     });
 
@@ -427,7 +407,6 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add TextEditors value", () => {
-      SystemRequirement("FB-0610");
       cy.get("[data-cy^=\"te-wi-ch-\"]").find("div[contenteditable]")
         .click({ force: true }).type("te-wi-ch-value");
       cy.get("[data-cy^=\"te-wo-ch-\"]").find("div[contenteditable]")
@@ -435,8 +414,6 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select 'Select fields' value", () => {
-      SystemRequirement("FB-0810");
-      SystemRequirement("FB-0880");
       cy.get("[id^=mui-component-select-sf-wi-ch-]").click();
       cy.get("[data-value=\"option1\"]").click();
       cy.contains("sf-wi-ch").click();
@@ -450,40 +427,29 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add Quantities value", () => {
-      SystemRequirement("FB-1260");
-      cy.get("[name^=\"q-wi-ch-\"]").typeFieldLock("1");
-      cy.get("[name^=\"q-wo-ch-\"]").typeFieldLock("1");
+      cy.get("[name^=\"q-wi-ch-\"]").type("1");
+      cy.get("[name^=\"q-wo-ch-\"]").type("1");
     });
 
     it("Add Timers value", () => {
-      cy.get("[name^=\"t-wi-ch-\"]").typeFieldLock("t-wi-ch-value", { force: true });
+      cy.get("[name^=\"t-wi-ch-\"]").type("t-wi-ch-value", { force: true });
       cy.unClick();
-      cy.get("[name^=\"t-wo-ch-\"]").typeFieldLock("t-wo-ch-value", { force: true });
+      cy.get("[name^=\"t-wo-ch-\"]").type("t-wo-ch-value", { force: true });
     });
 
     it("Add 'TextField with range' value", () => {
-      cy.get("[name^=\"twr-wi-ch-\"]").typeFieldLock("2");
-      cy.get("[name^=\"twr-wo-ch-\"]").typeFieldLock("2");
+      cy.get("[name^=\"twr-wi-ch-\"]").type("2");
+      cy.get("[name^=\"twr-wo-ch-\"]").type("2");
     });
 
     it("Add Date pickers value", () => {
-      SystemRequirement("FB-0700");
-      SystemRequirement("FB-0630");
       cy.get("[name^=\"dp-wi-ch-\"]").parent().find("button").click();
       cy.get(".MuiPickersDay-daySelected").click();
       cy.get("[name^=\"dp-wo-ch-\"]").parent().find("button").click();
       cy.get(".MuiPickersDay-daySelected").click();
     });
 
-    it("Add Purchase Orders value", () => {
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").click();
-      cy.get("[data-value=EUR]").click();
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").click();
-      cy.get("[data-value=EUR]").click();
-    });
-
     it("Select Autocompletes", () => {
-      SystemRequirement("FB-0520");
       cy.get("[data-cy^=\"ac-wi-ch-\"]").click().type("test title{downarrow}{enter}");
       cy.get("[data-cy^=\"ac-wo-ch-\"]").click().type("test title{downarrow}{enter}");
     });
@@ -562,7 +528,6 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Verify location linked on Hyperlink", () => {
-      SystemRequirement("FB-0790");
       cy.window().then((win) => {
         cy.spy(win, "open").as("redirect");
       });
@@ -597,12 +562,7 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Date pickers values", () => {
       cy.get("input[name^=\"dp-wi-ch-\"]").invoke("val").should("not.be.empty");
-      cy.get("input[name^=\"dp-wo-ch-\"]").should("have.value", "");
-    });
-
-    it("Verify Purchase Orders values", () => {
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wi-ch-\"]").should("have.text", "EUR €");
-      cy.get(".MuiOutlinedInput-root div[id^=\"mui-component-select-po-wo-ch-\"]").should("have.text", "USD $");
+      cy.get("input[name^=\"dp-wo-ch-\"]").invoke("val").should("not.be.empty");
     });
 
     it("Verify Autocompletes values", () => {
@@ -631,7 +591,6 @@ context("Copyable Checkbox test", () => {
 
   context("Edit and Verify field values", () => {
     it("Edit Quantity value", () => {
-      SystemRequirement("FB-1330");
       cy.get("[name^=\"q-wi-ch-\"]").clear().type("2");
     });
 
@@ -648,7 +607,6 @@ context("Copyable Checkbox test", () => {
 
   context("Add, Edit and Verify fields", () => {
     it("Add new Quantity field", () => {
-      SystemRequirement("FB-1290");
       cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
       cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "quantity" });
@@ -656,7 +614,6 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Add new Hyperlink field", () => {
-      SystemRequirement("FB-0750");
       cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
       cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
       cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink" });
@@ -664,24 +621,63 @@ context("Copyable Checkbox test", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add new Autocomplete field", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add new Text Editor field", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
+      cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add new Date picker field", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click({ force: true });
+      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Edit Quantity field", () => {
-      SystemRequirement("FB-1290");
       cy.contains("quantity").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
       cy.fbEnterNameValue({ name: "label", value: "quantity1" });
       cy.fbAddNewFieldButton();
     });
 
     it("Edit Blank Template field", () => {
-      SystemRequirement("FB-1200");
       cy.contains("fb-blank-template").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
       cy.fbAddNewFieldButton();
     });
 
     it("Edit Hyperlink field", () => {
-      SystemRequirement("FB-0750");
       cy.contains("fb-hyperlink").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
       cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Autocomplete field", () => {
+      cy.contains("fb-autocomplete").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Text Editor field", () => {
+      cy.contains("fb-text-editor").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor1" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Edit Date picker field", () => {
+      cy.contains("fb-datepicker").parentsUntil("li").find("[data-cy=edit-schema-item]").click({ force: true });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -700,6 +696,18 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Hyperlink field", () => {
       cy.get("[name^=fb-hyperlink-]").should("have.text", "fb-hyperlink1");
+    });
+
+    it("Verify Autocomplete field", () => {
+      cy.get("[data-cy=fb-autocomplete1]").should("have.text", "fb-autocomplete1");
+    });
+
+    it("Verify Text Editor field", () => {
+      cy.get("[data-cy=fb-text-editor1]").should("have.text", "fb-text-editor1");
+    });
+
+    it("Verify Date picker field", () => {
+      cy.get("[data-cy=fb-datepicker1]").should("have.text", "fb-datepicker1");
     });
   });
 });

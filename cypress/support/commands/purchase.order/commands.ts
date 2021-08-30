@@ -92,7 +92,7 @@ Cypress.Commands.add("poAddPOButtonClick", () => {
 });
 
 Cypress.Commands.add("poCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
   cy.checkToastMessage({ exists: false });
@@ -315,7 +315,6 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApprovers], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();

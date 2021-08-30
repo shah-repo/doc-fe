@@ -106,13 +106,6 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     isOpen: false,
     menu: [
       {
-        label: "Work Orders",
-        type: "CATEGORY",
-        icon: "/navigation_icons/todo.svg",
-        category: "Work Order",
-        restrictedToUsersWithTags: [GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES],
-      },
-      {
         label: "Lots",
         type: "CATEGORY",
         icon: "/navigation_icons/tag-check.svg",
