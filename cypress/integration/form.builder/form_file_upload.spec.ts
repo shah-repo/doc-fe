@@ -147,8 +147,6 @@ context("FORM Field Upload test", () => {
       });
 
       it("Upload file1", () => {
-        SystemRequirement("FB-1080");
-        SystemRequirement("FB-1140");
         cy.elUploadAttachment({ fileName: "dummy.pdf", el: "fb-attachment-field-file-1-" });
       });
 

@@ -44,7 +44,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
             {(item: FBPurchaseOrderItem, index) => (
               <TableRow
                 key={`fb-po-item-${item.id}-${index}`}
-                onClick={() => handleItem && handleItem(item)}
+                onClick={() => handleItem?.(item)}
                 data-cy="poItems"
               >
                 <FBTableCell align="right">
@@ -53,7 +53,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                       <DeleteIcon
                         className="FBIcon-root"
                         fontSize="small"
-                        onClick={handleDelete && handleDelete(index)}
+                        onClick={handleDelete?.(index)}
                       />
                     </FBTooltip>
                   )}
