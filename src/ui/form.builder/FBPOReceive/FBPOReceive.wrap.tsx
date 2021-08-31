@@ -80,6 +80,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
           mode: "preview",
           handleItem,
           handleLot,
+          receivableName: name,
         },
       };
     }

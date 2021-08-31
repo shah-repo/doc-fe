@@ -101,6 +101,7 @@ export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 // export {
 //   default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
+export * from "./FBEditorLHRStep/FBEditorLHRStep.types";
 // export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 // export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";

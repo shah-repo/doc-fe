@@ -178,7 +178,7 @@ context("Mpi/Qpi test", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
-          materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Subassembly");
+          materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           done();
         });
       });
@@ -337,6 +337,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
+        SystemRequirement("REQ-3040");
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
       });
 
@@ -401,6 +402,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Select 'Quantity Process Instructions Test' document type", () => {
+        SystemRequirement("REQ-3040");
         cy.drSelectDocumentType({ documentType: "Quantity Process Instructions Test" });
       });
 

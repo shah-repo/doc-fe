@@ -1,7 +1,7 @@
 import { Dictionary, template } from "lodash";
 import { action, computed } from "mobx";
 import { useIntl } from "react-intl";
-import { FBPurchaseOrderItem, FBSchemaProps } from "..";
+import { FBPurchaseOrderItem, FBSchemaProps, ReceiveQuantityBody } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -10,6 +10,7 @@ import { FBEditorElementType } from "../types/editor";
 
 class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
   public receivedItems: FBRequest<any, Dictionary<number>> = new FBRequest();
+  public receiveQuantityAPI = new FBRequest<null, ReceiveQuantityBody>(FBEndpoint.PatchDocumentRevision);
 
   public constructor(id: string) {
     super();
@@ -58,6 +59,16 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     const url = urlTpl({ documentId: id });
     this.setUrl(url);
     await this.fetch();
+  };
+
+  public addReceiveQuantity = (docRevId?: string, body?: ReceiveQuantityBody) => {
+    if (!docRevId) { return; }
+    this.receiveQuantityAPI.set({
+      url: FBEndpoint.PatchDocumentRevision,
+      urlValues: { docRevId },
+      body,
+      method: "patch",
+    });
   };
 }
 

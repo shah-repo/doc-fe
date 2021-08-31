@@ -1,5 +1,4 @@
 // import { Datacenter, datadogRum } from "@datadog/browser-rum";
-import "./config/wdyr";
 import React from "react";
 import ReactDOM from "react-dom";
 import Config from "./config";

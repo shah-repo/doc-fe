@@ -347,6 +347,7 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.wait(1000);
     cy.get("#title").type(params.title);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {

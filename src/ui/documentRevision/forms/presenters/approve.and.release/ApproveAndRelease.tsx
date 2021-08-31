@@ -199,6 +199,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         proposedDocumentRevision: { id: docRevId },
       }],
       effectiveDate: values.effectiveDate,
+      password: values.password,
     },
   });
 
@@ -270,6 +271,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     const effectiveDate = values.effectiveDate !== ""
       ? values.effectiveDate
       : undefined;
+    const password = values.password !== ""
+      ? values.password
+      : undefined;
 
     if (!isQms) {
       async.start(
@@ -281,6 +285,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           documentType: { id: documentType },
           formDocument: { id: formDocument },
         },
+        password,
         async,
       );
       return;
@@ -305,6 +310,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         documentType: { id: documentType },
         formDocument: { id: formDocument },
       },
+      password,
       async,
     );
   };

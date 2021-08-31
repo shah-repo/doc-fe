@@ -450,13 +450,8 @@ context("Receivable list test", () => {
     });
 
     it("Verify record state is present", () => {
-      cy.recVerifyFilterByState({ state: "DRAFT" });
+      cy.recVerifyFilterByState({ state: "WIP" });
     });
-
-    // it.skip("Verify approval date is present", () => {
-    //   cy.recVerifyFilterByState({ state: "DRAFT" });
-    //   fail;
-    // });
   });
 
   context("Edit receivable", () => {
@@ -562,13 +557,13 @@ context("Receivable list test", () => {
         cy.dlClearFilters();
       });
 
-      it("Filter list by state 'DRAFT'", () => {
-        cy.recFilterByState({ state: "Draft" });
+      it("Filter list by state 'WIP'", () => {
+        cy.recFilterByState({ state: "WIP" });
       });
 
       it("Verify filter by state", () => {
         SystemRequirement("REQ-1710");
-        cy.recVerifyFilterByState({ state: "DRAFT" });
+        cy.recVerifyFilterByState({ state: "WIP" });
       });
 
       it("Verify receivable counter on document list", () => {

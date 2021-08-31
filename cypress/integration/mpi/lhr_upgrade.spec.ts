@@ -51,47 +51,6 @@ context("LHR Upgrade", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "LHR Step Test",
-                documentTypeAcronym: "LHRS-",
-                group: "PI_INSTANCE",
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: false,
-                  },
-                  F: {
-                    visible: false,
-                    required: false,
-                  },
-                  N: {
-                    label: "Complete Step",
-                    visible: true,
-                  },
-                  U: {
-                    label: "Operators",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Completed",
-                    visible: true,
-                  },
-                },
-              },
-              {
                 documentTypeName: "Lot History Record Test",
                 documentTypeAcronym: "LHR-",
                 group: "LHR",
@@ -589,7 +548,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").typeFieldLock("10");
+      cy.get("[name=\"lhr_initial_quantity\"]").type("10");
     });
 
     it("Select 'R&D' build type", () => {
@@ -675,15 +634,15 @@ context("LHR Upgrade", () => {
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").typeFieldLock("10");
+        cy.get("[name=\"lhrs-start-quantity\"]").type("10");
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").typeFieldLock("8");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").type("8");
       });
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").typeFieldLock("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").type("2");
       });
 
       it("Add an Approval", () => {

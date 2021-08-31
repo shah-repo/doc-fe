@@ -157,22 +157,6 @@ context("PO approval test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
     });
 
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
@@ -209,22 +193,6 @@ context("PO approval test", () => {
 
     it("Click on 'PO Approval Matrix' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'PO Approval Matrix' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "PO Approval Matrix" });
-    });
-
-    it("Fill label field with 'New POAM'", () => {
-      cy.fbEnterPOLabelName({ name: "New POAM" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -313,10 +281,6 @@ context("PO approval test", () => {
       cy.poClickCreatePO();
     });
 
-    it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
-    });
-
     it("Click on 'Add item' button", () => {
       cy.poAddNewFieldItem();
     });
@@ -353,8 +317,8 @@ context("PO approval test", () => {
       cy.poAddPOButtonClick();
     });
 
-    it("Save document", () => {
-      cy.poSaveDocument();
+    it("Enter description 'POAM test", () => {
+      cy.drEnterDocumentDescriptionWithWait({ description: "POAM testing description" });
     });
 
     it("Check approval icon if it's gray", () => {
@@ -392,7 +356,7 @@ context("PO approval test", () => {
 
     it("Create document in 'Pending approval' state", () => {
       SystemRequirement("REQ-1520");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });
@@ -458,7 +422,7 @@ context("PO approval test", () => {
     });
 
     it("Create document in 'Pending approval' state", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });

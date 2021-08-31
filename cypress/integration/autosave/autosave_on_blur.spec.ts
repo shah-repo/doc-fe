@@ -824,6 +824,7 @@ context("Autosave on blur", () => {
         [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
+      cy.wait(2000);
     });
 
     it("Enters title 'New document from form'", () => {
@@ -831,7 +832,7 @@ context("Autosave on blur", () => {
     });
 
     it("Enters description 'New document from form description'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "New document from form description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
@@ -839,7 +840,8 @@ context("Autosave on blur", () => {
 
     it("Fill TextField and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-textfield-]").typeFieldLock("Test field");
+        cy.get("[name^=fb-textfield-]").type("Test field");
+        cy.unClick();
       });
     });
 
@@ -858,8 +860,6 @@ context("Autosave on blur", () => {
     });
 
     it("Fill text editor field and check for autosave", () => {
-      SystemRequirement("FB-0540");
-      SystemRequirement("FB-0600");
       cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).type("Test description", { force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -919,7 +919,7 @@ context("Autosave on blur", () => {
     it("Add PO service item and check for autosave", () => {
       cy.get("[data-cy='form.builder.add.item']").eq(3).click();
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.poSelectOption({ optionName: "service" });
           cy.poEnterServiceID({ serviceId: "SRV123" });
           cy.poAddPOButtonClick();

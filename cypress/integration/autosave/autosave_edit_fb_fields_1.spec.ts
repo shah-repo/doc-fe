@@ -144,7 +144,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Add Date picker", () => {
-      SystemRequirement("FB-0640");
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
@@ -174,7 +173,7 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Add Radio Button group", () => {
-      SystemRequirement("FB-0910");
+
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
@@ -185,7 +184,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Add Paragraph", () => {
-      SystemRequirement("FB-1000");
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
@@ -196,7 +194,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Add File Upload", () => {
-      SystemRequirement("FB-1090");
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
@@ -285,7 +282,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit TextField", () => {
-      SystemRequirement("FB-0290");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
@@ -318,7 +314,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit Date picker", () => {
-      SystemRequirement("FB-0640");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
@@ -327,7 +322,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit Hyperlink", () => {
-      SystemRequirement("FB-0730");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
       cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
@@ -344,7 +338,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit Radio Button group", () => {
-      SystemRequirement("FB-0910");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
@@ -353,7 +346,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit Paragraph", () => {
-      SystemRequirement("FB-1000");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().type("fb-paragraph1");
@@ -363,7 +355,6 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Edit File Upload", () => {
-      SystemRequirement("FB-1090");
       cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload1" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {

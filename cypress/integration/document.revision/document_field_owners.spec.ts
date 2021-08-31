@@ -401,7 +401,7 @@ context("Document Field Owners Test", () => {
     it("Submit for Approval and verify owner is required too", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-        cy.checkToastMessageIsEqual({ message: "All colaborators to the document must be on approvers list" });
+        cy.checkToastMessageIsEqual({ message: "All collaborators to the document must be on approvers list" });
       });
     });
 
@@ -421,7 +421,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetFieldLocks ], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
       });
     });

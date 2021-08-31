@@ -560,7 +560,6 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
-      SystemRequirement("REQ-1360", "FB-0030");
       cy.get("[data-cy=\"fb-control-btn\"]").last().click();
     });
 
@@ -628,7 +627,7 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckAmount({ number: "$1.95" });
+      cy.poCheckTax({ number: "1.95" });
     });
 
     it("Check Total value", () => {
@@ -637,7 +636,6 @@ context("PO test", () => {
     });
 
     context("Add Supplier to PO", () => {
-      SystemRequirement("FB-0030");
       it("Click 'Create A New Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[data-cy=\"form.builder.create.new.supplier\"]").click();
@@ -720,7 +718,8 @@ context("PO test", () => {
           .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
         cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+          CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -786,7 +785,7 @@ context("PO test", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.GetFieldLocks], () => {
+        CyRoutes.EmployeesGet], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });
@@ -819,7 +818,6 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      SystemRequirement("REQ-1360", "FB-0030");
       cy.poAddNewFieldItem();
     });
 
@@ -954,7 +952,8 @@ context("PO test", () => {
     it("Click 'Approve' button", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
+        CyRoutes.EmployeesGet], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });
@@ -1012,7 +1011,7 @@ context("PO test", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
       cy.get("input[name=\"password\"]").type("Tester1!");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.GetFieldLocks], () => {
+        CyRoutes.EmployeesGet], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
     });

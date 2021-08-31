@@ -410,7 +410,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).typeFieldLock("10");
+      cy.get("[name*=\"frequency\"]").eq(0).type("10");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -429,7 +429,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).typeFieldLock("5");
+      cy.get("[name*=\"frequency\"]").eq(1).type("5");
     });
 
     it("Type preventative maintenance instruction", () => {
