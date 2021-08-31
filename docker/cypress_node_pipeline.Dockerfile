@@ -6,7 +6,7 @@
 #   docker build -t cypress/base:14.7.0 .
 #
 FROM node:14.10.0
-ENV CHROME_VERSION 90.0.4430.93
+ENV CHROME_VERSION 92.0.4515.159
 
 RUN apt-get update && \
   apt-get install --no-install-recommends -y \
@@ -163,7 +163,7 @@ RUN chmod 755 /root
 WORKDIR /opt/app
 
 ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
-RUN npm install -g "cypress@7.3.0"
+RUN npm install -g "cypress@8.3.1"
 RUN cypress verify
 RUN sed -i -e "s|api_url:.*$|api_url: \"http://localhost:1234\"|g" /opt/app/cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml
 
