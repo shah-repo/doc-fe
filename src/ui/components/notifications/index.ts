@@ -1,4 +1,4 @@
-import { Slide, toast as taostify, ToastOptions } from "react-toastify";
+import { Slide, toast as toastify, ToastOptions } from "react-toastify";
 
 enum ToastType {
   Error = "error",
@@ -19,7 +19,7 @@ const TOAST_OPTIONS: ToastOptions = {
 };
 
 const toast = (type: ToastType, message: string, options: ToastOptions = {}) =>
-  taostify[type](
+  toastify[type](
     message,
     {
       ...TOAST_OPTIONS,
@@ -35,3 +35,9 @@ export const toastInfo = (message: string, options: ToastOptions = {}) =>
 
 export const toastSuccess = (message: string, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
+
+export const toastInfoLink = (link: any, options: ToastOptions = {}) =>
+  toastify.info(link, {
+    ...TOAST_OPTIONS,
+    ...options,
+  });

@@ -1,0 +1,86 @@
+import { Box, Paper, Typography } from "@material-ui/core";
+import { Form } from "formik";
+import * as React from "react";
+import { AsyncState } from "../../../state/types";
+import InputField from "../../components/forms/fields/Input";
+import { required, validator } from "../../components/forms/fields/validators";
+import FormMessage from "../../components/forms/FormMessage";
+import SubmitButton from "../../components/forms/SubmitButton";
+import Text from "../../components/Text";
+import { styles } from "./ResetPassword.styles";
+
+interface Props {
+  asyncState: AsyncState;
+  logo: string;
+}
+
+const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
+  asyncState,
+  logo,
+}) => {
+  const classes = styles();
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <img
+          src={logo}
+          alt="Logo"
+          className={classes.logo}
+        />
+        <Box display="flex" textAlign="center" mb={3} data-cy="ResetPassword-title">
+          <Typography variant="h4" className={classes.title}>
+            <Text translation={"reset.password"} />
+          </Typography>
+        </Box>
+        <Box display="flex" textAlign="center" data-cy="ResetPassword-subtitle">
+          <Typography variant="h5"className={classes.subtitle} >
+            <Text translation={"reset.choose.new.password"} />
+          </Typography>
+        </Box>
+        <Box display="flex" alignSelf="flex-start" data-cy="ResetPassword-passwordInfo">
+          <Typography variant="h5"className={classes.passwordInfo}>
+            <Text translation={"reset.password.info"} />
+          </Typography>
+        </Box>
+        <Form className={classes.formStyle}>
+          <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
+          <InputField
+            name="password"
+            label="reset.enter.new.password"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "reset-password",
+              id: "ResetPassword-password",
+              type: "password",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+          />
+          <InputField
+            name="confirmPass"
+            label="reset.confirm.new.password"
+            size="sm"
+            gutter={false}
+            inputProps={{
+              autoComplete: "reset-password",
+              id: "ResetPassword-confirmPassword",
+              type: "password",
+            }}
+            validate={validator(required)}
+            lpignore={false}
+
+          />
+          <SubmitButton
+            asyncState={asyncState}
+            label={"reset.password"}
+            className={classes.submit}
+            id="ResetPassword-resetPassword"
+          />
+        </Form>
+      </Paper>
+    </div>
+  );
+};
+
+export default ResetPasswordPresenter;
