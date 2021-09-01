@@ -1479,7 +1479,13 @@ context("LHR flow", () => {
         it("Add LHR step", () => {
           SystemRequirement("REQ-3150");
           cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).click({ force: true });
-          cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
+          });
+          cy.get("[data-cy=\"editorConfig.filters.documentType\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Manufacturing Process Instructions Test").click();
+          cy.get("[data-cy=\"editorConfig.filters.revisionStatus\"]").click();
+          cy.get("ul[role=listbox]>li").contains("Released").click();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
             cy.fbAddNewFieldButton();
           });
