@@ -5,8 +5,8 @@ import { FBApprovalsProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBBut
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
+import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import { withFBApprovals } from "./FBApprovals.wrap";
-import { isDocumentRevisionApprovedOrRejected } from "../../documentRevision/helpers/documentRevisionStatus";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
   onApproveClick,
@@ -76,7 +76,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
       </Box>}
       <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
         {(approval: FBInlineApprovalBody, index) => {
-          const isApprovedOrRejected = isDocumentRevisionApprovedOrRejected(approval.status);
+          const isApproved = isDocumentRevisionApproved(approval.status);
           return (
             <Box>
               <Box
@@ -87,7 +87,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 alignItems="center"
               >
                 {<Box fontWeight="bold">{
-                  isApprovedOrRejected ? approval.approverName :  approval.approver?.user.name
+                  isApproved ? approval.approverName :  approval.approver?.user.name
                 }</Box>}
                 {approval.status && approval.approverGroup && (
                   <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
@@ -95,7 +95,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 {approval.status && (
                   <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
                 )}
-                {approval.reviewedAt && isApprovedOrRejected && (
+                {approval.reviewedAt && isApproved && (
                   <Box>&nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}</Box>
                 )}
                 {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
@@ -133,7 +133,7 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
                 )}
               </Box>
               <Box mt={1} mb={4}>
-                { isApprovedOrRejected ? approval.approverEmail : approval.approver?.user.email }
+                { isApproved ? approval.approverEmail : approval.approver?.user.email }
               </Box>
             </Box>
           ); }

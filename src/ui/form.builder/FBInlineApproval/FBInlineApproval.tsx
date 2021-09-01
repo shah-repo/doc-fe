@@ -3,9 +3,9 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
 import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
-import { isDocumentRevisionApprovedOrRejected } from "../../documentRevision/helpers/documentRevisionStatus";
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
@@ -69,7 +69,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       <Box mt={approvals.length ? 1 : 0}>
         <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
           {(approval: FBInlineApprovalBody, index) => {
-            const isApprovedOrRejected = isDocumentRevisionApprovedOrRejected(approval.status);
+            const isApproved = isDocumentRevisionApproved(approval.status);
             return (
               <Box mb={4}>
                 <Box
@@ -80,7 +80,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   alignItems="center"
                 >
                   {<Box fontWeight="bold">{
-                    isApprovedOrRejected ? approval.approverName :  approval.approver?.user.name
+                    isApproved ? approval.approverName :  approval.approver?.user.name
                   }</Box>}
                   {approval.status && approval.approverGroup && (
                     <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
@@ -102,7 +102,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
                   )}
                 </Box>
                 <Box mt={1}>
-                  { isApprovedOrRejected ? approval.approverEmail : approval.approver?.user.email }
+                  { isApproved ? approval.approverEmail : approval.approver?.user.email }
                 </Box>
                 {shouldShowRequestAllApprovals &&
                   <Box flexGrow={1} textAlign="right">
