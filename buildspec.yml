@@ -28,15 +28,16 @@ phases:
       # name: version
       # name: version
     commands:
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - ls
+      # - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   pre_build:
     commands:
-      - docker-compose up -d #--force-recreate because local test run
+      # - docker-compose up -d #--force-recreate because local test run
   build:
     commands:
-      - docker ps
-      - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ls
-      - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ./scripts/cypress/utils/start_tests.sh
+      # - docker ps
+      # - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ls
+      # - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ./scripts/cypress/utils/start_tests.sh
       # - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
       # - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
       # - yarn install --frozen-lockfile
@@ -49,8 +50,8 @@ phases:
   post_build:
     commands:
       # - ls
-      - docker logs doc-fe_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
-      - docker logs doc-fe_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
+      # - docker logs doc-fe_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
+      # - docker logs doc-fe_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
       # - command
 reports:
   report-name-or-arn:
