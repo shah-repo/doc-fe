@@ -1,7 +1,7 @@
 import { omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -22,6 +22,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     handleTaxRateBlur,
     handleTaxChange,
     handleTaxBlur,
+    handleTaxFieldChange,
+    handleTaxFieldBlur,
     handleCurrencyChange,
     handleDelete,
     classes,
@@ -34,6 +36,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   }: T) => {
 
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
@@ -51,31 +54,56 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState.value = purchaseOrderState?.calculateCost();
     };
 
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-      const { target: { value = 0 } = {} } = ev || {};
-      const abs = Math.abs(value).toFixed(2).toString();
-      purchaseOrderState?.setTaxRate(abs);
-      ev.target.value = value;
+    // handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
+    //   const { target: { value = 0 } = {} } = ev || {};
+    //   const abs = Math.abs(value).toFixed(2).toString();
+    //   purchaseOrderState?.setTaxRate(abs);
+    //   ev.target.value = value;
+    // };
+    // handleTaxRateBlur = (ev: React.ChangeEvent<any>) => {
+    //   if (!purchaseOrderState) { return; }
+    //   purchaseOrderState.value = purchaseOrderState?.calculateCost();
+    // };
+
+    // handleTaxChange = (ev: React.ChangeEvent<any>) => {
+    //   const { target: { value = 0 } = {} } = ev || {};
+    //   const abs = Math.abs(value).toFixed(2).toString();
+    //   purchaseOrderState?.setTax(abs);
+    //   ev.target.value = value;
+    // };
+    // handleTaxBlur = () => {
+    //   if (!purchaseOrderState) { return; }
+    //   const tax = String(Number(purchaseOrderState?.value.tax || 0).toFixed(2));
+    //   purchaseOrderState?.setTaxRateByTax(tax);
+    // };
+
+    // TODO: update handleTaxFieldChange to "handleTaxChange"
+    handleTaxFieldChange = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = "" } = {} } = ev || {};
+      const taxInputPattern = /([0-9\.]+)/g;
+      let fieldValue: string = value?.match(taxInputPattern)?.join("").replace(
+        (/(.*)\./), (item) => item.replace(/\./g, "") + "."
+      ) || "0";
+      if (value.endsWith("%")) {
+        purchaseOrderState?.setTaxRate(fieldValue);
+        fieldValue = fieldValue + "%";
+      } else {
+        purchaseOrderState?.setTax(fieldValue);
+      }
+      setTaxField(fieldValue);
     };
-    handleTaxRateBlur = (ev: React.ChangeEvent<any>) => {
+    // TODO: update handleTaxFieldBlur to "handleTaxBlur"
+    handleTaxFieldBlur = () => {
       if (!purchaseOrderState) { return; }
-      purchaseOrderState.value = purchaseOrderState?.calculateCost();
+      if (taxField.endsWith("%")) {
+        purchaseOrderState.value = purchaseOrderState?.calculateCost();
+      } else {
+        purchaseOrderState?.setTaxRateByTax(taxField);
+      }
+      setTaxField(purchaseOrderState.value.tax);
     };
 
-    handleTaxChange = (ev: React.ChangeEvent<any>) => {
-      const { target: { value = 0 } = {} } = ev || {};
-      const abs = Math.abs(value).toFixed(2).toString();
-      purchaseOrderState?.setTax(abs);
-      ev.target.value = value;
-    };
-    handleTaxBlur = () => {
-      if (!purchaseOrderState) { return; }
-      const tax = String(Number(purchaseOrderState?.value.tax || 0).toFixed(2));
-      purchaseOrderState?.setTaxRateByTax(tax);
-    };
-
-    handleCurrencyChange = (ev, currency) =>
-      purchaseOrderState?.setCurrency(currency.props.value);
+    handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
@@ -109,7 +137,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     if (isReceivable) {
       const receivedName = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
@@ -131,10 +158,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleTaxRateBlur,
       handleTaxChange,
       handleTaxBlur,
+      handleTaxFieldChange,
+      handleTaxFieldBlur,
       handleCurrencyChange,
       handleDelete,
       classes,
       calculation,
+      taxField,
       loading,
       disabled,
       items,

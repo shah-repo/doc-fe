@@ -92,6 +92,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!taxRate) { return; }
     this.value.taxRate = Number(this.formatCost(taxRate));
   };
+
   @action public setTax = (tax?: string) => {
     if (!tax) { return; }
     this.value.tax = this.formatCost(tax);

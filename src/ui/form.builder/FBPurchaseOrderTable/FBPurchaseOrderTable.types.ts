@@ -10,11 +10,14 @@ export type FBPurchaseOrderTableProps =
   handleTaxRateBlur?: (ev: React.ChangeEvent<any>) => void;
   handleTaxChange?: (ev: React.ChangeEvent<any>) => void;
   handleTaxBlur?: (ev: React.ChangeEvent<any>) => void;
+  handleTaxFieldChange?: (ev: React.ChangeEvent<any>) => void;
+  handleTaxFieldBlur?: (ev: React.ChangeEvent<any>) => void;
   handleCurrencyChange?: (ev, value) => void;
   handleDelete?: (index: number) => (e: any) => void;
   classes?: Record<"root" | "table", string>;
   items?: FBPurchaseOrderItem[];
   calculation?: FBPurchaseOrderCalculation;
+  taxField?: string;
   loading?: boolean;
 };
 
@@ -39,8 +42,11 @@ export type FBPurchaseOrderTableTotalProps = Pick<FBPurchaseOrderTableProps,
 | "handleTaxRateBlur"
 | "handleTaxChange"
 | "handleTaxBlur"
+| "handleTaxFieldChange"
+| "handleTaxFieldBlur"
 | "handleCurrencyChange"
 | "calculation"
+| "taxField"
 | "disabled"
 | "name"
 >;

@@ -6,6 +6,8 @@ import { FormContext } from "../../components/forms/FormContext";
 import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
 import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 
+// TODO: update label of FBTableCell ("form.builder.tax.field") to ("form.builder.tax")
+
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
   handleShippingCostBlur,
@@ -15,6 +17,9 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
   handleTaxBlur,
   handleCurrencyChange,
   calculation,
+  handleTaxFieldChange,
+  handleTaxFieldBlur,
+  taxField,
   disabled,
   name,
 }) => (
@@ -82,6 +87,24 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             min: "0",
             onChange: handleTaxChange,
             onBlur: handleTaxBlur,
+          }}
+          rules="min:0"
+          {...{ disabled }}
+        />
+      </FBTableCell>
+    </TableRow>
+    <TableRow>
+      <FBTableCell label="form.builder.tax.field" className="FBTotal-root" colSpan={3} />
+      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
+        <FBTextField
+          name={`${name}.tax.field`}
+          gutter={false}
+          size="small"
+          value={taxField || calculation?.tax || "0.00"}
+          inputProps={{
+            style: { textAlign: "right", padding: "5px 20px 5px 5px" },
+            onChange: handleTaxFieldChange,
+            onBlur: handleTaxFieldBlur,
           }}
           rules="min:0"
           {...{ disabled }}
