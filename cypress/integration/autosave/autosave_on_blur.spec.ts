@@ -919,7 +919,7 @@ context("Autosave on blur", () => {
     it("Add PO service item and check for autosave", () => {
       cy.get("[data-cy='form.builder.add.item']").eq(3).click();
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.poSelectOption({ optionName: "service" });
           cy.poEnterServiceID({ serviceId: "SRV123" });
           cy.poAddPOButtonClick();

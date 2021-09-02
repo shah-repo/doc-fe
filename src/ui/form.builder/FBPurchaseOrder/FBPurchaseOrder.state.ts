@@ -113,12 +113,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
     try {
       const data = await this.exchangeRate.fetch();
-      set(this, "value", {
-        ...this.calculateCost(),
-        currency,
-        exchangeRate: parseFloat(data.rate.toFixed(2)),
-        dateOfExchangeRate: moment().format("LL"),
-      });
+      this.value.currency = currency;
+      this.value.exchangeRate = parseFloat(data.rate.toFixed(2));
+      this.value.dateOfExchangeRate = moment().format("LL");
+      set(this, "value", { ...this.calculateCost() });
     } catch (e) {
       setToUsd();
     }
@@ -128,10 +126,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!item) {
       return;
     }
-    const items: FBPurchaseOrderItem[] = isUndefined(item.index)
+    isUndefined(item.index)
       ? this.addItem(item)
       : this.updateItem(item);
-    set(this, "value", { ...this.calculateCost(), items });
+    set(this, "value", { ...this.calculateCost() });
     this.setItemTotalAmount();
   };
 
@@ -143,7 +141,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   public calculateCost = (taxField?: string): FBPurchaseOrderValue => {
-    taxField = taxField || this.value.tax || TAX_RATE;
+    taxField = taxField || TAX_RATE;
 
     const isTaxPercent = !!taxField?.endsWith("%");
     const taxFieldValue: number = parseFloat(taxField);
@@ -174,14 +172,14 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   };
 
   @action public deleteItem = (index: number) => {
-    const items = this.value.items
+    this.value.items = this.value.items
       .filter((itm, indx) =>
         indx !== index
       ).map((itm, indx) => ({
         ...itm,
         index: indx,
       }));
-    set(this, "value", { ...this.calculateCost(), items });
+    set(this, "value", { ...this.calculateCost() });
   };
 
   public onSuccess() {
@@ -214,22 +212,23 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 
-  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => union(this.value.items, [{
-    ...item,
-    id: FB.uniqid,
-    received: 0,
-    totalAmount: this.itemTotalAmount.toFixed(2),
-    formattedDate: this.formatDate(item.date),
-    index: size(this.value.items),
-  }]);
+  private addItem = (item: FBPurchaseOrderItem) => {
+    this.value.items = union(this.value.items, [{
+      ...item,
+      id: FB.uniqid,
+      received: 0,
+      totalAmount: this.itemTotalAmount.toFixed(2),
+      formattedDate: this.formatDate(item.date),
+      index: size(this.value.items),
+    }]);
+  };
 
-  private updateItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => {
+  private updateItem = (item: FBPurchaseOrderItem) => {
     this.value.items[item.index] = {
       ...item,
       totalAmount: this.itemTotalAmount.toFixed(2),
       formattedDate: this.formatDate(item.date),
     };
-    return this.value.items;
   };
 }
 

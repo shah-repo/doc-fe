@@ -279,13 +279,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       async.start(
         releaseNonQmsAction,
         id,
-        password,
         {
           approversWithSignatures,
           effectiveDate,
           documentType: { id: documentType },
           formDocument: { id: formDocument },
         },
+        password,
         async,
       );
       return;
