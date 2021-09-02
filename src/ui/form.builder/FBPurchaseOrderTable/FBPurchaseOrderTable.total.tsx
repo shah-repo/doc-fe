@@ -100,7 +100,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           name={`${name}.tax.field`}
           gutter={false}
           size="small"
-          value={taxField || calculation?.tax || "0.00"}
+          value={taxField}
           inputProps={{
             style: { textAlign: "right", padding: "5px 20px 5px 5px" },
             onChange: handleTaxFieldChange,

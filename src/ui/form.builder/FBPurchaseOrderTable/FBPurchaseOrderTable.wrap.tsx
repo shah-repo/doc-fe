@@ -1,16 +1,13 @@
 import { omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-
-// TODO: remove after test
-/* eslint-disable no-console */
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -36,7 +33,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   }: T) => {
 
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
-    const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
@@ -54,6 +50,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState.value = purchaseOrderState?.calculateCost();
     };
 
+    /* TODO: remove method below */
     // handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
     //   const { target: { value = 0 } = {} } = ev || {};
     //   const abs = Math.abs(value).toFixed(2).toString();
@@ -65,6 +62,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     //   purchaseOrderState.value = purchaseOrderState?.calculateCost();
     // };
 
+    /* TODO: remove method below */
     // handleTaxChange = (ev: React.ChangeEvent<any>) => {
     //   const { target: { value = 0 } = {} } = ev || {};
     //   const abs = Math.abs(value).toFixed(2).toString();
@@ -90,17 +88,17 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       } else {
         purchaseOrderState?.setTax(fieldValue);
       }
-      setTaxField(fieldValue);
+      purchaseOrderState?.setTaxField(fieldValue);
     };
     // TODO: update handleTaxFieldBlur to "handleTaxBlur"
     handleTaxFieldBlur = () => {
       if (!purchaseOrderState) { return; }
-      if (taxField.endsWith("%")) {
+      if (purchaseOrderState.taxField.endsWith("%")) {
         purchaseOrderState.value = purchaseOrderState?.calculateCost();
       } else {
-        purchaseOrderState?.setTaxRateByTax(taxField);
+        purchaseOrderState?.setTaxRateByTax(purchaseOrderState.taxField);
       }
-      setTaxField(purchaseOrderState.value.tax);
+      purchaseOrderState?.setTaxField(purchaseOrderState.value.tax);
     };
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
@@ -134,6 +132,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     useEffect(() => {
       if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
+      purchaseOrderState?.setTaxField(purchaseOrderState?.value.tax);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -164,7 +163,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       handleDelete,
       classes,
       calculation,
-      taxField,
+      taxField: purchaseOrderState?.taxField,
       loading,
       disabled,
       items,

@@ -8,9 +8,6 @@ import FBRequest from "../FBApi/FBApi.request";
 import { FBCurrency, FBPurchaseOrderValue } from "./FBPurchaseOrder.types";
 import { TAX_RATE } from "../helpers/constants";
 
-// TODO: remove rule below after testing
-/* eslint-disable no-console */
-
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
@@ -26,6 +23,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     dateOfExchangeRate: "",
     items: [],
   };
+  @observable public taxField = this.value.tax;
 
   public partApi = new FBRequest<DocumentRevision, null>();
 
@@ -98,6 +96,12 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.value.tax = this.formatCost(tax);
   };
 
+  @action public setTaxField = (taxField?: string) => {
+    if (!taxField) { return; }
+    taxField = taxField || this.taxField;
+    this.taxField = taxField;
+  };
+
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87
     // on change is triggered twice
@@ -139,8 +143,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     isUndefined(item.index)
       ? this.addItem(item)
       : this.updateItem(item);
-    set(this, "value", { ...this.calculateCost() });
+    const value = this.calculateCost();
+    set(this, "value", { ...value });
     this.setItemTotalAmount();
+    this.setTaxField(value.tax);
   };
 
   @action public removeItem = (item?: FBPurchaseOrderItem) => {
@@ -161,14 +167,14 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   public setTaxRateByTax = (tax: string) => {
     const sum = this.calculateItemSum();
-    const taxRate = parseFloat(tax) / sum.forTax * 100;
+    const taxRate = sum.forTax ? (parseFloat(tax) / sum.forTax * 100) : 0;
     set(this, "value", { ...this.calculateCost(taxRate), taxRate });
   };
 
   public calculateCost = (taxRate?: number): FBPurchaseOrderValue => {
     taxRate = taxRate || this.value.taxRate;
     const sum = this.calculateItemSum();
-    const tax = sum.forTax * (taxRate / 100);
+    const tax = sum.forTax ? (sum.forTax * taxRate / 100) : 0;
 
     const shippingCost = this.value.shippingCost || 0;
     const totalAmount = tax + sum.subTotal + Number(shippingCost);
@@ -188,13 +194,11 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   @action public deleteItem = (index: number) => {
     this.value.items = this.value.items
-      .filter((itm, indx) =>
-        indx !== index
-      ).map((itm, indx) => ({
-        ...itm,
-        index: indx,
-      }));
-    set(this, "value", { ...this.calculateCost() });
+      .filter((itm, indx) => indx !== index)
+      .map((itm, indx) => ({ ...itm, index: indx }));
+    const value = this.calculateCost();
+    set(this, "value", { ...value });
+    this.setTaxField(value.tax);
   };
 
   public onSuccess() {
