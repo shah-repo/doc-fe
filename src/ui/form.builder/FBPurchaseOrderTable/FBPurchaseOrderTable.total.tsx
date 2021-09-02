@@ -11,21 +11,17 @@ import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
   handleShippingCostBlur,
-  handleTaxRateChange,
-  handleTaxRateBlur,
-  handleTaxChange,
-  handleTaxBlur,
   handleCurrencyChange,
   calculation,
-  handleTaxFieldChange,
-  handleTaxFieldBlur,
+  handleTaxChange,
+  handleTaxBlur,
   taxField,
   disabled,
   name,
 }) => (
   <React.Fragment>
     <TableRow>
-      <FBTableCell rowSpan={7} colSpan={6} />
+      <FBTableCell rowSpan={6} colSpan={6} />
       <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormContext.Provider value={{ submitOnChange: false }}>
@@ -52,59 +48,17 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.tax.rate" className="FBTotal-root" colSpan={3} />
-      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FBTextField
-          name={`${name}.taxRate`}
-          type="number"
-          gutter={false}
-          size="small"
-          value={calculation?.taxRate}
-          inputProps={{
-            style: { textAlign: "right", padding: "5px" },
-            step: ".01",
-            min: "0",
-            onChange: handleTaxRateChange,
-            onBlur: handleTaxRateBlur,
-          }}
-          rules="min:0"
-          {...{ disabled }}
-        />
-      </FBTableCell>
-    </TableRow>
-    <TableRow>
       <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FBTextField
           name={`${name}.tax`}
           gutter={false}
-          type="number"
-          size="small"
-          value={calculation?.tax}
-          inputProps={{
-            style: { textAlign: "right", padding: "5px" },
-            step: ".01",
-            min: "0",
-            onChange: handleTaxChange,
-            onBlur: handleTaxBlur,
-          }}
-          rules="min:0"
-          {...{ disabled }}
-        />
-      </FBTableCell>
-    </TableRow>
-    <TableRow>
-      <FBTableCell label="form.builder.tax.field" className="FBTotal-root" colSpan={3} />
-      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FBTextField
-          name={`${name}.tax.field`}
-          gutter={false}
           size="small"
           value={taxField}
           inputProps={{
             style: { textAlign: "right", padding: "5px 20px 5px 5px" },
-            onChange: handleTaxFieldChange,
-            onBlur: handleTaxFieldBlur,
+            onChange: handleTaxChange,
+            onBlur: handleTaxBlur,
           }}
           rules="min:0"
           {...{ disabled }}

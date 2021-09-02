@@ -23,7 +23,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     dateOfExchangeRate: "",
     items: [],
   };
-  @observable public taxField = this.value.tax;
+  @observable public taxField = "0.00";
 
   public partApi = new FBRequest<DocumentRevision, null>();
 
@@ -98,8 +98,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   @action public setTaxField = (taxField?: string) => {
     if (!taxField) { return; }
-    taxField = taxField || this.taxField;
-    this.taxField = taxField;
+    set(this, "taxField", taxField);
   };
 
   @action public setCurrency = async (currency: FBCurrency) => {
@@ -165,9 +164,9 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }, { subTotal: 0, forTax: 0 },
   );
 
-  public setTaxRateByTax = (tax: string) => {
+  public setTaxRateByTax = () => {
     const sum = this.calculateItemSum();
-    const taxRate = sum.forTax ? (parseFloat(tax) / sum.forTax * 100) : 0;
+    const taxRate = sum.forTax ? (parseFloat(this.value.tax) / sum.forTax * 100) : 0;
     set(this, "value", { ...this.calculateCost(taxRate), taxRate });
   };
 

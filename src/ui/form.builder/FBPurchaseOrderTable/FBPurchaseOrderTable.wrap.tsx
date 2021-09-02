@@ -15,12 +15,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   const Comp = ({
     handleShippingCostChange,
     handleShippingCostBlur,
-    handleTaxRateChange,
-    handleTaxRateBlur,
     handleTaxChange,
     handleTaxBlur,
-    handleTaxFieldChange,
-    handleTaxFieldBlur,
     handleCurrencyChange,
     handleDelete,
     classes,
@@ -50,33 +46,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       purchaseOrderState.value = purchaseOrderState?.calculateCost();
     };
 
-    /* TODO: remove method below */
-    // handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-    //   const { target: { value = 0 } = {} } = ev || {};
-    //   const abs = Math.abs(value).toFixed(2).toString();
-    //   purchaseOrderState?.setTaxRate(abs);
-    //   ev.target.value = value;
-    // };
-    // handleTaxRateBlur = (ev: React.ChangeEvent<any>) => {
-    //   if (!purchaseOrderState) { return; }
-    //   purchaseOrderState.value = purchaseOrderState?.calculateCost();
-    // };
-
-    /* TODO: remove method below */
-    // handleTaxChange = (ev: React.ChangeEvent<any>) => {
-    //   const { target: { value = 0 } = {} } = ev || {};
-    //   const abs = Math.abs(value).toFixed(2).toString();
-    //   purchaseOrderState?.setTax(abs);
-    //   ev.target.value = value;
-    // };
-    // handleTaxBlur = () => {
-    //   if (!purchaseOrderState) { return; }
-    //   const tax = String(Number(purchaseOrderState?.value.tax || 0).toFixed(2));
-    //   purchaseOrderState?.setTaxRateByTax(tax);
-    // };
-
-    // TODO: update handleTaxFieldChange to "handleTaxChange"
-    handleTaxFieldChange = (ev: React.ChangeEvent<any>) => {
+    handleTaxChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = "" } = {} } = ev || {};
       const taxInputPattern = /([0-9\.]+)/g;
       let fieldValue: string = value?.match(taxInputPattern)?.join("").replace(
@@ -90,13 +60,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       purchaseOrderState?.setTaxField(fieldValue);
     };
-    // TODO: update handleTaxFieldBlur to "handleTaxBlur"
-    handleTaxFieldBlur = () => {
+
+    handleTaxBlur = () => {
       if (!purchaseOrderState) { return; }
       if (purchaseOrderState.taxField.endsWith("%")) {
         purchaseOrderState.value = purchaseOrderState?.calculateCost();
       } else {
-        purchaseOrderState?.setTaxRateByTax(purchaseOrderState.taxField);
+        purchaseOrderState?.setTaxRateByTax();
       }
       purchaseOrderState?.setTaxField(purchaseOrderState.value.tax);
     };
@@ -153,12 +123,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       ...(props as T),
       handleShippingCostChange,
       handleShippingCostBlur,
-      handleTaxRateChange,
-      handleTaxRateBlur,
       handleTaxChange,
       handleTaxBlur,
-      handleTaxFieldChange,
-      handleTaxFieldBlur,
       handleCurrencyChange,
       handleDelete,
       classes,
