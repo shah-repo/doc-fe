@@ -6,8 +6,6 @@ import { FormContext } from "../../components/forms/FormContext";
 import FBPurchaseOrderExchange from "./FBPurchaseOrder.exchange";
 import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 
-// TODO: update label of FBTableCell ("form.builder.tax.field") to ("form.builder.tax")
-
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
   handleShippingCostBlur,
