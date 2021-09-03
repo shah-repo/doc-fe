@@ -66,6 +66,9 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     }, []);
 
     useEffect(() => {
+      if (!id) {
+        return;
+      }
       mediaAlbumFieldState?.getAllAttachments(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
