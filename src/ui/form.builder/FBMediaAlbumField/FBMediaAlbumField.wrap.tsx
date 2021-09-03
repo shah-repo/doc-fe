@@ -140,7 +140,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       // To have updated list for the next uploading event
       () => workspaceState?.documentRevApi.loading,
       (loading) => {
-        if (loading && !id) {
+        if (loading) {
           return;
         }
         mediaAlbumFieldState?.getAllAttachments(id);
