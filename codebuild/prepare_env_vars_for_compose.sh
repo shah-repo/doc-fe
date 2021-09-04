@@ -110,7 +110,7 @@ do
             BUILD_FE)
               cd $FE_REPO
               IMAGE=fe_${FE_GIT_COMMIT_HASH}
-              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO/$IMAGE
+              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
               $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
               IMAGE_FOUND=$?
 
@@ -141,7 +141,7 @@ do
             BUILD_VALIDATORS)
               cd $VALIDATORS_REPO
               IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
-              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO/$IMAGE
+              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
               $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
               IMAGE_FOUND=$?
 
