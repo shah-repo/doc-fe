@@ -54,21 +54,21 @@ if [[ -z "${VALIDATORS_REPO}" ]]; then
   exit
 fi
 
-if [[ -z "${AWS_ACCESS_KEY_ID}" ]]; then
-  echo "AWS_ACCESS_KEY_ID not set, exiting"
-  echo "Use ./scripts/export_aws_credentials.sh"
-  exit
-fi
-if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
-  echo "AWS_SECRET_ACCESS_KEY not set, exiting"
-  echo "Use ./scripts/export_aws_credentials.sh"
-  exit
-fi
-if [[ -z "${AWS_SESSION_TOKEN}" ]]; then
-  echo "AWS_SESSION_TOKEN not set, exiting"
-  echo "Use ./scripts/export_aws_credentials.sh"
-  exit
-fi
+# if [[ -z "${AWS_ACCESS_KEY_ID}" ]]; then
+#   echo "AWS_ACCESS_KEY_ID not set, exiting"
+#   echo "Use ./scripts/export_aws_credentials.sh"
+#   exit
+# fi
+# if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
+#   echo "AWS_SECRET_ACCESS_KEY not set, exiting"
+#   echo "Use ./scripts/export_aws_credentials.sh"
+#   exit
+# fi
+# if [[ -z "${AWS_SESSION_TOKEN}" ]]; then
+#   echo "AWS_SESSION_TOKEN not set, exiting"
+#   echo "Use ./scripts/export_aws_credentials.sh"
+#   exit
+# fi
 
 
 export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
