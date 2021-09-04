@@ -33,7 +33,7 @@ phases:
       #- ls
       - export HEAD_PWD=$(pwd)
       - echo $HEAD_PWD
-      - ./doc-fe/codebuild/prepare_env_vars_for_compose.sh
+      - ./doc-fe/codebuild/prepare_env_vars_for_compose.sh BUILD_BE BUILD_FE BUILD_VALIDATORS
   pre_build:
     commands:
       # - docker-compose up -d #--force-recreate because local test run
