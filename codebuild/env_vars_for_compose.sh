@@ -1,0 +1,5 @@
+export BE_REPO="/doc-be"
+export FE_REPO="/doc-fe"
+export VALIDATORS_REPO="/remote-js-validators"
+export ENLIL_COMPOSE_SUITE_NUMBER="13"
+export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START-5600}

@@ -28,10 +28,10 @@ phases:
       # name: version
       # name: version
     commands:
-      - ls
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - cd ..
-      - ls
-      # - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - export HEAD_PWD=$(pwd)
+      - ./doc-fe/codebuild/prepare_env_vars_for_compose.sh
   pre_build:
     commands:
       # - docker-compose up -d #--force-recreate because local test run
