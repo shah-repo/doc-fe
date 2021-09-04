@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export DOCKER_COMPOSE_BE="/doc-be/cypress/docker-compose.yml"
-export DOCKER_COMPOSE_FE="/doc-be/cypress/fe.docker-compose.yml"
-export DOCKER_COMPOSE_SORRY_CY="/doc-be/cypress/sorry-cypress.docker-compose.yml"
+export DOCKER_COMPOSE_BE="$HEAD_PWD/doc-be/cypress/docker-compose.yml"
+export DOCKER_COMPOSE_FE="$HEAD_PWD/doc-be/cypress/fe.docker-compose.yml"
+export DOCKER_COMPOSE_SORRY_CY="$HEAD_PWD/doc-be/cypress/sorry-cypress.docker-compose.yml"
 
 if [ ! -f "$DOCKER_COMPOSE_BE" ]; then
     echo "$DOCKER_COMPOSE_BE does not exist"
