@@ -10,7 +10,7 @@ type FBProcedureFormMode = "eb" | "mpi" | "lhr";
 
 export type FBProcedureFormProps =
 & Pick<FBFormProps, "formState" | "children" | "initialValues">
-& Pick<FBProcedureItemProps, "type">
+& Pick<FBProcedureItemProps, "type" | "name">
 & Pick<FBAutocompleteAsyncProps, "optionId" | "disabledOptions">
 & {
   handleChangeOfPart?: () => void;

@@ -19,6 +19,7 @@ export interface FBFormProps {
   workspaceMode?: FBWorkspaceMode;
   errorValidation?: boolean;
   initialValidation?: boolean;
+  includeLocking?: boolean;
 }
 
 export type FBFormConstructor = Pick<FBFormProps, "schema" | "initialValues" | "workspaceMode">

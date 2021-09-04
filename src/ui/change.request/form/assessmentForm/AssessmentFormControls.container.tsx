@@ -1,13 +1,12 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import { FormikErrors } from "formik";
-import { isEmpty } from "lodash";
+import { find, isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest/types";
 import { ApprovalStatus } from "../../../../state/ducks/common/types";
-import { Approval } from "../../../../state/ducks/documents/types";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChangerContainer from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -96,14 +95,16 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     (changeRequest.state === ChangeRequestStatus.Approved ||
       changeRequest.state === ChangeRequestStatus.Implementation);
 
-  const currentUserApproval = changeRequest.approvals.find(
+  const currentUserApproval = changeRequest.approvals.filter(
     (approval) => approval.approver.user.email === currentUserEmail,
   );
+
+  const approverHasPendingStatus = find(currentUserApproval, (approval) => approval.status === ApprovalStatus.Pending);
   const isCurrentUserApprover = !!currentUserApproval;
   const canApproveOrReject =
     isCurrentUserApprover &&
     changeRequest.state === ChangeRequestStatus.InReview &&
-    (currentUserApproval as unknown as Approval).status === ApprovalStatus.Pending;
+    Boolean(approverHasPendingStatus);
 
   return (
     <>

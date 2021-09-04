@@ -1,26 +1,100 @@
 import csv from "csvtojson";
 import fs from "fs";
 import { resolve } from "path";
+import { findRequirementsListToProcess } from "../support/organizeReports/helpers/findRequirementsListToProcess";
+import { ModuleOrSubModule, REQ_HEADER_TEXT, utf8Encoding } from "../support/organizeReports/helpers/typing.constants";
+import { RequirementsReadWriteConfig, REQUIREMENTS_CONFIG_RUN } from "./configRequirementsRun";
 
-const INPUT =  "list.csv";
-const OUTPUT = "cache/generated.json";
+const REQUIREMENTS_LIST = findRequirementsListToProcess();
+generateJsonFromCSVList(REQUIREMENTS_LIST);
 
-const REQ_HEADER_TEXT = "REQ #";
-csv()
-  .fromFile([__dirname, INPUT].join("/"))
-  .then((jsonObj) => {
-    const result = {};
-    jsonObj.forEach((item) => {
-      if (result[item[REQ_HEADER_TEXT]]) {
-        throw new Error("Found duplicate: " + item[REQ_HEADER_TEXT]);
+function generateJsonFromCSVList(reqsList: RequirementsReadWriteConfig) {
+  csv()
+    .fromFile([__dirname, reqsList.sourcePath].join("/"))
+    .then((jsonObj) => {
+      const result = {};
+      jsonObj.forEach((item) => {
+        if (result[item[REQ_HEADER_TEXT]]) {
+          throw new Error("Found duplicate: " + item[REQ_HEADER_TEXT]);
+        }
+        result[item[REQ_HEADER_TEXT]] = item;
+      });
+      const jsonObject = JSON.stringify(result, null, 2);
+
+      if (fs.existsSync(
+        resolve(__dirname, "..", `${reqsList.outputPath}`))) {
+        fs.rmdirSync((resolve(__dirname, "..", reqsList.outputPath)), { recursive: true });
       }
-      result[item[REQ_HEADER_TEXT]] = item;
+
+      fs.mkdirSync(resolve(__dirname, "..", `${reqsList.outputPath}`));
+      fs.writeFileSync(
+        resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`),
+        jsonObject, utf8Encoding
+      );
+
+      if (REQUIREMENTS_CONFIG_RUN.extractPerModules && reqsList.extractModules) {
+        generateModulesOrSubModulesFromJson(
+          result,
+          reqsList.outputPath,
+          reqsList.outputFolderName,
+          "Module");
+      }
+
+      if (REQUIREMENTS_CONFIG_RUN.extractPerSubModules && reqsList.extractSubModules) {
+        generateModulesOrSubModulesFromJson(
+          result,
+          reqsList.outputPath,
+          reqsList.outputFolderName,
+          "Sub-Module");
+      }
+      // eslint-disable-next-line no-console
+      console.log("DONE!!!!!!", resolve(__dirname, "..", `${reqsList.outputPath}/${reqsList.outputFileName}`));
     });
-    fs.writeFileSync(
-      resolve(__dirname, "..", OUTPUT),
-      JSON.stringify(result, null, 2),
-      { encoding: "UTF-8" }
-    );
-    // eslint-disable-next-line no-console
-    console.log("DONE!!!!!!", resolve(__dirname, "..", OUTPUT));
-  });
+}
+
+function generateModulesOrSubModulesFromJson(
+  object: any,
+  outputPath: string,
+  outputFolderName: string,
+  modulesOrSubModules: ModuleOrSubModule,
+) {
+
+  const objectKeys = Object.keys(object);
+  const groupedObjectsByModules = objectKeys
+    .map((item) => object[item])
+    .reduce((groups, item) => ({
+      ...groups,
+      [item[`${modulesOrSubModules}`]]: [...(groups[item[`${modulesOrSubModules}`]] || []), item],
+    }), {});
+
+  const moduleKeys = Object.keys(groupedObjectsByModules);
+  if (moduleKeys.length) {
+    moduleKeys.forEach((key) => {
+      const selectedReqs = groupedObjectsByModules[key].map((item) => item[REQ_HEADER_TEXT]);
+      const filteredObjectRequirements = objectKeys
+        .filter((key) => selectedReqs.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = object[key];
+          return obj;
+        }, {});
+
+
+      if (!fs.existsSync(
+        resolve(__dirname, "..", `${outputPath}/${outputFolderName}`))) {
+        fs.mkdirSync(resolve(__dirname, "..", `${outputPath}/${outputFolderName}`));
+      }
+
+      if (!fs.existsSync(
+        resolve(__dirname, "..", `${outputPath}/${outputFolderName}/${modulesOrSubModules}`))) {
+        fs.mkdirSync(resolve(__dirname, "..", `${outputPath}/${outputFolderName}/${modulesOrSubModules}`));
+      }
+
+      fs.writeFileSync(
+        resolve(__dirname, "..",
+          `${outputPath}/${outputFolderName}/${modulesOrSubModules}/${key.toLowerCase().replace(/[" "/]/g, "_")}.json`),
+        JSON.stringify(filteredObjectRequirements, null, 2), utf8Encoding
+      );
+    });
+  }
+}
+

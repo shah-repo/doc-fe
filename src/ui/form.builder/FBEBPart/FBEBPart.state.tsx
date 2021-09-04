@@ -1,9 +1,11 @@
+import { omit } from "lodash";
 import { action, observable, set } from "mobx";
 import { EBPartPatchBody, EBPartPostBody, ProposedDocIdBody } from "..";
 import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 class FBEBPartState {
   // MARK: @observables
@@ -32,6 +34,12 @@ class FBEBPartState {
   // MARK: @helpers
   public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
     if (!docRevId) { return; }
+    body = {
+      ...body, formInput: omit(body?.formInput,
+        Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
+      ),
+    } as EBPartPatchBody;
+
     this.existingChildApi.set({
       url: FBEndpoint.PatchDocumentRevision,
       urlValues: { docRevId },
@@ -41,6 +49,9 @@ class FBEBPartState {
   };
 
   public addNewPartChild = (body: EBPartPostBody) => {
+    body = omit(body,
+      Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
+    ) as EBPartPostBody;
     this.newChildApi.set({ body, method: "post" });
   };
 

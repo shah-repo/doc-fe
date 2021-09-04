@@ -232,6 +232,7 @@ context("Records flow", () => {
     });
 
     it("Create new record button click", () => {
+      SystemRequirement("REQ-2770");
       cy.recCreateRecordFromLandingPage();
     });
 
@@ -274,6 +275,10 @@ context("Records flow", () => {
       });
     });
 
+    it("Save Record'", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
     it("Finalize and release button click'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
@@ -294,6 +299,55 @@ context("Records flow", () => {
     it("Check if approved date exists", () => {
       SystemRequirement("REQ-1010");
       cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
+    });
+
+    context("Check for Landing page columns and values", () => {
+      it("Navigate to Records", () => {
+        cy.navigToRecords();
+      });
+
+      it("Check if most recent added item is fist on list", () => {
+        cy.filterGetFirstValueFromList({ value: "RD-00004" });
+      });
+
+      it("Check for Landing page default columns", () => {
+        SystemRequirement("REQ-2740");
+        cy.filterCheckHeaderValues("ID",
+          "Revision", "State",
+          "Title",
+          "Owner",
+          "Released Date",
+          "Form ID");
+      });
+    });
+
+    context("Test the filter inside Records landing page", () => {
+      it("Enter all fields to check if all filter fields are working", () => {
+        SystemRequirement("REQ-2750");
+        cy.filterRecords({
+          docId: "RD-00004", revision: "A", state: "Released", title: "Approval", owner: USERS[2].name,
+          releasedDate: "Last 7 days", formId: "FM-00003",
+        }).wait(2000);
+      });
+
+      it("Navigate to Document List", () => {
+        cy.wait(1000).navigToDocumentList();
+      });
+
+      it("Navigate to Records", () => {
+        cy.navigToRecords();
+      });
+
+      it("Check if all filter values persist after changing landing page", () => {
+        cy.filterCheckIfRecordsFilterPersists({
+          docId: "RD-00004", revision: "A", state: "Released", title: "Approval", owner: USERS[2].name,
+          releasedDate: "Last 7 days", formId: "FM-00003",
+        });
+      });
+
+      it("Clear filter", () => {
+        cy.filterClear();
+      });
     });
   });
 });

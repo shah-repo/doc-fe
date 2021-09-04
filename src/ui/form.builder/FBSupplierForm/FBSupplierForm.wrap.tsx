@@ -2,7 +2,11 @@ import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
 import { FB, FBFormState, FBSupplierFormActions, FBSupplierFormProps, SupplierPostBody } from "..";
+import { GroupTag } from "../../../state/ducks/auth/types";
+import { Id } from "../../../state/ducks/common/types";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
 
 export const withFBSupplierForm = <T extends FBSupplierFormProps>(
   Component: React.FunctionComponent<T>,
@@ -17,6 +21,7 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     ...props
   }: T) => {
 
+    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     // MARK: @config
     const { dialogState, supplierState } = FB.useStores();
     const formState = FB.useRef<FBFormState>(FBFormState, {});
@@ -31,6 +36,17 @@ export const withFBSupplierForm = <T extends FBSupplierFormProps>(
     // MARK: @methods
     onDialogConfirm = () => {
       const formValue = formState.getValues();
+      if (supplierState?.documentTypeApi.data?.documentType.isQms) {
+        const securityGroups: Id[] = [];
+        groupOptions.forEach((group) => {
+          if (group.tags?.includes(GroupTag.QMS_DEFAULT)) {
+            securityGroups.push({ id: group.value });
+          }
+        });
+        formValue.document.securityList = {
+          securityGroups,
+        };
+      }
       supplierState?.addNewSupplier(formValue as SupplierPostBody);
       onDialogClose?.();
     };

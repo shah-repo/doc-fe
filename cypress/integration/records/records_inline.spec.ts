@@ -157,6 +157,7 @@ context("Record inline Flow", () => {
     });
 
     it("Click on create new and chose 'Legal Record'", () => {
+      SystemRequirement("REQ-2760");
       cy.recCreateRecordFromLandingPage();
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Legal Record" });
     });
@@ -176,7 +177,7 @@ context("Record inline Flow", () => {
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type("First entry");
           cy.unClick();
         });
       });
@@ -184,8 +185,8 @@ context("Record inline Flow", () => {
       it("Enter text 'First entry' in second textfield for inline", () => {
         SystemRequirement("REQ-1080");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"second-textfield-for-inline\"]")
-            .click().type("First entry");
+          cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
+            .type("First entry");
           cy.unClick();
         });
       });
@@ -199,7 +200,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAggregatedAudit],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
@@ -214,12 +215,14 @@ context("Record inline Flow", () => {
 
       it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
+        cy.wait(5000);
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+        cy.wait(2000);
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -239,15 +242,16 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Second entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type(", Second entry");
         });
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(5000);
         });
 
         it("Verify system asks for another approval afer changing section", () => {
-          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100");
+          SystemRequirement("REQ-1050", "REQ-0990", "REQ-1100", "REQ-1090");
           cy.get("[data-cy^=\"form.builder.approval.pending\"]")
             .first()
             .should("have.text", "Inline approval pending");
@@ -255,6 +259,7 @@ context("Record inline Flow", () => {
 
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.wait(2000);
           cy.get("input[name=\"password\"]").type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
@@ -281,11 +286,12 @@ context("Record inline Flow", () => {
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", Third entry");
+          cy.get("[data-cy^=\"textfield-for-inline\"] input").type(", Third entry");
         });
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+          cy.wait(5000);
         });
 
         it("Approve Inline Approval", () => {
@@ -302,6 +308,12 @@ context("Record inline Flow", () => {
 
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).click();
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).click();
+          });
           cy.recApproveAndReleaseInlineRecord();
         });
       });
@@ -317,7 +329,7 @@ context("Record inline Flow", () => {
         });
 
         it("Check if there is only one record in list", () => {
-          SystemRequirement("REQ-1110");
+          SystemRequirement("REQ-1110", "REQ-2790");
           cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         });
 

@@ -50,7 +50,3 @@ export interface FBWorkspaceExternalState {
 }
 
 export type FBWorkspaceConstructor = Pick<FBWorkspaceProps, "schema" | "mode" | "autosave">;
-
-export interface FBWorkspaceSocketProps {
-  id?: string;
-}

@@ -17,4 +17,5 @@ export type FBMPIProcedureItemProps =
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   isDocumentMPI?: boolean;
   fieldType?: FBInputType;
+  isReleased?: boolean;
 };

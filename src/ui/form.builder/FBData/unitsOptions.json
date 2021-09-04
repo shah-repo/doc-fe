@@ -32,6 +32,10 @@
     "value": "boxes"
   },
   {
+    "text": "form.builder.units.bags",
+    "value": "bags"
+  },
+  {
     "text": "form.builder.units.cases",
     "value": "cases"
   },

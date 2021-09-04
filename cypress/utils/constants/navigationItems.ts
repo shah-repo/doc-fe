@@ -12,10 +12,10 @@ export enum NavigationItems{
   SUPPLIER_LIST = "supplierList",
   RECEIVING = "receiving",
   MANUFACTURING = "manufacturing",
-  WORK_ORDERS = "workOrders",
   LOTS = "lots",
   PARTS = "parts",
   INSPECTION = "inspection",
   DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
-  SUPPLIER_MANAGEMENT = "supplierManagement"
+  SUPPLIER_MANAGEMENT = "supplierManagement",
+  LHR = "lhr"
 }

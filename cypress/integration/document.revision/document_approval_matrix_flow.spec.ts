@@ -198,18 +198,6 @@ context("Document Approval Matrix Flow", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
     });
 
-    it("open add field dialogue", () => {
-      cy.fbAddNewField();
-    });
-
-    it("select 'Approval Matrix'", () => {
-      cy.fbSelectApprovalMatrix();
-    });
-
-    it("add 'Approval Matrix' field", () => {
-      cy.fbAddField();
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
@@ -227,7 +215,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
         cy.drCreateNewDocumentFromForm();
       });
     });
@@ -322,7 +310,8 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      SystemRequirement("REQ-0630", "REQ-0650");
+      SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
+      SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
@@ -599,11 +588,13 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Mark 'Approvals Administrative' for ${individualRole}`, () => {
+      SystemRequirement("REQ-0660", "REQ-0670");
+      SystemRequirement("REQ-2780", "REQ-4390");
       cy.drAMCheckRole({ stage: "admStage", index: 2 });
     });
 
     it("Save Approval Matrix Item", () => {
-      SystemRequirement("REQ-0630", "REQ-0650");
+      SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
 
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
     });
@@ -681,6 +672,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
+      SystemRequirement("REQ-4220", "REQ-4270");
       cy.drReleaseDocAfterRoleExistsAndChecked({ group: 0, role: roleOne });
     });
   });
@@ -705,7 +697,12 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
+      SystemRequirement("REQ-4270");
       cy.drAddApprover({ name: INDIVIDUAL_USER.name });
+    });
+
+    it("Type password in Approve and Release dialog", () => {
+      cy.get("input[name=password]").type("Tester1!");
     });
 
     it("'Approve and Release' the document", () => {

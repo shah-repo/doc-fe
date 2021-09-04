@@ -9,6 +9,7 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/do
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -74,6 +75,18 @@ class FBWorkspaceState extends FBSchemaState {
     return this.document?.status === DocumentRevisionStatus.Released;
   }
 
+  public get isDraft(): boolean {
+    return this.document?.status === DocumentRevisionStatus.Draft;
+  }
+
+  public get isPendingChange(): boolean {
+    return this.document?.status === DocumentRevisionStatus.PendingChange;
+  }
+
+  public get isDeprecated(): boolean {
+    return this.document?.status === DocumentRevisionStatus.Deprecated;
+  }
+
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
     return Boolean(docId && !isEmpty(docId));
@@ -88,6 +101,7 @@ class FBWorkspaceState extends FBSchemaState {
     const { version = 0, revision = 0, outputRevision = false } = this.document || {};
     return ((version > 1) && (revision > 1)) || outputRevision;
   }
+
 
   @computed public get active(): boolean {
     return this.mode !== "none";
@@ -116,6 +130,8 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
+
+  @action public getFieldByName = (name: string) => this.document?.formInput?.[name];
 
   @action public isMode = (mode: FBWorkspaceMode | FBWorkspaceMode[]): boolean => {
     if (isArray(mode)) {
@@ -158,7 +174,8 @@ class FBWorkspaceState extends FBSchemaState {
       case "form":
       case "formDesign":
         body = {
-          formInput: values,
+          formInput: omit(values,
+            Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
           ...mode === "formDesign" && this.isOutputSchema && { schema },
         };
         break;
@@ -193,9 +210,9 @@ class FBWorkspaceState extends FBSchemaState {
       method: "get",
     }, (data, error) => {
       if (error) {
-        this.documentRevApi.onError(error);
+        this.loadDocumentRevApi.onError(error);
       } else {
-        this.documentRevApi.onSuccess();
+        this.loadDocumentRevApi.onSuccess();
         const { formInput = {} } = data ?? {};
         this.formInput = formInput;
         map(formInput, (value, key) => {

@@ -294,7 +294,7 @@ context("Document list test", () => {
       });
 
       it("Verify filter by document title", () => {
-        SystemRequirement("REQ-0060");
+        SystemRequirement("REQ-0060", "REQ-2270");
         cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
       });
 

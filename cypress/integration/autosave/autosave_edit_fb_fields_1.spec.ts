@@ -173,6 +173,7 @@ context.skip("Autosave on add and edit FB fields", () => {
     });
 
     it("Add Radio Button group", () => {
+
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });

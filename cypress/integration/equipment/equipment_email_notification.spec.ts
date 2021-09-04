@@ -11,6 +11,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[25];
 const FIRST_USER = USERS[26];
@@ -409,6 +410,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Enter preventative maintenance frequency", () => {
+        SystemRequirement("REQ-2920");
         cy.get("[name*=\"frequency\"]").eq(0).type("16");
       });
 

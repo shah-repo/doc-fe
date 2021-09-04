@@ -46,6 +46,7 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
         (files) => {
           formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
+          formState?.unlockField(name);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps

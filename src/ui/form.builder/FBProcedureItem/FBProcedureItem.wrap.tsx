@@ -17,20 +17,44 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
     name,
     type,
     value,
+    disabled,
+    locked,
     ...props
   }: T) => {
 
     // MARK: @config
-    const { procedureState } = FB.useStores();
+    const { procedureState, workspaceState, formState } = FB.useStores();
     dialogState = FB.useRef(FBDialogState);
+    const { id } = workspaceState || {};
 
     // MARK: @reactions
 
     // MARK: @helpers
+    function handleLockField() {
+      if (!id) { return; }
+      if (!name) { return; }
+      const namePart = `${name}.${type}`;
+      formState?.lockField({
+        fields: [{
+          formInput: [{
+            [namePart]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, namePart);
+    }
+
+    function onClose() {
+      if (formState?.isBackdropOpen) { return; }
+      formState?.unlockField(`${name}.${type}`);
+      dialogState?.closeDialog();
+    }
 
     // MARK: @methods
     onClick = (part?: FBProcedureItemConfig) => {
+      handleLockField();
       dialogState?.config({
+        onClose,
         open: true,
         title: {
           locale: "form.builder.action.mode",
@@ -39,7 +63,7 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
             title: `${FBProcedureItemLocale[type]}|s`,
           },
         },
-        content: <FBProcedureForm {...{ type }} initialValues={cloneDeep(part)} />,
+        content: <FBProcedureForm {...{ type, name, onClose }} initialValues={cloneDeep(part)} />,
       });
     };
 
@@ -62,6 +86,8 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
         loading = !FBAutocompleteAsyncStore.data.get(procedureState?.equipmentId || "");
       }
       value = get(procedureState, type);
+      disabled = disabled || formState?.locked.get(`${name}.${type}`)?.locked || formState?.isBackdropOpen;
+      locked = formState?.locked.get(`${name}.${type}`)?.locked;
     });
 
     return Component({
@@ -75,6 +101,8 @@ export const withFBProcedureItem = <T extends FBProcedureItemProps>(
       name,
       type,
       value,
+      disabled,
+      locked,
     });
   };
 

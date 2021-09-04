@@ -111,6 +111,7 @@ context("Authentication", () => {
 
   context("Login user with correct credentials", () => {
     it("Logs user in", () => {
+      SystemRequirement("REQ-4160");
       cy.authLogin({
         email: USERS[2].email,
         password: "Tester1!",

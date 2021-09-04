@@ -24,6 +24,7 @@ fi
 export ENLIL_WORKER_LOG_FILE="$DIR_REPORTS/worker.log"
 
 ./scripts/cypress/utils/generate_requirements_json_file.sh
+yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToGeneratedJson.ts
 
 echo "--| CI_BUILD_ID: $CI_BUILD_ID"
 echo "--| CYPRESS_SKIP_ON_RUN_FAILURE: $CYPRESS_SKIP_ON_RUN_FAILURE"
@@ -32,7 +33,6 @@ echo "--| CYPRESS_SCREENSHOT_OF_RUN_FAILURE: $CYPRESS_SCREENSHOT_OF_RUN_FAILURE"
 echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 echo "--| NUMBER_OF_WORKERS: $NUMBER_OF_WORKERS"
 echo " "
-
 
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 

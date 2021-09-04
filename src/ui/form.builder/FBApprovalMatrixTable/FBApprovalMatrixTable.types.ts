@@ -35,7 +35,6 @@ export enum FBDocTypeGroup {
   DYNAMIC_FORM = "DYNAMIC FORM",
   POAM = "POAM",
   PO = "PO",
-  WORK_ORDER = "WORK ORDER",
   DAM = "DAM",
   PART_LOT = "PART_LOT"
 }

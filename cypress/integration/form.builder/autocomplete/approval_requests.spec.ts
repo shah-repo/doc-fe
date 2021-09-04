@@ -153,6 +153,13 @@ context("Autocomplete 'Approval requests' test", () => {
           it("Click 'Add' button", () => {
             cy.fbAddNewFieldButton();
           });
+
+          it("Verify autocomplete is disabled in form edit mode", () => {
+            cy.get("input[data-cy^=test-label]")
+              .should("have.attr", "autocomplete", "disabled");
+            cy.get("input[data-cy^=test-label]")
+              .should("have.attr", "disabled");
+          });
         });
 
         context("Preview FORM document", () => {

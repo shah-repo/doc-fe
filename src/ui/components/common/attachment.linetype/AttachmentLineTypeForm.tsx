@@ -14,6 +14,7 @@ interface Props {
   multiple?: boolean;
   name?: string;
   disabled?: boolean;
+  documentTypeCanRedline: boolean;
 }
 
 const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
@@ -23,6 +24,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
   name = "",
   disabled,
   isUploading,
+  documentTypeCanRedline,
 }) => {
   const isField = true;
   const classes = styles({ isField });
@@ -82,7 +84,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
           </Link>
         </label>
       </Box>
-      <Box>
+      {documentTypeCanRedline && <Box>
         <input
           accept="*"
           id={`${name}-button-file-red-line`}
@@ -100,7 +102,7 @@ const AttachmentLineTypeForm: React.FunctionComponent<Props> = ({
             <Text translation="common.attachment.upload.button.redline" />
           </Link>
         </label>
-      </Box>
+      </Box>}
 
     </Box>
       }

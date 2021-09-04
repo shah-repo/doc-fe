@@ -66,7 +66,7 @@ export const withFBMediaCarousel = <T extends FBMediaCarouselProps>(
       }
       removeMedia && removeMedia(media.id);
       mediaAlbumState?.setActiveMedia(0);
-      if (!autosave) { return; }
+      if (!workspaceState?.autosave) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 

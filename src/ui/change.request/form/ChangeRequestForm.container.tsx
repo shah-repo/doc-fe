@@ -85,6 +85,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       icon: <TimelineIcon />,
       type: "history",
       details: {
+        shouldShow: Boolean(changeRequest),
         dataCy: "timeline-icon",
         title: intl.formatMessage({
           id: "document.revision.history",
@@ -97,6 +98,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       icon: <BookmarkIcon />,
       type: "bookmarks",
       details: {
+        shouldShow: true,
         dataCy: "bookmark-icon",
         title: intl.formatMessage({
           id: "document.revision.bookmarks",

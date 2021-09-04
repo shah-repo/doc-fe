@@ -7,6 +7,7 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/do
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
 import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
+import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../form.builder/FBInput/FBInput.wrap";
 import { SubmitFormRelation } from "./FormContext.types";
 
 export const FormContext = React.createContext({ submitOnChange: false });
@@ -41,7 +42,8 @@ export const useFormContext = () => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", formState?.getValues());
+        formik.setFieldValue("formInput", omit(formState?.getValues(),
+          Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })));
         if (workspaceState.mode === "formDesign" && isOutputSchema()) {
           formik.setFieldValue("schema", schema);
         }
@@ -57,7 +59,9 @@ export const useFormContext = () => {
     let prevDocument: DocumentRevision | undefined;
     let nextDocument: DocumentRevision | undefined;
     if (relation.type === "poreceive") {
-      prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      if (prevValue) {
+        prevDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, prevValue.id);
+      }
       nextDocument = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.POList, nextValue.id);
     }
     if (relation.type === "autocomplete" && relation.name === "lot_part") {

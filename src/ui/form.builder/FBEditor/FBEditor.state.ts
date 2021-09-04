@@ -13,13 +13,12 @@ import FBEditorHyperlink from "../FBEditorHyperlink/FBEditorHyperlink";
 import FBEditorInlineApproval from "../FBEditorInlineApproval/FBEditorInlineApproval";
 import FBEditorInstructionsDocument from "../FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 import FBEditorLabel from "../FBEditorLabel/FBEditorLabel";
+import FBEditorLHRStep from "../FBEditorLHRStep/FBEditorLHRStep";
 import FBEditorMediaAlbum from "../FBEditorMediaAlbum/FBEditorMediaAlbum";
 import FBEditorOptionGroup from "../FBEditorOptionGroup/FBEditorOptionGroup";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
 import FBEditorRequestApproval from "../FBEditorRequestApproval/FBEditorRequestApproval";
 import FBEditorSelectDocument from "../FBEditorSelectDocument/FBEditorSelectDocument";
-import FBEditorSelectRequirement from "../FBEditorSelectRequirement/FBEditorSelectRequirement";
-import FBEditorTestRequirement from "../FBEditorTestRequirement/FBEditorTestRequirement";
 import FBEditorTextEditor from "../FBEditorTextEditor/FBEditorTextEditor";
 import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
 import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
@@ -43,10 +42,8 @@ class FBEditorState {
     "purchaseorder",
     "instructionsmediaupload",
     "evidencemediaupload",
-    "testRequirement",
     "instructionsdocument",
     "selectdocument",
-    "selectrequirement",
     "documentRevisions",
     "checkpoint",
     "createlabel",
@@ -71,10 +68,8 @@ class FBEditorState {
     "teststep",
     "instructionsmediaupload",
     "evidencemediaupload",
-    "testRequirement",
     "instructionsdocument",
     "selectdocument",
-    "selectrequirement",
     "checkpoint",
     "createlabel",
     "approval",
@@ -113,10 +108,8 @@ class FBEditorState {
     poreceive: FBEditorLabel,
     instructionsmediaupload: FBEditorMediaAlbum,
     evidencemediaupload: FBEditorMediaAlbum,
-    testRequirement: FBEditorTestRequirement,
     instructionsdocument: FBEditorInstructionsDocument,
     selectdocument: FBEditorSelectDocument,
-    selectrequirement: FBEditorSelectRequirement,
     checkpoint: FBEditorLabel,
     createlabel: FBEditorLabel,
     approval: FBEditorApprovalField,
@@ -135,7 +128,7 @@ class FBEditorState {
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
-    lhrstep: FBEditorLabel,
+    lhrstep: FBEditorLHRStep,
     unitMeasures: FBEditorLabel,
   };
 

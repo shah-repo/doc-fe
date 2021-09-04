@@ -7,6 +7,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
+    onClick,
     setMediaMode,
     mediaAlbumState,
     collection = [],
@@ -14,11 +15,14 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
     actionsDisabled,
     title = "",
     mode,
+    name,
+    uploadDisabled,
     ...props
   }: T) => {
 
     mediaAlbumState = FB.useRef<FBMediaAlbumState>(FBMediaAlbumState);
-    const { mode: workspaceMode } = FB.useStores().workspaceState || {};
+    const { formState, workspaceState } = FB.useStores();
+    const { mode: workspaceMode, id } = workspaceState || {};
 
     // Handle mode
     setMediaMode = () => {
@@ -28,6 +32,7 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
 
     useObserver(() => {
       mode = mediaAlbumState?.mode;
+      uploadDisabled = formState?.locked.get(name || "")?.locked;
       title = (mode === "carousel")
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
@@ -37,16 +42,50 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       );
     });
 
+    onClick = () => {
+      if (formState?.isBackdropOpen) { return; }
+      if (!name) { return; }
+      if (!id) { return; }
+      formState?.lockField({
+        fields: [{
+          formInput: [{
+            [name]: true,
+          }],
+        }],
+        documentRevisionId: id,
+      }, name);
+    };
+
+    const fileUploadEl = document.getElementById(`fb-mediaalbum-upload-${name}`);
+
+    if (fileUploadEl) {
+      fileUploadEl.onclick = registerCancel;
+    }
+
+
+    function registerCancel() {
+      document.body.onfocus = removeLock;
+    }
+
+    function removeLock() {
+      if (fileUploadEl?.nodeValue?.length) { return; }
+      formState?.unlockField(name);
+    }
+
     return Component({
       ...(props as T),
+      onClick,
       setMediaMode,
       mediaAlbumState,
+      formState,
       workspaceMode,
       hiddenContainer,
       actionsDisabled,
       collection,
       title,
       mode,
+      name,
+      uploadDisabled,
     });
   };
 

@@ -52,7 +52,13 @@ export const withFBOnChange = <T extends FBInputProps>(
       if (!name) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
-      formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      // Hack for quantity field to have empty state beacuse of validation
+      if (schemaState?.getSchemaItem(name)?.type === "quantity" && formValue === 0) {
+        formState?.setFieldValue(name, "", state || withState, omitFormValue);
+      } else {
+        formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      }
+
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }
@@ -174,10 +180,12 @@ export const withFBOnChange = <T extends FBInputProps>(
     });
 
     const onBlur = (ev) => {
-      if (ev.target.type === "number" && ev.target.step === ".01") {
+      if (ev?.target?.type === "number" && ev?.target.step === ".01") {
         ev.target.value = Math.abs(ev.target.value).toFixed(2).toString();
       }
       props.onBlur && props.onBlur(ev);
+      if (!name) { return; }
+      formState?.unlockField(name);
       if (type && FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);
       }

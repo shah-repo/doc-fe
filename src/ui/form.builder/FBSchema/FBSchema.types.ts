@@ -21,7 +21,6 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "rules"
   | "validationMode"
   | "paragraph"
-  | "testRequirement"
   | "isTemplate"
   | "stepIndex"
   | "includeQRScan"

@@ -15,6 +15,7 @@ import icons from "./icons.json";
 import partTypeOptions from "./partTypeOptions.json";
 import passTypeOptions from "./passTypeOptions.json";
 import requirementOptions from "./requirementOptions.json";
+import statusOptions from "./statusOptions.json";
 import taskSchema from "./taskSchema.json";
 import testStepSchema from "./testStepSchema.json";
 import unitsOptions from "./unitsOptions.json";
@@ -51,6 +52,10 @@ class FBData {
     return autocompleteOptions;
   }
 
+  public static get statusOptions(): FBOption[] {
+    return statusOptions;
+  }
+
   public static get unitsOptions(): FBOption[] {
     return unitsOptions;
   }
@@ -58,11 +63,6 @@ class FBData {
   public static get productUnitsOptions(): FBOption[] {
     const notAllowedItems = ["hours", "days", "months"];
     return unitsOptions.filter((item: {[key: string]: string}) => !notAllowedItems.includes(item.value));
-  }
-
-  public static get serviceUnitsOptions(): FBOption[] {
-    const allowedItems = ["hours", "days", "months", "each"];
-    return unitsOptions.filter((item: {[key: string]: string}) => allowedItems.includes(item.value));
   }
 
   public static get requirementOptions(): FBOption[] {

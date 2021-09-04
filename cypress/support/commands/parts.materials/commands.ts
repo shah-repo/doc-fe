@@ -91,7 +91,10 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").click();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).click();
+  cy.unClick();
+  cy.wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -99,7 +102,10 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
 Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").click();
   cy.get("[data-cy=\"title\"]").type(params.equipment);
+  cy.unClick();
+  cy.wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").click();
   });
 });
@@ -130,15 +136,13 @@ Cypress.Commands.add("ptClickCreateNewPart", () => {
 });
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
-    CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").type(params.partForm + "{downarrow}{enter}");
   });
 });
 
 Cypress.Commands.add("pmSubmitForApproval", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
 });

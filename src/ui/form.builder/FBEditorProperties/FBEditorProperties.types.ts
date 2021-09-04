@@ -13,7 +13,9 @@ export type FBEditorPropertiesType =
 | "includeInInspection"
 | "includeInFaiInspection"
 | "deleteDisabled"
-| "includeNotes";
+| "includeNotes"
+| "defaultCurrentDate"
+| "disablePastDates";
 
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange"> & {
   inputProps?: Partial<FBInputProps>;

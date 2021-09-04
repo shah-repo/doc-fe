@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -93,7 +94,7 @@ context("Procedure and parts flow test", () => {
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specifications Lot");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           done();
         });
       });
@@ -377,32 +378,57 @@ context("Procedure and parts flow test", () => {
                 name: "lot_quantity",
                 type: "quantity",
                 index: 0,
-                label: "Quantity Received",
+                label: "Initial Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
-                editorProperties: [
-
-                ],
-                validationAttribute: "Quantity Received",
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
               },
               {
-                name: "expiry-date",
-                type: "datepicker",
+                name: "lot_usable_quantity",
+                type: "quantity",
                 index: 1,
-                label: "Expiry Date",
+                label: "Usable Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                deleteDisabled: true,
                 editorProperties: [],
-                validationAttribute: "Expiry Date",
+                validationAttribute: "Usable Quantity",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+              },
+              {
+                name: "lot_expiry_date",
+                type: "datepicker",
+                index: 2,
+                label: "Expiration Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Expiration Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_part",
+                type: "autocomplete",
+                index: 3,
+                label: "Part Selection",
+                optionId: "21",
+                placeholder: "Select the appropriate part for this lot",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 name: "100-inspection-override",
                 type: "checkboxgroup",
-                index: 2,
+                index: 4,
                 label: "100% Inspection Override",
                 options: [
                   {
@@ -413,15 +439,18 @@ context("Procedure and parts flow test", () => {
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                deleteDisabled: true,
+                validationMode: "default",
                 editorProperties: [],
                 validationAttribute: "100% Inspection Override",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
               },
               {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
-                name: "fb-approvals-ki5yh7ba",
+                name: "fb-approvals-ksherq6d",
                 uniqueSchemaItem: true,
                 index: 5,
               },
@@ -467,19 +496,19 @@ context("Procedure and parts flow test", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Navigate to Records", () => {
-      cy.navigToRecords();
+    it("Navigate to Lots", () => {
+      cy.navigToLots();
     });
 
     it("Click on Create new", () => {
       cy.poClickCreatePO();
     });
 
-    it("Select 'Component Specifications Lot' from the dropdown", () => {
+    it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
       cy.wait(500);
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
-        cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+        cy.get("div[id^=react-select]").contains("Component Specification Lot").click();
       });
     });
 
@@ -493,6 +522,15 @@ context("Procedure and parts flow test", () => {
 
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").type("12");
+    });
+
+    it("Enter Usable Quantity", () => {
+      cy.get("[name=\"lot_usable_quantity\"]").type("12");
+    });
+
+    it("Select 'Part document' for Part lot", () => {
+      cy.get("[data-cy=\"lot_part\"]").type("Part document");
+      cy.get("ul[role=listbox]>li").contains("Part document").click();
     });
 
     it("Check 100% override", () => {
@@ -706,7 +744,10 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetProposedDocId,
+        CyRoutes.PostDocRev,
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drCreateNewDocumentFromForm();
       });
     });
@@ -718,15 +759,51 @@ context("Procedure and parts flow test", () => {
       it("Enters description 'EB description'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.unClick();
         });
+        cy.wait(500);
       });
 
       it("Add approver to approvals", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
+      });
+
+      it("Verify step can be added", () => {
+        SystemRequirement("REQ-2970");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"form.builder.add.step\"]").click();
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+      });
+
+      it("Remove step", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
+      });
+
+      it("Add textfield to eb", () => {
+        SystemRequirement("REQ-2980");
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectTextField();
+        cy.fbAddLabelName({ name: "Textfield for eb test" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.fbAddField();
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("have.text", "Textfield for eb test");
+      });
+
+      it("Remove textfield", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"Textfield for eb test\"]").should("not.exist");
+      });
+
+      it("Enter description to step #1", () => {
+        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
       });
 
       it("Add material document", () => {
@@ -755,13 +832,77 @@ context("Procedure and parts flow test", () => {
         cy.pmAddFreeTextEquipment({ equipment: "Free text equipment" });
       });
 
-      it("Upload attachment 'image.jpg'", () => {
+      it("Upload attachment 'video.mp4'", () => {
+        SystemRequirement("REQ-2990");
         cy.get("[data-cy=\"albumMediaButton\"]").click();
-        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "video.mp4" });
+        });
+      });
+
+      it("Upload attachment 'image.jpg'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "image.jpg" });
+        });
       });
 
       it("Upload attachment 'test.docx'", () => {
-        cy.pmUploadAttachment({ fileName: "test.docx" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
+          cy.pmUploadAttachment({ fileName: "test.docx" });
+        });
+      });
+    });
+
+    context("Verify 'Clone Step' feature", () => {
+      it("Click 'Clone Step'", () => {
+        SystemRequirement("REQ-3010");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev,
+          CyRoutes.GetAttachments,
+          CyRoutes.GetAttachmentsAttached,
+          CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"form.builder.clone.step\"]").click();
+        });
+        cy.wait(10000);
+      });
+
+      it("Verify description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .eq(1)
+          .should("have.text", "Step #1 description");
+      });
+
+      it("Verify materials are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
+        cy.wait(5000);
+      });
+
+      it("Verify equipments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(4).should("have.text", "ET-00003 - Equipment document ");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(5).should("have.text", "Free text equipment ");
+      });
+
+      it("Verify attachments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(5).click();
+        cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+          const attachName = $el.text();
+          expect(attachName).to.be.oneOf(["image", "test", "video"]);
+        });
+      });
+
+      it("Remove step", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"remove-schema-item\"]").last().click({ force: true });
+        });
+        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
       });
     });
 
@@ -791,6 +932,62 @@ context("Procedure and parts flow test", () => {
   context("Clone EB and verify materials and equipment tracking", () => {
     it("Click Clone EB", () => {
       cy.ebClickClone();
+    });
+
+    context("Verify 'Clone EB' feature copied EB", () => {
+      it("Verify title is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"Title-field\"]")
+          .should("have.text", "EB document");
+      });
+
+      it("Verify description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[id=field-description] div[data-editor]")
+          .should("have.text", "EB description");
+      });
+
+      it("Verify part revision", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("input[value=document]").should("have.attr", "checked");
+      });
+
+      it("Verify part document is same", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=childForRevise]")
+          .should("have.attr", "value", "PRT-00006 - Part for EB document");
+      });
+
+      it("Verify step description is copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .should("have.text", "Step #1 description");
+      });
+
+      it("Verify materials are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(2).should("contain.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+          .eq(3).should("have.text", "Free text material | Test | Qty: 3 pounds");
+      });
+
+      it("Verify equipments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(2).should("have.text", "ET-00003 - Equipment document ");
+        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+          .eq(3).should("have.text", "Free text equipment ");
+      });
+
+      it("Verify attachments are copied", () => {
+        SystemRequirement("REQ-3020");
+        cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(1).click();
+        cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
+          const attachName = $el.text();
+          expect(attachName).to.be.oneOf(["image", "test", "video"]);
+        });
+      });
     });
 
     context("Add materials and equipments", () => {
@@ -827,10 +1024,12 @@ context("Procedure and parts flow test", () => {
 
     context("Verify change from previous build", () => {
       it("Click 'Show changes from previous build'", () => {
+        SystemRequirement("REQ-3030");
         cy.pmToggleChangesFromPrevBuild();
       });
 
       it("Verify 'New Material for procedure' is added to materials", () => {
+        SystemRequirement("REQ-3030");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(0)
           .should("contain.text", "New Material for procedure")
           .should("contain.text", "Qty: 3")
@@ -860,7 +1059,6 @@ context("Procedure and parts flow test", () => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
               CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.GetRequiredApprovers], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
@@ -896,6 +1094,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {
@@ -908,6 +1108,10 @@ context("Procedure and parts flow test", () => {
   context("Copy to EB and verify materials and equipment tracking", () => {
     it("Click copy to EB", () => {
       cy.ebClickClone();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     context("Add materials and equipments", () => {
@@ -932,9 +1136,11 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Save EB", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -988,7 +1194,6 @@ context("Procedure and parts flow test", () => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
               CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.GetRequiredApprovers], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
@@ -997,10 +1202,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Approve and release the part", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () =>
-          {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
 
@@ -1027,6 +1229,8 @@ context("Procedure and parts flow test", () => {
               cy.visit(CONFIG.FE_URL + link);
             });
           });
+
+          cy.wait(5000);
         });
 
         it("Approve record button click", () => {

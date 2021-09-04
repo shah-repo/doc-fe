@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
+import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -10,6 +11,7 @@ import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionEffectiveDateOption } from "../../document.revision/utils/helpers";
+import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "./CreateDocumentByType";
 import { styles } from "./styles";
 
@@ -37,6 +39,8 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
 }) => {
   const classes = styles();
+  const intl = useIntl();
+
 
   const headers =
     columns.map((column) => {
@@ -49,8 +53,11 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           key: column.key,
         };
       }
+
+      const columnLabel = isTranslation(column.label) ? intl.formatMessage({ id: column.label }) : column.label;
+
       return {
-        label: `${column.label}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
+        label: `${columnLabel}: ${tableCriteria.queryDict?.[column.searchOptions?.dataKey || column.searchOptions?.defaultValue || ""] || column.searchOptions?.defaultValue || ""}`,
         key: column.key,
       };
     });

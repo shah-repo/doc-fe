@@ -240,7 +240,7 @@ Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => 
   cy.get("button[aria-label=approve]").first().click();
   cy.get("[data-cy=\"transition.action.password\"]").type("wrongPassword");
   cy.get("[data-cy=\"passwordConfirm\"]").click();
-  cy.wait(2000);
+  cy.wait(3000);
   cy.checkToastMessage({ exists: true });
 });
 
@@ -347,6 +347,7 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+    cy.wait(1000);
     cy.get("#title").type(params.title);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
@@ -381,7 +382,6 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
   cy.get("[data-cy=\"change.request.withdraw.alert\"]").click();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostWithdrawChangeRequests,
-    CyRoutes.EmployeesGet,
     CyRoutes.ARPreview,
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();

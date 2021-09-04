@@ -3,7 +3,7 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import { checkIsDocumentForm } from "./checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
-const isOwner = (
+export const isOwner = (
   documentRevision: DocumentRevision,
   currentUserEmail: string,
 ) =>

@@ -17,7 +17,7 @@ export const withFBMediaGallery = <T extends FBMediaGalleryProps>(
     handleDelete = (id: string) => {
       removeMedia && removeMedia(id);
       mediaAlbumState?.setActiveMedia(0);
-      if (!autosave) { return; }
+      if (!workspaceState?.autosave) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     };
 

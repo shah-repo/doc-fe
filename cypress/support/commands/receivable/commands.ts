@@ -59,7 +59,7 @@ Cypress.Commands.add("recAPICreateReceivable", (params: {
 });
 
 Cypress.Commands.add("recCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
 });
@@ -82,7 +82,12 @@ Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
-  cy.get("[data-cy=\"updateRecord\"]").click();
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApproversDocRev,
+    CyRoutes.GetAutocompleteOptions], () => {
+    cy.get("[data-cy=\"updateRecord\"]").click();
+  });
 });
 
 Cypress.Commands.add("recClickSaveBtn", () => {
@@ -172,8 +177,6 @@ Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: Purchase
       .contains("[data-cy=poItemIndex]", loadedItem.index.toString())
       .siblings("[data-cy=unitPrice]")
       .should("have.text", loadedItem.unitPrice);
-    cy.get("[data-cy=poSum]").eq(loadedItem.index - 1)
-      .should("have.text", loadedItem.totalPrice);
   });
 });
 

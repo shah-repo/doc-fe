@@ -7,25 +7,31 @@ import RadioButton from "../../../components/forms/fields/RadioButton";
 import RadioGroup from "../../../components/forms/fields/RadioGroup";
 import { required, validator } from "../../../components/forms/fields/validators";
 import Text from "../../../components/Text";
+import { useRevisionStageSelect } from "../../../hooks/docCustomization/useCustomization";
 
 interface Props {
   isDisabled: boolean;
   isDocRevFirstDraft: boolean;
   shouldShowRevStageForDocType: boolean;
+  documentTypeId: string;
+  defaultRevisionStage: string;
 }
 
 const RevisionStage: React.FunctionComponent<Props> = ({
   isDisabled,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,
+  documentTypeId,
+  defaultRevisionStage,
 }) => {
+  const { isVisible } = useRevisionStageSelect(documentTypeId);
 
   const numOfRevStages = useSelector(companySelectors.getCompanyMaxRevisionStage);
   const revStageOptions = numOfRevStages === 2 ?
     RevisionStageOptions.filter((stage) => stage.value !== 2) :
     RevisionStageOptions;
 
-  if (isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) {
+  if ((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType)) || (!isVisible && defaultRevisionStage)) {
     return null;
   }
 

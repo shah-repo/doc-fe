@@ -2,7 +2,7 @@ import { Box, createStyles, ExpansionPanel, ExpansionPanelDetails, ExpansionPane
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
-import { stripTags } from "../../../../common/utils/helpers";
+import { stripTags, convertHtmlEntities } from "../../../../common/utils/helpers";
 import { Attachment } from "../../../../state/ducks/attachments/types";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
@@ -46,7 +46,7 @@ const PODetails: React.FunctionComponent<Props> = ({
 
   const renderDetails = (
     <Box>
-      <PODetailItem label="common.description" value={stripTags(documentRevision.description)} />
+      <PODetailItem label="common.description" value={convertHtmlEntities(stripTags(documentRevision.description))} />
       <PODetailItem label="common.line.items" value={purchaseOrder.items?.length || 0} />
       <POAttachments {...{ docRevAttachments }} />
     </Box>

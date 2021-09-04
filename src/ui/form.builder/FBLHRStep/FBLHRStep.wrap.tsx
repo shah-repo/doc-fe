@@ -1,10 +1,11 @@
-import { find, flattenDeep, omit } from "lodash";
+import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
+import { find, flattenDeep, lowerCase, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { getHighestRevision } from "../../documentRevision/forms/transform";
+import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -12,6 +13,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
+    filterOptions,
     name = "",
     index,
     loading,
@@ -30,17 +32,18 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom;
-
-    stepLHRs = smartReferencesFrom
-      ?.find((ref) => ref.active
+    const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
       && ref.type === SmartReferenceType.HiddenPiInstance
-      && ref.metadata.fieldId === name)?.fromDocRev;
+      && ref.metadata.fieldId === name);
+
+    const highestReference = getLatesReferenceVersion(smartReferencesFrom);
+    stepLHRs = highestReference?.fromDocRev;
+
     const employees = workspaceState?.externalState?.company?.companyMine.employees;
     ownerOfStartMPIAction = employees?.find((e) =>
       e.id === smartReferencesFrom?.[0]?.metadata.startedBy)?.user?.name;
     ownerOfCompleteMPIAction = employees?.find((e) =>
-      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name || "Sara";
+      e.id === smartReferencesFrom?.[0]?.metadata.completedBy)?.user?.name;
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
@@ -112,7 +115,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
-        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) => item.type === "mpiprocedure");
+        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) =>
+          item.type === "mpiprocedure" && !item.deleted);
         const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
@@ -141,13 +145,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @methods
     startMpi = () => {
-      let startQuantity = formState?.getFieldValue(`fb-lhrs-start-quantity-${name}`);
-      if (!startQuantity || startQuantity === "") {
-        startQuantity = 1;
-      }
       lhrStepState.startMpi(
         name,
-        startQuantity,
         workspaceState?.document?.id,
         schemaItem?.editorConfig?.value,
         stepIndex,
@@ -177,6 +176,38 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
     };
+    const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
+      const filterValue = lowerCase(inputValue);
+
+      return lowerCase(docRev.name).includes(filterValue) ||
+        lowerCase(docRev.document.docId).includes(filterValue);
+    };
+
+    function handleFilter(
+      data: DocumentRevision[],
+      state: FilterOptionsState,
+    ) {
+      const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
+      const { inputValue = "" } = state || {};
+
+      if (documentType.length === 0 && revisionStatus.length === 0) {
+        return data?.filter((docRev) => filterOutOption(docRev, inputValue));
+      }
+      const options = data?.filter((docRev) => {
+        const {
+          status = "",
+          document: { documentType: { id: docTypeId = "" } = {} } = {},
+        } = docRev || {};
+
+        return revisionStatus.includes(status) &&
+          documentType.includes(docTypeId) &&
+          filterOutOption(docRev, inputValue);
+      });
+
+      return options;
+    }
+
+    filterOptions = (options, state) => handleFilter(options, state);
 
     // MARK: @observer
     useObserver(() => {
@@ -190,6 +221,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     return Component({
       ...(props as T),
+      filterOptions,
       name,
       isOutput,
       startMpi,

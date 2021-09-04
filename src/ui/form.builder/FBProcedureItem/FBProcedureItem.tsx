@@ -1,6 +1,7 @@
 import { Box, IconButton } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import EditIcon from "@material-ui/icons/Edit";
+import LockIcon from "@material-ui/icons/Lock";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import React from "react";
@@ -21,6 +22,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
   type,
   value = [],
   name,
+  locked,
 }) => (
   <FBProvider {...{ dialogState }}>
     <FBDialog />
@@ -46,7 +48,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
           variant="text"
           color="inherit"
           dataCy= {`${FBProcedureItemLocale[type]}.btn`}
-          startIcon={<AddCircleIcon />}
+          startIcon={locked ? <LockIcon fontSize="small" color="error" /> : <AddCircleIcon />}
           label={{
             locale: "form.builder.action.mode",
             values: {

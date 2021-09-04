@@ -127,7 +127,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
 
       cy.navigListExistsCheck(
-        NavigationItems.WORK_ORDERS,
         NavigationItems.LOTS,
       );
 

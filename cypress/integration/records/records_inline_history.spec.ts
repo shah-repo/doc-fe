@@ -163,6 +163,7 @@ context("Record inline history Flow", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.wait(5000);
       });
 
       it("Approve and release document", () => {
@@ -198,7 +199,7 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").click().type("First entry");
+        cy.get("[data-cy^=\"textfield-for-inline\"]").type("First entry");
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
@@ -214,12 +215,16 @@ context("Record inline history Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.get("[name*=\"fb-ia-inline-field\"] input").click();
-        cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
+        SystemRequirement("REQ-4340");
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+          cy.get("[name*=\"fb-ia-inline-field\"] input").click();
+          cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
+        });
       });
 
       it("Save record", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(5000);
       });
     });
 
@@ -229,8 +234,9 @@ context("Record inline history Flow", () => {
         cy.get("input[name=\"password\"]").type("Tester1!");
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet,
-          CyRoutes.DocPreview], () => {
+          CyRoutes.DocPreview,
+          CyRoutes.GetDocAggregatedAudit,
+          CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
       });
@@ -238,10 +244,8 @@ context("Record inline history Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.get("[data-cy^=\"textfield-for-inline\"]").click().type(", <b> Second entry </b>");
-            cy.unClick();
-          });
+          cy.unClick();
+          cy.get("[data-cy^=\"textfield-for-inline\"]").type(", <b> Second entry </b>");
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
@@ -256,12 +260,13 @@ context("Record inline history Flow", () => {
         });
 
         it("Approve first Inline Approval", () => {
+          SystemRequirement("REQ-4400");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
         });
@@ -296,6 +301,7 @@ context("Record inline history Flow", () => {
 
         it("Save record", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.wait(4000);
         });
 
         it("Count number of elements in approval history", () => {
@@ -321,14 +327,17 @@ context("Record inline history Flow", () => {
 
       context("Check inline approval history on released document", () => {
         it("Approve first Inline Approval", () => {
+          SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.wait(2000);
           cy.get("input[name=\"password\"]").clear().type("Tester1!");
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.EmployeesGet,
-            CyRoutes.DocPreview], () => {
+            CyRoutes.DocPreview,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();
           });
+          // cy.wait(3000);
         });
 
         it("Navigate to released document", () => {
@@ -341,8 +350,8 @@ context("Record inline history Flow", () => {
           cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 7);
         });
 
-        it("Check Inline approval history values", () => {
-          SystemRequirement("REQ-1000");
+        it("Check Inline approval history values for current revision", () => {
+          SystemRequirement("REQ-1000", "REQ-2680", "REQ-4370");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Checked in CheckboxGroup for inline: Blue",
@@ -370,8 +379,8 @@ context("Record inline history Flow", () => {
           cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 3);
         });
 
-        it("Check Inline approval history values", () => {
-          SystemRequirement("REQ-1000");
+        it("Check Inline approval history values for current revision", () => {
+          SystemRequirement("REQ-1000", "REQ-2680");
           cy.fbInlineApprovalHisotryCheck(
             "Approved",
             "Changed Textfield for inline from First entry to First entry, Second entry",

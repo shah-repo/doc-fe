@@ -71,7 +71,7 @@ const RevisionTypeChange: React.FunctionComponent<Props> = ({
       <CustomLabelTooltip tooltipConfig={revisionTooltipConfig}>
         <Typography variant="h6">
           <Text
-            message={isRecord ? "document.revision.type.of.update" : revisionSelectLabel}
+            message={revisionSelectLabel}
           />
         </Typography>
       </CustomLabelTooltip>

@@ -9,6 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -21,7 +22,116 @@ let initialArDocument;
 let subassemblyDocumentForm;
 let approvalRequestDocumentType;
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
-
+const FGLandSLSchema = [
+  {
+    name: "lot_quantity",
+    type: "quantity",
+    index: 0,
+    label: "Quantity Received",
+    applicableOn: [
+      "ON_STATE_TO_IN_REVIEW",
+    ],
+    deleteDisabled: true,
+    editorProperties: [],
+    validationAttribute: "Quantity Received",
+    deleteInFormDisabled: true,
+    applicableValidationSchema: true,
+  },
+  {
+    name: "100-inspection-override",
+    type: "checkboxgroup",
+    index: 1,
+    label: "100% Inspection Override",
+    options: [
+      {
+        text: "100% Inspection Override",
+        value: "100% Inspection Override",
+      },
+    ],
+    applicableOn: [
+      "ON_STATE_TO_IN_REVIEW",
+    ],
+    deleteDisabled: true,
+    validationMode: "default",
+    editorProperties: [],
+    validationAttribute: "100% Inspection Override",
+    deleteInFormDisabled: true,
+    applicableValidationSchema: true,
+  },
+];
+const FGLandSLFieldsConfig = {
+  D: {
+    visible: false,
+    required: false,
+  },
+  E: {
+    label: "Record Type",
+    visible: true,
+    required: true,
+  },
+  F: {
+    label: "Record ID",
+    visible: false,
+    required: true,
+  },
+  G: {
+    visible: false,
+    required: false,
+  },
+  I: {
+    visible: false,
+  },
+  J: {
+    visible: false,
+  },
+  K: {
+    label: "Void",
+    visible: true,
+  },
+  L: {
+    label: "Correction",
+    visible: true,
+  },
+  N: {
+    label: "Finalize and Release",
+    visible: true,
+  },
+  O: {
+    label: "Record History",
+    visible: true,
+  },
+  R: {
+    visible: false,
+  },
+  S: {
+    label: "Update Record",
+    visible: true,
+  },
+  A1: {
+    label: "WIP",
+    visible: true,
+  },
+  A2: {
+    label: "Voided",
+    visible: true,
+  },
+  A3: {
+    label: "Archive",
+    visible: true,
+  },
+  P1: {
+    label: "WIP",
+    visible: true,
+  },
+  P2: {
+    label: "Voided",
+    visible: true,
+  },
+  P3: {
+    label: "Archive",
+    visible: true,
+  },
+};
 const subassemblySchema = [
   {
     name: "make-vs-buy",
@@ -373,6 +483,24 @@ context("Inspection flow", () => {
                 category: "Parts",
                 schema: subassemblySchema,
               },
+              {
+                documentTypeName: "Finished Good Lot",
+                documentTypeAcronym: "FGL-",
+                group: "PART_LOT",
+                isQms: true,
+                category: "Parts",
+                schema: FGLandSLSchema,
+                fieldsConfig: FGLandSLFieldsConfig,
+              },
+              {
+                documentTypeName: "Subassembly Lot",
+                documentTypeAcronym: "SA-",
+                group: "PART_LOT",
+                isQms: true,
+                category: "Record",
+                schema: FGLandSLSchema,
+                fieldsConfig: FGLandSLFieldsConfig,
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -487,15 +615,6 @@ context("Inspection flow", () => {
                   type: "CATEGORY",
                   label: "Parts",
                   category: "Parts",
-                  restrictedToUsersWithTags: [
-                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
-                  ],
-                },
-                {
-                  icon: "/navigation_icons/todo.svg",
-                  type: "CATEGORY",
-                  label: "Work Orders",
-                  category: "Work Order",
                   restrictedToUsersWithTags: [
                     GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
                   ],
@@ -976,6 +1095,7 @@ context("Inspection flow", () => {
         });
 
         it("Add 'Height field'", () => {
+          SystemRequirement("FB-0090");
           cy.fbClickAddNewHiddenBtn();
           cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
           cy.fbEnterLabel({ label: "Height" });
@@ -1033,8 +1153,10 @@ context("Inspection flow", () => {
       });
 
       it("Click 'ADD NEW PART'", () => {
-        cy.recCreateRecordFromLandingPage();
-        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
+          cy.recCreateRecordFromLandingPage();
+          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
+        });
       });
 
       it("Enter title 'New Part for inspection'", () => {
@@ -1117,7 +1239,7 @@ context("Inspection flow", () => {
     });
 
     it("Add output type named 'Test Component Specifications Lot'", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Component Specifications Lot" });
+      cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
     });
 
     it("Add output type named 'Test Finished Good Lot'", () => {
@@ -1139,7 +1261,9 @@ context("Inspection flow", () => {
 
   context("Create Inspection document", () => {
     it("Create inspection from Form", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
     it("Enters title 'Inspection Document'", () => {
@@ -1164,10 +1288,14 @@ context("Inspection flow", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.wait(5000);
     });
 
     it("Add 'Expiry Date'", () => {
-      cy.poAddDateRequired();
+      cy.get("input[name=expiry-date]").parent().find("button").click();
+      cy.wait(500);
+      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().click();
+      cy.wait(5000);
     });
 
     context("Fill samples with values", () => {
@@ -1249,7 +1377,9 @@ context("Inspection flow", () => {
 
     context("Release Inspection document", () => {
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
       });
 
       it("Add approvals", () => {
@@ -1262,9 +1392,7 @@ context("Inspection flow", () => {
       });
 
       it("Approve inspection document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-          cy.ebApprove();
-        });
+        cy.ebApprove();
       });
 
       it("Check status is 'Released'", () => {

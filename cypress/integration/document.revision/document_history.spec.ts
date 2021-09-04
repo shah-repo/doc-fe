@@ -16,7 +16,7 @@ const groupOne = "Developers";
 const groupTwo = "User Management";
 const documentId = { value: "00004", fullId: "FM-00004" };
 const reference = {
-  value: "FM-00001 - 1 - Initial AR Form", valueCode: "FM-00001",
+  value: "FM-00001 - 1 - AR Form", valueCode: "FM-00001",
 };
 const formTitle = { value: "My Form", newValue: "My Form Edited", newChunk: " Edited" };
 const formDescription = { value: "Description", newValue: "Description Edited" };
@@ -218,7 +218,12 @@ context("Check Document History", () => {
     });
 
     it("edit the description", () => {
-      cy.drEnterDocumentDescription({ description: formDescription.newValue });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drEnterDocumentDescription({ description: formDescription.newValue });
+        cy.unClick();
+        cy.wait(500);
+        cy.unClick();
+      });
     });
 
     it("Remove reference for document", () => {
@@ -282,15 +287,20 @@ context("Check Document History", () => {
 
   context("Edit permissions", () => {
     it("Open permissions tab", () => {
+      SystemRequirement("REQ-4240");
       cy.drSelectPermissionTab();
     });
 
     it("Add another user permission", () => {
-      cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      SystemRequirement("REQ-4240");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.drAddUserFromPermissionTab(sharedUserTwo.name);
+      });
     });
 
     it("Add another group permission", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocSecurity, () => {
+      SystemRequirement("REQ-4240");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
         cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });
@@ -331,13 +341,14 @@ context("Check Document History", () => {
 
   context("Approve and Release document", () => {
     it("Approves and releases document", () => {
+      SystemRequirement("REQ-4020", "REQ-4040");
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
   context("Check document history", () => {
-    it("Open history drawer", () => {
-      SystemRequirement("REQ-0360");
+    it("Open history drawer and compare history values", () => {
+      SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
       cy.drSelectHistoryTab();
     });
 
@@ -356,12 +367,12 @@ context("Check Document History", () => {
           }
 
           if (typeOfChange === "s3Link added") {
-            cy.get(`[data-cy^=\"change-key-${groupIndex}-\"]`).should("have.text", typeOfChange);
+            cy.get(`[data-cy^="change-key-${groupIndex}-"]`).should("have.text", typeOfChange);
             cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
           }
           else {
 
-            cy.get(`[data-cy^=\"change-value-${groupIndex}-\"]`)
+            cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
               .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
               .parent()
               .parent()

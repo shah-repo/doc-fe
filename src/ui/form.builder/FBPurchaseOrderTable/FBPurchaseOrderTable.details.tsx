@@ -33,7 +33,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 <FBTableCell
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
-                  align={(index > 2) ? "right" : "left"}
+                  align={(index > 2 && head !== "form.builder.field.lots") ? "right" : "left"}
                 />
               )}
             </FBMapWrapper>
@@ -44,7 +44,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
             {(item: FBPurchaseOrderItem, index) => (
               <TableRow
                 key={`fb-po-item-${item.id}-${index}`}
-                onClick={() => handleItem && handleItem(item)}
+                onClick={() => handleItem?.(item)}
                 data-cy="poItems"
               >
                 <FBTableCell align="right">
@@ -53,7 +53,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                       <DeleteIcon
                         className="FBIcon-root"
                         fontSize="small"
-                        onClick={handleDelete && handleDelete(index)}
+                        onClick={handleDelete?.(index)}
                       />
                     </FBTooltip>
                   )}
@@ -82,7 +82,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                         {index > 0 && (
                           <FBTableCell
                             data-cy = {dataCy}
-                            align={(index > 2) ? "right" : "left"}
+                            align={(index > 2 && key !== "lots") ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
                           />

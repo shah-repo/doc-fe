@@ -13,8 +13,6 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     "poreceive",
     "evidencemediaupload",
     "instructionsdocument",
-    "testRequirement",
-    "selectrequirement",
     "hellosign",
     "approvalMatrix",
     "poApprovalMatrix",

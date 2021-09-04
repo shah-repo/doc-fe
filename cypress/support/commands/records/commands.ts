@@ -74,7 +74,6 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
@@ -91,7 +90,6 @@ Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordTyp
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApprovers], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
@@ -108,7 +106,6 @@ Cypress.Commands.add("equipClickCreateNew", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetDocumentType,
     CyRoutes.GetSpecificDocumentType,
-    CyRoutes.EmployeesGet,
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApprovers], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
@@ -118,7 +115,6 @@ Cypress.Commands.add("equipClickCreateNew", () => {
 Cypress.Commands.add("equipReloadDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
-    CyRoutes.EmployeesGet,
     CyRoutes.GetAutocompleteOptions,
     CyRoutes.DocPreview], () => {
     cy.reload();
@@ -127,9 +123,7 @@ Cypress.Commands.add("equipReloadDocument", () => {
 
 
 Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.EmployeesGet,
-    CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
     cy.wait(500);
     cy.get("div[id^=react-select]").contains(params.recordType).click();

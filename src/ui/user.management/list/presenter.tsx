@@ -52,7 +52,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       window.open(data?.data.url);
     },
     onError: (error) => {
-      toastError(error as string);
+      toastError(intl.formatMessage({ id: "dropbox.connection.error" }));
     },
   });
   const enableDropboxAction = useActionCreator(companyActions.enableDropbox);

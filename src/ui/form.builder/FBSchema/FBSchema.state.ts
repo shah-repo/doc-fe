@@ -8,7 +8,8 @@ import {
   FBCheckboxGroup,
   FBEditorState,
   FBInputProps,
-  FBInputType, FBSchemaProps,
+  FBInputType,
+  FBSchemaProps,
 } from "..";
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
 import FBApprovals from "../FBApprovals/FBApprovals";
@@ -46,11 +47,9 @@ import FBSchemaSelect from "../FBSchemaSelect/FBSchemaSelect";
 import FBSection from "../FBSection/FBSection";
 import FBSelect from "../FBSelect/FBSelect";
 import FBSelectDocument from "../FBSelectDocument/FBSelectDocument";
-import FBSelectRequirement from "../FBSelectRequirement/FBSelectRequirement";
 import FBSubsection from "../FBSubsection/FBSubsection";
 import FBSupplier from "../FBSupplier/FBSupplier";
 import FBTask from "../FBTask/FBTask";
-import FBTestRequirement from "../FBTestRequirement/FBTestRequirement";
 import FBTextEditor from "../FBTextEditor/FBTextEditor";
 import FBTextField from "../FBTextField/FBTextField";
 import FBTextFieldWithRange from "../FBTextFieldWithRange/FBTextFieldWithRange";
@@ -98,10 +97,8 @@ class FBSchemaState {
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
     evidencemediaupload: FBMediaAlbumField,
-    testRequirement: FBTestRequirement,
     instructionsdocument: FBInstructionsDocument,
     selectdocument: FBSelectDocument,
-    selectrequirement: FBSelectRequirement,
     checkpoint: FBButton,
     createlabel: FBButton,
     approval: FBApproval,

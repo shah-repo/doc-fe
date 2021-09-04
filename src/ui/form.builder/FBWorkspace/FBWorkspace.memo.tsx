@@ -1,6 +1,6 @@
 import { isEqual, size } from "lodash";
 import React from "react";
-import { FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps } from "..";
+import { FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from "..";
 
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   isStarter,
@@ -10,6 +10,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   workspaceState,
 }) => (
   <>
+    <FBWorkspaceSocket />
     {isStarter && <FBStarter />}
     {!isStarter && size(schema) > 0 && <FBSchema {...{ schema }} schemaState={workspaceState} workspaceMode={mode} />}
     <FBWorkspaceBottomBar {...{ includeTransport }} />

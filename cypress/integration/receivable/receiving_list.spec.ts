@@ -1,10 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -24,8 +26,22 @@ let createdPOFormDocument;
 let createdPODocument;
 let createdRecivableFormDocument;
 let createdReceivable1;
+let dateOfStepCompletion;
+let dateOfStepCompletionOneMinuteLater;
 
 context("Receivable list test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -237,6 +253,14 @@ context("Receivable list test", () => {
                           label: "Receivable",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
+                        },
+                        {
+                          label: "form.builder.approvals",
+                          type: "approvals",
+                          deleteDisabled: true,
+                          name: "fb-approvals-kn7fbu5l",
+                          uniqueSchemaItem: true,
+                          index: 0,
                         }],
                       },
                     },
@@ -358,14 +382,12 @@ context("Receivable list test", () => {
 
     context("Check for access to receivable list", () => {
       it("Verify user can't access receivable list", () => {
-        // SystemRequirement("REQ-1700");
         cy.navigListNotExistsCheck( NavigationItems.RECEIVING );
       });
     });
 
     context("Create group with privilages to restricted doc types", () => {
       it("Create group with permission to access receivable list", () => {
-        // SystemRequirement("REQ-1700");
         cy.grpAPICreateNewGroup({
           payload: {
             name: "Group with access to restricted doc types",
@@ -376,6 +398,10 @@ context("Receivable list test", () => {
           employeeId: adminEmployee.id,
           sessionId: loginResponse.sessionId,
         });
+      });
+
+      it("Logout user", () => {
+        cy.authLogout();
       });
     });
 
@@ -394,7 +420,6 @@ context("Receivable list test", () => {
 
     context("Check for access to receivable list", () => {
       it("Verify user can access receivable list", () => {
-        // SystemRequirement("REQ-1700");
         cy.navigListExistsCheck( NavigationItems.RECEIVING );
       });
     });
@@ -413,7 +438,6 @@ context("Receivable list test", () => {
 
   context("Check for displaying default columns", () => {
     it("Verify receivable id is present", () => {
-      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
     });
 
@@ -422,20 +446,12 @@ context("Receivable list test", () => {
     // });
 
     it("Verify owner is present", () => {
-      // SystemRequirement("REQ-1680");
       cy.recVerifyFilterByOwner({ owner: USERS[1].name });
     });
 
     it("Verify record state is present", () => {
-      // SystemRequirement("REQ-1680");
-      cy.recVerifyFilterByState({ state: "DRAFT" });
+      cy.recVerifyFilterByState({ state: "WIP" });
     });
-
-    // it.skip("Verify approval date is present", () => {
-    //   // SystemRequirement("REQ-1680");
-    //   cy.recVerifyFilterByState({ state: "DRAFT" });
-    //   fail;
-    // });
   });
 
   context("Edit receivable", () => {
@@ -444,20 +460,46 @@ context("Receivable list test", () => {
     });
 
     it("Enter first receivable on list", () => {
-      // SystemRequirement("REQ-1780");
-      cy.recClickOnFirstReceivableOnList();
+      SystemRequirement("REQ-1780");
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetAutocompleteOptions,
+        CyRoutes.GetFieldLocks], () => {
+        cy.recClickOnFirstReceivableOnList();
+      });
     });
 
     it("Click on update record", () => {
-      cy.recClickUpdateRecord();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.recClickUpdateRecord();
+      });
     });
 
-    it("Click on save record", () => {
-      cy.recClickSaveBtn();
+    it("Add approval", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
     });
 
-    it("Approve and release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve receivable", () => {
+      dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+      dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
+        .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+      cy.ebApprove();
+    });
+
+    it("Check if ID and date time are recorded when approving", () => {
+      SystemRequirement("REQ-2050", "REQ-2060");
+      cy.get("[id=\"Presenter-FBWorkspace\"]>div>div>div").eq(6).should("contain", USERS[1].name)
+        .and("contain", "Approved")
+        .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
+    });
+
+    it("Verify status", () => {
+      cy.drCheckDocumentStatus({ status: "Current" });
     });
   });
 
@@ -467,7 +509,7 @@ context("Receivable list test", () => {
     });
 
     it("Verify last edited receivable is first on list", () => {
-      // SystemRequirement("REQ-1740");
+      SystemRequirement("REQ-1740");
       cy.dlClearFilters();
       cy.recVerifyFilterByReceivableId({ recId: "RC-00005" });
     });
@@ -480,12 +522,12 @@ context("Receivable list test", () => {
       });
 
       it("Verify filter by receivable id", () => {
-        // SystemRequirement("REQ-1710");
+        SystemRequirement("REQ-1710");
         cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
       });
 
       it("Verify receivable counter on document list", () => {
-        // SystemRequirement("REQ-1760");
+        SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -500,12 +542,12 @@ context("Receivable list test", () => {
       });
 
       it("Verify filter by owner", () => {
-        // SystemRequirement("REQ-1710");
+        SystemRequirement("REQ-1710");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify receivable counter on document list", () => {
-        // SystemRequirement("REQ-1760");
+        SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 2 });
       });
     });
@@ -515,37 +557,17 @@ context("Receivable list test", () => {
         cy.dlClearFilters();
       });
 
-      it("Filter list by state 'DRAFT'", () => {
-        cy.recFilterByState({ state: "Draft" });
+      it("Filter list by state 'WIP'", () => {
+        cy.recFilterByState({ state: "WIP" });
       });
 
       it("Verify filter by state", () => {
-        // SystemRequirement("REQ-1710");
-        cy.recVerifyFilterByState({ state: "DRAFT" });
+        SystemRequirement("REQ-1710");
+        cy.recVerifyFilterByState({ state: "WIP" });
       });
 
       it("Verify receivable counter on document list", () => {
-        // SystemRequirement("REQ-1760");
-        cy.dlVerifyDocCounter({ docCounterNumber: 1 });
-      });
-    });
-
-    context("Verify filter by approval id", () => {
-      it("Clear filter", () => {
-        cy.dlClearFilters();
-      });
-
-      it("Filter list by approval id 'AR00005'", () => {
-        cy.recFilterByARId({ arId: "AR00005" });
-      });
-
-      it("Verify filter by approval id", () => {
-        // SystemRequirement("REQ-1710");
-        cy.recVerifyFilterByARId({ arId: "AR00005" });
-      });
-
-      it("Verify receivable counter on document list", () => {
-        // SystemRequirement("REQ-1760");
+        SystemRequirement("REQ-1760");
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });
@@ -556,7 +578,7 @@ context("Receivable list test", () => {
       });
 
       it("Verify filter clear", () => {
-        // SystemRequirement("REQ-1750");
+        SystemRequirement("REQ-1750");
         cy.recVerifyFilterClear();
       });
     });
@@ -576,12 +598,12 @@ context("Receivable list test", () => {
       });
 
       it("Verify filter by owner", () => {
-        // SystemRequirement("REQ-1730");
+        SystemRequirement("REQ-1730");
         cy.recVerifyFilterByOwner({ owner: USERS[1].name });
       });
 
       it("Verify filter by receivable id", () => {
-        // SystemRequirement("REQ-1730");
+        SystemRequirement("REQ-1730");
         cy.recVerifyFilterByReceivableId({ recId: "RC-00006" });
       });
     });

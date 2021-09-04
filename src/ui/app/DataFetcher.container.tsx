@@ -1,8 +1,9 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import moment from "moment";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
+import Config from "../../config";
 import { authActions, authSelectors } from "../../state/ducks/auth";
 import { setIotCreds } from "../../state/ducks/auth/actions";
 import { changeRequestsActions } from "../../state/ducks/changeRequest";
@@ -10,17 +11,16 @@ import { documentTypeActions } from "../../state/ducks/documentRevisions/documen
 import { GroupWithGroupOptions } from "../../state/ducks/documentRevisions/documentType/types";
 import { pageDetailsActions } from "../../state/ducks/pageDetails";
 import { userManagementActions } from "../../state/ducks/userManagement";
-import { isEqual } from "lodash";
 import { toastError } from "../components/notifications";
-import Config from "../../config";
-import useAsync from "../hooks/useAsync";
 import useActionCreator from "../hooks/useActionCreator";
+import useAsync from "../hooks/useAsync";
 
 const DataFetcherContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const employeeId = useSelector(authSelectors.currentEmployeeId);
   const iotCredentials = useSelector(authSelectors.getCredentials);
   const expirationIotDate = useSelector(authSelectors.getExpirationOfCredentials);
+  const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions);
 
   useEffect(() => {
     dispatch(pageDetailsActions.allPageDetails());
@@ -48,9 +48,9 @@ const DataFetcherContainer: React.FunctionComponent = () => {
     },
   });
 
-  const getGroupWithGroupOptions = useActionCreator(documentTypeActions.getGroupWithGroupOptions);
   useEffect(() => {
     async.start(getGroupWithGroupOptions, async);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // NOTE: should we show error messages here?

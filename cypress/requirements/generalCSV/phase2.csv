@@ -1,0 +1,94 @@
+,REQ #,Module,Sub-Module,Requirement
+UN-0060,REQ-2230,Supplier Management,Supplier Landing Page,The system shall display the list of suppliers on the Supplier Landing page
+UN-0060,REQ-2240,Supplier Management,Supplier Landing Page,"The system should display the following default columns on the landing page of the Supplier module: Supplier ID, State, Supplier Name, Supplier Use, Supplier Status, Risk Classification"
+UN-0060,REQ-2250,Supplier Management,Supplier Landing Page,The system should provide a mechanism to export the Supplier database from the landing page (e.g. a .csv file)
+UN-0060,REQ-2270,Supplier Management,Supplier Landing Page,The system shall allow the user to filter the displayed Suppliers for each of the columns displayed on the landing page
+UN-0060,REQ-2290,Supplier Management,Supplier Landing Page,The system shall maintain Supplier filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0060,REQ-2310,Supplier Management,Supplier Landing Page,The system shall provide a mechanism to clear Supplier List filters
+UN-0060,REQ-2320,Supplier Management,Supplier Landing Page,The system shall display the number of suppliers displayed that match the filter settings
+UN-0060,REQ-2330,Supplier Management,Supplier Landing Page,The system shall allow for creation of a new supplier from the supplier landing page 
+UN-0060,REQ-2340,Supplier Management,Supplier Landing Page,The system shall allow the user to open the Supplier File from the supplier list
+UN-0100,REQ-2840,Equipment,Equipment,"The system shall display the following default columns on the landing page for the Equipment list: Equipment ID, Revision, STATE, Title, Equipment Owner, Cal Due Date, PM Due Date AND EQ STATUS (e.g. this list defines content, not column header names)"
+UN-0100,REQ-2850,Equipment,Equipment,The system shall allow the user to filter the displayed Equipment List for each of the columns displayed on the landing page
+UN-0100,REQ-2860,Equipment,Equipment,The system should provide a mechanism to export the Equipment List (e.g. to a .csv format)
+UN-0100,REQ-2870,Equipment,Equipment,The system shall allow the user to open any item within the Equipment List
+UN-0100,REQ-2880,Equipment,Equipment,The system shall provide a mechanism for the user to create an item from the Equipment List landing page
+UN-0100,REQ-2890,Equipment,Equipment,The system shall allow the user to create a Calibration or a Preventive Maintenance (PM) record associated with an item of internal type equipment from within the equipment page
+UN-0100,REQ-2900,Equipment,Equipment,"The system shall display the history of the equipment associated records (Calibration, PM) in the equipment page. The history shall include the record ID, title, status, approver name and date of completion"
+UN-0100,REQ-2910,Equipment,Equipment,The system shall indicate the due date of the Calibration or PM record for any item with internal type equipment
+UN-0100,REQ-2920,Equipment,Equipment,The system shall provide a mechanism for the user to set up/define the frequency for the required equipment associated Calibration or PM record
+UN-0030,REQ-1120,Purchasing,Purchase Order Landing Page,"The system shall display the following default columns on the landing page of the PO module: 
+PO#, 
+Revision (major only), 
+PO status, 
+Supplier, 
+Part Number, 
+Amount, 
+Requestor 
+Issue Date"
+UN-0030,REQ-1130,Purchasing,Purchase Order Landing Page,The system should provide a mechanism to export the PO database from the landing page
+UN-0030,REQ-1150,Purchasing,Purchase Order Landing Page,The system shall allow the user to filter the displayed PO's for each of the columns displayed on the landing page
+UN-0030,REQ-1160,Purchasing,Purchase Order Landing Page,The system shall default to most recently edited Open PO's displayed when starting a new Enlil session
+UN-0030,REQ-1170,Purchasing,Purchase Order Landing Page,The system shall maintain PO filter settings during an Enlil session when navigating away from and back to the landing page
+UN-0030,REQ-1180,Purchasing,Purchase Order Landing Page,The system shall default to the PO list being sorted by most recent first
+UN-0030,REQ-1190,Purchasing,Purchase Order Landing Page,The system shall provide a mechanism to clear Purchase Order list filters
+UN-0030,REQ-1200,Purchasing,Purchase Order Landing Page,The system shall display the number of PO's displayed that match the filter settings
+UN-0030,REQ-1210,Purchasing,Purchase Order Landing Page,The system shall allow the user to open a PO from the PO list
+UN-0030,REQ-1220,Purchasing,Purchase Order Landing Page,The system should allow the user to access the Title of a Part number on the Purchase Order Landing Page
+UN-0030,REQ-1250,Purchasing,Purchase Order Creation ,"The system shall allow the user to access a list of the following:
+company addresses
+GL codes
+shipping accounts
+Terms
+Units "
+UN-0030,REQ-1260,Purchasing,Purchase Order Creation ,"The system shall allow a customer to select from multiple PO forms when creating a new PO. (If only one form is in system, no form selector window is shown)"
+UN-0030,REQ-1270,Purchasing,Purchase Order Creation ,The system shall assign a unique PO number for each PO created
+UN-0030,REQ-1280,Purchasing,Purchase Order Creation ,The system shall set the PO state to draft when created
+UN-0030,REQ-1290,Purchasing,Purchase Order Creation ,The system shall allow the user to enter a description for the PO
+UN-0030,REQ-1300,Purchasing,Purchase Order Creation ,"The system shall allow the selection of:
+a supplier in the system, 
+the shipping address to any of the company address(es)
+from a subset of GL Code list
+a shipping accounts
+the Requestor"
+UN-0030,REQ-1310,Purchasing,Purchase Order Creation ,"The system shall allow the entry of:
+a default company address
+the ""Ordered"" date
+Terms"
+UN-0030,REQ-1320,Purchasing,Purchase Order Creation ,"The system shall allow the user to specify the selected currency for the entire PO. The following currencies are supported (USD, EURO, BRITISH POUND, Canadian Dollar and Australian Dollar)"
+UN-0030,REQ-1330,Purchasing,Purchase Order Creation ,"The system shall display a source website from where the exchange rate was extracted, the currency exchange rate and the date that was used to estimate the USD value of the PO"
+UN-0030,REQ-1350,Purchasing,Purchase Order Creation ,The system shall allow the user to upload attachment(s) (e.g.: quotation and any other necessary attachments…etc.)
+UN-0030,REQ-1360,Purchasing,Purchase Order Creation ,The system shall allow the user to enter multiple line items (to purchase parts or service items). 
+UN-0030,REQ-1370,Purchasing,Purchase Order Creation ,The system shall allow the user to save a PO in Draft state and complete it at a later time
+UN-0030,REQ-1380,Purchasing,Purchase Order Creation ,Each line item added to the PO shall have a unique number identifier
+UN-0030,REQ-1400,Purchasing,Purchase Order Creation ,"The system shall have all the line item details as optional. Exceptions: the part number identifier is required, the order date is required"
+UN-0033,REQ-1410,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Product"" line item was selected: Part Number with Rev (list), Part Description (text entry), Quantity Ordered (text entry), Units (list), GL Code (list), Date Required (Datepicker), Supplier Part Number (text entry), Unit Price (text entry), Capital Equipment (checkbox), Tax (checkbox)"
+UN-0033,REQ-1420,Purchasing,Purchase Order Creation ,"The system shall have the following entries if a ""Service"" line item was selected: Service ID (text entry), Description (text entry), Quantity Ordered (text entry), Units (list/text entry), GL Code (list), Date Required (list), Unit Price (text entry), Tax (checkbox)"
+UN-0030,REQ-1430,Purchasing,Purchase Order Creation ,The system shall auto calculate the subtotal amount based on the ordered quantity and the unit price
+UN-0030,REQ-1440,Purchasing,Purchase Order Creation ,"The system shall auto calculate the total amount based on the subtotal, the tax (if applicable) and the shipping cost (if applicable)"
+UN-0030,REQ-1450,Purchasing,Purchase Order Creation ,One tax rate shall be used for all POs per company.
+UN-0030,REQ-1460,Purchasing,Purchase Order Creation ,The system shall display the total PO cost in USD using the exchange rate when appropriate
+UN-0030,REQ-1470,Purchasing,Purchase Order Status,"The system shall allow the user to identify the PO Status (e.g. Open, Closed, Cancelled…etc.). "
+UN-0030,REQ-1490,Purchasing,Purchase Order Approval,The system shall allow the user to submit the PO for approval 
+UN-0031,REQ-1500,Purchasing,Purchase Order Approval,The system shall enforce the PO Approval Matrix
+UN-0031,REQ-1510,Purchasing,Purchase Order Approval,The system shall allow the user to select approvers based on the PO Approval Matrix
+UN-0030,REQ-1520,Purchasing,Purchase Order Approval,The system shall set the PO state to Submitted for Approval when submitted for approval
+UN-0030,REQ-1530,Purchasing,Purchase Order Approval,The system shall allow the PO Owner to withdraw a PO that has been routed for approval but is not yet fully approved
+UN-0031,REQ-1540,Purchasing,Purchase Order Approval,The system shall capture the ID of the user(s) approving a PO
+UN-0031,REQ-1550,Purchasing,Purchase Order Approval,The system shall capture the date and time of the approval(s)
+UN-0031,REQ-1560,Purchasing,Purchase Order Approval,The system shall set blank PO state when all approvals are recorded
+UN-0031,REQ-1570,Purchasing,Purchase Order Approval,The system shall set the PO state to Draft when a user rejects the PO
+UN-0030,REQ-1580,Purchasing,Purchase Order Delivery to Supplier,The system shall create a PDF of the PO form with all the PO details and attachments (e.g. prints)
+UN-0032,REQ-1590,Purchasing,Purchase Order Delivery to Supplier,The system shall add terms and conditions requiring notification for all changes in the pdf of the PO form
+UN-0030,REQ-1600,Purchasing,Purchase Order Revising,The system shall allow users to revise a PO
+UN-0030,REQ-1610,Purchasing,Purchase Order Delivery to Supplier,The system shall set the PO status to draft when a new revision is created
+UN-0030,REQ-1620,Purchasing,Purchase Order Revising,"The system shall allow updating the PO details as needed. However, the supplier may not be modified after the first release of the PO"
+UN-0030,REQ-1630,Purchasing,Purchase Order Revising,The system shall capture the ID of the user and the date and time of the changes
+UN-0031,REQ-1640,Purchasing,Purchase Order Revising,The system shall require reapproval of the PO if the modified total is higher than the previous approval threshold for the approvers
+UN-0030,REQ-1650,Purchasing,Purchase Order Revising,The system shall maintain version history of the PO [when modified except status field is removed]
+UN-0030,REQ-1660,Purchasing,Purchase Order Closing,The system shall allow a user to cancel a PO
+UN-0030,REQ-1670,Purchasing,Purchase Order Closing,The system shall allow a user to close a PO
+UN-0030,REQ-3860,Purchase Order,Purchase Order,The system shall allow the user to preview the PO
+UN-0030,REQ-3870,Purchase Order,Purchase Order,The system shall release the PO in numeric stage
+UN-0080,REQ-2210,Notifications,Purchase Order,"The approval of a PO shall be available in the User's dashboard, including the PO number, name of submitter, PO amount"
+UN-0080,REQ-2220,Notifications,Purchase Order,The notification of a PO shall allow for opening of the pdf version of the PO

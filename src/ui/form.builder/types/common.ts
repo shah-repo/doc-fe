@@ -115,7 +115,6 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   approverGroups?: string[] | GroupRequestBody[];
   approveIsBlocking?: boolean;
   instructionsDocument?: string;
-  testRequirement?: string;
   approved?: boolean;
   designDisabled?: boolean;
   reviseDisabled?: boolean;

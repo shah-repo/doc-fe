@@ -154,6 +154,7 @@ export interface SmartReference {
   fromDocRev?: Nullable<DocumentRevision>;
   fromDocRevId?: Nullable<string>;
   fromDocumentId?: Nullable<string>;
+  fromDocument?: Nullable<DocumentRevision>;
   id: string;
   metadata: {
     fieldId: string;
@@ -178,6 +179,7 @@ export enum SmartReferenceType {
   General = "GENERAL",
   EquipmentReplacement = "EQUIPMENT_REPLACEMENT",
   LotUsage = "LOT_USAGE",
+  LotSoruce = "LOT_SOURCE",
 }
 
 interface InputOwner {
@@ -324,4 +326,12 @@ export interface HeaderTableType {
   key: string;
 }
 
+export interface UpdateFormFieldMapping {
+  sourceId: string;
+  targetId: string;
+}
 
+export interface UpdateFormRequestBody {
+  mapping: UpdateFormFieldMapping[];
+  formToBeUsed: Id;
+}

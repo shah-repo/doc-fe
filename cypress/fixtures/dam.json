@@ -1,1 +1,2368 @@
- {"approvalRoles":[],"approvalMatrix":[{"id":"b4cc022d-9bd6-4924-9b0e-6bf8b887b9fa","docType":{"acronym":"SEED-","name":"Seed Document","defaultTraining":false,"group":"OTHER","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"8047fc3a-7f0b-4e21-8673-41a1330f238d","docType":{"acronym":"SOP-","name":"Standard Operating Procedure","defaultTraining":true,"group":"OTHER","needsSignature":true,"isQms":true,"startingNumber":100,"privateNumberPool":true,"defaultRevStage":"Alpha","category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"3bc38867-0f2c-4ef4-80e0-bf74cc2c785a","docType":{"acronym":"CP","name":"Clinical Protocol","defaultTraining":false,"group":"OTHER","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"07d73a3c-617b-42b3-ae2a-fab4b48f9517","docType":{"acronym":"AR-","name":"Approval Request","defaultTraining":false,"group":"CHANGE_REQUEST","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":null,"schema":[{"name":"change-request-details","type":"section","index":0,"label":"Approval Request Details","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"deleteInFormDisabled":true},{"name":"documentRevisions","type":"documentRevisions","index":1,"rules":{"documentRevisions.*.id":"required","documentRevisions.*.descriptionOfChange":"required","documentRevisions.*.descriptionOfJustification":"required","documentRevisions.*.proposedDocumentRevision.id":"required"},"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"deleteInFormDisabled":true},{"name":"target-date-approvers","type":"section","index":2,"label":"Approvers","applicableOn":["ON_STATE_TO_IN_REVIEW"]},{"name":"approvers","type":"approvers","index":3,"deleteDisabled":true,"deleteInFormDisabled":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"68ee1110-fe82-42ae-9ad2-a08a51047886","docType":{"acronym":"RC-","name":"Receivable","defaultTraining":false,"group":"RECEIVABLE","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":"Receive","schema":[],"fieldsConfig":{"C":{"visible":false,"required":false},"D":{"visible":false,"required":false},"E":{"visible":false,"required":true},"F":{"visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"label":"Update","visible":true},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"M":{"label":"Type of Change","visible":true,"required":true},"N":{"label":"Create Receving Record","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"Draft","visible":true},"A2":{"label":"Void","visible":true},"A3":{"label":"History","visible":true},"A4":{"label":"Current","visible":true},"A5":{"label":"Pending Approval","visible":true},"P1":{"label":"Draft","visible":true},"P2":{"label":"Void","visible":true},"P3":{"label":"History","visible":true},"P4":{"label":"Current","visible":true},"P5":{"label":"Pending Approval","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"fa216834-016b-4198-8878-abe1bec6a710","docType":{"acronym":"SA-","name":"Subassembly","defaultTraining":false,"group":"PART","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"82ccb583-a632-43ed-a8f0-c97cdd64ff82","docType":{"acronym":"MPI-","name":"Manufacturing Process Instructure","defaultTraining":false,"group":"FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"4b1aee65-9db4-4989-a66e-7f41b8d93aa5","docType":{"acronym":"EB-","name":"Engineering Build","defaultTraining":false,"group":"ENGINEERING_BUILD","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":null,"fieldsConfig":{"D":{"label":"Description","visible":true,"required":true},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"c1cc8f63-2787-4913-bdfd-08fb5754bda8","docType":{"acronym":"FM-","name":"Form","defaultTraining":false,"group":"FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":"Alpha","category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"7f135c02-f030-41ee-a80d-da7a7fb657a4","docType":{"acronym":"CS-","name":"Component Specification","defaultTraining":false,"group":"PART","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"a5e1694c-44b1-4d26-b9a7-09245688b27a","docType":{"acronym":"QS-","name":"Quality Inspection","defaultTraining":false,"group":"FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"104c1866-71c3-42b0-afb4-83ff01eb8502","docType":{"acronym":"LFPO-","name":"Lot From Purchase Order Form","defaultTraining":false,"group":"FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":[{"name":"lot_quantity","type":"quantity","index":0,"label":"form.builder.quantity","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"lot_part_number","type":"autocompleteasync","index":1,"label":"form.builder.part.number","rules":"","optionId":"11","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"lot_comment","type":"textfield","index":2,"label":"form.builder.comment","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"371acb0b-d5e0-4ff9-82a2-1a86b5d19b00","docType":{"acronym":"DAM-","name":"Document Approval Matrix","defaultTraining":false,"group":"DAM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":{"E":{"visible":false,"required":true},"J":{"visible":false},"K":{"visible":false},"L":{"visible":false},"P3":{"label":"History","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"5c457936-af88-42ae-8b71-f1e13546be01","docType":{"acronym":"DFM-","name":"Dynamic Form","defaultTraining":false,"group":"DYNAMIC_FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"34990631-93a3-4627-b3d6-e08edfb41be5","docType":{"acronym":"PO-","name":"Purchase Order","defaultTraining":false,"group":"PO","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Purchase Order","schema":null,"fieldsConfig":{"C":{"visible":false,"required":false},"D":{"label":"Description","visible":true,"required":false},"E":{"visible":false,"required":true},"F":{"visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"label":"Update","visible":true},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"M":{"label":"Type of Change","visible":true,"required":true},"N":{"label":"Add Approvers","visible":true},"O":{"label":"PO History","visible":true},"R":{"visible":false},"S":{"label":"Revise PO","visible":true},"V":{"label":"Create PO","visible":true},"A1":{"label":"Draft","visible":true},"A2":{"label":"Void","visible":true},"A3":{"label":"History","visible":true},"A4":{"visible":false},"A5":{"label":"Pending Approval","visible":true},"A6":{"label":"Draft","visible":true},"P1":{"label":"Draft","visible":true},"P2":{"label":"Void","visible":true},"P3":{"label":"History","visible":true},"P4":{"visible":false},"P5":{"label":"Pending Approval","visible":true},"P6":{"label":"Draft","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"3d2859cc-2b8b-46dc-9d4b-69e84861f0de","docType":{"acronym":"POAM-","name":"PO Approval Matrix","defaultTraining":false,"group":"POAM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":null,"schema":null,"fieldsConfig":{"E":{"visible":false,"required":true},"J":{"visible":false},"K":{"visible":false},"L":{"visible":false},"P3":{"label":"History","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"3fba4c04-de11-4eaf-9d5a-73be5de6ffc8","docType":{"acronym":"SUP-","name":"Suppliers","defaultTraining":false,"group":"SUPPLIER","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Supplier","schema":null,"fieldsConfig":{"C":{"label":"Supplier name","visible":true,"required":true},"D":{"label":"Supplier Address/Phone","visible":true,"required":true},"E":{"visible":false,"required":true},"F":{"visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"label":"Update","visible":true},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"M":{"label":"Type of Change","visible":true,"required":true},"N":{"label":"Add Approvers","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"Draft","visible":true},"A2":{"label":"Void","visible":true},"A3":{"label":"History","visible":true},"A4":{"label":"Current","visible":true},"A5":{"label":"Pending Approval","visible":true},"A6":{"label":"Draft","visible":true},"P1":{"label":"Draft","visible":true},"P2":{"label":"Void","visible":true},"P3":{"label":"History","visible":true},"P4":{"label":"Current","visible":true},"P5":{"label":"Pending Approval","visible":false},"P6":{"label":"Draft","visible":false}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"bdfc1fb6-90d0-4e8d-b111-2a92cc575891","docType":{"acronym":"EQ-","name":"Equipment","defaultTraining":false,"group":"EQUIPMENT","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Equipment","schema":[{"name":"fb-default-eq-status","type":"radiogroup","index":0,"label":"EQ Status","rules":"required","options":[{"text":"Active","value":"Active"},{"text":"Inactive","value":"Inactive"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true}],"fieldsConfig":{"G":{"label":"document.revision.trainingRequired","visible":false,"required":false}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"a86f9986-b9a4-4e04-b256-ac700b64987f","docType":{"acronym":"MR-","name":"Maintenance Record","defaultTraining":false,"group":"MAINTENANCE_RECORD","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":[{"name":"fb-maintenance-details-section","type":"section","index":0,"label":"Maintenance Details","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"deleteInFormDisabled":true},{"name":"equipment_id","type":"autocomplete","index":1,"label":"Equipment","rules":"required","optionId":"20","placeholder":"[Select revision here]","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","formValuesRules":{},"deleteInFormDisabled":true},{"name":"equipment_maintainer","type":"autocomplete","index":2,"label":"Maintainer","rules":"required","optionId":"13","placeholder":"[Select name here]","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","deleteInFormDisabled":true},{"name":"fb-equipment_due_date","type":"datepicker","index":3,"label":"Completion Date","rules":"required","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","deleteInFormDisabled":true},{"name":"fb-requipment-maintenance-section","type":"textfield","index":4,"label":"Equipment Maintenance Section","rules":"required","hidden":true,"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","deleteInFormDisabled":true}],"fieldsConfig":{"D":{"visible":false,"required":false},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"90597eac-13e7-4319-aba0-83f3a8112ae7","docType":{"acronym":"LHR-","name":"Lot History Record","defaultTraining":false,"group":"FORM","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":null,"schema":[{"name":"lhr_subassembly","type":"selectdocument","index":0,"label":"Subassembly(s)","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"outputDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"lhr_initial_quantity","type":"quantity","index":1,"label":"Initial Quantity","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"lhr_serialized","type":"radiogroup","index":2,"label":"Serialized/Non-Serialized","rules":"","options":[{"text":"Serialized","value":"Serialized"},{"text":"Non-Serialized","value":"Non-Serialized"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"lhr_supplier_serial_number","rows":1,"type":"textfield","index":3,"label":"SupplierSerialNumber","placeholder":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"deleteInFormDisabled":true},{"name":"lhr_expiry_date","type":"datepicker","index":4,"label":"ExpiryDate","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"deleteInFormDisabled":true},{"name":"lhr_quantity_unit","rows":1,"type":"textfield","index":5,"label":"QuantityUnit","placeholder":"e.g.pcs","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"deleteInFormDisabled":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"4a720823-44db-4946-aa5f-bb392039e51d","docType":{"acronym":"WO-","name":"Work Order","defaultTraining":false,"group":"WORK_ORDER","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":"Work Order","schema":[{"name":"wo_details","type":"section","index":0,"label":"Work Order Details","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"wo_status","type":"select","index":1,"label":"Work Order Status","rules":"required","options":[{"text":"Open","value":"Open"},{"text":"Closed","value":"Closed"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true},"deleteInFormDisabled":true},{"name":"wo_part_number","type":"autocomplete","index":2,"label":"Part Number","rules":"required","multiple":true,"optionId":"15","placeholder":"Part number","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true,"required_document_type":false},"editor-additions":["multiple"],"deleteInFormDisabled":true},{"name":"wo_lot_quantity","type":"quantity","index":3,"label":"Lot Quantity","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true},{"name":"wo_supplier_serial_number","rows":1,"type":"textfield","index":4,"label":"Supplier Serial Number","placeholder":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","deleteInFormDisabled":true},{"name":"wo_quantity_unit","rows":1,"type":"textfield","index":5,"label":"Quantity Unit","placeholder":"e.g. pcs","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"deleteInFormDisabled":true},{"name":"wo_build_type","type":"autocomplete","index":6,"label":"Build Type","rules":"required","optionId":"4","placeholder":"Build Type","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true},"deleteInFormDisabled":true},{"name":"wo_build_priority","type":"select","index":7,"label":"Build Priority","rules":"","options":[{"text":"Low","value":"Low"},{"text":"Normal","value":"Normal"},{"text":"High","value":"High"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true},"deleteInFormDisabled":true},{"name":"wo_due_date","type":"datepicker","index":8,"label":"Due Date","rules":"required","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true},"deleteInFormDisabled":true},{"name":"wo_assigned_to","type":"autocomplete","index":9,"label":"Assigned Work Order to:","rules":"required","multiple":true,"optionId":"3","placeholder":"Assigned Work Order to:","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{"required":true},"editor-additions":["multiple"],"deleteInFormDisabled":true},{"name":"wo_serialized","type":"radiogroup","index":10,"label":"Serialized/Non-Serialized","rules":"","options":[{"text":"Serialized","value":"Serialized"},{"text":"Non-Serialized","value":"Non-Serialized"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"e89a7b2d-4448-46c9-a506-2f0838915462","docType":{"acronym":"FAI-","name":"First Article Inspection","defaultTraining":false,"group":"FAI_INSPECTION","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Lot Inspection","schema":[{"name":"lot_quantity","type":"quantity","index":1,"label":"Quantity Received","rules":"","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"outputDisabled":true,"formValuesRules":{},"deleteInFormDisabled":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"830e8ed0-e9bc-4a1a-88c2-4e63d109091d","docType":{"acronym":"CSL-","name":"Component Specifications Lot","defaultTraining":false,"group":"PART_LOT","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":[{"name":"lot_quantity","type":"quantity","index":0,"label":"Quantity Received","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"editorProperties":[],"validationAttribute":"Quantity Received","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"100-inspection-override","type":"checkboxgroup","index":1,"label":"100% Inspection Override","options":[{"text":"100% Inspection Override","value":"100% Inspection Override"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"100% Inspection Override","deleteInFormDisabled":true,"applicableValidationSchema":true}],"fieldsConfig":{"D":{"visible":false,"required":false},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"fcb2208e-2f7f-4b3c-9ad1-c972dab6f783","docType":{"acronym":"SAL-","name":"Subassembly Lot","defaultTraining":false,"group":"PART_LOT","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":[{"name":"lot_quantity","type":"quantity","index":0,"label":"Quantity Received","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"editorProperties":[],"validationAttribute":"Quantity Received","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"100-inspection-override","type":"checkboxgroup","index":1,"label":"100% Inspection Override","options":[{"text":"100% Inspection Override","value":"100% Inspection Override"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"100% Inspection Override","deleteInFormDisabled":true,"applicableValidationSchema":true}],"fieldsConfig":{"D":{"visible":false,"required":false},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"faf31f6b-7400-42ce-aec8-c92ae18e51df","docType":{"acronym":"FGL-","name":"Finished Good Lot","defaultTraining":false,"group":"PART_LOT","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":[{"name":"lot_quantity","type":"quantity","index":0,"label":"Quantity Received","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"editorProperties":[],"validationAttribute":"Quantity Received","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"100-inspection-override","type":"checkboxgroup","index":1,"label":"100% Inspection Override","options":[{"text":"100% Inspection Override","value":"100% Inspection Override"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"100% Inspection Override","deleteInFormDisabled":true,"applicableValidationSchema":true}],"fieldsConfig":{"D":{"visible":false,"required":false},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"e6371dd9-2ed5-42d5-bc7e-946b344e0aa4","docType":{"acronym":"LOT-","name":"Lots","defaultTraining":false,"group":"LOT","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Lot","schema":[{"name":"lot_quantity","type":"quantity","index":0,"label":"Quantity Received","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"editorProperties":[],"validationAttribute":"Quantity Received","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"100-inspection-override","type":"checkboxgroup","index":1,"label":"100% Inspection Override","options":[{"text":"100% Inspection Override","value":"100% Inspection Override"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"100% Inspection Override","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"approvers","type":"approvals","index":2,"label":"Approvers","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"uniqueSchemaItem":true,"validationAttribute":"Approvers","deleteInFormDisabled":true,"applicableValidationSchema":true}],"fieldsConfig":{"C":{"visible":true,"required":true},"D":{"label":"Description","visible":true,"required":false},"E":{"visible":false,"required":true},"F":{"visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"label":"Update","visible":true},"J":{"visible":false},"K":{"visible":false},"L":{"label":"Correction","visible":true},"O":{"label":"Lot History","visible":true},"R":{"visible":false},"A1":{"label":"WIP","visible":true},"A2":{"label":"Rejected","visible":true},"A3":{"visible":false},"A4":{"label":"Accepted","visible":true},"A5":{"label":"Quarantine","visible":true},"A6":{"visible":false},"P1":{"label":"WIP","visible":true},"P2":{"label":"Rejected","visible":true},"P3":{"visible":false},"P4":{"label":"Accepted","visible":true},"P5":{"label":"Quarantine","visible":true},"P6":{"visible":false}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"4da69f2c-91f4-424e-bfbe-973bfcdcce1f","docType":{"acronym":"NCO-","name":"New Company Record","defaultTraining":false,"group":"NEW_COMPANY","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":true,"defaultRevStage":null,"category":"Record","schema":[{"name":"company-details-kknucnd4","type":"section","index":0,"label":"Company Details","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","validationAttribute":"Company Details","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"company-name-kknuh7mr","rows":1,"type":"textfield","index":1,"label":"Company Name","rules":"required","placeholder":"Select the company name to be used","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","validationAttribute":"Company Name","applicableValidationSchema":true},{"name":"company-abbreviation-kknuhx5k","rows":1,"type":"textfield","index":2,"label":"Company Abbreviation","rules":"required","placeholder":"This has to be unique in the system","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Company Abbreviation","applicableValidationSchema":true},{"name":"company-admin-email-kknuh8mr","rows":1,"type":"textfield","index":3,"label":"Company Admin Email","rules":"required","placeholder":"Select the company admin email to be used","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","validationAttribute":"Company Admin Email","applicableValidationSchema":true},{"name":"clients-logo-kknwh2my","type":"evidencemediaupload","index":4,"label":"Client's Logo","isTemplate":false,"applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationAttribute":"Client's Logo","applicableValidationSchema":true},{"name":"-kknufjy0","type":"paragraph","index":5,"paragraph":"<p>DAM JSON will include all the following details:</p>\n<ol>\n<li>List of all the documents to be created in the next company to be created</li>\n<li>All the roles necessary as defined in the approval matrix</li>\n</ol>","applicableOn":["ON_STATE_TO_IN_REVIEW"],"applicableValidationSchema":true},{"name":"dom-json-kknwbegh","type":"fileupload","index":6,"label":"DAM JSON ","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"DAM JSON ","applicableValidationSchema":true},{"name":"page-details-json-kknzjq6c","type":"fileupload","index":7,"label":"Page Details JSON","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Page Details JSON","applicableValidationSchema":true},{"name":"navigation-json-kknzjzkx","type":"fileupload","index":8,"label":"Navigation JSON","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Navigation JSON","applicableValidationSchema":true},{"name":"launching-details-kknwbuor","type":"section","index":9,"label":"Launching Details","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Launching Details","applicableValidationSchema":true},{"name":"scheduled-go-live-date-kknwfx7f","type":"datepicker","index":10,"label":"Scheduled Go Live Date","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Scheduled Go Live Date","applicableValidationSchema":true},{"name":"users-list-kknwg5mb","type":"fileupload","index":11,"label":"Users List","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Users List","applicableValidationSchema":true},{"name":"seed-documents-to-be-included-kknz6afl","type":"autocomplete","index":12,"label":"Seed documents to be included","multiple":true,"optionId":"18","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","editorProperties":["multiple"],"validationAttribute":"Seed documents to be included","applicableValidationSchema":true},{"name":"post-creation-records-kknzl4t6","type":"section","index":13,"label":"Post Creation Records","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Post Creation Records","applicableValidationSchema":true},{"name":"logs-created-kknzkrnl","type":"fileupload","index":14,"label":"Logs Created","applicableOn":["ON_STATE_TO_IN_REVIEW"],"validationMode":"default","validationAttribute":"Logs Created","applicableValidationSchema":true}],"fieldsConfig":{"D":{"visible":false,"required":false},"E":{"label":"Record Type","visible":true,"required":true},"F":{"label":"Record ID","visible":false,"required":true},"G":{"visible":false,"required":false},"I":{"visible":false},"J":{"visible":false},"K":{"label":"Void","visible":true},"L":{"label":"Correction","visible":true},"N":{"label":"Finalize and Release","visible":true},"O":{"label":"Record History","visible":true},"R":{"visible":false},"S":{"label":"Update Record","visible":true},"A1":{"label":"WIP","visible":true},"A2":{"label":"Voided","visible":true},"A3":{"label":"Archive","visible":true},"P1":{"label":"WIP","visible":true},"P2":{"label":"Voided","visible":true},"P3":{"label":"Archive","visible":true}}},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}},{"id":"480deaa2-c336-41b8-a49c-ef3f6b431564","docType":{"acronym":"PRT-","name":"Parts","defaultTraining":false,"group":"PART","needsSignature":true,"isQms":true,"startingNumber":1,"privateNumberPool":false,"defaultRevStage":null,"category":"Parts","schema":[{"name":"make-vs-buy","type":"select","index":0,"label":"Make vs Buy","options":[{"text":"Make","value":"Make"},{"text":"Buy","value":"Buy"},{"text":"Make and buy","value":"Make and buy"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"Make vs Buy","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"primary-supplier","type":"autocomplete","index":1,"label":"Primary Supplier","rules":"required_if_in:make-vs-buy,Buy,Make and buy","multiple":true,"optionId":"5","placeholder":"Start typing to see the list","applicableOn":["ON_STATE_TO_IN_REVIEW"],"showErrorMsg":false,"deleteDisabled":true,"validationMode":"visibility","editorProperties":["multiple"],"omitFinalValidation":true,"validationAttribute":"Primary Supplier","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"other-suppliers","type":"autocomplete","index":2,"label":"Other Suppliers","rules":"required_if_in:make-vs-buy,Buy,Make and buy","multiple":true,"optionId":"5","placeholder":"Start typing to see the list","applicableOn":["ON_STATE_TO_IN_REVIEW"],"showErrorMsg":false,"deleteDisabled":true,"validationMode":"visibility","editorProperties":["multiple"],"omitFinalValidation":true,"validationAttribute":"Other Suppliers","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"unit-of-measure","type":"unitMeasures","index":3,"label":"Unit of measure","placeholder":"Enter","applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"Unit of measure","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"traceability-required","type":"checkboxgroup","index":4,"label":"Traceability required","options":[{"text":"Traceability required","value":"Traceability required"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"Traceability required","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"serialized","type":"radiogroup","index":5,"label":"Serialized","rules":"required_if_in:traceability-required,Traceability required","options":[{"text":"Yes","value":"Yes"},{"text":"No","value":"No"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"visibility","editorProperties":[],"validationAttribute":"Serialized","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"select-serialization","type":"select","index":6,"label":"Select serialization","rules":"required_if_in:serialized,Yes","options":[{"text":"Select Provided Serialization","value":"Select Provided Serialization"},{"text":"In-house Generated Serialization","value":"In-house Generated Serialization"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"visibility","editorProperties":[],"validationAttribute":"Select serialization","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"iqc-required","type":"checkboxgroup","index":7,"label":"IQC Required","options":[{"text":"IQC Required","value":"IQC Required"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"IQC Required","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"limited-shelf-life","type":"checkboxgroup","index":8,"label":"Limited Shelf Life","options":[{"text":"Limited Shelf Life","value":"Limited Shelf Life"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"Limited Shelf Life","deleteInFormDisabled":true,"applicableValidationSchema":true},{"name":"fai-required","type":"checkboxgroup","index":9,"label":"FAI Required","options":[{"text":"FAI Required","value":"FAI Required"}],"applicableOn":["ON_STATE_TO_IN_REVIEW"],"deleteDisabled":true,"validationMode":"default","editorProperties":[],"validationAttribute":"FAI Required","deleteInFormDisabled":true,"applicableValidationSchema":true}],"fieldsConfig":null},"approvalRoles":{"stage1":[],"stage2":[],"stage3":[],"admStage":[]}}]}
+{
+  "approvalRoles": [],
+  "approvalMatrix": [
+    {
+      "id": "b4cc022d-9bd6-4924-9b0e-6bf8b887b9fa",
+      "docType": {
+        "acronym": "SEED-",
+        "name": "Seed Document",
+        "defaultTraining": false,
+        "group": "OTHER",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "8047fc3a-7f0b-4e21-8673-41a1330f238d",
+      "docType": {
+        "acronym": "SOP-",
+        "name": "Standard Operating Procedure",
+        "defaultTraining": true,
+        "group": "OTHER",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 100,
+        "privateNumberPool": true,
+        "defaultRevStage": "Alpha",
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "3bc38867-0f2c-4ef4-80e0-bf74cc2c785a",
+      "docType": {
+        "acronym": "CP",
+        "name": "Clinical Protocol",
+        "defaultTraining": false,
+        "group": "OTHER",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "07d73a3c-617b-42b3-ae2a-fab4b48f9517",
+      "docType": {
+        "acronym": "AR-",
+        "name": "Approval Request",
+        "defaultTraining": false,
+        "group": "CHANGE_REQUEST",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": [
+          {
+            "name": "change-request-details",
+            "type": "section",
+            "index": 0,
+            "label": "Approval Request Details",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "documentRevisions",
+            "type": "documentRevisions",
+            "index": 1,
+            "rules": {
+              "documentRevisions.*.id": "required",
+              "documentRevisions.*.descriptionOfChange": "required",
+              "documentRevisions.*.descriptionOfJustification": "required",
+              "documentRevisions.*.proposedDocumentRevision.id": "required"
+            },
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "target-date-approvers",
+            "type": "section",
+            "index": 2,
+            "label": "Approvers",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ]
+          },
+          {
+            "name": "approvers",
+            "type": "approvers",
+            "index": 3,
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "68ee1110-fe82-42ae-9ad2-a08a51047886",
+      "docType": {
+        "acronym": "RC-",
+        "name": "Receivable",
+        "defaultTraining": false,
+        "group": "RECEIVABLE",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": "Receive",
+        "schema": [],
+        "fieldsConfig": {
+          "C": {
+            "visible": false,
+            "required": false
+          },
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "F": {
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "label": "Update",
+            "visible": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "M": {
+            "label": "Type of Change",
+            "visible": true,
+            "required": true
+          },
+          "N": {
+            "label": "Create Receving Record",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "A2": {
+            "label": "Void",
+            "visible": true
+          },
+          "A3": {
+            "label": "History",
+            "visible": true
+          },
+          "A4": {
+            "label": "Current",
+            "visible": true
+          },
+          "A5": {
+            "label": "Pending Approval",
+            "visible": true
+          },
+          "P1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "P2": {
+            "label": "Void",
+            "visible": true
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          },
+          "P4": {
+            "label": "Current",
+            "visible": true
+          },
+          "P5": {
+            "label": "Pending Approval",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "fa216834-016b-4198-8878-abe1bec6a710",
+      "docType": {
+        "acronym": "SA-",
+        "name": "Subassembly",
+        "defaultTraining": false,
+        "group": "PART",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "82ccb583-a632-43ed-a8f0-c97cdd64ff82",
+      "docType": {
+        "acronym": "MPI-",
+        "name": "Manufacturing Process Instructure",
+        "defaultTraining": false,
+        "group": "FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "4b1aee65-9db4-4989-a66e-7f41b8d93aa5",
+      "docType": {
+        "acronym": "EB-",
+        "name": "Engineering Build",
+        "defaultTraining": false,
+        "group": "ENGINEERING_BUILD",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": null,
+        "fieldsConfig": {
+          "D": {
+            "label": "Description",
+            "visible": true,
+            "required": true
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "c1cc8f63-2787-4913-bdfd-08fb5754bda8",
+      "docType": {
+        "acronym": "FM-",
+        "name": "Form",
+        "defaultTraining": false,
+        "group": "FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": "Alpha",
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "7f135c02-f030-41ee-a80d-da7a7fb657a4",
+      "docType": {
+        "acronym": "CS-",
+        "name": "Component Specification",
+        "defaultTraining": false,
+        "group": "PART",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "a5e1694c-44b1-4d26-b9a7-09245688b27a",
+      "docType": {
+        "acronym": "QS-",
+        "name": "Quality Inspection",
+        "defaultTraining": false,
+        "group": "FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "104c1866-71c3-42b0-afb4-83ff01eb8502",
+      "docType": {
+        "acronym": "LFPO-",
+        "name": "Lot From Purchase Order Form",
+        "defaultTraining": false,
+        "group": "FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 0,
+            "label": "form.builder.quantity",
+            "rules": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lot_part_number",
+            "type": "autocompleteasync",
+            "index": 1,
+            "label": "form.builder.part.number",
+            "rules": "",
+            "optionId": "11",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lot_comment",
+            "type": "textfield",
+            "index": 2,
+            "label": "form.builder.comment",
+            "rules": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "371acb0b-d5e0-4ff9-82a2-1a86b5d19b00",
+      "docType": {
+        "acronym": "DAM-",
+        "name": "Document Approval Matrix",
+        "defaultTraining": false,
+        "group": "DAM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": {
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "visible": false
+          },
+          "L": {
+            "visible": false
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "5c457936-af88-42ae-8b71-f1e13546be01",
+      "docType": {
+        "acronym": "DFM-",
+        "name": "Dynamic Form",
+        "defaultTraining": false,
+        "group": "DYNAMIC_FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "34990631-93a3-4627-b3d6-e08edfb41be5",
+      "docType": {
+        "acronym": "PO-",
+        "name": "Purchase Order",
+        "defaultTraining": false,
+        "group": "PO",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Purchase Order",
+        "schema": null,
+        "fieldsConfig": {
+          "C": {
+            "visible": false,
+            "required": false
+          },
+          "D": {
+            "label": "Description",
+            "visible": true,
+            "required": false
+          },
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "F": {
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "label": "Update",
+            "visible": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "M": {
+            "label": "Type of Change",
+            "visible": true,
+            "required": true
+          },
+          "N": {
+            "label": "Add Approvers",
+            "visible": true
+          },
+          "O": {
+            "label": "PO History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Revise PO",
+            "visible": true
+          },
+          "V": {
+            "label": "Create PO",
+            "visible": true
+          },
+          "A1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "A2": {
+            "label": "Void",
+            "visible": true
+          },
+          "A3": {
+            "label": "History",
+            "visible": true
+          },
+          "A4": {
+            "visible": false
+          },
+          "A5": {
+            "label": "Pending Approval",
+            "visible": true
+          },
+          "A6": {
+            "label": "Draft",
+            "visible": true
+          },
+          "P1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "P2": {
+            "label": "Void",
+            "visible": true
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          },
+          "P4": {
+            "visible": false
+          },
+          "P5": {
+            "label": "Pending Approval",
+            "visible": true
+          },
+          "P6": {
+            "label": "Draft",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "3d2859cc-2b8b-46dc-9d4b-69e84861f0de",
+      "docType": {
+        "acronym": "POAM-",
+        "name": "PO Approval Matrix",
+        "defaultTraining": false,
+        "group": "POAM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": null,
+        "fieldsConfig": {
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "visible": false
+          },
+          "L": {
+            "visible": false
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "3fba4c04-de11-4eaf-9d5a-73be5de6ffc8",
+      "docType": {
+        "acronym": "SUP-",
+        "name": "Suppliers",
+        "defaultTraining": false,
+        "group": "SUPPLIER",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Supplier",
+        "schema": null,
+        "fieldsConfig": {
+          "C": {
+            "label": "Supplier name",
+            "visible": true,
+            "required": true
+          },
+          "D": {
+            "label": "Supplier Address/Phone",
+            "visible": true,
+            "required": true
+          },
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "F": {
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "label": "Update",
+            "visible": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "M": {
+            "label": "Type of Change",
+            "visible": true,
+            "required": true
+          },
+          "N": {
+            "label": "Add Approvers",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "A2": {
+            "label": "Void",
+            "visible": true
+          },
+          "A3": {
+            "label": "History",
+            "visible": true
+          },
+          "A4": {
+            "label": "Current",
+            "visible": true
+          },
+          "A5": {
+            "label": "Pending Approval",
+            "visible": true
+          },
+          "A6": {
+            "label": "Draft",
+            "visible": true
+          },
+          "P1": {
+            "label": "Draft",
+            "visible": true
+          },
+          "P2": {
+            "label": "Void",
+            "visible": true
+          },
+          "P3": {
+            "label": "History",
+            "visible": true
+          },
+          "P4": {
+            "label": "Current",
+            "visible": true
+          },
+          "P5": {
+            "label": "Pending Approval",
+            "visible": false
+          },
+          "P6": {
+            "label": "Draft",
+            "visible": false
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "bdfc1fb6-90d0-4e8d-b111-2a92cc575891",
+      "docType": {
+        "acronym": "EQ-",
+        "name": "Equipment",
+        "defaultTraining": false,
+        "group": "EQUIPMENT",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Equipment",
+        "schema": [
+          {
+            "name": "fb-default-eq-status",
+            "type": "radiogroup",
+            "index": 0,
+            "label": "EQ Status",
+            "rules": "required",
+            "options": [
+              {
+                "text": "Active",
+                "value": "Active"
+              },
+              {
+                "text": "Inactive",
+                "value": "Inactive"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": {
+          "G": {
+            "label": "document.revision.trainingRequired",
+            "visible": false,
+            "required": false
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "a86f9986-b9a4-4e04-b256-ac700b64987f",
+      "docType": {
+        "acronym": "MR-",
+        "name": "Maintenance Record",
+        "defaultTraining": false,
+        "group": "MAINTENANCE_RECORD",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": [
+          {
+            "name": "fb-maintenance-details-section",
+            "type": "section",
+            "index": 0,
+            "label": "Maintenance Details",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "equipment_id",
+            "type": "autocomplete",
+            "index": 1,
+            "label": "Equipment",
+            "rules": "required",
+            "optionId": "20",
+            "placeholder": "[Select revision here]",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "equipment_maintainer",
+            "type": "autocomplete",
+            "index": 2,
+            "label": "Maintainer",
+            "rules": "required",
+            "optionId": "13",
+            "placeholder": "[Select name here]",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "fb-equipment_due_date",
+            "type": "datepicker",
+            "index": 3,
+            "label": "Completion Date",
+            "rules": "required",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "fb-requipment-maintenance-section",
+            "type": "textfield",
+            "index": 4,
+            "label": "Equipment Maintenance Section",
+            "rules": "required",
+            "hidden": true,
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": {
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "90597eac-13e7-4319-aba0-83f3a8112ae7",
+      "docType": {
+        "acronym": "LHR-",
+        "name": "Lot History Record",
+        "defaultTraining": false,
+        "group": "FORM",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": null,
+        "schema": [
+          {
+            "name": "lhr_subassembly",
+            "type": "selectdocument",
+            "index": 0,
+            "label": "Subassembly(s)",
+            "rules": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "outputDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lhr_initial_quantity",
+            "type": "quantity",
+            "index": 1,
+            "label": "Initial Quantity",
+            "rules": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lhr_serialized",
+            "type": "radiogroup",
+            "index": 2,
+            "label": "Serialized/Non-Serialized",
+            "rules": "",
+            "options": [
+              {
+                "text": "Serialized",
+                "value": "Serialized"
+              },
+              {
+                "text": "Non-Serialized",
+                "value": "Non-Serialized"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lhr_supplier_serial_number",
+            "rows": 1,
+            "type": "textfield",
+            "index": 3,
+            "label": "SupplierSerialNumber",
+            "placeholder": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lhr_expiry_date",
+            "type": "datepicker",
+            "index": 4,
+            "label": "ExpiryDate",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "deleteInFormDisabled": true
+          },
+          {
+            "name": "lhr_quantity_unit",
+            "rows": 1,
+            "type": "textfield",
+            "index": 5,
+            "label": "QuantityUnit",
+            "placeholder": "e.g.pcs",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "e89a7b2d-4448-46c9-a506-2f0838915462",
+      "docType": {
+        "acronym": "FAI-",
+        "name": "First Article Inspection",
+        "defaultTraining": false,
+        "group": "FAI_INSPECTION",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Lot Inspection",
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 1,
+            "label": "Quantity Received",
+            "rules": "",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "outputDisabled": true,
+            "formValuesRules": {},
+            "deleteInFormDisabled": true
+          }
+        ],
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "830e8ed0-e9bc-4a1a-88c2-4e63d109091d",
+      "docType": {
+        "acronym": "CSL-",
+        "name": "Component Specifications Lot",
+        "defaultTraining": false,
+        "group": "PART_LOT",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 0,
+            "label": "Quantity Received",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "editorProperties": [],
+            "validationAttribute": "Quantity Received",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "100-inspection-override",
+            "type": "checkboxgroup",
+            "index": 1,
+            "label": "100% Inspection Override",
+            "options": [
+              {
+                "text": "100% Inspection Override",
+                "value": "100% Inspection Override"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "100% Inspection Override",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": {
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "fcb2208e-2f7f-4b3c-9ad1-c972dab6f783",
+      "docType": {
+        "acronym": "SAL-",
+        "name": "Subassembly Lot",
+        "defaultTraining": false,
+        "group": "PART_LOT",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 0,
+            "label": "Quantity Received",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "editorProperties": [],
+            "validationAttribute": "Quantity Received",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "100-inspection-override",
+            "type": "checkboxgroup",
+            "index": 1,
+            "label": "100% Inspection Override",
+            "options": [
+              {
+                "text": "100% Inspection Override",
+                "value": "100% Inspection Override"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "100% Inspection Override",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": {
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "faf31f6b-7400-42ce-aec8-c92ae18e51df",
+      "docType": {
+        "acronym": "FGL-",
+        "name": "Finished Good Lot",
+        "defaultTraining": false,
+        "group": "PART_LOT",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 0,
+            "label": "Quantity Received",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "editorProperties": [],
+            "validationAttribute": "Quantity Received",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "100-inspection-override",
+            "type": "checkboxgroup",
+            "index": 1,
+            "label": "100% Inspection Override",
+            "options": [
+              {
+                "text": "100% Inspection Override",
+                "value": "100% Inspection Override"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "100% Inspection Override",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": {
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "e6371dd9-2ed5-42d5-bc7e-946b344e0aa4",
+      "docType": {
+        "acronym": "LOT-",
+        "name": "Lots",
+        "defaultTraining": false,
+        "group": "LOT",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Lot",
+        "schema": [
+          {
+            "name": "lot_quantity",
+            "type": "quantity",
+            "index": 0,
+            "label": "Quantity Received",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "editorProperties": [],
+            "validationAttribute": "Quantity Received",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "100-inspection-override",
+            "type": "checkboxgroup",
+            "index": 1,
+            "label": "100% Inspection Override",
+            "options": [
+              {
+                "text": "100% Inspection Override",
+                "value": "100% Inspection Override"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "100% Inspection Override",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "approvers",
+            "type": "approvals",
+            "index": 2,
+            "label": "Approvers",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "uniqueSchemaItem": true,
+            "validationAttribute": "Approvers",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": {
+          "C": {
+            "visible": true,
+            "required": true
+          },
+          "D": {
+            "label": "Description",
+            "visible": true,
+            "required": false
+          },
+          "E": {
+            "visible": false,
+            "required": true
+          },
+          "F": {
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "label": "Update",
+            "visible": true
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "visible": false
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "O": {
+            "label": "Lot History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Rejected",
+            "visible": true
+          },
+          "A3": {
+            "visible": false
+          },
+          "A4": {
+            "label": "Accepted",
+            "visible": true
+          },
+          "A5": {
+            "label": "Quarantine",
+            "visible": true
+          },
+          "A6": {
+            "visible": false
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Rejected",
+            "visible": true
+          },
+          "P3": {
+            "visible": false
+          },
+          "P4": {
+            "label": "Accepted",
+            "visible": true
+          },
+          "P5": {
+            "label": "Quarantine",
+            "visible": true
+          },
+          "P6": {
+            "visible": false
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "4da69f2c-91f4-424e-bfbe-973bfcdcce1f",
+      "docType": {
+        "acronym": "NCO-",
+        "name": "New Company Record",
+        "defaultTraining": false,
+        "group": "NEW_COMPANY",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": true,
+        "defaultRevStage": null,
+        "category": "Record",
+        "schema": [
+          {
+            "name": "company-details-kknucnd4",
+            "type": "section",
+            "index": 0,
+            "label": "Company Details",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "validationAttribute": "Company Details",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "company-name-kknuh7mr",
+            "rows": 1,
+            "type": "textfield",
+            "index": 1,
+            "label": "Company Name",
+            "rules": "required",
+            "placeholder": "Select the company name to be used",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "validationAttribute": "Company Name",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "company-abbreviation-kknuhx5k",
+            "rows": 1,
+            "type": "textfield",
+            "index": 2,
+            "label": "Company Abbreviation",
+            "rules": "required",
+            "placeholder": "This has to be unique in the system",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Company Abbreviation",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "company-admin-email-kknuh8mr",
+            "rows": 1,
+            "type": "textfield",
+            "index": 3,
+            "label": "Company Admin Email",
+            "rules": "required",
+            "placeholder": "Select the company admin email to be used",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "validationAttribute": "Company Admin Email",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "clients-logo-kknwh2my",
+            "type": "evidencemediaupload",
+            "index": 4,
+            "label": "Client's Logo",
+            "isTemplate": false,
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationAttribute": "Client's Logo",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "-kknufjy0",
+            "type": "paragraph",
+            "index": 5,
+            "paragraph": "<p>DAM JSON will include all the following details:</p>\n<ol>\n<li>List of all the documents to be created in the next company to be created</li>\n<li>All the roles necessary as defined in the approval matrix</li>\n</ol>",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "dom-json-kknwbegh",
+            "type": "fileupload",
+            "index": 6,
+            "label": "DAM JSON ",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "DAM JSON ",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "page-details-json-kknzjq6c",
+            "type": "fileupload",
+            "index": 7,
+            "label": "Page Details JSON",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Page Details JSON",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "navigation-json-kknzjzkx",
+            "type": "fileupload",
+            "index": 8,
+            "label": "Navigation JSON",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Navigation JSON",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "launching-details-kknwbuor",
+            "type": "section",
+            "index": 9,
+            "label": "Launching Details",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Launching Details",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "scheduled-go-live-date-kknwfx7f",
+            "type": "datepicker",
+            "index": 10,
+            "label": "Scheduled Go Live Date",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Scheduled Go Live Date",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "users-list-kknwg5mb",
+            "type": "fileupload",
+            "index": 11,
+            "label": "Users List",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Users List",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "seed-documents-to-be-included-kknz6afl",
+            "type": "autocomplete",
+            "index": 12,
+            "label": "Seed documents to be included",
+            "multiple": true,
+            "optionId": "18",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "editorProperties": [
+              "multiple"
+            ],
+            "validationAttribute": "Seed documents to be included",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "post-creation-records-kknzl4t6",
+            "type": "section",
+            "index": 13,
+            "label": "Post Creation Records",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Post Creation Records",
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "logs-created-kknzkrnl",
+            "type": "fileupload",
+            "index": 14,
+            "label": "Logs Created",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "validationMode": "default",
+            "validationAttribute": "Logs Created",
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": {
+          "D": {
+            "visible": false,
+            "required": false
+          },
+          "E": {
+            "label": "Record Type",
+            "visible": true,
+            "required": true
+          },
+          "F": {
+            "label": "Record ID",
+            "visible": false,
+            "required": true
+          },
+          "G": {
+            "visible": false,
+            "required": false
+          },
+          "I": {
+            "visible": false
+          },
+          "J": {
+            "visible": false
+          },
+          "K": {
+            "label": "Void",
+            "visible": true
+          },
+          "L": {
+            "label": "Correction",
+            "visible": true
+          },
+          "N": {
+            "label": "Finalize and Release",
+            "visible": true
+          },
+          "O": {
+            "label": "Record History",
+            "visible": true
+          },
+          "R": {
+            "visible": false
+          },
+          "S": {
+            "label": "Update Record",
+            "visible": true
+          },
+          "A1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "A2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "A3": {
+            "label": "Archive",
+            "visible": true
+          },
+          "P1": {
+            "label": "WIP",
+            "visible": true
+          },
+          "P2": {
+            "label": "Voided",
+            "visible": true
+          },
+          "P3": {
+            "label": "Archive",
+            "visible": true
+          }
+        }
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    },
+    {
+      "id": "480deaa2-c336-41b8-a49c-ef3f6b431564",
+      "docType": {
+        "acronym": "PRT-",
+        "name": "Parts",
+        "defaultTraining": false,
+        "group": "PART",
+        "needsSignature": true,
+        "isQms": true,
+        "startingNumber": 1,
+        "privateNumberPool": false,
+        "defaultRevStage": null,
+        "category": "Parts",
+        "schema": [
+          {
+            "name": "make-vs-buy",
+            "type": "select",
+            "index": 0,
+            "label": "Make vs Buy",
+            "options": [
+              {
+                "text": "Make",
+                "value": "Make"
+              },
+              {
+                "text": "Buy",
+                "value": "Buy"
+              },
+              {
+                "text": "Make and buy",
+                "value": "Make and buy"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "Make vs Buy",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "primary-supplier",
+            "type": "autocomplete",
+            "index": 1,
+            "label": "Primary Supplier",
+            "rules": "required_if_in:make-vs-buy,Buy,Make and buy",
+            "multiple": true,
+            "optionId": "5",
+            "placeholder": "Start typing to see the list",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "showErrorMsg": false,
+            "deleteDisabled": true,
+            "validationMode": "visibility",
+            "editorProperties": [
+              "multiple"
+            ],
+            "omitFinalValidation": true,
+            "validationAttribute": "Primary Supplier",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "other-suppliers",
+            "type": "autocomplete",
+            "index": 2,
+            "label": "Other Suppliers",
+            "rules": "required_if_in:make-vs-buy,Buy,Make and buy",
+            "multiple": true,
+            "optionId": "5",
+            "placeholder": "Start typing to see the list",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "showErrorMsg": false,
+            "deleteDisabled": true,
+            "validationMode": "visibility",
+            "editorProperties": [
+              "multiple"
+            ],
+            "omitFinalValidation": true,
+            "validationAttribute": "Other Suppliers",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "unit-of-measure",
+            "type": "unitMeasures",
+            "index": 3,
+            "label": "Unit of measure",
+            "placeholder": "Enter",
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "Unit of measure",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "traceability-required",
+            "type": "checkboxgroup",
+            "index": 4,
+            "label": "Traceability required",
+            "options": [
+              {
+                "text": "Traceability required",
+                "value": "Traceability required"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "Traceability required",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "serialized",
+            "type": "radiogroup",
+            "index": 5,
+            "label": "Serialized",
+            "rules": "required_if_in:traceability-required,Traceability required",
+            "options": [
+              {
+                "text": "Yes",
+                "value": "Yes"
+              },
+              {
+                "text": "No",
+                "value": "No"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "visibility",
+            "editorProperties": [],
+            "validationAttribute": "Serialized",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "select-serialization",
+            "type": "select",
+            "index": 6,
+            "label": "Select serialization",
+            "rules": "required_if_in:serialized,Yes",
+            "options": [
+              {
+                "text": "Select Provided Serialization",
+                "value": "Select Provided Serialization"
+              },
+              {
+                "text": "In-house Generated Serialization",
+                "value": "In-house Generated Serialization"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "visibility",
+            "editorProperties": [],
+            "validationAttribute": "Select serialization",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "iqc-required",
+            "type": "checkboxgroup",
+            "index": 7,
+            "label": "IQC Required",
+            "options": [
+              {
+                "text": "IQC Required",
+                "value": "IQC Required"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "IQC Required",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "limited-shelf-life",
+            "type": "checkboxgroup",
+            "index": 8,
+            "label": "Limited Shelf Life",
+            "options": [
+              {
+                "text": "Limited Shelf Life",
+                "value": "Limited Shelf Life"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "Limited Shelf Life",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          },
+          {
+            "name": "fai-required",
+            "type": "checkboxgroup",
+            "index": 9,
+            "label": "FAI Required",
+            "options": [
+              {
+                "text": "FAI Required",
+                "value": "FAI Required"
+              }
+            ],
+            "applicableOn": [
+              "ON_STATE_TO_IN_REVIEW"
+            ],
+            "deleteDisabled": true,
+            "validationMode": "default",
+            "editorProperties": [],
+            "validationAttribute": "FAI Required",
+            "deleteInFormDisabled": true,
+            "applicableValidationSchema": true
+          }
+        ],
+        "fieldsConfig": null
+      },
+      "approvalRoles": {
+        "stage1": [],
+        "stage2": [],
+        "stage3": [],
+        "admStage": []
+      }
+    }
+  ]
+}

@@ -22,7 +22,8 @@ class FBMediaAlbumState {
   public previewType = (media: FBAttachment): FBFilePreviewType | undefined => {
     let { type } = media || {};
     if (!type) { return; }
-    type = type.split("/")[1];
+    type = type.split("/")[1] || type;
+
     switch (true) {
       case SUPPORTED_VIDEO_FILES.includes(type):
         return "video";

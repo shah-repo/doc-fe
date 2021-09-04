@@ -5,6 +5,7 @@ import AttachmentDownloadAllButton from "../../components/common/attachment.down
 import AttachmentField from "../../components/common/attachment.field/container";
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
+import { useAttachments } from "../../hooks/docCustomization/useCustomization";
 
 interface Props {
   isDisabled: boolean;
@@ -14,6 +15,7 @@ interface Props {
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
   documentRevision: DocumentRevision;
+  documentTypeId: string;
 }
 
 const classes = {
@@ -35,21 +37,29 @@ const Attachments: React.FunctionComponent<Props> = ({
   containsRedline,
   docRevStatus,
   documentRevision,
-}) => (
-  <Box marginBottom="33px">
-    <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
-      <Typography variant="h6" style = {classes.attachmentHeadText}>
-        <Text message="common.attachments"/>
-      </Typography>
-      <AttachmentDownloadAllButton
-        isAttachmentEmpty = {isAttachmentEmpty}
-        docRevId = {docRevId}
-        containsRedline={containsRedline}
-        docRevStatus = {docRevStatus}/>
+  documentTypeId,
+}) => {
+  const { isVisible, label } = useAttachments(documentTypeId);
+
+  if (!isVisible) {
+    return null;
+  }
+
+  return (
+    <Box marginBottom="33px">
+      <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
+        <Typography variant="h6" style = {classes.attachmentHeadText}>
+          <Text message={label}/>
+        </Typography>
+        <AttachmentDownloadAllButton
+          isAttachmentEmpty = {isAttachmentEmpty}
+          docRevId = {docRevId}
+          containsRedline={containsRedline}
+          docRevStatus = {docRevStatus}/>
+      </Box>
+      <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
+      <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
     </Box>
-    <AttachmentField name="attachments" component="field" disabled={isDisabled}/>
-    <AttachmentIconField name="attachments" {...{ isNewVersion, documentRevision }}/>
-  </Box>
-);
+  ); };
 
 export default React.memo(Attachments);

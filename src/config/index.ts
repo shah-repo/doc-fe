@@ -131,6 +131,10 @@ class Config {
     return this.get("ENV_NAME") === "DEMO";
   }
 
+  public static get isDev(): boolean {
+    return this.get("ENV_NAME") === "DEVELOP";
+  }
+
   public static get consoleToastsEnabled(): boolean {
     return this.get("CONSOLE_TOAST") === "true";
   }

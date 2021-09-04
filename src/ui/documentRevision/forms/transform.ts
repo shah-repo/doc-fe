@@ -1,17 +1,24 @@
 import { get, maxBy, pick } from "lodash";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReference } from "../../../state/ducks/documentRevisions/types";
 import FBDRStore from "../../form.builder/stores/ui/FBDRStore";
 import { DEFAULT_INITIAL_VALUES } from "../DocumentRevisionCreate.container";
 import { checkIsDocumentDAM, checkIsDocumentPOAM, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { isDocumentRevisionCanceled, isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
 import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import { getIsAdministrativeDefault } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
 
+export const getLatesReferenceVersion = (reference: SmartReference[] | undefined) => {
+  const removedCancelledReference = reference?.filter( (ref) =>
+    !isDocumentRevisionCanceled(ref.fromDocRev?.status));
+  const highestReference = maxBy(removedCancelledReference, (ref) => ref?.fromDocRev?.version);
+  return highestReference;
+};
+
 const getRevisionsInHighestStage = (revisions: DocumentRevision[]) => {
   const highestStage = maxBy(revisions, "revisionStage")?.revisionStage;
-  const revs = revisions.filter((rev) => rev.revisionStage === highestStage);
+  const revs = revisions.filter((rev) => rev.revisionStage === highestStage && !isDocumentRevisionCanceled(rev.status));
   return revs;
 };
 

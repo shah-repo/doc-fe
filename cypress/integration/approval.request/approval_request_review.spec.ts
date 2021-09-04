@@ -190,6 +190,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      SystemRequirement("REQ-0940");
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
@@ -450,12 +451,12 @@ context("Approval request form scenario", () => {
     });
 
     it("Capture Audit date", () => {
-      SystemRequirement("REQ-0960");
+      SystemRequirement("REQ-0960", "REQ-2730");
       cy.get("[data-cy=\"audit-time-0\"]").should("not.be.empty");
     });
 
     it("Capture Audit timestamp", () => {
-      SystemRequirement("REQ-0960");
+      SystemRequirement("REQ-0960", "REQ-2730");
       cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
@@ -496,11 +497,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[20].email,
-          contains: ["Your approval request <b>ARID: AR00002</b> is in review.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
         },
         {
           sentToUser: USERS[22].email,
-          contains: ["Your approval request <b>ARID: AR00002</b> is in review.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -515,7 +516,7 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR00002</b> is approved.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is approved.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -530,7 +531,7 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR00002</b> is rejected.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is rejected.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({

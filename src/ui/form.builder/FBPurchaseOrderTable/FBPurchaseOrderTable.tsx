@@ -8,12 +8,17 @@ import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
 const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> = ({
-  handleShippingCost,
+  handleShippingCostChange,
+  handleShippingCostBlur,
+  handleTaxChange,
+  handleTaxBlur,
   handleCurrencyChange,
   handleDelete,
   handleItem,
+  handleLot,
   classes,
   calculation,
+  taxField,
   disabled,
   items = [],
   loading,
@@ -23,8 +28,11 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   <Table className={classes?.root}>
     <TableHead>
       <TableRow>
-        <FBTableCell colSpan={8} label="form.builder.details" />
-        <FBTableCell colSpan={3} label="form.builder.field.ext.amount" align="right" />
+        <FBTableCell
+          colSpan={8}
+          label={mode === "form" ? "form.builder.details" : "form.builder.select.line.to.receive.against"}
+        />
+        <FBTableCell colSpan={3} label={mode === "form" ? "form.builder.field.ext.amount" : ""} align="right" />
       </TableRow>
     </TableHead>
     <TableBody>
@@ -33,11 +41,21 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
           <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading, calculation }} />
         </FBTableCell>
         <FBTableCell colSpan={3} style={{ verticalAlign: "baseline" }}>
-          <FBPurchaseOrderTableSum {...{ handleItem, classes, items, calculation }} />
+          <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode }} />
         </FBTableCell>
       </TableRow>
       {mode === "form" && (
-        <FBPurchaseOrderTableTotal {...{ handleShippingCost, handleCurrencyChange, calculation, disabled, name }} />
+        <FBPurchaseOrderTableTotal {...{
+          handleShippingCostChange,
+          handleShippingCostBlur,
+          handleTaxChange,
+          handleTaxBlur,
+          handleCurrencyChange,
+          calculation,
+          taxField,
+          disabled,
+          name,
+        }} />
       )}
     </TableBody>
   </Table>

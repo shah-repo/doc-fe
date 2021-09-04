@@ -1,13 +1,18 @@
 import { FBDialogState, FBInputProps, FBPurchaseOrderState } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 type FBPurchaseOrderMode = "preview" | "form";
 export type FBPurchaseOrderProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "gutter" | "defaultValue" | "autosave">
 & {
   handleItem?: (item?: FBPurchaseOrderItem) => any;
+  handleReceiveAll?: () => any;
+  handleLot?: (e?: React.MouseEvent<HTMLButtonElement>, item?: FBPurchaseOrderItem) => void;
   purchaseOrderState?: FBPurchaseOrderState;
   dialogState?: FBDialogState;
   mode?: FBPurchaseOrderMode;
+  isReceivable?: boolean;
+  receivableName?: string;
 };
 
 type FBPurchaseOrderItemType = "product" | "service";
@@ -27,6 +32,7 @@ export interface FBPurchaseOrderItem {
   unitPrice: string;
   formattedDate: string;
   totalAmount: string;
+  lots?: string;
   isTraceabilityRequired: boolean;
   capitalEquipment: boolean;
   tax: boolean;
@@ -34,6 +40,7 @@ export interface FBPurchaseOrderItem {
   received?: number;
   receivedList?: any[];
   type: FBPurchaseOrderItemType;
+  status?: DocumentRevisionStatus;
 }
 
 export interface FBPurchaseOrderCalculation {
@@ -49,7 +56,7 @@ export interface FBPurchaseOrderCalculation {
 
 export type FBPurchaseOrderValue = FBPurchaseOrderCalculation
 & {
-  items?: FBPurchaseOrderItem[];
+  items: FBPurchaseOrderItem[];
 };
 
 export type FBPurchaseOrderConstructor = FBPurchaseOrderValue & {

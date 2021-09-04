@@ -573,7 +573,7 @@ context("Create company with golden tenant", () => {
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -591,11 +591,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
-      cy.get("[name^=type-of-document-to-be-created-]").eq(0).click();
+      cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
     });
 
     it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-      cy.get("[name^=default-revision-stage-]").eq(0).click();
+      cy.get("[name^=default-revision-stage-]").eq(0).check();
     });
 
     it("Upload JSON Form", () => {
@@ -623,7 +623,7 @@ context("Create company with golden tenant", () => {
 
     it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
     });
@@ -644,7 +644,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -662,11 +662,11 @@ context("Create company with golden tenant", () => {
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
-      cy.get("[name^=type-of-document-to-be-created-]").eq(1).click();
+      cy.get("[name^=type-of-document-to-be-created-]").eq(1).check();
     });
 
     it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-      cy.get("[name^=default-revision-stage-]").eq(0).click();
+      cy.get("[name^=default-revision-stage-]").eq(0).check();
     });
 
     it("Enters document description 'Second document description'", () => {
@@ -681,12 +681,12 @@ context("Create company with golden tenant", () => {
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.get("[name^=training-required-]").eq(1).check();
     });
 
     it("Save document", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
     });
@@ -707,7 +707,7 @@ context("Create company with golden tenant", () => {
 
     it("Create new document from form", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev, CyRoutes.EmployeesGet], () => {
+        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
           cy.drCreateNewDocumentFromForm();
         });
     });
@@ -765,7 +765,7 @@ context("Create company with golden tenant", () => {
 
     it("Upload logo picture 'image.jpg'", () => {
       SystemRequirement("REQ-3500");
-      cy.xpath("//div[@data-cy=\"Client's Logo\"]/../../../div/div/button").click();
+      cy.get("[data-cy=\"albumMediaButton\"]").click();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -775,8 +775,7 @@ context("Create company with golden tenant", () => {
 
     it("Approve and release document - create company", () => {
       SystemRequirement("REQ-3600");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });

@@ -40,5 +40,6 @@ yarn cypress verify
 ./scripts/cypress/utils/delete_cache.sh
 ./scripts/cypress/utils/patch_director_port_in_cache.sh
 ./scripts/cypress/utils/generate_requirements_json_file.sh
+yarn ts-node -O '{"module": "commonjs"}' cypress/support/organizeReports/copyToGeneratedJson.ts
 
 yarn cypress open

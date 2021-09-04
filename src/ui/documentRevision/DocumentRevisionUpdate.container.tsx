@@ -106,6 +106,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     }
 
     if (isEmpty(dataToSubmit)) {
+      helpers.setSubmitting(false);
       return;
     }
 

@@ -35,7 +35,7 @@ declare global {
       poClickOnSpecificPOFromList(params: {item: string}): Chainable<Subject>;
       poCheckForSpecificPOItemValue(params: {itemValue: string}): Chainable<Subject>;
       poConvertedToDollarsMessage(): Chainable<Subject>;
-      poCheckIfFormPopUpIsActive(...list: string[]): Chainable<Subject>;
+      poCheckIfFormPopUpIsActive(params: {type: string; list: string[]}): Chainable<Subject>;
       poCloseFormPopUpOnLandingPage(): Chainable<Subject>;
       poCheckForLineItemsAndTheirID(params: {firstId: string; secondId: string}): Chainable<Subject>;
       poAMEnterLevelName(params: {name: string}): Chainable<Subject>;
@@ -54,6 +54,9 @@ declare global {
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
       poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
+      poSelectPOStatus(params: {status: string}): Chainable<Subject>;
+      poCheckTax(params: {number: string}): Chainable<Subject>;
     }
   }
 }
@@ -90,7 +93,7 @@ Cypress.Commands.add("poAddPOButtonClick", () => {
 });
 
 Cypress.Commands.add("poCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.LotQuantity], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
   });
   cy.checkToastMessage({ exists: false });
@@ -160,8 +163,17 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
   cy.get("[name=\"tax\"]").check();
 });
 
+Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
+  cy.get("[id$=\"po-status-built-in\"]").click();
+  cy.get("ul[role=listbox]>li").contains(params.status).click();
+});
+
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
   cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
+  cy.get("[name=\"po-items-built-in.tax\"]").should("have.attr", "value", params.number);
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
@@ -202,9 +214,11 @@ Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
   });
 });
 
-Cypress.Commands.add("poCheckIfFormPopUpIsActive", (...list: string[]) => {
+Cypress.Commands.add("poCheckIfFormPopUpIsActive", (params: {type: string; list: string[]}) => {
+  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+  cy.get("[id^=\"react-select\"]").contains(params.type).click();
   cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
-  list.forEach((item) => {
+  params.list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
   cy.get("[data-cy=field-selectType]>div:nth-child(1)").click();
@@ -215,8 +229,8 @@ Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
 });
 
 Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string; secondId: string}) => {
-  cy.get("[class=\"MuiTableRow-root\"]").eq(1).contains(params.firstId).should("exist");
-  cy.get("[class=\"MuiTableRow-root\"]").eq(2).contains(params.secondId).should("exist");
+  cy.get("[data-cy=\"poItemIndex\"]").eq(0).should("have.text", params.firstId);
+  cy.get("[data-cy=\"poItemIndex\"]").eq(1).should("have.text", params.secondId);
 });
 
 Cypress.Commands.add("poAMEnterLevelName", (params: {name: string}) => {
@@ -299,5 +313,22 @@ Cypress.Commands.add("poAPICreatePO", (params: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response.body);
+});
+
+Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; poForm?: string}) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType], () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click();
+  });
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.DocPreview,
+    CyRoutes.GetRequiredApprovers], () => {
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+    cy.wait(500);
+    cy.get("div[id^=react-select]").contains(params.poType).click();
+    if (params.poForm) {
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").click();
+      cy.get("div[id^=react-select]").contains(params.poForm).click();
+    }
+  });
 });
 
