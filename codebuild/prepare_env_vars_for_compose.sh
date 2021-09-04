@@ -73,9 +73,9 @@ fi
 
 export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 
-export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
-export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
-export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+source export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
+source export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+source export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
 
 export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
 export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
@@ -136,9 +136,9 @@ do
 
               if [ $IMAGE_FOUND = 0 ]
               then
-                ../doc-fe/codebuild/pull_be_images.sh
+                $FE_REPO/codebuild/pull_be_images.sh
               else
-                ../doc-fe/codebuild/build_and_push_be_images.sh
+                $FE_REPO/codebuild/build_and_push_be_images.sh
               fi
               cd $HEAD_PWD
             ;;
