@@ -1,8 +1,12 @@
 #!/bin/bash
 
-export DOCKER_COMPOSE_BE="$HEAD_PWD/doc-be/cypress/docker-compose.yml"
-export DOCKER_COMPOSE_FE="$HEAD_PWD/doc-be/cypress/fe.docker-compose.yml"
-export DOCKER_COMPOSE_SORRY_CY="$HEAD_PWD/doc-be/cypress/sorry-cypress.docker-compose.yml"
+set -a
+source doc-fe/codebuild/env_vars_for_compose.sh
+set +a
+
+export DOCKER_COMPOSE_BE="$BE_REPO/cypress/docker-compose.yml"
+export DOCKER_COMPOSE_FE="$BE_REPO/cypress/fe.docker-compose.yml"
+export DOCKER_COMPOSE_SORRY_CY="$BE_REPO/cypress/sorry-cypress.docker-compose.yml"
 
 if [ ! -f "$DOCKER_COMPOSE_BE" ]; then
     echo "$DOCKER_COMPOSE_BE does not exist"
@@ -24,10 +28,6 @@ if [ ! -f "$DOCKER_COMPOSE_SORRY_CY" ]; then
     echo "Run from root of the repository!!"
     exit;
 fi
-
-set -a
-source cypress/env_vars_for_compose.sh
-set +a
 
 if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
   echo "ENLIL_COMPOSE_SUITE_NUMBER not set, exiting"
@@ -87,7 +87,6 @@ export ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START
 export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+8))"
 export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+9))"
 
-export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
 export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/817083319299/cypress_terraform_test_dev_$ENLIL_COMPOSE_SUITE_NUMBER.fifo"
 export ENLIL_BE_VALIDATORS_CYPRESS_FE_URL="http://validators:${ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT}"
 
@@ -104,7 +103,7 @@ echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
 echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
 echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 
-aws sqs purge-queue --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
+aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
 
 export ECR_REPO="codebuild"
 
@@ -116,7 +115,7 @@ do
               cd $FE_REPO
               IMAGE=fe_${FE_GIT_COMMIT_HASH}
               DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO/$IMAGE
-              doc-fe/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
               IMAGE_FOUND=$?
 
               if [ $IMAGE_FOUND = 0 ]
@@ -132,7 +131,7 @@ do
             BUILD_BE)
               cd $BE_REPO
               IMAGE=be_server_${BE_GIT_COMMIT_HASH}
-              doc-fe/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
               IMAGE_FOUND=$?
 
               if [ $IMAGE_FOUND = 0 ]
@@ -147,7 +146,7 @@ do
               cd $VALIDATORS_REPO
               IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
               DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO/$IMAGE
-              doc-fe/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
               IMAGE_FOUND=$?
 
               if [ $IMAGE_FOUND = 0 ]
