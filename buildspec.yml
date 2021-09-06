@@ -36,19 +36,20 @@ phases:
       - ./doc-fe/codebuild/prepare_env_vars_for_compose.sh BUILD_BE BUILD_FE BUILD_VALIDATORS
   pre_build:
     commands:
-      # - docker-compose up -d #--force-recreate because local test run
+      - cd doc-fe/codebuild
+      - docker-compose up -d --force-recreate because local test run
   build:
     commands:
-      # - docker ps
-      # - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ls
-      # - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ./scripts/cypress/utils/start_tests.sh
-      # - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
-      # - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-      # - yarn install --frozen-lockfile
-      # - ./scripts/cypress/utils/generate_requirements_json_file.sh
-      # - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-      # - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-      # - ./scripts/cypress/utils/merge_reports_pipeline.sh
+      - docker ps
+      - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ls
+      - docker exec -w /opt/app/tests doc-fe_test_run_container_1 ./scripts/cypress/utils/start_tests.sh
+      - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
+      - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+      - yarn install --frozen-lockfile
+      - ./scripts/cypress/utils/generate_requirements_json_file.sh
+      - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+      - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+      - ./scripts/cypress/utils/merge_reports_pipeline.sh
       # - command
       # - command
   post_build:
@@ -56,7 +57,8 @@ phases:
       # - ls
       # - docker logs doc-fe_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
       # - docker logs doc-fe_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
-      # - command
+      - cd ..
+      - ls
 reports:
   report-name-or-arn:
     files:
