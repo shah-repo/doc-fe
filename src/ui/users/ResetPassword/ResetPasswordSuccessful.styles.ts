@@ -37,5 +37,12 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: "50px",
       height: "50px",
     },
+    link: {
+      fontSize: "1rem",
+    },
+    lockedInfo: {
+      width: "700px",
+      color: Colors.dark_gray,
+    },
   }),
 );

@@ -45,7 +45,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
         <Form className={classes.formStyle}>
           <FormMessage asyncState={asyncState} className={classes.status} id="ResetPassword-formError"/>
           <InputField
-            name="password"
+            name="newPassword"
             label="reset.enter.new.password"
             size="sm"
             gutter={false}
@@ -58,7 +58,7 @@ const ResetPasswordPresenter: React.FunctionComponent<Props> = ({
             lpignore={false}
           />
           <InputField
-            name="confirmPass"
+            name="newPasswordConfirmation"
             label="reset.confirm.new.password"
             size="sm"
             gutter={false}

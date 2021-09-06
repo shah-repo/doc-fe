@@ -19,6 +19,7 @@ export const LOGOUT_URL = "/auth/logout";
 export const AUTH_AWS_IOT_URL = "/auth/credentials/iot";
 export const GROUPS_URL = "/groups/me";
 export const PING_SERVER_URL = "/auth/prevent_idle_logout";
+export const CHANGE_PASSWORD_URL = "/auth/change_password";
 
 export const FETCH_VALIDATORS_REMOTE_URL_URL = "/remoteValidators";
 export const REMOTE_VALIDATORS_STATUS_URL = "/remoteValidators/status";

@@ -52,6 +52,12 @@ const getLoadPermissionsAsyncState = (state: ApplicationState): AsyncState =>
 const getPingServerAsyncState = (state: ApplicationState): AsyncState =>
   state.auth.pingServerAsyncInfo;
 
+const getDaysUntilPasswordExpires = (state: ApplicationState): number =>
+  state.auth.user.daysUntilPasswordExpires;
+
+const getPasswordSoonToExpire = (state: ApplicationState): boolean =>
+  state.auth.user.passwordSoonToExpire;
+
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
@@ -120,4 +126,6 @@ export default {
   getCredentials,
   isCustomLabelsOn,
   isDropboxEnabled,
+  getDaysUntilPasswordExpires,
+  getPasswordSoonToExpire,
 };

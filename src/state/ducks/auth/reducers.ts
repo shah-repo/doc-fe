@@ -1,3 +1,4 @@
+import moment from "moment";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
@@ -39,6 +40,8 @@ export const USER_DEFAULT_STATE: UserState = {
   employee: DEFAULT_EMPLOYEE,
   iotCredentials: DEFAULT_CREDENTIALS,
   customLabels: false,
+  daysUntilPasswordExpires: 90,
+  passwordSoonToExpire: false,
 };
 
 type AuthUserActions =
@@ -59,11 +62,13 @@ export const user = (
   switch (action.type) {
     case AUTH_USER: {
       const activeUser = action.payload.employees.find((employee) => employee.active) || { id: "" } as Employee;
+      const { passwordUpdatedAt, passwordExpiresAt } = action.payload;
       return {
         ...state,
         ...action.payload,
         employeeId: activeUser.id,
         employee: activeUser,
+        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(passwordUpdatedAt), "days"),
       };
     }
     case SET_EMPLOYEE:

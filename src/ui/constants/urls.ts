@@ -30,6 +30,7 @@ export const RESET_PASSWORD_SUCCESSFUL_URL = "/reset_password_successful/";
 
 export const STATUS = "/status";
 export const MAINTENANCE = "/maintenance";
+export const USER_LOCKED = "/locked";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
 

@@ -3,31 +3,27 @@ import * as React from "react";
 import * as Yup from "yup";
 import { logo } from "../../../common/utils/helpers";
 import { AsyncState } from "../../../state/types";
-import { confirmPasswordSchema, passwordSchema } from "../../components/forms/fields/validators";
+import { confirmResetPasswordSchema, passwordSchema } from "../../components/forms/fields/validators";
 import { FormContext } from "../../components/forms/FormContext";
-import { PasswordValues } from "../types";
+import { ResetPasswordValues } from "../types";
 import ResetPasswordPresenter from "./ResetPassword.presenter";
 
 interface Props {
-  clientEmail: string;
   asyncState: AsyncState;
-  onSubmit: (confirmValues: PasswordValues) => void;
-  isUserAuthenticated: boolean;
+  onSubmit: (confirmValues: ResetPasswordValues) => void;
 }
 
 const ResetPasswordContainer: React.FunctionComponent<Props> = ({
-  clientEmail,
   asyncState,
   onSubmit,
 }) => {
 
-  const initialValues: PasswordValues = {
-    email: clientEmail,
-    confirmPass: "",
-    password: "",
+  const initialValues: ResetPasswordValues = {
+    newPassword: "",
+    newPasswordConfirmation: "",
   };
 
-  const render = (props: FormikProps<PasswordValues>) => (
+  const render = (props: FormikProps<ResetPasswordValues>) => (
     <ResetPasswordPresenter
       logo={logo}
       asyncState={asyncState}
@@ -35,8 +31,8 @@ const ResetPasswordContainer: React.FunctionComponent<Props> = ({
   );
 
   const validationSchema = Yup.object({
-    password: passwordSchema,
-    confirmPass: confirmPasswordSchema,
+    newPassword: passwordSchema,
+    newPasswordConfirmation: confirmResetPasswordSchema,
   });
 
   return (

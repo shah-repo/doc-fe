@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useSelector } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { authSelectors } from "../../../state/ducks/auth";
-import { RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect, RouteComponentProps, useHistory } from "react-router-dom";
+import { authActions, authSelectors } from "../../../state/ducks/auth";
+import { HOME_URL, RESET_PASSWORD_SUCCESSFUL_URL } from "../../constants/urls";
+import FBStore from "../../form.builder/stores/ui/FBStore";
 import useAsync from "../../hooks/useAsync";
-import { PasswordValues } from "../types";
+import { ResetPasswordValues } from "../types";
 import ResetPasswordContainer from "./ResetPassword.container";
 
 type Props = Pick<RouteComponentProps, "location">;
@@ -13,21 +14,36 @@ const ResetPassword: React.FunctionComponent<Props> = ({
   location,
 }) => {
   const isUserAuth = useSelector(authSelectors.isAuthenticated);
-  const clientEmail = useSelector(authSelectors.currentUserEmail);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const async = useAsync({
-    onSuccess: () => history.push(RESET_PASSWORD_SUCCESSFUL_URL),
+    onSuccess: () => {
+      dispatch(authActions.logout());
+      FBStore.clearStores();
+      history.push(RESET_PASSWORD_SUCCESSFUL_URL);
+    },
   });
 
-  const onSubmit = (confirmValues: PasswordValues): void => history.push(RESET_PASSWORD_SUCCESSFUL_URL);
+  const onSubmit = (values: ResetPasswordValues): void => {
+    dispatch(
+      authActions.resetPassword({
+        newPassword: values.newPassword,
+        newPasswordConfirmation: values.newPasswordConfirmation,
+      },
+      async,
+      ),
+    );
+  };
+
+  if (!isUserAuth) {
+    return <Redirect to={{ pathname: HOME_URL }} />;
+  }
 
   return (
     <ResetPasswordContainer
-      clientEmail={clientEmail}
       onSubmit={onSubmit}
       asyncState={async.asyncState}
-      isUserAuthenticated={isUserAuth}
     />
   );
 };

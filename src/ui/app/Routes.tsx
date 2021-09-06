@@ -3,7 +3,7 @@ import * as React from "react";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import PrivateRouteContainer from "../components/routes/PrivateRoute.container";
-import { CONFIRM_FORGOT_PASSWORD_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, MAINTENANCE, NEW_USER_SET_PASSWORD, RESET_PASSWORD_SUCCESSFUL_URL, RESET_PASSWORD_URL, SIGNUP_URL, STATUS, SUPPLIER_SURVEY_URL } from "../constants/urls";
+import { CONFIRM_FORGOT_PASSWORD_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, MAINTENANCE, NEW_USER_SET_PASSWORD, RESET_PASSWORD_SUCCESSFUL_URL, RESET_PASSWORD_URL, SIGNUP_URL, STATUS, SUPPLIER_SURVEY_URL, USER_LOCKED } from "../constants/urls";
 import Maintenance from "../maintenance/Maintenance";
 import StatusPresenter from "../status/Status.presenter";
 import SupplierSurveyContainer from "../users/forms/SupplierSurvey/SupplierSurvey.container";
@@ -11,6 +11,7 @@ import LoginContainer from "../users/Login.container";
 import LoginWithCodeContainer from "../users/LoginWithCode.container";
 import ResetPassword from "../users/ResetPassword/ResetPassword";
 import ResetPasswordSuccessful from "../users/ResetPassword/ResetPasswordSuccessful";
+import UserLocked from "../users/ResetPassword/UserLocked";
 import NewUserSetPasswordContainer from "../users/SignUp/NewUserSetPassword.container";
 import SetForgotPasswordContainer from "../users/SignUp/SetForgotPassword.container";
 import SignUpContainer from "../users/SignUp/SignUp.container";
@@ -57,6 +58,11 @@ const Routes: React.FunctionComponent<Props> = ({ classes }) => (
         path={RESET_PASSWORD_SUCCESSFUL_URL}
         exact={true}
         component={ResetPasswordSuccessful}
+      />
+      <Route
+        path={USER_LOCKED}
+        exact={true}
+        component={UserLocked}
       />
       <Route
         path={SUPPLIER_SURVEY_URL}
