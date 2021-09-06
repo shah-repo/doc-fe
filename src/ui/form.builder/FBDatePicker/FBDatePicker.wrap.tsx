@@ -30,7 +30,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
 
     function save(date?: string) {
-      if (!date) { return; }
+      if (!date || !isOutput) { return; }
       formState?.setFieldValue(name, date);
       workspaceState?.saveDocRev(formState?.getValues());
     }
@@ -40,7 +40,6 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       if (isUnderDefault) {
         const nowDate = getStartOfDayDateString(moment(new Date()).tz(TIME_ZONE).toISOString());
         datePickerState?.setValue(nowDate);
-        if (!isOutput) { return; }
         save(nowDate);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,10 +47,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     useEffect(() => reaction(
       () => datePickerState?.date,
-      (date) => {
-        if (!isOutput) { return; }
-        save(date);
-      }
+      (date) => save(date)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
