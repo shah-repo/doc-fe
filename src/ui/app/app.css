@@ -18,14 +18,3 @@ body {
 .x-hellosign-embedded {
   z-index: 9999;
 }
-
-.Toastify__toast.Toastify__toast--info.warning-deletion {
-  background: #d3ead8;
-  color: black;
-  width: 520px;
-}
-
-.Toastify__toast.Toastify__toast--info.warning-deletion
-  .Toastify__close-button {
-  color: black;
-}
