@@ -18,7 +18,7 @@ const TOAST_OPTIONS: ToastOptions = {
   transition: Slide,
 };
 
-const toast = (type: ToastType, message: string, options: ToastOptions = {}) =>
+const toast = (type: ToastType, message: string | Element, options: ToastOptions = {}) =>
   taostify[type](
     message,
     {
@@ -27,11 +27,11 @@ const toast = (type: ToastType, message: string, options: ToastOptions = {}) =>
     },
   );
 
-export const toastError = (message: string, options: ToastOptions = {}) =>
+export const toastError = (message: string | Element, options: ToastOptions = {}) =>
   toast(ToastType.Error, message, options);
 
-export const toastInfo = (message: string, options: ToastOptions = {}) =>
+export const toastInfo = (message: string | Element, options: ToastOptions = {}) =>
   toast(ToastType.Info, message, options);
 
-export const toastSuccess = (message: string, options: ToastOptions = {}) =>
+export const toastSuccess = (message: string | Element, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);

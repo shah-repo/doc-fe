@@ -15,11 +15,9 @@ import { companyActions, companySelectors } from "../../state/ducks/company";
 import { NavigationItem } from "../../state/ducks/company/types";
 import BottomLogo from "../components/icons/BottomLogo.container";
 import Logo from "../components/icons/Logo.container";
-import { toastInfo } from "../components/notifications";
 import { HOME_URL } from "../constants/urls";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
-import "./app.css";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
 
@@ -42,15 +40,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   });
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
-  const companyMine = useSelector(companySelectors.getCompanyMine);
-
-  useEffect(() => {
-    companyMine.scheduledForDeletion &&
-    toastInfo(
-      `This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to enlil-feedback@shifamed.com`,
-      { position: "top-center", className: "warning-deletion" }
-    );
-  }, [companyMine]);
 
   const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
     .reduce<NavigationItem[]>((acc, item) => {
