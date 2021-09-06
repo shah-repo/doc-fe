@@ -13,7 +13,7 @@ env:
      # key: secret-id:json-key:version-stage:version-id
   exported-variables:
      - AWS_DEFAULT_REGION
-     #- AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
   #git-credential-helper: yes
 #batch:
   #fast-fail: true
