@@ -13,7 +13,7 @@ env:
      # key: secret-id:json-key:version-stage:version-id
   exported-variables:
      - AWS_DEFAULT_REGION
-     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+     #- AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
   #git-credential-helper: yes
 #batch:
   #fast-fail: true
@@ -33,11 +33,11 @@ phases:
       #- ls
       - export HEAD_PWD=$(pwd)
       - echo $HEAD_PWD
-      - ./doc-fe/codebuild/prepare_env_vars_for_compose.sh BUILD_BE BUILD_FE BUILD_VALIDATORS
+      - source ./doc-fe/codebuild/prepare_env_vars_for_compose.sh
   pre_build:
     commands:
       - cd doc-fe/codebuild
-      - docker-compose up -d --force-recreate because local test run
+      - docker-compose up -d --force-recreate #because local test run
   build:
     commands:
       - docker ps

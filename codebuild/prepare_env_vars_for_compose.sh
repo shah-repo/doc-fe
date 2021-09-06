@@ -1,12 +1,23 @@
 #!/bin/bash
 
+# set -a
+# source doc-fe/codebuild/env_vars_for_compose.sh
+# set +a
 set -a
-source doc-fe/codebuild/env_vars_for_compose.sh
-set +a
+  export BE_REPO="$HEAD_PWD/doc-be"
+  export FE_REPO="$HEAD_PWD/doc-fe"
+  export VALIDATORS_REPO="$HEAD_PWD/remote-js-validators"
+  export ENLIL_COMPOSE_SUITE_NUMBER="13"
+  export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START-5600}
 
-export DOCKER_COMPOSE_BE="$BE_REPO/cypress/docker-compose.yml"
-export DOCKER_COMPOSE_FE="$BE_REPO/cypress/fe.docker-compose.yml"
-export DOCKER_COMPOSE_SORRY_CY="$BE_REPO/cypress/sorry-cypress.docker-compose.yml"
+  export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
+  export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+  export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
+
+  export DOCKER_COMPOSE_BE="$BE_REPO/cypress/docker-compose.yml"
+  export DOCKER_COMPOSE_FE="$BE_REPO/cypress/fe.docker-compose.yml"
+  export DOCKER_COMPOSE_SORRY_CY="$BE_REPO/cypress/sorry-cypress.docker-compose.yml"
+set +a
 
 if [ ! -f "$DOCKER_COMPOSE_BE" ]; then
     echo "$DOCKER_COMPOSE_BE does not exist"
@@ -70,28 +81,33 @@ fi
 #   exit
 # fi
 
+set -a
+  export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 
-export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
+  export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
+  export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
+  export ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+3))"
+  export ENLIL_COMPOSE_EXPOSE_POSTGRES_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+4))"
+  export ENLIL_COMPOSE_EXPOSE_REDIS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+5))"
+  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
+  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+7))"
+  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+8))"
+  export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+9))"
 
-export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
-export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
-export ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+3))"
-export ENLIL_COMPOSE_EXPOSE_POSTGRES_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+4))"
-export ENLIL_COMPOSE_EXPOSE_REDIS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+5))"
-export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
-export ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+7))"
-export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+8))"
-export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+9))"
+  export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/817083319299/cypress_terraform_test_dev_$ENLIL_COMPOSE_SUITE_NUMBER.fifo"
+  export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
+  export ENLIL_BE_VALIDATORS_CYPRESS_FE_URL="http://localhost:${ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT}"
 
-export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/817083319299/cypress_terraform_test_dev_$ENLIL_COMPOSE_SUITE_NUMBER.fifo"
-export ENLIL_BE_VALIDATORS_CYPRESS_FE_URL="http://localhost:${ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT}"
-
-export REACT_APP_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT/api"
-export REACT_APP_WORKER_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT/api"
+  export ENLIL_FE_REACT_APP_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT/api"
+  export ENLIL_FE_REACT_APP_FRONTEND_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
+  export REACT_APP_WORKER_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT/api"
 
 
-export TYPEORM_DATABASE=${TYPEORM_DATABASE-cypress_db}
-export TYPEORM_HOST=enlil_cypress_postgres
+  export TYPEORM_DATABASE=${TYPEORM_DATABASE-cypress_db}
+  export TYPEORM_HOST=enlil_cypress_postgres
+  export ENLIL_DB_PERSIST=false
+  export ECR_REPO="codebuild"
+set +a
 
 echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
 echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
@@ -101,60 +117,78 @@ echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
 
-export ECR_REPO="codebuild"
+build_be () {
+  cd $BE_REPO
+  IMAGE=be_server_${BE_GIT_COMMIT_HASH}
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
 
-for ARGUMENT in "$@"
-do
-    KEY=$(echo $ARGUMENT | cut -f1 -d=)
-    case "$KEY" in
-            BUILD_FE)
-              cd $FE_REPO
-              IMAGE=fe_${FE_GIT_COMMIT_HASH}
-              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
-              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
-              IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    $FE_REPO/codebuild/pull_be_images.sh
+  else
+    $FE_REPO/codebuild/build_and_push_be_images.sh
+  fi
+  cd $HEAD_PWD
+}
 
-              if [ $IMAGE_FOUND = 0 ]
-              then
-                docker pull $DOCKER_IMAGE
-              else
-                ./scripts/cypress_build_images.sh
-                docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} $DOCKER_IMAGE
-                docker push $DOCKER_IMAGE
-              fi
-              cd $HEAD_PWD
-            ;;
-            BUILD_BE)
-              cd $BE_REPO
-              IMAGE=be_server_${BE_GIT_COMMIT_HASH}
-              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
-              IMAGE_FOUND=$?
+build_fe () {
+  cd $FE_REPO
+  IMAGE=fe_${FE_GIT_COMMIT_HASH}
+  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
 
-              if [ $IMAGE_FOUND = 0 ]
-              then
-                $FE_REPO/codebuild/pull_be_images.sh
-              else
-                $FE_REPO/codebuild/build_and_push_be_images.sh
-              fi
-              cd $HEAD_PWD
-            ;;
-            BUILD_VALIDATORS)
-              cd $VALIDATORS_REPO
-              IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
-              DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
-              $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
-              IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    docker pull $DOCKER_IMAGE
+  else
+    ./scripts/cypress_build_images.sh
+    docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} $DOCKER_IMAGE
+    docker push $DOCKER_IMAGE
+  fi
+  cd $HEAD_PWD
+}
 
-              if [ $IMAGE_FOUND = 0 ]
-              then
-                docker pull $DOCKER_IMAGE
-              else
-                ./scripts/cypress_build_images.sh
-                docker tag enlil_cypress_validators:$VALIDATORS_GIT_COMMIT_HASH $DOCKER_IMAGE
-                docker push $DOCKER_IMAGE
-              fi
-              cd $HEAD_PWD
-            ;;   
-            *)   
-    esac    
-done
+build_validators () {
+  cd $VALIDATORS_REPO
+  IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
+  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    docker pull $DOCKER_IMAGE
+  else
+    ./scripts/cypress_build_images.sh
+    docker tag enlil_cypress_validators:$VALIDATORS_GIT_COMMIT_HASH $DOCKER_IMAGE
+    docker push $DOCKER_IMAGE
+  fi
+  cd $HEAD_PWD
+}
+
+build_be &
+build_fe &
+build_validators &
+
+wait
+echo "Done with images"
+
+
+
+# for ARGUMENT in "$@"
+# do
+#     KEY=$(echo $ARGUMENT | cut -f1 -d=)
+#     case "$KEY" in
+#             BUILD_FE)
+
+#             ;;
+#             BUILD_BE)
+
+#             ;;
+#             BUILD_VALIDATORS)
+
+#             ;;   
+#             *)   
+#     esac    
+# done
