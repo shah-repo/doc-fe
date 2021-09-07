@@ -9,10 +9,10 @@ import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
   handleShippingCostBlur,
-  handleTaxChange,
-  handleTaxBlur,
   handleCurrencyChange,
   calculation,
+  handleTaxChange,
+  handleTaxBlur,
   taxField,
   disabled,
   name,
@@ -52,10 +52,9 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
           name={`${name}.tax`}
           gutter={false}
           size="small"
-          value={taxField || calculation?.tax}
+          value={taxField}
           inputProps={{
             style: { textAlign: "right", padding: "5px 20px 5px 5px" },
-            min: "0",
             onChange: handleTaxChange,
             onBlur: handleTaxBlur,
           }}

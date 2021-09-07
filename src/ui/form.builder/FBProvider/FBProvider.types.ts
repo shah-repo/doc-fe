@@ -4,8 +4,7 @@ import {
   FBApprovalMatrixTableState,
   FBApprovalsState,
   FBApproversState,
-  FBBookmarkState,
-  FBDialogState,
+  FBBookmarkState, FBDatePickerState, FBDialogState,
   FBDocumentRevisionsState,
   FBEBPartState,
   FBEditorCustomControlState,
@@ -82,4 +81,5 @@ export interface FBProviderProps {
   lhrStepState?: FBLHRStepState;
   mpiProcedureSelectState?: FBMPIProcedureSelectState;
   poApprovalsState?: FBPOApprovalsState;
+  datePickerState?: FBDatePickerState;
 }

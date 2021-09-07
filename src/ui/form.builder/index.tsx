@@ -64,6 +64,7 @@ export { default as FBControlPickerState } from "./FBControlPicker/FBControlPick
 export * from "./FBControlPicker/FBControlPicker.types";
 export { default as FBData } from "./FBData/FBData";
 export { default as FBDatePicker } from "./FBDatePicker/FBDatePicker";
+export { default as FBDatePickerState } from "./FBDatePicker/FBDatePicker.state";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
