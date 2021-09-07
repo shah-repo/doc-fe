@@ -28,7 +28,7 @@ const DEFAULT_CREDENTIALS = {
   region: "",
 };
 
-export const USER_DEFAULT_STATE: UserState = {
+const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
   id: "",
@@ -55,7 +55,7 @@ type AuthUserActions =
   | SetCredentialsAction
   | ToggleCustomLabelsAction;
 
-export const user = (
+const user = (
   state: UserState = USER_DEFAULT_STATE,
   action: AuthUserActions,
 ): UserState => {
@@ -122,12 +122,12 @@ export const user = (
   }
 };
 
-export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
+const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
   tags: [],
   permissions: [],
 };
 
-export const groups = (
+const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
   action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {

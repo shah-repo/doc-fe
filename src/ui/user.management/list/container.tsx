@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { User } from "../../../state/ducks/common/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { HOME_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -31,26 +31,28 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   const getResendSignupEmailAction = useActionCreator(authActions.resendSignupEmail);
   const getSendPasswordResetEmailAction = useActionCreator(authActions.sendPasswordResetEmail);
 
-  const notify = () => toast.info(intl.formatMessage({
-    id: "user.management.signup.email.sent",
-  }));
-
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
-      notify();
+      toast.info(intl.formatMessage({
+        id: "user.management.reset.password.email.sent",
+      }));
     },
   });
 
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
-      notify();
+      toast.info(intl.formatMessage({
+        id: "user.management.signup.email.sent",
+      }));
     },
   });
 
-  const handleResendEmail = ( user: User ) => {
-    user.locked ?
-      asyncResetPasswordEmail.start(getSendPasswordResetEmailAction, user.id, asyncResetPasswordEmail) :
-      asyncSignUpEmail.start(getResendSignupEmailAction, user.email, asyncSignUpEmail);
+  const handleResendEmail = ( employee: GetEmployeeResponse ) => {
+    const { user, id } = employee || {};
+
+    user?.locked ?
+      asyncResetPasswordEmail.start(getSendPasswordResetEmailAction, id, asyncResetPasswordEmail) :
+      asyncSignUpEmail.start(getResendSignupEmailAction, user?.email, asyncSignUpEmail);
   };
 
   if (isEmpty(tableCriteria.queryDict) && !didMount) {

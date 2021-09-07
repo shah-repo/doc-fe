@@ -31,7 +31,7 @@ interface Props {
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
   groupOptions: SelectOption[];
-  handleResendEmail: (user: User) => void;
+  handleResendEmail: (employee: GetEmployeeResponse) => void;
 }
 
 const UserManagementListPresenter: React.FunctionComponent<Props> = ({
@@ -147,7 +147,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       key: "confirmed" as keyof GetEmployeeResponse,
       label: "user.management.signed.up",
       omitSearch: true,
-      onSelect: ({ rowData }) => () => {  handleResendEmail(rowData.user); },
+      onSelect: ({ rowData }) => () => {  handleResendEmail(rowData); },
       cellType: (rowData) => handleEmailCellType(rowData.user),
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleEmail(rowData.user),

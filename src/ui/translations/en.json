@@ -959,6 +959,7 @@
   "user.management.signed.up": "Signed up",
   "user.management.resend.signup.email": "Resend signup email",
   "user.management.signup.email.sent": "Signup email sent!",
+  "user.management.reset.password.email.sent": "Reset password email sent!",
   "api.token.title": "API Token",
   "api.token.key": "Key",
   "api.token.secret": "Secret",
