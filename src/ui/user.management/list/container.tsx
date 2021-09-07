@@ -34,7 +34,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
       toast.info(intl.formatMessage({
-        id: "user.management.reset.password.email.sent",
+        id: "user.management.signup.email.sent",
       }));
     },
   });
@@ -42,7 +42,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
       toast.info(intl.formatMessage({
-        id: "user.management.signup.email.sent",
+        id: "user.management.reset.password.email.sent",
       }));
     },
   });
