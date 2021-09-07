@@ -71,7 +71,8 @@ export type FBInputType =
   | "quantityunit"
   | "partsselection"
   | "mediaalbum"
-  | "poapprovals";
+  | "poapprovals"
+  | "downloadsheet";
 
 export type FBInputProps =
   & FBLabelProps
