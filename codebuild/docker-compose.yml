@@ -47,7 +47,6 @@ services:
 
   enlil_fe_server:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:fe_${FE_GIT_COMMIT_HASH}
-    working_dir: /opt/app/fe
     depends_on:
       - enlil_cypress_server
     ports:
@@ -57,6 +56,7 @@ services:
     environment:
       REACT_APP_API_ENDPOINT: ${ENLIL_FE_REACT_APP_API_ENDPOINT}
       REACT_APP_FRONTEND_URL: ${ENLIL_FE_REACT_APP_FRONTEND_URL}
+      REACT_APP_WORKER_API_ENDPOINT: ${REACT_APP_WORKER_API_ENDPOINT}
     networks:
       cypress_network:
         aliases: 
@@ -139,6 +139,7 @@ services:
     depends_on:
       - enlil_cypress_postgres
       - enlil_cypress_redis
+      - enlil_cypress_migration
     expose:
       - 4211
     environment:
