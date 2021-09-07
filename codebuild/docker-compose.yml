@@ -11,9 +11,6 @@ x-const:
     - ENV_NAME=${ENLIL_BE_ENV_NAME}
     - TYPEORM_DATABASE=${TYPEORM_DATABASE}
     - TYPEORM_HOST=${TYPEORM_HOST}
-    - VALIDATORS_CYPRESS_FE_URL=${ENLIL_BE_VALIDATORS_CYPRESS_FE_URL}
-    - ENLIL_FE_REACT_APP_API_ENDPOINT=${ENLIL_FE_REACT_APP_API_ENDPOINT}
-    - ENLIL_FE_REACT_APP_FRONTEND_URL=${ENLIL_FE_REACT_APP_FRONTEND_URL}
 
   enlil_cypress_worker_config: &ENLIL_CYPRESS_WORKER_CONFIG
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:be_worker_${BE_GIT_COMMIT_HASH}
@@ -30,7 +27,7 @@ x-const:
 
 services:
   director:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.0.0-rc.10
     ports:
       - 1234:1234
     networks:
@@ -39,10 +36,10 @@ services:
           - director
 
   test_run_container:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_90_cy_7_3_0_aws
     command: tail -F anything
     volumes:
-      - "./:/opt/app/tests"
+      - "$FE_REPO:/opt/app/tests"
     networks:
       cypress_network:
     depends_on:
@@ -60,8 +57,6 @@ services:
     environment:
       REACT_APP_API_ENDPOINT: ${ENLIL_FE_REACT_APP_API_ENDPOINT}
       REACT_APP_FRONTEND_URL: ${ENLIL_FE_REACT_APP_FRONTEND_URL}
-    volumes:
-      - "./:/opt/app/fe"
     networks:
       cypress_network:
         aliases: 
@@ -125,7 +120,7 @@ services:
     <<: *ENLIL_CYPRESS_WORKER_CONFIG
 
   enlil_cypress_redis:
-    image: redis:4.0.14-alpine
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:redis_4.0.14-alpine
     ports:
       - ${ENLIL_COMPOSE_EXPOSE_REDIS_PORT}:6379
     command: ["redis-server", "--appendonly", "yes"]
@@ -152,7 +147,7 @@ services:
       - be_env.env
 
   enlil_cypress_haproxy:
-    image: dockercloud/haproxy
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:haproxy
     networks:
       cypress_network:
         aliases: 

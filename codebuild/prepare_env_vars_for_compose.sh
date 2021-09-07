@@ -1,14 +1,10 @@
 #!/bin/bash
 
-# set -a
-# source doc-fe/codebuild/env_vars_for_compose.sh
-# set +a
 set -a
   export BE_REPO="$HEAD_PWD/doc-be"
   export FE_REPO="$HEAD_PWD/doc-fe"
   export VALIDATORS_REPO="$HEAD_PWD/remote-js-validators"
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
-  export ENLIL_COMPOSE_PORT_RANGE_START=${ENLIL_COMPOSE_PORT_RANGE_START-5600}
 
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
   export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
@@ -45,11 +41,6 @@ if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
   exit
 fi
 
-if [[ -z "${ENLIL_COMPOSE_PORT_RANGE_START}" ]]; then
-  echo "ENLIL_COMPOSE_PORT_RANGE_START not set, exiting"
-  exit
-fi
-
 if [[ -z "${BE_REPO}" ]]; then
   echo "BE_REPO not set, exiting"
   exit
@@ -65,55 +56,37 @@ if [[ -z "${VALIDATORS_REPO}" ]]; then
   exit
 fi
 
-# if [[ -z "${AWS_ACCESS_KEY_ID}" ]]; then
-#   echo "AWS_ACCESS_KEY_ID not set, exiting"
-#   echo "Use ./scripts/export_aws_credentials.sh"
-#   exit
-# fi
-# if [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
-#   echo "AWS_SECRET_ACCESS_KEY not set, exiting"
-#   echo "Use ./scripts/export_aws_credentials.sh"
-#   exit
-# fi
-# if [[ -z "${AWS_SESSION_TOKEN}" ]]; then
-#   echo "AWS_SESSION_TOKEN not set, exiting"
-#   echo "Use ./scripts/export_aws_credentials.sh"
-#   exit
-# fi
-
 set -a
-  export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
+  export COMPOSE_PROJECT_NAME="enlil_codebuild"
 
-  export ENLIL_COMPOSE_EXPOSE_BE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+1))"
-  export ENLIL_COMPOSE_EXPOSE_FE_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+2))"
-  export ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+3))"
-  export ENLIL_COMPOSE_EXPOSE_POSTGRES_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+4))"
-  export ENLIL_COMPOSE_EXPOSE_REDIS_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+5))"
-  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+6))"
-  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_API_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+7))"
-  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DASHBOARD_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+8))"
-  export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="$((ENLIL_COMPOSE_PORT_RANGE_START+9))"
+  export ENLIL_COMPOSE_EXPOSE_BE_PORT="4211"
+  export ENLIL_COMPOSE_EXPOSE_FE_PORT="4212"
+  export ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT="4215"
+  export ENLIL_COMPOSE_EXPOSE_POSTGRES_PORT="5432"
+  export ENLIL_COMPOSE_EXPOSE_REDIS_PORT="6379"
+  export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="1234"
+  export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="4219"
 
   export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/817083319299/cypress_terraform_test_dev_$ENLIL_COMPOSE_SUITE_NUMBER.fifo"
   export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
-  export ENLIL_BE_VALIDATORS_CYPRESS_FE_URL="http://localhost:${ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT}"
-
-  export ENLIL_FE_REACT_APP_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_PORT/api"
-  export ENLIL_FE_REACT_APP_FRONTEND_URL="http://localhost:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
-  export REACT_APP_WORKER_API_ENDPOINT="http://localhost:$ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT/api"
+  
+  export ENLIL_BE_VALIDATORS_CYPRESS_FE_URL="http://validators:$ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT"
+  export ENLIL_FE_REACT_APP_API_ENDPOINT="http://backend:$ENLIL_COMPOSE_EXPOSE_BE_PORT/api"
+  export ENLIL_FE_REACT_APP_FRONTEND_URL="http://frontend:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
+  export REACT_APP_WORKER_API_ENDPOINT="http://worker:$ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT/api"
 
 
   export TYPEORM_DATABASE=${TYPEORM_DATABASE-cypress_db}
-  export TYPEORM_HOST=enlil_cypress_postgres
+  export TYPEORM_HOST=postgres
   export ENLIL_DB_PERSIST=false
   export ECR_REPO="codebuild"
+  export AWS_DEFAULT_REGION=us-west-2
 set +a
 
 echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
 echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
 echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
 echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
-echo "--| ENLIL_COMPOSE_PORT_RANGE_START: $ENLIL_COMPOSE_PORT_RANGE_START"
 
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
 
@@ -143,9 +116,7 @@ build_fe () {
   then
     docker pull $DOCKER_IMAGE
   else
-    ./scripts/cypress_build_images.sh
-    docker tag enlil_cypress_web:${FE_GIT_COMMIT_HASH}_${ENLIL_COMPOSE_PORT_RANGE_START} $DOCKER_IMAGE
-    docker push $DOCKER_IMAGE
+    $FE_REPO/codebuild/build_and_push_fe_image.sh
   fi
   cd $HEAD_PWD
 }
@@ -173,22 +144,3 @@ build_validators &
 
 wait
 echo "Done with images"
-
-
-
-# for ARGUMENT in "$@"
-# do
-#     KEY=$(echo $ARGUMENT | cut -f1 -d=)
-#     case "$KEY" in
-#             BUILD_FE)
-
-#             ;;
-#             BUILD_BE)
-
-#             ;;
-#             BUILD_VALIDATORS)
-
-#             ;;   
-#             *)   
-#     esac    
-# done

@@ -37,7 +37,7 @@ case "$ENV" in
   ;;
 "CODEBUILD")  
   export CYPRESS_BE_URL="http://backend:80"
-  export CYPRESS_FE_URL="http://frontend:5602"
+  export CYPRESS_FE_URL="http://frontend:4212"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
   ;;
