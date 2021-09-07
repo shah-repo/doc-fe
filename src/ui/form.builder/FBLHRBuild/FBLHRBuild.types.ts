@@ -7,9 +7,12 @@ export type FBLHRBuildProps =
 & Pick<FBProviderProps, "lhrBuildState">
 & Pick<SMDialogProps, "onDialogActionClick">;
 
-export type FBLHRBuildOption = "R&D" | "Production";
-
 export interface FBLHRBuildConstructor {
   value?: string;
   disabled?: boolean;
+}
+
+export enum FBLHRBuildOptions {
+  "R&D" = "R&D",
+  Production = "Production"
 }

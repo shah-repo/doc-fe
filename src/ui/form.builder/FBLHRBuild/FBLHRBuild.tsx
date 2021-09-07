@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBData, FBLHRBuildProps } from "..";
+import { FBLHRBuildProps } from "..";
 import { SMDialogAction, SMText } from "../../../App";
 import SMDialog from "../../../App/Shifamed/Components/SMDialog/SMDialog";
 import FBRadioGroup from "../FBRadioGroup/FBRadioGroup";
@@ -30,7 +30,7 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
           controlValue={lhrBuildState?.value}
           disabled={lhrBuildState?.disabled}
           label="form.builder.build.type"
-          options={FBData.lhrBuildOptions}
+          options={lhrBuildState?.options}
         />
       )}
     </Observer>

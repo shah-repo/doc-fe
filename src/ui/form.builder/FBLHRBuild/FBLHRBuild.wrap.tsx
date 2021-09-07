@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
-import { FB, FBLHRBuildOption, FBLHRBuildProps, FBLHRBuildState } from "..";
+import { FB, FBLHRBuildOptions, FBLHRBuildProps, FBLHRBuildState } from "..";
 import { SMDialogAction } from "../../../App";
 import { withSMDialog } from "../../../App/Shifamed/Components/SMDialog/SMDialog.hoc";
 
@@ -28,7 +28,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     useEffect(() => {
       const isOutput = workspaceState?.isOutput;
       const savedData = get(workspaceState?.document?.formInput, name);
-      if (isOutput && (savedData as FBLHRBuildOption) === "R&D") {
+      if (isOutput && savedData === FBLHRBuildOptions["R&D"]) {
         lhrBuildState?.setDisabled(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,12 +44,12 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     // MARK: @methods
     onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       const formValue = formState?.getFieldValue(name);
-      if ((value as FBLHRBuildOption) === "R&D" && (formValue as FBLHRBuildOption) === "Production") {
-        lhrBuildState?.setValue("Production");
+      if (value === FBLHRBuildOptions["R&D"] && formValue === FBLHRBuildOptions.Production) {
+        lhrBuildState?.setValue(FBLHRBuildOptions.Production);
         dialogState?.setOpen?.(true);
         return;
       }
-      const isDisabled = (value as FBLHRBuildOption) === "R&D";
+      const isDisabled = value === FBLHRBuildOptions["R&D"];
       lhrBuildState?.setDisabled(isDisabled);
       formState?.setFieldValue(name, value);
       save();
@@ -60,15 +60,14 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         lhrBuildState?.setValue(formState?.getFieldValue(name));
         return;
       }
-      lhrBuildState?.setValue("R&D");
+      lhrBuildState?.setValue(FBLHRBuildOptions["R&D"]);
+      lhrBuildState?.setDisabled(true);
+      save();
     };
 
     useEffect(() => reaction(
       () => lhrBuildState?.value,
-      (value) => {
-        formState?.setFieldValue(name, value);
-        save();
-      }
+      (value) => formState?.setFieldValue(name, value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
