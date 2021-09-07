@@ -22,7 +22,7 @@ const SMDialog: React.FunctionComponent<SMDialogProps> = ({
       >
         {title && (
           <DialogTitle>
-            <SMText locale={title} />
+            <SMText label={title} />
           </DialogTitle>
         )}
         <DialogContent>
@@ -35,7 +35,7 @@ const SMDialog: React.FunctionComponent<SMDialogProps> = ({
                 <SMButton
                   key={`sm-dialog-${action}-${index}`}
                   onClick={() => onDialogActionClick?.(action)}
-                  label={action}
+                  label={`form.builder.${action}`}
                 />
               )}
             </SMMap>

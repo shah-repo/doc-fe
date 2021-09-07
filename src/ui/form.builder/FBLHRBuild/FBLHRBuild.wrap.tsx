@@ -56,7 +56,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     };
 
     onDialogActionClick = (action: SMDialogAction) => {
-      if (action === SMDialogAction.close) {
+      if (action === SMDialogAction.cancel) {
         lhrBuildState?.setValue(formState?.getFieldValue(name));
         return;
       }

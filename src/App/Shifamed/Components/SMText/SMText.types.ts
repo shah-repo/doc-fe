@@ -7,7 +7,7 @@ export interface SMTextLocaleProps {
 }
 
 export interface SMTextProps {
-  locale?: string | SMTextLocaleProps;
+  label?: string | SMTextLocaleProps;
   boxProps?: BoxProps;
   loading?: boolean;
   dataCy?: string;

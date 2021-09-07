@@ -2,10 +2,10 @@ import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { SMTextProps } from "../../..";
 
 
-export type SMInputType =
-| "textfield";
+// export type SMInputType =
+// | "textfield";
 
-export interface SMInputValidationProps {
+interface SMInputValidationProps {
   /**
    * @cfg {Boolean} If true allow form state to record the value
    * but don't include it in validation rules.
@@ -28,7 +28,7 @@ export type SMInputProps =
   | "hidden"
 >
 & {
-  label?: SMTextProps["locale"];
+  label?: SMTextProps["label"];
   boxProps?: BoxProps;
   /**
    * @cfg {String} Validation rules.

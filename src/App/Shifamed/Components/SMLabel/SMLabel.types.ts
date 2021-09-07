@@ -1,7 +1,7 @@
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { Props } from "react-intl/lib/components/message";
 
-export interface SMLabelLocaleProps {
+interface SMLabelLocaleProps {
   locale: string;
   values: Props["values"];
 }

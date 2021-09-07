@@ -18,7 +18,7 @@ const SMLabel: React.FunctionComponent<SMLabelProps> = ({
     fontSize={`${get(SMLabelFontSize, fontSize)}.fontSize`}
     {...boxProps}
   >
-    <SMText {...{ loading }} locale={label} />
+    <SMText {...{ loading, label }} />
   </Box>
 );
 

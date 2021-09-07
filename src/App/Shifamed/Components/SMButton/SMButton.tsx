@@ -21,7 +21,7 @@ const SMButton: React.FunctionComponent<SMButtonProps> = ({
       ...hidden && { display: "none" },
     }}
   >
-    <SMText locale={label} />
+    <SMText label={label} />
   </Button>
 );
 

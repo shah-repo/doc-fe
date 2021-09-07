@@ -8,22 +8,22 @@ import { SMTextLocaleProps, SMTextProps } from "../../..";
 const SMText: React.FunctionComponent<SMTextProps> = ({
   boxProps,
   loading,
-  locale,
+  label,
   dataCy,
 }) => (
   <Box
     {...boxProps}
-    data-cy={dataCy || locale}
+    data-cy={dataCy || label}
     flexDirection="row"
   >
     <Box display="flex">
-      {isString(locale) && (
-        <FormattedMessage id={locale} />
+      {isString(label) && (
+        <FormattedMessage id={label} />
       )}
-      {hasIn(locale, "locale") && (
+      {hasIn(label, "locale") && (
         <FormattedMessage
-          id={(locale as SMTextLocaleProps).locale}
-          values={(locale as SMTextLocaleProps).values}
+          id={(label as SMTextLocaleProps).locale}
+          values={(label as SMTextLocaleProps).values}
         />
       )}
       {loading && (

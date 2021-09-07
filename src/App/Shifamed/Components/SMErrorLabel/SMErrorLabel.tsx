@@ -9,7 +9,7 @@ const SMErrorLabel: React.FunctionComponent<SMErrorLabelProps> = ({
   <>
     {error && (
       <FormHelperText error={true}>
-        <SMText locale={error} />
+        <SMText label={error} />
       </FormHelperText>
     )}
   </>

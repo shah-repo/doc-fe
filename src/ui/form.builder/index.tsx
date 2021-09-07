@@ -178,7 +178,7 @@ export * from "./FBInput/FBInput.types";
 export * from "./FBInstructionsDocument/FBInstructionsDocument.types";
 export { default as FBLabel } from "./FBLabel/FBLabel";
 export * from "./FBLabel/FBLabel.types";
-export { default as FBLHRBuild } from "./FBLHRBuild/FBLHRBuild";
+// export { default as FBLHRBuild } from "./FBLHRBuild/FBLHRBuild";
 export { default as FBLHRBuildState } from "./FBLHRBuild/FBLHRBuild.state";
 export * from "./FBLHRBuild/FBLHRBuild.types";
 export { default as FBLHRStepState } from "./FBLHRStep/FBLHRStep.state";

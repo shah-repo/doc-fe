@@ -1,8 +1,11 @@
 import { DialogProps } from "@material-ui/core";
 
 export enum SMDialogAction {
-  done = "DONE",
-  close = "CLOSE",
+  done = "done",
+  close = "close",
+  save = "save",
+  cancel = "cancel",
+  lhrBuildSwitch = "lhr.build.switch"
 }
 
 export type SMDialogProps =
@@ -14,6 +17,7 @@ export type SMDialogProps =
   title?: string;
   actions?: SMDialogAction[];
   children?: React.ReactNode | React.ReactNode[];
+  doneLabel?: string;
 };
 
 export interface SMDialogStateProps {

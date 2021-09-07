@@ -15,11 +15,17 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
   <>
     <SMDialog
       title="form.builder.build.title"
-      actions={[SMDialogAction.close, SMDialogAction.done]}
+      actions={[SMDialogAction.cancel, SMDialogAction.lhrBuildSwitch]}
       {...{ onDialogActionClick }}
     >
       <SMText
-        locale="form.builder.build.production.msg"
+        label={{
+          locale: "form.builder.build.production.msg",
+          values: {
+            prod: "form.builder.Production",
+            rd: "form.builder.R&D",
+          },
+        }}
       />
     </SMDialog>
     <Observer>
