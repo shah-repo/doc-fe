@@ -37,6 +37,7 @@ import {
   FBTextFieldWithRangeState,
   FBWorkspaceState,
 } from "..";
+import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
 import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
 
@@ -82,4 +83,5 @@ export interface FBProviderProps {
   mpiProcedureSelectState?: FBMPIProcedureSelectState;
   poApprovalsState?: FBPOApprovalsState;
   datePickerState?: FBDatePickerState;
+  lhrBuildState?: FBLHRBuildState;
 }
