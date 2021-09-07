@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Slide, toast as toastify, ToastOptions } from "react-toastify";
 
 enum ToastType {
@@ -36,7 +37,7 @@ export const toastInfo = (message: string, options: ToastOptions = {}) =>
 export const toastSuccess = (message: string, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
 
-export const toastInfoLink = (link: any, options: ToastOptions = {}) =>
+export const toastInfoLink = (link: ReactNode, options: ToastOptions = {}) =>
   toastify.info(link, {
     ...TOAST_OPTIONS,
     ...options,

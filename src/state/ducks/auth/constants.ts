@@ -30,3 +30,4 @@ export const USERS_URL = "/users";
 export const USERS_ME_URL = "/users/me";
 
 export const RESEND_SIGNUP_EMAIL_URL = "/auth/resend_confirmation_email";
+export const SEND_PASSWORD_RESET_EMAIL = "/auth/send_password_reset_email";

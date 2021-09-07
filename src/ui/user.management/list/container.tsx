@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { User } from "../../../state/ducks/common/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { HOME_URL } from "../../constants/urls";
@@ -28,16 +29,29 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   const getResendSignupEmailAction = useActionCreator(authActions.resendSignupEmail);
+  const getSendPasswordResetEmailAction = useActionCreator(authActions.sendPasswordResetEmail);
+
   const notify = () => toast.info(intl.formatMessage({
     id: "user.management.signup.email.sent",
   }));
-  const async = useAsync({
+
+  const asyncSignUpEmail = useAsync({
     onSuccess: () => {
       notify();
     },
   });
 
-  const handleResendSignupEmail = ( email: string ) => async.start(getResendSignupEmailAction, email, async);
+  const asyncResetPasswordEmail = useAsync({
+    onSuccess: () => {
+      notify();
+    },
+  });
+
+  const handleResendEmail = ( user: User ) => {
+    user.locked ?
+      asyncResetPasswordEmail.start(getSendPasswordResetEmailAction, user.id, asyncResetPasswordEmail) :
+      asyncSignUpEmail.start(getResendSignupEmailAction, user.email, asyncSignUpEmail);
+  };
 
   if (isEmpty(tableCriteria.queryDict) && !didMount) {
     dispatch(
@@ -67,7 +81,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
       tableData={tableData}
       clearFilter={clearFilter}
       groupOptions={groupOptions}
-      handleResendSignupEmail={handleResendSignupEmail}
+      handleResendEmail={handleResendEmail}
     />
   );
 };
