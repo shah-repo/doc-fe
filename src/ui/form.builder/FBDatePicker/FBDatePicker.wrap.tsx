@@ -30,7 +30,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
 
     function save(date?: string) {
-      if (!date || !isOutput) { return; }
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!date || !isOutput || !isUnderWorkspace) { return; }
       formState?.setFieldValue(name, date);
       workspaceState?.saveDocRev(formState?.getValues());
     }
@@ -47,7 +48,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     useEffect(() => reaction(
       () => datePickerState?.date,
-      (date) => save(date)
+      (date) => save(moment(date).tz(TIME_ZONE).toISOString())
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
