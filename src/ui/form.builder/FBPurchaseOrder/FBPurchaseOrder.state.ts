@@ -1,5 +1,6 @@
 import { Dictionary, filter, isEmpty, isUndefined, reduce, size, template, toNumber, union } from "lodash";
 import { action, observable, set } from "mobx";
+import { isNumber } from "lodash";
 import moment from "moment";
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -114,8 +115,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       return;
     }
     const taxRate = this.getTaxRateByTax(tax);
+    if (isNumber(taxRate)) {
+      set(this.value, "taxRate", taxRate);
+    }
     set(this.value, "tax", tax);
-    set(this.value, "taxRate", taxRate);
   };
 
   @action public setShippingCost = (shippingCost?: string) => {
@@ -164,6 +167,9 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   public getTaxRateByTax = (tax) => {
     const sum = this.calculateItemSum();
+    if (sum.forTax === 0) {
+      return null;
+    }
     return sum.forTax ? (parseFloat(tax) / sum.forTax * 100) : 0;
   };
 
