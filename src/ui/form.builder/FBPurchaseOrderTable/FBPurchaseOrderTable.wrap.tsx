@@ -83,7 +83,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     useEffect(() => {
       if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
-      // purchaseOrderState?.setTaxField(purchaseOrderState?.value.tax); // TODO: remove such code
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
