@@ -28,7 +28,7 @@ x-const:
 
 services:
   director:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.0.0-rc.10
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
     ports:
       - 1234:1234
     networks:
@@ -37,7 +37,7 @@ services:
           - director
 
   test_run_container:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_90_cy_7_3_0_aws
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
     command: tail -F anything
     volumes:
       - "$FE_REPO:/opt/app/tests"
