@@ -37,7 +37,7 @@ phases:
   pre_build:
     commands:
       - cd doc-fe/codebuild
-      - docker-compose up -d --force-recreate #because local test run
+      - docker-compose up -d #--force-recreate #because local test run
   build:
     commands:
       - docker ps
@@ -56,8 +56,8 @@ phases:
   post_build:
     commands:
       # - ls
-      - docker logs doc-fe_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
-      - docker logs doc-fe_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
+      - docker logs enlil_codebuild_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
+      - docker logs enlil_codebuild_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
       - ls
 reports:
   report-name-or-arn:
