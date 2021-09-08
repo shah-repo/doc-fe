@@ -7,7 +7,6 @@ import Text from "../../components/Text";
 import { LOGIN_URL } from "../../constants/urls";
 import { styles } from "./ResetPasswordSuccessful.styles";
 
-
 const ResetPasswordSuccessful: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const classes = styles();

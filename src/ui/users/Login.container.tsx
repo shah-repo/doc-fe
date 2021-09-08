@@ -5,7 +5,7 @@ import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
 import { Employee } from "../../state/ducks/company/types";
 import { ApplicationState } from "../../state/reducers";
-import { toastInfoLink } from "../components/notifications";
+import { toastInfo } from "../components/notifications";
 import { HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
 import SwitchCompanyContainer from "./SwitchCompany/SwitchCompany.container";
@@ -31,9 +31,9 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
         />
       );
     }
-    props.passwordSoonToExpire && toastInfoLink(
+    props.passwordSoonToExpire && toastInfo(
       <div>
-        Your password will expire in {props.daysUntilPasswordExpires} days.
+        Your password will expire in {props.daysUntilPasswordExpires} days.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 });

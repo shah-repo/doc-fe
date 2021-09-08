@@ -8,7 +8,7 @@ import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { toastInfoLink } from "../../components/notifications";
+import { toastInfo } from "../../components/notifications";
 import { HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { LoginContainerProps } from "../Login.container";
@@ -33,9 +33,9 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
-    passwordSoonToExpire && toastInfoLink(
+    passwordSoonToExpire && toastInfo(
       <div>
-        Your password will expire in {daysUntilPasswordExpires} days.
+        Your password will expire in {daysUntilPasswordExpires} days.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 });

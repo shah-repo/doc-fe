@@ -3,13 +3,13 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { toast } from "react-toastify";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
+import { toastInfo } from "../../components/notifications";
 import { HOME_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -33,7 +33,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
 
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
-      toast.info(intl.formatMessage({
+      toastInfo(intl.formatMessage({
         id: "user.management.signup.email.sent",
       }));
     },
@@ -41,7 +41,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
 
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
-      toast.info(intl.formatMessage({
+      toastInfo(intl.formatMessage({
         id: "user.management.reset.password.email.sent",
       }));
     },

@@ -3,7 +3,6 @@ import React from "react";
 import { logo } from "../../../common/utils/helpers";
 import { styles } from "./ResetPasswordSuccessful.styles";
 
-
 const UserLocked: React.FunctionComponent<{}> = () => {
   const classes = styles();
 

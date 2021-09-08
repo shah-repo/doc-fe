@@ -1,5 +1,6 @@
 import moment from "moment";
 import { combineReducers } from "redux";
+import { MomentFormats } from "../../../common/utils/date";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { Employee } from "../company/types";
@@ -61,14 +62,17 @@ const user = (
 ): UserState => {
   switch (action.type) {
     case AUTH_USER: {
-      const activeUser = action.payload.employees.find((employee) => employee.active) || { id: "" } as Employee;
-      const { passwordUpdatedAt, passwordExpiresAt } = action.payload;
+
+      const { passwordExpiresAt, employees } = action.payload;
+      const activeUser = employees.find((employee) => employee.active) || { id: "" } as Employee;
+      const currentDate = moment.utc().format(MomentFormats.MonthDateYear);
+
       return {
         ...state,
         ...action.payload,
         employeeId: activeUser.id,
         employee: activeUser,
-        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(passwordUpdatedAt), "days"),
+        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(currentDate), "days"),
       };
     }
     case SET_EMPLOYEE:
