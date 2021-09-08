@@ -20,5 +20,4 @@ export type FBButtonProps =
   >
   & {
     dataCy?: string;
-    iconType?: string;
   };

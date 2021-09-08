@@ -1,6 +1,5 @@
 import { Button } from "@material-ui/core";
-import { GetApp } from "@material-ui/icons";
-import { hasIn, isEqual, isString } from "lodash";
+import { hasIn, isString } from "lodash";
 import React from "react";
 import { FBButtonProps, FBLabelLocaleProps, FBText } from "..";
 
@@ -12,7 +11,6 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   gutter,
   hidden,
   style,
-  iconType,
   ...props
 }) => (
   <Button
@@ -25,9 +23,6 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
       ...hidden && { display: "none" },
     }}
   >
-    {isEqual(iconType, "download") && (
-      <GetApp width={20} height={20} style={{ marginRight: 4 }}/>
-    )}
     {isString(label) && (
       <FBText locale={label} />
     )}

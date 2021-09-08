@@ -1,8 +1,8 @@
 import { Box } from "@material-ui/core";
+import { GetApp } from "@material-ui/icons";
 import React from "react";
-import { FBButton } from "..";
+import { FBButton, FBDownloadSheetTplProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBDownloadSheetTplProps } from "..";
 import { withFBDownloadSheetTpl } from "./FBDownloadSheetTpl.wrap";
 
 const FBDownloadSheetTpl: React.FunctionComponent<FBDownloadSheetTplProps> = ({
@@ -15,7 +15,7 @@ const FBDownloadSheetTpl: React.FunctionComponent<FBDownloadSheetTplProps> = ({
 
   <Box display="flex" flexDirection="row">
     <FBButton
-      iconType={`download`}
+      startIcon={<GetApp width={20} height={20} style={{ marginRight: 4 }}/>}
       key={`downloadsheet`}
       label={label}
       variant="contained"
