@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton } from "..";
 import Colors from "../../layout/theme/utils/colors";
-import { FBDownloadSheetTplProps } from "./FBDownloadSheetTpl.types";
+import { FBDownloadSheetTplProps } from "..";
 import { withFBDownloadSheetTpl } from "./FBDownloadSheetTpl.wrap";
 
 const FBDownloadSheetTpl: React.FunctionComponent<FBDownloadSheetTplProps> = ({
