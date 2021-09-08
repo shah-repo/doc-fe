@@ -52,6 +52,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     workspaceState && (workspaceState.document = document);
     const { formInput = {} } = document ?? {};
     workspaceState.formInput = formInput;
+
+    map(formInput, (value, key) => {
+      workspaceState?.setFormInputSync(key, value);
+    });
+
     const { groupOptions: formGroupOptions } = document?.document?.documentType || {};
     // We should include document type in FB
     // We can't ignore that FB is not standalone package anymore

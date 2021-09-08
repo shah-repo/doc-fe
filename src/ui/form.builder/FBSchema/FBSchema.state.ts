@@ -27,6 +27,7 @@ import FBHelloSign from "../FBHelloSign/FBHelloSign";
 import FBHyperlink from "../FBHyperlink/FBHyperlink";
 import FBInlineApproval from "../FBInlineApproval/FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument/FBInstructionsDocument";
+import FBLHRBuild from "../FBLHRBuild/FBLHRBuild";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
 import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
 import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
@@ -125,6 +126,7 @@ class FBSchemaState {
     quantityunit: FBQuantityUnitField,
     partsselection: FBPartsSelection,
     poapprovals: FBPOApprovals,
+    lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
   };
 

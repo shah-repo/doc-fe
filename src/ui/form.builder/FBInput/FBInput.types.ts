@@ -72,6 +72,7 @@ export type FBInputType =
   | "partsselection"
   | "mediaalbum"
   | "poapprovals"
+  | "lhrbuild"
   | "downloadsheet";
 
 export type FBInputProps =
@@ -218,6 +219,8 @@ export const OmitInputClones: FBInputType[] = [
   "mediaalbum",
   "lhrstep",
   "datepicker",
+  "lhrbuild",
+  "radiogroup",
   "downloadsheet",
 ];
 
