@@ -19,6 +19,7 @@ import FBButton from "../FBButton/FBButton";
 import FBCheckbox from "../FBCheckbox/FBCheckbox";
 import FBDatePicker from "../FBDatePicker/FBDatePicker";
 import FBDocumentRevisions from "../FBDocumentRevisions/FBDocumentRevisions";
+import FBDownloadSheetTpl from "../FBDownloadSheetTpl/FBDownloadSheetTpl";
 import FBEBPart from "../FBEBPart/FBEBPart";
 import FBEQMaintenance from "../FBEQMaintenance/FBEQMaintenance";
 import FBFileUpload from "../FBFileUpload/FBFileUpload";
@@ -126,6 +127,7 @@ class FBSchemaState {
     partsselection: FBPartsSelection,
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
+    downloadsheet: FBDownloadSheetTpl,
   };
 
   @observable public schema?: FBSchemaProps[];

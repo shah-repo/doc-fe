@@ -72,7 +72,8 @@ export type FBInputType =
   | "partsselection"
   | "mediaalbum"
   | "poapprovals"
-  | "lhrbuild";
+  | "lhrbuild"
+  | "downloadsheet";
 
 export type FBInputProps =
   & FBLabelProps
@@ -220,6 +221,7 @@ export const OmitInputClones: FBInputType[] = [
   "datepicker",
   "lhrbuild",
   "radiogroup",
+  "downloadsheet",
 ];
 
 export const OmitIncludeNotes: FBInputType[] = [
