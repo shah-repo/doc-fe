@@ -14,11 +14,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 ) => {
   const Comp = ({
     handleShippingCostChange,
-    handleShippingCostBlur,
     handleTaxChange,
-    handleTaxBlur,
+    handleTaxRateChange,
     handleCurrencyChange,
     handleDelete,
+    reCalculateValueOnBlur,
     classes,
     calculation,
     loading,
@@ -38,37 +38,18 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       const { target: { value = 0 } = {} } = ev || {};
       const abs = Math.abs(value).toFixed(2).toString();
       purchaseOrderState?.setShippingCost(abs);
-      ev.target.value = value;
     };
-
-    handleShippingCostBlur = () => {
-      if (!purchaseOrderState) { return; }
-      purchaseOrderState.value = purchaseOrderState?.calculateCost();
-    };
-
     handleTaxChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = "" } = {} } = ev || {};
-      const taxInputPattern = /([0-9\.]+)/g;
-      let fieldValue: string = value?.match(taxInputPattern)?.join("").replace(
-        (/(.*)\./), (item) => item.replace(/\./g, "") + "."
-      ) || "0";
-      if (value.endsWith("%")) {
-        purchaseOrderState?.setTaxRate(fieldValue);
-        fieldValue = fieldValue + "%";
-      } else {
-        purchaseOrderState?.setTax(fieldValue);
-      }
-      purchaseOrderState?.setTaxField(fieldValue);
+      purchaseOrderState?.setTax(value);
+    };
+    handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = "" } = {} } = ev || {};
+      purchaseOrderState?.setTaxRate(value);
     };
 
-    handleTaxBlur = () => {
-      if (!purchaseOrderState) { return; }
-      if (purchaseOrderState.taxField.endsWith("%")) {
-        purchaseOrderState.value = purchaseOrderState?.calculateCost();
-      } else {
-        purchaseOrderState?.setTaxRateByTax();
-      }
-      purchaseOrderState?.setTaxField(purchaseOrderState.value.tax);
+    reCalculateValueOnBlur = () => {
+      purchaseOrderState?.reCalculateValue();
     };
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
@@ -102,7 +83,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
     useEffect(() => {
       if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
-      purchaseOrderState?.setTaxField(purchaseOrderState?.value.tax);
+      // purchaseOrderState?.setTaxField(purchaseOrderState?.value.tax); // TODO: remove such code
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -122,14 +103,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     return Component({
       ...(props as T),
       handleShippingCostChange,
-      handleShippingCostBlur,
       handleTaxChange,
-      handleTaxBlur,
+      handleTaxRateChange,
       handleCurrencyChange,
       handleDelete,
+      reCalculateValueOnBlur,
       classes,
       calculation,
-      taxField: purchaseOrderState?.taxField,
       loading,
       disabled,
       items,
