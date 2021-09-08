@@ -40,6 +40,20 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     }
 
     // MARK: @reactions
+    useEffect(() => reaction(
+      () => lhrBuildState?.value,
+      (value) => formState?.setFieldValue(name, value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    useEffect(() => reaction(
+      () => workspaceState?.formInputSync.get(name),
+      (value) => {
+        const isDisabled = value === FBLHRBuildOptions["R&D"];
+        lhrBuildState?.setDisabled(isDisabled);
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // MARK: @methods
     onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -49,27 +63,24 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         dialogState?.setOpen?.(true);
         return;
       }
-      const isDisabled = value === FBLHRBuildOptions["R&D"];
+      const { autosave } = workspaceState || {};
+      const isDisabled = autosave && (value === FBLHRBuildOptions["R&D"]);
       lhrBuildState?.setDisabled(isDisabled);
-      formState?.setFieldValue(name, value);
+      lhrBuildState?.setValue(value);
       save();
     };
 
     onDialogActionClick = (action: SMDialogAction) => {
       if (action === SMDialogAction.cancel) {
-        lhrBuildState?.setValue(formState?.getFieldValue(name));
+        const formValue = formState?.getFieldValue(name);
+        lhrBuildState?.setValue(formValue);
         return;
       }
+      const { autosave } = workspaceState || {};
       lhrBuildState?.setValue(FBLHRBuildOptions["R&D"]);
-      lhrBuildState?.setDisabled(true);
+      lhrBuildState?.setDisabled(autosave);
       save();
     };
-
-    useEffect(() => reaction(
-      () => lhrBuildState?.value,
-      (value) => formState?.setFieldValue(name, value)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
 
     return Component({
       ...(props as T),
