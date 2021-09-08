@@ -76,7 +76,7 @@ definitions:
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 120
+          max-time: 50
           size: 2x
           services:
             - sorry-cypress-director
@@ -130,17 +130,6 @@ definitions:
           <<: *COMMON_RUN_CYPRESS
           script:
             - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
-
-    - step: &SCHEDULED_CYPRESS_PROD2
-          <<: *COMMON_RUN_CYPRESS
-          script:
-            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD2"
             - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
             - yarn install --frozen-lockfile
             - ./scripts/cypress/utils/generate_requirements_json_file.sh
@@ -203,21 +192,6 @@ definitions:
         size: 1x
         script:
           - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
-          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-          - yarn install --frozen-lockfile
-          - ./scripts/cypress/utils/generate_requirements_json_file.sh
-          - ./scripts/cypress/utils/run_generate_requirements_report_pipeline.sh
-          - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
-          - ./scripts/cypress/utils/merge_reports_pipeline.sh
-          - ./scripts/cypress/utils/slack_test_report_upload.sh
-
-    - step: &SLACK_CYPRESS_REPORT_SCHEDULED_PROD2
-        <<: *COMMON_RUN_CYPRESS
-        name: Cypress upload reports
-        max-time: 15
-        size: 1x
-        script:
-          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD2"
           - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
           - yarn install --frozen-lockfile
           - ./scripts/cypress/utils/generate_requirements_json_file.sh
@@ -312,12 +286,13 @@ definitions:
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
         - step: 
             <<:  *SCHEDULED_CYPRESS_SANDBOX
-            name: Cypress specs 1/1
-
-    - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
+            name: Cypress specs 1/3
         - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD2
-            name: Cypress specs 1/1
+            <<:  *SCHEDULED_CYPRESS_SANDBOX
+            name: Cypress specs 2/3
+        - step: 
+            <<:  *SCHEDULED_CYPRESS_SANDBOX
+            name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD
         - step: 
@@ -517,9 +492,6 @@ pipelines:
     scheduled-cypress-prod:
       - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD
       - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD
-    scheduled-cypress-prod2:
-      - parallel: *SCHEDULED_CYPRESS_IN_PARALLEL_PROD2
-      - step: *SLACK_CYPRESS_REPORT_SCHEDULED_PROD2
 
   pull-requests:
     "**":
