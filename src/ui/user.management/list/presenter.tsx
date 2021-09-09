@@ -94,6 +94,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "name" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-name",
+      dataKey: "user.name",
       label: "common.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.name,
@@ -106,6 +107,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       key: "email" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-email",
       label: "common.email",
+      dataKey: "user.email",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.email,
       },
@@ -116,6 +118,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "groupId" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-groupId",
+      dataKey: "groups",
       label: "common.groups",
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
@@ -146,6 +149,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "confirmed" as keyof GetEmployeeResponse,
       label: "user.management.signed.up",
+      dataKey: "user.confirmed",
       omitSearch: true,
       onSelect: ({ rowData }) => () => {  handleResendEmail(rowData); },
       cellType: (rowData) => handleEmailCellType(rowData.user),
