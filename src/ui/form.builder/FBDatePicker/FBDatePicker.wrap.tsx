@@ -83,6 +83,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       onDatePickerClick,
       onDatePickerClose,
       onChange,
+      editorProperties,
       disablePastDates,
       defaultValue,
       name,
