@@ -3,7 +3,7 @@ import { Props } from "react-intl/lib/components/message";
 
 export interface SMTextLocaleProps {
   locale: string;
-  values: Props["values"];
+  values: Props["values"] | Record<string, string>;
 }
 
 export interface SMTextProps {
