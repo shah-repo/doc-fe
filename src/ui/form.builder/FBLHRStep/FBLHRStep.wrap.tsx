@@ -1,4 +1,5 @@
-import { find, flattenDeep, omit } from "lodash";
+import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
+import { find, flattenDeep, lowerCase, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -115,7 +116,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
         const editorCfg = mpiDocument?.formTemplate.schema.filter((item) =>
-          item.type === "mpiprocedure" && !item.deleted);
+          item.type === "mpiprocedure" && !item.deleted) || [];
         const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
@@ -175,23 +176,38 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
     };
+    const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
+      const filterValue = lowerCase(inputValue);
+
+      return lowerCase(docRev.name).includes(filterValue) ||
+        lowerCase(docRev.document.docId).includes(filterValue);
+    };
 
     function handleFilter(
       data: DocumentRevision[],
+      state: FilterOptionsState,
     ) {
       const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
-      if (documentType.length === 0 && revisionStatus.length === 0) { return data; }
+      const { inputValue = "" } = state || {};
+
+      if (documentType.length === 0 && revisionStatus.length === 0) {
+        return data?.filter((docRev) => filterOutOption(docRev, inputValue));
+      }
       const options = data?.filter((docRev) => {
         const {
           status = "",
           document: { documentType: { id: docTypeId = "" } = {} } = {},
         } = docRev || {};
-        return revisionStatus.includes(status) && documentType.includes(docTypeId);
+
+        return revisionStatus.includes(status) &&
+          documentType.includes(docTypeId) &&
+          filterOutOption(docRev, inputValue);
       });
+
       return options;
     }
 
-    filterOptions = (options) => handleFilter(options);
+    filterOptions = (options, state) => handleFilter(options, state);
 
     // MARK: @observer
     useObserver(() => {

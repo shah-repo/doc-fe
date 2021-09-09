@@ -154,6 +154,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "isDirty", isDirty);
   };
 
+  @action public setFormInputSync = (name: string, value: any) => {
+    set(this.formInputSync, name, value);
+  };
+
   public removeAutoState = () => {
     this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
   };

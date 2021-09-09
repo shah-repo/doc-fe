@@ -1,5 +1,6 @@
 import { Dictionary, filter, isEmpty, isUndefined, reduce, size, template, toNumber, union } from "lodash";
 import { action, observable, set } from "mobx";
+import { isNumber } from "lodash";
 import moment from "moment";
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -13,6 +14,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   @observable public itemTotalAmount = 0;
   @observable value: FBPurchaseOrderValue = {
     tax: "0.00",
+    taxRate: TAX_RATE,
     subTotal: "0.00",
     totalAmount: "0.00",
     shippingCost: "0.00",
@@ -71,24 +73,6 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "value", { ...initialValues, items });
   }
 
-  @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
-    const { unitPrice = 0, order = 0 } = item || {};
-    const itemTotalAmount = toNumber(unitPrice) * toNumber(order);
-    set(this, "itemTotalAmount", itemTotalAmount);
-  };
-
-  @action public setShippingCost = (shippingCost?: string) => {
-    if (!shippingCost) {
-      return;
-    }
-    this.value.shippingCost = this.formatCost(shippingCost);
-  };
-
-  @action public setTax = (tax?: string) => {
-    if (!tax) { return; }
-    set(this, "value", { ...this.calculateCost(tax), tax });
-  };
-
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87
     // on change is triggered twice
@@ -96,11 +80,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
       return;
     }
     const setToUsd = () => {
-      set(this, "value", {
-        ...this.calculateCost(),
-        currency: "USD",
-        exchangeRate: 1,
-      });
+      this.setValue({ ...this.calculateCost(), currency: "USD", exchangeRate: 1 });
     };
     if (currency === "USD") {
       setToUsd();
@@ -113,26 +93,60 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
     try {
       const data = await this.exchangeRate.fetch();
-      set(this, "value", {
-        ...this.calculateCost(),
-        currency,
-        exchangeRate: parseFloat(data.rate.toFixed(2)),
-        dateOfExchangeRate: moment().format("LL"),
-      });
+      this.value.currency = currency;
+      this.value.exchangeRate = parseFloat(data.rate.toFixed(2));
+      this.value.dateOfExchangeRate = moment().format("LL");
+      this.reCalculateValue();
     } catch (e) {
       setToUsd();
     }
+  };
+
+  @action public setTaxRate = (value?: string) => {
+    if (!value) {
+      return;
+    }
+    const taxRate = Number(this.formatCost(value));
+    set(this.value, "taxRate", taxRate);
+  };
+
+  @action public setTax = (tax?: string) => {
+    if (!tax) {
+      return;
+    }
+    const taxRate = this.getTaxRateByTax(tax);
+    if (isNumber(taxRate)) {
+      set(this.value, "taxRate", taxRate);
+    }
+    set(this.value, "tax", tax);
+  };
+
+  @action public setShippingCost = (shippingCost?: string) => {
+    if (!shippingCost) {
+      return;
+    }
+    set(this.value, "shippingCost", this.formatCost(shippingCost));
+  };
+
+  @action public setValue = (value = {}) => {
+    set(this, "value", { ...this.value, ...value });
   };
 
   @action public setItem = (item?: FBPurchaseOrderItem) => {
     if (!item) {
       return;
     }
-    const items: FBPurchaseOrderItem[] = isUndefined(item.index)
+    isUndefined(item.index)
       ? this.addItem(item)
       : this.updateItem(item);
-    set(this, "value", { ...this.calculateCost(), items });
+    this.reCalculateValue();
     this.setItemTotalAmount();
+  };
+
+  @action public setItemTotalAmount = (item?: FBPurchaseOrderItem) => {
+    const { unitPrice = 0, order = 0 } = item || {};
+    const itemTotalAmount = toNumber(unitPrice) * toNumber(order);
+    set(this, "itemTotalAmount", itemTotalAmount);
   };
 
   @action public removeItem = (item?: FBPurchaseOrderItem) => {
@@ -142,25 +156,31 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this.value, "items", filter(this.value.items, (itm) => itm.id !== item.id));
   };
 
-  public calculateCost = (taxField?: string): FBPurchaseOrderValue => {
-    taxField = taxField || this.value.tax || TAX_RATE;
+  public calculateItemSum = () => (this.value.items || []).reduce(
+    (agg, item: any) => {
+      const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
+      agg.subTotal += orderCost;
+      agg.forTax += item.tax ? orderCost : 0;
+      return agg;
+    }, { subTotal: 0, forTax: 0 },
+  );
 
-    const isTaxPercent = !!taxField?.endsWith("%");
-    const taxFieldValue: number = parseFloat(taxField);
-    let tax: number = isTaxPercent ? 0 : taxFieldValue;
+  public getTaxRateByTax = (tax) => {
+    const sum = this.calculateItemSum();
+    if (sum.forTax === 0) {
+      return null;
+    }
+    return sum.forTax ? (parseFloat(tax) / sum.forTax * 100) : 0;
+  };
 
-    const sum = (this.value.items || []).reduce(
-      (agg, item: any) => {
-        const orderCost = Number(item.unitPrice || 0) * Number(item.order || 0);
-        const subTotal = agg.subTotal + orderCost;
-        (item.tax && isTaxPercent) && (tax += orderCost * (taxFieldValue / 100));
-        return { subTotal, tax };
-      }, { tax: 0, subTotal: 0 },
-    );
+  public calculateCost = (): FBPurchaseOrderValue => {
+    const sum = this.calculateItemSum();
+    const tax = sum.forTax ? (sum.forTax * this.value.taxRate / 100) : 0;
 
     const shippingCost = this.value.shippingCost || 0;
     const totalAmount = tax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.value.exchangeRate;
+
     const value = {
       ...this.value,
       subTotal: this.formatCost(sum.subTotal),
@@ -173,15 +193,16 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     return value;
   };
 
+  public reCalculateValue = () => {
+    const value = this.calculateCost();
+    this.setValue(value);
+  };
+
   @action public deleteItem = (index: number) => {
-    const items = this.value.items
-      .filter((itm, indx) =>
-        indx !== index
-      ).map((itm, indx) => ({
-        ...itm,
-        index: indx,
-      }));
-    set(this, "value", { ...this.calculateCost(), items });
+    this.value.items = this.value.items
+      .filter((itm, indx) => indx !== index)
+      .map((itm, indx) => ({ ...itm, index: indx }));
+    this.reCalculateValue();
   };
 
   public onSuccess() {
@@ -214,22 +235,23 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 
-  private addItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => union(this.value.items, [{
-    ...item,
-    id: FB.uniqid,
-    received: 0,
-    totalAmount: this.itemTotalAmount.toFixed(2),
-    formattedDate: this.formatDate(item.date),
-    index: size(this.value.items),
-  }]);
+  private addItem = (item: FBPurchaseOrderItem) => {
+    this.value.items = union(this.value.items, [{
+      ...item,
+      id: FB.uniqid,
+      received: 0,
+      totalAmount: this.itemTotalAmount.toFixed(2),
+      formattedDate: this.formatDate(item.date),
+      index: size(this.value.items),
+    }]);
+  };
 
-  private updateItem = (item: FBPurchaseOrderItem): FBPurchaseOrderItem[] => {
+  private updateItem = (item: FBPurchaseOrderItem) => {
     this.value.items[item.index] = {
       ...item,
       totalAmount: this.itemTotalAmount.toFixed(2),
       formattedDate: this.formatDate(item.date),
     };
-    return this.value.items;
   };
 }
 

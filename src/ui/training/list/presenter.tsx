@@ -50,6 +50,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
       key: "completedAtAfter",
     },
+    { label: `TC ID: ${tableCriteria.queryDict?.tcId  || ""}`, key: "tcId" },
   ];
   const renderTableData = () => {
     if (!isEmpty(data)) {
@@ -62,6 +63,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
         dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
         completedAtAfter: e.completedAt ?
           getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
+        tcId: e.trainingPlan?.curriculumDocIds?.join(", "),
       }));
     }
     const defaultEmptyColumn = headers.map((column) => ({ [column.key]: "" }));
@@ -158,9 +160,19 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
         defaultValue: tableCriteria.queryDict?.completedAtAfter,
       },
       columnOptions: {
-        // eslint-disable-next-line react/display-name
         cellDataGetter: ({ rowData }) => rowData.completedAt ?
           getFormattedDateString(rowData.completedAt, MomentFormats.DateTimeComplete) : "Pending",
+      },
+    },
+    {
+      key: "tcId",
+      id: "TrainingListPresenter-tcId",
+      label: "common.tc.id",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.trainingPlan?.curriculumDocIds?.join(", "),
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict?.tcId,
       },
     },
   ];

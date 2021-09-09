@@ -221,6 +221,7 @@ Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { descriptio
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
     cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").type(params.description);
     cy.get("[data-cy=field-description]>label").click();
+    cy.unClick();
   });
 });
 
