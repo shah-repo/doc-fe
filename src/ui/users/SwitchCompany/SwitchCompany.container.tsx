@@ -1,24 +1,39 @@
 import { orderBy } from "lodash";
-import * as React from "react";
-import { useDispatch } from "react-redux";
+import { default as React, useEffect } from "react";
+import { useIntl } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import Config from "../../../config";
 import { authActions } from "../../../state/ducks/auth";
-import { companyActions } from "../../../state/ducks/company";
+import { companyActions, companySelectors } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { HOME_URL } from "../../constants/urls";
+import { toastInfo } from "../../components/notifications";
+import "../../components/notifications/notifications.css";
+import { COMPANY_EMAIL_URL, HOME_URL } from "../../constants/urls";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
 import { styles } from "./SwitchCompany.styles";
 
 type Props = LoginContainerProps;
+const toastConfig = (message) =>
+  <span>{message} <a href={`mailto:${COMPANY_EMAIL_URL}`}>{COMPANY_EMAIL_URL}</a></span>;
 
 const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   employees,
 }) => {
+
+  const scheduledForDeletion = useSelector(companySelectors.getScheduledForDeletion);
+  const intl = useIntl();
+
+  useEffect(() => {
+    scheduledForDeletion &&
+  toastInfo((toastConfig(intl.formatMessage({ id: "toast.notification.deletion" }))),
+    { position: "top-center", className: "warning-deletion" });
+  }, [intl, scheduledForDeletion]);
+
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -31,7 +46,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
   };
-
   const companies = orderBy(employees, ["company.name"], ["asc"])
     .filter((employee) => employee.active)
     .map(
@@ -62,7 +76,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
         );
       },
     );
-
   return (
     <SwitchCompanyPresenter
       // eslint-disable-next-line react/no-children-prop
