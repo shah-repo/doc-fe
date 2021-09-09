@@ -30,9 +30,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     const { id, isOutput } = workspaceState || {};
 
     function save(date?: string) {
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!date || !isOutput || !isUnderWorkspace) { return; }
+      if (!date || !isOutput) { return; }
       formState?.setFieldValue(name, date);
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      if (!isUnderWorkspace) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
