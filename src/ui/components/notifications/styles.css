@@ -8,10 +8,8 @@
   padding: 10px;
 }
 
-.Toastify__toast--info {
-  background-color: #FFF3CD !important;
-  color: #856404
-
+.Toastify__toast-body a {
+  font-weight: bold;
 }
 
 .Toastify__close-button {
@@ -20,7 +18,14 @@
   margin-right: 10px;
 }
 
-a {
+.Toastify__toast--info {
+  background-color: #FFF3CD !important;
+  color: #856404
+
+}
+
+.Toastify__toast--info a {
   color: #856404;
-  font-weight: bold;
-} 
+  
+}
+
