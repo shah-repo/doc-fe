@@ -97,7 +97,8 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    includeNotes = editorProperties?.includes("includeNotes") || includeNotes;
+    includeNotes = workspaceState?.isLHRProductionBuild ?  !workspaceState?.isLHRProductionBuild
+      : editorProperties?.includes("includeNotes") || includeNotes;
 
     const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
       // This sets shared default values for all of the fields

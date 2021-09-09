@@ -1,12 +1,12 @@
 import { includes, isArray, isEmpty, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Id } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
@@ -90,6 +90,12 @@ class FBWorkspaceState extends FBSchemaState {
   public get isOutput(): boolean {
     const { docId } = this.document?.formDocument?.document || {};
     return Boolean(docId && !isEmpty(docId));
+  }
+
+  public get isLHRProductionBuild(): boolean {
+    return this.document?.smartReferencesTo?.filter(
+      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
+      toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
   }
 
   public get isOutputSchema(): boolean {
