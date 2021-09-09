@@ -6,7 +6,9 @@ import {
   FBApproversState,
   FBBookmarkState, FBDatePickerState, FBDialogState,
   FBDocumentRevisionsState,
-  FBEBPartState,
+
+
+  FBDownloadSheetTplState, FBEBPartState,
   FBEditorCustomControlState,
   FBEditorState,
   FBEQMaintenanceHistoryState,
@@ -82,4 +84,5 @@ export interface FBProviderProps {
   mpiProcedureSelectState?: FBMPIProcedureSelectState;
   poApprovalsState?: FBPOApprovalsState;
   datePickerState?: FBDatePickerState;
+  downloadSheetTplState?: FBDownloadSheetTplState;
 }
