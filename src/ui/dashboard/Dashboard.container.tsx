@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { dashboardActions, dashboardSelectors } from "../../state/ducks/dashboard";
-import "../components/notifications/notifications.css";
 import useActionCreator from "../hooks/useActionCreator";
 import DashboardPresenter from "./Dashboard.presenter";
 import DashboardSockets from "./DashboardSockets";
