@@ -22,6 +22,7 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
       <Observer>
         {() => (
           <KeyboardDatePicker
+            name={props.name}
             onOpen={() => onDatePickerClick?.()}
             onClose={() => onDatePickerClose?.()}
             disabled={props.disabled}
