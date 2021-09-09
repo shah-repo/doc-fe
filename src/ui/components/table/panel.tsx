@@ -50,6 +50,7 @@ export function TablePanel<T extends any>({
 
   const [isLoading, setIsLoading] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
+  const [tableSortBy, setTableSortBy] = useState(sortBy);
   const tableData = useSelector(getTableData(tableName));
   const dispatch = useDispatch();
   const queryData = providedData || tableData;
@@ -64,7 +65,7 @@ export function TablePanel<T extends any>({
       sortBy === "docId" ? `document.${sortBy}` : sortBy,
     );
     sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
-
+    setTableSortBy(sortBy);
     return sortedData;
   };
 
@@ -260,7 +261,7 @@ export function TablePanel<T extends any>({
       rowClassName={classes.row}
       headerClassName={classes.header}
       rowGetter={rowGetter}
-      sortBy={sortBy}
+      sortBy={tableSortBy}
       sort={sort}
       sortDirection={tableCriteria.sortDirection}
       noRowsRenderer={noRowsRenderer}
@@ -296,6 +297,7 @@ export function TablePanel<T extends any>({
       ),
     );
   };
+
 
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 

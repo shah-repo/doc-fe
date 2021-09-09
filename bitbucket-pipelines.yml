@@ -5,7 +5,7 @@ definitions:
   services:
     sorry-cypress-director:
       image:
-        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.0.0-rc.10
+        name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
       variables:
         EXECUTION_DRIVER: "../execution/in-memory"
         SCREENSHOTS_DRIVER: "../screenshots/dummy.driver"
@@ -72,7 +72,7 @@ definitions:
     - step: &COMMON_RUN_CYPRESS
           name: Cypress specs
           image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_90_cy_7_3_0_aws
+            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
             aws:
               access-key: $AWS_ACCESS_KEY_ID
               secret-key: $AWS_SECRET_ACCESS_KEY

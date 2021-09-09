@@ -59,7 +59,8 @@ do
         db = new Mongo().getDB(\"sorry-cypress\");
         var run = db.getCollection('runs').find({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}).limit(1).toArray();
 
-        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.claimed\": false}});
+        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.claimedAt\": null}});
+        db.getCollection('runs').updateOne({\"meta.ciBuildId\": ciBuildId, \"specs.spec\": specFile}, {\$set: {\"specs.\$.completedAt\": null}});
         db.getCollection('instances').deleteOne({runId: run[0].runId, spec: specFile});"
       
     echo $SCRIPT | docker exec -i $SORRY_CYPRESS_DASBOARD_CONTAINER_NAME bash -c mongo  1> /dev/null
