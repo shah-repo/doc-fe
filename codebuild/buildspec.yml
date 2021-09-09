@@ -37,7 +37,7 @@ phases:
   pre_build:
     commands:
       - cd doc-fe/codebuild
-      - docker-compose up -d --scale enlil_cypress_server=2 #--force-recreate #because local test run
+      - docker-compose up -d --scale enlil_cypress_server=2 --scale enlil_cypress_worker=2 #--force-recreate #because local test run
   build:
     commands:
       - docker ps
