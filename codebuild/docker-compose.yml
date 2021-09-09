@@ -11,7 +11,7 @@ x-const:
     - ENV_NAME=${ENLIL_BE_ENV_NAME}
     - TYPEORM_DATABASE=${TYPEORM_DATABASE}
     - TYPEORM_HOST=${TYPEORM_HOST}
-    - VALIDATORS_CYPRESS_FE_URL=${ENLIL_BE_VALIDATORS_CYPRESS_FE_URL}
+    - VALIDATORS_CYPRESS_FE_URL=${VALIDATORS_CYPRESS_FE_URL}
 
   enlil_cypress_worker_config: &ENLIL_CYPRESS_WORKER_CONFIG
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:be_worker_${BE_GIT_COMMIT_HASH}
@@ -57,7 +57,6 @@ services:
     environment:
       REACT_APP_API_ENDPOINT: ${REACT_APP_API_ENDPOINT}
       REACT_APP_FRONTEND_URL: ${REACT_APP_FRONTEND_URL}
-      REACT_APP_WORKER_API_ENDPOINT: ${REACT_APP_WORKER_API_ENDPOINT}
     networks:
       cypress_network:
         aliases: 
