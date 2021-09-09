@@ -1,13 +1,12 @@
-import { Link } from "@material-ui/core";
 import { orderBy } from "lodash";
-import { default as React, useEffect } from "react";
+import { default as React } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { companyActions, companySelectors } from "../../../state/ducks/company";
+import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { toastInfo } from "../../components/notifications";
@@ -26,15 +25,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   employees,
 }) => {
 
-  const scheduledForDeletion = useSelector(companySelectors.getScheduledForDeletion);
   const intl = useIntl();
-
-  useEffect(() => {
-    scheduledForDeletion &&
-  toastInfo((toastConfig(intl.formatMessage({ id: "toast.notification.deletion" }))),
-    { position: "top-center", className: "warning-deletion" });
-  }, [intl, scheduledForDeletion]);
-
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -54,6 +45,10 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 });
+
+    employee.company.scheduledForDeletion &&
+    toastInfo((toastConfig(intl.formatMessage({ id: "toast.notification.deletion" }))),
+      { position: "top-center", className: "warning-deletion" });
   };
   const companies = orderBy(employees, ["company.name"], ["asc"])
     .filter((employee) => employee.active)

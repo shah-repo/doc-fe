@@ -1,4 +1,4 @@
-import { Slide, ToastOptions } from "react-toastify";
+import { Slide, toast as toastify, ToastOptions } from "react-toastify";
 import "./styles.css";
 
 enum ToastType {
@@ -20,7 +20,7 @@ const TOAST_OPTIONS: ToastOptions = {
 };
 
 const toast = (type: ToastType, message: string | React.ReactNode, options: ToastOptions = {}) =>
-  taostify[type](
+  toastify[type](
     message,
     {
       ...TOAST_OPTIONS,
