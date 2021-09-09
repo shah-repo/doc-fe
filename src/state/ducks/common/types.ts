@@ -21,6 +21,7 @@ export interface User {
   email: string;
   name: string;
   confirmed?: boolean;
+  locked?: boolean;
 }
 
 export interface Approval {
