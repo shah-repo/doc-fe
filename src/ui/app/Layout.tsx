@@ -1,17 +1,12 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import { default as React, useEffect } from "react";
-import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { default as React } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { companySelectors } from "../../state/ducks/company";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
-import { toastInfo } from "../components/notifications";
-import "../components/notifications/notifications.css";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
-import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, COMPANY_EMAIL_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
+import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
@@ -33,20 +28,9 @@ import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
 type Props = WithStyles<typeof styles>;
 
-const toastConfig = (message) =>
-  <span>{message} <a href={`mailto:${COMPANY_EMAIL_URL}`}>{COMPANY_EMAIL_URL}</a></span>;
 
-const Layout: React.FunctionComponent<Props> = ({ classes }) => {
-  const scheduledForDeletion = useSelector(companySelectors.getScheduledForDeletion);
-  const intl = useIntl();
-
-  useEffect(() => {
-    scheduledForDeletion &&
-  toastInfo((toastConfig(intl.formatMessage({ id: "toast.notification.deletion" }))),
-    { position: "top-center", className: "warning-deletion" });
-  }, [intl, scheduledForDeletion]);
-
-  return <div>
+const Layout: React.FunctionComponent<Props> = ({ classes }) => (
+  <div>
     <RemoteValidatorsLoader />
     <PingServer />
     <CssBaseline />
@@ -127,7 +111,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => {
         <Redirect to={{ pathname: HOME_URL }} />
       </Switch>
     </main>
-  </div>;
-};
+  </div>
+);
 
 export default withStyles(styles)(Layout);
