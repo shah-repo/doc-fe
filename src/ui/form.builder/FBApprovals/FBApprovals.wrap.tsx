@@ -212,7 +212,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // TODO: check what is going on with the types,
     // had to add any, DocumentStatus and DocumentRevisionStatus are not the same
-    documentStatus =  document?.status as any;
+    documentStatus = document?.status as any;
 
     showFieldOwnersWarning = document?.document
     .documentType
