@@ -412,6 +412,7 @@ context("Autosave on blur", () => {
                         index: 0,
                       }],
                       tax: "0.00",
+                      taxRate: 9.25,
                       subTotal: "150.00",
                       totalAmount: "150.00",
                       shippingCost: "0.00",
