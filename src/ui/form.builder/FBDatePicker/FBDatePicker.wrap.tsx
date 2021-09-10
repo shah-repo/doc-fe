@@ -27,11 +27,12 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
-    const { id, isOutput } = workspaceState || {};
+    const { id } = workspaceState || {};
 
     function save(date?: string) {
-      if (!date || !isOutput) { return; }
+      if (!date) { return; }
       formState?.setFieldValue(name, date);
+      formState?.validate();
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
       if (!isUnderWorkspace) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
