@@ -1,4 +1,4 @@
-import { isString } from "lodash";
+import { forIn, isString } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { isTranslation } from "../../../../ui/translations/types";
@@ -13,8 +13,8 @@ export const withSMText = <T extends SMTextProps>(
   }: T) => {
     const intl = useIntl();
     if (!isString(label) && label && label.values) {
-      Object.keys((label).values).forEach( (key) => {
-        if (isTranslation((label).values?.[key] as string)) {
+      forIn(label.values  as Record<string, string>, (value, key) => {
+        if (isTranslation(value)) {
           ((label).values as Record<string, string>)[key] =
             intl.formatMessage({ id: (label).values?.[key] as string });
         }
