@@ -54,4 +54,4 @@ export const COMPANY_MINE_URL = "/company/mine";
 
 export const PAGE_DETAILS_MANAGEMENT_URL = "/page_details_management";
 
-export const COMPANY_EMAIL_URL = "enlil-feedback@shifamed.com";
+export const COMPANY_EMAIL = "enlil-feedback@shifamed.com";

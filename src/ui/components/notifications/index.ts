@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Slide, toast as toastify, ToastOptions } from "react-toastify";
 import "./styles.css";
 
@@ -19,7 +20,7 @@ const TOAST_OPTIONS: ToastOptions = {
   transition: Slide,
 };
 
-const toast = (type: ToastType, message: string | React.ReactNode, options: ToastOptions = {}) =>
+const toast = (type: ToastType, message: string | ReactNode, options: ToastOptions = {}) =>
   toastify[type](
     message,
     {
@@ -28,12 +29,12 @@ const toast = (type: ToastType, message: string | React.ReactNode, options: Toas
     },
   );
 
-export const toastError = (message: string | React.ReactNode, options: ToastOptions = {}) =>
+export const toastError = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Error, message, options);
 
-export const toastInfo = (message: string | React.ReactNode, options: ToastOptions = {}) =>
+export const toastInfo = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Info, message, options);
 
-export const toastSuccess = (message: string | React.ReactNode, options: ToastOptions = {}) =>
+export const toastSuccess = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
 

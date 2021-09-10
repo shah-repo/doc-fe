@@ -1,6 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import { default as React } from "react";
+import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
@@ -27,7 +27,6 @@ import Navigation from "./Navigation";
 import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
 type Props = WithStyles<typeof styles>;
-
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => (
   <div>
