@@ -4,6 +4,7 @@ import { hasIn, isString } from "lodash";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { SMTextLocaleProps, SMTextProps } from "../../..";
+import { withSMText } from "./SMText.wrap";
 
 const SMText: React.FunctionComponent<SMTextProps> = ({
   boxProps,
@@ -35,4 +36,4 @@ const SMText: React.FunctionComponent<SMTextProps> = ({
   </Box>
 );
 
-export default SMText;
+export default withSMText(SMText);
