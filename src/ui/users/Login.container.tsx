@@ -23,7 +23,7 @@ interface StateProps {
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, "location">;
 
-export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
+const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
   const { from } = props.location.state || { from: { pathname: HOME_URL } };
   const intl = useIntl();
 
