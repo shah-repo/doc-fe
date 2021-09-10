@@ -172,31 +172,31 @@ Cypress.Commands.add(
     cy.wrapWithWaitOnApiCalls([name], callback, options);
   });
 
-// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-//   const state = cy.state("current").attributes.name;
+Cypress.Commands.overwrite("click", (originalFn, element, options) => {
+  const state = cy.state("current").attributes.name;
 
-//   if (state === "click") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, options));
-//   }
-//   else {
-//     return originalFn(element, options);
-//   }
-// });
+  if (state === "click") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, options));
+  }
+  else {
+    return originalFn(element, options);
+  }
+});
 
-// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-//   const state = cy.state("current").attributes.name;
+Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
+  const state = cy.state("current").attributes.name;
 
-//   if (state === "type") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, text, options));
-//   }
-//   else {
-//     return originalFn(element, text, options);
-//   }
-// });
+  if (state === "type") {
+    cy.wrap(element)
+      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+      .then(() => originalFn(element, text, options));
+  }
+  else {
+    return originalFn(element, text, options);
+  }
+});
 
 // Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
 //   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
