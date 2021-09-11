@@ -10,6 +10,7 @@ import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStat
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
+import FBStore from "../FBStore/FBStore";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -195,6 +196,13 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onError(error);
       } else {
         this.setDirty(false);
+        if (this.getItemsByType("inlineapproval")) {
+          FBStore.audit.set({
+            url: FBEndpoint.DocumentRevisionAudit,
+            urlValues: { documentId: this.id },
+            method: "get",
+          });
+        }
         this.documentRevApi.onSuccess();
       }
     });
