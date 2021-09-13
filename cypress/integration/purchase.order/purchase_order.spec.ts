@@ -627,13 +627,13 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckTax({ number: "1.95" });
+      cy.poCheckTax({ number: "2.77" });
     });
 
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
       cy.unClick();
-      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.95");
+      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$52.77");
     });
 
     context("Add Supplier to PO", () => {
@@ -728,7 +728,7 @@ context("PO test", () => {
       it("Check if approver ID and date time are recorded", () => {
         SystemRequirement("REQ-1540", "REQ-1550");
         cy.get("[name*='fb-po-approvals-']>div").eq(4).should("contain", USERS[1].name)
-          .and("contain", "Approved")
+          .and("contain", "APPROVED")
           .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
       });
 
@@ -1134,7 +1134,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
         docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
-        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
+        partNumber: "PRT-00004 - 1", amount: "52.77", owner: USERS[1].name, issueDate: "N/A",
       }).wait(2000);
     });
 
@@ -1155,7 +1155,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
         docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
-        partNumber: "PRT-00004 - 1", amount: "51.95", owner: USERS[1].name, issueDate: "N/A",
+        partNumber: "PRT-00004 - 1", amount: "52.77", owner: USERS[1].name, issueDate: "N/A",
       });
     });
 
