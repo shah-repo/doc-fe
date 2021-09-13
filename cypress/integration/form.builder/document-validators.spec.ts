@@ -748,6 +748,7 @@ field is empty: Add text field`, () => {
     });
 
     it(`Remove type from ${requiredIfInFieldLabel}`, () => {
+      cy.get("div[name^=\"required-doctypes\"]").click();
       cy.get("div[name^=\"required-doctypes\"] svg").first().click();
     });
 
