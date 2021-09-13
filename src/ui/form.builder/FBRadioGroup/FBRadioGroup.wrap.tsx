@@ -28,7 +28,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
-    defaultValue = defaultValue || formState?.getFieldValue(name);
+    defaultValue = formState?.getFieldValue(name) || defaultValue;
 
     controls = map(options as FBOption[], (option, index) => {
       const [value, message] = at(option, [optionValueKey, optionLabelKey]);
