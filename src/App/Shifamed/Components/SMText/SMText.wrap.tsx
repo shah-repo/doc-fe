@@ -1,8 +1,7 @@
-import { forIn, isString } from "lodash";
-import React from "react";
+import { isString, map } from "lodash";
+import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { isTranslation } from "../../../../ui/translations/types";
-import { SMTextProps } from "./SMText.types";
+import { SMTextLocaleProps, SMTextProps } from "./SMText.types";
 
 export const withSMText = <T extends SMTextProps>(
   Component: React.FunctionComponent<T>,
@@ -12,14 +11,18 @@ export const withSMText = <T extends SMTextProps>(
     ...props
   }: T) => {
     const intl = useIntl();
-    if (!isString(label) && label && label.values) {
-      forIn(label.values  as Record<string, string>, (value, key) => {
-        if (isTranslation(value)) {
-          ((label).values as Record<string, string>)[key] =
-            intl.formatMessage({ id: (label).values?.[key] as string });
+    const intlValues = (label as SMTextLocaleProps).values;
+
+    useMemo(
+      () => {
+        if (!isString(label)) {
+          map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
+          (label as SMTextLocaleProps).values = intlValues;
         }
-      });
-    }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
 
     return  Component({
       ...(props as T),
