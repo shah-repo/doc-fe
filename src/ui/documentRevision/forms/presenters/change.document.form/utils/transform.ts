@@ -50,7 +50,10 @@ export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSche
   });
 
   return map(fieldsFilteredByType, (field) => {
-    const label = find(sourceSchema, (x) => x.name === field.name)?.label;
+    const defaultLabel = find(sourceSchema, (x) => x.name === field.name)?.label;
+    // Hack: added default value for paragraph because it doesn't have a label - ChangeDocumentFormPresenter line 29
+    const label = field.type === "paragraph" ? "Paragraph" : defaultLabel;
+
     return {
       label,
       value: field.name,
