@@ -11,14 +11,15 @@ export const withSMText = <T extends SMTextProps>(
     ...props
   }: T) => {
     const intl = useIntl();
-    const intlValues = (label as SMTextLocaleProps).values;
 
-    useMemo(
+    label =  useMemo(
       () => {
         if (!isString(label)) {
+          const intlValues = (label as SMTextLocaleProps).values;
           map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
           (label as SMTextLocaleProps).values = intlValues;
         }
+        return label;
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
