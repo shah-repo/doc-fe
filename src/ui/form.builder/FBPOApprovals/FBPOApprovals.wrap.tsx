@@ -80,12 +80,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    React.useEffect(
-      () => reaction(() => workspaceState?.formInputSync?.get(poName),
-        () => {
-          outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
-        }
-      ), []);
+    React.useEffect(() => reaction(
+      () => workspaceState?.formInputSync?.get(poName),
+      () => {
+        outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     // On add approver
     React.useEffect(() => reaction(
