@@ -1,4 +1,4 @@
-import { isString, map } from "lodash";
+import { map } from "lodash";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { SMTextLocaleProps, SMTextProps } from "./SMText.types";
@@ -14,7 +14,6 @@ export const withSMText = <T extends SMTextProps>(
 
     useMemo(
       () => {
-        if (isString(label))  { return; }
         const intlValues = (label as SMTextLocaleProps).values;
         map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
       },
