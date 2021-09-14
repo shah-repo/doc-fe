@@ -869,26 +869,26 @@ context("Autosave on blur", () => {
     });
 
     it("Select Date and check for autosave", () => {
-      cy.xpath("//input[@name]/ ../div/button").click().wait(200);
-      // eslint-disable-next-line max-len
-      cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
-        .last().click().wait(300);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.xpath("//input[@name]/ ../div/button").click().wait(200);
+        // eslint-disable-next-line max-len
+        cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
+          .last().click().wait(300);
         cy.unClick();
       });
     });
 
     it("Select value for select field and check for autosave", () => {
-      cy.get("[id^=\"mui-component-select-fb-select-field-\"]").click();
-      cy.get("[data-value=\"option1\"]").click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[id^=\"mui-component-select-fb-select-field-\"]").click();
+        cy.get("[data-value=\"option1\"]").click();
         cy.unClick();
       });
     });
 
     it("Select radiobutton and check for autosave", () => {
-      cy.get("[name^=\"fb-radiobutton-group-\"]").first().click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=\"fb-radiobutton-group-\"]").first().click();
         cy.unClick();
       });
     });

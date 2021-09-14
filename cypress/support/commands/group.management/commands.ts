@@ -307,9 +307,11 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
 Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
     cy.get("#clearFilter").click();
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
     cy.get("#groupName").type(params.name);
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupGet, () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
