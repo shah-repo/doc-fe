@@ -50,6 +50,7 @@ export interface Company {
   navigation: NavigationItem[];
   employees?: Employee[];
   dropboxEnabled?: boolean;
+  scheduledForDeletion: boolean;
 }
 
 export interface SelectCompanyAction {
