@@ -2,31 +2,11 @@ version: 0.2
 
 env:
   shell: bash
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
-  #secrets-manager:
-     # key: secret-id:json-key:version-stage:version-id
-     # key: secret-id:json-key:version-stage:version-id
   exported-variables:
      - AWS_DEFAULT_REGION
      - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
-  #git-credential-helper: yes
-#batch:
-  #fast-fail: true
-  #build-list:
-  #build-matrix:
-  #build-graph:
 phases:
   install:
-    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
-    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
-    #runtime-versions:
-      # name: version
-      # name: version
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - cd ..
@@ -37,25 +17,15 @@ phases:
   pre_build:
     commands:
       - cd doc-fe/codebuild
-      - docker-compose up -d --scale enlil_cypress_server=2 --scale enlil_cypress_worker_replicas=1 #--force-recreate #because local test run
+      - docker-compose up -d --scale enlil_cypress_server=2 --scale enlil_cypress_worker_replicas=1
   build:
     commands:
       - docker ps
       - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ls
       - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./scripts/cypress/utils/start_tests.sh
       - cd $FE_REPO
-      # - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
-      # - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-      # - yarn install --frozen-lockfile
-      # - ./scripts/cypress/utils/generate_requirements_json_file.sh
-      # - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-      # - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-      # - ./scripts/cypress/utils/merge_reports_pipeline.sh
-      # - command
-      # - command
   post_build:
     commands:
-      # - ls
       - docker logs enlil_codebuild_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
       - docker logs enlil_codebuild_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
       - ls
@@ -64,15 +34,7 @@ reports:
     files:
       - '**/*'
     base-directory: test-results/some_ci_build_id/json/junit
-    #discard-paths: yes
     file-format: JunitXml
 artifacts:
   files:
     - test-results/some_ci_build_id/**/*
-    # - location
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - paths
