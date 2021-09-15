@@ -837,6 +837,7 @@ context("Autosave on blur", () => {
         cy.drEnterDocumentDescription({ description: "New document from form description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
+      cy.wait(2000);
     });
 
     it("Fill TextField and check for autosave", () => {

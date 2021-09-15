@@ -50,7 +50,7 @@ Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poSta
     cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").type(params.partNumber);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").type(params.owner);
+    cy.get("[id=\"owner\"]").type(params.owner).wait(1000);
   });
   cy.get("[id=\"dynamicParams.precalc.issueDate\"]").type(params.issueDate);
 });
