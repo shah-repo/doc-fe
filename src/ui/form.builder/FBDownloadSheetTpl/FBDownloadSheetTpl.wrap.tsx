@@ -1,5 +1,7 @@
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB, FBDownloadSheetTplState } from "..";
+import { toastSuccess } from "../../components/notifications";
 import { FBDownloadSheetTplProps } from "./FBDownloadSheetTpl.types";
 
 export const withFBDownloadSheetTpl = <T extends FBDownloadSheetTplProps>(
@@ -12,12 +14,20 @@ export const withFBDownloadSheetTpl = <T extends FBDownloadSheetTplProps>(
     ...props
   }: T) => {
 
+    const intl = useIntl();
+
     downloadSheetTplState = FB.useRef<FBDownloadSheetTplState>(FBDownloadSheetTplState);
     const { workspaceState } = FB.useStores();
     const docRevId = workspaceState?.document?.id;
 
     handleAction = () => {
-      downloadSheetTplState?.getBulkCreateTemplateId(docRevId);
+      downloadSheetTplState?.getBulkCreateTemplateId(docRevId as string, () => {
+        toastSuccess(
+          intl.formatMessage({ id: "document.revision.bulkCreate.download.excelTemplate" }),
+          { position: "bottom-right" }
+        );
+        window.onfocus = null;
+      });
     };
 
     return Component({

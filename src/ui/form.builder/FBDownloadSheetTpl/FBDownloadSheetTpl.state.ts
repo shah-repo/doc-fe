@@ -4,7 +4,7 @@ import { store } from "../../../state/store";
 
 class FBDownloadSheetTplState {
 
-  public getBulkCreateTemplateId = (documentRevisionId: any) => {
+  public getBulkCreateTemplateId = (documentRevisionId: string, callback: () => void) => {
     axios({
       url: `${Config.ApiEndpoint}/mass_create/generate_template/${documentRevisionId}`,
       method: "GET",
@@ -20,6 +20,9 @@ class FBDownloadSheetTplState {
       document.body.appendChild(link);
       link.click();
       link.remove();
+      window.onfocus = () => {
+        callback();
+      };
     });
   };
 }
