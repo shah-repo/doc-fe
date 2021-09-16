@@ -50,7 +50,10 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     useEffect(() => reaction(
       () => datePickerState?.date,
-      (date) => save(moment(date).tz(TIME_ZONE).toISOString())
+      (date) => {
+        const dateStr = getStartOfDayDateString(moment(date).tz(TIME_ZONE).toISOString());
+        save(dateStr);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
