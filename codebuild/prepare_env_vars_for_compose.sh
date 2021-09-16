@@ -115,7 +115,8 @@ build_fe () {
 
   if [ $IMAGE_FOUND = 0 ]
   then
-    docker pull $DOCKER_IMAGE
+    #docker pull $DOCKER_IMAGE
+    $FE_REPO/codebuild/build_and_push_fe_image.sh
   else
     $FE_REPO/codebuild/build_and_push_fe_image.sh
   fi
@@ -138,10 +139,12 @@ build_validators () {
   fi
   cd $HEAD_PWD
 }
+SECONDS=0
+# build_be &
+build_fe #&
+# build_validators &
 
-build_be &
-build_fe &
-build_validators &
-
-wait
+#wait
+duration=$SECONDS
+echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
 echo "Done with images"

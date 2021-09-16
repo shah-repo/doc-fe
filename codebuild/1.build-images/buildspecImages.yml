@@ -1,0 +1,21 @@
+version: 0.2
+
+env:
+  shell: bash
+  exported-variables:
+     - AWS_DEFAULT_REGION
+     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      #- cd ..
+      - ls
+      - export HEAD_PWD=$(pwd)
+      - echo $HEAD_PWD
+  build:
+    commands:
+      - source ./doc-fe/codebuild/1.build-images/start_build.sh
+  post_build:
+    commands:
+      - echo "Done"
