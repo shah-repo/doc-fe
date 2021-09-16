@@ -1,4 +1,5 @@
 import { FBApprovalsProps, FBEmployee, FBGroup, FBId, FBInlineApprovalRole, FBInputProps, FBProviderProps } from "..";
+import { Approval } from "../../../state/ducks/common/types";
 
 export interface FBInlineApprovalValue {
   approvers?: string[] | FBEmployee[];
@@ -42,7 +43,9 @@ export enum FBInlineApprovalStatusIdent {
   REJECTED = "Rejected",
 }
 
-export interface FBInlineApprovalBody {
+export type FBInlineApprovalBody =
+& Omit<Approval, "status" | "assigned" | "type" | "partOf" | "fieldId">
+& {
   reviewedAt?: string;
   id?: string;
   assigned?: FBId;
@@ -54,7 +57,7 @@ export interface FBInlineApprovalBody {
   canRequest?: boolean;
   signatureGroupName?: string;
   approverId?: string;
-}
+};
 
 export interface FBInlineApprovalTransitionBody {
   password?: string;
