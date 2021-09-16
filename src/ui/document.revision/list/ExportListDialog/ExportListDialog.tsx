@@ -87,8 +87,8 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
           </DialogContent>
           <Box className={classes.dialogAction} >
             <Button
-              variant="contained"
-              className={classes.cancelButton}
+              variant="outlined"
+              color="primary"
               onClick={dialog.close}
               id="ExportListDialog-cancelButton"
             >
@@ -97,7 +97,7 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
             <Button
               type="submit"
               variant="contained"
-              className={classes.submitButton}
+              color="primary"
               id="ExportListDialog-downloadButton"
               data-cy="ExportListDialog-downloadButton"
               onClick={() => {

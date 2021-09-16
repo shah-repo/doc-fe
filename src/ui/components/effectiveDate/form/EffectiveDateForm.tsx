@@ -36,8 +36,8 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
       className={classes.submitButton}
     />
     <Button
-      variant="text"
-      color="secondary"
+      variant="outlined"
+      color="primary"
       className={classes.cancelButton}
       disabled={asyncState.status === AsyncStatus.Active}
       onClick={cancel}

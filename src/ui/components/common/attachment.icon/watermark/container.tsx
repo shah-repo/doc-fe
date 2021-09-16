@@ -60,7 +60,7 @@ const WatermarkContainer: React.FunctionComponent<Props> = ({
   }, [newWatermarkError]);
 
   const renderCloseButton = (newWatermarkError || newWatermarkRequest) && (
-    <Button onClick={handleClose} color="primary">
+    <Button onClick={handleClose} color="primary" variant="outlined">
       <Text translation="common.close" />
     </Button>
   );

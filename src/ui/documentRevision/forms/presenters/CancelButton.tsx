@@ -40,7 +40,13 @@ const CancelButton: React.FunctionComponent<Props> = ({
     <>
       {
         canShowCancelButton &&
-        <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
+        <Button
+          id="cancelDraftButton"
+          data-cy="cancelDraftButton"
+          variant="outlined"
+          color="primary"
+          onClick={dialog.open}
+        >
           <Text translation="common.cancel.draft" />
         </Button>
       }

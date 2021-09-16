@@ -83,14 +83,14 @@ const DocumentRevisionApproval: React.FunctionComponent<Props> = ({
         <Grid item xs={3} className={classes.itemWrap}>
           <Button
             variant="outlined"
-            color="secondary"
+            color="primary"
             onClick={() => changeApprovalStatus("reject", approval.id)}
           >
             <Text translation="transition.action.reject"/>
           </Button>
           <Button
             variant="outlined"
-            color="secondary"
+            color="primary"
             onClick={() => passwordDialog.open()}
           >
             <Text translation="transition.action.approve"/>

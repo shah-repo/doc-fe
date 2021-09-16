@@ -35,7 +35,7 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   return (
     <Button
       variant="contained"
-      color="secondary"
+      color="primary"
       data-cy="CloneEBButton"
       onClick={cloneAction}
     >

@@ -55,7 +55,7 @@ const TaskPresenter: React.FunctionComponent<Props> = ({
           <Text data-id="status" translation="common.status" />:&nbsp;
           {task.status}
         </span>
-        <Button id="remove" onClick={removeTask(index)} className={classes.button} color="secondary">
+        <Button id="remove" onClick={removeTask(index)} className={classes.button} color="primary">
           <Text translation="common.remove" />
         </Button>
         <Button id="edit" onClick={editTask(task, index)} className={classes.button} color="primary">

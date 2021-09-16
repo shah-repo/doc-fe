@@ -44,7 +44,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
       <Button
         id="void"
         variant="outlined"
-        color="secondary"
+        color="primary"
         onClick={dialog.open}
         disabled={async.asyncState.status === AsyncStatus.Active}
       >

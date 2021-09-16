@@ -49,7 +49,7 @@ const DialogWindow: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
 
   const actionRenderer = (type: DialogAction) => (
-    <Button key={type} onClick={handleAction(type)} color="primary">
+    <Button key={type} onClick={handleAction(type)} color="primary" variant="outlined">
       <Text message={type} />
     </Button>
   );

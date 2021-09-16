@@ -131,10 +131,10 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
         {autoSizerRenderer({ label: "common.schema", name: "schema", disabled })}
         {autoSizerRenderer({ label: "common.fields.config", name: "fieldsConfig", disabled })}
         <Box display="flex" justifyContent="flex-end" mt={6}>
-          <Button type="submit" variant="outlined" {...{ disabled }} >
+          <Button type="submit" variant="outlined" color="primary" {...{ disabled }} >
             <Text translation="common.save" />
           </Button>
-          <Button onClick={handleTransition} variant="outlined" {...{ disabled }}>
+          <Button onClick={handleTransition} variant="outlined" color="primary" {...{ disabled }}>
             <Text translation={transitionLabel} />
           </Button>
         </Box>
