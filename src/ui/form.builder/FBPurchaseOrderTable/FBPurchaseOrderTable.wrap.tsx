@@ -34,23 +34,16 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
-    handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
+    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev));
+    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev));
+    handleShippingCostChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setShippingCost(getDecimalValue(ev));
+
+    const getDecimalValue = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
-      const abs = Math.abs(value).toFixed(2).toString();
-      purchaseOrderState?.setShippingCost(abs);
-    };
-    handleTaxChange = (ev: React.ChangeEvent<any>) => {
-      const { target: { value = "" } = {} } = ev || {};
-      purchaseOrderState?.setTax(value);
-    };
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => {
-      const { target: { value = "" } = {} } = ev || {};
-      purchaseOrderState?.setTaxRate(value);
+      return Math.abs(value).toFixed(2).toString();
     };
 
-    reCalculateValueOnBlur = () => {
-      purchaseOrderState?.reCalculateValue();
-    };
+    reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
 
     handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
 
