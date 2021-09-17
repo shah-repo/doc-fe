@@ -501,6 +501,10 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: `/api/v1/auth/login`,
     },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
+    },
   },
   GetDocumentTypes: {
     requestConfig: {

@@ -105,6 +105,7 @@ context("Sign up user flow", () => {
     it("Enter password for confirmation", () => {
       SystemRequirement("REQ-4110");
       cy.authEnterSignUpConfirmPassword({ password: "Tester1!" });
+      cy.wait(1500);
     });
 
     it("Click 'SIGN IN'", () => {
