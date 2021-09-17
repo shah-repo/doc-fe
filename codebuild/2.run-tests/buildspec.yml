@@ -14,6 +14,9 @@ phases:
   pre_build:
     commands:
       - cd $DOCKER_COMPOSE_FILE_LOCATION
+      - echo $DOCKER_COMPOSE_FILE_LOCATION
+      - echo $ENLIL_CYPRESS_SERVER_SCALE
+      - echo $ENLIL_CYPRESS_WORKER_SCALE
       - docker-compose up -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
   build:
     commands:
