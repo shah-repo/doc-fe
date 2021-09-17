@@ -23,7 +23,7 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
     <>
       <Button
         variant="outlined"
-        color="secondary"
+        color="primary"
         data-cy={`PreviewControlsContainer-inspection-FAI`}
         onClick={() => onButtonClick()}
         {...{ disabled }}

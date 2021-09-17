@@ -31,6 +31,7 @@ export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
           <Box display="flex" justifyContent="flex-end">
             <Button
               variant="contained"
+              color="primary"
               onClick={onUpgradeClick}
               id="UpgradeToLatest-proceed"
             >
@@ -38,6 +39,7 @@ export const UpgradeToLatestDialog: React.FunctionComponent<Props> = ({
             </Button>
             <Button
               variant="outlined"
+              color="primary"
               onClick={dialog.close}
               id="UpgradeToLatest-cancel"
             >

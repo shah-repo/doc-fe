@@ -3,7 +3,6 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
-import { styles } from "../FormList.styles";
 
 interface Props {
   dialog: DialogHandler;
@@ -11,15 +10,14 @@ interface Props {
   chosenFormId: string;
 }
 const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId, chosenTypeId }) => {
-  const classes = styles();
   const history = useHistory();
 
   return (
     <Grid container spacing={1}>
       <Grid item xs={4}>
         <Button
-          variant="contained"
-          className={classes.cancelButton}
+          variant="outlined"
+          color="primary"
           onClick={dialog.close}
           fullWidth
           id="FormList-cancelButton"
@@ -31,7 +29,7 @@ const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId,
         <Button
           type="submit"
           variant="contained"
-          className={classes.submitButton}
+          color="primary"
           fullWidth
           id="FormList-continueButton"
           data-cy="create.approval.request.continue"

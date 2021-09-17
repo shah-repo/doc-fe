@@ -3,28 +3,9 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    submitButton: {
-      "background": Colors.medium_blue,
-      "color": Colors.white,
-      "boxShadow": "none",
-      "margin": "0 10px 0 5px",
-      "flexGrow": 1,
-      "&:hover": {
-        background: Colors.medium_blue,
-      },
-    },
-    cancelButton: {
-      "background": Colors.light_blue,
-      "color": Colors.medium_blue,
-      "boxShadow": "none",
-      "margin": "0 5px 0 10px",
-      "flexGrow": 0.6,
-      "&:hover": {
-        background: Colors.light_blue,
-      },
-    },
     dialogAction: {
       display: "flex",
+      alignSelf: "flex-end",
       marginBottom: 10,
     },
     dialogContent: {

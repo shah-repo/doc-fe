@@ -22,7 +22,7 @@ const AsyncButton: React.FunctionComponent<SubmitButtonProps> = ({
     <Button
       type="button"
       variant="contained"
-      color="secondary"
+      color="primary"
       disabled={isActive}
       {...buttonProps}
     >

@@ -6,7 +6,7 @@ import { FBButtonProps } from "../../types/button";
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
   label = "",
   variant = "contained",
-  color = "secondary",
+  color = "primary",
   buttonType = "button",
   ...props
 }) => (

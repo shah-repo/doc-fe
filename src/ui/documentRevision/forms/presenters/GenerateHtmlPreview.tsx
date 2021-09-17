@@ -79,7 +79,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       <IconButton
         onClick={handleClick}
         disabled={htmlRequested}
-        color="secondary"
+        color="primary"
       >
         <GetAppIcon />
       </IconButton>
@@ -91,7 +91,7 @@ const GenerateHtmlPreview: React.FunctionComponent<Props> = ({
       onClick={handleClick}
       variant="contained"
       disabled={htmlRequested}
-      color="secondary"
+      color="primary"
     >
       <Text translation="common.generate.pdf" />
     </Button>

@@ -45,7 +45,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
         <Grid item>
           <Button
             variant="outlined"
-            color="secondary"
+            color="primary"
             aria-label="reject"
             data-cy="transition-reject"
             onClick={alertDialog.open}
@@ -54,7 +54,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
           </Button>
           <Button
             variant="outlined"
-            color="secondary"
+            color="primary"
             aria-label="approve"
             data-cy="transition-approve"
             onClick={() => passwordDialog.open()}

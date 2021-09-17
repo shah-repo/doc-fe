@@ -67,7 +67,7 @@ const UserGroups: React.FunctionComponent<Props> = ({
 
   const addGroupsRenderer = () => (
     <Button
-      variant="text"
+      variant="outlined"
       color="primary"
       onClick={openEditGroups}
       className={classes.addGroupsButton}

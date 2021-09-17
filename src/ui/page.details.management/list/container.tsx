@@ -90,7 +90,7 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
-        <Button onClick={dialog.open} variant="outlined">
+        <Button onClick={dialog.open} variant="outlined" color="primary">
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
