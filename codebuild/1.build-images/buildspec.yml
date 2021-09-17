@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      #- cd ..
+      - cd ..
       - ls
       - export HEAD_PWD=$(pwd)
       - echo $HEAD_PWD

@@ -57,7 +57,7 @@ echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
 
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
 
-check_be_images () {
+check_be_image () {
   cd $BE_REPO
   IMAGE=be_server_${BE_GIT_COMMIT_HASH}
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
@@ -73,7 +73,7 @@ check_be_images () {
   cd $HEAD_PWD
 }
 
-build_fe () {
+check_fe_image () {
   cd $FE_REPO
   IMAGE=fe_${FE_GIT_COMMIT_HASH}
   DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
@@ -90,7 +90,7 @@ build_fe () {
   cd $HEAD_PWD
 }
 
-build_validators () {
+check_validators_image () {
   cd $VALIDATORS_REPO
   IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
   DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
@@ -106,5 +106,9 @@ build_validators () {
   fi
   cd $HEAD_PWD
 }
+
+check_be_image
+check_fe_image
+check_validators_image
 
 echo "Done with exporting"

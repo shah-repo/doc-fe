@@ -9,4 +9,4 @@ ENLIL_DIRECTOR_HOST="director" ./scripts/cypress/utils/patch_director_port_in_ca
 ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
 ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
 ./scripts/cypress/utils/merge_reports_pipeline.sh
-./scripts/cypress/utils/slack_test_report_upload.sh
+#./scripts/cypress/utils/slack_test_report_upload.sh

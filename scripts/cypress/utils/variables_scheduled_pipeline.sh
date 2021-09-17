@@ -38,8 +38,8 @@ case "$ENV" in
 "CODEBUILD")  
   export CYPRESS_BE_URL="http://backend:80"
   export CYPRESS_FE_URL="http://frontend:4212"
-  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 *) 
   echo "unknwon environment, exiting"
