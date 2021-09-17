@@ -10,13 +10,11 @@ phases:
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - ls
-      - export HEAD_PWD=$(pwd)
-      - echo $HEAD_PWD
       - source ./codebuild/2.run-tests/export_variables.sh
   pre_build:
     commands:
-      - cd doc-fe/codebuild/2.run-tests
-      - docker-compose up -d --scale enlil_cypress_server=2 --scale enlil_cypress_worker_replicas=1
+      - cd codebuild/2.run-tests
+      - docker-compose up -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
   build:
     commands:
       - docker ps

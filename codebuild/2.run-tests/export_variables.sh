@@ -27,6 +27,8 @@ fi
 
 set -a
   export COMPOSE_PROJECT_NAME="enlil_codebuild"
+  export ENLIL_CYPRESS_SERVER_SCALE=${ENLIL_CYPRESS_SERVER_SCALE:=2}
+  export ENLIL_CYPRESS_WORKER_SCALE=${ENLIL_CYPRESS_WORKER_SCALE:=1}
 
   export ENLIL_COMPOSE_EXPOSE_BE_PORT="4211"
   export ENLIL_COMPOSE_EXPOSE_FE_PORT="4212"
@@ -48,6 +50,7 @@ set -a
   export TYPEORM_HOST=postgres
   export ENLIL_DB_PERSIST=false
   export AWS_DEFAULT_REGION=us-west-2
+  export ECR_REPO="codebuild"
 set +a
 
 echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
