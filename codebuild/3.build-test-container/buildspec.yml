@@ -9,14 +9,9 @@ phases:
   pre_build:
     commands:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - cd ..
-      - ls
-      - export HEAD_PWD=$(pwd)
-      - echo $HEAD_PWD
-      - cd doc-fe
   build:
     commands:
-      - docker build -t test-container:latest -f docker/cypress_node_pipeline.Dockerfile
+      - docker build -t test-container:latest -f docker/cypress_node_pipeline.Dockerfile .
       - docker tag test-container:latest 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
       - docker push 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
   post_build:
