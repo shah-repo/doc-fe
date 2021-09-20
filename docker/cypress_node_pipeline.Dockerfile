@@ -162,6 +162,10 @@ RUN chmod 755 /root
 
 WORKDIR /opt/app
 
+COPY package*.json ./
+COPY yarn*.lock ./
+RUN yarn install --frozen-lockfile
+
 ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
 RUN npm install -g "cypress@8.3.1"
 RUN cypress verify
