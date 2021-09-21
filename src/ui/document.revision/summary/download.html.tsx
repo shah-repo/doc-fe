@@ -40,7 +40,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
       data-cy="downloadHtml"
       onClick={handleClick}
       asyncState={async.asyncState}
-      color="primary"
+      color="secondary"
       variant="outlined"
     />
   );

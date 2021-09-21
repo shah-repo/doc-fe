@@ -89,7 +89,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   return (
     <Fragment>
       <Button
-        color="primary"
+        color="secondary"
         variant="outlined"
         onClick={openDialog}
         id="OwnerChangerPresenter-changeOwner"

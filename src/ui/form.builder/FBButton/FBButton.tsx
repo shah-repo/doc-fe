@@ -5,7 +5,7 @@ import { FBButtonProps, FBLabelLocaleProps, FBText } from "..";
 
 const FBButton: React.FunctionComponent<FBButtonProps> = ({
   label = "",
-  color = "primary",
+  color = "secondary",
   variant = "contained",
   dataCy = "fb-control-btn",
   gutter,

@@ -94,8 +94,8 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
             data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
           />}
           <Button
-            variant="outlined"
-            color="primary"
+            variant="text"
+            color="secondary"
             className={classes.cancelButton}
             onClick={closeMultipleFormDialog}
             id="DocTypeListDialog-cancelButton"

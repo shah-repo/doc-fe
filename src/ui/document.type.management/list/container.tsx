@@ -94,10 +94,10 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="flex-end">
-        <Button onClick={dialog.open} variant="outlined" color="primary" {...{ disabled }}>
+        <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
           <Text translation={"common.add.document.type"} />
         </Button>
-        <Button onClick={exportDAMDialog.open} variant="outlined" color="primary">
+        <Button onClick={exportDAMDialog.open} variant="outlined">
           <Text translation={"common.export.dam.details"} />
         </Button>
       </Box>

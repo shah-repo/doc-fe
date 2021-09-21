@@ -41,7 +41,7 @@ const SlackLandingError: React.FunctionComponent<Props> = ({
         </Link>
       </Box>
       <Button
-        variant="outlined"
+        variant="text"
         color="primary"
         onClick={goToDashboard}
       >

@@ -4,7 +4,7 @@ import { SMButtonProps, SMText } from "../../..";
 
 const SMButton: React.FunctionComponent<SMButtonProps> = ({
   label = "",
-  color = "primary",
+  color = "secondary",
   variant = "contained",
   dataCy = "fb-control-btn",
   hidden,

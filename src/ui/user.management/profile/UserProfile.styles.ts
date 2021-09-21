@@ -48,6 +48,11 @@ export default makeStyles((theme: Theme) =>
         },
       },
     },
+    activeStatusButton: {
+      width: "auto",
+      color: "#6E09EA",
+      borderColor: "#6E09EA",
+    },
     integrations: {
       marginTop: "50px",
       fontSize: "1.1rem",

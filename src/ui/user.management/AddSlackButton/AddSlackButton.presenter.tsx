@@ -15,8 +15,7 @@ const AddSlackButtonPresenter: React.FunctionComponent<Props> = ({
   return (
     <Button
       onClick={addSlack}
-      color="primary"
-      variant="outlined"
+      className={classes.slackButton}
       id="AddSlackButtonPresenter-slackButton"
     >
       <SlackLogo className={classes.slackLogo}/>

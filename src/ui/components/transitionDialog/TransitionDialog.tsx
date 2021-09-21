@@ -51,7 +51,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
     return (
       <div className={classes.container}>
         <Button
-          color="primary"
+          color= "secondary"
           variant= "outlined"
           aria-label={transition}
           onClick={openDialog}

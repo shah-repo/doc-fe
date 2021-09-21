@@ -57,8 +57,8 @@ const FormListDialog: React.FunctionComponent<FormListDialogProps> = ({
           label="supplier.select.form"
         />
         <Button
-          variant="outlined"
-          color="primary"
+          variant="text"
+          color="secondary"
           className={classes.cancelButton}
           onClick={dialog.close}
           id="FormListDialog-cancelButton"

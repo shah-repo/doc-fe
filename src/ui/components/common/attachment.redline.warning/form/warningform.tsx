@@ -32,8 +32,8 @@ const RedlineWarningForm: React.FunctionComponent<RedlineWarningFormProps> = ({
           className={classes.submitButton}
         />
         <Button
-          variant="outlined"
-          color="primary"
+          variant="text"
+          color="secondary"
           className={classes.cancelButton}
           disabled={asyncState.status === AsyncStatus.Active}
           onClick={cancel}
