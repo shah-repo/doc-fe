@@ -20,7 +20,7 @@ export interface TrainingRecord {
   isRefreshed: boolean;
   isValid: boolean;
   trainingPlan?: TrainingPlan;
-  documentRevision?: DocumentRevision;
+  documentRevision: DocumentRevision;
 }
 
 export interface TrainingListData {
@@ -59,10 +59,4 @@ export interface TrainingTransitionRequestBody {
 
 export interface TrainingRequestBody {
   docRev: Id;
-}
-
-interface DocumentRevision {
-  displayRevision: string;
-  id: string;
-  name: string;
 }
