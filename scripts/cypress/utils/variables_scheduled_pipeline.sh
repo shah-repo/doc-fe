@@ -36,10 +36,10 @@ case "$ENV" in
   export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
   ;;
 "CODEBUILD")  
-  export CYPRESS_BE_URL="http://backend:80"
-  export CYPRESS_FE_URL="http://frontend:4212"
-  export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
+  export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://backend:80"}
+  export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://frontend:4212"}
+  export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"enlil.testmail+sysadmin@gmail.com"}
+  export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!Admin"}
   ;;
 *) 
   echo "unknwon environment, exiting"
@@ -51,8 +51,8 @@ export CI_BUILD_ID="some_ci_build_id"
 export CYPRESS_KONFIG_ENV="development"
 export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
-export NUMBER_OF_WORKERS="7"
-export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
+export NUMBER_OF_WORKERS=${CYPRESS_VIDEO:-"7"}
+export CYPRESS_INTEGRATION_FOLDER="cypress/integration/document.revision"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"
 export CYPRESS_SCREENSHOT_OF_RUN_FAILURE="true"
