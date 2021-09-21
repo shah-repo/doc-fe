@@ -10,6 +10,7 @@ import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from 
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -60,10 +61,21 @@ export function TablePanel<T extends any>({
     sortBy = "",
     sortDirection = "DESC",
   ) => {
-    let sortedData = lodashSortBy(
-      data,
-      sortBy === "docId" ? `document.${sortBy}` : sortBy,
-    );
+    let sortedData: any[] = data;
+
+    if (sortBy === "precalc.po_amount") {
+      sortedData = lodashSortBy(
+        data,
+        [(document: DocumentRevision) => parseFloat(document.precalc.po_amount?.replace(/[^\d\.]/, "") || "")]
+      );
+    } else {
+      sortedData = lodashSortBy(
+        data,
+        sortBy === "docId" ? `document.${sortBy}` : sortBy,
+      );
+    }
+
+
     sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
     setTableSortBy(sortBy);
     return sortedData;

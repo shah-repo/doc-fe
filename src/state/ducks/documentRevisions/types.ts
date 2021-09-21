@@ -81,6 +81,7 @@ export interface PDF {
 interface Precalc {
   formDocId: string;
   revision: number;
+  po_amount?: string;
 }
 
 interface DocumentsInLHRS {
