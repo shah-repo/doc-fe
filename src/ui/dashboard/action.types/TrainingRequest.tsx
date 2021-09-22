@@ -21,7 +21,11 @@ const TrainingRequest: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const [title] = useState(intl.formatMessage(
     { id: "dashboard.title.training" },
-    { docId: trainingRecord?.trainingPlan?.document.docId },
+    {
+      docId: trainingRecord?.trainingPlan?.document.docId,
+      docTitle: trainingRecord?.documentRevision?.name,
+      version: trainingRecord?.documentRevision?.displayRevision,
+    },
   ));
   const [description] = useState(intl.formatMessage(
     { id: "dashboard.assigned.training" },
