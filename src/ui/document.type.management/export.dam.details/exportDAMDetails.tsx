@@ -85,8 +85,8 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
           </DialogContent>
           <Box className={classes.dialogAction} >
             <Button
-              variant="outlined"
-              color="primary"
+              variant="contained"
+              className={classes.cancelButton}
               onClick={dialog.close}
               id="ExportDAMDetails-cancelButton"
             >
@@ -95,7 +95,7 @@ const ExportDAMDetails: React.FunctionComponent<Props> = ({
             <Button
               type="submit"
               variant="contained"
-              color="primary"
+              className={classes.submitButton}
               id="ExportDAMDetails-downloadButton"
               data-cy="ExportDAMDetails-downloadButton"
               onClick={() => download()}

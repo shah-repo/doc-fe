@@ -84,7 +84,7 @@ const WhiteLabelingManagementPresenter: React.FunctionComponent<Props> = ({
           <FormProgress asyncState={asyncState} />
         </Box>
         <Box display="flex" justifyContent="flex-end">
-          <Button type="submit" variant="outlined" color="primary">
+          <Button type="submit" variant="outlined">
             <Text translation={"common.save"} />
           </Button>
         </Box>

@@ -57,24 +57,13 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiButton: {
     root: {
       fontSize: "0.75rem",
-      borderRadius: 20,
+      borderRadius: 3,
       margin: appTheme.spacing(1),
       fontWeight: "bold",
       fontFamily: "Open Sans, sans-serif;",
     },
     contained: {
-      "color": Colors.white,
-      "boxShadow": "none",
-      "&:hover": {
-        backgroundColor: `${Colors.dark_gray} !important`,
-      },
-    },
-    outlined: {
-      "&:hover": {
-        backgroundColor: `${Colors.dark_gray} !important`,
-        color: `${Colors.white} !important`,
-        border: `${Colors.dark_gray} !important`,
-      },
+      boxShadow: "none",
     },
   },
   MuiFab: {

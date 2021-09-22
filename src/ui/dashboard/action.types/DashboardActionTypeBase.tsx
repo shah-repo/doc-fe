@@ -74,7 +74,7 @@ const DashboardActionTypeBase: React.FunctionComponent<Props> = ({
           variant="contained"
           target="_blank"
           href={url}
-          color="primary"
+          color="secondary"
           id={`Dashboard-open-${index}`}
         >
           <Text translation="common.open" />

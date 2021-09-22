@@ -59,10 +59,10 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
           {autoSizerRenderer({ label: "Columns", name: "columns" })}
         </Box>
         <Box display="flex" justifyContent="flex-end" mt={6}>
-          <Button type="submit" variant="outlined" color="primary">
+          <Button type="submit" variant="outlined">
             <Text translation={"common.save"} />
           </Button>
-          <Button onClick={handleTransition} variant="outlined" color="primary">
+          <Button onClick={handleTransition} variant="outlined">
             <Text translation={transitionLabel} />
           </Button>
         </Box>

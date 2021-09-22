@@ -35,8 +35,8 @@ const PasswordForm: React.FunctionComponent<PasswordFormProps> = ({ cancel, clas
       className={classes.submitButton}
     />
     <Button
-      variant="outlined"
-      color="primary"
+      variant="text"
+      color="secondary"
       data-cy="reject.request"
       className={classes.cancelButton}
       disabled={asyncState.status === AsyncStatus.Active}

@@ -111,7 +111,6 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
             <Button
               className={classes.outlinedButton}
               variant="outlined"
-              color="primary"
               onClick={() => onCancel()}
               id="EditRemoveAddFields-cancel"
             >
@@ -147,7 +146,7 @@ const EditRemoveAddFields: React.FunctionComponent<Props> = ({
         </Typography>
         {canUpdateCompany &&
           <Button
-            variant="outlined"
+            variant="text"
             color="primary"
             onClick={!isAdding ? handleOpenEdit : handleAdd}
             id="EditRemoveAddFields-add"

@@ -207,7 +207,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
     <Box display="flex" justifyContent="flex-end">
       <Button
         variant="outlined"
-        color="primary"
+        style={{ width: "auto", color: "#6E09EA", borderColor: "#6E09EA" }}
         onClick={closeEdit}
         id="DialogContent-closeEdit"
       >
@@ -216,7 +216,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
       <Button
         variant="contained"
         disabled={isUsernameEmpty}
-        color="primary"
+        style={{ width: "auto", color: "white", backgroundColor: "#6E09EA" }}
         onClick={() => {
           updateProfile();
           closeEdit();
@@ -232,7 +232,7 @@ const DialogContent: React.FunctionComponent<Props> = ({
     <Box display="flex" alignSelf="flex-end" mt={-5} mr={2.5}>
       <Button
         variant="outlined"
-        color="primary"
+        className={classes.activeStatusButton}
         onClick={() => handleActiveStatus(!activeStatus)}
         id="DialogContent-activeStatusButton"
       >

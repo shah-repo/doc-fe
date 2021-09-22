@@ -49,8 +49,8 @@ const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
           isDisabled={isDocTypeInputDisabled}
         />
         <Button
-          variant="outlined"
-          color="primary"
+          variant="text"
+          color="secondary"
           onClick={inspectionDialog.close}
           id="DocTypeListDialog-cancelButton"
           data-cy="inspection-tye-cancel"

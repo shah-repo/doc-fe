@@ -31,7 +31,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId }) => {
 
   return (
     <>
-      <Button data-cy="exportToEmail" variant="outlined" color="primary" onClick={handleClick}>
+      <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={handleClick}>
         <Text translation="common.send.to.email" />
       </Button>
     </>

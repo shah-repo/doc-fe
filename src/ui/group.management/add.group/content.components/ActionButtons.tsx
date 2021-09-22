@@ -19,7 +19,7 @@ const ActionButtons: React.FunctionComponent<Props> = ({
 }) => {
 
   const resetButtonRenderer = () => (
-    <Button variant="outlined" color="primary" onClick={handleReset} id="Group-reset">
+    <Button variant="outlined" onClick={handleReset} id="Group-reset">
       <Text translation="common.reset" />
     </Button>
   );
@@ -29,7 +29,6 @@ const ActionButtons: React.FunctionComponent<Props> = ({
       id="Group-createGroup"
       data-cy="Group-createGroup"
       variant="contained"
-      color="primary"
       onClick={handleSubmit}
       disabled={isEmpty(group.name)}
     >

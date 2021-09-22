@@ -325,7 +325,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
         <Button
-          color="primary"
+          color="secondary"
           variant="outlined"
           onClick={isRecord ? alertDialog.open :  openDialog}
           id="ApproveAndRelease-button"

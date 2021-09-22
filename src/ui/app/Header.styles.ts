@@ -27,7 +27,7 @@ export default (theme: Theme) =>
       "padding": 0,
       "margin": 0,
       "&:hover": {
-        background: "none !important",
+        background: "none",
         boxShadow: "none",
       },
     },

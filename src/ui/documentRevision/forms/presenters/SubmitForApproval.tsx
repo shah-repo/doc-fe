@@ -81,7 +81,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   return (
     <>
       <Button
-        color="primary"
+        color="secondary"
         variant="outlined"
         onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
         id="ApproveAndRelease-button"
@@ -119,7 +119,6 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
             <Box display="flex" mx={3}>
               <Button
                 variant="outlined"
-                color="primary"
                 onClick={() => voidRecordDialog.close()}
               >
                 <Text translation="common.false" />
