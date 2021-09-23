@@ -11,9 +11,9 @@ phases:
       - ls
       - cd $CODEBUILD_SRC_DIR_env_build_artifacts
       - export commits_file_location=$(find . -name commit_hashes.json)
-      - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location)
-      - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location)
-      - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location)
+      - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location | tr -d '"')
+      - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location | tr -d '"')
+      - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location | tr -d '"')
       - echo FE=$FE_GIT_COMMIT_HASH
       - echo BE=$BE_GIT_COMMIT_HASH
       - echo Validators=$VALIDATORS_GIT_COMMIT_HASH
