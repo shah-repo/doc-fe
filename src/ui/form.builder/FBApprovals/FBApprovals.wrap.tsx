@@ -5,6 +5,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { Approval } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
@@ -74,9 +75,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
     const outputId = isOutput ? id : null;
+    const docApprovals = document?.approvals || changeRequest?.approvals;
     const approvalsState = FB.useRef(
       FBApprovalsState,
-      { id: outputId, approvals: document?.approvals || changeRequest?.approvals, isOwner },
+      { id: outputId, approvals: docApprovals, isOwner },
     );
     dialogState = FB.useRef(FBDialogState);
 
@@ -100,7 +102,11 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // On add approver
     React.useEffect(() => reaction(
       () => approvalsState?.approvalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        if (!data) { return; }
+        document?.approvals?.push(data as Approval);
+        concatApprovals(data);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 

@@ -35,7 +35,7 @@ const FBDatePicker: React.FunctionComponent<FBDatePickerProps> = ({
             autoOk={true}
             disablePast={disablePastDates}
             label=""
-            value={datePickerState?.date ?? ""}
+            value={datePickerState?.date || ""}
             initialFocusedDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
             onChange={(date, value) => onChange?.(date, value)}
             TextFieldComponent={(props) => <TextField {...props} disabled={true} />}
