@@ -9,7 +9,7 @@ phases:
   install:
     commands:
       - ls
-      - find.
+      - find .
       - cd $CODEBUILD_SRC_DIR_env_build_artifacts/codebuild/output
       - ls
       - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $CODEBUILD_SRC_DIR_env_build_artifacts/codebuild/output/commit_hashes.json)
