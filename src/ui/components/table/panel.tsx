@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
-import { debounce, set, sortBy as lodashSortBy } from "lodash";
+import { debounce, get, set, sortBy as lodashSortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
@@ -61,20 +61,18 @@ export function TablePanel<T extends any>({
     sortBy = "",
     sortDirection = "DESC",
   ) => {
-    let sortedData: any[] = data;
-
-    if (sortBy === "precalc.po_amount") {
-      sortedData = lodashSortBy(
-        data,
-        [(document: DocumentRevision) => parseFloat(document.precalc.po_amount?.replace(/[^\d\.]/, "") || "")]
-      );
-    } else {
-      sortedData = lodashSortBy(
-        data,
-        sortBy === "docId" ? `document.${sortBy}` : sortBy,
-      );
-    }
-
+    let sortedData = lodashSortBy(
+      data,
+      [(document: DocumentRevision) => {
+        const value = get(document,  sortBy === "docId" ? `document.${sortBy}` : sortBy);
+        if (value === "N/A") { return sortDirection === "DESC" ? "" : null; }
+        if (sortBy === "precalc.po_amount") {
+          return parseFloat(document.precalc.po_amount?.replace(/[^\d\.]/, "") || "");
+        }
+        if (sortBy === "docId") { return get(document, "document.docId"); }
+        return get(document, sortBy).toLowerCase();
+      }],
+    );
 
     sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
     setTableSortBy(sortBy);
