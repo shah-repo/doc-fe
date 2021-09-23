@@ -8,6 +8,9 @@ env:
 phases:
   install:
     commands:
+      - ls
+      - cd $CODEBUILD_SRC_DIR_env_build_artifacts
+      - ls
       - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $CODEBUILD_SRC_DIR_env_build_artifacts/commit_hashes.json)
       - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $CODEBUILD_SRC_DIR_env_build_artifacts/commit_hashes.json)
       - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $CODEBUILD_SRC_DIR_env_build_artifacts/commit_hashes.json)
@@ -16,6 +19,7 @@ phases:
       - echo Validators=$VALIDATORS_GIT_COMMIT_HASH
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - ls
+      - cd $CODEBUILD_SRC_DIR
       - source ./codebuild/2.run-tests/export_variables.sh
   pre_build:
     commands:

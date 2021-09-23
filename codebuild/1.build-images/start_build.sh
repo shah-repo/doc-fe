@@ -4,7 +4,7 @@ set -a
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
 
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
-  export FE_GIT_COMMIT_HASH=$(cd $FE_REPO;git rev-parse HEAD | cut -c1-8)
+  export FE_GIT_COMMIT_HASH=$($CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8)
   export VALIDATORS_GIT_COMMIT_HASH=$(cd $VALIDATORS_REPO;git rev-parse HEAD | cut -c1-8)
 set +a
 
