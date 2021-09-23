@@ -1,5 +1,4 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { reaction } from "mobx";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { FB } from "..";
@@ -48,12 +47,6 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => reaction(
-      () => datePickerState?.date,
-      (date) => save(moment(date).tz(TIME_ZONE).toISOString())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     onDatePickerClick = () => {
       if (formState?.isBackdropOpen) { return; }
       if (!name) { return; }
@@ -76,6 +69,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
 
     onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
       datePickerState?.setValue(value);
+      save(_date?.toISOString());
     };
 
     return Component({
