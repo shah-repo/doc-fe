@@ -64,13 +64,12 @@ export function TablePanel<T extends any>({
     let sortedData = lodashSortBy(
       data,
       [(document: DocumentRevision) => {
-        const value = get(document,  sortBy === "docId" ? `document.${sortBy}` : sortBy);
+        const value = get(document,  sortBy === "docId" ? `document.${sortBy}` : sortBy) || "";
         if (value === "N/A") { return sortDirection === "DESC" ? "" : null; }
         if (sortBy === "precalc.po_amount") {
           return parseFloat(document.precalc.po_amount?.replace(/[^\d\.]/, "") || "");
         }
-        if (sortBy === "docId") { return get(document, "document.docId"); }
-        return get(document, sortBy).toLowerCase();
+        return value.toLowerCase();
       }],
     );
 
