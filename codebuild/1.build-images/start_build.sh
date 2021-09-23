@@ -1,9 +1,9 @@
 #!/bin/bash
 
 set -a
-  export BE_REPO="$HEAD_PWD/doc-be"
-  export FE_REPO="$HEAD_PWD/doc-fe"
-  export VALIDATORS_REPO="$HEAD_PWD/remote-js-validators"
+  export FE_REPO="$CODEBUILD_SRC_DIR"
+  export BE_REPO="$CODEBUILD_SRC_DIR_backend"
+  export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators"
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
 
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
@@ -70,7 +70,7 @@ build_be () {
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
 
-  if [ $IMAGE_FOUND = 0 ]
+  if [ $IMAGE_FOUND = 1 ]
   then
     echo "BE image found"
   else
