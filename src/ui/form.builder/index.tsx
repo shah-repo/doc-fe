@@ -64,6 +64,7 @@ export { default as FBControlPickerState } from "./FBControlPicker/FBControlPick
 export * from "./FBControlPicker/FBControlPicker.types";
 export { default as FBData } from "./FBData/FBData";
 export { default as FBDatePicker } from "./FBDatePicker/FBDatePicker";
+export { default as FBDatePickerState } from "./FBDatePicker/FBDatePicker.state";
 export { default as FBDialog } from "./FBDialog/FBDialog";
 export { default as FBDialogState } from "./FBDialog/FBDialog.state";
 export * from "./FBDialog/FBDialog.types";
@@ -101,6 +102,7 @@ export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 // export {
 //   default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
+export * from "./FBEditorLHRStep/FBEditorLHRStep.types";
 // export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 // export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";

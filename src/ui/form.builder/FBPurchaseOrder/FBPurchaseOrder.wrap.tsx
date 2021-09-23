@@ -1,5 +1,9 @@
+import { isEmpty, map } from "lodash";
 import React from "react";
-import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState } from "..";
+import { useDispatch } from "react-redux";
+import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
+import { Id } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
@@ -12,10 +16,12 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     defaultValue,
     dialogState,
     disabled,
+    receivableName,
     name,
     ...props
   }: T) => {
 
+    const dispatch = useDispatch();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -43,16 +49,54 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       });
     });
 
+    async function handleReceiveAll() {
+      if (!workspaceState?.documentId) {
+        return;
+      }
+      if (!receivableName) { return; }
+      const { items } = formState?.getFieldValue(name) as FBPurchaseOrderValue;
+      const receivedItems = map(items, (item) => ({
+        itemId: item.partNumber || item.id,
+        received: item.order || 0,
+      }));
+
+      const hasNoReference = isEmpty(workspaceState.document?.referenceTo.find(
+        (e) => e.id === poReceiveState?.data?.document.id));
+
+      const receivedItemsInput = {
+        ...workspaceState.document?.formInput,
+        [receivableName]: {
+          ...workspaceState.document?.formInput?.[receivableName],
+          receivedItems,
+        },
+      };
+
+      poReceiveState?.addReceiveQuantity(workspaceState.id, {
+        formInput: receivedItemsInput,
+        referenceTo: hasNoReference ?
+          [{
+            ...workspaceState.document?.referenceTo,
+            id: poReceiveState?.data?.document.id,
+          }] as Id[] : undefined,
+      });
+      await poReceiveState?.setPOId(poReceiveState?.data?.id);
+      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+    }
+
     return Component({
       ...(props as T),
       handleItem,
       handleLot,
+      handleReceiveAll,
       purchaseOrderState,
       dialogState,
       disabled,
       name,
+      isReceivable,
     });
   };
 
   return (props: T) => Comp(props);
 };
+
+

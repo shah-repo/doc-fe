@@ -283,7 +283,7 @@ context("Autocomplete test", () => {
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Supplier");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specifications Lot");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           done();
         });
       });
@@ -819,32 +819,57 @@ context("Autocomplete test", () => {
                 name: "lot_quantity",
                 type: "quantity",
                 index: 0,
-                label: "Quantity Received",
+                label: "Initial Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
-                editorProperties: [
-
-                ],
-                validationAttribute: "Quantity Received",
+                deleteDisabled: true,
+                editorProperties: [],
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
               },
               {
-                name: "expiry-date",
-                type: "datepicker",
+                name: "lot_usable_quantity",
+                type: "quantity",
                 index: 1,
-                label: "Expiry Date",
+                label: "Usable Quantity",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                deleteDisabled: true,
                 editorProperties: [],
-                validationAttribute: "Expiry Date",
+                validationAttribute: "Usable Quantity",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+              },
+              {
+                name: "lot_expiry_date",
+                type: "datepicker",
+                index: 2,
+                label: "Expiration Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Expiration Date",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lot_part",
+                type: "autocomplete",
+                index: 3,
+                label: "Part Selection",
+                optionId: "21",
+                placeholder: "Select the appropriate part for this lot",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
               },
               {
                 name: "100-inspection-override",
                 type: "checkboxgroup",
-                index: 2,
+                index: 4,
                 label: "100% Inspection Override",
                 options: [
                   {
@@ -855,15 +880,18 @@ context("Autocomplete test", () => {
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                deleteDisabled: true,
+                validationMode: "default",
                 editorProperties: [],
                 validationAttribute: "100% Inspection Override",
+                deleteInFormDisabled: true,
                 applicableValidationSchema: true,
               },
               {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
-                name: "fb-approvals-ki5yh7ba",
+                name: "fb-approvals-ksherq6d",
                 uniqueSchemaItem: true,
                 index: 5,
               },
@@ -905,19 +933,19 @@ context("Autocomplete test", () => {
   });
 
   context("Create 'Lots' document", () => {
-    it("Navigate to Records", () => {
-      cy.navigToRecords();
+    it("Navigate to Lots", () => {
+      cy.navigToLots();
     });
 
     it("Click on Create new", () => {
       cy.poClickCreatePO();
     });
 
-    it("Select 'Component Specifications Lot' from the dropdown", () => {
+    it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
       cy.wait(500);
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
-        cy.get("div[id^=react-select]").contains("Component Specifications Lot").click();
+        cy.get("div[id^=react-select]").contains("Component Specification Lot").click();
       });
     });
 
@@ -931,6 +959,15 @@ context("Autocomplete test", () => {
 
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").type("12");
+    });
+
+    it("Enter Usable Quantity", () => {
+      cy.get("[name=\"lot_usable_quantity\"]").type("12");
+    });
+
+    it("Select 'Part document' for Part lot", () => {
+      cy.get("[data-cy=\"lot_part\"]").type("Part document");
+      cy.get("ul[role=listbox]>li").contains("Part document").click();
     });
 
     it("Check 100% override", () => {
@@ -1000,15 +1037,6 @@ context("Autocomplete test", () => {
 
     it("Select 'Document Approval Matrix' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
-    });
-
-    it("Add Approval Matrix", () => {
-      cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Approval Matrix" });
-    });
-
-    it("Click 'Add' button", () => {
-      cy.fbAddNewFieldButton();
     });
 
     it("Click create document", () => {
@@ -1236,7 +1264,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 30 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 27 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {

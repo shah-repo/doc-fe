@@ -711,9 +711,9 @@ context("Create receivable test", () => {
           cy.recClickCreateDocumentWithApiCall();
         });
 
-        it("Verify receivable status is 'Draft'", () => {
+        it("Verify receivable status is 'WIP'", () => {
           SystemRequirement("REQ-1870");
-          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.drCheckDocumentStatus({ status: "WIP" });
         });
 
         it("Verify owner change", () => {

@@ -39,6 +39,7 @@ export interface TrainingRecordQuery {
   createdAtAfter: Date;
   dueOn: Date;
   completedAtAfter: Date;
+  tcId: string;
 }
 
 interface TrainingPlan {
@@ -48,6 +49,7 @@ interface TrainingPlan {
   trainingRecords: TrainingRecord[];
   document: DocumentRevisionDocument;
   employee: Employee;
+  curriculumDocIds: string[];
 }
 
 export interface TrainingTransitionRequestBody {

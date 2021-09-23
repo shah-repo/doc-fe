@@ -558,14 +558,14 @@ pipelines:
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
 
-    sandbox:
+    demo:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER
-          - step: *BUILD_SANDBOX
-      - step: *DEPLOY_SANDBOX
+          - step: *BUILD_DEMO
+      - step: *DEPLOY_DEMO
 
-    release/21.6.1:
+    sandbox:
       - parallel:
           - step: *RUN_TESTS
           - step: *RUN_LINTER

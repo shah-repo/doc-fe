@@ -9,7 +9,25 @@ import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FinalizeAndReleaseRequest, SecurityList, UpdateFormRequestBody } from "./types";
+import {
+  ApproveAndReleaseRequest,
+  CreateAndReleaseRequest,
+  Document,
+  DocumentRevision,
+  DocumentRevisionAuditSetAction,
+  DocumentRevisionEditRequestBody,
+  DocumentRevisionSetAction,
+  DocumentRevisionsListAction,
+  DocumentRevisionStatus,
+  DocumentRevisionTransition,
+  DocumentRevisionTransitionRequestBody,
+  DocumentRevisionTransitionResponse,
+  DocumentSetAction,
+  FBDocumentRevisionProps,
+  FinalizeAndReleaseRequest,
+  SecurityList,
+  UpdateFormRequestBody,
+} from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -95,6 +113,15 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   sendNoResponseHeader: true,
 });
 
+const update = (id: string, body: FBDocumentRevisionProps): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
+  method: "patch",
+  data: body,
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 const ownerChange = (id: string, body: DocumentRevisionEditRequestBody, handlers: Handlers<DocumentRevision>):
 ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}/owner_change`,
@@ -154,11 +181,13 @@ const applyTransition = (
 const approveAndReleaseNonQms = (
   id: string,
   body: any,
+  password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
   method: "post",
   data: body,
+  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
     dispatch(loadDocument(docRev.document.id));
@@ -186,11 +215,13 @@ const loadAudit = (id: string): ApiAction<Audit[]> => apiAction({
 const approveAndRelease = (
   id: string,
   body: ApproveAndReleaseRequest,
+  password,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
   url: `${DOCUMENT_REVISION_ROOT_URL}/release/${id}`,
   method: "post",
   data: body,
+  password,
   onSuccess: (docRev: DocumentRevision, dispatch) => {
     dispatch(load(id));
     dispatch(loadDocument(docRev.document.id));
@@ -404,6 +435,7 @@ export default {
   load,
   loadWithCallback,
   save,
+  update,
   create,
   loadDocument,
   documentSet,

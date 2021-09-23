@@ -627,12 +627,13 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckAmount({ number: "$1.95" });
+      cy.poCheckTax({ number: "1.95" });
     });
 
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
-      cy.poCheckAmount({ number: "$51.95" });
+      cy.unClick();
+      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.95");
     });
 
     context("Add Supplier to PO", () => {
@@ -907,7 +908,8 @@ context("PO test", () => {
 
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
-      cy.poCheckAmount({ number: "€30.00" });
+      cy.unClick();
+      cy.get("[data-cy=\"poTotal\"]").should("have.text", "€30.00");
     });
 
     it("Check if total converted to dollars is shown", () => {
