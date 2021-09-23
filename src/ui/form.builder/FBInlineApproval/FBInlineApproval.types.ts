@@ -60,7 +60,7 @@ export type FBInlineApprovalBody =
   approverGroup?: string[];
   canRequest?: boolean;
   signatureGroupName?: string;
-}
+};
 
 export interface FBInlineApprovalTransitionBody {
   password?: string;
