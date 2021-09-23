@@ -18,7 +18,6 @@ set -a
 set +a
 
 docker build \
-  --no-cache \
   -f ./docker/cypress_web.Dockerfile \
   -t enlil_cypress_web:${FE_GIT_COMMIT_HASH} \
   --build-arg FE_GIT_COMMIT_HASH \
