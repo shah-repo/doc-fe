@@ -9,13 +9,13 @@ phases:
   pre_build:
     commands:
       - export FE_REPO="$CODEBUILD_SRC_DIR"
-      - export BE_REPO="$CODEBUILD_SRC_DIR_backend"
-      - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators"
+      - export BE_REPO="$CODEBUILD_SRC_DIR_backend_code"
+      - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - ls
       - echo $CODEBUILD_SOURCE_VERSION
-      - echo $CODEBUILD_SOURCE_REPO_URL
-      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION_backend_code
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION_validators_code
   build:
     commands:
       - source $FE_REPO/codebuild/1.build-images/start_build.sh
