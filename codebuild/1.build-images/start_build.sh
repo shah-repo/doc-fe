@@ -1,9 +1,6 @@
 #!/bin/bash
 
 set -a
-  export FE_REPO="$CODEBUILD_SRC_DIR"
-  export BE_REPO="$CODEBUILD_SRC_DIR_backend"
-  export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators"
   export ENLIL_COMPOSE_SUITE_NUMBER="13"
 
   export BE_GIT_COMMIT_HASH=$(cd $BE_REPO;git rev-parse HEAD | cut -c1-8)
@@ -70,14 +67,13 @@ build_be () {
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
 
-  if [ $IMAGE_FOUND = 1 ]
+  if [ $IMAGE_FOUND = 0 ]
   then
     echo "BE image found"
   else
     echo "BE image not found, building..."
     $FE_REPO/codebuild/1.build-images/build_and_push_be_images.sh
   fi
-  cd $HEAD_PWD
 }
 
 build_fe () {
@@ -94,7 +90,6 @@ build_fe () {
     echo "FE image not found, building..."
     $FE_REPO/codebuild/1.build-images/build_and_push_fe_image.sh
   fi
-  cd $HEAD_PWD
 }
 
 build_validators () {
@@ -112,7 +107,6 @@ build_validators () {
     docker tag enlil_cypress_validators:$VALIDATORS_GIT_COMMIT_HASH $DOCKER_IMAGE
     docker push $DOCKER_IMAGE
   fi
-  cd $HEAD_PWD
 }
 
 build_be &

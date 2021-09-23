@@ -8,20 +8,21 @@ env:
 phases:
   pre_build:
     commands:
+      - export FE_REPO="$CODEBUILD_SRC_DIR"
+      - export BE_REPO="$CODEBUILD_SRC_DIR_backend"
+      - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - cd ..
       - ls
-      - export HEAD_PWD=$(pwd)
-      - echo $HEAD_PWD
   build:
     commands:
-      - source ./doc-fe/codebuild/1.build-images/start_build.sh
+      - source $FE_REPO/codebuild/1.build-images/start_build.sh
   post_build:
     commands:
       - ls
-      - ./doc-fe/codebuild/1.build-images/export_commit_hashes.sh
+      - $FE_REPO/codebuild/1.build-images/export_commit_hashes.sh
       - echo "Done"
 
 artifacts:
   files:
-    - doc-fe/commit_hashes.json
+    - $FE_REPO/commit_hashes.json
