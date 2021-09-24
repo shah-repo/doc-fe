@@ -8,37 +8,23 @@ env:
 phases:
   install:
     commands:
-      - ls
       - cd $CODEBUILD_SRC_DIR_env_build_artifacts
       - export commits_file_location=$(find . -name commit_hashes.json)
       - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location | tr -d '"')
       - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location | tr -d '"')
       - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location | tr -d '"')
-      - echo FE=$FE_GIT_COMMIT_HASH
-      - echo BE=$BE_GIT_COMMIT_HASH
-      - echo Validators=$VALIDATORS_GIT_COMMIT_HASH
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - ls
       - cd $CODEBUILD_SRC_DIR
       - source ./codebuild/2.run-tests/export_variables.sh
   pre_build:
     commands:
       - cd $DOCKER_COMPOSE_FILE_LOCATION
-      - echo $DOCKER_COMPOSE_FILE_LOCATION
-      - echo $ENLIL_CYPRESS_SERVER_SCALE
-      - echo $ENLIL_CYPRESS_WORKER_SCALE
       - docker-compose up -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
   build:
     commands:
       - docker ps
-      - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ls
       - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/2.run-tests/start_tests.sh
-      - cd $FE_REPO
-  post_build:
-    commands:
-      # - docker logs enlil_codebuild_enlil_cypress_server_1 &> ./test-results/some_ci_build_id/server_logs.txt
-      # - docker logs enlil_codebuild_enlil_cypress_worker_1 &> ./test-results/some_ci_build_id/worker_logs.txt
-      - ls
+
 reports:
   report-name-or-arn:
     files:
