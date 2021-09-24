@@ -206,6 +206,7 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onError(error);
       } else {
         this.setDirty(false);
+        this.setFormInputData(data);
         if (this.getItemsByType("inlineapproval")) {
           FBStore.audit.set({
             url: FBEndpoint.DocumentRevisionAudit,
@@ -215,6 +216,14 @@ class FBWorkspaceState extends FBSchemaState {
         }
         this.documentRevApi.onSuccess();
       }
+    });
+  };
+
+  private setFormInputData = (data?: DocumentRevision) => {
+    const { formInput = {} } = data ?? {};
+    this.formInput = formInput;
+    map(formInput, (value, key) => {
+      set(this.formInputSync, key, value);
     });
   };
 
@@ -231,11 +240,7 @@ class FBWorkspaceState extends FBSchemaState {
         this.loadDocumentRevApi.onError(error);
       } else {
         this.loadDocumentRevApi.onSuccess();
-        const { formInput = {} } = data ?? {};
-        this.formInput = formInput;
-        map(formInput, (value, key) => {
-          set(this.formInputSync, key, value);
-        });
+        this.setFormInputData(data);
       }
     });
   };

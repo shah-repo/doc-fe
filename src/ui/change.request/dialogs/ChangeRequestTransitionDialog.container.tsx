@@ -2,7 +2,6 @@ import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../state/ducks/changeRequest/types";
-import { toastError } from "../../components/notifications";
 import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -38,7 +37,6 @@ const TransitionDialogContainer: React.FunctionComponent<Props> = ({
       }
     },
     onError: (error) => {
-      toastError(error as string);
       transitionDialog.close();
     },
   });
