@@ -12,6 +12,7 @@ phases:
       - export BE_REPO="$CODEBUILD_SRC_DIR_backend_code"
       - export VALIDATORS_REPO="$CODEBUILD_SRC_DIR_validators_code"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo $ENLIL_BE_AWS_SQS_QUEUE_URL
   build:
     commands:
       - source $FE_REPO/codebuild/1.build-images/start_build.sh
