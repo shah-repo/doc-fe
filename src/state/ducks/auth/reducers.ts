@@ -1,4 +1,6 @@
+import moment from "moment";
 import { combineReducers } from "redux";
+import { MomentFormats } from "../../../common/utils/date";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { Employee } from "../company/types";
@@ -27,7 +29,7 @@ const DEFAULT_CREDENTIALS = {
   region: "",
 };
 
-export const USER_DEFAULT_STATE: UserState = {
+const USER_DEFAULT_STATE: UserState = {
   email: "",
   name: "",
   id: "",
@@ -39,6 +41,8 @@ export const USER_DEFAULT_STATE: UserState = {
   employee: DEFAULT_EMPLOYEE,
   iotCredentials: DEFAULT_CREDENTIALS,
   customLabels: false,
+  daysUntilPasswordExpires: 90,
+  passwordSoonToExpire: false,
 };
 
 type AuthUserActions =
@@ -52,18 +56,23 @@ type AuthUserActions =
   | SetCredentialsAction
   | ToggleCustomLabelsAction;
 
-export const user = (
+const user = (
   state: UserState = USER_DEFAULT_STATE,
   action: AuthUserActions,
 ): UserState => {
   switch (action.type) {
     case AUTH_USER: {
-      const activeUser = action.payload.employees.find((employee) => employee.active) || { id: "" } as Employee;
+
+      const { passwordExpiresAt, employees } = action.payload;
+      const activeUser = employees.find((employee) => employee.active) || { id: "" } as Employee;
+      const currentDate = moment.utc().format(MomentFormats.MonthDateYear);
+
       return {
         ...state,
         ...action.payload,
         employeeId: activeUser.id,
         employee: activeUser,
+        daysUntilPasswordExpires: moment(passwordExpiresAt).diff(moment(currentDate), "days"),
       };
     }
     case SET_EMPLOYEE:
@@ -117,12 +126,12 @@ export const user = (
   }
 };
 
-export const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
+const USER_GROUPS_DEFAULT_STATE: UserGroupsState = {
   tags: [],
   permissions: [],
 };
 
-export const groups = (
+const groups = (
   state: UserGroupsState = USER_GROUPS_DEFAULT_STATE,
   action: UserGroupsAction | LogoutUserAction,
 ): UserGroupsState => {

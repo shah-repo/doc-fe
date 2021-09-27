@@ -79,6 +79,7 @@ export const withFBInput = <T extends FBInputProps>(
     deleted,
     isInputOwner,
     lockOwnerName,
+    includeNotes,
     ...props
   }: T) => {
 
@@ -96,6 +97,8 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
+    includeNotes = workspaceState?.isLHRProductionBuild ?  !workspaceState?.isLHRProductionBuild
+      : editorProperties?.includes("includeNotes") || includeNotes;
 
     const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
       // This sets shared default values for all of the fields
@@ -351,6 +354,7 @@ export const withFBInput = <T extends FBInputProps>(
       deleted,
       isOutput,
       lockOwnerName,
+      includeNotes,
     });
   };
 

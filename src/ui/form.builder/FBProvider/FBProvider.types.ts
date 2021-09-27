@@ -5,8 +5,10 @@ import {
   FBApprovalsState,
   FBApproversState,
   FBBookmarkState,
+  FBDatePickerState,
   FBDialogState,
   FBDocumentRevisionsState,
+  FBDownloadSheetTplState,
   FBEBPartState,
   FBEditorCustomControlState,
   FBEditorState,
@@ -38,6 +40,7 @@ import {
   FBTextFieldWithRangeState,
   FBWorkspaceState,
 } from "..";
+import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
 import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
 
@@ -82,4 +85,7 @@ export interface FBProviderProps {
   lhrStepState?: FBLHRStepState;
   mpiProcedureSelectState?: FBMPIProcedureSelectState;
   poApprovalsState?: FBPOApprovalsState;
+  datePickerState?: FBDatePickerState;
+  lhrBuildState?: FBLHRBuildState;
+  downloadSheetTplState?: FBDownloadSheetTplState;
 }
