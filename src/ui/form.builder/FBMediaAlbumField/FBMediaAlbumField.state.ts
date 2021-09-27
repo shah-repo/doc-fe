@@ -10,15 +10,13 @@ import FBRequest from "../FBApi/FBApi.request";
 class FBMediaAlbumFieldState {
   @observable public mode: FBMediaAlbumFieldMode = "qr";
   @observable public filesUploaded: File[] = [];
+  public fieldName: string | undefined;
+
   @observable public attachmentApi = new FBRequest<Attachment, FBFile>();
   @observable public attachmentsApi: FBRequest<FBAttachment[], null> = new FBRequest();
   @observable public collection: FBAttachment[] = [];
   @observable public attachmentDownloadApi = new FBRequest<AttachmentDownloadResponse, FBAttachment>();
-  @observable public allAttachmentsApi: FBRequest<FBAttachment[], null> = new FBRequest();
   @observable public files: Id[] = [];
-
-  public fieldName: string | undefined;
-  public existingFileNames: string[] = [];
   public fromUpload = false;
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
 
@@ -51,24 +49,6 @@ class FBMediaAlbumFieldState {
     }
     if (error) {
       this.filesApi.onError(error);
-    }
-  });
-
-  public getAllAttachments = (id: string) => this.allAttachmentsApi.set({
-    url: FBEndpoint.AllDocRevAttachments,
-    urlValues: { id },
-    method: "get",
-  }, (data, error) => {
-    if (data) {
-      map(data, (d) => {
-        if (!this.existingFileNames.includes(d.name)) {
-          this.existingFileNames.push(d.name);
-        }
-      });
-      this.allAttachmentsApi.onSuccess();
-    }
-    if (error) {
-      this.allAttachmentsApi.onError(error);
     }
   });
 

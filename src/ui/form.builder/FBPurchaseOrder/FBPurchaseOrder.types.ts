@@ -46,7 +46,6 @@ export interface FBPurchaseOrderItem {
 export interface FBPurchaseOrderCalculation {
   subTotal: string;
   tax: string;
-  taxRate: number;
   totalAmount: string;
   shippingCost: string;
   currency: FBCurrency;

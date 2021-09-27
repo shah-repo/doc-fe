@@ -1,24 +1,28 @@
 import { omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+// import { useDispatch } from "react-redux";
 import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+// import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
+
+/* eslint-disable no-console */
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     handleShippingCostChange,
+    handleShippingCostBlur,
     handleTaxChange,
-    handleTaxRateChange,
+    handleTaxBlur,
     handleCurrencyChange,
     handleDelete,
-    reCalculateValueOnBlur,
     classes,
     calculation,
     loading,
@@ -29,23 +33,46 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   }: T) => {
 
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
+    const [taxField, setTaxField] = useState("");
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
     const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
-    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev));
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev));
-    handleShippingCostChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setShippingCost(getDecimalValue(ev));
-
-    const getDecimalValue = (ev: React.ChangeEvent<any>) => {
+    handleShippingCostChange = (ev: React.ChangeEvent<any>) => {
       const { target: { value = 0 } = {} } = ev || {};
-      return Math.abs(value).toFixed(2).toString();
+      const abs = Math.abs(value).toFixed(2).toString();
+      purchaseOrderState?.setShippingCost(abs);
+      ev.target.value = value;
     };
 
-    reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
+    handleShippingCostBlur = () => {
+      if (!purchaseOrderState) { return; }
+      purchaseOrderState.value = purchaseOrderState?.calculateCost();
+    };
 
-    handleCurrencyChange = (ev, currency) => purchaseOrderState?.setCurrency(currency.props.value);
+    handleTaxChange = (ev: React.ChangeEvent<any>) => {
+      const { target: { value = "" } = {} } = ev || {};
+      const taxInputPattern = /([0-9\.]+)/g;
+      let fieldValue: string = value?.match(taxInputPattern)?.join("")
+        .replace((/(.*)\./), (item) => item.replace(/\./g, "") + ".") || "0";
+      fieldValue = value.endsWith("%") ? `${fieldValue}%` : `${fieldValue}`;
+      setTaxField(fieldValue);
+      if (!purchaseOrderState) { return; }
+      const { totalAmount, tax } = purchaseOrderState.calculateCost(fieldValue);
+      // We will save it on blur
+      purchaseOrderState.value.totalAmount = totalAmount;
+      purchaseOrderState.value.tax = tax;
+    };
+
+    handleTaxBlur = () => {
+      const tax = String(Number(purchaseOrderState?.value.tax || 0).toFixed(2));
+      setTaxField(tax);
+      purchaseOrderState?.setTax(tax);
+    };
+
+    handleCurrencyChange = (ev, currency) =>
+      purchaseOrderState?.setCurrency(currency.props.value);
 
     handleDelete = (index: number) => (e: any) => {
       e.stopPropagation();
@@ -79,6 +106,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     if (isReceivable) {
       const receivedName = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
@@ -95,13 +123,14 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     return Component({
       ...(props as T),
       handleShippingCostChange,
+      handleShippingCostBlur,
       handleTaxChange,
-      handleTaxRateChange,
+      handleTaxBlur,
       handleCurrencyChange,
       handleDelete,
-      reCalculateValueOnBlur,
       classes,
       calculation,
+      taxField,
       loading,
       disabled,
       items,

@@ -47,10 +47,6 @@ export const withFBEditorProperties = <T extends FBEditorPropertiesProps>(
       });
     }) as FBOption[];
 
-    if (workspaceState?.isLHRProductionBuild) {
-      options = filter(options, (option) => option.value === "includeNotes") as FBOption[];
-    }
-
     onChange = (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const [valueName, checked] = at(ev.target, ["value", "checked"]);
       // *NOTE: Mobile support until mobile switches to editor props

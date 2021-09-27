@@ -26,7 +26,7 @@ class FBInlineApprovalState {
   public approversApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.availableApprovers });
   public groupsApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.groups });
   public rolesApi = new FBAutocompleteAsyncState({ optionId: FBAutocompleteAsyncOption.approvalRoles });
-  public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
+  public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
   public requestApprovalApi =
@@ -68,7 +68,7 @@ class FBInlineApprovalState {
     this.setOptions(options);
   };
 
-  public approvalBody = (body: Partial<FBInlineApprovalBody>) => {
+  public approvalBody = (body: FBInlineApprovalBody) => {
     this.approvalApi.setBody(body);
     this.approvalApi.post();
   };

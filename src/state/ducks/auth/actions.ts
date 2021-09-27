@@ -1,14 +1,13 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { IotService } from "../../../common/utils/iot/mqttClient";
-import { ResetPasswordValues } from "../../../ui/users/types";
 import { apiAction, apiActionWithCallbacks } from "../../factories";
 import { ApplicationState } from "../../reducers";
 import { ApiAction, Handlers } from "../../types";
 import { companyActions } from "../company";
 import { Employee } from "../company/types";
 import { userManagementActions } from "../userManagement";
-import { AUTH_AWS_IOT_URL, AUTH_USER, CHANGE_PASSWORD_URL, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SEND_PASSWORD_RESET_EMAIL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
+import { AUTH_AWS_IOT_URL, AUTH_USER, CLEAR_NON_AUTH_DATA, CONFIRM_FORGOT_PASSWORD_URL, CONFIRM_SET_NEW_PASSWORD_URL, FORGOT_PASSWORD_URL, GROUPS_URL, LOGIN_URL, LOGIN_WITH_CODE_URL, LOGOUT_URL, LOGOUT_USER, PING_SERVER_GET_ASYNC, PING_SERVER_URL, RESEND_SIGNUP_EMAIL_URL, SESSION_DETAILS_URL, SET_CREDENTIALS, SET_EMPLOYEE, SIGNUP_URL, TOGGLE_CUSTOM_LABELS, USERS_ME_URL, USERS_URL, USER_GROUPS, USER_GROUPS_GET_ASYNC } from "./constants";
 import { AuthResponse, AuthUserAction, ClearNonAuthDataAction, ConfirmPasswordAction, EditUserMeAction, EmployeeEditRequestBody, ForgotPassword, ForgotPasswordAction, ForgotPasswordConfirmation, Group, LoginRequestBody, LoginWithCodeRequestBody, LogoutRequestBody, LogoutUserAction, NewPasswordConfirmation, NewUserSetPasswordAction, SelectEmployeeAction, SetCredentialsAction, SignupAction, ToggleCustomLabelsAction, User, UserGroupsAction } from "./types";
 
 const authSignup = (): SignupAction => ({
@@ -177,17 +176,6 @@ const newUserSetPassword = (
     handlers,
   });
 
-const resetPassword = (
-  values: ResetPasswordValues,
-  handlers: Handlers,
-): ApiAction<AuthResponse, ResetPasswordValues> =>
-  apiActionWithCallbacks({
-    url: CHANGE_PASSWORD_URL,
-    method: "post",
-    data: values,
-    handlers,
-  });
-
 const loginWithCode = (
   loginValues: LoginWithCodeRequestBody,
   handlers: Handlers,
@@ -214,17 +202,6 @@ const resendSignupEmail = (
     url: RESEND_SIGNUP_EMAIL_URL,
     method: "post",
     data: { email },
-    handlers,
-  });
-
-const sendPasswordResetEmail = (
-  employeeId: string,
-  handlers: Handlers,
-): ApiAction<Partial<AuthResponse>> =>
-  apiActionWithCallbacks({
-    url: SEND_PASSWORD_RESET_EMAIL,
-    method: "post",
-    data: { employeeId },
     handlers,
   });
 
@@ -327,6 +304,4 @@ export default {
   clearNonAuthData,
   resendSignupEmail,
   toggleCustomLabels,
-  resetPassword,
-  sendPasswordResetEmail,
 };

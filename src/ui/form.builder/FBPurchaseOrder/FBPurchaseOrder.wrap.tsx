@@ -56,7 +56,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       if (!receivableName) { return; }
       const { items } = formState?.getFieldValue(name) as FBPurchaseOrderValue;
       const receivedItems = map(items, (item) => ({
-        itemId: item.partNumber || item.id,
+        itemId: item.partNumber,
         received: item.order || 0,
       }));
 

@@ -41,8 +41,6 @@ export interface AuthResponse {
   employees: Employee[];
   avatar: string | null;
   iotCredentials: IotCredentials;
-  passwordUpdatedAt: string;
-  passwordExpiresAt: string;
 }
 
 export interface User {
@@ -112,8 +110,6 @@ export interface UserState {
   employee: Employee;
   iotCredentials: IotCredentials;
   customLabels: boolean;
-  passwordSoonToExpire: boolean;
-  daysUntilPasswordExpires: number;
 }
 
 export interface IotCredentials {

@@ -173,7 +173,7 @@ const ThemeOverrides = (appTheme: Theme, customColors: WhiteLabelingColors): Ove
   MuiDialogActions: {
     root: {
       padding: appTheme.spacing(1, 0),
-      // margin: appTheme.spacing(0, -1),
+      margin: appTheme.spacing(0, -1),
     },
   },
   MuiFormControl: {

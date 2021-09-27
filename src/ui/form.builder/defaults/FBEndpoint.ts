@@ -10,7 +10,6 @@ export enum FBEndpoint {
   AttachmentPatch = "/attachments/${id}",
   AttachmentById = "/attachments/${id}",
   AttachmentsByIds ="/attachments?ids=${ids}",
-  AllDocRevAttachments ="/document_revisions/all_attachments/${id}",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   DynamicControl = "/document_revisions/dynamic_forms",
   FetchDocumentRevision = "/document_revisions/${documentId}",

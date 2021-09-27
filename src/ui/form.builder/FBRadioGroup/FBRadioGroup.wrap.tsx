@@ -11,7 +11,6 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onChange,
     options,
     optionValueKey = "",
     optionLabelKey = "",
@@ -19,8 +18,6 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     disabled,
     isInputOwner,
     name = "",
-    defaultValue,
-    controlValue,
     ...props
   }: T) => {
     const intl = useIntl();
@@ -28,7 +25,6 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
-    defaultValue = formState?.getFieldValue(name) || defaultValue;
 
     controls = map(options as FBOption[], (option, index) => {
       const [value, message] = at(option, [optionValueKey, optionLabelKey]);
@@ -40,25 +36,15 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
       return (
         <FormControlLabel
           key={`fb-${value}-${index}`}
-          control={<Radio {...{ disabled }} {...(controlValue && { checked: controlValue === value })} />}
+          control={<Radio {...{ disabled }} />}
           {...{ value }}
           label={<Text {...{ message }} />}
         />
       );
     });
 
-    !onChange && (onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
-      formState?.setFieldValue(name, value);
-      formState?.validate();
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!isUnderWorkspace) { return; }
-      workspaceState?.saveDocRev(formState?.getValues());
-    });
-
     return Component({
       ...(props as T),
-      onChange,
-      defaultValue,
       controls,
       disabled,
       options,

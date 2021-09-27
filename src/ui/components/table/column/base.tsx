@@ -2,7 +2,7 @@ import { Box, Tooltip } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { CellMeasurer, Column, SortIndicator, TableCellProps as ColumnProps, TableHeaderProps } from "react-virtualized";
+import { CellMeasurer, Column, SortDirectionType, SortIndicator, TableCellProps as ColumnProps } from "react-virtualized";
 import Text from "../../Text";
 import { TableSearchSelectField } from "../search/select";
 import { TableSearchTextField } from "../search/text";
@@ -16,7 +16,6 @@ type InnerProps = InnerTableColumnProps;
 export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   const {
     key,
-    dataKey,
     label,
     cellType,
     columnOptions,
@@ -26,7 +25,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     searchOptions,
     omitSearch,
     cellHref,
-    sortable = true,
+    sortable,
   } = props;
   const { measurerCache, searchable, queryGetter } = innerProps;
 
@@ -118,29 +117,26 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
     }
   };
 
-  const headerRenderer = ({
-    dataKey,
-    sortBy,
-    sortDirection,
-  }: TableHeaderProps): React.ReactNode => {
-    const sorted = dataKey === sortBy;
+  const headerRenderer = (props: {
+    dataKey: string;
+    sortBy?: string | undefined;
+    sortDirection?: SortDirectionType | undefined;
+  }): React.ReactNode => (
+    <StyledTableHeader component="div" variant="head">
+      <Box component="div" className="columnBox">
+        <Box height="50px" pt={2} pl={1}>
+          <Text message={label} />
 
-    return (
-      <StyledTableHeader component="div" variant="head">
-        <Box component="div" className="columnBox">
-          <Box height="50px" pt={2} pl={1}>
-            <Text message={label} />
-            {sorted && sortable && <SortIndicator sortDirection={sortDirection} />}
-          </Box>
-          {searchable && (
-            <Box height="65px" component="div" className="headerField">
-              {searchFieldRenderer()}
-            </Box>
-          )}
+          {sortable && <SortIndicator sortDirection={props.sortDirection} />}
         </Box>
-      </StyledTableHeader>
-    );
-  };
+        {searchable && (
+          <Box height="65px" component="div" className="headerField">
+            {searchFieldRenderer()}
+          </Box>
+        )}
+      </Box>
+    </StyledTableHeader>
+  );
 
   const tooltipRenderer = (columnProps: ColumnProps) => {
     const { rowData } = columnProps;
@@ -186,7 +182,7 @@ export function TableColumn<T>(props: Props<T>, innerProps: InnerProps) {
   return (
     <Column
       key={key}
-      dataKey={dataKey || key}
+      dataKey={key}
       width={200}
       flexGrow={1}
       disableSort={!sortable}

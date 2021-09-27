@@ -18,8 +18,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
-    const { index = 0, designDisabled = false } = inputProps || {};
-    const reviseDisabled = inputProps?.editorProperties?.includes("reviseDisabled");
+    const { index = 0, designDisabled = false, reviseDisabled = false } = inputProps || {};
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
     const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};

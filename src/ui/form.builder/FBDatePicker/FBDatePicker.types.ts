@@ -1,11 +1,8 @@
-import { BaseKeyboardPickerProps } from "@material-ui/pickers/_shared/hooks/useKeyboardPickerState";
-import { FBInputProps, FBProviderProps } from "..";
+import { FBInputProps } from "..";
 
 export type FBDatePickerProps =
-& Pick<FBProviderProps, "datePickerState">
-& Omit<FBInputProps, "onChange">
+& FBInputProps
 & {
-  onChange?: BaseKeyboardPickerProps["onChange"];
   onDatePickerClick?: () => void;
   onDatePickerClose?: () => void;
   disablePastDates?: boolean;

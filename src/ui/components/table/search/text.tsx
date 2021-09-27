@@ -33,7 +33,6 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
       value={value}
       name={dataKey}
       onChange={handleChange}
-      onClick={(e) => e.stopPropagation()}
       margin="normal"
       InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
       inputProps={{ "data-lpignore": true }}

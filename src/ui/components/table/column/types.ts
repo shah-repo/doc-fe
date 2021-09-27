@@ -20,7 +20,6 @@ export interface TableCellProps<T> extends MuiTableCellProps {
 
 export interface TableColumnProps<T> {
   key: string & keyof T;
-  dataKey?: string | undefined;
   label: Translation;
   cellType?: TableColumnType | TableCellTypeRenderer<T>;
   columnOptions?: Partial<ColumnProps>;

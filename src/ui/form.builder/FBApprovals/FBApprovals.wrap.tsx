@@ -5,8 +5,6 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { Approval } from "../../../state/ducks/common/types";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -75,10 +73,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
     const outputId = isOutput ? id : null;
-    const docApprovals = document?.approvals || changeRequest?.approvals;
     const approvalsState = FB.useRef(
       FBApprovalsState,
-      { id: outputId, approvals: docApprovals, isOwner },
+      { id: outputId, approvals: document?.approvals || changeRequest?.approvals, isOwner },
     );
     dialogState = FB.useRef(FBDialogState);
 
@@ -102,11 +99,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // On add approver
     React.useEffect(() => reaction(
       () => approvalsState?.approvalApi.data,
-      (data) => {
-        if (!data) { return; }
-        document?.approvals?.push(data as Approval);
-        concatApprovals(data);
-      }
+      (data) => concatApprovals(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -219,11 +212,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     // TODO: check what is going on with the types,
     // had to add any, DocumentStatus and DocumentRevisionStatus are not the same
     documentStatus = document?.status as any;
+    showFieldOwnersWarning = !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
 
-    showFieldOwnersWarning = document?.document
-    .documentType
-    .groupOptions?.includes(DOC_TYPE_GROUP_OPTION.INPUT_OWNERS_APPROVERS) &&
-     !isEmpty(owners) && documentStatus !== DocumentStatus.Released;
 
     if (!isComponentVisible) {
       return null;

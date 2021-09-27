@@ -1,9 +1,5 @@
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import moment from "moment";
-import React, { useEffect } from "react";
+import React from "react";
 import { FB } from "..";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
-import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
 
 
@@ -11,41 +7,24 @@ export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    datePickerState,
     onDatePickerClick,
     onDatePickerClose,
-    onChange,
     editorProperties,
-    name = "",
+    value,
     defaultValue,
+    name = "",
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
-    const initialValue = formState?.getFieldValue(name);
-    datePickerState = FB.useRef(FBDatePickerState, initialValue);
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
     const { id } = workspaceState || {};
 
-    function save(date?: string) {
-      if (!date) { return; }
-      formState?.setFieldValue(name, date);
-      formState?.validate();
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
-      if (!isUnderWorkspace) { return; }
-      workspaceState?.saveDocRev(formState?.getValues());
-    }
+    value = formState?.getFieldValue(name);
 
-    useEffect(() => {
-      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate;
-      if (isUnderDefault) {
-        const nowDate = getStartOfDayDateString(moment(new Date()).tz(TIME_ZONE).toISOString());
-        datePickerState?.setValue(nowDate);
-        save(nowDate);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    if (!defaultValue && !value  && defaultCurrentDate) {
+        formState?.setFieldValue(name, new Date());
+    }
 
     onDatePickerClick = () => {
       if (formState?.isBackdropOpen) { return; }
@@ -67,21 +46,14 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       }, 1000);
     };
 
-    onChange = (_date: MaterialUiPickersDate | null, value?: string | null) => {
-      datePickerState?.setValue(value);
-      save(_date?.toISOString());
-    };
-
     return Component({
       ...(props as T),
-      datePickerState,
       onDatePickerClick,
       onDatePickerClose,
-      onChange,
-      editorProperties,
-      disablePastDates,
+      value,
       defaultValue,
       name,
+      disablePastDates,
     });
   };
 

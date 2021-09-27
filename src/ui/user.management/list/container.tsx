@@ -3,13 +3,12 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authActions } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { toastInfo } from "../../components/notifications";
 import { HOME_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -29,31 +28,16 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   const getResendSignupEmailAction = useActionCreator(authActions.resendSignupEmail);
-  const getSendPasswordResetEmailAction = useActionCreator(authActions.sendPasswordResetEmail);
-
-  const asyncSignUpEmail = useAsync({
+  const notify = () => toast.info(intl.formatMessage({
+    id: "user.management.signup.email.sent",
+  }));
+  const async = useAsync({
     onSuccess: () => {
-      toastInfo(intl.formatMessage({
-        id: "user.management.signup.email.sent",
-      }));
+      notify();
     },
   });
 
-  const asyncResetPasswordEmail = useAsync({
-    onSuccess: () => {
-      toastInfo(intl.formatMessage({
-        id: "user.management.reset.password.email.sent",
-      }));
-    },
-  });
-
-  const handleResendEmail = ( employee: GetEmployeeResponse ) => {
-    const { user, id } = employee || {};
-
-    user?.locked ?
-      asyncResetPasswordEmail.start(getSendPasswordResetEmailAction, id, asyncResetPasswordEmail) :
-      asyncSignUpEmail.start(getResendSignupEmailAction, user?.email, asyncSignUpEmail);
-  };
+  const handleResendSignupEmail = ( email: string ) => async.start(getResendSignupEmailAction, email, async);
 
   if (isEmpty(tableCriteria.queryDict) && !didMount) {
     dispatch(
@@ -83,7 +67,7 @@ const UserManagementListContainer: React.FunctionComponent = () => {
       tableData={tableData}
       clearFilter={clearFilter}
       groupOptions={groupOptions}
-      handleResendEmail={handleResendEmail}
+      handleResendSignupEmail={handleResendSignupEmail}
     />
   );
 };

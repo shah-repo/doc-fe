@@ -21,7 +21,6 @@ export interface User {
   email: string;
   name: string;
   confirmed?: boolean;
-  locked?: boolean;
 }
 
 export interface Approval {
@@ -31,9 +30,6 @@ export interface Approval {
   type: "MASTER" | "SECTION";
   fieldId?: string;
   approver: Owner;
-  approverName?: string;
-  approverEmail?: string;
-  approverGroups?: string[];
   documentRevision?: DocumentRevision;
   changeRequest?: ChangeRequest;
   reviewedAt?: string;

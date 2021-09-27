@@ -17,23 +17,6 @@ export type FBEditorPropertiesType =
 | "defaultCurrentDate"
 | "disablePastDates";
 
-export const editorPropertiesFlags: FBEditorPropertiesType[] = [
-  "multiple",
-  "includeNone",
-  "includeContext",
-  "includeQRScan",
-  "reviseDisabled",
-  "approveIsBlocking",
-  "approvalNonVersioned",
-  "copyableValue",
-  "includeInInspection",
-  "includeInFaiInspection",
-  "deleteDisabled",
-  "includeNotes",
-  "defaultCurrentDate",
-  "disablePastDates",
-];
-
 export type FBEditorPropertiesProps = Pick<FBInputProps, "type" | "options" | "onChange"> & {
   inputProps?: Partial<FBInputProps>;
   docGroupOptions?: DocumentGroupOptionsType[];

@@ -3,18 +3,24 @@ import React from "react";
 import { FBInput, FBRadioGroupProps } from "..";
 import { withFBRadioGroup } from "./FBRadioGroup.wrap";
 
+const FBRadioGroupComp: React.FunctionComponent<FBRadioGroupProps> = ({
+  row, controls, onChange, defaultValue, name,
+}) =>
+  <RadioGroup {...{ row, onChange, defaultValue, name }}>
+    {controls}
+  </RadioGroup>;
+
+
+const FBRadioGroupChild = withFBRadioGroup(FBRadioGroupComp);
+
 const FBRadioGroup: React.FunctionComponent<FBRadioGroupProps> = ({
   controls,
   row = true,
-  type = "radiogroup",
-  onBlur,
   ...props
 }) => (
-  <FBInput {...props} {...{ type }}>
-    <RadioGroup {...props} {...{ row  }}>
-      {controls}
-    </RadioGroup>
+  <FBInput {...props} type="radiogroup">
+    <FBRadioGroupChild {...props} {...{ row, controls }} />
   </FBInput>
 );
 
-export default withFBRadioGroup(FBRadioGroup);
+export default FBRadioGroup;

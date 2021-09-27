@@ -19,7 +19,6 @@ import FBButton from "../FBButton/FBButton";
 import FBCheckbox from "../FBCheckbox/FBCheckbox";
 import FBDatePicker from "../FBDatePicker/FBDatePicker";
 import FBDocumentRevisions from "../FBDocumentRevisions/FBDocumentRevisions";
-import FBDownloadSheetTpl from "../FBDownloadSheetTpl/FBDownloadSheetTpl";
 import FBEBPart from "../FBEBPart/FBEBPart";
 import FBEQMaintenance from "../FBEQMaintenance/FBEQMaintenance";
 import FBFileUpload from "../FBFileUpload/FBFileUpload";
@@ -27,7 +26,6 @@ import FBHelloSign from "../FBHelloSign/FBHelloSign";
 import FBHyperlink from "../FBHyperlink/FBHyperlink";
 import FBInlineApproval from "../FBInlineApproval/FBInlineApproval";
 import FBInstructionsDocument from "../FBInstructionsDocument/FBInstructionsDocument";
-import FBLHRBuild from "../FBLHRBuild/FBLHRBuild";
 import FBLHRStep from "../FBLHRStep/FBLHRStep";
 import FBMediaAlbumField from "../FBMediaAlbumField/FBMediaAlbumField";
 import FBMPIProcedure from "../FBMPIProcedure/FBMPIProcedure";
@@ -126,8 +124,6 @@ class FBSchemaState {
     quantityunit: FBQuantityUnitField,
     partsselection: FBPartsSelection,
     poapprovals: FBPOApprovals,
-    lhrbuild: FBLHRBuild,
-    downloadsheet: FBDownloadSheetTpl,
   };
 
   @observable public schema?: FBSchemaProps[];

@@ -8,17 +8,18 @@ import { FBPurchaseOrderTableTotalProps } from "./FBPurchaseOrderTable.types";
 
 const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTotalProps> = ({
   handleShippingCostChange,
+  handleShippingCostBlur,
+  handleTaxChange,
+  handleTaxBlur,
   handleCurrencyChange,
   calculation,
-  handleTaxChange,
-  handleTaxRateChange,
-  reCalculateValueOnBlur,
+  taxField,
   disabled,
   name,
 }) => (
   <React.Fragment>
     <TableRow>
-      <FBTableCell rowSpan={7} colSpan={6} />
+      <FBTableCell rowSpan={6} colSpan={6} />
       <FBTableCell label="form.builder.currency" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FormContext.Provider value={{ submitOnChange: false }}>
@@ -45,41 +46,18 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
       </FBTableCell>
     </TableRow>
     <TableRow>
-      <FBTableCell label="form.builder.tax.rate" className="FBTotal-root" colSpan={3} />
-      <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FBTextField
-          name={`${name}.taxRate`}
-          gutter={false}
-          type="number"
-          size="small"
-          value={calculation?.taxRate}
-          inputProps={{
-            style: { textAlign: "right", padding: "5px" },
-            step: ".01",
-            min: "0",
-            onChange: handleTaxRateChange,
-            onBlur: reCalculateValueOnBlur,
-          }}
-          rules="min:0"
-          {...{ disabled }}
-        />
-      </FBTableCell>
-    </TableRow>
-    <TableRow>
       <FBTableCell label="form.builder.tax" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
         <FBTextField
           name={`${name}.tax`}
           gutter={false}
-          type="number"
           size="small"
-          value={calculation?.tax}
+          value={taxField || calculation?.tax}
           inputProps={{
-            style: { textAlign: "right", padding: "5px" },
-            step: ".01",
+            style: { textAlign: "right", padding: "5px 20px 5px 5px" },
             min: "0",
             onChange: handleTaxChange,
-            onBlur: reCalculateValueOnBlur,
+            onBlur: handleTaxBlur,
           }}
           rules="min:0"
           {...{ disabled }}
@@ -99,7 +77,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             step: ".01",
             min: "0",
             onChange: handleShippingCostChange,
-            onBlur: reCalculateValueOnBlur,
+            onBlur: handleShippingCostBlur,
           }}
           rules="min:0"
           {...{ disabled }}

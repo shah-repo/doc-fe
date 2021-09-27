@@ -1,16 +1,15 @@
 import { includes, isArray, isEmpty, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
-import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
+import { FBInlineApprovalBody, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Id } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
-import FBStore from "../FBStore/FBStore";
 
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
@@ -93,12 +92,6 @@ class FBWorkspaceState extends FBSchemaState {
     return Boolean(docId && !isEmpty(docId));
   }
 
-  public get isLHRProductionBuild(): boolean {
-    return this.document?.smartReferencesTo?.filter(
-      (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
-      toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
-  }
-
   public get isOutputSchema(): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
@@ -161,10 +154,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "isDirty", isDirty);
   };
 
-  @action public setFormInputSync = (name: string, value: any) => {
-    set(this.formInputSync, name, value);
-  };
-
   public removeAutoState = () => {
     this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
   };
@@ -206,24 +195,8 @@ class FBWorkspaceState extends FBSchemaState {
         this.documentRevApi.onError(error);
       } else {
         this.setDirty(false);
-        this.setFormInputData(data);
-        if (this.getItemsByType("inlineapproval")) {
-          FBStore.audit.set({
-            url: FBEndpoint.DocumentRevisionAudit,
-            urlValues: { documentId: this.id },
-            method: "get",
-          });
-        }
         this.documentRevApi.onSuccess();
       }
-    });
-  };
-
-  private setFormInputData = (data?: DocumentRevision) => {
-    const { formInput = {} } = data ?? {};
-    this.formInput = formInput;
-    map(formInput, (value, key) => {
-      set(this.formInputSync, key, value);
     });
   };
 
@@ -240,7 +213,11 @@ class FBWorkspaceState extends FBSchemaState {
         this.loadDocumentRevApi.onError(error);
       } else {
         this.loadDocumentRevApi.onSuccess();
-        this.setFormInputData(data);
+        const { formInput = {} } = data ?? {};
+        this.formInput = formInput;
+        map(formInput, (value, key) => {
+          set(this.formInputSync, key, value);
+        });
       }
     });
   };

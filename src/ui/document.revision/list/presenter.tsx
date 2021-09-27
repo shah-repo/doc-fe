@@ -108,7 +108,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       // revision number calculation is now done on BE
       key: "displayRevision" as keyof DocumentRevision,
       label: "common.revision",
-      dataKey: "displayRevision",
       searchOptions: {
         defaultValue: tableCriteria.queryDict.displayRevision,
       },
@@ -134,7 +133,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       label: "document.revision.list.type",
       tooltipKey: typeTooltipRenderer,
       cellHref: cellHrefRenderer,
-      dataKey: "document.documentType.documentTypeAcronym",
       searchOptions: {
         searchType: "select",
         selectOptions: documentTypeOptions,
@@ -149,7 +147,6 @@ export const ListPresenter: React.FunctionComponent<Props> = ({
       key: "owner",
       label: "common.owner",
       cellHref: cellHrefRenderer,
-      dataKey: "owner.user.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.owner.user.name,
       },

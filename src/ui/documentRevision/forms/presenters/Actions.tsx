@@ -97,7 +97,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
   const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
-  const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
 
   const shouldShowUpgrade =
    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
@@ -213,7 +212,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {...{ documentRevision }}
         />}
         <InspectionControlsContainer {...{ documentRevision }} />
-        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
+        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline }}/>
         {
           isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
             <SubmitForApproval

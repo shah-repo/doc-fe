@@ -15,13 +15,13 @@ const FBSupplierForm: React.FunctionComponent<FBSupplierFormProps> = ({
     <FBTextField
       rules="required"
       name="name"
-      label="common.title.SUP"
+      label="form.builder.title"
       {...{ disabled }}
     />
     <FBTextEditor
       rules="required"
       name="description"
-      label="common.description.SUP"
+      label="form.builder.field.description"
       {...{ disabled }}
       shouldNotAutosaveOnBlur
     />

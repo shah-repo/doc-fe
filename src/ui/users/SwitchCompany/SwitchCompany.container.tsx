@@ -1,15 +1,14 @@
 import { orderBy } from "lodash";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import Config from "../../../config";
-import { authActions, authSelectors } from "../../../state/ducks/auth";
+import { authActions } from "../../../state/ducks/auth";
 import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { toastInfo } from "../../components/notifications";
-import { HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
+import { HOME_URL } from "../../constants/urls";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
@@ -23,8 +22,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
-  const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
@@ -33,12 +30,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
-    passwordSoonToExpire && toastInfo(
-      <div>
-        Your password will expire in {daysUntilPasswordExpires} days.&nbsp;
-        <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
-      </div>,
-      { autoClose: 10000 });
   };
 
   const companies = orderBy(employees, ["company.name"], ["asc"])

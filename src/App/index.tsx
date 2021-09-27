@@ -1,17 +1,3 @@
-export { default as SMButton } from "./Shifamed/Components/SMButton/SMButton";
-export * from "./Shifamed/Components/SMButton/SMButton.types";
-export { default as SMDialogState } from "./Shifamed/Components/SMDialog/SMDialog.state";
-export * from "./Shifamed/Components/SMDialog/SMDialog.types";
-// export { default as SMErrorLabel } from "./Shifamed/Components/SMErrorLabel/SMErrorLabel";
-// export * from "./Shifamed/Components/SMErrorLabel/SMErrorLabel.types";
-// export { default as SMInputState } from "./Shifamed/Components/SMInput/SMInput.state";
-export * from "./Shifamed/Components/SMInput/SMInput.types";
-// export { default as SMLabel } from "./Shifamed/Components/SMLabel/SMLabel";
-// export * from "./Shifamed/Components/SMLabel/SMLabel.types";
-export { default as SMMap } from "./Shifamed/Components/SMMap/SMMap";
-export * from "./Shifamed/Components/SMMap/SMMap.types";
-export { default as SMText } from "./Shifamed/Components/SMText/SMText";
-export * from "./Shifamed/Components/SMText/SMText.types";
 export * from "./Shifamed/Utils/SM/SM";
 export { default as SM } from "./Shifamed/Utils/SM/SM";
 export { default as SMProvider } from "./Shifamed/Utils/SMProvider/SMProvider";
