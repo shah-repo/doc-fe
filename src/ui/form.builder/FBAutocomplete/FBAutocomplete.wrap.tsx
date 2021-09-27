@@ -39,8 +39,8 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       !isInputOwner) || disabled;
     const formValue = formState?.getFieldValue(name) || defaultValue;
 
-    const multiple = editorProperties?.includes("multiple");
-    const includeQRScan = editorProperties?.includes("includeQRScan");
+    const multiple = editorProperties?.includes("multiple") || props.multiple;
+    const includeQRScan = editorProperties?.includes("includeQRScan") || props.includeQRScan;
 
     const intl = useIntl();
 
