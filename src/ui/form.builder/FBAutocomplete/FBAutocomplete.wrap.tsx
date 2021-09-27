@@ -129,7 +129,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       name,
       disabled,
       includeQRScan,
-      multiple,
     });
   };
 
