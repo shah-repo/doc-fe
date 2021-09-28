@@ -648,7 +648,9 @@ context("PO test", () => {
       });
 
       it("Enter Supplier Description 'Supplier Description'", () => {
-        cy.ebEnterPartDescription({ description: "Supplier Description" });
+        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").click();
+        cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().type("Supplier Description");
+        cy.get("[data-cy=\"description\"]>div").click().wait(1000);
         cy.checkToastMessage({ exists: false });
       });
 
@@ -696,11 +698,12 @@ context("PO test", () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
           });
         cy.checkToastMessage({ exists: false });
-        cy.wait(2000);
+        cy.wait(3000);
       });
 
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+        cy.wait(3000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
         });
@@ -727,9 +730,11 @@ context("PO test", () => {
 
       it("Check if approver ID and date time are recorded", () => {
         SystemRequirement("REQ-1540", "REQ-1550");
-        cy.get("[name*='fb-po-approvals-']>div").eq(4).should("contain", USERS[1].name)
-          .and("contain", "APPROVED")
-          .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
+        cy.get("[name*='fb-po-approvals-']>div").eq(4).each(($el) => {
+          const text = $el.text();
+          expect(text).to.be.oneOf([USERS[1].name + " | APPROVED | " + dateOfStepCompletion + USERS[1].email,
+            USERS[1].name + " | APPROVED | " + dateOfStepCompletionOneMinuteLater + USERS[1].email]);
+        });
       });
 
       it("Check if PO state is blank", () => {
@@ -766,10 +771,12 @@ context("PO test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         cy.checkToastMessage({ exists: false });
       });
+      cy.wait(3000);
     });
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });
@@ -936,6 +943,7 @@ context("PO test", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wait(3000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });
@@ -996,6 +1004,7 @@ context("PO test", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.wait(3000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });
