@@ -8,7 +8,7 @@ case "$ENV" in
 "DEV")  
   export CYPRESS_BE_URL="https://api.dev.enlil.io"
   export CYPRESS_FE_URL="https://dev.enlil.io"
-  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+  export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
   export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "DEMO")  
