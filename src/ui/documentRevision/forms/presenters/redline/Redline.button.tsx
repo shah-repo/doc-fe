@@ -8,11 +8,13 @@ import { FB } from "../../../../form.builder";
 interface Props {
   isUserDocumentOwner: boolean;
   docTypeHasRedline: boolean;
+  isLHRProductionBuild: boolean;
 }
 
 const RedlineButton: React.FunctionComponent<Props> = ({
   isUserDocumentOwner,
   docTypeHasRedline,
+  isLHRProductionBuild,
 }) => {
   const { workspaceState } = FB.useStores();
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
     dispatch(companyActions.autosaveConfig());
   };
 
-  if (!isUserDocumentOwner || !docTypeHasRedline) {
+  if (!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild) {
     return null;
   }
 

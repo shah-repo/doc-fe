@@ -5,7 +5,7 @@ import { FBApprovalsProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBBut
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
-import Colors from "../../layout/theme/utils/colors";
+import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import { withFBApprovals } from "./FBApprovals.wrap";
 
 const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
@@ -75,59 +75,69 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         </FBMapWrapper>
       </Box>}
       <FBMapWrapper<FBInlineApprovalBody[]> collection={approvals}>
-        {(approval: FBInlineApprovalBody, index) => (
-          <Box
-            key={`fb-ia-info-${approval.id}-${index}`}
-            pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            mb={4}
-          >
-            {approval.approver?.user.name}
-            {approval.status && approval.status !== "DRAFT" && (
-              <Box color={Colors.gray}>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
-            )}
-            {approval.reviewedAt && approval.status !== "DRAFT" && (
-              <Box color={Colors.gray}>
-              &nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
+        {(approval: FBInlineApprovalBody, index) => {
+          const isApproved = isDocumentRevisionApproved(approval.status);
+          return (
+            <Box>
+              <Box
+                key={`fb-ia-info-${approval.id}-${index}`}
+                pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+              >
+                {<Box fontWeight="bold">{
+                  isApproved ? approval.approverName :  approval.approver?.user.name
+                }</Box>}
+                {approval.status && approval.approverGroup && (
+                  <Box>&nbsp;| {approval.approverGroup?.join(", ")}</Box>
+                )}
+                {approval.status && (
+                  <Box>&nbsp;| {FBInlineApprovalStatusIdent[approval.status]}</Box>
+                )}
+                {approval.reviewedAt && isApproved && (
+                  <Box>&nbsp;| {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}</Box>
+                )}
+                {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
+                  <>
+                    <Box> |</Box>
+                    <FBButton
+                      style={{ margin: 0 }}
+                      label="form.builder.request.approval"
+                      variant="text"
+                      color="primary"
+                      onClick={() => requestApproval?.(approval.id)}
+                    />
+                  </>
+                )}
+                {documentStatus === DocumentStatus.InReview
+                && approval.status === ApprovalStatus.Pending
+                && currentUser === approval.approver?.user.id
+                && (
+                  <Box flexGrow={1} textAlign="right">
+                    <FBButton
+                      {...{ disabled }}
+                      label="common.reject"
+                      size="small"
+                      style={{ fontSize: "11px" }}
+                      onClick={() => approvalTransition("reject", approval.id)}
+                    />
+                    <FBButton
+                      {...{ disabled }}
+                      label="form.builder.request.approve"
+                      size="small"
+                      style={{ fontSize: "11px" }}
+                      onClick={() => onApproveClick?.(approval.id || "")}
+                    />
+                  </Box>
+                )}
               </Box>
-            )}
-            {approval.canRequest && inlineApprovalExists && !isAlphaReleased && (
-              <>
-                <Box> |</Box>
-                <FBButton
-                  style={{ margin: 0 }}
-                  label="form.builder.request.approval"
-                  variant="text"
-                  color="primary"
-                  onClick={() => requestApproval?.(approval.id)}
-                />
-              </>
-            )}
-            {documentStatus === DocumentStatus.InReview
-          && approval.status === ApprovalStatus.Pending
-          && currentUser === approval.approver?.user.id
-          && (
-            <Box flexGrow={1} textAlign="right">
-              <FBButton
-                {...{ disabled }}
-                label="common.reject"
-                size="small"
-                style={{ fontSize: "11px" }}
-                onClick={() => approvalTransition("reject", approval.id)}
-              />
-              <FBButton
-                {...{ disabled }}
-                label="form.builder.request.approve"
-                size="small"
-                style={{ fontSize: "11px" }}
-                onClick={() => onApproveClick?.(approval.id || "")}
-              />
+              <Box mt={1} mb={4}>
+                { isApproved ? approval.approverEmail : approval.approver?.user.email }
+              </Box>
             </Box>
-          )}
-          </Box>
-        )}
+          ); }
+        }
       </FBMapWrapper>
     </FBInput>
   </FBProvider>

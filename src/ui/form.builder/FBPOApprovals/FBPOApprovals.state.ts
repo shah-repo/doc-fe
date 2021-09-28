@@ -11,7 +11,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   @observable approvals?: FBInlineApprovalBody[];
 
   // MARK: @config
-  public approvalApi = new FBRequest<FBInlineApprovalBody, FBInlineApprovalBody>(FBEndpoint.Approvals);
+  public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
 
@@ -82,7 +82,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
 
-  public addApproval = (approval: FBInlineApprovalBody) => {
+  public addApproval = (approval: Partial<FBInlineApprovalBody>) => {
     this.approvalApi.setBody(approval);
     this.approvalApi.post();
   };

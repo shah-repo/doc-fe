@@ -1,4 +1,6 @@
-import { Slide, toast as taostify, ToastOptions } from "react-toastify";
+import { ReactNode } from "react";
+import { Slide, toast as toastify, ToastOptions } from "react-toastify";
+import "./styles.css";
 
 enum ToastType {
   Error = "error",
@@ -9,7 +11,7 @@ enum ToastType {
 }
 
 const TOAST_OPTIONS: ToastOptions = {
-  position: "bottom-right",
+  position: "top-center",
   autoClose: 5000,
   hideProgressBar: true,
   closeOnClick: true,
@@ -18,8 +20,8 @@ const TOAST_OPTIONS: ToastOptions = {
   transition: Slide,
 };
 
-const toast = (type: ToastType, message: string, options: ToastOptions = {}) =>
-  taostify[type](
+const toast = (type: ToastType, message: string | ReactNode, options: ToastOptions = {}) =>
+  toastify[type](
     message,
     {
       ...TOAST_OPTIONS,
@@ -27,11 +29,12 @@ const toast = (type: ToastType, message: string, options: ToastOptions = {}) =>
     },
   );
 
-export const toastError = (message: string, options: ToastOptions = {}) =>
+export const toastError = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Error, message, options);
 
-export const toastInfo = (message: string, options: ToastOptions = {}) =>
+export const toastInfo = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Info, message, options);
 
-export const toastSuccess = (message: string, options: ToastOptions = {}) =>
+export const toastSuccess = (message: string | ReactNode, options: ToastOptions = {}) =>
   toast(ToastType.Success, message, options);
+

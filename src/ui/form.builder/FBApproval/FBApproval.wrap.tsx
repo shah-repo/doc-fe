@@ -231,6 +231,7 @@ export const withFBApproval = <T extends FBApprovalProps>(
       disabled,
       loading,
       name,
+      editorProperties,
       approveLoading,
       autosave,
     });
