@@ -140,7 +140,7 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 });
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
-  cy.get("#clearFilter").click().wait(500);
+  cy.get("#clearFilter").click().wait(1000);
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
   });
