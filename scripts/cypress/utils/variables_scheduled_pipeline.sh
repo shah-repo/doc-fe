@@ -9,13 +9,13 @@ case "$ENV" in
   export CYPRESS_BE_URL="https://api.dev.enlil.io"
   export CYPRESS_FE_URL="https://dev.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "DEMO")  
   export CYPRESS_BE_URL="https://api.demo.enlil.io"
   export CYPRESS_FE_URL="https://demo.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "SANDBOX")  
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
@@ -33,7 +33,7 @@ case "$ENV" in
   export CYPRESS_BE_URL="https://api.prod2.enlil.io"
   export CYPRESS_FE_URL="https://prod2.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "CODEBUILD")  
   export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://backend:80"}
