@@ -1,0 +1,36 @@
+version: 0.2
+
+env:
+  shell: bash
+  exported-variables:
+     - AWS_DEFAULT_REGION
+     - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+phases:
+  install:
+    commands:
+      - cd $CODEBUILD_SRC_DIR_env_build_artifacts
+      - export commits_file_location=$(find . -name commit_hashes.json)
+      - export FE_GIT_COMMIT_HASH=$(jq '.feCommit' $commits_file_location | tr -d '"')
+      - export BE_GIT_COMMIT_HASH=$(jq '.beCommit' $commits_file_location | tr -d '"')
+      - export VALIDATORS_GIT_COMMIT_HASH=$(jq '.validatorsCommit' $commits_file_location | tr -d '"')
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - cd $CODEBUILD_SRC_DIR
+      - source ./codebuild/2.run-tests/export_variables.sh
+  pre_build:
+    commands:
+      - cd $DOCKER_COMPOSE_FILE_LOCATION
+      - docker-compose up -d --scale enlil_cypress_server=$ENLIL_CYPRESS_SERVER_SCALE --scale enlil_cypress_worker_replicas=$ENLIL_CYPRESS_WORKER_SCALE
+  build:
+    commands:
+      - docker ps
+      - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/2.run-tests/start_tests.sh
+
+reports:
+  report-name-or-arn:
+    files:
+      - '**/*'
+    base-directory: test-results/some_ci_build_id/json/junit
+    file-format: JunitXml
+artifacts:
+  files:
+    - test-results/some_ci_build_id/**/*

@@ -194,6 +194,7 @@ context("Receivable list test", () => {
                         index: 0,
                       }],
                       tax: "0.00",
+                      taxRate: 9.25,
                       subTotal: "150.00",
                       totalAmount: "150.00",
                       shippingCost: "0.00",
@@ -494,7 +495,7 @@ context("Receivable list test", () => {
     it("Check if ID and date time are recorded when approving", () => {
       SystemRequirement("REQ-2050", "REQ-2060");
       cy.get("[id=\"Presenter-FBWorkspace\"]>div>div>div").eq(6).should("contain", USERS[1].name)
-        .and("contain", "Approved")
+        .and("contain", "APPROVED")
         .and("contain", (dateOfStepCompletion || dateOfStepCompletionOneMinuteLater));
     });
 
