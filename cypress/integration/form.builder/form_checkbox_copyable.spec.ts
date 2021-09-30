@@ -562,7 +562,7 @@ context("Copyable Checkbox test", () => {
 
     it("Verify Date pickers values", () => {
       cy.get("input[name^=\"dp-wi-ch-\"]").invoke("val").should("not.be.empty");
-      cy.get("input[name^=\"dp-wo-ch-\"]").invoke("val").should("not.be.empty");
+      cy.get("input[name^=\"dp-wo-ch-\"]").invoke("val").should("be.empty");
     });
 
     it("Verify Autocompletes values", () => {

@@ -519,6 +519,7 @@
   "document.revision.enter.file.name": "Enter a file name",
   "document.revision.inspection": "Inspection",
   "document.revision.fai": "FAI",
+  "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",
