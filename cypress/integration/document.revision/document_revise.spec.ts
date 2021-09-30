@@ -165,7 +165,9 @@ context("Document revise test", () => {
     it("Verify 'Test document for revising' revision is set to 1.1", () => {
       SystemRequirement("REQ-0580", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+      cy.wait(1000);
       cy.dlVerifyFilterByRev({ revision: "1.1" });
+      cy.wait(1000);
     });
   });
 
@@ -191,8 +193,11 @@ context("Document revise test", () => {
     it("Verify 'Test document for revising' revision is set to 2", () => {
       SystemRequirement("REQ-0580", "REQ-0370");
       cy.dlClearFilters();
+      cy.wait(1000);
       cy.dlFilterByStatus({ status: "Released" });
+      cy.wait(1000);
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+      cy.wait(1000);
       cy.dlVerifyFilterByRev({ revision: "2" });
     });
   });
@@ -265,9 +270,13 @@ context("Document revise test", () => {
       it("Verify 'Test document for revising' revision is set to '1A'", () => {
         SystemRequirement("REQ-0580", "REQ-0370");
         cy.navigToDocumentList();
+        cy.wait(1000);
         cy.dlClearFilters();
+        cy.wait(1000);
         cy.dlFilterByStatus({ status: "Released" });
+        cy.wait(1000);
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.wait(1000);
         cy.dlVerifyFilterByRev({ revision: "1A" });
       });
     });
@@ -339,9 +348,13 @@ context("Document revise test", () => {
       it("Verify 'Test document for revising' revision is set to 'OBS'", () => {
         SystemRequirement("REQ-0580", "REQ-0370");
         cy.navigToDocumentList();
+        cy.wait(1000);
         cy.dlClearFilters();
+        cy.wait(1000);
         cy.dlFilterByStatus({ status: "Obsolete" });
+        cy.wait(1000);
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
+        cy.wait(1000);
         cy.dlVerifyFilterByRev({ revision: "OBS" });
       });
     });
