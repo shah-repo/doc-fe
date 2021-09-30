@@ -97,8 +97,6 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    includeNotes = ((editorProperties?.includes("includeNotes") || includeNotes) && isOutput && type !== "blanktplform");
-    inputState?.setIncludeNotes(includeNotes || false);
 
     const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
       // This sets shared default values for all of the fields
@@ -326,7 +324,14 @@ export const withFBInput = <T extends FBInputProps>(
       map(lhrBuilds, (item) => {
         reaction(
           () => workspaceState?.formInputSync.get(item.name || ""),
-          (value) => inputState?.setIncludeNotes(value === FBLHRBuildOptions["R&D"]),
+          (value) => {
+            const notesIncluded = includeNotes && isOutput && type !== "blanktplform";
+            if (!notesIncluded) {
+              inputState?.setIncludeNotes(false);
+              return;
+            }
+            inputState?.setIncludeNotes(value === FBLHRBuildOptions["R&D"]);
+          },
           { fireImmediately: true }
         );
       });

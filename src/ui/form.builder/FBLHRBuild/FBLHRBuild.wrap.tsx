@@ -54,8 +54,10 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       () => workspaceState?.formInputSync.get(name),
       (value) => {
         const { autosave } = workspaceState || {};
-        const isDisabled = autosave && (value === FBLHRBuildOptions["R&D"]);
+        const isDisabled = (autosave && (value === FBLHRBuildOptions["R&D"])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
+      }, {
+        fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
