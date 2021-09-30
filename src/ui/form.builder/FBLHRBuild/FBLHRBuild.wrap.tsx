@@ -30,7 +30,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       const isOutput = workspaceState?.isOutput;
       const savedData = get(workspaceState?.document?.formInput, name);
       if (isOutput && savedData === FBLHRBuildOptions["R&D"]) {
-        // lhrBuildState?.setDisabled(true);
+        lhrBuildState?.setDisabled(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -56,8 +56,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         const { autosave } = workspaceState || {};
         const isDisabled = (autosave && (value === FBLHRBuildOptions["R&D"])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
-      }, {
-        fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
