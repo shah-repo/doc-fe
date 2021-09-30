@@ -1,10 +1,12 @@
 import axios from "axios";
+import { IntlShape } from "react-intl";
 import Config from "../../../config";
 import { store } from "../../../state/store";
+import { toastSuccess } from "../../components/notifications";
 
 class FBDownloadSheetTplState {
 
-  public getBulkCreateTemplateId = (documentRevisionId: string, callback: () => void) => {
+  public getBulkCreateTemplateId = (documentRevisionId: string, intl: IntlShape) => {
     axios({
       url: `${Config.ApiEndpoint}/mass_create/generate_template/${documentRevisionId}`,
       method: "GET",
@@ -20,9 +22,9 @@ class FBDownloadSheetTplState {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.onfocus = () => {
-        callback();
-      };
+      toastSuccess(
+        intl.formatMessage({ id: "document.revision.bulkCreate.download.excelTemplate" })
+      );
     });
   };
 }
