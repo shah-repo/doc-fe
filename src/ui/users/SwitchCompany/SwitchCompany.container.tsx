@@ -6,7 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { companyActions, companySelectors } from "../../../state/ducks/company";
+import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { toastInfo, toastSuccess } from "../../components/notifications";
@@ -15,9 +15,6 @@ import { ThemeEnv } from "../../layout/theme/utils/types";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
 import { styles } from "./SwitchCompany.styles";
-
-export const toastCompanyDeletion = (message) =>
-  <span>{message} <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a></span>;
 
 type Props = LoginContainerProps;
 
@@ -30,7 +27,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const passwordSoonToExpire = useSelector(authSelectors.getPasswordSoonToExpire);
   const daysUntilPasswordExpires = useSelector(authSelectors.getDaysUntilPasswordExpires);
-  const isScheduledForDeletion = useSelector(companySelectors.getScheduledForDeletion);
 
   const handleClick = (employee: Employee) => () => {
     dispatch(companyActions.selectCompany(employee.company));
@@ -39,6 +35,7 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
+
     passwordSoonToExpire && toastInfo(
       <div>
         Your password will expire in {daysUntilPasswordExpires} days.&nbsp;
@@ -46,9 +43,13 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
       </div>,
       { autoClose: 10000 });
 
-    isScheduledForDeletion &&
-    toastSuccess((toastCompanyDeletion(intl.formatMessage({ id: "toast.notification.deletion" }))),
-      { autoClose: 20000 });
+    employee.company.scheduledForDeletion &&
+    toastSuccess(
+      <div>
+        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
+      </div>,
+      { autoClose: 15000 });
   };
   const companies = orderBy(employees, ["company.name"], ["asc"])
     .filter((employee) => employee.active)

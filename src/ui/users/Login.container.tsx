@@ -4,13 +4,12 @@ import { connect } from "react-redux";
 import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
-import { companySelectors } from "../../state/ducks/company";
 import { Employee } from "../../state/ducks/company/types";
 import { ApplicationState } from "../../state/reducers";
 import { toastInfo, toastSuccess } from "../components/notifications";
-import { HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
+import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
-import SwitchCompanyContainer, { toastCompanyDeletion } from "./SwitchCompany/SwitchCompany.container";
+import SwitchCompanyContainer from "./SwitchCompany/SwitchCompany.container";
 
 interface StateProps {
   isUserAuthenticated: boolean;
@@ -43,8 +42,12 @@ const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => 
       { autoClose: 10000 });
 
     props.isScheduledForDeletion &&
-    toastSuccess((toastCompanyDeletion(intl.formatMessage({ id: "toast.notification.deletion" }))),
-      { autoClose: 20000 });
+    toastSuccess(
+      <div>
+        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
+      </div>,
+      { autoClose: 15000 });
 
     return <Redirect to={from} />;
   }
@@ -62,7 +65,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
   passwordSoonToExpire: authSelectors.getPasswordSoonToExpire(state),
   daysUntilPasswordExpires: authSelectors.getDaysUntilPasswordExpires(state),
-  isScheduledForDeletion: companySelectors.getScheduledForDeletion(state),
+  isScheduledForDeletion: authSelectors.getIsScheduledForDeletion(state),
 });
 
 export default connect<StateProps, {}, {}, ApplicationState>(mapStateToProps)(LoginContainer);

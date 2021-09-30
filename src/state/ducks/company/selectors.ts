@@ -31,8 +31,6 @@ const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.co
 const getAutosaveEnabled = (state: ApplicationState) => state.company.autosaveConfig.autosaveEnabled;
 const getRedlineActive = (state: ApplicationState) => state.company.redlineConfig.redlineActive;
 
-const getScheduledForDeletion = (state: ApplicationState) => state.company.companyMine.scheduledForDeletion;
-
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -47,5 +45,4 @@ export default {
   getAllWhiteLabeling,
   getAutosaveEnabled,
   getRedlineActive,
-  getScheduledForDeletion,
 };
