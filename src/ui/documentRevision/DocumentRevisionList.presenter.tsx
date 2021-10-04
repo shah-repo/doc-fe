@@ -131,8 +131,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           value={
             <DateFormatter
               value={
-                isRecord ?
-                  documentRevision.releasedAt || documentRevision.updatedAt :
+                isRecord ? (isReleased ? documentRevision.releasedAt : documentRevision.updatedAt ) :
                   documentRevision.obsoletedAt || documentRevision.effectiveDate
               }/>
           }

@@ -385,7 +385,7 @@
   "dashboard.title.approval.request": "APPROVAL REQUEST: {docId} - from {name}",
   "dashboard.title.purchase.order": "PURCHASE ORDER: {docId}, Rev {version}",
   "dashboard.title.task": "APPROVAL REQUEST: {crId}",
-  "dashboard.title.training": "TRAINING: {docId}",
+  "dashboard.title.training": "TRAINING: {docId} {docTitle}, - Rev {version}",
   "dashboard.noPendingActions": "No pending actions",
   "dashboard.is.due.on": " for doc id: {docId} is due on ",
   "dashboard.po.reject.alert": "You are rejecting the Purchase Order\nAre you sure you want to continue?",
@@ -519,6 +519,7 @@
   "document.revision.enter.file.name": "Enter a file name",
   "document.revision.inspection": "Inspection",
   "document.revision.fai": "FAI",
+  "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
   "page.title.documentCreate": "Create New Document",
@@ -1065,5 +1066,6 @@
   "tooltip.required.flag": "Required Flag Status: {requiredFlag}",
   "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}",
   "dropbox.enable": "Enable Dropbox",
-  "dropbox.connection.error": "There was an error connecting to Dropbox."
+  "dropbox.connection.error": "There was an error connecting to Dropbox.",
+  "toast.notification.deletion": "This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to"
 }

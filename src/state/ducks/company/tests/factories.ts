@@ -16,6 +16,7 @@ export const getCompany = (company: Partial<Company> = {}): Company => ({
   acctCodes: [],
   helloSignIntegrationEnabled: false,
   navigation: DEFAULT_NAVIGATION_ITEMS,
+  scheduledForDeletion: false,
   ...company,
 });
 
