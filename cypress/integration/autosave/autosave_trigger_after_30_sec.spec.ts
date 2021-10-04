@@ -56,7 +56,6 @@ context.skip("Autosave trigger after 30 sec", () => {
     it("[API]Login admin with autosave tigger shown", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -69,7 +68,6 @@ context.skip("Autosave trigger after 30 sec", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 

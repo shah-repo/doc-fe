@@ -54,7 +54,6 @@ context("Approval request form scenario", () => {
     it("[API]Tester Login to get companies", (done: any) => {
       cy.authApiLogin({
         email: USERS[21].email,
-        password: "Tester1!",
       }).then((response: any) => {
         multipleCompanies = response.employees.length > 1 ? true : false;
         done();
@@ -66,7 +65,6 @@ context("Approval request form scenario", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[21].email,
-        password: "Tester1!",
       });
     });
 
@@ -252,7 +250,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -270,7 +267,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[21].email,
-          password: "Tester1!",
         });
       });
 
@@ -324,7 +320,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -353,7 +348,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
-          password: "Tester1!",
         });
       });
 
@@ -372,7 +366,6 @@ context("Approval request form scenario", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[21].email,
-        password: "Tester1!",
       });
     });
 
@@ -399,7 +392,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -417,7 +409,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
-          password: "Tester1!",
         });
       });
 

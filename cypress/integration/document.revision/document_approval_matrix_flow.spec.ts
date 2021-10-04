@@ -85,7 +85,6 @@ context("Document Approval Matrix Flow", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
@@ -98,7 +97,6 @@ context("Document Approval Matrix Flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -702,7 +700,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Type password in Approve and Release dialog", () => {
-      cy.get("input[name=password]").type("Tester1!");
+      cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
     });
 
     it("'Approve and Release' the document", () => {
@@ -730,7 +728,6 @@ context("Document Approval Matrix Flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: INDIVIDUAL_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -746,7 +743,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -788,7 +785,6 @@ context("Document Approval Matrix Flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 

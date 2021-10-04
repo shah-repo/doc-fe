@@ -368,7 +368,7 @@ Cypress.Commands.add("arApproveAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get("button[aria-label=approve]").first().click();
-      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     });
   cy.checkToastMessage({ exists: false });

@@ -72,7 +72,6 @@ context("PO approval test", () => {
     it("[API] Create group with access to restricted doc_types", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -114,7 +113,6 @@ context("PO approval test", () => {
     it("[API] Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -125,7 +123,6 @@ context("PO approval test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -434,7 +431,6 @@ context("PO approval test", () => {
     it(`Log in with '${USERS[3].name}'`, () => {
       cy.authLogin({
         email: USERS[3].email,
-        password: "Tester1!",
       });
     });
 

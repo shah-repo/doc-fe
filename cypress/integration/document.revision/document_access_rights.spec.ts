@@ -56,7 +56,6 @@ context("Document Access Rights", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
@@ -69,7 +68,6 @@ context("Document Access Rights", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -257,7 +255,6 @@ context("Document Access Rights", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: FIRST_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -318,7 +315,6 @@ context("Document Access Rights", () => {
       SystemRequirement("REQ-3990", "REQ-3930");
       cy.authLogin({
         email: SECOND_USER.email,
-        password: "Tester1!",
       });
     });
 
