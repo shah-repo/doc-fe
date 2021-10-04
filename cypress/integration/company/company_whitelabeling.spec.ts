@@ -144,9 +144,9 @@ context("Whitelabeling test", () => {
 
   context("Change company whitelabeling", () => {
     it("[API] Patch company", (done: any) => {
-      cy.cmpAdminUpdateCompany({
-        sessionId: loginResponse.sessionId,
-        companyId: createdCompany.id,
+      cy.cmpUpdateCompany({
+        sessionId: adminLoginResponse.sessionId,
+        employeeId: adminEmployee.id,
         payload: {
           whiteLabeling: {
             DEV_THEME: {

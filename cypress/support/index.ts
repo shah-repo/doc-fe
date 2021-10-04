@@ -25,6 +25,7 @@ import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
+import "./commands/company.replica/commands";
 import "./commands/company/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";

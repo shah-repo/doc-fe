@@ -117,12 +117,11 @@ Cypress.Commands.add("drCreateDocumentRevision", (params: {
 });
 
 Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; sessionId: string }) => {
-  const auth = params.employeeId === "" ? `bearer_admin ${params.sessionId}` : `bearer ${params.employeeId}:${params.sessionId}`;
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
     headers: {
-      Authorization: auth,
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response ? response.body : []);
 });
