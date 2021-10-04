@@ -465,6 +465,10 @@ context("PO test", () => {
   });
 
   context("Create Purchase Order document with Product option from Form document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
     });
@@ -694,16 +698,15 @@ context("PO test", () => {
       it("Save PO document", () => {
         SystemRequirement("REQ-1290");
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
+          [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
           });
+        cy.wait(1000);
         cy.checkToastMessage({ exists: false });
-        cy.wait(3000);
       });
 
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
-        cy.wait(3000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
         });
@@ -731,7 +734,8 @@ context("PO test", () => {
       it("Check if approver ID and date time are recorded", () => {
         SystemRequirement("REQ-1540", "REQ-1550");
         cy.get("[name*='fb-po-approvals-']>div").eq(4).each(($el) => {
-          const text = $el.text();
+          let text = $el.text();
+          text = text.replace(/\u00a0/g, " ");
           expect(text).to.be.oneOf([USERS[1].name + " | APPROVED | " + dateOfStepCompletion + USERS[1].email,
             USERS[1].name + " | APPROVED | " + dateOfStepCompletionOneMinuteLater + USERS[1].email]);
         });
@@ -767,16 +771,15 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         cy.checkToastMessage({ exists: false });
       });
-      cy.wait(3000);
+      cy.wait(1000);
     });
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
-      cy.wait(5000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });
@@ -805,6 +808,10 @@ context("PO test", () => {
   });
 
   context("Create Purchase Order document with Service option from Form document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
     });
@@ -941,16 +948,19 @@ context("PO test", () => {
       cy.poSelectPOStatus({ status: "Closed" });
     });
 
+    it("Save PO", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+        cy.checkToastMessage({ exists: false });
+      });
+      cy.wait(1000);
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
-      cy.wait(3000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });
-    });
-
-    it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'Submit for Approval' button", () => {
@@ -996,7 +1006,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
         cy.checkToastMessage({ exists: false });
       });
@@ -1004,7 +1014,6 @@ context("PO test", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
-      cy.wait(3000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
       });

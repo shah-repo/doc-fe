@@ -13,6 +13,7 @@ class FBInputState {
   @observable public autosaveNextValue?: any;
   @observable public hidden?: boolean;
   @observable public forceRender?: boolean = false;
+  @observable public includeNotes = false;
 
   public constructor({ value, hidden }: FBInputConstructor) {
     this.value = value;
@@ -30,6 +31,10 @@ class FBInputState {
 
   @action public setIncludeContext = (state: boolean) => {
     set(this, "includeContext", state);
+  };
+
+  @action public setIncludeNotes = (state: boolean) => {
+    set(this, "includeNotes", state);
   };
 
   @action public setValue = (value: any) => {

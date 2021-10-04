@@ -1,5 +1,5 @@
-FROM node:14.10.0
-# RUN npm install -g yarn@1.22.4
+# official node image but in shifa ECR repo
+FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:node_14.10.0
 
 WORKDIR /opt/app
 
