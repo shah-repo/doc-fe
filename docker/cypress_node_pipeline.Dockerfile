@@ -5,7 +5,7 @@
 # build it with command
 #   docker build -t cypress/base:14.7.0 .
 #
-FROM node:14.10.0
+FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:node_14.10.0
 ENV CHROME_VERSION 92.0.4515.159
 
 RUN apt-get update && \
@@ -161,6 +161,10 @@ RUN chmod 755 /root
 #   "firefox:         $(firefox --version || true) \n"
 
 WORKDIR /opt/app
+
+COPY package*.json ./
+COPY yarn*.lock ./
+RUN yarn install --frozen-lockfile
 
 ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
 RUN npm install -g "cypress@8.3.1"
