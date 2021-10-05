@@ -1,4 +1,4 @@
-import { Dictionary, get, isArray, isDate, isObject, join, map } from "lodash";
+import { compact, Dictionary, get, isArray, isDate, isObject, join, map } from "lodash";
 import React from "react";
 import { FBValidationProps } from "..";
 
@@ -32,7 +32,7 @@ export const withFBValidation = <T extends FBValidationProps>(
 
     toStringRules = (validators: Dictionary<any>): string | undefined => {
       const rules = map(validators, (value, key) => `${valueSplit(key, value)}`);
-      return join(rules, "|");
+      return join(compact(rules), "|");
     };
 
     return Component({
