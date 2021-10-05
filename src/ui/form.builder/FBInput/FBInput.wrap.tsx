@@ -90,8 +90,16 @@ export const withFBInput = <T extends FBInputProps>(
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
     const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
-    includeNotes = (includeNotes || editorProperties?.includes("includeNotes")) && isOutput && type !== "blanktplform";
-    inputState?.setIncludeNotes(includeNotes || false);
+
+    useEffect(() => {
+      includeNotes =
+      (includeNotes || editorProperties?.includes("includeNotes")) &&
+      isOutput &&
+      type !== "blanktplform" &&
+      !workspaceState?.isLHRProductionBuild;
+      inputState?.setIncludeNotes(includeNotes || false);
+    }, []);
+
 
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
