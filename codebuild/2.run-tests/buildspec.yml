@@ -25,6 +25,12 @@ phases:
       - docker ps
       - docker exec -w /opt/app/tests enlil_codebuild_test_run_container_1 ./codebuild/2.run-tests/start_tests.sh
 
+  post_build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR
+      - docker logs enlil_codebuild_enlil_cypress_server_1 > test-results/some_ci_build_id/log_server1.log
+      - docker logs enlil_codebuild_enlil_cypress_server_2 > test-results/some_ci_build_id/log_server2.log
+
 reports:
   report-name-or-arn:
     files:
