@@ -91,6 +91,16 @@ export const withFBInput = <T extends FBInputProps>(
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
     const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
 
+    useEffect(() => {
+      includeNotes =
+      (includeNotes || editorProperties?.includes("includeNotes")) &&
+      isOutput &&
+      type !== "blanktplform" &&
+      !workspaceState?.isLHRProductionBuild;
+      inputState?.setIncludeNotes(includeNotes || false);
+    }, []);
+
+
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
@@ -325,8 +335,7 @@ export const withFBInput = <T extends FBInputProps>(
         reaction(
           () => workspaceState?.formInputSync.get(item.name || ""),
           (value) => {
-            const notesIncluded = includeNotes && isOutput && type !== "blanktplform";
-            if (!notesIncluded) {
+            if (!includeNotes) {
               inputState?.setIncludeNotes(false);
               return;
             }
