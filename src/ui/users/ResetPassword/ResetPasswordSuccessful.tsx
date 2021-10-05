@@ -47,7 +47,7 @@ const ResetPasswordSuccessful: React.FunctionComponent<{}> = () => {
           className={classes.submit}
           id="ResetPasswordSuccessful-signUp"
           variant="contained"
-          color="primary"
+          color="secondary"
           onClick={() => { history.push(LOGIN_URL); }}
         >
           <Text message={"login.submit"} />

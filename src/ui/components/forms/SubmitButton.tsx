@@ -26,7 +26,7 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
     <Button
       type="submit"
       variant="contained"
-      color="primary"
+      color="secondary"
       data-cy={dataCy}
       disabled={hasErrors || isActive}
       {...buttonProps}

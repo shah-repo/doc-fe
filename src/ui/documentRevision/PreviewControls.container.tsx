@@ -128,7 +128,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
           <Button
-            color="primary"
+            color="secondary"
             variant="outlined"
             onClick={cloneDocument}
             id="PreviewControlsContainer-revise"
@@ -148,7 +148,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
         <Button
-          color="primary"
+          color="secondary"
           variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
@@ -183,7 +183,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
             <Text translation="document.security.warning" />
           </Box>
           {!isEmailSent &&
-            <Button color="primary" variant="outlined" onClick={onSubmit}
+            <Button color="secondary" variant="outlined" onClick={onSubmit}
               id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
               <Text translation="document.request.access" />
             </Button>
@@ -196,7 +196,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const renderWithdrawSubmissionButton = () =>
     <>
       <Button
-        color="primary"
+        color="secondary"
         variant="outlined"
         onClick={dialog.open}
         data-cy="document.revision.withdraw.alert"

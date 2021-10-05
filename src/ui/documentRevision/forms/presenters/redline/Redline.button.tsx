@@ -33,7 +33,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
     <>
       <Button
         variant="outlined"
-        color="primary"
+        color="secondary"
         onClick={() => handleClick()}
         id="Redline"
       >

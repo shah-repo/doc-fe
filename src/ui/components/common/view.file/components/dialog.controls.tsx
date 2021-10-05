@@ -31,7 +31,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
   return (
     <span className={classes.buttonsContainer}>
       <Button
-        color="primary"
+        color="secondary"
         variant="outlined"
         disabled={!setPreviousAttachment}
         onClick={setPreviousAttachment}
@@ -39,7 +39,7 @@ const ViewFileTitleControls: React.FunctionComponent<ViewFileTitleControlsProps>
         <Text translation="common.previous" />
       </Button>
       <Button
-        color="primary"
+        color="secondary"
         variant="contained"
         disabled={!setNextAttachment}
         onClick={setNextAttachment}

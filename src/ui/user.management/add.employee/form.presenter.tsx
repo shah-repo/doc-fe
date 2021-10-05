@@ -107,7 +107,7 @@ const AddEmployeeFormPresenter: React.FunctionComponent<Props> = ({
         >
           <Button
             variant="outlined"
-            color="primary"
+            color="secondary"
             onClick={() => resetForm()}
             id="AddEmployeeFormPresenter-resetForm"
           >

@@ -61,8 +61,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           </DialogContent>
           <Box className={classes.dialogAction} >
             <Button
-              variant="outlined"
-              color="primary"
+              variant="contained"
+              className={classes.cancelButton}
               onClick={cancelAction}
               id="AlertDialog-cancelButton"
             >
@@ -70,8 +70,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
             </Button>
             <Button
               type="submit"
-              color="primary"
               variant="contained"
+              className={classes.submitButton}
               id="AlertDialog-continueButton"
               data-cy="AlertDialog-continueButton"
               onClick={confirmAction}

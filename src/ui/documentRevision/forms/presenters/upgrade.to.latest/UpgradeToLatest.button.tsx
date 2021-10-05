@@ -28,7 +28,6 @@ const UpgradeToLatestButton: React.FunctionComponent<Props> = ({
         <>
           <Button
             variant="outlined"
-            color="primary"
             onClick={dialog.open}
             id="UpgradeToLatest-upgrade"
           >

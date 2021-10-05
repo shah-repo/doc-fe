@@ -63,7 +63,7 @@ const ChangeDocumentFormPresenter: React.FunctionComponent<Props> = ({
         <Button
           type="submit"
           variant="contained"
-          color="primary"
+          color="secondary"
           data-cy="confirmButton"
         >
           <Text translation="document.action.confirm" />

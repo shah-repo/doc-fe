@@ -12,7 +12,6 @@ import Approvers from "../../../../change.request/form/approvers";
 import { TemplateOption } from "../../../../change.request/form/types";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import DatePickerField from "../../../../components/forms/fields/DatePickerField";
-import InputField from "../../../../components/forms/fields/Input";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import FormMessage from "../../../../components/forms/FormMessage";
 import FormProgress from "../../../../components/forms/FormProgress";
@@ -22,6 +21,7 @@ import { FBFormState, FBSchemaProps } from "../../../../form.builder";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
 import { styles } from "./ApproveAndRelease.styles";
+import InputField from "../../../../components/forms/fields/Input";
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
@@ -216,8 +216,8 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         data-cy="ApproveAndRelease-submit"
       />
       <Button
-        variant="outlined"
-        color="primary"
+        variant="text"
+        color="secondary"
         className={classes.cancelButton}
         disabled={asyncState.status === AsyncStatus.Active}
         onClick={cancel}

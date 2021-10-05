@@ -11,6 +11,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
   const Comp = ({
     onChange,
     onDialogActionClick,
+    inputState,
     lhrBuildState,
     dialogState,
     name = "",
@@ -42,14 +43,18 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     // MARK: @reactions
     useEffect(() => reaction(
       () => lhrBuildState?.value,
-      (value) => formState?.setFieldValue(name, value)
+      (value) => {
+        formState?.setFieldValue(name, value);
+        workspaceState?.formInputSync.set(name, value);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => reaction(
       () => workspaceState?.formInputSync.get(name),
       (value) => {
-        const isDisabled = value === FBLHRBuildOptions["R&D"];
+        const { autosave } = workspaceState || {};
+        const isDisabled = (autosave && (value === FBLHRBuildOptions["R&D"])) || disabled;
         lhrBuildState?.setDisabled(isDisabled);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,9 +68,6 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
         dialogState?.setOpen?.(true);
         return;
       }
-      const { autosave } = workspaceState || {};
-      const isDisabled = autosave && (value === FBLHRBuildOptions["R&D"]);
-      lhrBuildState?.setDisabled(isDisabled);
       lhrBuildState?.setValue(value);
       save();
     };

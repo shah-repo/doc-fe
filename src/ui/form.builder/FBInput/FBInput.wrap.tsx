@@ -5,7 +5,7 @@ import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual,
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBInputProps, FBInputType, FBOption, OmitInputClones } from "..";
+import { FB, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -90,6 +90,8 @@ export const withFBInput = <T extends FBInputProps>(
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
     const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
+    includeNotes = (includeNotes || editorProperties?.includes("includeNotes")) && isOutput && type !== "blanktplform";
+    inputState?.setIncludeNotes(includeNotes || false);
 
     helperText = formState?.errors.get(name) || helperText;
     error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
@@ -97,8 +99,6 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    includeNotes = workspaceState?.isLHRProductionBuild ?  !workspaceState?.isLHRProductionBuild
-      : editorProperties?.includes("includeNotes") || includeNotes;
 
     const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
       // This sets shared default values for all of the fields
@@ -320,6 +320,23 @@ export const withFBInput = <T extends FBInputProps>(
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
       bookmarkState?.addBookmark({ name, label });
     }, [bookmarked]);
+
+    useEffect(() => {
+      const lhrBuilds = workspaceState?.getItemsByType("lhrbuild");
+      map(lhrBuilds, (item) => {
+        reaction(
+          () => workspaceState?.formInputSync.get(item.name || ""),
+          (value) => {
+            if (!includeNotes) {
+              inputState?.setIncludeNotes(false);
+              return;
+            }
+            inputState?.setIncludeNotes(value === FBLHRBuildOptions["R&D"]);
+          },
+          { fireImmediately: true }
+        );
+      });
+    }, []);
 
     return Component({
       ...(props as T),

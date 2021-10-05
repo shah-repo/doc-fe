@@ -349,10 +349,12 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
     cy.wait(1000);
     cy.get("#title").type(params.title);
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
     cy.get("[id=\"mui-component-select-state\"]").click().wait(300);
     cy.get("li[data-value]").contains(params.status).click();
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev,

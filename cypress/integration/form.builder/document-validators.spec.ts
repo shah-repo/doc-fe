@@ -748,6 +748,7 @@ field is empty: Add text field`, () => {
     });
 
     it(`Remove type from ${requiredIfInFieldLabel}`, () => {
+      cy.get("div[name^=\"required-doctypes\"]").click();
       cy.get("div[name^=\"required-doctypes\"] svg").first().click();
     });
 
@@ -758,8 +759,8 @@ field is empty: Add text field`, () => {
 
     it("Select 'Required doctypes", () => {
       SystemRequirement("FB-0250");
-      cy.get(`[data-cy^="required-doctypes"]`).click();
-      cy.get("ul[role=listbox]>li").contains("Equipment").click();
+      cy.wait(3000);
+      cy.get(`[data-cy^="required-doctypes-"]`).type("Equipment{downarrow}{enter}");
     });
 
     it("Should show error for 'required with' field", () => {
