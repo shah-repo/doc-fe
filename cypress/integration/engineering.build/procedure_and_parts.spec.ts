@@ -997,6 +997,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 3,
           typeOfMaterial: "gram",
         });
+        cy.wait(3000);
       });
 
       it("Add free material text", () => {
@@ -1005,6 +1006,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 2,
           typeOfMaterial: "pounds",
         });
+        cy.wait(3000);
       });
 
       it("Add equipment document", () => {
