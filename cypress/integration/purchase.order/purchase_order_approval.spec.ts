@@ -321,6 +321,10 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescriptionWithWait({ description: "POAM testing description" });
     });
 
+    it("Add required order date", () => {
+      cy.poAddDateRequired();
+    });
+
     it("Check approval icon if it's gray", () => {
       cy.poAMCheckApprovalIconIfItsGray();
     });

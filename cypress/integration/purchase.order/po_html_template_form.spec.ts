@@ -205,44 +205,7 @@ context("Purchase order HTML template form", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    // it("Click create document after filling document", () => {
-    //   cy.drClickCreateDocumentWithApiCall();
-    // });
-
-    // it("Click 'Add New Field'", () => {
-    //   cy.fbAddNewFieldWhenHidden();
-    // });
-
-    // it("Select 'Purchase Order' from list", () => {
-    //   cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    // });
-
-    // it("Fill label field with 'New Purchase Order with Product item'", () => {
-    //   cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    // });
-
-    // it("Click 'Add' to finish adding new field", () => {
-    //   cy.fbAddNewFieldButton();
-    // });
-
-    // it("Click 'Add New Field'", () => {
-    //   cy.fbAddNewFieldWhenHidden();
-    // });
-
-    // it("Add supplier form builder field", () => {
-    //   cy.fbSelectCustomFieldToAdd({ name: "Supplier" });
-    // });
-
-    // it("Fill label field with 'Supplier'", () => {
-    //   cy.fbEnterLabel({ label: "Supplier" });
-    // });
-
-    // it("Click 'Add' to finish adding new field", () => {
-    //   cy.fbAddNewFieldButton();
-    // });
-
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
       cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -252,6 +215,7 @@ context("Purchase order HTML template form", () => {
           }
         });
       }).as("response");
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.wait("@response");
     });
 
@@ -375,7 +339,6 @@ context("Purchase order HTML template form", () => {
 
     it("Fill order Date", () => {
       SystemRequirement("REQ-1420");
-      // cy.poAddDateRequired();
       cy.xpath("//input[@name]/ ../div/button").last().click().wait(200);
       cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
       "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
