@@ -1,7 +1,8 @@
 
 import { differenceBy, filter, map } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
 import { store } from "../../../state/store";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -88,7 +89,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     }, [autosave]);
 
     // *TODO: find a way to reset constructor props
-    React.useEffect(() => {
+    useEffect(() => {
       if (!workspaceState) { return; }
       workspaceState.changeRequest = changeRequest;
       workspaceState.externalState = store.getState();
@@ -100,6 +101,16 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceSchema = workspaceState?.schema || [];
       mode = workspaceState?.mode;
     });
+
+    useEffect(() => reaction(
+      () => workspaceState?.schema,
+      () => {
+        const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
+        if (!canAddFBFields) { return; }
+        workspaceState?.saveDocRev();
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     return Component({
       ...(props as T),

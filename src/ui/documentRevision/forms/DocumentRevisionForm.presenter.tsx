@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, isEmpty, isEqual } from "lodash";
+import { flatten, isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { observer } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
@@ -12,7 +12,6 @@ import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/doc
 import { documentsActions } from "../../../state/ducks/documents";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { useFormContext } from "../../components/forms/FormContext";
 import FormWrapper from "../../components/forms/FormWrapper";
 import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
@@ -128,7 +127,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const [forceNewRender, setNewRender] = React.useState();
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
   const { schema = [] } =  workspaceState || {};
-  const { submitForm } = useFormContext();
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,7 +174,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
 
   const showOutputInfo = workspaceState?.mode === "form" || workspaceState?.mode === "formDesign";
-  const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
   const outputDocumentTypes = pmFormId ?
     initialValues.outputDocumentTypes :
@@ -195,16 +192,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     type,
     lastSavedTimestamp,
   });
-
-  // Autosave for adding FB fields
-  useEffect(() => {
-    if (workspaceState?.omitAutosave) { return; }
-    if (!schema || isEqual(originScheme, schema) || !canAddFBFields) {
-      return;
-    }
-    submitForm();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schema.length]);
 
   useEffect(() => {
     if (!redlineActive) {
