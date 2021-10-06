@@ -51,7 +51,7 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
                 </>
               )}
             </Observer>
-            {!includes(FBInputState.omitLabel, type) && label && label !== "form.builder.note" && (
+            {!includes(FBInputState.omitLabel, type) && label && (
               <FBLabel {...{ error, label, loading }} />
             )}
           </Box>
