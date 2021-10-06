@@ -58,7 +58,6 @@ context("Record inline history Flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -71,7 +70,6 @@ context("Record inline history Flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -231,7 +229,7 @@ context("Record inline history Flow", () => {
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.DocPreview,
@@ -262,7 +260,7 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          cy.get("input[name=\"password\"]").clear().type("Tester1!");
+          cy.get("input[name=\"password\"]").clear().type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.DocPreview,
@@ -330,7 +328,7 @@ context("Record inline history Flow", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.wait(2000);
-          cy.get("input[name=\"password\"]").clear().type("Tester1!");
+          cy.get("input[name=\"password\"]").clear().type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.DocPreview,

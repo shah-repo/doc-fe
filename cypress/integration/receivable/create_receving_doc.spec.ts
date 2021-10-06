@@ -246,7 +246,6 @@ context("Create receivable test", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -627,7 +626,6 @@ context("Create receivable test", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: ADMIN_USER.email,
-          password: "Tester1!",
         });
       });
 
@@ -753,7 +751,7 @@ context("Create receivable test", () => {
         it("Click 'Approve' button", () => {
           SystemRequirement("REQ-1860");
           cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
             CyRoutes.EmployeesGet], () => {
             cy.get("[data-cy=\"common.confirm\"]").click();

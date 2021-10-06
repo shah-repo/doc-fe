@@ -117,12 +117,11 @@ Cypress.Commands.add("drCreateDocumentRevision", (params: {
 });
 
 Cypress.Commands.add("drGetDocumentType", (params: { employeeId: string; sessionId: string }) => {
-  const auth = params.employeeId === "" ? `bearer_admin ${params.sessionId}` : `bearer ${params.employeeId}:${params.sessionId}`;
   cy.request({
     method: "GET",
     url: `${CONFIG.BE_URL}/api/v1/document_type`,
     headers: {
-      Authorization: auth,
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
     },
   }).then((response) => response ? response.body : []);
 });
@@ -170,7 +169,7 @@ Cypress.Commands.add("drCheckApprovalsEnforcment", () => {
   cy.wait(2000);
   cy.get("[data-cy=unchecked]").should("exist");
   cy.get("[data-cy=group-0]").should("have.text", "Role One");
-  cy.get("input[name=password]").type("Tester1!");
+  cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
   cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
   cy.closeAllAlertMessages();
@@ -255,7 +254,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
   });
   cy.wait(1000);
-  cy.get("input[name=password]").type("Tester1!");
+  cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -562,7 +561,7 @@ Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: 
   cy.wait(1000);
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
-  cy.get("input[name=password]").type("Tester1!");
+  cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
@@ -689,7 +688,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
   names.forEach((name) => {
     cy.get(`[data-cy="field-approvals"]`).type(`${name}{enter}`);
   });
-  cy.get("input[name=password]").type("Tester1!");
+  cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {

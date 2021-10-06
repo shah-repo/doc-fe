@@ -78,7 +78,6 @@ context("Equipment maintenance test", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -365,7 +364,6 @@ context("Equipment maintenance test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 

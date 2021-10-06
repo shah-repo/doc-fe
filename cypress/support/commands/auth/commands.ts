@@ -10,8 +10,8 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      authApiLogin(params: { email: string; password: string }): Chainable<Subject>;
-      authLogin(params: { email: string; password: string }): Chainable<Subject>;
+      authApiLogin(params: { email: string; password?: string }): Chainable<Subject>;
+      authLogin(params: { email: string; password?: string }): Chainable<Subject>;
       authApiLogout(): Chainable<Subject>;
       authLogout(): Chainable<Subject>;
       authVisitLogin(): Chainable<Subject>;
@@ -21,18 +21,21 @@ declare global {
       authEnterEmail(params: {value: string}): Chainable<Subject>;
       authEnterPassword(params: {value: string}): Chainable<Subject>;
       authSubmitLoginError(params: {show: boolean; message?: string}): Chainable<Subject>;
-      authEnterSignUpPassword(params: {password: string}): Chainable<Subject>;
-      authEnterSignUpConfirmPassword(params: {password: string}): Chainable<Subject>;
+      authEnterSignUpPassword(params?: {password?: string}): Chainable<Subject>;
+      authEnterSignUpConfirmPassword(params?: {password?: string}): Chainable<Subject>;
       authClickSignIn(): Chainable<Subject>;
     }
   }
 }
 
-Cypress.Commands.add("authApiLogin", (params: { email: string; password: string }) => {
+Cypress.Commands.add("authApiLogin", (params: { email: string; password?: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
-    body: params,
+    body: {
+      email: params.email,
+      password: params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+    },
   }).then((response) => response.body);
 });
 
@@ -43,7 +46,7 @@ Cypress.Commands.add("authApiLogout", () => {
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("authLogin", (params: { email: string; password: string }) => {
+Cypress.Commands.add("authLogin", (params: { email: string; password?: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PreventIdleLogout, () => {
     cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
   });
@@ -52,7 +55,9 @@ Cypress.Commands.add("authLogin", (params: { email: string; password: string }) 
     CyRoutes.Login, () => {
       cy.log(params.email);
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email);
-      cy.get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password).wait(300);
+      cy.get("[data-cy=\"LoginFormPresenter-password\"]")
+        .type(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
+        .wait(300);
       cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
     });
   cy.checkToastMessage({ exists: false });
@@ -108,12 +113,12 @@ Cypress.Commands.add("authLogout", () => {
   });
 });
 
-Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => {
-  cy.get("[name=\"password\"]").type(params.password);
+Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
+  cy.get("[name=\"password\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
-Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password: string}) => {
-  cy.get("[name=\"confirmPass\"]").type(params.password);
+Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {
+  cy.get("[name=\"confirmPass\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.unClick();
 });
 

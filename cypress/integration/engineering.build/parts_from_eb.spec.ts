@@ -69,7 +69,6 @@ context("Parts from EB flow test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -147,7 +146,6 @@ context("Parts from EB flow test", () => {
     it("Log user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -459,7 +457,7 @@ context("Parts from EB flow test", () => {
     context("Verify that EB cannot be released unless 1st revision of part is released", () => {
       it("Try approving the EB", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
 
@@ -541,3 +539,4 @@ context("Parts from EB flow test", () => {
 });
 
 export { };
+

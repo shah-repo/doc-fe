@@ -81,7 +81,6 @@ context("Create Test company example", () => {
     it("[API] Login admin", (done: any) => {
       cy.authApiLogin({
         email: adminUser.email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -880,7 +879,6 @@ context("Create Test company example", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: adminUser.email,
-        password: "Tester1!",
       });
     });
 

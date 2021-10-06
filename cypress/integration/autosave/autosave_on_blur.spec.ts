@@ -238,7 +238,6 @@ context("Autosave on blur", () => {
     it("[API]Login admin with autosave trigger shown", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -582,7 +581,6 @@ context("Autosave on blur", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1038,3 +1036,4 @@ context("Autosave on blur", () => {
 
 
 export { };
+
