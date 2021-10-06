@@ -36,11 +36,11 @@ type FBInlineApprovalStatus = "DRAFT" | "PENDING" | "ABANDONED" | "APPROVED" | "
 export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "reject" | "pending_by_field";
 
 export enum FBInlineApprovalStatusIdent {
-  DRAFT = "Draft",
-  PENDING = "Pending approval",
-  ABANDONED = "Abandoned",
-  APPROVED = "Approved",
-  REJECTED = "Rejected",
+  DRAFT = "DRAFT",
+  PENDING = "PENDING APPROVAL",
+  ABANDONED = "ABANDONED",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
 
 export type FBInlineApprovalBody =
@@ -54,9 +54,12 @@ export type FBInlineApprovalBody =
   partOf: FBId;
   status?: FBInlineApprovalStatus;
   approver?: FBEmployee;
+  approverId?: string;
+  approverName?: string;
+  approverEmail?: string;
+  approverGroup?: string[];
   canRequest?: boolean;
   signatureGroupName?: string;
-  approverId?: string;
 };
 
 export interface FBInlineApprovalTransitionBody {

@@ -37,6 +37,10 @@ export const confirmPasswordSchema = Yup.string()
   .oneOf([Yup.ref("password"), null], "validator.match.passwords")
   .required("validator.confirm");
 
+export const confirmResetPasswordSchema = Yup.string()
+  .oneOf([Yup.ref("newPassword"), null], "validator.match.passwords")
+  .required("validator.confirm");
+
 export const emailSchema = Yup.string()
   .email("validators.email")
   .required("validators.required");

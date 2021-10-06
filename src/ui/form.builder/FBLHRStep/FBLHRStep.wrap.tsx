@@ -116,7 +116,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
         const editorCfg = mpiDocument?.formTemplate.schema.filter((item) =>
-          item.type === "mpiprocedure" && !item.deleted);
+          item.type === "mpiprocedure" && !item.deleted) || [];
         const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
           (item) => item.editorConfig.materials);
         const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
@@ -160,22 +160,27 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     };
 
     const setDisplayToMPI = () => {
-      lhrStepState.setIsHovering(true);
+      if (isOutput && stepLHRs) {
+        lhrStepState.setIsHovering(true);
       formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
-      formState?.getInputState(name)?.setRender();
+       formState?.getInputState(name)?.setRender();
+      }
     };
 
     const setDisplayToLHRs = () => {
-      lhrStepState.setIsHovering(false);
-      if (!lhrStepState.stepLHRs) { return; }
-      FBAutocompleteAsyncStore.add(
-        FBAutocompleteAsyncOption.mpiDocuments,
-        lhrStepState.stepLHRs.id,
-        lhrStepState.stepLHRs
-      );
+      if (isOutput && stepLHRs) {
+        lhrStepState.setIsHovering(false);
+        if (!lhrStepState.stepLHRs) { return; }
+        FBAutocompleteAsyncStore.add(
+          FBAutocompleteAsyncOption.mpiDocuments,
+          lhrStepState.stepLHRs.id,
+          lhrStepState.stepLHRs
+        );
       formState?.setFieldValue(name, lhrStepState.stepLHRs.id);
       formState?.getInputState(name)?.setRender();
+      }
     };
+
     const filterOutOption = (docRev: DocumentRevision, inputValue: string ) => {
       const filterValue = lowerCase(inputValue);
 

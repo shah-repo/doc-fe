@@ -8,14 +8,14 @@ case "$ENV" in
 "DEV")  
   export CYPRESS_BE_URL="https://api.dev.enlil.io"
   export CYPRESS_FE_URL="https://dev.enlil.io"
-  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_EMAIL="enlil.testmail+sysadmin@gmail.com"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "DEMO")  
   export CYPRESS_BE_URL="https://api.demo.enlil.io"
   export CYPRESS_FE_URL="https://demo.enlil.io"
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
-  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
   ;;
 "SANDBOX")  
   export CYPRESS_BE_URL="https://api.sandbox.enlil.io"
@@ -29,6 +29,18 @@ case "$ENV" in
   export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
   export CYPRESS_SUPERADMIN_PASSWORD=$CY_SUPERADMIN_PASSWORD_PROD
   ;;
+"PROD2")  
+  export CYPRESS_BE_URL="https://api.prod2.enlil.io"
+  export CYPRESS_FE_URL="https://prod2.enlil.io"
+  export CYPRESS_SUPERADMIN_EMAIL="zoran.kovacevic+admin@codecons.com"
+  export CYPRESS_SUPERADMIN_PASSWORD="Tester1!Admin"
+  ;;
+"CODEBUILD")  
+  export CYPRESS_BE_URL=${CYPRESS_BE_URL:-"http://backend:80"}
+  export CYPRESS_FE_URL=${CYPRESS_FE_URL:-"http://frontend:4212"}
+  export CYPRESS_SUPERADMIN_EMAIL=${CYPRESS_SUPERADMIN_EMAIL:-"enlil.testmail+sysadmin@gmail.com"}
+  export CYPRESS_SUPERADMIN_PASSWORD=${CYPRESS_SUPERADMIN_PASSWORD:-"Tester1!Admin"}
+  ;;
 *) 
   echo "unknwon environment, exiting"
   exit 1;
@@ -39,7 +51,7 @@ export CI_BUILD_ID="some_ci_build_id"
 export CYPRESS_KONFIG_ENV="development"
 export NODE_ENV="development"
 export CYPRESS_BROWSER="chrome"
-export NUMBER_OF_WORKERS="3"
+export NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS:-"7"}
 export CYPRESS_INTEGRATION_FOLDER="cypress/integration"
 export CYPRESS_SKIP_ON_RUN_FAILURE="true"
 export CYPRESS_TAKE_SCREENSHOT_AFTER_EACH="false"

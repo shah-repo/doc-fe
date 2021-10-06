@@ -22,3 +22,13 @@ then
   --spec $LIST_OF_SPECS_SERIALIZED \
   --ci-build-id "$CI_BUILD_ID") 2>/dev/null || true
 fi
+
+FILE=$DIR_JSON/generated_requirements_001.json
+if [[ -f "$FILE" ]]; then
+    rm -f $FILE
+fi
+
+FILE=$DIR_JSON/generated_requirements_002.json
+if [[ -f "$FILE" ]]; then
+    rm -f $FILE
+fi

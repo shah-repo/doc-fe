@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, CircularProgress } from "@material-ui/core";
 import axios, { AxiosRequestConfig } from "axios";
-import { debounce, set, sortBy as lodashSortBy } from "lodash";
+import { debounce, get, isString, set, sortBy as lodashSortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { AutoSizer, CellMeasurerCache, Index, Size, SortDirection, Table } from 
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -50,6 +51,7 @@ export function TablePanel<T extends any>({
 
   const [isLoading, setIsLoading] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
+  const [tableSortBy, setTableSortBy] = useState(sortBy);
   const tableData = useSelector(getTableData(tableName));
   const dispatch = useDispatch();
   const queryData = providedData || tableData;
@@ -61,10 +63,20 @@ export function TablePanel<T extends any>({
   ) => {
     let sortedData = lodashSortBy(
       data,
-      sortBy === "docId" ? `document.${sortBy}` : sortBy,
+      (document: DocumentRevision) => {
+        const value = get(document,  sortBy === "docId" ? `document.${sortBy}` : sortBy) || "";
+        if (value === "N/A") { return sortDirection === "DESC" ? "" : null; }
+        if (sortBy === "precalc.po_amount") {
+          // remove curreny string and comma
+          const poAmount = document.precalc.po_amount?.replace(/[^0-9.-]+/g, "");
+          return parseFloat(poAmount || "");
+        }
+        return isString(value) ? value.toLowerCase() : value;
+      },
     );
-    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
 
+    sortedData = sortDirection === "DESC" ? sortedData.reverse() : sortedData;
+    setTableSortBy(sortBy);
     return sortedData;
   };
 
@@ -260,7 +272,7 @@ export function TablePanel<T extends any>({
       rowClassName={classes.row}
       headerClassName={classes.header}
       rowGetter={rowGetter}
-      sortBy={sortBy}
+      sortBy={tableSortBy}
       sort={sort}
       sortDirection={tableCriteria.sortDirection}
       noRowsRenderer={noRowsRenderer}
@@ -296,6 +308,7 @@ export function TablePanel<T extends any>({
       ),
     );
   };
+
 
   const bodyRenderer = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
