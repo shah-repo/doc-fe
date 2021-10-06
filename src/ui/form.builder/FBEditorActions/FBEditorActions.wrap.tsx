@@ -75,7 +75,10 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         uniqueSchemaItem &&
         (workspaceState?.getItemsByType(type).length || 0) > 0
       );
-      let formRules = validators && toStringRules?.(validators);
+      let formRules = rules;
+      if (validators) {
+        formRules = toStringRules?.(validators);
+      }
 
       // Inidvidual field flag setup
       if (type === "eqmaintenance") {
@@ -108,7 +111,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         return;
       }
       additionalSchema();
-      formValues.rules = formRules || rules;
+      formValues.rules = formRules;
 
       workspaceState?.setSchemaItemAt({
         index,
