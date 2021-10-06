@@ -219,6 +219,7 @@ context("Document Field Owners Test", () => {
   context(`Open created document and check for operators restrictions`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -276,6 +277,7 @@ context("Document Field Owners Test", () => {
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -315,6 +317,7 @@ context("Document Field Owners Test", () => {
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -352,6 +355,7 @@ context("Document Field Owners Test", () => {
 
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
