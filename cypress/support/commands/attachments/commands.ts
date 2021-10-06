@@ -265,7 +265,7 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     }
   });
@@ -293,7 +293,7 @@ Cypress.Commands.add("atchDownloadCleanCopyFile", (params: {fileName: string; sa
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     }
   });
@@ -320,7 +320,7 @@ Cypress.Commands.add("atchDownloadAll", () => {
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type("Tester1!");
+      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").click();
     }
   });

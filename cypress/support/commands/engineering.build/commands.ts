@@ -55,7 +55,7 @@ Cypress.Commands.add("ebClickClone", () => {
 
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-  cy.get("input[name=\"password\"]").type("Tester1!");
+  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();

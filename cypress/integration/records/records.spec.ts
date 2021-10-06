@@ -66,7 +66,6 @@ context("Records flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -77,7 +76,6 @@ context("Records flow", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
@@ -115,7 +113,6 @@ context("Records flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -289,7 +286,7 @@ context("Records flow", () => {
   context("Approve form and close it", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });

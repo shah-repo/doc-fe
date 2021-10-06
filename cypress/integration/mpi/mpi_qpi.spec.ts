@@ -187,7 +187,6 @@ context("Mpi/Qpi test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -303,7 +302,6 @@ context("Mpi/Qpi test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -445,3 +443,4 @@ context("Mpi/Qpi test", () => {
 });
 
 export { };
+

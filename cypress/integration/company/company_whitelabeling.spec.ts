@@ -56,7 +56,6 @@ context("Whitelabeling test", () => {
       it("[API]Login admin tester", (done: any) => {
         cy.authApiLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         }).then((response) => {
           adminLoginResponse = response;
           adminSessionId = adminLoginResponse.sessionId;
@@ -92,7 +91,6 @@ context("Whitelabeling test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -144,9 +142,9 @@ context("Whitelabeling test", () => {
 
   context("Change company whitelabeling", () => {
     it("[API] Patch company", (done: any) => {
-      cy.cmpAdminUpdateCompany({
-        sessionId: loginResponse.sessionId,
-        companyId: createdCompany.id,
+      cy.cmpUpdateCompany({
+        sessionId: adminLoginResponse.sessionId,
+        employeeId: adminEmployee.id,
         payload: {
           whiteLabeling: {
             DEV_THEME: {
@@ -203,7 +201,6 @@ context("Whitelabeling test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 

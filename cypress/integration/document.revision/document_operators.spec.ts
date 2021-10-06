@@ -77,7 +77,6 @@ context("Document Operators Access Test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -90,7 +89,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -296,7 +294,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[3].email,
-        password: "Tester1!",
       });
     });
 
@@ -354,7 +351,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[4].email,
-        password: "Tester1!",
       });
     });
 
@@ -400,7 +396,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -440,7 +435,7 @@ context("Document Operators Access Test", () => {
 
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
@@ -455,7 +450,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[3].email,
-        password: "Tester1!",
       });
     });
 
@@ -475,7 +469,7 @@ context("Document Operators Access Test", () => {
 
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
@@ -490,7 +484,6 @@ context("Document Operators Access Test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[4].email,
-        password: "Tester1!",
       });
     });
 
@@ -510,7 +503,7 @@ context("Document Operators Access Test", () => {
 
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });

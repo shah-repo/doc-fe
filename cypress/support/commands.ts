@@ -42,17 +42,25 @@ interface IUser {
   email: string;
   name: string;
 }
+
+interface IfieldsConfig{
+  [key: string]: {
+    visible: boolean;
+    required?: boolean;
+    label?: string;};
+}
 interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
-  group: string;
-  privateNumberPool: boolean;
-  startingNumber?: number;
-  pageDetails?: any;
   isQms?: boolean;
+  group: string;
+  privateNumberPool?: boolean;
+  startingNumber?: number;
   needsSignature?: boolean;
-  defaultTraining?: boolean;
+  category?: string;
   schema?: any;
+  fieldsConfig?: IfieldsConfig;
+  canRedLine?: boolean;
 }
 
 export interface ICreateCompanyBootstrap {

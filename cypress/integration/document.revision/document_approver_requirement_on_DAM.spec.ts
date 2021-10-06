@@ -62,7 +62,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
@@ -75,7 +74,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -477,7 +475,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: FIRST_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -492,7 +489,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -508,7 +505,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: SECOND_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -524,7 +520,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Confirm password", () => {
       SystemRequirement("REQ-0910");
-      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
         cy.get(`[data-cy="passwordConfirm"]`).click();
       });
@@ -540,7 +536,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: THIRD_USER.email,
-        password: "Tester1!",
       });
     });
 
@@ -555,7 +550,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -577,7 +572,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 
