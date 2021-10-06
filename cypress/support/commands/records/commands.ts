@@ -42,15 +42,19 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
     cy.get("#clearFilter").click();
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("#name").type(params.title).wait(500);
+    cy.get("#name").type(params.title);
     cy.unClick();
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").click().wait(300);
+    cy.get("[id=\"mui-component-select-displayStatus\"]").click();
+    cy.wait(1000);
     cy.get("li[data-value]").contains(params.status).click();
+    cy.wait(1000);
   });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).click();
+    cy.wait(1000);
   });
 });
 

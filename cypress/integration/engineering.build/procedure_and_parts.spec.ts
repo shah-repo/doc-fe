@@ -997,6 +997,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 3,
           typeOfMaterial: "gram",
         });
+        cy.unClick();
         cy.wait(3000);
       });
 
@@ -1006,6 +1007,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 2,
           typeOfMaterial: "pounds",
         });
+        cy.unClick();
         cy.wait(3000);
       });
 
