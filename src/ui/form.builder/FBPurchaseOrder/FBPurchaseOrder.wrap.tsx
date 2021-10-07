@@ -1,9 +1,11 @@
 import { isEmpty, map } from "lodash";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
@@ -30,6 +32,10 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       documentId: isReceivable ? poReceiveState?.data?.documentId : workspaceState?.document?.document?.id,
     });
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
+
+    useObserver(() => {
+      disabled = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
+    });
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
       if (disabled && !(workspaceState?.isDraft || workspaceState?.isPendingChange)) {
