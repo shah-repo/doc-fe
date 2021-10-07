@@ -4,9 +4,9 @@
 
 set -a
   export REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS="30"
-  export REACT_APP_AWS_COGNITO_CLIENT_ID="4ie5ck29g8ebg8925m4tgmnhah"
+  export REACT_APP_AWS_COGNITO_CLIENT_ID="1ere7pgti58jked7s21god194v"
   export REACT_APP_FRONTEND_URL="http://frontend:$ENLIL_COMPOSE_EXPOSE_FE_PORT"
-  export REACT_APP_SIGNUP_DOMAIN_URL="https://shifamed-doc-develop.auth.us-west-2.amazoncognito.com"
+  export REACT_APP_SIGNUP_DOMAIN_URL="https://shifamed-doc-dev.auth.us-west-2.amazoncognito.com"
   export BROWSER="none"
   export PORT=${ENLIL_COMPOSE_EXPOSE_FE_PORT}
   export REACT_APP_THEME="DEV_THEME"

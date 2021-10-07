@@ -1,4 +1,4 @@
-import { at, cloneDeep, get, has, isArray, isEmpty, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
@@ -93,6 +93,10 @@ export const withFBOnChange = <T extends FBInputProps>(
     function contextValue(value: boolean | string | string[] | undefined = "") {
       if (!editorProperties || isEmpty(editorProperties)) {
         return;
+      }
+
+      if (isNumber(value)) {
+        value = editorProperties.includes("includeContext");
       }
 
       if (isString(value)) {
