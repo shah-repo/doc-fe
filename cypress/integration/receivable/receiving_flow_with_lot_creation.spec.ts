@@ -360,7 +360,6 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -889,7 +888,6 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: ADMIN_USER.email,
-          password: "Tester1!",
         });
       });
 
@@ -1005,7 +1003,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
       it("Click 'Approve' button", () => {
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
@@ -1202,7 +1200,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Click 'Approve' button", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });

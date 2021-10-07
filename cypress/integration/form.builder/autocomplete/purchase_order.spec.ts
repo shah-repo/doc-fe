@@ -234,7 +234,6 @@ context("Autocomplete 'Purchase Order' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -247,7 +246,6 @@ context("Autocomplete 'Purchase Order' test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -344,7 +342,7 @@ context("Autocomplete 'Purchase Order' test", () => {
 
       it("Click 'Approve' button", () => {
         cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
           CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"common.confirm\"]").click();

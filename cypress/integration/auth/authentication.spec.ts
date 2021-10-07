@@ -114,7 +114,6 @@ context("Authentication", () => {
       SystemRequirement("REQ-4160");
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 

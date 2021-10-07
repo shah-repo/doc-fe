@@ -292,7 +292,6 @@ context("Autocomplete test", () => {
     it("[API]Login Admin", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -924,7 +923,6 @@ context("Autocomplete test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -996,7 +994,7 @@ context("Autocomplete test", () => {
 
     it("Approve record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
         cy.get("[data-cy=\"common.confirm\"]").click();
       });
@@ -1005,7 +1003,6 @@ context("Autocomplete test", () => {
     it("Logs user in & Selects company", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });

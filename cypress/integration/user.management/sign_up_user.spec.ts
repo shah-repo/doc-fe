@@ -40,7 +40,6 @@ context("Sign up user flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1;
@@ -53,7 +52,6 @@ context("Sign up user flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -99,12 +97,12 @@ context("Sign up user flow", () => {
 
     it("Enter password", () => {
       SystemRequirement("REQ-4110");
-      cy.authEnterSignUpPassword({ password: "Tester1!" });
+      cy.authEnterSignUpPassword();
     });
 
     it("Enter password for confirmation", () => {
       SystemRequirement("REQ-4110");
-      cy.authEnterSignUpConfirmPassword({ password: "Tester1!" });
+      cy.authEnterSignUpConfirmPassword();
       cy.wait(1500);
     });
 
@@ -128,7 +126,6 @@ context("Sign up user flow", () => {
     it("Log user in", () => {
       cy.authLogin({
         email: emailOfUserToSignUp,
-        password: "Tester1!",
       });
     });
 

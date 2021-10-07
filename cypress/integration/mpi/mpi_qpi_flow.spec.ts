@@ -187,7 +187,6 @@ context("Mpi/Qpi flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -303,7 +302,6 @@ context("Mpi/Qpi flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -473,7 +471,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[2].email,
-          password: "Tester1!",
         });
       });
 
@@ -489,7 +486,7 @@ context("Mpi/Qpi flow", () => {
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -505,7 +502,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         });
       });
 
@@ -607,7 +603,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[2].email,
-          password: "Tester1!",
         });
       });
 
@@ -623,7 +618,7 @@ context("Mpi/Qpi flow", () => {
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get(`[data-cy="passwordConfirm"]`).click();
       });
     });
@@ -636,7 +631,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         });
       });
 
@@ -813,7 +807,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[2].email,
-          password: "Tester1!",
         });
       });
 
@@ -829,7 +822,7 @@ context("Mpi/Qpi flow", () => {
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).click();
@@ -845,7 +838,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         });
       });
 
@@ -947,7 +939,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[2].email,
-          password: "Tester1!",
         });
       });
 
@@ -963,7 +954,7 @@ context("Mpi/Qpi flow", () => {
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get(`[data-cy="passwordConfirm"]`).click();
       });
     });
@@ -976,7 +967,6 @@ context("Mpi/Qpi flow", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         });
       });
 
@@ -999,3 +989,4 @@ context("Mpi/Qpi flow", () => {
 });
 
 export { };
+

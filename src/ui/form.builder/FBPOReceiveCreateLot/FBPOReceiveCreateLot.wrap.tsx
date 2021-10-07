@@ -29,8 +29,7 @@ export const withFBPOReceiveCreateLot = <T extends FBPOReceiveCreateLotProps>(
     );
 
     handleCreateLot = async ()  => {
-      const values = formState?.getValues();
-      await createLotState.submit(values);
+      createLotState.submit(formState?.getValues());
       dialogState?.closeDialog();
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));

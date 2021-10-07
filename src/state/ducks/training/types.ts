@@ -20,6 +20,7 @@ export interface TrainingRecord {
   isRefreshed: boolean;
   isValid: boolean;
   trainingPlan?: TrainingPlan;
+  documentRevision: Partial<DocumentRevision>;
 }
 
 export interface TrainingListData {

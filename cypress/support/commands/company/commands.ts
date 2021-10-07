@@ -3,6 +3,7 @@ import faker from "faker";
 import { Company } from "../../../../src/state/ducks/company/types";
 import { addTestContext } from "../../../utils/context/addTestContext";
 import { HEX2RGB } from "../../../utils/context/converers";
+import { ICreateCompanyBootstrap } from "../../commands";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -12,49 +13,6 @@ const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 export { };
 // We need this interfaces for Company Bootstrap, do not remove
-interface IUser {
-  email: string;
-  name: string;
-}
-//
-interface IfieldsConfig{
-  [key: string]: {
-    visible: boolean;
-    required?: boolean;
-    label?: string;};
-}
-
-interface IdocumentTypeDto {
-  documentTypeName: string;
-  documentTypeAcronym: string;
-  isQms?: boolean;
-  group: string;
-  privateNumberPool?: boolean;
-  startingNumber?: number;
-  needsSignature?: boolean;
-  category?: string;
-  schema?: any;
-  fieldsConfig?: IfieldsConfig;
-  canRedLine?: boolean;
-}
-
-export interface ICreateCompanyBootstrap {
-  name: string;
-  companyAcronym: string;
-  companyAdminEmail: string;
-  importerEmail: string;
-  slackIntegrationEnabled: boolean;
-  helloSignIntegrationEnabled: boolean;
-  helloSignTestMode: boolean;
-  numOfRevStages: number;
-  numOfDocDigits: number;
-  users: IUser[];
-  documentTypes: IdocumentTypeDto[];
-  whiteLabeling?: any;
-  addresses?: string[];
-  remoteValidatorBundleName: string;
-  acctCodes?: string[];
-}
 
 declare global {
   namespace Cypress {
@@ -72,10 +30,6 @@ declare global {
         employeeId: string;
         sessionId: string;
         payload: any;}): Chainable<Subject>;
-      cmpAdminUpdateCompany(params: {
-        companyId: string;
-        sessionId: string;
-        payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpCompanyDoesntExist(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
@@ -167,18 +121,13 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
       },
     },
   };
-  const body: ICreateCompanyBootstrap = {
-    ...bodyDefaults,
-    ...payload,
-  };
-  cy.request({
-    method: "POST",
-    url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
-    body,
-    headers: {
-      Authorization: `bearer_admin ${sessionId}`,
-    },
-  }).then((response) => response.body);
+
+  cy.createCompany({
+    payload: {
+      ...bodyDefaults,
+      ...payload,
+    }, sessionId,
+  });
 });
 
 Cypress.Commands.add("cmpUpdateCompany", (
@@ -219,22 +168,6 @@ Cypress.Commands.add("cmpTurnOffAutosave", () => {
 
 Cypress.Commands.add("cmpTurnOnAutosave", () => {
   cy.get("[name=\"toggleAutosave\"]").check();
-});
-
-Cypress.Commands.add("cmpAdminUpdateCompany", (
-  params: {
-    companyId: string;
-    sessionId: string;
-    payload: Partial<Company>;
-  }) => {
-  cy.request({
-    method: "PATCH",
-    url: `${CONFIG.BE_URL}/api/v1/company/${params.companyId}`,
-    body: params.payload,
-    headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
-    },
-  }).then((response) => response.body);
 });
 
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {

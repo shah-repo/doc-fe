@@ -75,7 +75,6 @@ context("Check DAM enforcement rules for document types", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
         multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
@@ -282,7 +281,6 @@ context("Check DAM enforcement rules for document types", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       });
     });
 
