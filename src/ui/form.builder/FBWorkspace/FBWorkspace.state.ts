@@ -15,6 +15,7 @@ import FBStore from "../FBStore/FBStore";
 class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   @observable approvals?: FBInlineApprovalBody[];
+  @observable loadAudit = false;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
@@ -170,6 +171,7 @@ class FBWorkspaceState extends FBSchemaState {
   };
 
   public saveDocRev = (values?: Record<string, any>) => {
+    this.loadAudit = false;
     const { id, mode, autosave } = this;
     if (!autosave) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
@@ -210,13 +212,14 @@ class FBWorkspaceState extends FBSchemaState {
       } else {
         this.setDirty(false);
         this.setFormInputData(data);
-        if (this.getItemsByType("inlineapproval")) {
+        if (!isEmpty(this.getItemsByType("inlineapproval"))) {
           FBStore.audit.set({
             url: FBEndpoint.DocumentRevisionAudit,
-            urlValues: { documentId: this.id },
+            urlValues: { documentId: id },
             method: "get",
           });
         }
+        this.loadAudit = true;
         this.documentRevApi.onSuccess();
       }
     });
@@ -250,4 +253,3 @@ class FBWorkspaceState extends FBSchemaState {
 }
 
 export default FBWorkspaceState;
-

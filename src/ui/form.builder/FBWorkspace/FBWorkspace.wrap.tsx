@@ -3,7 +3,9 @@ import { differenceBy, filter, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes, FBSnackbarState, FBWorkspaceProps, FBWorkspaceState } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 
@@ -47,6 +49,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       mode,
       autosave,
     });
+    const dispatch = useDispatch();
 
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
@@ -66,6 +69,19 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       checkIsDocumentEB(formGroupOptions) &&
       Boolean(parent)
     );
+
+    React.useEffect(() => {
+      reaction(
+        () => workspaceState?.loadAudit,
+        (state) => {
+          if (!state) { return; }
+          const { id } = workspaceState || {};
+          if (!id) { return; }
+          dispatch(documentRevisionsActions.loadAudit(id));
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
       const schemaDiff = differenceBy(workspaceState?.schema, schema || [], "name");
