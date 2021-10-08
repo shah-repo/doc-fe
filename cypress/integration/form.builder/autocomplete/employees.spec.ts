@@ -105,10 +105,10 @@ context("Autocomplete 'Employees' test", () => {
 
       context("Enable Hello Sign", () => {
         it("Click on created user", () => {
-          cy.contains(approverEmail).click();
+          cy.contains(approverEmail).arrowClick();
         });
         it("Checks on 'Enable Hello Sign' button", () => {
-          cy.contains("Enable Hello Sign").click();
+          cy.contains("Enable Hello Sign").arrowClick();
         });
       });
     });
@@ -156,7 +156,7 @@ context("Autocomplete 'Employees' test", () => {
           });
 
           it("Select 'Employees' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Employees{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Employees{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -177,7 +177,7 @@ context("Autocomplete 'Employees' test", () => {
       context("Verify Autocomplete 'Employees'", () => {
         it("Verify created 'Employees' in the list", () => {
           cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-            .find("[data-cy^=\"test-label-\"]").click();
+            .find("[data-cy^=\"test-label-\"]").arrowClick();
           cy.get(".MuiAutocomplete-popper ul li").should("contain", `${approverName}`);
         });
 

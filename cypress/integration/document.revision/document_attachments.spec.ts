@@ -244,7 +244,7 @@ context("Document Attachment Flow", () => {
         });
 
         it("Select Obsolete revision option", () => {
-          cy.get("[id=\"RevisionTypeChange-obsolete\"]").click();
+          cy.get("[id=\"RevisionTypeChange-obsolete\"]").arrowClick();
         });
 
         it("Clicks Save button", () => {

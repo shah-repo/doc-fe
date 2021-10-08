@@ -15,6 +15,15 @@ declare global {
        * Custom command to select DOM element by data-cy attribute.
        * @example cy.dataCy('greeting')
       */
+      arrowClick(
+        options?: Partial<Cypress.ClickOptions>): Chainable<Subject>;
+      arrowClick(
+        x: number,
+        y: number,
+        options?: Partial<Cypress.ClickOptions>): Chainable<Subject>;
+      arrowType(
+        text: string,
+        options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
@@ -99,7 +108,7 @@ Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstra
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
-    timeout: 10 * 1000,
+    timeout: 20 * 1000,
   }).then((response) => response.body);
 });
 
@@ -149,11 +158,11 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
 });
 
 Cypress.Commands.add("selectCompany", (params: { name: string }) => {
-  cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).click();
+  cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).arrowClick();
 });
 
 Cypress.Commands.add("unClick", () => {
-  cy.get("body").click( 10, 10, { force: true });
+  cy.get("body").arrowClick( 10, 10, { force: true });
 });
 
 Cypress.Commands.add(
@@ -180,38 +189,59 @@ Cypress.Commands.add(
     cy.wrapWithWaitOnApiCalls([name], callback, options);
   });
 
-Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-  const state = cy.state("current").attributes.name;
-
-  if (state === "click") {
-    cy.wrap(element)
-      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(element, options));
-  }
-  else {
-    return originalFn(element, options);
-  }
+Cypress.Commands.add("arrowClick", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  options?: Partial<Cypress.ClickOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).click(options);
 });
 
-Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-  const state = cy.state("current").attributes.name;
-
-  if (state === "type") {
-    cy.wrap(element)
-      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(element, text, options));
-  }
-  else {
-    return originalFn(element, text, options);
-  }
+Cypress.Commands.add("arrowClick", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  x: number,
+  y: number,
+  options?: Partial<Cypress.ClickOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).click(x, y, options);
 });
+
+Cypress.Commands.add("arrowType", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  text: string,
+  options?: Partial<Cypress.TypeOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).type(text, options);
+});
+
+// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
+//   const state = cy.state("current").attributes.name;
+
+//   if (state === "click") {
+//     cy.wrap(element)
+//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+//       .then(() => originalFn(element, options));
+//   }
+//   else {
+//     return originalFn(element, options);
+//   }
+// });
+
+// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
+//   const state = cy.state("current").attributes.name;
+
+//   if (state === "type") {
+//     cy.wrap(element)
+//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+//       .then(() => originalFn(element, text, options));
+//   }
+//   else {
+//     return originalFn(element, text, options);
+//   }
+// });
 
 // Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
 //   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
-//     cy.wrap(subject).click();
+//     cy.wrap(subject).arrowClick();
 //   });
 //   cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
-//     cy.wrap(subject).type(thingToTypeIn, options).unClick();
+//     cy.wrap(subject).arrowType(thingToTypeIn, options).unClick();
 //   });
 // });
 

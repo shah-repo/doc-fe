@@ -128,7 +128,7 @@ context("Group Permissions Flow", () => {
 
   context("Login company admin", () => {
     it("Logout", () => {
-      cy.get("[data-cy=\"dialog-close\"]").click();
+      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
       cy.authLogout();
     });
 
@@ -355,7 +355,7 @@ context("Group Permissions Flow", () => {
 
     it("Check if 'Change Owner' button exists on AR", () => {
       SystemRequirement("REQ-2520");
-      cy.get("#HeaderMenuButton").click();
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
   });

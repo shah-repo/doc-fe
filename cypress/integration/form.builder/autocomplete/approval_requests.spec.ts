@@ -93,7 +93,7 @@ context("Autocomplete 'Approval requests' test", () => {
       it("Click Create Approval Request", () => {
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostChangeRequests], () => {
-            cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
+            cy.get("[data-cy=\"navigation.createChangeRequest\"]").arrowClick();
           });
       });
 
@@ -145,7 +145,7 @@ context("Autocomplete 'Approval requests' test", () => {
           });
 
           it("Select 'Approval requests' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Approval requests{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Approval requests{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -191,7 +191,7 @@ context("Autocomplete 'Approval requests' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const approvalRequests = response.body;

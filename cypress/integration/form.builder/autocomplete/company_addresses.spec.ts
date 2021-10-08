@@ -71,27 +71,27 @@ context("Autocomplete 'Company addresses' test", () => {
   context("Autocomplete 'Company addresses' test", () => {
     context("Create 'Company addresses'", () => {
       it("Click on User menu button", () => {
-        cy.get("[data-cy=\"UserMenuButton\"]").click();
+        cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
       });
 
       it("Click on 'My Profile'", () => {
-        cy.contains("My profile").click();
+        cy.contains("My profile").arrowClick();
       });
 
       it("Click 'Add Addresses' button", () => {
-        cy.get("#EditRemoveAddFields-add").click();
+        cy.get("#EditRemoveAddFields-add").arrowClick();
       });
 
       it("Enter New Address " + companyAddress, () => {
-        cy.get("[placeholder=\"New Address\"]").type(companyAddress);
+        cy.get("[placeholder=\"New Address\"]").arrowType(companyAddress);
       });
 
       it("Click 'DONE' button", () => {
-        cy.get("#EditRemoveAddFields-done").click();
+        cy.get("#EditRemoveAddFields-done").arrowClick();
       });
 
       it("Close Profile dialog", () => {
-        cy.get("#DialogContent-close").click();
+        cy.get("#DialogContent-close").arrowClick();
       });
     });
 
@@ -138,7 +138,7 @@ context("Autocomplete 'Company addresses' test", () => {
           });
 
           it("Select 'Company addressess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Company addresses{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Company addresses{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -164,7 +164,7 @@ context("Autocomplete 'Company addresses' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.addresses.length > 0 ) {
               const addresses = response.body.addresses;

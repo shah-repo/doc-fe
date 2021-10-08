@@ -79,23 +79,23 @@ context("Autocomplete 'Groups' test", () => {
       });
 
       it("Select 'Unofficial' radio button", () => {
-        cy.get("input[value=\"unofficial\"]").click();
+        cy.get("input[value=\"unofficial\"]").arrowClick();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").type(groupName);
+        cy.get("#Group-groupName").arrowType(groupName);
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").click().type("{downarrow}{enter}");
+        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").click();
+        cy.get("#Group-createGroup").arrowClick();
       });
 
       it("Close dialog box", () => {
-        cy.get("#DialogContent-close").click();
+        cy.get("#DialogContent-close").arrowClick();
       });
     });
 
@@ -142,7 +142,7 @@ context("Autocomplete 'Groups' test", () => {
           });
 
           it("Select 'Groupss' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Groups{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Groups{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -168,7 +168,7 @@ context("Autocomplete 'Groups' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const groups = response.body;

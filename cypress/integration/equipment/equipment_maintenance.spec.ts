@@ -399,16 +399,16 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).click();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
     });
 
     it("Select 'Maintenance record form' for preventative maintenance required", () => {
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).type("10");
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType("10");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -418,16 +418,16 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).click();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
     });
 
     it("Select 'Maintenance record form' for calibration required", () => {
-      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).click();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+      cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).type("5");
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType("5");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -511,7 +511,7 @@ context("Equipment maintenance test", () => {
         it("Select 'Equipment maintenance document'", () => {
           SystemRequirement("REQ-2870");
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-            cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+            cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
           });
         });
       });
@@ -547,20 +547,20 @@ context("Equipment maintenance test", () => {
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
-      cy.get("[data-cy=\"equipment_maintainer\"]").click();
-      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
+      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
 
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
-      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
       cy.wait(500);
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
           const dayNumber = $el.text();
           if (dayOfTheMonth.toString() === dayNumber) {
-            cy.wrap($el).click();
+            cy.wrap($el).arrowClick();
           }
         });
       cy.wait(500);
@@ -598,7 +598,7 @@ context("Equipment maintenance test", () => {
 
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+        cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
       });
     });
 
@@ -648,13 +648,13 @@ context("Equipment maintenance test", () => {
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
-      cy.get("[data-cy=\"equipment_maintainer\"]").click();
-      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).click();
+      cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
 
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
-      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").click();
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
       cy.wait(500);
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
@@ -662,7 +662,7 @@ context("Equipment maintenance test", () => {
           const dayNumber = $el.text();
           cy.log(dayNumber);
           if (dayOfTheMonth.toString() === dayNumber) {
-            cy.wrap($el).click();
+            cy.wrap($el).arrowClick();
           }
         });
       cy.wait(500);
@@ -759,7 +759,7 @@ context("Equipment maintenance test", () => {
       it("Select 'Equipment calibration document'", () => {
         SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
-          cy.get("div.ReactVirtualized__Table__rowColumn").first().click();
+          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
           cy.wait(2000);
         });
       });

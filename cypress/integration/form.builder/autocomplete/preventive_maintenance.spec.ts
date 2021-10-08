@@ -160,7 +160,7 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
           });
 
           it("Select 'Maintenance' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Preventative Maintenance Forms{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Preventative Maintenance Forms{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -186,7 +186,7 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               cy.get(".MuiAutocomplete-popper ul li")

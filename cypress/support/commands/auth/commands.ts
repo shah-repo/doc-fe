@@ -47,29 +47,27 @@ Cypress.Commands.add("authApiLogout", () => {
 });
 
 Cypress.Commands.add("authLogin", (params: { email: string; password?: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PreventIdleLogout, () => {
-    cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
-  });
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
   cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.log(params.email);
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
       cy.get("[data-cy=\"LoginFormPresenter-password\"]")
-        .type(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
+        .arrowType(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
         .wait(300);
-      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
   addTestContext("user", params.email);
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authVisitLogin", () => {
@@ -77,7 +75,7 @@ Cypress.Commands.add("authVisitLogin", () => {
 });
 
 Cypress.Commands.add("authSubmitLogin", () => {
-  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
 });
 
 Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show: boolean}) => {
@@ -107,24 +105,24 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
 });
 
 Cypress.Commands.add("authLogout", () => {
-  cy.get("[data-cy=\"UserMenuButton\"]").click();
+  cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.DeleteLogout, () => {
-    cy.get("[data-cy=\"header.logout\"]").click();
+    cy.get("[data-cy=\"header.logout\"]").arrowClick();
   });
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
-  cy.get("[name=\"password\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"password\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
 Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {
-  cy.get("[name=\"confirmPass\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"confirmPass\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.unClick();
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
-      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").click();
+      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
     });
 });

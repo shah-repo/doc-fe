@@ -195,7 +195,7 @@ context("Autocomplete 'Parts' test", () => {
           });
 
           it("Select 'Partss' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Parts{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Parts{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -221,7 +221,7 @@ context("Autocomplete 'Parts' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const parts = response.body;

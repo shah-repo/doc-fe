@@ -473,9 +473,7 @@ context("Receivable list test", () => {
     });
 
     it("Add approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {

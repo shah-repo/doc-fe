@@ -152,7 +152,7 @@ context("Approval request implementation tasks", () => {
     it("Add 'Implementation Task' to AR", () => {
       cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").type("Implementation Task");
+      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
       cy.fbAddField();
     });
 
@@ -211,13 +211,13 @@ context("Approval request implementation tasks", () => {
   context("Add implementation task and continue AR creation flow", () => {
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").click();
-      cy.get("[data-cy=\"title\"]").type("Task One");
-      cy.get("[data-cy=\"description\"]").next().type("Task Description");
-      cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
+      cy.get("[data-cy=\"title\"]").arrowType("Task One");
+      cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
+      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
       });
     });
 
@@ -251,12 +251,12 @@ context("Approval request implementation tasks", () => {
 
     it("Complete Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
-      cy.get("[data-cy=\"description\"]").next().type("Task is done");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
+      cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
       });
-      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
     });
 
     it("Check 'Implementation task' status is 'Done'", () => {

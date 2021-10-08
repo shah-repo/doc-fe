@@ -12,7 +12,7 @@
   "defaultCommandTimeout": 50000,
   "responseTimeout": 50000,
   "trashAssetsBeforeRuns": false,
-  "numTestsKeptInMemory": 0,
+  "numTestsKeptInMemory": 100,
   "modifyObstructiveCode": false,
   "env": {
     "TEST_COMPANY_REPLICA_NAME": "test"

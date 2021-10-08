@@ -259,7 +259,7 @@ context("PO approval test", () => {
     it("Click 'Save' document", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
       cy.wait(500);
     });
@@ -328,7 +328,7 @@ context("PO approval test", () => {
 
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
@@ -345,9 +345,9 @@ context("PO approval test", () => {
 
     it("Add an Approval", () => {
       cy.wait(2000);
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
       });
     });
 
@@ -358,15 +358,15 @@ context("PO approval test", () => {
     it("Create document in 'Pending approval' state", () => {
       SystemRequirement("REQ-1520");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Click on 'Withdraw Submission' button", () => {
       SystemRequirement("REQ-1530");
-      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
+      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+        cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
     });
 
@@ -416,15 +416,15 @@ context("PO approval test", () => {
 
     it("Add an Approval", () => {
       cy.wait(2000);
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
       });
     });
 
     it("Create document in 'Pending approval' state", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
@@ -450,8 +450,8 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
-      cy.get("[data-cy=\"transition-reject\"]").first().click().wait(300);
-      cy.get("#AlertDialog-continueButton").click();
+      cy.get("[data-cy=\"transition-reject\"]").first().arrowClick().wait(300);
+      cy.get("#AlertDialog-continueButton").arrowClick();
       cy.checkToastMessage({ exists: false });
     });
 

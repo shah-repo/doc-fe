@@ -307,7 +307,7 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"form.builder.cancel\"]").click().wait(1000);
+      cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick().wait(1000);
     });
   });
 
@@ -438,7 +438,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Open history drawer", () => {
-      cy.get("[data-cy=\"timeline-icon\"]").click();
+      cy.get("[data-cy=\"timeline-icon\"]").arrowClick();
     });
 
     it("Capture Audit date", () => {

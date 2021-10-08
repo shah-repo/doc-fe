@@ -228,7 +228,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Choose an existing part from the list of available parts", () => {
-      cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
+      cy.get("[data-cy=\"childrenParts\"]").arrowType("Test Part{downarrow}{enter}");
     });
 
     it("Click on 'Add a field'", () => {
@@ -274,7 +274,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").click();
+      cy.get("[data-cy='permission-icon']").arrowClick();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
@@ -335,7 +335,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Test First Field");
+      cy.get("[name^='text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -380,7 +380,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").type("Test First Field");
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -429,15 +429,15 @@ context("Document Operators Access Test", () => {
 
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
@@ -468,10 +468,10 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
@@ -502,10 +502,10 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 

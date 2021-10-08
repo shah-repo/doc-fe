@@ -180,7 +180,7 @@ context("Document Access Rights", () => {
     });
 
     it(`Remove default Everyone from group`, () => {
-      cy.get(`[data-cy="field-securityGroups"]`).type(`{backspace}`);
+      cy.get(`[data-cy="field-securityGroups"]`).arrowType(`{backspace}`);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -224,7 +224,7 @@ context("Document Access Rights", () => {
     });
 
     it(`Remove default Everyone from group`, () => {
-      cy.get(`[data-cy="field-securityGroups"]`).type(`{backspace}`);
+      cy.get(`[data-cy="field-securityGroups"]`).arrowType(`{backspace}`);
     });
 
     it(`Select one group: '${groupOne}'`, () => {

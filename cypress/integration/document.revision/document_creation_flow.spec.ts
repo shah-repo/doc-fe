@@ -223,7 +223,7 @@ context("Document Creation Flow", () => {
 
       it("Upload multiple attachments at once: 'image.jpg' and 'test_image.jpg'", () => {
         SystemRequirement("REQ-0220");
-        cy.get("#AttachmentFieldPresenter-linkButton").click();
+        cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
         cy.get("#attachments-button-file-clean-copy")
           .attachFiles(
             [
@@ -383,7 +383,7 @@ context("Document Creation Flow", () => {
 
     context("Check document type redLine option", () => {
       it("Open attachment upload dialog", () => {
-        cy.get("[id=AttachmentFieldPresenter-linkButton]").click();
+        cy.get("[id=AttachmentFieldPresenter-linkButton]").arrowClick();
       });
 
       it("Verify there is no option to upload redline attachment", () => {
@@ -391,7 +391,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Close attachment upload dialog", () => {
-        cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").click();
+        cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").arrowClick();
       });
     });
 

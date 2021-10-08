@@ -44,7 +44,7 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
-  cy.wait(1000).get("[data-cy=\"navigation." + params.navigItem + "\"]").click({ force: true });
+  cy.wait(1000).get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
@@ -56,7 +56,7 @@ Cypress.Commands.add("navigToDashboard", () => {
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
-  cy.get("a[href=\"/document_type_management\"]").click().wait(1000);
+  cy.get("a[href=\"/document_type_management\"]").arrowClick().wait(1000);
 });
 
 Cypress.Commands.add("navigToRecords", () => {

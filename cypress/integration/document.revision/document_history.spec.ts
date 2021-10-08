@@ -209,7 +209,7 @@ context("Check Document History", () => {
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
-        cy.get("[data-cy=field-description]>label").click();
+        cy.get("[data-cy=field-description]>label").arrowClick();
         // auto-save
         cy.wait(1000);
       });
@@ -278,7 +278,7 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.get("#root").contains(formTitle.newValue).click();
+      cy.get("#root").contains(formTitle.newValue).arrowClick();
     });
   });
 
@@ -330,7 +330,7 @@ context("Check Document History", () => {
 
     it(`select '${formTitle.newValue}'`, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.get("#root").contains(formTitle.newValue).click();
+        cy.get("#root").contains(formTitle.newValue).arrowClick();
       });
     });
   });

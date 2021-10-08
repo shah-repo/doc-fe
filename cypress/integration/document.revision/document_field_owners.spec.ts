@@ -185,7 +185,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").click();
+      cy.get("[data-cy='permission-icon']").arrowClick();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
@@ -245,7 +245,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Test First Field");
+      cy.get("[name^='text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -281,7 +281,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").type("Test First Field");
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -373,7 +373,7 @@ context("Document Field Owners Test", () => {
 
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 

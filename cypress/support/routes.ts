@@ -582,7 +582,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/aggregated_audit",
     },
     callConfig: {
-      requestTimeout: 35 * 1000,
+      requestTimeout: 4 * 1000,
       responseTimeout: 40 * 1000,
     },
   },

@@ -320,7 +320,7 @@ context("Purchase order HTML template form", () => {
     it("Add Required Date", () => {
       SystemRequirement("REQ-1420");
       // cy.poAddDateRequired();
-      cy.xpath("//input[@name]/ ../div/button").last().click().wait(200);
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick().wait(200);
       cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
       "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
         .click().wait(300);
@@ -331,21 +331,21 @@ context("Purchase order HTML template form", () => {
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy^=\"po-supplier-built-in\"]").type("SUP-00004{downarrow}{enter}");
+      cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00004{downarrow}{enter}");
     });
 
     it("Fill order Date", () => {
       SystemRequirement("REQ-1420");
-      cy.xpath("//input[@name]/ ../div/button").last().click().wait(200);
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick().wait(200);
       cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
       "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
         .click().wait(300);
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
       });
     });
 
@@ -355,15 +355,15 @@ context("Purchase order HTML template form", () => {
 
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 

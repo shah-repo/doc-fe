@@ -126,7 +126,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
       cy.fbAddNewFieldButton();
       cy.wait(2000);
     });
@@ -173,7 +173,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
-        .click({ force: true }).clear().type("fb-paragraph");
+        .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.fbAddNewFieldButton();
     });
 
@@ -200,7 +200,7 @@ context("Add and edit FB fields - Test 1", () => {
 
     it("Add Timer", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+      cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
       cy.fbAddNewFieldButton();
     });
@@ -296,7 +296,7 @@ context("Add and edit FB fields - Test 1", () => {
     it("Edit Paragraph", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
-        .click({ force: true }).clear().type("fb-paragraph1");
+        .click({ force: true }).clear().arrowType("fb-paragraph1");
       cy.fbAddNewFieldButton();
     });
 

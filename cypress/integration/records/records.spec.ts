@@ -268,7 +268,7 @@ context("Records flow", () => {
 
     it("Select approver'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy*=fb-approvals-]").type(USERS[2].name + "{downarrow}{enter}");
+        cy.get("[data-cy*=fb-approvals-]").arrowType(USERS[2].name + "{downarrow}{enter}");
       });
     });
 
@@ -278,17 +278,17 @@ context("Records flow", () => {
 
     it("Finalize and release button click'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
   });
 
   context("Approve form and close it", () => {
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
     });

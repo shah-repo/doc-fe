@@ -146,7 +146,7 @@ context("Autocomplete 'Document types' test", () => {
           });
 
           it("Select 'Document typess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Document types{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Document types{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -171,7 +171,7 @@ context("Autocomplete 'Document types' test", () => {
             },
           }).then((response) => {
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const docTypes = response.body;

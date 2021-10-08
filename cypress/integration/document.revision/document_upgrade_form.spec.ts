@@ -307,7 +307,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -345,7 +345,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -482,7 +482,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
     });
 
@@ -535,7 +535,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
 
       context("Release updated record", () => {

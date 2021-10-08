@@ -146,7 +146,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Document Revisions In Draft without Records{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revisions In Draft without Records{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -172,7 +172,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const draftDocRevs = response.body;

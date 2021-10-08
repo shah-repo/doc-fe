@@ -482,14 +482,14 @@ context("Mpi/Qpi flow", () => {
     context("Approve document in review", () => {
       it(`approve document`, () => {
         cy.wait(1000);
-        cy.get("#root").contains("Approve").click();
+        cy.get("#root").contains("Approve").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
-            cy.get(`[data-cy="passwordConfirm"]`).click();
+            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
       });
     });
@@ -614,12 +614,12 @@ context("Mpi/Qpi flow", () => {
     context("Reject document in review", () => {
       it(`Reject document`, () => {
         cy.wait(1000);
-        cy.get("#root").contains("Reject").click();
+        cy.get("#root").contains("Reject").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get(`[data-cy="passwordConfirm"]`).click();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
     });
 
@@ -818,14 +818,14 @@ context("Mpi/Qpi flow", () => {
     context("Approve document in review", () => {
       it(`approve document`, () => {
         cy.wait(1000);
-        cy.get("#root").contains("Approve").click();
+        cy.get("#root").contains("Approve").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
-            cy.get(`[data-cy="passwordConfirm"]`).click();
+            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
       });
     });
@@ -950,12 +950,12 @@ context("Mpi/Qpi flow", () => {
     context("Reject document in review", () => {
       it(`Reject document`, () => {
         cy.wait(1000);
-        cy.get("#root").contains("Reject").click();
+        cy.get("#root").contains("Reject").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get(`[data-cy="passwordConfirm"]`).click();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
     });
 

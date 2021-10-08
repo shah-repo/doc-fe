@@ -311,7 +311,7 @@ context("Document Approval Matrix Flow", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
       });
     });
   });
@@ -338,7 +338,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
     });
   });
 
@@ -486,7 +486,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
-      cy.get("#root").contains(DAMTitle).click();
+      cy.get("#root").contains(DAMTitle).arrowClick();
     });
 
     it("Revise document", () => {
@@ -594,7 +594,7 @@ context("Document Approval Matrix Flow", () => {
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
 
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
     });
   });
 
@@ -700,14 +700,14 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Type password in Approve and Release dialog", () => {
-      cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
     });
 
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ReleaseDocRev,
         () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
         });
     });
   });
@@ -739,14 +739,14 @@ context("Document Approval Matrix Flow", () => {
   context("Approve document in review", () => {
     it(`approve document`, () => {
       cy.wait(1000);
-      cy.get("#root").contains("Approve").click();
+      cy.get("#root").contains("Approve").arrowClick();
     });
 
     it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
         () => {
-          cy.get(`[data-cy="passwordConfirm"]`).click();
+          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
     });
   });
@@ -799,7 +799,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
-      cy.get("#root").contains(DAMTitle).click();
+      cy.get("#root").contains(DAMTitle).arrowClick();
     });
 
     it("Revise document", () => {

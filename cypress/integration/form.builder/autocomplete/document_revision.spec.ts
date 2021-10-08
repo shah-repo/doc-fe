@@ -156,7 +156,7 @@ context("Autocomplete 'Document Revision' test", () => {
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -195,7 +195,7 @@ context("Autocomplete 'Document Revision' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const docRevs = response.body;
@@ -221,7 +221,7 @@ context("Autocomplete 'Document Revision' test", () => {
         });
 
         it(`Select ${documentRevisionTitle}`, () => {
-          cy.get(".MuiAutocomplete-popper ul li").contains(documentRevisionTitle).click();
+          cy.get(".MuiAutocomplete-popper ul li").contains(documentRevisionTitle).arrowClick();
         });
 
         it(`Verify value ${documentRevisionTitle}`, () => {

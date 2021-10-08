@@ -125,7 +125,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -185,7 +185,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
-        .click({ force: true }).clear().type("fb-paragraph");
+        .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -220,7 +220,7 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Add Timer", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+      cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "fb-timer" });
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
@@ -346,7 +346,7 @@ context.skip("Autosave on add and edit FB fields", () => {
     it("Edit Paragraph", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
-        .click({ force: true }).clear().type("fb-paragraph1");
+        .click({ force: true }).clear().arrowType("fb-paragraph1");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });

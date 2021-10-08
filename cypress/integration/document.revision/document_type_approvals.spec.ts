@@ -376,7 +376,7 @@ context("Check DAM enforcement rules for document types", () => {
     it("Check all checkboxes for 'Approvals Numeric'", () => {
       cy.get("div:nth-child(2) > div> table > tbody > tr > td:nth-child(1)")
         .each(($el) => {
-          cy.wrap($el).click();
+          cy.wrap($el).arrowClick();
         });
     });
 
@@ -475,7 +475,7 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Fill document name", () => {
         cy.drEnterDocumentTitle({ name: "Form approvals" });
-        cy.get("[data-cy=field-name]").click();
+        cy.get("[data-cy=field-name]").arrowClick();
       });
 
       it("Fill document description", () => {
@@ -580,7 +580,7 @@ context("Check DAM enforcement rules for document types", () => {
       it("Add approver to approvals", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.poAddApproverOnApproverList({ approver: USERS[1].email });
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
       });
 
@@ -589,7 +589,7 @@ context("Check DAM enforcement rules for document types", () => {
       // });
 
       it("Submit for approvals and check enfocment", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
         cy.closeAllAlertMessages();
       });

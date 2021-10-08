@@ -703,7 +703,7 @@ context("Create receivable test", () => {
         });
 
         it("Fill custom text field added in receivable form", () => {
-          cy.get("input[type=textfield]").type("Custom field");
+          cy.get("input[type=textfield]").arrowType("Custom field");
         });
 
         it("Click 'Create document' on receiving lading page", () => {
@@ -732,9 +732,9 @@ context("Create receivable test", () => {
         });
 
         it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
           });
         });
 
@@ -744,17 +744,17 @@ context("Create receivable test", () => {
 
         it("Click 'Submit for Approval' button", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
         });
 
         it("Click 'Approve' button", () => {
           SystemRequirement("REQ-1860");
-          cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
             CyRoutes.EmployeesGet], () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
         });
 

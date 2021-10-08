@@ -132,7 +132,7 @@ context("File delete in Pending Change", () => {
       });
 
       it("Delete file test.docx", () => {
-        cy.contains("test.docx").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+        cy.contains("test.docx").parent().parent().find("#AttachmentIconPresenter-handleRemove").arrowClick({ force: true });
       });
 
       it("Check number of attachments after reload page", () => {
@@ -142,7 +142,7 @@ context("File delete in Pending Change", () => {
       });
 
       it("Delete file image.jpg", () => {
-        cy.contains("image.jpg").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+        cy.contains("image.jpg").parent().parent().find("#AttachmentIconPresenter-handleRemove").arrowClick({ force: true });
       });
 
       it("Check number of attachments after reload page", () => {

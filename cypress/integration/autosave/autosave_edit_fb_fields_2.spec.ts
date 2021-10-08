@@ -115,7 +115,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
-      cy.get("input[value=\"preventativeMaintenance\"]").click();
+      cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -171,8 +171,8 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
       cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
-      cy.get("[data-cy=\"editorConfig.approvers\"]").type(`${USERS[1].email }{downarrow}{enter}`);
-      cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
+      cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
+      cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -216,9 +216,9 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Add Instructions 'MPI'", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).click();
+      cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
-      cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=\"instructionsDocument\"]").arrowType("AR Form{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -228,7 +228,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-      cy.get("[data-cy=\"options\"]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
