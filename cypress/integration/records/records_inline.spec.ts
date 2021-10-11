@@ -59,7 +59,6 @@ context("Record inline Flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -223,7 +222,7 @@ context("Record inline Flow", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
         cy.wait(2000);
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
@@ -260,7 +259,7 @@ context("Record inline Flow", () => {
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
           cy.wait(2000);
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.GetRequiredApproversDocRev,
@@ -272,7 +271,7 @@ context("Record inline Flow", () => {
 
         it("Approve second Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.GetRequiredApproversDocRev,
@@ -296,7 +295,7 @@ context("Record inline Flow", () => {
 
         it("Approve Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.GetRequiredApproversDocRev,

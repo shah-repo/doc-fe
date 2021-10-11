@@ -42,7 +42,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("[API] Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -55,7 +54,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Logs default user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -94,7 +92,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Logs in with company admin", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -142,7 +139,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("[API] Updates company", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
 
@@ -199,7 +195,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("[API] API login with company admin", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -210,7 +205,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Logs in with company admin", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -236,7 +230,6 @@ context(`Test: ${path.basename(__filename)}`, () => {
     it("Logs in with user without group management and user management tags", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 

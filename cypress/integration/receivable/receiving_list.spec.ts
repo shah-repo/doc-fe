@@ -76,7 +76,6 @@ context("Receivable list test", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -372,7 +371,6 @@ context("Receivable list test", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[2].email,
-          password: "Tester1!",
         });
       });
 
@@ -410,7 +408,6 @@ context("Receivable list test", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         });
       });
 

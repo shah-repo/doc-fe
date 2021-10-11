@@ -55,6 +55,7 @@ const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
           queryDict: {
             "status[]": status,
             displayStatus,
+            "documentTypeWithoutCategory": true,
             /** Temp fix - disabling filtering by doc type name */
             // "documentTypeNames[]": DOCUMENT_TABLE_LIST_NAMES,
           },

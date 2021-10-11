@@ -38,6 +38,7 @@ export class ConfigEnv {
       JSON_REPORTS_FOLDER: Cypress.env("JSON_REPORTS_FOLDER"),
       ARROW_DURATION: Cypress.env("ARROW_DURATION"),
       TEST_EMAIL: Cypress.env("TEST_EMAIL"),
+      DEFAULT_ENLIL_USER_PASSWORD: "Tester1!",
     });
 
     const errors = validateSync(configEnv, {
@@ -127,6 +128,10 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   JSON_REPORTS_FOLDER!: string;
+
+  @IsDefined()
+  @IsString()
+  DEFAULT_ENLIL_USER_PASSWORD!: string;
 }
 
 

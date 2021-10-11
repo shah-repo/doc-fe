@@ -103,7 +103,6 @@ context("Procedure and parts flow test", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1;
@@ -482,7 +481,6 @@ context("Procedure and parts flow test", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -997,6 +995,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 3,
           typeOfMaterial: "gram",
         });
+        cy.wait(3000);
       });
 
       it("Add free material text", () => {
@@ -1005,6 +1004,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 2,
           typeOfMaterial: "pounds",
         });
+        cy.wait(3000);
       });
 
       it("Add equipment document", () => {
@@ -1179,7 +1179,7 @@ context("Procedure and parts flow test", () => {
       context("Verify that EB cannot be released unless 1st revision of part is released", () => {
         it("Try approving the EB", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy=\"common.confirm\"]").click();
         });
 

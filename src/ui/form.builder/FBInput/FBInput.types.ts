@@ -231,6 +231,15 @@ export const OmitIncludeNotes: FBInputType[] = [
   "subsection",
 ];
 
+export const FBAutosave: FBInputType[] = [
+  "textfield",
+  "checkboxgroup",
+  "autocomplete",
+  "select",
+  "quantity",
+  "texteditor",
+];
+
 export interface FBInputConstructor {
   value: any;
   hidden?: boolean;

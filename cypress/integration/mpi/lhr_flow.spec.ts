@@ -292,7 +292,6 @@ context("LHR flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -1143,7 +1142,6 @@ context("LHR flow", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1495,7 +1493,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetAutocompleteOptions], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
@@ -2256,3 +2254,4 @@ context("LHR flow", () => {
 });
 
 export { };
+

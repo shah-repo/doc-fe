@@ -44,7 +44,6 @@ context("Autosave on leaving page while data is still not saved", () => {
     it("[API]Login admin with autosave tigger shown", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -57,7 +56,6 @@ context("Autosave on leaving page while data is still not saved", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -245,3 +243,4 @@ context("Autosave on leaving page while data is still not saved", () => {
 
 
 export { };
+
