@@ -108,7 +108,7 @@ Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstra
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
-    timeout: 20 * 1000,
+    timeout: 30 * 1000,
   }).then((response) => response.body);
 });
 
