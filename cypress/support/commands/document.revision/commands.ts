@@ -714,7 +714,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
 });
 
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
-  let cellContents: string[];
+  let cellContents = [];
   cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
     .children()
     .each(($el, $index) => {
@@ -729,7 +729,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
 });
 
 Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number}) => {
-  let cellContents: string[];
+  let cellContents = [];
   cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
     .children()
     .each(($el, $index) => {
