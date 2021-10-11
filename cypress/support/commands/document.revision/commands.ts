@@ -97,6 +97,9 @@ declare global {
       drSelectGroup(...groups: string[]): Chainable<Subject>;
       drAddGroupFromPermissionTab(...groups: string[]): Chainable<Subject>;
       drRequestAccessVisibility(params: {isVisible: boolean}): Chainable<Subject>;
+
+      verifyDesSort(params: { index: number; colLength: number }): Chainable<Subject>;
+      verifyAscSort(params: { index: number; colLength: number }): Chainable<Subject>;
     }
   }
 }
@@ -708,4 +711,34 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
       cy.checkToastMessage({ exists: false });
     }
   }
+});
+
+Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
+  let cellContents = [];
+  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+    .children()
+    .each(($el, $index) => {
+      if ($index % params.colLength === params.index) {
+        cellContents.push($el.text());
+      }
+    })
+    .then(() => {
+      const actual = cellContents.slice();
+      cy.wrap(actual).should("deep.eq", cellContents);
+    });
+});
+
+Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number}) => {
+  let cellContents = [];
+  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+    .children()
+    .each(($el, $index) => {
+      if ($index % params.colLength === params.index) {
+        cellContents.push($el.text());
+      }
+    })
+    .then(() => {
+      const actual = cellContents.slice();
+      cy.wrap(actual).should("deep.eq", cellContents.sort());
+    });
 });
