@@ -7,7 +7,10 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginSecond;
+let employeeLoginThird;
+let employeeLoginFourth;
+let employeeLoginSeventh;
 
 context("Document Field Owners Test", () => {
   before(() => {
@@ -67,6 +70,10 @@ context("Document Field Owners Test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginSecond = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeLoginThird = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          employeeLoginFourth = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
+          employeeLoginSeventh = createdCompany.employees.find((employee) => employee.user.email === USERS[7].email);
           done();
         });
       });
@@ -77,21 +84,14 @@ context("Document Field Owners Test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginSecond.id });
     });
   });
 
@@ -202,14 +202,8 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
   });
 
@@ -258,14 +252,8 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
 
@@ -298,14 +286,8 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginSecond.id });
     });
   });
 
@@ -337,14 +319,8 @@ context("Document Field Owners Test", () => {
   });
 
   context("Log in with another user and approve document", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[7].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[7], employeeId: employeeLoginSeventh.id });
     });
 
     it("Navigate to records list", () => {

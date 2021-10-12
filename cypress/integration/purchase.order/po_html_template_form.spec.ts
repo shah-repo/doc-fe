@@ -9,7 +9,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let supplierFieldName;
@@ -72,7 +71,6 @@ context("Purchase order HTML template form", () => {
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -83,7 +81,6 @@ context("Purchase order HTML template form", () => {
       }).then((response) => {
         loginResponse = response;
         baererSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -154,14 +151,8 @@ context("Purchase order HTML template form", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {

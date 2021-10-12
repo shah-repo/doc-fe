@@ -8,7 +8,8 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginOwner;
+let employeeLoginShared;
 const owner = USERS[2].name;
 const sharedUser = USERS[1];
 const sharedUserTwo = USERS[3];
@@ -114,6 +115,8 @@ context("Check Document History", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginOwner = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeLoginShared = createdCompany.employees.find((employee) => employee.user.email === sharedUser.email);
           done();
         });
       });
@@ -124,21 +127,14 @@ context("Check Document History", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginOwner.id });
     });
   });
 
@@ -257,14 +253,8 @@ context("Check Document History", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: sharedUser.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: sharedUser, employeeId: employeeLoginShared.id });
     });
   });
 
@@ -308,14 +298,8 @@ context("Check Document History", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginOwner.id });
     });
   });
 

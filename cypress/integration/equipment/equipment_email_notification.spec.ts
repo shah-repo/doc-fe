@@ -21,7 +21,6 @@ const THIRD_USER = USERS[28];
 let createdCompany;
 let loginResponse;
 let adminEmployeeLoginResponse;
-let multipleCompanies;
 let adminEmployee;
 let equipmentDocumentType;
 let formDocumentType;
@@ -96,7 +95,6 @@ context("Test Equipment maintenance email notifications", () => {
         email: ADMIN_USER.email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -360,14 +358,8 @@ context("Test Equipment maintenance email notifications", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
     });
   });
 

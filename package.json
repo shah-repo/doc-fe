@@ -110,7 +110,6 @@
     "not dead"
   ],
   "devDependencies": {
-    "@rckeller/cypress-unfetch": "^1.0.1",
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.4.0",
     "@types/classnames": "2.2.9",

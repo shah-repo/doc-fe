@@ -14,7 +14,6 @@ Cypress.Screenshot.defaults({
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let thirdEmployee;
@@ -74,7 +73,6 @@ context("PO approval test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         cy.grpAPICreateNewGroup({
           payload: {
             name: "Group with access to restricted doc types",
@@ -115,19 +113,12 @@ context("PO approval test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
     it("Navigate to document list", () => {
@@ -432,14 +423,8 @@ context("PO approval test", () => {
       cy.authLogout();
     });
 
-    it(`Log in with '${USERS[3].name}'`, () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
     it("Check for PO notification on dashboard", () => {

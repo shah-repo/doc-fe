@@ -12,7 +12,10 @@ Cypress.Screenshot.defaults({
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
+let employeeLoginAdmin;
+let employeeLoginFirst;
+let employeeLoginSecond;
+let employeeLoginThird;
 
 const ADMIN_USER = USERS[10];
 const FIRST_USER = USERS[11];
@@ -54,6 +57,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
+          employeeLoginAdmin = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          employeeLoginFirst = company.employees.find((employee) => employee.user.email === FIRST_USER.email);
+          employeeLoginSecond = company.employees.find((employee) => employee.user.email === SECOND_USER.email);
+          employeeLoginThird = company.employees.find((employee) => employee.user.email === THIRD_USER.email);
           done();
         });
       });
@@ -64,21 +71,14 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         email: ADMIN_USER.email,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
   });
 
@@ -472,14 +472,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: FIRST_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -502,14 +496,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: SECOND_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: SECOND_USER, employeeId: employeeLoginSecond.id });
     });
   });
 
@@ -533,14 +521,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: THIRD_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: THIRD_USER, employeeId: employeeLoginThird.id });
     });
   });
 
@@ -569,14 +551,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
   });
 

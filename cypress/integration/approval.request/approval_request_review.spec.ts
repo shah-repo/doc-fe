@@ -14,6 +14,7 @@ let sessionId;
 let multipleCompanies;
 let companyId: string;
 let emailsFromInbox: IMAPEmail[];
+let employeeLogin;
 
 const approvalRequestFormName = "Approval request form template";
 const approvalRequestDocumentTitle = "Approval request from newly created form";
@@ -46,6 +47,7 @@ context("Approval request form scenario", () => {
         }).then((response) => {
           createdCompany = response;
           companyId = createdCompany.id;
+          employeeLogin = createdCompany.employees.find((employee) => employee.user.email === USERS[21].email);
           done();
         });
       });
@@ -61,15 +63,9 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Log in user and select company", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[21].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+  context("Log in user to dashboard", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[21], employeeId: employeeLogin.id });
     });
   });
 

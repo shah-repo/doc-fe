@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
 let adminEmployee;
 let group;
 let initialArDocument;
@@ -77,7 +76,6 @@ context("Check DAM enforcement rules for document types", () => {
         email: ADMIN_USER.email,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -278,14 +276,8 @@ context("Check DAM enforcement rules for document types", () => {
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
     });
   });
 

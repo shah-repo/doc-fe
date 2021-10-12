@@ -920,14 +920,8 @@ context("Autocomplete test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -998,11 +992,8 @@ context("Autocomplete test", () => {
       });
     });
 
-    it("Logs user in & Selects company", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -1083,9 +1074,7 @@ context("Autocomplete test", () => {
     });
 
     it("Reload company", () => {
-      cy.fbClickButton({ el: "UserMenuButton" });
-      cy.get("#switchCompanyButton").arrowClick();
-      cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 

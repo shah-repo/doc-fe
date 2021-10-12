@@ -8,6 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
+let secondEmployee;
 
 context("Record inline Flow", () => {
   before(() => {
@@ -49,6 +50,7 @@ context("Record inline Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -56,14 +58,8 @@ context("Record inline Flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 

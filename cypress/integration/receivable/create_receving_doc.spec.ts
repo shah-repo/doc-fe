@@ -17,7 +17,6 @@ const THIRD_USER = USERS[4];
 let createdCompany;
 let loginResponse;
 let adminEmployeeLoginResponse;
-let multipleCompanies;
 let adminEmployee;
 let purchaseOrderDocumentType;
 let formDocumentType;
@@ -248,7 +247,6 @@ context("Create receivable test", () => {
         email: ADMIN_USER.email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -623,14 +621,8 @@ context("Create receivable test", () => {
 
   context("Login user", () => {
     context("Login user when he doesn't have privileges", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: ADMIN_USER.email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
       });
     });
   });

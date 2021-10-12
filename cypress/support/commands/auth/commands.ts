@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { addTestContext } from "../../../utils/context/addTestContext";
+import { IUser } from "../../commands";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -24,6 +25,7 @@ declare global {
       authEnterSignUpPassword(params?: {password?: string}): Chainable<Subject>;
       authEnterSignUpConfirmPassword(params?: {password?: string}): Chainable<Subject>;
       authClickSignIn(): Chainable<Subject>;
+      authLoginToDashboard(params: { USER: IUser; employeeId: string }): Chainable<Subject>;
     }
   }
 }
@@ -124,5 +126,41 @@ Cypress.Commands.add("authClickSignIn", () => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+    });
+});
+
+Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {
+  let loginResponse;
+  cy.authApiLogin({ email: params.USER.email })
+    .then((response) => {
+      loginResponse = response;
+      cy.request({
+        method: "GET",
+        url: `${CONFIG.BE_URL}/api/v1/auth/credentials/iot`,
+        headers: {
+          Authorization: `bearer ${params.employeeId}:${loginResponse.sessionId}`,
+        },
+      }).then((response) => {
+        const user = {
+          email: loginResponse.email,
+          name: loginResponse.name,
+          id: loginResponse.id,
+          employeeId: params.employeeId,
+          sessionId: loginResponse.sessionId,
+          iotCredentials: response.body,
+          employee: { active: true },
+          employees: [],
+        };
+        const auth =
+        {
+          user: JSON.stringify(user),
+          _persist: JSON.stringify({ version: 2, rehydrated: true }),
+        };
+        cy.setLocalStorage("persist:auth", JSON.stringify(auth));
+        cy.saveLocalStorage();
+        cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+          cy.visit(CONFIG.FE_URL);
+        });
+      });
     });
 });

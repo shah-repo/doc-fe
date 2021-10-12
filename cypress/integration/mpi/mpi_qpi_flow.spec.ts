@@ -10,7 +10,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let secondEmployee;
 let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
@@ -176,6 +176,7 @@ context("Mpi/Qpi flow", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
@@ -189,7 +190,6 @@ context("Mpi/Qpi flow", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -299,14 +299,8 @@ context("Mpi/Qpi flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -468,14 +462,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
@@ -499,14 +487,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to MPI Document list", () => {
@@ -600,14 +582,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
@@ -628,14 +604,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to MPI Document list", () => {
@@ -804,14 +774,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
@@ -835,14 +799,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to QPI Document list", () => {
@@ -936,14 +894,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
@@ -964,14 +916,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to QPI Document list", () => {

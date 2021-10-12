@@ -8,11 +8,12 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let secondEmployee;
 let developersGroup;
 let adminSessionId;
 let adminEmployee;
 let adminLoginResponse;
+let thirdEmployee;
 
 context("Group Permissions Flow", () => {
   context("[API]Prepare company", () => {
@@ -33,6 +34,8 @@ context("Group Permissions Flow", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           done();
         });
       });
@@ -43,7 +46,6 @@ context("Group Permissions Flow", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1;
         done();
       });
     });
@@ -84,14 +86,8 @@ context("Group Permissions Flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -132,14 +128,8 @@ context("Group Permissions Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -275,14 +265,8 @@ context("Group Permissions Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
     it("Check that 'User Management' is visible in navigation", () => {
@@ -303,14 +287,8 @@ context("Group Permissions Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
     it("Navigates to document list", () => {

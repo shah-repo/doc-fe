@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
 
 context("FORM Field Upload test", () => {
@@ -37,6 +37,7 @@ context("FORM Field Upload test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -47,21 +48,14 @@ context("FORM Field Upload test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 

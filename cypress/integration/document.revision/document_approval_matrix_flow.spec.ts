@@ -13,7 +13,8 @@ Cypress.Screenshot.defaults({
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
+let employeeLoginAdmin;
+let employeeLoginIndividual;
 let adminEmployee;
 let docTypes: any[];
 const DAMDocumentTypes: string[] = [];
@@ -77,6 +78,8 @@ context("Document Approval Matrix Flow", () => {
           company = response;
           adminEmployee = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           docTypes = company.documentTypes || [];
+          employeeLoginAdmin = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          employeeLoginIndividual = company.employees.find((employee) => employee.user.email === INDIVIDUAL_USER.email);
           done();
         });
       });
@@ -87,21 +90,14 @@ context("Document Approval Matrix Flow", () => {
         email: ADMIN_USER.email,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
 
     it("Open Group Management", () => {
@@ -725,14 +721,8 @@ context("Document Approval Matrix Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: INDIVIDUAL_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: INDIVIDUAL_USER, employeeId: employeeLoginIndividual.id });
     });
   });
 
@@ -782,14 +772,8 @@ context("Document Approval Matrix Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
   });
 

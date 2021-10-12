@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 
 context("Copyable Checkbox test", () => {
   context("[API]Prepare company", () => {
@@ -42,6 +42,7 @@ context("Copyable Checkbox test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -52,21 +53,14 @@ context("Copyable Checkbox test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
 
     it("Turn off autosave", () => {
@@ -650,7 +644,8 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Edit Blank Template field", () => {
-      cy.contains("fb-blank-template").parentsUntil("li").find("[data-cy=edit-schema-item]").arrowClick({ force: true });
+      cy.contains("fb-blank-template")
+        .parentsUntil("li").find("[data-cy=edit-schema-item]").arrowClick({ force: true });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template1" });
       cy.fbAddNewFieldButton();
     });

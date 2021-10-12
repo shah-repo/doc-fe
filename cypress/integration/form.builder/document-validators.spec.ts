@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let docId;
 let loginResponse;
-let multipleCompanies;
 let createdCompany;
 let secondEmployee;
 let clinicalProtocolType;
@@ -88,7 +87,6 @@ context("Validators tests", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -141,7 +139,6 @@ context("Validators tests", () => {
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -170,14 +167,8 @@ context("Validators tests", () => {
   });
 
   context("Log in user, select company and open 'Create Document'", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
 
     context("Open 'Create Document'", () => {

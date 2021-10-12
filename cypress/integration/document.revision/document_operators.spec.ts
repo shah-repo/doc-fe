@@ -7,7 +7,9 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
+let employeeLoginThird;
+let employeeLoginFourth;
 
 context("Document Operators Access Test", () => {
   before(() => {
@@ -69,6 +71,9 @@ context("Document Operators Access Test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeLoginThird = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          employeeLoginFourth = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
           done();
         });
       });
@@ -79,21 +84,14 @@ context("Document Operators Access Test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -291,14 +289,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
   });
 
@@ -348,14 +340,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
 
@@ -393,14 +379,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -447,14 +427,8 @@ context("Document Operators Access Test", () => {
   });
 
   context(`Approve form as '${USERS[3].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
 
     it("Navigates to document list", () => {
@@ -481,14 +455,8 @@ context("Document Operators Access Test", () => {
   });
 
   context(`Approve form as '${USERS[4].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
 
     it("Navigates to document list", () => {

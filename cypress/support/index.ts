@@ -14,7 +14,6 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import "@rckeller/cypress-unfetch/await";
 import "cypress-file-upload";
 import "cypress-localstorage-commands";
 import "cypress-promise/register";
@@ -95,10 +94,6 @@ before(() => {
     cy.task("deleteScreenshotsFolder", { CONFIG, specFileName: Cypress.spec.name });
     cy.task("deleteExistingReports", { CONFIG, specFileName: Cypress.spec.name } );
   }
-});
-
-afterEach(() => {
-  cy.await();
 });
 
 it("Server has correct commits code deployed", function()  {

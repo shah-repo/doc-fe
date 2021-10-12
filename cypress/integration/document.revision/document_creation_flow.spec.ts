@@ -7,12 +7,12 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let documentUploadFailureCaught = false;
 let developersGroup;
 let adminSessionId;
 let adminEmployee;
 let employeeToDevs;
+let employeeLoginThird;
 
 context("Document Creation Flow", () => {
   context("[API]Prepare company", () => {
@@ -49,6 +49,7 @@ context("Document Creation Flow", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeLoginThird = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           done();
         });
       });
@@ -60,7 +61,6 @@ context("Document Creation Flow", () => {
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -70,7 +70,6 @@ context("Document Creation Flow", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -101,14 +100,8 @@ context("Document Creation Flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
   });
 
@@ -401,14 +394,8 @@ context("Document Creation Flow", () => {
         cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
       });
 
-      it("Logs user that ownership was changed to", () => {
-        cy.authLogin({
-          email: USERS[3].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
       });
 
       it("Navigates to document list", () => {
@@ -423,14 +410,8 @@ context("Document Creation Flow", () => {
         cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
       });
 
-      it("Logs with admin", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigates to document list", () => {
@@ -446,14 +427,8 @@ context("Document Creation Flow", () => {
         cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
       });
 
-      it("Logs user that ownership was changed to", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
       });
 
       it("Navigates to document list", () => {

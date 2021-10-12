@@ -11,7 +11,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM D, YYYY");
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let developersGroup;
 let adminSessionId;
 let adminEmployee;
@@ -68,7 +67,6 @@ context("Records flow", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -79,7 +77,6 @@ context("Records flow", () => {
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -110,14 +107,8 @@ context("Records flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
   });
 
