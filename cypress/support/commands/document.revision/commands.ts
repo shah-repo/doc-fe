@@ -620,7 +620,7 @@ Cypress.Commands.add("drAPIApproveAndRelease", (params: {
     url: `${CONFIG.BE_URL}/api/v1/document_revisions/release/` + params.documentId,
     body: params.payload,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:Tester1!`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
     },
   }).then((response) => response.body);
 });

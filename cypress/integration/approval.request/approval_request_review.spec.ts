@@ -335,7 +335,7 @@ context("Approval request form scenario", () => {
 
       it("Reject AR from dashboard", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-          cy.poRejectAR({ password: "Tester1!" });
+          cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         });
       });
     });

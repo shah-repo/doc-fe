@@ -147,10 +147,10 @@ Cypress.Commands.add("arApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:Tester1!`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
     },
     body: {
-      password: "Tester1!",
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     },
   }).then((response) => response.body);
 });
@@ -164,10 +164,10 @@ Cypress.Commands.add("approvalApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/approvals/${params.approvalsId}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:Tester1!`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
     },
     body: {
-      password: "Tester1!",
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     },
   }).then((response) => response.body);
 });

@@ -50,7 +50,7 @@ context("Create company via API and create Suppliers document", () => {
   it("[API] Login admin tester", (done: any) => {
     cy.authApiLogin({
       email: USERS[1].email,
-      password: "Tester1!",
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     }).then((response) => {
       loginResponse = response;
       done();
