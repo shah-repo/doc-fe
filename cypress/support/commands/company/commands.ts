@@ -177,11 +177,19 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       CyRoutes.SessionDetails,
       CyRoutes.IOTCredentials,
     ], () => {
-      cy.get("#root").contains(params.name).click();
+      cy.get("#root").contains(params.name).arrowClick();
     });
     cy.wait(1500);
     addTestContext("companyName", params.name);
   }
+  cy.get("body").then(($body) => {
+    const scheduledForDeleteAlertText = "This company tenant is scheduled to be deleted. If there are" +
+    " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com";
+    const scheduledForDeleteAlert = $body.find("div.Toastify__toast--success>div>div");
+    if (scheduledForDeleteAlert && scheduledForDeleteAlert.text() === scheduledForDeleteAlertText) {
+      cy.get("button.Toastify__close-button--success").arrowClick();
+    }
+  });
 });
 
 Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
@@ -196,7 +204,7 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
     ], () => {
-      cy.get("#root").contains(params.name).click();
+      cy.get("#root").contains(params.name).arrowClick();
     });
     cy.wait(500);
     addTestContext("companyName", params.name);
@@ -210,7 +218,7 @@ Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSo
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"document.revision.create\"]").click();
+    cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
   cy.wait(3000);
@@ -221,7 +229,7 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
-  cy.get("[data-cy=\"change.request.create\"]").click();
+  cy.get("[data-cy=\"change.request.create\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 

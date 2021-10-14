@@ -11,7 +11,7 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 let secondEmployee;
 let recordDocumentType;
 let testDocumentType;
@@ -67,6 +67,7 @@ context("Document form upgrade", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record Document");
           testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
@@ -82,7 +83,6 @@ context("Document form upgrade", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1;
         done();
       });
     });
@@ -267,14 +267,8 @@ context("Document form upgrade", () => {
   });
 
   context("Login user", () => {
-    it("Log user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -307,7 +301,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -345,7 +339,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -482,7 +476,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
     });
 
@@ -535,7 +529,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
 
       context("Release updated record", () => {

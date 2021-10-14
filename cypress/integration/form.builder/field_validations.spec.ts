@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 
 context("Field validations test", () => {
   context("[API]Prepare company", () => {
@@ -35,6 +35,7 @@ context("Field validations test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -45,21 +46,14 @@ context("Field validations test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -128,16 +122,16 @@ context("Field validations test", () => {
       });
 
       it("Select validation in add field dialog", () => {
-        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").click();
+        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick();
       });
 
       it("Select required_with on default validation", () => {
-        cy.get("[name=\"validators.required_with\"]").click();
+        cy.get("[name=\"validators.required_with\"]").arrowClick();
       });
 
       it("Select normal text field as required with validatior", () => {
-        cy.get("input[data-cy=\"validators.required_with.name\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").click();
+        cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {
@@ -159,7 +153,7 @@ context("Field validations test", () => {
       });
 
       it("Select validation in add field dialog", () => {
-        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").click();
+        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick();
       });
 
       it("Select show/hide type of validation", () => {
@@ -168,12 +162,12 @@ context("Field validations test", () => {
       });
 
       it("Select required_with on show/hide validation", () => {
-        cy.get("[name=\"validators.required_with\"]").click();
+        cy.get("[name=\"validators.required_with\"]").arrowClick();
       });
 
       it("Select normal text field as required with validator", () => {
-        cy.get("input[data-cy=\"validators.required_with.name\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").click();
+        cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {
@@ -195,7 +189,7 @@ context("Field validations test", () => {
       });
 
       it("Select validation in add field dialog", () => {
-        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").click();
+        cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick();
       });
 
       it("Select Enable/disable type of validation", () => {
@@ -204,12 +198,12 @@ context("Field validations test", () => {
       });
 
       it("Select required_with on Enable/disable validation", () => {
-        cy.get("[name=\"validators.required_with\"]").click();
+        cy.get("[name=\"validators.required_with\"]").arrowClick();
       });
 
       it("Select normal text field as required with validator", () => {
-        cy.get("input[data-cy=\"validators.required_with.name\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").click();
+        cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {
@@ -260,7 +254,7 @@ context("Field validations test", () => {
 
       it("Insert text in Normal text field", () => {
         SystemRequirement("FB-0210");
-        cy.get("[name^=normal-text-field]").type("test required text field");
+        cy.get("[name^=normal-text-field]").arrowType("test required text field");
       });
 
       it("Verify field is required when Normal text field is empty", () => {
@@ -282,7 +276,7 @@ context("Field validations test", () => {
 
       it("Insert text in Normal text field", () => {
         SystemRequirement("FB-0210");
-        cy.get("[name^=normal-text-field]").type("test show/hide text field");
+        cy.get("[name^=normal-text-field]").arrowType("test show/hide text field");
       });
 
       it("Verify field is visible when Normal text field is empty", () => {
@@ -305,7 +299,7 @@ context("Field validations test", () => {
 
       it("Insert text in Normal text field", () => {
         SystemRequirement("FB-0210");
-        cy.get("[name^=normal-text-field]").type("test enable/disable text field");
+        cy.get("[name^=normal-text-field]").arrowType("test enable/disable text field");
       });
 
       it("Verify field is not disabled when Normal text field is empty", () => {

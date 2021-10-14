@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 
 context("Checkboxes test1", () => {
   context("[API]Prepare company", () => {
@@ -42,6 +42,7 @@ context("Checkboxes test1", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -52,21 +53,14 @@ context("Checkboxes test1", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -103,7 +97,7 @@ context("Checkboxes test1", () => {
     context("Add Fields with Checkboxes", () => {
       it("Add TextField with checkboxes", () => {
         cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
-        cy.get("[data-cy=\"form.builder.add.field\"]").click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "textfield-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -112,7 +106,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add TextField without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "textfield-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -120,7 +114,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Checkbox group with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbEnterNameValue({ name: "label", value: "cbg-wi-ch" });
@@ -130,7 +124,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Checkbox group without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
         cy.fbEnterNameValue({ name: "label", value: "cbg-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
@@ -139,10 +133,10 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Autocomplete with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wi-ch" });
-        cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
         cy.wait(2000);
@@ -150,17 +144,17 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Autocomplete without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
-        cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbAddNewFieldButton();
         cy.wait(2000);
         cy.contains("ac-wo-ch").trigger("mouseover");
       });
 
       it("Add Text Editor with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "te-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -169,7 +163,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Text Editor without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
         cy.fbEnterNameValue({ name: "label", value: "te-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -177,7 +171,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Date picker with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
         cy.fbEnterNameValue({ name: "label", value: "dp-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -186,7 +180,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Date picker without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
         cy.fbEnterNameValue({ name: "label", value: "dp-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -194,7 +188,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Hyperlink with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
         cy.fbEnterNameValue({ name: "label", value: "hl-wi-ch" });
         cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
@@ -204,7 +198,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Hyperlink without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
         cy.fbEnterNameValue({ name: "label", value: "hl-wo-ch" });
         cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
@@ -213,7 +207,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Select Field with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wi-ch" });
         cy.fbGroupOptions("option1", "option2");
@@ -224,7 +218,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Select Field without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "sf-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
@@ -233,7 +227,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Radio Button group with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "rbg-wi-ch" });
         cy.fbGroupOptions("option1", "option2");
@@ -243,7 +237,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Radio Button group without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
         cy.fbEnterNameValue({ name: "label", value: "rbg-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
@@ -252,7 +246,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add File Upload with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
         cy.fbEnterNameValue({ name: "label", value: "fu-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -261,7 +255,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add File Upload without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
         cy.fbEnterNameValue({ name: "label", value: "fu-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -269,7 +263,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Quantity with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         cy.fbEnterNameValue({ name: "label", value: "q-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -278,7 +272,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Quantity without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
         cy.fbEnterNameValue({ name: "label", value: "q-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -286,8 +280,8 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Timer with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
         cy.fbEnterNameValue({ name: "label", value: "t-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
@@ -295,15 +289,15 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Timer without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
-        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
         cy.fbEnterNameValue({ name: "label", value: "t-wo-ch" });
         cy.fbAddNewFieldButton();
         cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
       });
 
       it("Add Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "po-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -312,7 +306,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "po-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -320,7 +314,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Receive Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "rpo-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
@@ -330,7 +324,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Receive Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "rpo-wo-ch" });
         cy.fbAddNewFieldButton();
@@ -339,7 +333,7 @@ context("Checkboxes test1", () => {
       });
 
       it("Add Actions 'Action Button' with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).click();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
         cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
         cy.fbAddNewFieldButton();
@@ -533,30 +527,30 @@ context("Checkboxes test1", () => {
 
     it("Verify Select Field without 'Include None' checkbox", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").click();
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
       cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "None");
-      cy.get("[id^=menu-sf-wo-ch-] ul").click();
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
     });
 
     it("Verify Select Field with 'Include None' checkbox", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").click();
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
       cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "None");
-      cy.get("[id^=menu-sf-wi-ch-] ul").click();
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
     });
 
     it("Verify Select Field without 'Include Other' checkbox", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wo-ch-]").click();
+        .find("[id^=mui-component-select-sf-wo-ch-]").arrowClick();
       cy.get("[id^=menu-sf-wo-ch-] ul").should("not.contain", "Other");
-      cy.get("[id^=menu-sf-wo-ch-] ul").click();
+      cy.get("[id^=menu-sf-wo-ch-] ul").arrowClick();
     });
 
     it("Verify Select Field with 'Include Other' checkbox", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[id^=mui-component-select-sf-wi-ch-]").click();
+        .find("[id^=mui-component-select-sf-wi-ch-]").arrowClick();
       cy.get("[id^=menu-sf-wi-ch-] ul").should("contain", "Other");
-      cy.get("[id^=menu-sf-wi-ch-] ul").click();
+      cy.get("[id^=menu-sf-wi-ch-] ul").arrowClick();
     });
 
     it("Verify Radio Button group without 'Include Other' checkbox", () => {

@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let supplierDocumentType;
 let adminEmployee;
 let group;
@@ -51,10 +50,9 @@ context("Create company via API and create Suppliers document", () => {
   it("[API] Login admin tester", (done: any) => {
     cy.authApiLogin({
       email: USERS[1].email,
-      password: "Tester1!",
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     }).then((response) => {
       loginResponse = response;
-      multipleCompanies = loginResponse.employees.length > 1 ? true : false;
       done();
     });
   });
@@ -99,15 +97,8 @@ context("Create company via API and create Suppliers document", () => {
     });
   });
 
-  it("Logs user in", () => {
-    cy.authLogin({
-      email: USERS[1].email,
-      password: "Tester1!",
-    });
-  });
-
-  it("Selects company", () => {
-    cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+  it("Login user to dashboard", () => {
+    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
   });
 
   it("Navigate to document list", () => {

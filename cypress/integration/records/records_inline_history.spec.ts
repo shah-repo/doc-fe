@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let secondEmployee;
 
 context("Record inline history Flow", () => {
   before(() => {
@@ -50,6 +50,7 @@ context("Record inline history Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -60,21 +61,14 @@ context("Record inline history Flow", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -152,7 +146,7 @@ context("Record inline history Flow", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.fbSelectInlineApproval();
         });
-        cy.get("[name=\"label\"]").type("Inline field");
+        cy.get("[name=\"label\"]").arrowType("Inline field");
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
       });
@@ -197,7 +191,7 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").type("First entry");
+        cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("First entry");
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
@@ -215,8 +209,8 @@ context("Record inline history Flow", () => {
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[name*=\"fb-ia-inline-field\"] input").click();
-          cy.get("ul[role=listbox]>li").contains(USERS[2].email).click();
+          cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
+          cy.get("ul[role=listbox]>li").contains(USERS[2].email).arrowClick();
         });
       });
 
@@ -228,14 +222,12 @@ context("Record inline history Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.DocPreview,
-          CyRoutes.GetDocAggregatedAudit,
           CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
       });
 
@@ -243,7 +235,7 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.get("[data-cy^=\"textfield-for-inline\"]").type(", <b> Second entry </b>");
+          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
@@ -259,13 +251,12 @@ context("Record inline history Flow", () => {
 
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
-          cy.get("input[name=\"password\"]").clear().type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+          cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview,
             CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
         });
 
@@ -298,7 +289,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Save record", () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           cy.wait(4000);
         });
 
@@ -326,21 +317,20 @@ context("Record inline history Flow", () => {
       context("Check inline approval history on released document", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().click();
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.wait(2000);
-          cy.get("input[name=\"password\"]").clear().type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.DocPreview,
             CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
           // cy.wait(3000);
         });
 
         it("Navigate to released document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).click();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
         });
 
@@ -369,7 +359,7 @@ context("Record inline history Flow", () => {
       context("Check inline approval history on released Superseded document", () => {
         it("Navigate to Superseded document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).click();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).arrowClick();
           });
         });
 

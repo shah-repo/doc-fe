@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { addTestContext } from "../../../utils/context/addTestContext";
+import { IUser } from "../../commands";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -24,6 +25,7 @@ declare global {
       authEnterSignUpPassword(params?: {password?: string}): Chainable<Subject>;
       authEnterSignUpConfirmPassword(params?: {password?: string}): Chainable<Subject>;
       authClickSignIn(): Chainable<Subject>;
+      authLoginToDashboard(params: { USER: IUser; employeeId: string }): Chainable<Subject>;
     }
   }
 }
@@ -47,29 +49,27 @@ Cypress.Commands.add("authApiLogout", () => {
 });
 
 Cypress.Commands.add("authLogin", (params: { email: string; password?: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PreventIdleLogout, () => {
-    cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
-  });
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
   cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.log(params.email);
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
       cy.get("[data-cy=\"LoginFormPresenter-password\"]")
-        .type(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
+        .arrowType(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
         .wait(300);
-      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
   addTestContext("user", params.email);
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authVisitLogin", () => {
@@ -77,7 +77,7 @@ Cypress.Commands.add("authVisitLogin", () => {
 });
 
 Cypress.Commands.add("authSubmitLogin", () => {
-  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
 });
 
 Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show: boolean}) => {
@@ -107,24 +107,60 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
 });
 
 Cypress.Commands.add("authLogout", () => {
-  cy.get("[data-cy=\"UserMenuButton\"]").click();
+  cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.DeleteLogout, () => {
-    cy.get("[data-cy=\"header.logout\"]").click();
+    cy.get("[data-cy=\"header.logout\"]").arrowClick();
   });
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
-  cy.get("[name=\"password\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"password\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
 Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {
-  cy.get("[name=\"confirmPass\"]").type(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"confirmPass\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.unClick();
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
-      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").click();
+      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+    });
+});
+
+Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {
+  let loginResponse;
+  cy.authApiLogin({ email: params.USER.email })
+    .then((response) => {
+      loginResponse = response;
+      cy.request({
+        method: "GET",
+        url: `${CONFIG.BE_URL}/api/v1/auth/credentials/iot`,
+        headers: {
+          Authorization: `bearer ${params.employeeId}:${loginResponse.sessionId}`,
+        },
+      }).then((response) => {
+        const user = {
+          email: loginResponse.email,
+          name: loginResponse.name,
+          id: loginResponse.id,
+          employeeId: params.employeeId,
+          sessionId: loginResponse.sessionId,
+          iotCredentials: response.body,
+          employee: { active: true },
+          employees: [],
+        };
+        const auth =
+        {
+          user: JSON.stringify(user),
+          _persist: JSON.stringify({ version: 2, rehydrated: true }),
+        };
+        cy.setLocalStorage("persist:auth", JSON.stringify(auth));
+        cy.saveLocalStorage();
+        cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+          cy.visit(CONFIG.FE_URL);
+        });
+      });
     });
 });

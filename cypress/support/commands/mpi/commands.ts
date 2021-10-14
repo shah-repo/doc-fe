@@ -42,7 +42,7 @@ Cypress.Commands.add("mpiEnterDescriptionToStep", (params: {numbOfStep: integer;
 });
 
 Cypress.Commands.add("mpiAddStep", () => {
-  cy.get("[data-cy=\"form.builder.add.step\"]").last().click();
+  cy.get("[data-cy=\"form.builder.add.step\"]").last().arrowClick();
 });
 
 Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
@@ -51,15 +51,15 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   quntity: string;
   unit: string;}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
   cy.get("[name=\"LHRTparameter\"]").uncheck();
-  cy.get("[data-cy=\"title\"]").click();
-  cy.get("ul[role=listbox]>li").contains(params.material).click();
-  cy.get("[name=\"quantity\"]").type(params.quntity);
-  cy.get("[data-cy=\"unit\"]").click();
-  cy.get("ul[role=listbox]>li").contains(params.unit).click();
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.material).arrowClick();
+  cy.get("[name=\"quantity\"]").arrowType(params.quntity);
+  cy.get("[data-cy=\"unit\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.unit).arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
@@ -68,42 +68,42 @@ Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
   quntity: string;
   unit: string;}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
-  cy.get("[data-cy=\"title\"]").click();
-  cy.get("ul[role=listbox]>li").contains(params.material).click();
-  cy.get("[name=\"quantity\"]").type(params.quntity);
-  cy.get("[data-cy=\"unit\"]").click();
-  cy.get("ul[role=listbox]>li").contains(params.unit).click();
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.material).arrowClick();
+  cy.get("[name=\"quantity\"]").arrowType(params.quntity);
+  cy.get("[data-cy=\"unit\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.unit).arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
   numbOfStep: integer;
   material: string;}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).click();
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
-  cy.get("[data-cy=\"title\"]").type(params.material);
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.get("[data-cy=\"title\"]").arrowType(params.material);
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("mpiAddEquipmentToStep", (params: {
   checkParameter: boolean;
   numbOfStep: integer;
   equipment: string;}) => {
-  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).click();
-  cy.get("[data-cy=\"title\"]").click();
-  cy.get("ul[role=listbox]>li").contains(params.equipment).click();
+  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.equipment).arrowClick();
   params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : "";
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("mpiAddEquipmentParameterToStep", (params: {
   numbOfStep: integer;
   equipmentDescription: string;}) => {
-  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).click();
+  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   cy.get("[name=\"LHRTparameter\"]").check();
-  cy.get("[data-cy=\"title\"]").type(params.equipmentDescription);
-  cy.get("[data-cy=\"form.builder.save\"]").click();
+  cy.get("[data-cy=\"title\"]").arrowType(params.equipmentDescription);
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });

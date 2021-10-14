@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 
 context("Dynamic Form Test", () => {
   context("[API]Prepare company", () => {
@@ -36,6 +36,7 @@ context("Dynamic Form Test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -46,21 +47,14 @@ context("Dynamic Form Test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -194,17 +188,17 @@ context("Dynamic Form Test", () => {
     });
 
     it("Enters text inside 'New Text Field 1' dynamic form field", () => {
-      cy.get("[data-cy*=\"new-text-field\"]").eq(0).type("Some text for Dynamic Form field");
+      cy.get("[data-cy*=\"new-text-field\"]").eq(0).arrowType("Some text for Dynamic Form field");
     });
 
     it("Enters text inside 'New Text Field 2'", () => {
-      cy.get("[data-cy*=\"new-text-field-2\"]").type("Some text for Text field");
+      cy.get("[data-cy*=\"new-text-field-2\"]").arrowType("Some text for Text field");
     });
 
     it("Click create document after filling document", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
       cy.wait(500);
     });

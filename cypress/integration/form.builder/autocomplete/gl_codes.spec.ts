@@ -9,7 +9,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const acctCode = `${moment().format("X")}`;
 
@@ -50,48 +49,41 @@ context("Autocomplete 'GL code' test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
   context("Autocomplete 'GL code' test", () => {
     context("Create 'GL code'", () => {
       it("Click on User menu button", () => {
-        cy.get("[data-cy=\"UserMenuButton\"]").click();
+        cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
       });
 
       it("Click on 'My Profile'", () => {
-        cy.contains("My profile").click();
+        cy.contains("My profile").arrowClick();
       });
 
       it("Click 'Add Acct Codes' button", () => {
-        cy.contains("Add Acct Codes").click();
+        cy.contains("Add Acct Codes").arrowClick();
       });
 
       it("Enter New Acct Code " + acctCode, () => {
-        cy.get("[placeholder=\"New Acct Code\"]").type(acctCode);
+        cy.get("[placeholder=\"New Acct Code\"]").arrowType(acctCode);
       });
 
       it("Click 'DONE' button", () => {
-        cy.get("#EditRemoveAddFields-done").click();
+        cy.get("#EditRemoveAddFields-done").arrowClick();
       });
 
       it("Close Profile dialog", () => {
-        cy.get("#DialogContent-close").click();
+        cy.get("#DialogContent-close").arrowClick();
       });
     });
 
@@ -138,7 +130,7 @@ context("Autocomplete 'GL code' test", () => {
           });
 
           it("Select 'GL codes' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("GL codes{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("GL codes{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -164,7 +156,7 @@ context("Autocomplete 'GL code' test", () => {
           }).then((response) => {
             cy.wait(3000);
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.acctCodes.length > 0 ) {
               const acctCodes = response.body.acctCodes;

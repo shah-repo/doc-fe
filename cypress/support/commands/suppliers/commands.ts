@@ -17,23 +17,23 @@ declare global {
 }
 
 Cypress.Commands.add("supEnterSuppName", (params: {name: string}) => {
-  cy.get("[data-cy=\"field-name\"]").click().type(params.name);
+  cy.get("[data-cy=\"field-name\"]").arrowClick().arrowType(params.name);
 });
 
 Cypress.Commands.add("supEnterSuppAddressPhone", (params: {address: string}) => {
-  cy.get("[data-cy=\"RichTextEditor.description\"]").click().type(params.address);
+  cy.get("[data-cy=\"RichTextEditor.description\"]").arrowClick().arrowType(params.address);
 });
 
 Cypress.Commands.add("supCreateNew", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").click().wait(3000);
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick().wait(3000);
 });
 
 Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).click();
+  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
 });
 
 Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
-  cy.get("[data-cy=field-selectForm]>div:nth-child(2)").click();
+  cy.get("[data-cy=field-selectForm]>div:nth-child(2)").arrowClick();
   list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });

@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
@@ -294,7 +293,6 @@ context("Autocomplete test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -920,14 +918,8 @@ context("Autocomplete test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -941,10 +933,10 @@ context("Autocomplete test", () => {
     });
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
-      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
+      cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
       cy.wait(500);
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
-        cy.get("div[id^=react-select]").contains("Component Specification Lot").click();
+        cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
     });
 
@@ -957,16 +949,16 @@ context("Autocomplete test", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").type("12");
+      cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
 
     it("Enter Usable Quantity", () => {
-      cy.get("[name=\"lot_usable_quantity\"]").type("12");
+      cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
     });
 
     it("Select 'Part document' for Part lot", () => {
-      cy.get("[data-cy=\"lot_part\"]").type("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").click();
+      cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
+      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -982,10 +974,8 @@ context("Autocomplete test", () => {
       cy.wait(5000);
     });
 
-    it("Add an Approval'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
@@ -993,18 +983,15 @@ context("Autocomplete test", () => {
     });
 
     it("Approve record", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
-    it("Logs user in & Selects company", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -1065,15 +1052,15 @@ context("Autocomplete test", () => {
     });
 
     it("Click on 'Add Another Role' button", () => {
-      cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+      cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
     });
 
     it("Enter Approval Role " + approvalRoleName, () => {
-      cy.get("[data-cy=\"name\"]").type(approvalRoleName);
+      cy.get("[data-cy=\"name\"]").arrowType(approvalRoleName);
     });
 
     it("Click on 'Add' button", () => {
-      cy.get("button[data-cy=\"common.add\"]").click();
+      cy.get("button[data-cy=\"common.add\"]").arrowClick();
     });
 
     it("Click on 'Create Document' button", () => {
@@ -1085,9 +1072,7 @@ context("Autocomplete test", () => {
     });
 
     it("Reload company", () => {
-      cy.fbClickButton({ el: "UserMenuButton" });
-      cy.get("#switchCompanyButton").click();
-      cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
