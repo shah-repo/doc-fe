@@ -44,7 +44,7 @@ Cypress.Commands.add("navigListNotExistsCheck", (...list: NavigationItems[]) => 
 });
 
 Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
-  cy.wait(1000).get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"navigation." + params.navigItem + "\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("navigToDashboard", () => {
@@ -52,11 +52,11 @@ Cypress.Commands.add("navigToDashboard", () => {
     CyRoutes.GetPendingActions,
     () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
-    }).wait(1000);
+    });
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
-  cy.get("a[href=\"/document_type_management\"]").arrowClick().wait(1000);
+  cy.get("a[href=\"/document_type_management\"]").arrowClick();
 });
 
 Cypress.Commands.add("navigToRecords", () => {
@@ -162,6 +162,7 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       ],
     });
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToWorkOrders", () => {

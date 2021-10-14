@@ -50,7 +50,7 @@ Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poSta
     cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").arrowType(params.partNumber);
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(1000);
+    cy.get("[id=\"owner\"]").arrowType(params.owner);
   });
   cy.get("[id=\"dynamicParams.precalc.issueDate\"]").arrowType(params.issueDate);
 });
@@ -136,6 +136,7 @@ Cypress.Commands.add("filterPOVersion", (params: { version: string }) => {
 
 Cypress.Commands.add("filterClear", () => {
   cy.get("[id=\"clearFilter\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckNumberOfDisplayedRecords", (params: { numberOfRecords: string }) => {

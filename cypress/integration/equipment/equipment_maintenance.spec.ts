@@ -450,7 +450,7 @@ context("Equipment maintenance test", () => {
       });
 
       it("Add created document revision", () => {
-        cy.arClickAddDocument().wait(500);
+        cy.arClickAddDocument();
         cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -546,7 +546,7 @@ context("Equipment maintenance test", () => {
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-      cy.wait(500);
+
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
@@ -555,7 +555,7 @@ context("Equipment maintenance test", () => {
             cy.wrap($el).arrowClick();
           }
         });
-      cy.wait(500);
+
     });
 
     it("Create 'Preventative maintenance document'", () => {
@@ -647,7 +647,7 @@ context("Equipment maintenance test", () => {
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-      cy.wait(500);
+
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
@@ -657,7 +657,7 @@ context("Equipment maintenance test", () => {
             cy.wrap($el).arrowClick();
           }
         });
-      cy.wait(500);
+
     });
 
     it("Create 'Calibration document'", () => {
@@ -738,7 +738,7 @@ context("Equipment maintenance test", () => {
         cy.filterEquip({
           docId: "EQ-00001", revision: "1", eqState: "Released", title: "Equipment maintenance document",
           owner: USERS[1].name, calDueDate: CAL_DUE_DATE, pmDueDate: PM_DUE_DATE, eqStatus: "Active",
-        }).wait(2000);
+        });
       });
 
       it("Verify equipment is shown", () => {
@@ -752,13 +752,13 @@ context("Equipment maintenance test", () => {
         SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
           cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
-          cy.wait(2000);
+
         });
       });
 
       it("Check Calibration document existance", () => {
         SystemRequirement("REQ-2900");
-        cy.wait(5000);
+
         cy.get("[data-cy=maintenanceHistory]")
           .eq(1)
           .should("contain", "MR-00002 - Calibration document")

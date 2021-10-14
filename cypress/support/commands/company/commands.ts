@@ -179,7 +179,6 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
     ], () => {
       cy.get("#root").contains(params.name).arrowClick();
     });
-    cy.wait(1500);
     addTestContext("companyName", params.name);
   }
   cy.get("body").then(($body) => {
@@ -206,7 +205,7 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
     ], () => {
       cy.get("#root").contains(params.name).arrowClick();
     });
-    cy.wait(500);
+
     addTestContext("companyName", params.name);
   }
 });
@@ -221,7 +220,7 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
     cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
-  cy.wait(3000);
+
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -229,7 +228,10 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
-  cy.get("[data-cy=\"change.request.create\"]").arrowClick();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+    cy.get("[data-cy=\"change.request.create\"]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 

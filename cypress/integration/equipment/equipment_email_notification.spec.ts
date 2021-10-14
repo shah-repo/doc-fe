@@ -383,7 +383,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Enter description 'Equipment maintenance'", () => {
         cy.drEnterDocumentDescription({ description: "Equipment maintenance" });
-        cy.wait(5000);
+
       });
 
       it("Select 'Active' as EQ status", () => {
@@ -845,7 +845,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Select document 'Yes' for preventative maintenance required", () => {
         cy.get("[value=\"Yes\"]").eq(0).arrowClick();
-        cy.wait(500);
+
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {

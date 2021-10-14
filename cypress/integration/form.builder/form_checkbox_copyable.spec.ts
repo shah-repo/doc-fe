@@ -143,7 +143,7 @@ context("Copyable Checkbox test", () => {
         cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.contains("ac-wi-ch").trigger("mouseover");
       });
 
@@ -153,7 +153,7 @@ context("Copyable Checkbox test", () => {
         cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
         cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.contains("ac-wo-ch").trigger("mouseover");
       });
 

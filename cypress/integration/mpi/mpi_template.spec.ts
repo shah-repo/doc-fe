@@ -328,7 +328,7 @@ context("Mpi Template", () => {
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
           cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
           cy.fbAddNewFieldButton();
-          cy.wait(2000);
+
           cy.contains("fb-autocomplete").trigger("mouseover");
         });
 
@@ -527,7 +527,7 @@ context("Mpi Template", () => {
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
           cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
           cy.fbAddNewFieldButton();
-          cy.wait(2000);
+
           cy.contains("fb-autocomplete").trigger("mouseover");
         });
 

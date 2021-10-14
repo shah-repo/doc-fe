@@ -195,7 +195,7 @@ context("Document Operators Access Test", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
+
     });
 
     it("'Approve and Release' the document", () => {
@@ -206,11 +206,7 @@ context("Document Operators Access Test", () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev,
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Turn off autosave", () => {

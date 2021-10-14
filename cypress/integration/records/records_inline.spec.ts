@@ -119,7 +119,7 @@ context("Record inline Flow", () => {
 
       it("Add second textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.wait(1000);
+
         cy.fbSelectTextField();
         cy.fbAddLabelName({ name: "Second textfield for inline" });
         cy.fbAddField();
@@ -210,14 +210,14 @@ context("Record inline Flow", () => {
 
       it("Check approve button is not disabled", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
-        cy.wait(5000);
+
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-        cy.wait(2000);
+
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -242,7 +242,7 @@ context("Record inline Flow", () => {
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
-          cy.wait(5000);
+
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -254,7 +254,7 @@ context("Record inline Flow", () => {
 
         it("Approve first Inline Approval", () => {
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.wait(2000);
+
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
@@ -286,7 +286,7 @@ context("Record inline Flow", () => {
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
-          cy.wait(5000);
+
         });
 
         it("Approve Inline Approval", () => {

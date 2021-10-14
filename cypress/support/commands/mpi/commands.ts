@@ -37,7 +37,7 @@ Cypress.Commands.add("mpiEnterDescriptionToStep", (params: {numbOfStep: integer;
   cy.get("[data-cy$=\"description\"]>div>div>div>div>div[contenteditable]")
     .eq(params.numbOfStep)
     .type(params.description)
-    .wait(300);
+  ;
   cy.unClick();
 });
 

@@ -714,7 +714,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Should show error for 'required if' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -747,12 +747,12 @@ field is empty: Add text field`, () => {
 
     it("Select 'Required doctypes", () => {
       SystemRequirement("FB-0250");
-      cy.wait(3000);
+
       cy.get(`[data-cy^="required-doctypes-"]`).arrowType("Equipment{downarrow}{enter}");
     });
 
     it("Should show error for 'required with' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 

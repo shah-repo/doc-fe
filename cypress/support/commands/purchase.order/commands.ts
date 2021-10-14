@@ -85,7 +85,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").arrowClick().wait(500);
+  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").arrowClick();
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -106,11 +106,11 @@ Cypress.Commands.add("poClickCreatePO", () => {
 
 Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string }) => {
   cy.get("[data-cy=\"field-description\"]").arrowClick().arrowType(params.description);
-  cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).arrowClick();
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
 });
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
-  cy.get("[name=\"partNumber\"]").arrowClick().wait(300);
+  cy.get("[name=\"partNumber\"]").arrowClick();
   cy.get("ul[role=listbox] > li").contains(params.partNo).arrowClick();
 });
 
@@ -137,13 +137,13 @@ Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
-  cy.xpath("//input[@name]/ ../div/button").arrowClick().wait(200);
+  cy.xpath("//input[@name]/ ../div/button").arrowClick();
   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
-    .click().wait(300);
+    .click();
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").arrowClick().wait(1000).arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
 });
 
 Cypress.Commands.add("poCheckCurrency", () => {
@@ -192,6 +192,8 @@ Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => 
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
     cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
@@ -290,9 +292,9 @@ Cypress.Commands.add("poAMCheckForAlertMessage", () => {
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
-  cy.get("button[aria-label=reject]").first().arrowClick().wait(300);
+  cy.get("button[aria-label=reject]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowClick().arrowType(params.password);
-  cy.wait(300).get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -323,7 +325,7 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApprovers], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-    cy.wait(500);
+
     cy.get("div[id^=react-select]").contains(params.poType).arrowClick();
     if (params.poForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();

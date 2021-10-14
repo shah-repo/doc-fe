@@ -645,7 +645,7 @@ context("Autosave on blur", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
-      cy.wait(2000);
+
     });
 
     it("Add Text Editor", () => {
@@ -811,11 +811,7 @@ context("Autosave on blur", () => {
 
   context("Create document from form and test autosave on blur", () => {
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
-      cy.wait(2000);
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New document from form'", () => {
@@ -827,7 +823,7 @@ context("Autosave on blur", () => {
         cy.drEnterDocumentDescription({ description: "New document from form description" });
         cy.drClickCreateDocumentWithoutApiCall();
       });
-      cy.wait(2000);
+
     });
 
     it("Fill TextField and check for autosave", () => {
@@ -861,10 +857,10 @@ context("Autosave on blur", () => {
 
     it("Select Date and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.xpath("//input[@name]/ ../div/button").arrowClick().wait(200);
+        cy.xpath("//input[@name]/ ../div/button").arrowClick();
         // eslint-disable-next-line max-len
         cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
-          .last().arrowClick().wait(300);
+          .last().arrowClick();
         cy.unClick();
       });
     });
@@ -903,7 +899,7 @@ context("Autosave on blur", () => {
     it("Enter quantity value and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[name^=\"fb-quantity-\"]").arrowType("2");
-        cy.wait(2000);
+
         cy.get("[data-cy=fb-quantity]").arrowClick();
       });
     });
@@ -928,7 +924,7 @@ context("Autosave on blur", () => {
     it("Enter Timer value and check for autosave", () => {
       cy.get("[name^=\"fb-timer-\"]").arrowType("5");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.wait(2000);
+
         cy.unClick();
       });
     });
@@ -989,7 +985,7 @@ context("Autosave on blur", () => {
     it("Enter FB range and check for autosave", () => {
       cy.get("[name*=\"fb-range-\"]").arrowType("2");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.wait(2000);
+
         cy.unClick();
       });
     });
@@ -1008,12 +1004,12 @@ context("Autosave on blur", () => {
     //   cy.get("[data-cy=\"title\"]").arrowType("Task One");
     //   cy.get("[data-cy=\"description\"]").eq(1).next().arrowType("Task Description");
     //   cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
-    //   cy.xpath("//input[@name]/ ../div/button").eq(1).arrowClick().wait(200);
+    //   cy.xpath("//input[@name]/ ../div/button").eq(1).arrowClick();
     //   // eslint-disable-next-line max-len
     //   cy.xpath(
     // "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
     // ).last()
-    //     .click().wait(300);
+    //     .click();
     //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).arrowClick({ force: true });
     // });
 

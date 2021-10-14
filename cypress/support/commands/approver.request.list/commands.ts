@@ -39,10 +39,12 @@ Cypress.Commands.add("alClearFilters", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
     cy.get("#clearFilter").arrowClick();
   });
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("alFilterByArId", (params: {arId: string }) => {
-  cy.get("input[name=crId]").arrowType(params.arId).wait(300);
+  cy.get("input[name=crId]").arrowType(params.arId).wait(500);
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
@@ -54,7 +56,8 @@ Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("alFilterByTitle", (params: {title: string }) => {
-  cy.get("input[name=title]").arrowType(params.title).wait(300);
+  cy.get("input[name=title]").arrowType(params.title).wait(500);
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("alVerifyFilterByTitle", (params: {title: string }) => {
@@ -66,7 +69,8 @@ Cypress.Commands.add("alVerifyFilterByTitle", (params: {title: string }) => {
 });
 
 Cypress.Commands.add("alFilterByOwner", (params: {owner: string }) => {
-  cy.get("input[name=owner]").arrowType(params.owner).wait(300);
+  cy.get("input[name=owner]").arrowType(params.owner).wait(500);
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("alVerifyFilterByOwner", (params: {owner: string }) => {
@@ -78,8 +82,9 @@ Cypress.Commands.add("alVerifyFilterByOwner", (params: {owner: string }) => {
 });
 
 Cypress.Commands.add("alFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-state\"]").arrowClick().wait(300);
-  cy.get("ul[role=listbox]>li").contains(params.status).arrowClick().wait(300);
+  cy.get("div[id=\"mui-component-select-state\"]").arrowClick();
+  cy.get("ul[role=listbox]>li").contains(params.status).arrowClick();
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("alVerifyFilterByStatus", (params: {status: string }) => {

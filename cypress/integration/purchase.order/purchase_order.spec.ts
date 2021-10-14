@@ -645,7 +645,7 @@ context("PO test", () => {
         cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
         cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear()
           .arrowType("Supplier Description");
-        cy.get("[data-cy=\"description\"]>div").arrowClick().wait(1000);
+        cy.get("[data-cy=\"description\"]>div").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
 
@@ -692,7 +692,7 @@ context("PO test", () => {
           [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           });
-        cy.wait(1000);
+
         cy.checkToastMessage({ exists: false });
       });
 
@@ -766,7 +766,7 @@ context("PO test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
-      cy.wait(1000);
+
     });
 
     it("Add an Approval", () => {
@@ -944,7 +944,7 @@ context("PO test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
-      cy.wait(1000);
+
     });
 
     it("Add an Approval", () => {
@@ -1144,7 +1144,7 @@ context("PO test", () => {
       cy.filterPO({
         docId: "POT-00001", version: "1", poStatus: "Closed", supplier: "Supplier",
         partNumber: "PRT-00004 - 1", amount: "52.77", owner: USERS[1].name, issueDate: "N/A",
-      }).wait(2000);
+      });
     });
 
     it("Check if number of displayed filtered items is '1'", () => {
@@ -1153,7 +1153,7 @@ context("PO test", () => {
     });
 
     it("Navigate to Document List", () => {
-      cy.wait(1000).navigToDocumentList();
+      cy.navigToDocumentList();
     });
 
     it("Navigate to Purchase Order", () => {

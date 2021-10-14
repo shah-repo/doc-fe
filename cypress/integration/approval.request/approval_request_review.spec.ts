@@ -154,7 +154,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -291,7 +291,7 @@ context("Approval request form scenario", () => {
 
     it("Click Create a Approval Request button", () => {
       SystemRequirement("REQ-0860");
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -303,7 +303,7 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick().wait(1000);
+      cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
     });
   });
 
@@ -469,7 +469,7 @@ context("Approval request form scenario", () => {
         include_body: true,
         after: dateAfterEmailShouldArrive,
       };
-      cy.wait(20000);
+      cy.wait(30000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;

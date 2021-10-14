@@ -4,11 +4,11 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
@@ -277,7 +277,6 @@ context("Sorting test", () => {
         password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -1849,7 +1848,7 @@ context("Sorting test", () => {
 
   context("Group Management Sorting", () => {
     it("Navigate to Group Management", () => {
-      cy.grpNavigateToGroupManagement().wait(1000);
+      cy.grpNavigateToGroupManagement();
     });
 
     // context("Sort 'Name'", () => {
@@ -1903,7 +1902,7 @@ context("Sorting test", () => {
 
   context("User Management Sorting", () => {
     it("Navigate to User Management", () => {
-      cy.usrNavigateToUserManagement().wait(1000);
+      cy.usrNavigateToUserManagement();
     });
 
     context("Sort 'Name'", () => {
@@ -1989,7 +1988,7 @@ context("Sorting test", () => {
 
   context("Equipment Sorting", () => {
     it("Navigate to Equipment", () => {
-      cy.navigToEquipment().wait(1000);
+      cy.navigToEquipment();
     });
 
     context("Sort 'ID'", () => {
@@ -2123,7 +2122,7 @@ context("Sorting test", () => {
 
   context("Suppliers Sorting", () => {
     it("Navigate to Suppliers", () => {
-      cy.navigToSuppliers().wait(1000);
+      cy.navigToSuppliers();
     });
 
     context("Sort 'Supplier ID'", () => {
@@ -2241,7 +2240,7 @@ context("Sorting test", () => {
 
   context("Parts Sorting", () => {
     it("Navigate to Parts", () => {
-      cy.navigToParts().wait(1000);
+      cy.navigToParts();
     });
 
     context("Sort 'Parts ID'", () => {
@@ -2327,7 +2326,7 @@ context("Sorting test", () => {
 
   context("Purchase Order Sorting", () => {
     it("Navigate to Purchase Order", () => {
-      cy.navigToPurchaseOrder().wait(1000);
+      cy.navigToPurchaseOrder();
     });
 
     context("Sort 'PO #'", () => {
@@ -2463,7 +2462,7 @@ context("Sorting test", () => {
 
   context("Receiving Sorting", () => {
     it("Navigate to Receiving", () => {
-      cy.navigToReceivableList().wait(1000);
+      cy.navigToReceivableList();
     });
 
     context("Sort 'Receive ID'", () => {
@@ -2551,8 +2550,11 @@ context("Sorting test", () => {
   context("AR Sorting", () => {
     it("Navigate to AR", () => {
       cy.navigToApprovalRequestList();
-      cy.get("[id=\"mui-component-select-state\"]").click().wait(300);
-      cy.get("li[data-value]").contains("None").click().wait(1000);
+      cy.get("[id=\"mui-component-select-state\"]").click();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+        cy.get("li[data-value]").contains("None").click();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Sort 'AR ID'", () => {
@@ -2623,7 +2625,7 @@ context("Sorting test", () => {
 
   context("Records Sorting", () => {
     it("Navigate to Records", () => {
-      cy.navigToRecords().wait(1000);
+      cy.navigToRecords();
     });
 
     context("Sort 'ID'", () => {

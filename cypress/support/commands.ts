@@ -43,7 +43,8 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
-      // type(thingToTypeIn: string, options?: any): Chainable<Subject>;
+      progressBarShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldNotExist(): Chainable<Subject>;
     }
   }
 }
@@ -98,6 +99,14 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
     }
     return false;
   });
+});
+
+Cypress.Commands.add("progressBarShouldNotExist", () => {
+  cy.get("div.MuiLinearProgress-root").should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
+  cy.get("div.MuiCircularProgress-root").should("not.exist");
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {

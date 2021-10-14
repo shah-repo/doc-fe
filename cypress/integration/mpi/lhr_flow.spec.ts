@@ -1163,7 +1163,7 @@ context("LHR flow", () => {
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-      cy.wait(500);
+
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
@@ -1200,7 +1200,7 @@ context("LHR flow", () => {
 
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-      cy.wait(5000);
+
     });
 
     it("Add an Approval'", () => {
@@ -1327,7 +1327,7 @@ context("LHR flow", () => {
             CyRoutes.GetAttachmentsAttached ], () => {
             cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).arrowClick();
           });
-          cy.wait(6000);
+
         });
 
         it("Verify description of clone of Step #1", () => {
@@ -1662,7 +1662,7 @@ context("LHR flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
           });
-          cy.wait(500);
+
         });
 
         it("Turn off autosave", () => {
@@ -1856,7 +1856,7 @@ context("LHR flow", () => {
 
         it("Update step #1 description", () => {
           cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-          cy.wait(500);
+
           cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
         });
 
@@ -1961,7 +1961,7 @@ context("LHR flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).arrowClick();
         });
-        cy.wait(500);
+
       });
 
       it("Turn off autosave", () => {
@@ -1995,7 +1995,7 @@ context("LHR flow", () => {
         it("Update step #1 description", () => {
           SystemRequirement("REQ-3270");
           cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-          cy.wait(500);
+
           cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
         });
 

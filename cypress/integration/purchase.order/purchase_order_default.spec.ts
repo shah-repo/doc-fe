@@ -397,7 +397,7 @@ context("PO test with default enlil form", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
           });
-          cy.wait(500);
+
           cy.get("div[data-cy=\"owner-0\"]").should("have.text", USERS[1].name);
           cy.get("time[data-cy=\"time-0\"]")
             .should("have.text", (poCreationDate1 || poCreationDate2));
@@ -449,7 +449,7 @@ context("PO test with default enlil form", () => {
 
         it("Select Order Date", () => {
           cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-          cy.wait(500);
+
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
       });
@@ -483,7 +483,7 @@ context("PO test with default enlil form", () => {
 
         it("Add Required Date", () => {
           cy.get("input[name^=date]").parent().find("button").arrowClick();
-          cy.wait(500);
+
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
 
@@ -501,7 +501,6 @@ context("PO test with default enlil form", () => {
           cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
           cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
           cy.get("[data-cy=Comments]").arrowClick();
-          cy.wait(300);
           cy.unClick();
         });
 
@@ -522,7 +521,7 @@ context("PO test with default enlil form", () => {
               cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
             });
           cy.checkToastMessage({ exists: false });
-          cy.wait(2000);
+
         });
 
         it("Click 'Submit for Approval' button", () => {

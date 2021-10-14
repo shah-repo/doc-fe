@@ -207,7 +207,7 @@ context("Check Document History", () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
         cy.get("[data-cy=field-description]>label").arrowClick();
         // auto-save
-        cy.wait(1000);
+
       });
     });
 
@@ -215,7 +215,7 @@ context("Check Document History", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentDescription({ description: formDescription.newValue });
         cy.unClick();
-        cy.wait(500);
+
         cy.unClick();
       });
     });

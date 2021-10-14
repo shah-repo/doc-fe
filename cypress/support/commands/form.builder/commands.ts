@@ -65,7 +65,7 @@ declare global {
       fbVerifyElementContainText(params: { name: string; label: string; text: string }): Chainable<Subject>;
       fbVerifyElementNotContainText(params: { name: string; label: string; text: string }): Chainable<Subject>;
       fbEnterNameData(params: { name: string; data: string }): Chainable<Subject>;
-      fbAddAutocompleteElement(params: { name: string; label: string }): Chainable<Subject>;
+      fbAddAutocompleteElement(params: { name: string; label: string; addBtnVisible?: boolean }): Chainable<Subject>;
       fbVerifyAutocompleteElementLength(params: { el: string; length: number }): Chainable<Subject>;
       fbClickLabelEditHiddenBtn(params: { label: string }): Chainable<Subject>;
       fbAutocompleteType(params: { autocompleteOption: string }): Chainable<Subject>;
@@ -145,12 +145,12 @@ Cypress.Commands.add("fbGroupName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
-  cy.get("button[data-cy^=\"form.builder\"]").contains(params.name).arrowClick().wait(500);
+  cy.get("button[data-cy^=\"form.builder\"]").contains(params.name).arrowClick();
 });
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[type=\"checkbox\"]").check(item, { force: true }).wait(200);
+    cy.get("[type=\"checkbox\"]").check(item, { force: true });
   });
 });
 
@@ -168,7 +168,7 @@ Cypress.Commands.add("fbCheckFieldsDoesntExist", (...list: string[]) => {
 
 Cypress.Commands.add("fbUnSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[type=\"checkbox\"]").uncheck(item).wait(200);
+    cy.get("[type=\"checkbox\"]").uncheck(item);
   });
 });
 
@@ -184,7 +184,7 @@ Cypress.Commands.add("fbSelectRadioButtonValue", (params: { value: string }) => 
 
 Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
   cy.get("[id*=\"mui-component-select-select-field-for-inline\"]").arrowClick().wait(400);
-  cy.get("ul[role=listbox]>li").contains(params.value).arrowClick().wait(500);
+  cy.get("ul[role=listbox]>li").contains(params.value).arrowClick();
 });
 
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
@@ -204,7 +204,7 @@ Cypress.Commands.add("fbRadioBtnGroupField", () => cy.get("button[data-cy=\"form
 Cypress.Commands.add("fbSelectField", () => cy.get("button[data-cy=\"form.builder.select\"]").arrowClick());
 
 Cypress.Commands.add("fbSelectInlineApproval", () => {
-  cy.wait(500);
+
   cy.get("button[data-cy=\"form.builder.inlineapproval\"]").arrowClick();
 });
 
@@ -216,9 +216,9 @@ Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form
 
 Cypress.Commands.add("fbOpenValidation", () => cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick());
 
-Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick().wait(500));
+Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
-Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }).wait(500));
+Cypress.Commands.add("fbEditHiddenBtn", () => cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEnterNameValue", (params: { name: string; value: string }) => {
   cy.get(`input[name="${params.name}"]`).clear().arrowType(params.value).arrowClick();
@@ -246,7 +246,7 @@ Cypress.Commands.add("fbVerifyRadioButtonValue", (params: { name: string }) => {
 
 Cypress.Commands.add("fbEnterParagraph", (params: { paragraph: string }) => {
   cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.paragraph);
-  cy.get("[data-cy=form.builder.create.field]").arrowClick().wait(1000);
+  cy.get("[data-cy=form.builder.create.field]").arrowClick();
 });
 
 Cypress.Commands.add("fbVerifyParagraphValue", (params: { paragraph: string }) => {
@@ -255,7 +255,7 @@ Cypress.Commands.add("fbVerifyParagraphValue", (params: { paragraph: string }) =
 
 Cypress.Commands.add("fbSelectCheckboxName", (...list: string[]) => {
   list.forEach((name) => {
-    cy.get(`input[name="${name}"]`).check().wait(200);
+    cy.get(`input[name="${name}"]`).check();
   });
 });
 
@@ -313,14 +313,17 @@ Cypress.Commands.add("fbEnterNameData", (params: { name: string; data: string })
   cy.get(`[name="${params.name}"]`).clear().arrowType(params.data);
 });
 
-Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label: string }) => {
-  cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
+Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label: string; addBtnVisible?: boolean }) => {
+  if (params.addBtnVisible) {
+    cy.fbAddNewField();
+  }
+  else {
+    cy.fbClickAddNewHiddenBtn();
+  }
   cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
   cy.fbEnterNameValue({ name: "label", value: params.label });
   cy.get("[data-cy=\"optionId\"]").arrowType(`${params.name}{downarrow}{enter}`);
   cy.fbAddNewFieldButton();
-  cy.wait(1000);
-  cy.contains(params.label).trigger("mouseover");
 });
 
 Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string; length: number }) => {
@@ -333,5 +336,5 @@ Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string;
 });
 
 Cypress.Commands.add("fbClickLabelEditHiddenBtn", (params: { label: string }) => {
-  cy.contains(params.label).parentsUntil("li").find("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }).wait(500);
+  cy.contains(params.label).parentsUntil("li").find("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true });
 });

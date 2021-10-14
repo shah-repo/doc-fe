@@ -26,7 +26,7 @@ Cypress.Commands.add("ebEnterPartName", (params: { name: string }) => {
 Cypress.Commands.add("ebEnterPartDescription", (params: { description: string }) => {
   cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
   cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
-  cy.get("[data-cy=\"form.builder.field.description\"]>div").arrowClick().wait(1000);
+  cy.get("[data-cy=\"form.builder.field.description\"]>div").arrowClick();
 });
 
 Cypress.Commands.add("ebChoosePartType", (params: {partName: string}) => {
@@ -57,7 +57,7 @@ Cypress.Commands.add("ebClickClone", () => {
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.wait(500);
+
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });

@@ -48,7 +48,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-  cy.wait(2000);
+
 
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).arrowClick();
@@ -72,7 +72,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-  cy.wait(2000);
+
   cy.get("[data-cy=\"title\"]").arrowType(params.material);
 
   if (params.partLot) {
@@ -92,7 +92,7 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).arrowClick();
   cy.unClick();
-  cy.wait(500);
+
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -103,7 +103,7 @@ Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => 
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
   cy.get("[data-cy=\"title\"]").arrowType(params.equipment);
   cy.unClick();
-  cy.wait(500);
+
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
