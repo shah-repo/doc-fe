@@ -124,6 +124,7 @@ Cypress.Commands.add("poSelectUnits", () => {
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
+  cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"glCode\"]").arrowClick();
   cy.get("ul[role=listbox] > li").contains("code 1").arrowClick();
 });
