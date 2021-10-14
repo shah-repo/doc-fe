@@ -327,17 +327,22 @@ context("FORM Field test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
         cy.fbEnterNameValue({ name: "label", value: "fb-approvals" });
-        cy.fbAddNewFieldButton();
+        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
+          cy.fbAddNewFieldButton();
+        });
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
         cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
         cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
+        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
+          cy.fbAddNewFieldButton();
+        });
       });
 
       it("Add Request Approval", () => {
@@ -768,25 +773,34 @@ context("FORM Field test", () => {
 
       it("Enter description", () => {
         cy.drEnterDocumentDescription({ description: "test description" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter Quantity field value", () => {
         cy.get("input[name^=\"fb-quantity-\"]").arrowType("1");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Autocomplete field value", () => {
         cy.get("input[data-cy^=\"fb-autocomplete-\"]").arrowClick().arrowType("test title{downarrow}{enter}");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter Date picker field value", () => {
         cy.get("input[name^=\"fb-datepicker-\"]").parent().find("button").arrowClick({ force: true });
         cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Save button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify Clinical Protocol doc values", () => {

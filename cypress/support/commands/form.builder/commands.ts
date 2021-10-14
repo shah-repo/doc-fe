@@ -134,6 +134,8 @@ Cypress.Commands.add("fbEnterPlaceholder", (params: { placeholder: string }) => 
 
 Cypress.Commands.add("fbAddNewFieldButton", () => {
   cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {

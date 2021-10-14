@@ -363,7 +363,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 35 * 1000,
-      requestTimeout: 20 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   GetDocTypeGroupOptions: {
