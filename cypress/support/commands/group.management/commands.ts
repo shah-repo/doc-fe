@@ -129,6 +129,7 @@ Cypress.Commands.add("grpNavigateToGroupManagement", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
     cy.get("[data-cy=\"navigation.groupManagement\"]").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {

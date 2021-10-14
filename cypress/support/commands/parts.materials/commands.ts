@@ -131,14 +131,20 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("ptClickCreateNewPart", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowType(params.partForm + "{downarrow}{enter}");
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("pmSubmitForApproval", () => {

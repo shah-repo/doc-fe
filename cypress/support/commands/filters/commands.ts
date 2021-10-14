@@ -95,28 +95,35 @@ Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; e
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").arrowType(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision);
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
     cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
     cy.get("ul[role=listbox] > li").contains(params.state).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"name\"]").arrowType(params.title);
+    cy.get("[id=\"name\"]").arrowType(params.title).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").arrowType(params.owner);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
     cy.get("[id=\"mui-component-select-releasedAfter\"]").arrowClick();
     cy.get("ul[role=listbox] > li").contains(params.releasedDate).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.formDocId\"]").arrowType(params.formId);
+    cy.get("[id=\"dynamicParams.precalc.formDocId\"]").arrowType(params.formId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckIfRecordsFilterPersists", (params: {docId: string; revision: string; state: string;

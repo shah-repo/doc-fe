@@ -19,7 +19,10 @@ declare global {
 }
 
 Cypress.Commands.add("usrNavigateToUserManagement", () => {
-  cy.get("[data-cy=\"navigation.userManagement\"]").arrowClick();
+  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
+    cy.get("[data-cy=\"navigation.userManagement\"]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {

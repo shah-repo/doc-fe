@@ -695,8 +695,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   GetDocRevs: {

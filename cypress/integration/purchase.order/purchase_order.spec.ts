@@ -701,6 +701,8 @@ context("PO test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -720,6 +722,8 @@ context("PO test", () => {
           CyRoutes.EmployeesGet], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check if approver ID and date time are recorded", () => {
@@ -746,6 +750,8 @@ context("PO test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -774,6 +780,8 @@ context("PO test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Submit for Approval' button", () => {
@@ -781,6 +789,8 @@ context("PO test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
@@ -952,12 +962,16 @@ context("PO test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
@@ -1001,6 +1015,8 @@ context("PO test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
@@ -1008,6 +1024,8 @@ context("PO test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Void' button", () => {
