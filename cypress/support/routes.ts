@@ -363,7 +363,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 35 * 1000,
-      requestTimeout: 30 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   GetDocTypeGroupOptions: {
@@ -648,8 +648,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/change_requests/available_approvers",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   GetRequiredApproversDocRev: {

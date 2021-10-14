@@ -505,6 +505,8 @@ context("Equipment maintenance test", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
             cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -592,12 +594,14 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check preventative maintenance document existance", () => {
       cy.get("div[data-cy=\"maintenanceHistory\"]")
         .eq(0)
-        .contains("MR-00001 - Preventative maintenance document");
+        .should("contain", "MR-00001 - Preventative maintenance document");
     });
 
     it("Check preventative maintenance status is in complience for next 10 days", () => {
@@ -752,13 +756,13 @@ context("Equipment maintenance test", () => {
         SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
           cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
-
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check Calibration document existance", () => {
         SystemRequirement("REQ-2900");
-
         cy.get("[data-cy=maintenanceHistory]")
           .eq(1)
           .should("contain", "MR-00002 - Calibration document")
