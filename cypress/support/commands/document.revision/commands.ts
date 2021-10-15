@@ -258,14 +258,16 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
-
-  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -286,13 +288,16 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
-
-  cy.get("#FormList-selectForm").arrowType("AR Form{enter}");
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("#FormList-selectForm").arrowType("AR Form{enter}").wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
