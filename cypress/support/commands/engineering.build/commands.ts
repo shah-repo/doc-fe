@@ -51,15 +51,19 @@ Cypress.Commands.add("ebClickClone", () => {
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
 });
 
 
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
-  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });

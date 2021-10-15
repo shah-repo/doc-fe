@@ -1141,6 +1141,7 @@ context("LHR flow", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.pause();
     });
 
     it("Turn off autosave", () => {
@@ -1327,7 +1328,6 @@ context("LHR flow", () => {
             CyRoutes.GetAttachmentsAttached ], () => {
             cy.get("[data-cy=\"form.builder.clone.step\"]").eq(0).arrowClick();
           });
-
         });
 
         it("Verify description of clone of Step #1", () => {
@@ -1463,6 +1463,7 @@ context("LHR flow", () => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+            cy.listLoadingElementShouldNotExist();
             cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
           });
         });
@@ -1475,6 +1476,7 @@ context("LHR flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
           });
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"editorConfig.filters.documentType\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Manufacturing Process Instructions Test").arrowClick();
           cy.get("[data-cy=\"editorConfig.filters.revisionStatus\"]").arrowClick();
@@ -1489,6 +1491,7 @@ context("LHR flow", () => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetAutocompleteOptions], () => {
+            cy.listLoadingElementShouldNotExist();
             cy.get("input[data-cy^=\"lhr-step\"]").arrowType("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
@@ -1523,6 +1526,7 @@ context("LHR flow", () => {
         it("Add material parameter", () => {
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
             .eq(0).arrowClick();
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Material three").arrowClick();
           cy.get("[name=\"quantity\"]").arrowType("3");
@@ -1534,6 +1538,7 @@ context("LHR flow", () => {
         it("Add equipment parameter", () => {
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
             .eq(1).arrowClick();
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Equipment three").arrowClick();
           cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -1662,7 +1667,8 @@ context("LHR flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
           });
-
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -1694,6 +1700,7 @@ context("LHR flow", () => {
         });
 
         it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get("input[data-cy=usedOverride]").arrowClick();
           cy.get("ul[role=listbox]>li").contains(`LOT #${lotDateSuffix}01`).arrowClick();
         });
@@ -1719,6 +1726,7 @@ context("LHR flow", () => {
         });
 
         it("Select 'Equipment one'", () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"usedOverride\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Equipment one").arrowClick();
         });
@@ -1986,6 +1994,8 @@ context("LHR flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("#Redline").arrowClick();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {

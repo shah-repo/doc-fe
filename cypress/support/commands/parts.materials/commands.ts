@@ -124,6 +124,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 });
 
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
@@ -151,6 +152,8 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {

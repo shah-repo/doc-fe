@@ -219,8 +219,9 @@ Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
     cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
-
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -231,6 +232,7 @@ Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"change.request.create\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });

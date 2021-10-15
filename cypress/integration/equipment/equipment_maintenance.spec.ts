@@ -405,7 +405,7 @@ context("Equipment maintenance test", () => {
 
     it("Type preventative maintenance instruction", () => {
       cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
-        .type("Instructions for preventative maintenance");
+        .type("Instructions for preventative maintenance").wait(500);
       cy.unClick();
     });
 
@@ -424,7 +424,7 @@ context("Equipment maintenance test", () => {
 
     it("Type preventative maintenance instruction", () => {
       cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
-        .type("Instructions for calibration");
+        .type("Instructions for calibration").wait(500);
       cy.unClick();
     });
 
@@ -521,6 +521,8 @@ context("Equipment maintenance test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
           cy.visit(newPMUrl);
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -548,7 +550,6 @@ context("Equipment maintenance test", () => {
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
@@ -557,7 +558,6 @@ context("Equipment maintenance test", () => {
             cy.wrap($el).arrowClick();
           }
         });
-
     });
 
     it("Create 'Preventative maintenance document'", () => {
@@ -577,7 +577,6 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -591,7 +590,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.AvailableMaintenanceForms], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -680,7 +679,6 @@ context("Equipment maintenance test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
       });
-      cy.wait(15000);
     });
 
     it("Verify status is 'Released'", () => {
@@ -748,13 +746,18 @@ context("Equipment maintenance test", () => {
       it("Verify equipment is shown", () => {
         SystemRequirement("REQ-2850");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
+        cy.pause();
       });
     });
 
     context("Verify maintenance document in equipment", () => {
       it("Select 'Equipment calibration document'", () => {
         SystemRequirement("REQ-2900");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.DocRevPreview], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+          CyRoutes.EmployeesGet,
+          CyRoutes.DocRevPreview,
+          CyRoutes.AvailableMaintenanceForms,
+          CyRoutes.AvailableMaintenanceForms], () => {
           cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
         });
         cy.progressBarShouldNotExist();
@@ -763,7 +766,7 @@ context("Equipment maintenance test", () => {
 
       it("Check Calibration document existance", () => {
         SystemRequirement("REQ-2900");
-        cy.get("[data-cy=maintenanceHistory]")
+        cy.get("[data-cy=\"maintenanceHistory\"]")
           .eq(1)
           .should("contain", "MR-00002 - Calibration document")
           .and("contain", ADMIN_USER.name)

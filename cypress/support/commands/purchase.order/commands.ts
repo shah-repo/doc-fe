@@ -101,6 +101,8 @@ Cypress.Commands.add("poCreateNew", () => {
 
 Cypress.Commands.add("poClickCreatePO", () => {
   cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 

@@ -331,7 +331,8 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
     routesToWait, () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -489,6 +490,8 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {

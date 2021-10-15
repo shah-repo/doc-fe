@@ -102,11 +102,11 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {
-  cy.get("div.MuiLinearProgress-root").should("not.exist");
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {

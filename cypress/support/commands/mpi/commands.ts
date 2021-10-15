@@ -36,9 +36,11 @@ Cypress.Commands.add("mpiEnterDescriptionToStep", (params: {numbOfStep: integer;
     .click();
   cy.get("[data-cy$=\"description\"]>div>div>div>div>div[contenteditable]")
     .eq(params.numbOfStep)
-    .type(params.description)
-  ;
+    .type(params.description);
+  cy.wait(500);
   cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("mpiAddStep", () => {
@@ -53,13 +55,17 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"LHRTparameter\"]").uncheck();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=listbox]>li").contains(params.material).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.quntity);
+  cy.wait(500);
   cy.get("[data-cy=\"unit\"]").arrowClick();
   cy.get("ul[role=listbox]>li").contains(params.unit).arrowClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
@@ -70,12 +76,16 @@ Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=listbox]>li").contains(params.material).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.quntity);
+  cy.wait(500);
   cy.get("[data-cy=\"unit\"]").arrowClick();
   cy.get("ul[role=listbox]>li").contains(params.unit).arrowClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
@@ -84,8 +94,11 @@ Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowType(params.material);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("mpiAddEquipmentToStep", (params: {
@@ -93,17 +106,25 @@ Cypress.Commands.add("mpiAddEquipmentToStep", (params: {
   numbOfStep: integer;
   equipment: string;}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.wait(500);
   cy.get("ul[role=listbox]>li").contains(params.equipment).arrowClick();
   params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : "";
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("mpiAddEquipmentParameterToStep", (params: {
   numbOfStep: integer;
   equipmentDescription: string;}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(params.numbOfStep - 1).arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"LHRTparameter\"]").check();
   cy.get("[data-cy=\"title\"]").arrowType(params.equipmentDescription);
+  cy.wait(500);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
