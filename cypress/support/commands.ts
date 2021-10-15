@@ -151,7 +151,7 @@ Cypress.Commands.add("triggerDueDateEmailScript", (params: {sessionId: string; c
     body: {
       currentDate: params.currentDate,
     },
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   }).then((response) => response.body);
 });
 

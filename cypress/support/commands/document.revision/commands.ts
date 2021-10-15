@@ -227,6 +227,8 @@ Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { descriptio
     cy.get("[data-cy=field-description]>label").arrowClick();
     cy.unClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {

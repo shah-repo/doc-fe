@@ -1034,6 +1034,8 @@ context("PO test", () => {
         cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
         cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {

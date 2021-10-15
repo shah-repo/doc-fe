@@ -799,8 +799,6 @@ context("FORM Field test", () => {
       it("Click Save button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify Clinical Protocol doc values", () => {

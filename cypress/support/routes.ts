@@ -329,6 +329,10 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/document_revisions/in_review/*",
     },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 25 * 1000,
+    },
   },
   DeleteLogout: {
     requestConfig: {
@@ -582,7 +586,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/aggregated_audit",
     },
     callConfig: {
-      requestTimeout: 4 * 1000,
+      requestTimeout: 40 * 1000,
       responseTimeout: 40 * 1000,
     },
   },

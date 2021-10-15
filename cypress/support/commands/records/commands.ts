@@ -87,6 +87,8 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
     }
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
@@ -104,6 +106,8 @@ Cypress.Commands.add("equipSelectRecordFormFromMultiSelect", (params: {recordTyp
       cy.get("div[id^=react-select]").contains(params.recordForm).arrowClick();
     }
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("equipClickCreateNew", () => {
@@ -114,6 +118,8 @@ Cypress.Commands.add("equipClickCreateNew", () => {
     CyRoutes.GetRequiredApprovers], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("equipReloadDocument", () => {
@@ -123,6 +129,8 @@ Cypress.Commands.add("equipReloadDocument", () => {
     CyRoutes.DocPreview], () => {
     cy.reload();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 
@@ -135,6 +143,8 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
     }
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
