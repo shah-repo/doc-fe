@@ -159,7 +159,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         cy.setLocalStorage("persist:auth", JSON.stringify(auth));
         cy.saveLocalStorage();
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-          cy.visit(CONFIG.FE_URL);
+          cy.visit(CONFIG.FE_URL, { timeout: 50000 });
         });
       });
     });
