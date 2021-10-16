@@ -32,27 +32,35 @@ declare global {
 Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poStatus: string;
   supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").arrowType(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.version\"]").arrowType(params.version);
+    cy.get("[id=\"dynamicParams.precalc.version\"]").arrowType(params.version).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_status\"]").arrowType(params.poStatus);
+    cy.get("[id=\"dynamicParams.precalc.po_status\"]").arrowType(params.poStatus).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.supplier\"]").arrowType(params.supplier);
+    cy.get("[id=\"dynamicParams.precalc.supplier\"]").arrowType(params.supplier).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_amount\"]").arrowType(params.amount);
+    cy.get("[id=\"dynamicParams.precalc.po_amount\"]").arrowType(params.amount).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").arrowType(params.partNumber);
+    cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").arrowType(params.partNumber).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").arrowType(params.owner);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
-  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").arrowType(params.issueDate);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").arrowType(params.issueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; version: string; poStatus: string;

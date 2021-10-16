@@ -590,7 +590,9 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.AvailableMaintenanceForms], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
+        CyRoutes.AvailableMaintenanceForms], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -746,7 +748,6 @@ context("Equipment maintenance test", () => {
       it("Verify equipment is shown", () => {
         SystemRequirement("REQ-2850");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.pause();
       });
     });
 

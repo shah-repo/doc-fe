@@ -1141,7 +1141,6 @@ context("LHR flow", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-      cy.pause();
     });
 
     it("Turn off autosave", () => {
@@ -1864,7 +1863,6 @@ context("LHR flow", () => {
 
         it("Update step #1 description", () => {
           cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-
           cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
         });
 

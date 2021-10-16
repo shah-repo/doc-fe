@@ -55,7 +55,6 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   specFilePath: string;
 }) => {
   const { payload, sessionId, specFilePath } = params;
-
   const companyNumber = (Math.abs(CRC32.str(specFilePath)) + Math.round(Math.random() * 100000)) % 100000;
   const companyName = `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`;
   const acronym = companyName.match(/[A-Z]/g)?.join("");

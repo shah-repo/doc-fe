@@ -772,9 +772,7 @@ context("FORM Field test", () => {
       });
 
       it("Enter description", () => {
-        cy.drEnterDocumentDescription({ description: "test description" });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drEnterDocumentDescriptionWithWait({ description: "test description" });
       });
 
       it("Enter Quantity field value", () => {
@@ -792,8 +790,6 @@ context("FORM Field test", () => {
       it("Enter Date picker field value", () => {
         cy.get("input[name^=\"fb-datepicker-\"]").parent().find("button").arrowClick({ force: true });
         cy.get(".MuiPickersDay-daySelected").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Save button", () => {

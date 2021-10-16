@@ -219,7 +219,6 @@ context("Record inline Flow", () => {
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.GetDocAggregatedAudit], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
@@ -258,10 +257,11 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.checkToastMessage({ exists: false });
         });
 
@@ -271,11 +271,12 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
           cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -293,10 +294,12 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetDocAggregatedAudit], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 

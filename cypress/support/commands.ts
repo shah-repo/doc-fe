@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -110,6 +111,7 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
+  addTestContext("company", params.payload.name);
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,

@@ -200,8 +200,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/available_maintenance_forms",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   LotQuantity: {
@@ -743,8 +743,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/autocomplete_options/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 35 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
 };

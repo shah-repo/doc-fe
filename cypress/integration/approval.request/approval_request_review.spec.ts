@@ -243,6 +243,10 @@ context("Approval request form scenario", () => {
     });
 
     context("Verify dashboard notification are not shown", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
@@ -260,6 +264,10 @@ context("Approval request form scenario", () => {
     });
 
     context("Send AR to review again", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[21].email,
@@ -341,6 +349,10 @@ context("Approval request form scenario", () => {
     });
 
     context("Verify dashboard notification are not shown", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
@@ -359,6 +371,10 @@ context("Approval request form scenario", () => {
   });
 
   context("Send to review again and approve", () => {
+    it("Log out", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[21].email,
@@ -385,6 +401,10 @@ context("Approval request form scenario", () => {
 
   context("Approve AR and verify email notifications are received", () => {
     context("Approve AR with first approver", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
@@ -402,6 +422,10 @@ context("Approval request form scenario", () => {
     });
 
     context("Approve AR with second approver", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
