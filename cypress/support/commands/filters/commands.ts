@@ -78,26 +78,34 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
 Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
   title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").arrowType(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision);
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
     cy.get("[id$=\"select-displayStatus\"]").arrowClick();
-    cy.get("ul[role=listbox]>li").contains(params.eqState).arrowClick();
+    cy.get("ul[role=listbox]>li").contains(params.eqState).arrowClick().wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"name\"]").arrowType(params.title);
+    cy.get("[id=\"name\"]").arrowType(params.title).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").arrowType(params.owner);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
-  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").arrowType(params.calDueDate);
-  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").arrowType(params.pmDueDate);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").arrowType(params.calDueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").arrowType(params.pmDueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").arrowType(params.eqStatus);
+    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").arrowType(params.eqStatus).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
