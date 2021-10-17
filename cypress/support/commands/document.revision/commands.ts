@@ -218,6 +218,7 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
   cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
   cy.wait(500);
   cy.get("[data-cy=field-description]>label").arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("drEnterDocumentDescriptionWithWait", (params: { description: string }) => {
