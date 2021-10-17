@@ -141,7 +141,6 @@ context("Document form upgrade", () => {
                     index: 1,
                     type: "section",
                     name: "old-textfield-kn7fc209",
-                    omitFinalValidation: true,
                     validationMode: "default",
                     label: "Old section",
                     applicableOn: [
@@ -220,7 +219,6 @@ context("Document form upgrade", () => {
                 index: 0,
                 type: "section",
                 name: "old-section-kn7ffn15",
-                omitFinalValidation: true,
                 validationMode: "default",
                 label: "Old section",
                 applicableOn: [
@@ -567,6 +565,8 @@ context("Document form upgrade", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check that A.1 version was created", () => {
