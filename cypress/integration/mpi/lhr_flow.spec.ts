@@ -34,6 +34,7 @@ let lhrDocUrl;
 let lhrs1DocUrl;
 let dateOfStep1Completion;
 let dateOfStep1CompletionOneMinuteLater;
+let dateOfStep1CompletionOneMinuteBefore;
 let dateOfStep2Completion;
 let dateOfStep2CompletionOneMinuteLater;
 let dateOfStep2CompletionOneMinuteBefore;
@@ -1663,7 +1664,7 @@ context("LHR flow", () => {
       context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           SystemRequirement("REQ-3210");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
           });
           cy.progressBarShouldNotExist();
@@ -1676,7 +1677,7 @@ context("LHR flow", () => {
 
         it("Verify LHRs title", () => {
           SystemRequirement("REQ-3320");
-          cy.get("#HeaderInfo-subtitle")
+          cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
             .should("have.text", "LOT #" + lotDateSuffix + "02RD | LHR-00004 | CS-00005.1 Part document");
         });
 
@@ -1895,6 +1896,8 @@ context("LHR flow", () => {
           dateOfStep1Completion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
           dateOfStep1CompletionOneMinuteLater = moment().add(1, "minutes")
             .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          dateOfStep1CompletionOneMinuteBefore = moment().subtract(1, "minutes")
+            .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         });
       });
     });
@@ -1964,7 +1967,7 @@ context("LHR flow", () => {
     context("Complete LHRs #2 in LHR", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).arrowClick();
         });
 
@@ -2122,9 +2125,9 @@ context("LHR flow", () => {
           .invoke("text")
           .then((text) => {
             expect(text).to.be
-              .oneOf(["Step completed | " + dateOfStep2Completion,
-                "Step completed | " + dateOfStep2CompletionOneMinuteLater,
-                "Step completed | " + dateOfStep2CompletionOneMinuteBefore]);
+              .oneOf(["Step completed | " + dateOfStep1Completion,
+                "Step completed | " + dateOfStep1CompletionOneMinuteLater,
+                "Step completed | " + dateOfStep1CompletionOneMinuteBefore]);
           });
       });
 

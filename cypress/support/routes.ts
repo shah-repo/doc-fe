@@ -1,3 +1,5 @@
+import { RouteMatcher } from "cypress/types/net-stubbing";
+
 export interface CyWaitOptions {
   log: boolean;
   timeout: number;
@@ -6,7 +8,7 @@ export interface CyWaitOptions {
 }
 
 type ICyRoutes = {[key in keyof typeof CyRoutes]: {
-  requestConfig: Partial<Cypress.RouteOptions>;
+  requestConfig: RouteMatcher;
   callConfig?: Partial<CyWaitOptions>;
 }};
 
@@ -89,6 +91,7 @@ export enum CyRoutes {
   GetNotes = "GetNotes",
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
+  StartMpi = "StartMpi",
 }
 
 export const routes: ICyRoutes =   {
@@ -152,6 +155,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/notes",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  StartMpi: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/lhr/start_mpi",
     },
     callConfig: {
       responseTimeout: 30 * 1000,

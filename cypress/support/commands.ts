@@ -176,13 +176,31 @@ Cypress.Commands.add("unClick", () => {
   cy.get("body").arrowClick( 10, 10, { force: true });
 });
 
+// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
+//   const functionRequestTimeout: number = 40 * 1000;
+//   const functionResponseTimeout: number = 40 * 1000;
+//   names.forEach((name) => {
+//     const { requestConfig } = routes[name];
+//     cy.intercept(requestConfig).as(name);
+//   });
+
+//   callback();
+
+//   const aliasesToWait: string[] = [];
+
+//   names.forEach((name) => {
+//     aliasesToWait.push(`@${name}`);
+//   });
+
+//   cy.wait(aliasesToWait);
+// });
+
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
   (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
-    cy.server();
     names.forEach((name) => {
       const { requestConfig } = routes[name];
-      cy.route(requestConfig).as(name);
+      cy.intercept(requestConfig).as(name);
 
     });
 
