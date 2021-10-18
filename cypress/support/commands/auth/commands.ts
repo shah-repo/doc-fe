@@ -114,6 +114,7 @@ Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => 
 
 Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password: string}) => {
   cy.get("[name=\"confirmPass\"]").type(params.password);
+  cy.unClick();
 });
 
 Cypress.Commands.add("authClickSignIn", () => {

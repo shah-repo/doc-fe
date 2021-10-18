@@ -63,12 +63,18 @@ Cypress.Commands.add("imapVerifyLastEmailContains", (params: { userEmail: string
   });
 });
 
+function decodeHTMLEntities(text) {
+  const textArea = document.createElement("textarea");
+  textArea.innerHTML = text;
+  return textArea.value;
+}
+
 Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => {
   cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
-    const startingPosition = emailText.search("/new_user");
+    const startingPosition = emailText.search("new_user_set_password");
     const endingPosition = emailText.search("\" target");
     const activationLink = emailText.substring(startingPosition, endingPosition);
-    cy.visit(CONFIG.FE_URL + activationLink);
+    cy.visit(CONFIG.FE_URL + "/" + decodeHTMLEntities(activationLink));
   });
 });
 

@@ -4,7 +4,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
 export type FBLHRStepProps =
 & Pick<FBProviderProps, "lhrStepState">
-& Pick<FBInputProps, "name" | "label" | "disabled" | "index" | "loading" | "stepIndex" | "gutter">
+& Pick<FBInputProps, "name" | "label" | "disabled" | "index" | "loading" | "stepIndex" | "gutter" | "autosave">
 & Pick<FBProcedureItemProps, "onClick" | "dialogState">
 & Pick<FBAutocompleteProps, "filterOptions">
 & {
@@ -37,3 +37,4 @@ export interface StartMpiBody {
   fieldId: string;
   stepNumber?: number;
 }
+

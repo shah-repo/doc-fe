@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../common/utils/selectors";
 import { Group, Permission } from "../../../state/ducks/auth/types";
+import { User } from "../../../state/ducks/common/types";
 import { companyActions, companySelectors } from "../../../state/ducks/company";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
@@ -30,7 +31,7 @@ interface Props {
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
   groupOptions: SelectOption[];
-  handleResendSignupEmail: (email: string) => void;
+  handleResendEmail: (employee: GetEmployeeResponse) => void;
 }
 
 const UserManagementListPresenter: React.FunctionComponent<Props> = ({
@@ -39,7 +40,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   tableData,
   clearFilter,
   groupOptions,
-  handleResendSignupEmail,
+  handleResendEmail,
 }) => {
   const intl = useIntl();
   const classes = styles();
@@ -67,18 +68,33 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const handleGroups = (groups: Group[]) => groups.map((group) => group.name).join(", ");
-  const handleSignupEmail = (confirmed: boolean) => confirmed ?
-    intl.formatMessage({
+  const handleEmail = (user: User) => {
+    if (user.locked) {
+      return intl.formatMessage({
+        id: "reset.password",
+      });
+    }
+    if (!user.confirmed) {
+      return intl.formatMessage({
+        id: "user.management.resend.signup.email",
+      });
+    }
+    return  intl.formatMessage({
       id: "user.management.signed.up",
-    }) :
-    intl.formatMessage({
-      id: "user.management.resend.signup.email",
     });
+  };
+  const handleEmailCellType = (user: User) => {
+    if (user.locked || !user.confirmed) {
+      return "LINK";
+    }
+    return "BASE";
+  };
 
   const columns: TableColumnProps<GetEmployeeResponse>[] = [
     {
       key: "name" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-name",
+      dataKey: "user.name",
       label: "common.name",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.name,
@@ -91,6 +107,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
       key: "email" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-email",
       label: "common.email",
+      dataKey: "user.email",
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.user.email,
       },
@@ -101,6 +118,7 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "groupId" as keyof GetEmployeeResponse,
       id: "UserManagementListPresenter-groupId",
+      dataKey: "groups",
       label: "common.groups",
       columnOptions: {
         cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
@@ -131,11 +149,12 @@ const UserManagementListPresenter: React.FunctionComponent<Props> = ({
     {
       key: "confirmed" as keyof GetEmployeeResponse,
       label: "user.management.signed.up",
+      dataKey: "user.confirmed",
       omitSearch: true,
-      onSelect: ({ rowData }) => () => handleResendSignupEmail(rowData.user.email),
-      cellType: (rowData) => rowData.user.confirmed ? "BASE" : "LINK",
+      onSelect: ({ rowData }) => () => {  handleResendEmail(rowData); },
+      cellType: (rowData) => handleEmailCellType(rowData.user),
       columnOptions: {
-        cellDataGetter: ({ rowData }) => handleSignupEmail(rowData.user.confirmed),
+        cellDataGetter: ({ rowData }) => handleEmail(rowData.user),
         width: 50,
       },
     },

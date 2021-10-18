@@ -33,10 +33,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   stepIndex,
   label,
   gutter,
+  autosave,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
-    <FBInput {...{ name, gutter }} type="lhrstep">
+    <FBInput {...{ name, gutter, autosave }} type="lhrstep">
       <FBSection {...{ stepIndex, label }} />
       <Box
         display="flex"

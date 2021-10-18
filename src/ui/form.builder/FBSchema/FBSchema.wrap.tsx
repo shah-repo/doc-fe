@@ -59,7 +59,8 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
       }
       return map(schema, (schemaItem, index, ro) => {
         const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
-        const { deleted, disabled, reviseDisabled, outputDisabled } = schemaItem || {};
+        const { deleted, disabled, outputDisabled } = schemaItem || {};
+        const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
         if (deleted) { return; }
         return controlRenderer({
           autosave: isUnderWorkspace && workspaceState?.autosave,

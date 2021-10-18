@@ -10,6 +10,7 @@ import { withFBInput } from "./FBInput.wrap";
 
 const FBInput: React.FunctionComponent<FBInputProps> = ({
   formState,
+  inputState,
   label,
   error,
   gutter = true,
@@ -30,11 +31,11 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   <>
     {!hidden && (
       <Box mb={gutter ? 5 : 0} {...boxProps}>
-
-
-        {/* blankTemplateForm has notes on attachment already,
-        still we need input inside blnkTemplateForm according to ENC-5908 */}
-        {includeNotes && isOutput && type !== "blanktplform" && <FBNotes {...{ name }} />}
+        <Observer>
+          {() => (
+            <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
+          )}
+        </Observer>
         <FormControl fullWidth {...{ error }}>
           <Box display="flex" flexDirection="row">
             <Observer>

@@ -12,3 +12,8 @@ export interface PasswordValues {
   confirmPass: string;
   password: string;
 }
+
+export interface ResetPasswordValues {
+  newPassword: string;
+  newPasswordConfirmation: string;
+}

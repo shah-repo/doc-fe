@@ -219,6 +219,7 @@ context("Document Field Owners Test", () => {
   context(`Open created document and check for operators restrictions`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -276,6 +277,7 @@ context("Document Field Owners Test", () => {
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -315,6 +317,7 @@ context("Document Field Owners Test", () => {
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -338,7 +341,7 @@ context("Document Field Owners Test", () => {
     });
   });
 
-  context("Check fields are disabled for user that is not field owner with new document owner", () => {
+  context("Log in with another user and approve document", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[7].email,
@@ -352,6 +355,7 @@ context("Document Field Owners Test", () => {
 
     it("Navigate to records list", () => {
       cy.navigToRecords();
+      cy.wait(2000);
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -365,59 +369,12 @@ context("Document Field Owners Test", () => {
     it("Check field from second colaborator is disabled", () => {
       cy.get("[name^='new-text-field-for']").should("be.disabled");
     });
-  });
 
-  context("Check all colaborators must be on approvals list", () => {
-    it("Check that first colaborator is required as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[3].name} (${USERS[3].email})-check-disabled"]`).should("exist");
-    });
-
-    it("Add first colaborator as Approver on document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-    });
-
-    it("Check that first colaborator is added as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[3].name} (${USERS[3].email})-check-marked"]`).should("exist");
-    });
-
-    it("Check that second colaborator is required as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[4].name} (${USERS[4].email})-check-disabled"]`).should("exist");
-    });
-
-    it("Add second colaborator as Approver on document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-    });
-
-    it("Check that second colaborator is added as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[4].name} (${USERS[4].email})-check-marked"]`).should("exist");
-    });
-
-    it("Submit for Approval and verify owner is required too", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
-        cy.checkToastMessageIsEqual({ message: "All collaborators to the document must be on approvers list" });
-      });
-    });
-
-    it("Check that third colaborator is required as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[7].name} (${USERS[7].email})-check-disabled"]`).should("exist");
-    });
-
-    it("Add third colaborator as Approver on document", () => {
+    it("Add Approver on document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
         cy.drClickCreateDocumentWithoutApiCall();
       });
-    });
-
-    it("Check that third colaborator is added as approver", () => {
-      cy.get(`[data-cy="fb-approvals-${USERS[7].name} (${USERS[7].email})-check-marked"]`).should("exist");
     });
 
     it("Submit for Approval", () => {

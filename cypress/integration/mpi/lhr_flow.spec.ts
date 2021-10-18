@@ -1495,7 +1495,7 @@ context("LHR flow", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetAutocompleteOptions], () => {
             cy.get("input[data-cy^=\"lhr-step\"]").type("MPI created with API{downarrow}{enter}", { force: true });
           });
         });
@@ -1953,16 +1953,6 @@ context("LHR flow", () => {
           .should("have.css", "background-color", "rgb(252, 222, 222)");
       });
 
-      it("Verify Owner is required approver on LHR", () => {
-        cy.get("[data-cy=\"fb-approvals-Giovanni Reynolds (enlil.testmail+cy1@gmail.com)-check-disabled\"]")
-          .should("exist");
-      });
-
-      it("Select 'Production' build type", () => {
-        SystemRequirement("REQ-3190");
-        cy.get("[value=\"Production\"]").check();
-      });
-
       it("Add owner to approver list", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
@@ -1974,12 +1964,7 @@ context("LHR flow", () => {
       });
 
       it("Check lot number", () => {
-        cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02");
-      });
-
-      it("Verify owner is added as approver", () => {
-        cy.get("[data-cy=\"fb-approvals-Giovanni Reynolds (enlil.testmail+cy1@gmail.com)-check-marked\"]")
-          .should("exist");
+        cy.get("#HeaderInfo-subtitle").should("have.text", "LOT #" + lotDateSuffix + "02RD");
       });
 
       it("Try submitting for approval with uncompleted LHRs #2", () => {
@@ -2222,12 +2207,6 @@ context("LHR flow", () => {
         it("Click Revise on LHR", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"updateRecord\"]").click();
-          });
-        });
-
-        it("Change Build Type to 'R&D'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.get("[value=\"R&D\"]").check();
           });
         });
 
