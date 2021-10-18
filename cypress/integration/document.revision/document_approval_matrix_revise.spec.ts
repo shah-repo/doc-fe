@@ -11,9 +11,8 @@ Cypress.Screenshot.defaults({
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
+let employeeLoginFirst;
 
-const ADMIN_USER = USERS[10];
 const INDIVIDUAL_USER = USERS[14];
 
 const FormTitle = "New Form";
@@ -46,38 +45,36 @@ context("Document Approval Matrix Revise", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: ADMIN_USER.email,
+            companyAdminEmail: USERS[1].email,
+            helloSignIntegrationEnabled: false,
+            helloSignTestMode: false,
             importerEmail: IMPORTER_USER.email,
+            numOfRevStages: 3,
+            numOfDocDigits: 5,
+            remoteValidatorBundleName: "default",
+            slackIntegrationEnabled: false,
             users: [INDIVIDUAL_USER],
-            documentTypes: [],
+            documentTypes: [
+              {
+                documentTypeName: "Clinical Protocol",
+                documentTypeAcronym: "CP-",
+                group: "OTHER",
+                isQms: true,
+              },
+            ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
+          employeeLoginFirst = company.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
     });
-
-    it("[API]Login admin", (done: any) => {
-      cy.authApiLogin({
-        email: ADMIN_USER.email,
-      }).then((response) => {
-        adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
-        done();
-      });
-    });
   });
 
-  context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -144,7 +141,6 @@ context("Document Approval Matrix Revise", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
       });
-      cy.wait(500);
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -293,17 +289,16 @@ context("Document Approval Matrix Revise", () => {
       cy.get("input[name=password]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
     });
 
+    it("Verify revision status is 'Revision 1.1  - Draft'", () => {
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1.1  - Draft" });
+    });
+
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ReleaseDocRev,
         () => {
           cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
         });
-    });
-
-    it("Verify revision status is 'Revision 1.1  - Released'", () => {
-      cy.wait(2000);
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1.1  - Released" });
     });
   });
 
@@ -386,7 +381,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it(`Uncheck Approvals Numeric for ${roleOne}`, () => {
-      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(5) > td:nth-child(1)").click();
+      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(6) > td:nth-child(1)").click();
     });
   });
 
