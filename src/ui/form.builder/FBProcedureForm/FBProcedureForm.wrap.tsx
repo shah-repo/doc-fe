@@ -177,7 +177,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       inputValue: string,
     ) {
       const typeValue = formState?.getFieldValue(type);
-      data = type === FBProcedureFormFilterType.lots ?
+      data = (type === FBProcedureFormFilterType.lots && mode === "mpi") ?
         data.filter((e) => e.status === DocumentRevisionStatus.Released) : data;
       let filtered = typeValue ? [] : data;
       const relation = type === FBProcedureFormFilterType.parts
