@@ -141,7 +141,6 @@ context("Document form upgrade", () => {
                     index: 1,
                     type: "section",
                     name: "old-textfield-kn7fc209",
-                    omitFinalValidation: true,
                     validationMode: "default",
                     label: "Old section",
                     applicableOn: [
@@ -220,7 +219,6 @@ context("Document form upgrade", () => {
                 index: 0,
                 type: "section",
                 name: "old-section-kn7ffn15",
-                omitFinalValidation: true,
                 validationMode: "default",
                 label: "Old section",
                 applicableOn: [
@@ -283,7 +281,7 @@ context("Document form upgrade", () => {
 
     it("Select the Record form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -319,9 +317,9 @@ context("Document form upgrade", () => {
 
     it("Select the Document form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocTitle({ docTitle: "Test document form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -357,9 +355,9 @@ context("Document form upgrade", () => {
 
     it("Select the created Record form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -404,9 +402,9 @@ context("Document form upgrade", () => {
 
     it("Select the created Document form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocId({ docId: "FM-00004" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -451,9 +449,9 @@ context("Document form upgrade", () => {
 
     it("Select document", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocId({ docId: "TDT-00005" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -505,9 +503,9 @@ context("Document form upgrade", () => {
 
     it("Select Record", () => {
       cy.dlFilterByDocId({ docId: "RD-00002" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
-      cy.wait(1000);
+
     });
 
     it("Click on upgrade to new form", () => {
@@ -567,6 +565,8 @@ context("Document form upgrade", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check that A.1 version was created", () => {

@@ -163,7 +163,7 @@ context("Autocomplete 'Employees' test", () => {
         context("Preview FORM document", () => {
           it("Click Form Review", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
-            cy.wait(3000);
+
           });
         });
       });

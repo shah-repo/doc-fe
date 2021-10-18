@@ -252,7 +252,7 @@ context("PO approval test", () => {
         [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
-      cy.wait(500);
+
     });
 
     it("Approve and release document", () => {
@@ -335,7 +335,7 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wait(2000);
+
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
@@ -406,7 +406,7 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wait(2000);
+
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
@@ -435,13 +435,16 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
-      cy.get("[data-cy=\"transition-reject\"]").first().arrowClick().wait(300);
-      cy.get("#AlertDialog-continueButton").arrowClick();
+      cy.get("[data-cy=\"transition-reject\"]").first().arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+        cy.get("#AlertDialog-continueButton").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
 
     it("Navigate to Doc List", () => {
-      cy.navigToDocumentList().wait(2000);
+      cy.navigToDocumentList();
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {

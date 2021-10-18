@@ -1388,10 +1388,7 @@ context("Create company with golden tenant", () => {
 
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed'", () => {
@@ -1460,10 +1457,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed 2'", () => {
@@ -1524,10 +1518,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Company'", () => {
@@ -1587,8 +1578,9 @@ context("Create company with golden tenant", () => {
 
     it("Include Seed documents", () => {
       SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
-      cy.wait(1500);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
+      });
       cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
       cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
     });

@@ -164,7 +164,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -181,7 +181,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

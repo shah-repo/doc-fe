@@ -387,7 +387,7 @@ context("Parts from EB flow test", () => {
           [CyRoutes.PatchDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           });
-        cy.wait(500);
+
       });
 
       it("Submit for Approval", () => {

@@ -622,7 +622,7 @@ context("Checkboxes test2", () => {
 
     it("Verify Inline Approval without 'Revision Disabled' checkbox", () => {
       cy.fbMouseOverByLabel({ label: "ia-wo-ch" } );
-      cy.wait(1000);
+
       cy.contains("ia-wi-ch").arrowClick();
       cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "edit-schema-item" });
       cy.fbVerifyElementVisibileByLabel({ label: "ia-wo-ch", el: "remove-schema-item" });
@@ -630,7 +630,7 @@ context("Checkboxes test2", () => {
 
     it("Verify Inline Approval with 'Revision Disabled' checkbox", () => {
       cy.fbMouseOverByLabel({ label: "ia-wi-ch" } );
-      cy.wait(1000);
+
       cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "ia-wi-ch", el: "remove-schema-item" });
     });

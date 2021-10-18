@@ -212,7 +212,10 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Enter value for custom text field", () => {
-      cy.get("[name^=fb-textfield-]").arrowType("Test edit field second time");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[name^=fb-textfield-]").arrowType("Test edit field second time");
+        cy.unClick();
+      });
     });
 
     it("Save document", () => {

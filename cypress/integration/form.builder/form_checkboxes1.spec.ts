@@ -139,7 +139,7 @@ context("Checkboxes test1", () => {
         cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.contains("ac-wi-ch").trigger("mouseover");
       });
 
@@ -149,7 +149,7 @@ context("Checkboxes test1", () => {
         cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
         cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.contains("ac-wo-ch").trigger("mouseover");
       });
 
@@ -319,7 +319,7 @@ context("Checkboxes test1", () => {
         cy.fbEnterNameValue({ name: "label", value: "rpo-wi-ch" });
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.fbMouseOverByLabel({ label: "rpo-wi-ch" } );
       });
 
@@ -328,7 +328,7 @@ context("Checkboxes test1", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "rpo-wo-ch" });
         cy.fbAddNewFieldButton();
-        cy.wait(2000);
+
         cy.fbMouseOverByLabel({ label: "rpo-wo-ch" } );
       });
 

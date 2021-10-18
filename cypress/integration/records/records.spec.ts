@@ -315,11 +315,11 @@ context("Records flow", () => {
         cy.filterRecords({
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval", owner: USERS[2].name,
           releasedDate: "Last 7 days", formId: "FM-00003",
-        }).wait(2000);
+        });
       });
 
       it("Navigate to Document List", () => {
-        cy.wait(1000).navigToDocumentList();
+        cy.navigToDocumentList();
       });
 
       it("Navigate to Records", () => {

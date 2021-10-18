@@ -250,7 +250,7 @@ context("Document Approval Matrix Flow", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
       });
-      cy.wait(500);
+
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -493,7 +493,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
-      cy.wait(1000);
+
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -532,7 +532,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
       cy.drOpenCloseSidebarDrawer();
-      cy.wait(1000);
+
       cy.drAddApprovalMatrixItem();
     });
 
@@ -728,7 +728,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
-      cy.wait(1000);
+
       cy.get("#root").contains("Approve").arrowClick();
     });
 

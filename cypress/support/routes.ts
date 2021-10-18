@@ -1,3 +1,5 @@
+import { RouteMatcher } from "cypress/types/net-stubbing";
+
 export interface CyWaitOptions {
   log: boolean;
   timeout: number;
@@ -6,7 +8,7 @@ export interface CyWaitOptions {
 }
 
 type ICyRoutes = {[key in keyof typeof CyRoutes]: {
-  requestConfig: Partial<Cypress.RouteOptions>;
+  requestConfig: RouteMatcher;
   callConfig?: Partial<CyWaitOptions>;
 }};
 
@@ -89,6 +91,7 @@ export enum CyRoutes {
   GetNotes = "GetNotes",
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
+  StartMpi = "StartMpi",
 }
 
 export const routes: ICyRoutes =   {
@@ -158,6 +161,16 @@ export const routes: ICyRoutes =   {
       requestTimeout: 30 * 1000,
     },
   },
+  StartMpi: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/lhr/start_mpi",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
   GetReceivableQuantity: {
     requestConfig: {
       method: "GET",
@@ -200,8 +213,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/available_maintenance_forms",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
   LotQuantity: {
@@ -329,6 +342,10 @@ export const routes: ICyRoutes =   {
       method: "POST",
       url: "/api/v1/document_revisions/in_review/*",
     },
+    callConfig: {
+      responseTimeout: 35 * 1000,
+      requestTimeout: 25 * 1000,
+    },
   },
   DeleteLogout: {
     requestConfig: {
@@ -363,7 +380,7 @@ export const routes: ICyRoutes =   {
     },
     callConfig: {
       responseTimeout: 35 * 1000,
-      requestTimeout: 20 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   GetDocTypeGroupOptions: {
@@ -582,7 +599,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/*/aggregated_audit",
     },
     callConfig: {
-      requestTimeout: 4 * 1000,
+      requestTimeout: 40 * 1000,
       responseTimeout: 40 * 1000,
     },
   },
@@ -648,8 +665,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/change_requests/available_approvers",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   GetRequiredApproversDocRev: {
@@ -695,8 +712,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 25 * 1000,
+      requestTimeout: 20 * 1000,
     },
   },
   GetDocRevs: {
@@ -739,8 +756,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/autocomplete_options/*",
     },
     callConfig: {
-      responseTimeout: 25 * 1000,
-      requestTimeout: 10 * 1000,
+      responseTimeout: 35 * 1000,
+      requestTimeout: 30 * 1000,
     },
   },
 };

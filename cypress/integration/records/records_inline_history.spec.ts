@@ -155,7 +155,7 @@ context("Record inline history Flow", () => {
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.wait(5000);
+
       });
 
       it("Approve and release document", () => {
@@ -216,7 +216,7 @@ context("Record inline history Flow", () => {
 
       it("Save record", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.wait(5000);
+
       });
     });
 
@@ -318,14 +318,14 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.wait(2000);
+
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
-          // cy.wait(3000);
+          //
         });
 
         it("Navigate to released document", () => {

@@ -311,10 +311,10 @@ context("Purchase order HTML template form", () => {
     it("Add Required Date", () => {
       SystemRequirement("REQ-1420");
       // cy.poAddDateRequired();
-      cy.xpath("//input[@name]/ ../div/button").last().arrowClick().wait(200);
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick();
       cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
       "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
-        .click().wait(300);
+        .click();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -327,10 +327,10 @@ context("Purchase order HTML template form", () => {
 
     it("Fill order Date", () => {
       SystemRequirement("REQ-1420");
-      cy.xpath("//input[@name]/ ../div/button").last().arrowClick().wait(200);
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick();
       cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
       "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
-        .click().wait(300);
+        .click();
     });
 
     it("Add an Approval", () => {

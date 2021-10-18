@@ -182,7 +182,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Download all attachments with redline document", () => {
@@ -204,7 +204,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Revise document", () => {
@@ -217,7 +217,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Select Superseded version of document without redline attachments", () => {
@@ -247,12 +247,12 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Download all attachments without redline document on Obsolete version", () => {
           SystemRequirement("REQ-0380");
-          cy.atchDownloadAll().wait(2000);
+          cy.atchDownloadAll();
         });
       });
     });
@@ -315,7 +315,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00003" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

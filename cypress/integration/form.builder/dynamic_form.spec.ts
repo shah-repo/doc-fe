@@ -105,7 +105,7 @@ context("Dynamic Form Test", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
+
     });
 
     it("Approve and Release document", () => {
@@ -200,7 +200,7 @@ context("Dynamic Form Test", () => {
         [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
-      cy.wait(500);
+
     });
 
     it("Approve and Release document", () => {
