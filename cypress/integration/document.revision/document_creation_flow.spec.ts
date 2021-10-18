@@ -407,7 +407,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[3].name }).wait(1000);
+        cy.drVerifyDocumentOWner({ owner: USERS[3].name });
       });
 
       it("Login user to dashboard", () => {

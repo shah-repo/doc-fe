@@ -79,7 +79,6 @@ context("Autocomplete 'Approval requests' test", () => {
 
       it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
-        cy.wait(2000);
       });
 
       it("Click Create Approval Request", () => {
@@ -181,7 +180,7 @@ context("Autocomplete 'Approval requests' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").arrowClick();
 

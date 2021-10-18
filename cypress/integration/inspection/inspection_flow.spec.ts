@@ -1251,9 +1251,7 @@ context("Inspection flow", () => {
 
   context("Create Inspection document", () => {
     it("Create inspection from Form", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromFormRecord();
     });
 
     it("Enters title 'Inspection Document'", () => {
@@ -1278,14 +1276,14 @@ context("Inspection flow", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-      cy.wait(5000);
+
     });
 
     it("Add 'Expiry Date'", () => {
       cy.get("input[name=expiry-date]").parent().find("button").arrowClick();
-      cy.wait(500);
+
       cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
-      cy.wait(5000);
+
     });
 
     context("Fill samples with values", () => {

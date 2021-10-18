@@ -469,7 +469,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Approve document in review", () => {
       it(`approve document`, () => {
-        cy.wait(1000);
+
         cy.get("#root").contains("Approve").arrowClick();
       });
 
@@ -589,7 +589,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-        cy.wait(1000);
+
         cy.get("#root").contains("Reject").arrowClick();
       });
 
@@ -781,7 +781,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Approve document in review", () => {
       it(`approve document`, () => {
-        cy.wait(1000);
+
         cy.get("#root").contains("Approve").arrowClick();
       });
 
@@ -901,7 +901,7 @@ context("Mpi/Qpi flow", () => {
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-        cy.wait(1000);
+
         cy.get("#root").contains("Reject").arrowClick();
       });
 

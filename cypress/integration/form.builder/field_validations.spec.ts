@@ -158,7 +158,7 @@ context("Field validations test", () => {
 
       it("Select show/hide type of validation", () => {
         cy.get("input[value^=\"visibility\"]").check();
-        cy.wait(1000);
+
       });
 
       it("Select required_with on show/hide validation", () => {
@@ -194,7 +194,7 @@ context("Field validations test", () => {
 
       it("Select Enable/disable type of validation", () => {
         cy.get("input[value=\"disabled\"]").check();
-        cy.wait(1000);
+
       });
 
       it("Select required_with on Enable/disable validation", () => {

@@ -597,7 +597,7 @@ field is empty: Add text field`, () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).arrowClick();
+      cy.drCreateNewDocumentFromForm();
     });
   });
 
@@ -620,7 +620,7 @@ field is empty: Add text field`, () => {
 
   context("Fills in Title and Description", () => {
     it("Type a title", () => {
-      cy.get("#Title-field", { timeout: 10000 }).arrowType("Doc Title{enter}");
+      cy.get("#Title-field").arrowType("Doc Title{enter}");
     });
 
     it("Type a description", () => {
@@ -714,7 +714,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Should show error for 'required if' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -747,12 +747,12 @@ field is empty: Add text field`, () => {
 
     it("Select 'Required doctypes", () => {
       SystemRequirement("FB-0250");
-      cy.wait(3000);
+
       cy.get(`[data-cy^="required-doctypes-"]`).arrowType("Equipment{downarrow}{enter}");
     });
 
     it("Should show error for 'required with' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -814,23 +814,28 @@ field is empty: Add text field`, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
         cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType(`${documentRevisionName}{downarrow}{enter}`);
       });
+      cy.pause();
     });
   });
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType("AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType("AR Form{downarrow}{enter}").wait(500);
+        cy.unClick();
       });
     });
 
+    // it("Should show error for 'Incorrect document type' field", () => {
+    //   cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
+    //     const errorBlock = elem.offsetParent().siblings("p");
+    //     cy.wrap(errorBlock)
+    //       .should("have.text", `Incorrect document type.`);
+    //   });
+    // });
     it("Should show error for 'Incorrect document type' field", () => {
-      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
-        const errorBlock = elem.offsetParent().siblings("p");
-
-        cy.wrap(errorBlock)
-          .should("have.text", `Incorrect document type.`);
-      });
+      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).parent().siblings("p")
+        .should("have.text", `Incorrect document type.`);
     });
 
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {

@@ -122,7 +122,7 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
       cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
       cy.fbAddNewFieldButton();
-      cy.wait(2000);
+
     });
 
     it("Add Text Editor", () => {

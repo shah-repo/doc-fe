@@ -207,23 +207,22 @@ context("Check Document History", () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
         cy.get("[data-cy=field-description]>label").arrowClick();
         // auto-save
-        cy.wait(1000);
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("edit the description", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentDescription({ description: formDescription.newValue });
-        cy.unClick();
-        cy.wait(500);
-        cy.unClick();
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Remove reference for document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drRemoveReferences(0);
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
@@ -234,6 +233,7 @@ context("Check Document History", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Upload test.docx", () => {

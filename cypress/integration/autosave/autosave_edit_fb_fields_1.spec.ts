@@ -123,7 +123,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
-      cy.wait(2000);
+
     });
 
     it("Add Text Editor", () => {

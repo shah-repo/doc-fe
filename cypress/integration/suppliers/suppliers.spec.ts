@@ -118,12 +118,12 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click on 'Form' document type", () => {
-    cy.drSelectDocumentType({ documentType: "Form" }).wait(500);
+    cy.drSelectDocumentType({ documentType: "Form" });
   });
 
   it("Click on 'Supplier' document type", () => {
     SystemRequirement("REQ-2400");
-    cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+    cy.drSelectOutputDocumentType({ documentType: "Supplier" });
   });
 
   it("Select 'Numeric' revision stage", () => {
@@ -171,7 +171,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Filter supplier Title/Name", () => {
-    cy.filterSupplierTitle({ name: "Test" }).wait(300);
+    cy.filterSupplierTitle({ name: "Test" });
   });
 
   it("Check for filtered values", () => {
@@ -181,7 +181,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Clear filter", () => {
     SystemRequirement("REQ-2310");
-    cy.filterClear().wait(300);
+    cy.filterClear();
     cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
   });
 
@@ -207,11 +207,11 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click on 'Form' document type", () => {
-    cy.drSelectDocumentType({ documentType: "Form" }).wait(500);
+    cy.drSelectDocumentType({ documentType: "Form" });
   });
 
   it("Click on 'Supplier' document type", () => {
-    cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+    cy.drSelectOutputDocumentType({ documentType: "Supplier" });
   });
 
   it("Select 'Numeric' revision stage", () => {

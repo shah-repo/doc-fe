@@ -114,7 +114,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Select 'Component Specification Lot' from the dropdown", () => {
         cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-        cy.wait(500);
+
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
           cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
         });
@@ -142,7 +142,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Create 'Preventative maintenance document'", () => {
         cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-        cy.wait(5000);
+
       });
 
       it("Add an Approval", () => {
@@ -233,7 +233,7 @@ context("Autocomplete 'Lots' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").arrowClick();
 

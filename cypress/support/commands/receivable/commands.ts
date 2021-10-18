@@ -77,7 +77,7 @@ Cypress.Commands.add("recClickOnFirstReceivableOnList", () => {
 
 Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=docId]").arrowType(params.id).wait(300);
+    cy.get("input[name=docId]").arrowType(params.id);
   });
 });
 
@@ -88,6 +88,8 @@ Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
     CyRoutes.GetAutocompleteOptions], () => {
     cy.get("[data-cy=\"updateRecord\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recClickSaveBtn", () => {
@@ -104,7 +106,7 @@ Cypress.Commands.add("recVerifyFilterByReceivableId", (params: {recId: string })
 
 Cypress.Commands.add("recFilterByOwner", (params: {owner: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=owner]").arrowType(params.owner).wait(300);
+    cy.get("input[name=owner]").arrowType(params.owner);
   });
 });
 
@@ -118,8 +120,8 @@ Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
 
 Cypress.Commands.add("recFilterByState", (params: {state: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick().wait(300);
-    cy.get("ul[role=listbox]>li").contains(params.state).arrowClick().wait(300);
+    cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick();
+    cy.get("ul[role=listbox]>li").contains(params.state).arrowClick();
   });
 });
 
@@ -133,7 +135,7 @@ Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
 
 Cypress.Commands.add("recFilterByARId", (params: {arId: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=crId]").arrowType(params.arId).wait(300);
+    cy.get("input[name=crId]").arrowType(params.arId);
   });
 });
 

@@ -135,7 +135,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click on 'Create Document' button", () => {
-        cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).arrowClick();
+        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
@@ -214,7 +214,7 @@ context("Autocomplete 'Approval Roles' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("[data-cy^=\"test-label-\"]").arrowClick();
 

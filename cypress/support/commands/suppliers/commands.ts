@@ -25,7 +25,7 @@ Cypress.Commands.add("supEnterSuppAddressPhone", (params: {address: string}) => 
 });
 
 Cypress.Commands.add("supCreateNew", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick().wait(3000);
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
 });
 
 Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: string}) => {

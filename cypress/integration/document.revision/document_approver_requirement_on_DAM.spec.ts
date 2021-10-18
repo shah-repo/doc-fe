@@ -143,7 +143,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
       });
-      cy.wait(500);
+
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -399,7 +399,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: documentOne });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });
@@ -407,7 +407,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: documentTwo });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification" });
@@ -440,7 +440,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
-      cy.wait(2000);
+
     });
 
     it("Add first approver to approval request on approver list", () => {

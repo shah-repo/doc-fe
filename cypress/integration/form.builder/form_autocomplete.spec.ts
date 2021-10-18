@@ -934,7 +934,7 @@ context("Autocomplete test", () => {
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-      cy.wait(500);
+
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
@@ -971,7 +971,7 @@ context("Autocomplete test", () => {
 
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-      cy.wait(5000);
+
     });
 
     it("Add an Approval", () => {
@@ -1109,7 +1109,7 @@ context("Autocomplete test", () => {
 
     context("Add Autocomplete fields", () => {
       it("Select 'Document revisions'", () => {
-        cy.fbAddAutocompleteElement({ name: "Document Revision", label: "doc-revision" });
+        cy.fbAddAutocompleteElement({ name: "Document Revision", label: "doc-revision", addBtnVisible: true });
       });
 
       it("Select 'Approval requests'", () => {

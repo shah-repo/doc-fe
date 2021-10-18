@@ -496,7 +496,7 @@ context("Procedure and parts flow test", () => {
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-      cy.wait(500);
+
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
@@ -533,7 +533,7 @@ context("Procedure and parts flow test", () => {
 
     it("Create 'Preventative maintenance document'", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-      cy.wait(5000);
+
     });
 
     it("Add an Approval'", () => {
@@ -588,7 +588,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Click Create a Approval Request button", () => {
-          cy.cmpClickCreateApprovalRequest();
+          cy.arClickCreateAnAR();
         });
 
         it("Enter title AR title: ", () => {
@@ -600,7 +600,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add created document revision", () => {
-          cy.arClickAddDocument().wait(500);
+          cy.arClickAddDocument();
           cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
           cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
           cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -734,12 +734,7 @@ context("Procedure and parts flow test", () => {
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetProposedDocId,
-        CyRoutes.PostDocRev,
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
     context("Fill EB document attributes", () => {
       it("Enters title 'Form document for procedure'", () => {
@@ -750,7 +745,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
         });
-        cy.wait(500);
+
       });
 
       it("Add approver to approvals", () => {
@@ -868,7 +863,7 @@ context("Procedure and parts flow test", () => {
           .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
           .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
-        cy.wait(5000);
+
       });
 
       it("Verify equipments are copied", () => {
@@ -987,7 +982,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 3,
           typeOfMaterial: "gram",
         });
-        cy.wait(3000);
+
       });
 
       it("Add free material text", () => {
@@ -996,7 +991,7 @@ context("Procedure and parts flow test", () => {
           numberOfMaterial: 2,
           typeOfMaterial: "pounds",
         });
-        cy.wait(3000);
+
       });
 
       it("Add equipment document", () => {
@@ -1087,7 +1082,7 @@ context("Procedure and parts flow test", () => {
             });
           });
 
-          cy.wait(5000);
+
         });
 
         it("Approve record button click", () => {
@@ -1222,7 +1217,7 @@ context("Procedure and parts flow test", () => {
             });
           });
 
-          cy.wait(5000);
+
         });
 
         it("Approve record button click", () => {

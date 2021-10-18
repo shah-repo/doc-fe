@@ -50,14 +50,13 @@ Cypress.Commands.add("authApiLogout", () => {
 
 Cypress.Commands.add("authLogin", (params: { email: string; password?: string }) => {
   cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
-  cy.wait(500);
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.log(params.email);
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
       cy.get("[data-cy=\"LoginFormPresenter-password\"]")
         .arrowType(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
-        .wait(300);
+      ;
       cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
@@ -140,6 +139,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         headers: {
           Authorization: `bearer ${params.employeeId}:${loginResponse.sessionId}`,
         },
+        timeout: 30000,
       }).then((response) => {
         const user = {
           email: loginResponse.email,
@@ -159,8 +159,9 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         cy.setLocalStorage("persist:auth", JSON.stringify(auth));
         cy.saveLocalStorage();
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-          cy.visit(CONFIG.FE_URL);
+          cy.visit(CONFIG.FE_URL, { timeout: 50000 });
         });
+        addTestContext("user", loginResponse.email);
       });
     });
 });

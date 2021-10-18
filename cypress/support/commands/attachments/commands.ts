@@ -203,7 +203,7 @@ Cypress.Commands.add("atchUploadRedlineVerifyCleanCopyStatus", (params: {fileNam
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
-    cy.wait(500);
+
     cy.get("[data-cy=\"set.attachment.as.primary\"]").arrowClick();
   });
 });

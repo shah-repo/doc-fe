@@ -886,6 +886,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
     });
   });
 
@@ -911,7 +915,6 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Enters description 'New Purchase Order Description'", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order Description" });
-      cy.wait(1000);
     });
 
     context("Create first line item on PO", () => {
@@ -984,13 +987,17 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       });
 
       it("Save PO", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
       });
 
       it("Click 'Submit for Approval' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Approve' button", () => {
@@ -999,6 +1006,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -1012,6 +1020,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check for ID uniqueness - should be 'RC-00001'", () => {
@@ -1027,7 +1037,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet, CyRoutes.GetSpecificDocumentType], () => {
         cy.recCreateNew();
       });
-      cy.wait(6000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check for ID uniqueness - should be 'RC-00002'", () => {
@@ -1037,11 +1048,16 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select PO Receivable from dropdown for 'RC-00002'", () => {
       SystemRequirement("REQ-1830");
-      cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on first line item", () => {
       cy.get("[data-cy='poItems']").eq(0).arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add quantity received", () => {
@@ -1050,7 +1066,11 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on first line item again", () => {
@@ -1063,7 +1083,11 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Receiving' on sidebar", () => {
@@ -1077,15 +1101,17 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {
       SystemRequirement("REQ-1830");
-      cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
-      cy.wait(3000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy*=\"porec-receivable-\"]").arrowType("POT-00001{downarrow}{enter}");
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Check if supplier is automatically populated", () => {
     it("Check if supplier field is populated automatically", () => {
       SystemRequirement("REQ-1920");
-      cy.wait(2000);
       cy.get("[data-cy=\"po-supplier-built-in\"]").should("contain.value", "SUP-00001 - rev 1 - API Supplier Document");
     });
   });
@@ -1093,9 +1119,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
   context("Create a Lot for first line item", () => {
     it("Click 'Create a Lot' on first line item", () => {
       SystemRequirement("REQ-1820", "REQ-2010");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
         cy.get("tr>td>button").eq(0).arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add 'Receipt Quantity'", () => {
@@ -1103,44 +1130,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Select 'Lots test' document type", () => {
-      cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
-      cy.wait(2000);
-    });
-
-    it("Select 'Lots form document' form", () => {
-      cy.get("[data-cy='lotForm']").arrowType("Lots form{downarrow}{enter}");
-    });
-
-    it("Click 'Create Lot' button", () => {
-      cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
-      cy.unClick();
-    });
-  });
-
-  context("Check if reference to Lot is automatically generated", () => {
-    it("Check reference for a Lot", () => {
-      SystemRequirement("REQ-1940");
-      cy.wait(2000);
-      cy.get("[data-cy='common.referenced.by']")
-        .should("contain.text", "A - PRT-00005 rev 1 - Part document, Received in RC-00001");
-    });
-  });
-
-  context("Create a Lot for second line item", () => {
-    it("Click 'Create a Lot' on second line item", () => {
-      SystemRequirement("REQ-1820", "REQ-2010");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType], () => {
-        cy.get("tr>td>button").eq(1).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
       });
-    });
-
-    it("Add 'Receipt Quantity'", () => {
-      cy.get("[name='received']").arrowType("15");
-    });
-
-    it("Select 'Lots test' document type", () => {
-      cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
-      cy.wait(2000);
     });
 
     it("Select 'Lots form document' form", () => {
@@ -1151,6 +1143,49 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
         cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+    });
+  });
+
+  context("Check if reference to Lot is automatically generated", () => {
+    it("Check reference for a Lot", () => {
+      SystemRequirement("REQ-1940");
+      cy.get("[data-cy='common.referenced.by']")
+        .should("contain.text", "A - PRT-00005 rev 1 - Part document, Received in RC-00001");
+    });
+  });
+
+  context("Create a Lot for second line item", () => {
+    it("Click 'Create a Lot' on second line item", () => {
+      SystemRequirement("REQ-1820", "REQ-2010");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
+        cy.get("tr>td>button").eq(1).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add 'Receipt Quantity'", () => {
+      cy.get("[name='received']").arrowType("15");
+    });
+
+    it("Select 'Lots test' document type", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.get("[data-cy='lotType']").arrowType("Lots test{downarrow}{enter}");
+      });
+    });
+
+    it("Select 'Lots form document' form", () => {
+      cy.get("[data-cy='lotForm']").arrowType("Lots form{downarrow}{enter}");
+    });
+
+    it("Click 'Create Lot' button", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
+        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1165,8 +1200,11 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-      cy.wait(5000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
@@ -1184,6 +1222,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
@@ -1192,6 +1232,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on update record", () => {

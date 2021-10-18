@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -43,11 +44,12 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
-      // type(thingToTypeIn: string, options?: any): Chainable<Subject>;
+      progressBarShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldNotExist(): Chainable<Subject>;
     }
   }
 }
-interface IUser {
+export interface IUser {
   email: string;
   name: string;
 }
@@ -100,7 +102,16 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
   });
 });
 
+Cypress.Commands.add("progressBarShouldNotExist", () => {
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
+  addTestContext("company", params.payload.name);
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
@@ -142,7 +153,7 @@ Cypress.Commands.add("triggerDueDateEmailScript", (params: {sessionId: string; c
     body: {
       currentDate: params.currentDate,
     },
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   }).then((response) => response.body);
 });
 
@@ -165,13 +176,31 @@ Cypress.Commands.add("unClick", () => {
   cy.get("body").arrowClick( 10, 10, { force: true });
 });
 
+// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
+//   const functionRequestTimeout: number = 40 * 1000;
+//   const functionResponseTimeout: number = 40 * 1000;
+//   names.forEach((name) => {
+//     const { requestConfig } = routes[name];
+//     cy.intercept(requestConfig).as(name);
+//   });
+
+//   callback();
+
+//   const aliasesToWait: string[] = [];
+
+//   names.forEach((name) => {
+//     aliasesToWait.push(`@${name}`);
+//   });
+
+//   cy.wait(aliasesToWait);
+// });
+
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
   (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
-    cy.server();
     names.forEach((name) => {
       const { requestConfig } = routes[name];
-      cy.route(requestConfig).as(name);
+      cy.intercept(requestConfig).as(name);
 
     });
 

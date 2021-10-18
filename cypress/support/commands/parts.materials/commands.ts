@@ -48,7 +48,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-  cy.wait(2000);
+
 
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).arrowClick();
@@ -72,7 +72,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-  cy.wait(2000);
+
   cy.get("[data-cy=\"title\"]").arrowType(params.material);
 
   if (params.partLot) {
@@ -92,7 +92,7 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).arrowClick();
   cy.unClick();
-  cy.wait(500);
+
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -103,7 +103,7 @@ Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => 
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
   cy.get("[data-cy=\"title\"]").arrowType(params.equipment);
   cy.unClick();
-  cy.wait(500);
+
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.unClick();
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -124,6 +124,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 });
 
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
@@ -131,20 +132,28 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("ptClickCreateNewPart", () => {
-  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+    cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowType(params.partForm + "{downarrow}{enter}");
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {

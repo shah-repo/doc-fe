@@ -616,7 +616,7 @@ context("LHR Upgrade", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
         });
-        cy.wait(500);
+
       });
 
       it("Turn off autosave", () => {
