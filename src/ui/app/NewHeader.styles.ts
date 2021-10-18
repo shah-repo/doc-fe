@@ -1,0 +1,60 @@
+import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
+import { DRAWER_WIDTH } from "./Navigation.styles";
+export default (theme: Theme) =>
+  createStyles({
+    appBar: {
+      background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
+      fontSize: "1rem",
+      height: "20%",
+      zIndex: 0,
+      color: Colors.white,
+    },
+    logo: {
+      position: "absolute",
+      marginTop: "-45px",
+    },
+    toolbarTitle: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSize: "27px",
+      lineHeight: "34px",
+      fontWeight: 300,
+      color: Colors.white,
+    },
+    toolbarTitleName: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "27px",
+      lineHeight: "34px",
+      color: Colors.white,
+    },
+    welcomeText: {
+      color: Colors.white,
+    },
+    name: {
+      fontWeight: 600,
+      color: Colors.white,
+      // color: theme.palette.primary.main,
+    },
+    toolbar: {
+      marginLeft: 30 + DRAWER_WIDTH,
+      paddingTop: 20,
+      // borderBottom: `1px solid ${Colors.medium_gray}`,
+      // minHeight: "40px",
+    },
+    headerButton: {
+      "boxShadow": "none",
+      "textTransform": "none",
+      "padding": 0,
+      "margin": 0,
+      "&:hover": {
+        background: "none",
+        boxShadow: "none",
+      },
+    },
+    wrapContainer: {
+      marginLeft: theme.spacing(2),
+    },
+  });

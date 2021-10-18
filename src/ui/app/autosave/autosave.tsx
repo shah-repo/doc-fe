@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Permission } from "../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../state/ducks/company";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
+import Colors from "../../layout/theme/utils/colors";
 
 const AutosaveToggle: React.FunctionComponent<any> = (
 
@@ -16,6 +17,10 @@ const AutosaveToggle: React.FunctionComponent<any> = (
   if (!canToggleAutosave) {
     return null;
   }
+  const style = {
+    color: Colors.white,
+    fontSize: "12px",
+  };
 
   return (
     <FormControlLabel
@@ -24,6 +29,7 @@ const AutosaveToggle: React.FunctionComponent<any> = (
         checked={autosaveEnabled}
         onChange={() => { dispatch(companyActions.autosaveConfig()); }}
       />}
+      style={style}
       label="Toggle Autosave"
     />
   );
