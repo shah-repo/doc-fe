@@ -19,7 +19,9 @@ function DashboardChart() {
   return (
     <Card className={classes.outline}>
       <CardContent>
-      Chart Container
+      Training Stats Container (Chart & Line Items)
+        {/* <TrainingChart /> */}
+        {/* <TrainingLineItems /> */}
       </CardContent>
     </Card>);
 }

@@ -13,15 +13,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function Recents() {
+function MyFeeds() {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
       <CardContent>
-      Recent Container
-        {/* <Dashboard /> */}
+      My Feed Container
+        {/* <MyFeedsPresenter /> */}
       </CardContent>
     </Card>);
 }
 
-export default Recents;
+export default MyFeeds;

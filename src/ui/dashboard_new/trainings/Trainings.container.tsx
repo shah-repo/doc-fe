@@ -19,7 +19,7 @@ function Trainings() {
     <Card className={classes.outline}>
       <CardContent>
       Training Container
-        {/* <Dashboard /> */}
+        {/* <TrainingsPresenter /> */}
       </CardContent>
     </Card>);
 }

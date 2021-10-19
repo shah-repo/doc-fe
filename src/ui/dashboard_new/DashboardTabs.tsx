@@ -11,17 +11,13 @@ import { ReactComponent as MyFeed } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelected } from "../../assets/images/my_feed_selected.svg";
 import { ReactComponent as Recent } from "../../assets/images/recent.svg";
 import { ReactComponent as RecentSelected } from "../../assets/images/recent_selected.svg";
-// import { ReactComponent as TrainingBottom } from "../../assets/images/training_bottom.svg";
-// import { ReactComponent as TrainingSide } from "../../assets/images/training_side.svg";
-// import { ReactComponent as TrainingTop } from "../../assets/images/training_top.svg";
 import { ReactComponent as Training } from "../../assets/images/training.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
-import DashboardChart from "./DashboardChart";
-import MyFeeds from "./MyFeeds";
-import Recents from "./Recents";
-import Trainings from "./Trainings";
-// import Dashboard from "./Dashboard.container";
+import MyFeeds from "./my_feeds/MyFeeds.container";
+import Recents from "./recents/Recents.container";
+import Trainings from "./trainings/Trainings.container";
+import TrainingStats from "./training_stats/TrainingStats";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,7 +46,7 @@ function TabPanel(props: TabPanelProps) {
             {value === 2 && isDashboardAdmin && <Recents />}
           </Grid>
           {isDashboardAdmin && (<Grid item={true} md={4} sm={12}>
-            <DashboardChart />
+            <TrainingStats />
           </Grid>)}
         </Grid>
       )}
