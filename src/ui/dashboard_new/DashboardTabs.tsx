@@ -1,5 +1,3 @@
-/* eslint-disable func-call-spacing */
-/* eslint-disable max-len */
 import { createStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, Theme, withStyles } from "@material-ui/core/styles";
@@ -54,7 +52,6 @@ function TabPanel(props: TabPanelProps) {
     </div>
   );
 }
-
 interface StyledTabsProps {
   // textColor: string;
   value: number;
@@ -67,7 +64,6 @@ const StyledTabs = withStyles({
     "justifyContent": "center",
     "backgroundColor": "transparent",
     "& > span": {
-      // maxWidth: 40,
       width: "100%",
       backgroundColor: "#FFFFFF",
     },
@@ -78,35 +74,6 @@ const StyledTabs = withStyles({
 })((props: StyledTabsProps) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
 ));
-
-// interface StyledTabProps {
-//   label: any;
-// }
-
-// const StyledTab = withStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       "textTransform": "none",
-//       "color": "grey",
-//       "borderRadius": "20px",
-//       "backgroundColor": "#F5F8FF",
-//       "border": "1px solid #F5F8FF",
-//       "fontWeight": theme.typography.fontWeightRegular,
-//       "fontSize": theme.typography.pxToRem(15),
-//       "marginRight": theme.spacing(1),
-//       "&:focus": {
-//         opacity: 1,
-//         color: "#011FBB",
-//       },
-//       "&$selected": {
-//         opacity: 1,
-//         color: "red",
-//         backgroundColor: "red",
-//       },
-//     },
-//   })
-// )((props: StyledTabProps) => <Tab disableRipple {...props} />);
-
 interface WrapTabProps {
   label: any;
 }
@@ -159,9 +126,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     left: 15,
   },
   tabContent: {},
-  // divider: {
-  //   "margin-top": 25,
-  // },
 }));
 
 function a11yProps(index: any) {
@@ -176,14 +140,12 @@ export default function CustomizedTabs() {
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
   isDashboardAdmin = true; // TO DO:: For testing purpose only, this has been added. Once we get DASHBOARD_ADMIN tag from backend, this line should be removed.
-  console.log("isDashboardAdmin:: ", isDashboardAdmin);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
   return (
-    // <div className={classes.root}>
     <Grid container={true} className={classes.root}>
       <Grid item={true} sm={12}>
         <Toolbar variant="dense" disableGutters className={classes.toolbar}>
@@ -192,10 +154,6 @@ export default function CustomizedTabs() {
             onChange={handleChange}
             aria-label="dashboard tabs"
           >
-            {/* <StyledTab {...a11yProps(0)} label={<div> <MyFeed /> My Feed (26) </div>} /> */}
-            {/* <StyledTab {...a11yProps(1)} label={<div> <Recent /> Recent </div>} /> */}
-            {/* <Tab disableRipple {...a11yProps(1)} label={<Chip icon={<MyFeed />} label="My Feed (26)" />} />
-            <Tab disableRipple {...a11yProps(1)} label={<Chip icon={<Recent />} label="Recent" />} /> */}
             <WrapTab {...a11yProps(0)} label={
               <Grid container={true} justify="center"
                 alignItems="center">
@@ -214,7 +172,6 @@ export default function CustomizedTabs() {
               </Grid>} />
           </StyledTabs>
         </Toolbar>
-        {/* <Grid item={true} sm={12}> <Divider className={classes.divider} /> </Grid> */}
       </Grid>
       <Grid item={true} sm={12} className={classes.tabContent}>
         <TabPanel value={value} index={0} isDashboardAdmin={isDashboardAdmin}>
@@ -225,6 +182,5 @@ export default function CustomizedTabs() {
         </TabPanel>
       </Grid>
     </Grid>
-  // </div>
   );
 }
