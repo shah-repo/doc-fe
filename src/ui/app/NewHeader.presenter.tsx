@@ -5,7 +5,6 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ReactComponent as EnlilLogo } from "../../assets/images/enlil_logo.svg";
 // import { ReactComponent as HeaderBackgroundLogo } from "../../assets/images/enlil-background-icon.svg";
 import { Nullable } from "../../state/ducks/common/types";
 import Text from "../components/Text";
@@ -50,11 +49,13 @@ const Header: React.FunctionComponent<Props> = ({
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
+      <div className={classes.logo}></div>
       <Grid
         item={true}
         justify="flex-start"
         alignContent="center"
-        sm={4}
+        md={4}
+        sm={12}
       >
         <Grid container={true} justify="flex-start" alignContent="center">
           <Typography  className={classes.toolbarTitle} >
@@ -62,13 +63,13 @@ const Header: React.FunctionComponent<Props> = ({
           </Typography>
         </Grid>
       </Grid>
-      <Grid item={true} sm={1}><EnlilLogo className={classes.logo}/></Grid>
       {/* <HeaderBackgroundLogo /> */}
       <Grid
         item={true}
         alignItems="flex-end"
         justify="flex-end"
-        sm={7}
+        md={8}
+        sm={12}
       >
         <Grid item={true} className={classes.wrapContainer}>
           <Grid container={true} justify="flex-end" alignItems="center">
