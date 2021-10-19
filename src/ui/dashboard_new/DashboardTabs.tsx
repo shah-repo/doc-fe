@@ -40,13 +40,15 @@ function TabPanel(props: TabPanelProps) {
         <Grid container={true}>
           <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
             {value === 0 && <MyFeeds />}
-            {value === 1 && isDashboardAdmin && <Trainings /> }
-            {value === 1 && !isDashboardAdmin && <Recents /> }
+            {value === 1 && isDashboardAdmin && <Trainings />}
+            {value === 1 && !isDashboardAdmin && <Recents />}
             {value === 2 && isDashboardAdmin && <Recents />}
           </Grid>
-          {isDashboardAdmin && (<Grid item={true} md={4} sm={12}>
-            <TrainingStats />
-          </Grid>)}
+          {isDashboardAdmin && (
+            <Grid item={true} md={4} sm={12}>
+              <TrainingStats />
+            </Grid>
+          )}
         </Grid>
       )}
     </div>
@@ -139,7 +141,9 @@ export default function CustomizedTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
-  isDashboardAdmin = true; // TO DO:: For testing purpose only, this has been added. Once we get DASHBOARD_ADMIN tag from backend, this line should be removed.
+  /* TO DO:: For testing purpose only, this has been added.
+  Once we get DASHBOARD_ADMIN tag from backend, this line should be removed. */
+  isDashboardAdmin = true;
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -154,32 +158,61 @@ export default function CustomizedTabs() {
             onChange={handleChange}
             aria-label="dashboard tabs"
           >
-            <WrapTab {...a11yProps(0)} label={
-              <Grid container={true} justify="center"
-                alignItems="center">
-                {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon /> } &nbsp;&nbsp;<span>My Feed (26)</span>
-              </Grid>
-            } />
-            {isDashboardAdmin && <WrapTab {...a11yProps(1)} label={
-              <Grid container={true} justify="center"
-                alignItems="center">
-                {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon /> } &nbsp;&nbsp;<span>Training</span>
-              </Grid>} />}
-            <WrapTab {...a11yProps(2)} label={
-              <Grid container={true} justify="center"
-                alignItems="center">
-                {(isDashboardAdmin && value === 2) || (!isDashboardAdmin && value === 1) ? <RecentSelectedIcon /> : <RecentIcon />  } &nbsp;&nbsp;<span>Recent</span>
-              </Grid>} />
+            <WrapTab
+              {...a11yProps(0)}
+              label={
+                <Grid container={true} justify="center" alignItems="center">
+                  {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}{" "}
+                  &nbsp;&nbsp;<span>My Feed (26)</span>
+                </Grid>
+              }
+            />
+            {isDashboardAdmin && (
+              <WrapTab
+                {...a11yProps(1)}
+                label={
+                  <Grid container={true} justify="center" alignItems="center">
+                    {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}{" "}
+                    &nbsp;&nbsp;<span>Training</span>
+                  </Grid>
+                }
+              />
+            )}
+            <WrapTab
+              {...a11yProps(2)}
+              label={
+                <Grid container={true} justify="center" alignItems="center">
+                  {(isDashboardAdmin && value === 2) ||
+                  (!isDashboardAdmin && value === 1) ? (
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}{" "}
+                  &nbsp;&nbsp;<span>Recent</span>
+                </Grid>
+              }
+            />
           </StyledTabs>
         </Toolbar>
       </Grid>
       <Grid item={true} sm={12} className={classes.tabContent}>
-        <TabPanel value={value} index={0} isDashboardAdmin={isDashboardAdmin}>
-        </TabPanel>
-        {isDashboardAdmin && <TabPanel value={value} index={1} isDashboardAdmin={isDashboardAdmin}>
-        </TabPanel>}
-        <TabPanel value={value} index={isDashboardAdmin ? 2 : 1} isDashboardAdmin={isDashboardAdmin}>
-        </TabPanel>
+        <TabPanel
+          value={value}
+          index={0}
+          isDashboardAdmin={isDashboardAdmin}
+        ></TabPanel>
+        {isDashboardAdmin && (
+          <TabPanel
+            value={value}
+            index={1}
+            isDashboardAdmin={isDashboardAdmin}
+          ></TabPanel>
+        )}
+        <TabPanel
+          value={value}
+          index={isDashboardAdmin ? 2 : 1}
+          isDashboardAdmin={isDashboardAdmin}
+        ></TabPanel>
       </Grid>
     </Grid>
   );
