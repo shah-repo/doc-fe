@@ -1,6 +1,5 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
@@ -38,10 +37,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <Navigation />
   <SocketsContainer />
   <WatermarkFooterContainer />
-  <main  className={clsx({
-    [classes.newContent]: window.location.pathname === "/dashboard",
-    [classes.content]: window.location.pathname !== "/dashboard",
-  })}>
+  <main  className={window.location.pathname === "/dashboard" ? classes.newContent : classes.content}>
     <DataFetcherContainer />
     <Switch>
       <Route path={HOME_URL} exact={true} component={DashboardContainer} />

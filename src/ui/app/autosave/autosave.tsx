@@ -6,11 +6,9 @@ import { companyActions, companySelectors } from "../../../state/ducks/company";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 
-const AutosaveToggle: React.FunctionComponent<any> = (
-
-) => {
+const AutosaveToggle: React.FunctionComponent<any> = (location) => {
   const dispatch = useDispatch();
-
+  const isNewDashboard = location.pathname === "/dashboard";
   const canToggleAutosave = useGetHasPermission(Permission.DEVELOPERS);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
@@ -29,7 +27,7 @@ const AutosaveToggle: React.FunctionComponent<any> = (
         checked={autosaveEnabled}
         onChange={() => { dispatch(companyActions.autosaveConfig()); }}
       />}
-      style={style}
+      style={isNewDashboard ? style : {}}
       label="Toggle Autosave"
     />
   );
