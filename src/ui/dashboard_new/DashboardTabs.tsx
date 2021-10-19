@@ -7,11 +7,12 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
-import { ReactComponent as MyFeed } from "../../assets/images/my_feed.svg";
-import { ReactComponent as MyFeedSelected } from "../../assets/images/my_feed_selected.svg";
-import { ReactComponent as Recent } from "../../assets/images/recent.svg";
-import { ReactComponent as RecentSelected } from "../../assets/images/recent_selected.svg";
-import { ReactComponent as Training } from "../../assets/images/training.svg";
+import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
+import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
+import { ReactComponent as RecentIcon } from "../../assets/images/recent.svg";
+import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent_selected.svg";
+import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
+import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
 import MyFeeds from "./my_feeds/MyFeeds.container";
@@ -198,18 +199,18 @@ export default function CustomizedTabs() {
             <WrapTab {...a11yProps(0)} label={
               <Grid container={true} justify="center"
                 alignItems="center">
-                {value === 0 ? <MyFeedSelected/> : <MyFeed /> } &nbsp;&nbsp;<span>My Feed (26)</span>
+                {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon /> } &nbsp;&nbsp;<span>My Feed (26)</span>
               </Grid>
             } />
             {isDashboardAdmin && <WrapTab {...a11yProps(1)} label={
               <Grid container={true} justify="center"
                 alignItems="center">
-                <Training /> &nbsp;&nbsp;<span>Training</span>
+                {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon /> } &nbsp;&nbsp;<span>Training</span>
               </Grid>} />}
             <WrapTab {...a11yProps(2)} label={
               <Grid container={true} justify="center"
                 alignItems="center">
-                {value === 2 ? <RecentSelected/> : <Recent />  } &nbsp;&nbsp;<span>Recent</span>
+                {(isDashboardAdmin && value === 2) || (!isDashboardAdmin && value === 1) ? <RecentSelectedIcon /> : <RecentIcon />  } &nbsp;&nbsp;<span>Recent</span>
               </Grid>} />
           </StyledTabs>
         </Toolbar>
