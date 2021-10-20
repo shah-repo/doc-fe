@@ -8,7 +8,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 let purchaseOrderNo;
 
@@ -236,21 +235,14 @@ context("Autocomplete 'Purchase Order' test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -324,9 +316,9 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -336,16 +328,16 @@ context("Autocomplete 'Purchase Order' test", () => {
 
       it("Click 'Submit for Approval' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
 
       it("Click 'Approve' button", () => {
-        cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-        cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
           CyRoutes.EmployeesGet], () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
       });
     });
@@ -393,7 +385,7 @@ context("Autocomplete 'Purchase Order' test", () => {
           });
 
           it("Select 'Purchase Order' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Purchase Order list{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Purchase Order list{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -417,9 +409,9 @@ context("Autocomplete 'Purchase Order' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const purchaseOrders = response.body;

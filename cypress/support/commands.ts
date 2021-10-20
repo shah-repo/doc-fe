@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
 
@@ -15,6 +16,15 @@ declare global {
        * Custom command to select DOM element by data-cy attribute.
        * @example cy.dataCy('greeting')
       */
+      arrowClick(
+        options?: Partial<Cypress.ClickOptions>): Chainable<Subject>;
+      arrowClick(
+        x: number,
+        y: number,
+        options?: Partial<Cypress.ClickOptions>): Chainable<Subject>;
+      arrowType(
+        text: string,
+        options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
@@ -34,11 +44,12 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
-      // type(thingToTypeIn: string, options?: any): Chainable<Subject>;
+      progressBarShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldNotExist(): Chainable<Subject>;
     }
   }
 }
-interface IUser {
+export interface IUser {
   email: string;
   name: string;
 }
@@ -91,7 +102,16 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
   });
 });
 
+Cypress.Commands.add("progressBarShouldNotExist", () => {
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
+  addTestContext("company", params.payload.name);
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
@@ -99,7 +119,7 @@ Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstra
     headers: {
       Authorization: `bearer_admin ${params.sessionId}`,
     },
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   }).then((response) => response.body);
 });
 
@@ -133,7 +153,7 @@ Cypress.Commands.add("triggerDueDateEmailScript", (params: {sessionId: string; c
     body: {
       currentDate: params.currentDate,
     },
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   }).then((response) => response.body);
 });
 
@@ -149,20 +169,38 @@ Cypress.Commands.add("apiLogin", (params: { email: string; password: string }) =
 });
 
 Cypress.Commands.add("selectCompany", (params: { name: string }) => {
-  cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).click();
+  cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).arrowClick();
 });
 
 Cypress.Commands.add("unClick", () => {
-  cy.get("body").click( 10, 10, { force: true });
+  cy.get("body").arrowClick( 10, 10, { force: true });
 });
+
+// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
+//   const functionRequestTimeout: number = 40 * 1000;
+//   const functionResponseTimeout: number = 40 * 1000;
+//   names.forEach((name) => {
+//     const { requestConfig } = routes[name];
+//     cy.intercept(requestConfig).as(name);
+//   });
+
+//   callback();
+
+//   const aliasesToWait: string[] = [];
+
+//   names.forEach((name) => {
+//     aliasesToWait.push(`@${name}`);
+//   });
+
+//   cy.wait(aliasesToWait);
+// });
 
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
   (names: CyRoutes[], callback: () => void, options?: Partial<CyWaitOptions>) => {
-    cy.server();
     names.forEach((name) => {
       const { requestConfig } = routes[name];
-      cy.route(requestConfig).as(name);
+      cy.intercept(requestConfig).as(name);
 
     });
 
@@ -180,38 +218,59 @@ Cypress.Commands.add(
     cy.wrapWithWaitOnApiCalls([name], callback, options);
   });
 
-Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-  const state = cy.state("current").attributes.name;
-
-  if (state === "click") {
-    cy.wrap(element)
-      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(element, options));
-  }
-  else {
-    return originalFn(element, options);
-  }
+Cypress.Commands.add("arrowClick", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  options?: Partial<Cypress.ClickOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).click(options);
 });
 
-Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-  const state = cy.state("current").attributes.name;
-
-  if (state === "type") {
-    cy.wrap(element)
-      .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-      .then(() => originalFn(element, text, options));
-  }
-  else {
-    return originalFn(element, text, options);
-  }
+Cypress.Commands.add("arrowClick", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  x: number,
+  y: number,
+  options?: Partial<Cypress.ClickOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).click(x, y, options);
 });
+
+Cypress.Commands.add("arrowType", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>,
+  text: string,
+  options?: Partial<Cypress.TypeOptions>) => {
+  cy.wrap(subject).arrow({ duration: CONFIG.ARROW_DURATION, blocking: true }).type(text, options);
+});
+
+// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
+//   const state = cy.state("current").attributes.name;
+
+//   if (state === "click") {
+//     cy.wrap(element)
+//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+//       .then(() => originalFn(element, options));
+//   }
+//   else {
+//     return originalFn(element, options);
+//   }
+// });
+
+// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
+//   const state = cy.state("current").attributes.name;
+
+//   if (state === "type") {
+//     cy.wrap(element)
+//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
+//       .then(() => originalFn(element, text, options));
+//   }
+//   else {
+//     return originalFn(element, text, options);
+//   }
+// });
 
 // Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
 //   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
-//     cy.wrap(subject).click();
+//     cy.wrap(subject).arrowClick();
 //   });
 //   cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
-//     cy.wrap(subject).type(thingToTypeIn, options).unClick();
+//     cy.wrap(subject).arrowType(thingToTypeIn, options).unClick();
 //   });
 // });
 
