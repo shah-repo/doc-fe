@@ -5,7 +5,6 @@ import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-// import { ReactComponent as HeaderBackgroundLogo } from "../../assets/images/enlil-background-icon.svg";
 import { Nullable } from "../../state/ducks/common/types";
 import Text from "../components/Text";
 import Colors from "../layout/theme/utils/colors";
@@ -14,8 +13,6 @@ import AutosaveToggle from "./autosave/autosave";
 import styles from "./NewHeader.styles";
 import UserAvatar from "./UserMenu/UserAvatar";
 import UserMenu from "./UserMenu/UserMenu.container";
-
-
 interface Props extends WithStyles<typeof styles> {
   email: string;
   name: string;
@@ -58,34 +55,38 @@ const Header: React.FunctionComponent<Props> = ({
         sm={12}
       >
         <Grid container={true} justify="flex-start" alignContent="center">
-          <Typography  className={classes.toolbarTitle} >
-           Welcome back, <b className={classes.toolbarTitleName}>{name}!</b>
+          <Typography className={classes.toolbarTitle}>
+            Welcome back, <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
       </Grid>
-      {/* <HeaderBackgroundLogo /> */}
-      <Grid
-        item={true}
-        alignItems="flex-end"
-        justify="flex-end"
-        md={8}
-        sm={12}
-      >
+      <Grid item={true} alignItems="flex-end" justify="flex-end" md={8} sm={12}>
         <Grid item={true} className={classes.wrapContainer}>
           <Grid container={true} justify="flex-end" alignItems="center">
-            {canToggleCustomLabels &&
-        <FormControlLabel
-          control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
-          label="Show customizable labels"
-          style= {style}
-        />
-            }
-            <AutosaveToggle/>
-            <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
+            {canToggleCustomLabels && (
+              <FormControlLabel
+                control={
+                  <Switch
+                    name="toggleCustomLabels"
+                    checked={customLabelsValue}
+                    onChange={toggleCustomLabels}
+                  />
+                }
+                label="Show customizable labels"
+                style={style}
+              />
+            )}
+            <AutosaveToggle />
+            <ClickAwayListener
+              onClickAway={handleCloseMenu}
+              mouseEvent="onClick"
+            >
               <Button
                 disableFocusRipple={true}
                 disableRipple={true}
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleOpenMenu(event)}
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                  handleOpenMenu(event)
+                }
                 classes={{ root: classes.headerButton }}
               >
                 <UserAvatar avatar={avatar} />
@@ -94,11 +95,10 @@ const Header: React.FunctionComponent<Props> = ({
                   variant="caption"
                   className={classes.welcomeText}
                   noWrap={true}
-
                 >
                   <Text translation="header.welcome" />,
                 </Typography>
-                  &nbsp;
+                &nbsp;
                 <Typography
                   id="Header-userName"
                   variant="caption"
@@ -114,7 +114,6 @@ const Header: React.FunctionComponent<Props> = ({
                 />
               </Button>
             </ClickAwayListener>
-
           </Grid>
         </Grid>
       </Grid>
