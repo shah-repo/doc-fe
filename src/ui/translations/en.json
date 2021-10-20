@@ -1068,5 +1068,6 @@
   "dropbox.enable": "Enable Dropbox",
   "dropbox.connection.error": "There was an error connecting to Dropbox.",
   "toast.notification.deletion": "This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to",
+  "my.feed.container.title": "My Feed Container",
   "training.container.title": "Training Container"
 }
