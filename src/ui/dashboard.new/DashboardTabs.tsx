@@ -13,7 +13,7 @@ import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
-import MyFeeds from "./my_feeds/MyFeeds.container";
+import MyFeeds from "./my.feeds/MyFeeds.container";
 import Recents from "./recents/Recents.container";
 import Trainings from "./trainings/Trainings.container";
 import TrainingStats from "./training_stats/TrainingStats";
