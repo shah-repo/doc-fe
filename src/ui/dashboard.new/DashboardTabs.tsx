@@ -15,9 +15,8 @@ import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
 import MyFeeds from "./my.feeds/MyFeeds.container";
 import Recents from "./recents/Recents.container";
+import TrainingStats from "./training.stats/TrainingStats";
 import Trainings from "./trainings/Trainings.container";
-import TrainingStats from "./training_stats/TrainingStats";
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
