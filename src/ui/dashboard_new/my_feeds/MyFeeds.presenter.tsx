@@ -11,6 +11,7 @@ import ApprovalRelease from "../line_items/approvals/approval_release/approvalRe
 import PendingReview from "../line_items/approvals/pending_review/pendingReview";
 import TaskApproval from "../line_items/approvals/task_approval/taskApproval";
 import PurchaseOrder from "../line_items/purchase_order/purchaseOrder";
+import NewTraining from "../line_items/training/new_training/newTraining";
 import PendingTraining from "../line_items/training/pending_training/pendingTraining";
 import { styles } from "./MyFeeds.styles";
 
@@ -23,6 +24,7 @@ interface Props {
     status: string;
     timestamp: string;
     verbose: string;
+    dueDate?: any;
     approvers: string[];
   }[];
 }
@@ -41,12 +43,19 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
+            case ActionTypes.NEW_TRAINING_RECORDS:
+              return <NewTraining  id={pendingAction.id} type={pendingAction.type}
+                title ={pendingAction.title} documentId={pendingAction.documentId}
+                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
+                dueDate ={pendingAction.dueDate}
+                approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_TRAINING_RECORDS:
               return <PendingTraining  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
-                approvers ={pendingAction.approvers}/>;
+                dueDate ={pendingAction.dueDate}/>;
             case ActionTypes.PURCHASE_ORDERS:
               return <PurchaseOrder  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
