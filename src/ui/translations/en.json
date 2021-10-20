@@ -1070,5 +1070,6 @@
   "toast.notification.deletion": "This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to",
   "my.feed.container.title": "My Feed Container",
   "training.container.title": "Training Container",
-  "recent.container.title": "Recent Container"
+  "recent.container.title": "Recent Container",
+  "training.stats.container.title": "Training Stats Container (Chart & Line Items)"
 }
