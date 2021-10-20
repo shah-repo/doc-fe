@@ -25,7 +25,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   const titleRender = (type, docId, title, createdAt) => (
     <div>
       {`${docId} `}
-      {type === "TRAINING" && <span> to </span>}
+      {type === "PO" && <span> to </span>}
       <strong>
         {truncate(`${title}`, {
           length: 30,
