@@ -24,7 +24,7 @@ const NewTrainingPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("NewTrainingPresenter");
   return (
-    <ListItem>
+    <ListItem button>
       <ListItemAvatar>
         <Avatar>
           <SendIcon />

@@ -24,7 +24,7 @@ const calDuePresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("calDuePresenter");
   return (
-    <ListItem>
+    <ListItem button>
       <ListItemAvatar>
         <Avatar>
           <SendIcon />

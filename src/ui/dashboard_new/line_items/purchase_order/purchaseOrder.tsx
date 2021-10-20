@@ -24,7 +24,7 @@ const purchaseOrderPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("purchaseOrderPresenter");
   return (
-    <ListItem>
+    <ListItem button>
       <ListItemAvatar>
         <Avatar>
           <SendIcon />

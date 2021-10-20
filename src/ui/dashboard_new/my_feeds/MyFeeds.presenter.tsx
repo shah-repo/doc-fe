@@ -1,7 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Grid } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
@@ -32,7 +30,7 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const renderPendingActions = () => (
-    <List>
+    <List dense className={classes.root}>
       {
         feedItems.map((pendingAction, index) => {
           switch (pendingAction.type) {
@@ -88,14 +86,10 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
 
   return (
 
-    <Grid container={true} className={classes.root} spacing={4}>
-      <Grid item={true} className={classes.item} md={12} sm={12}>
-        <Card className={classes.card}>gg
-          <CardContent>
-            {feedItems.length > 0 && renderPendingActions()}
-            {renderNoPendingActions}
-          </CardContent>
-        </Card>
+    <Grid container={true} spacing={5}>
+      <Grid item={true} md={12} sm={12}>
+        {feedItems.length > 0 && renderPendingActions()}
+        {renderNoPendingActions}
       </Grid>
     </Grid>
 
