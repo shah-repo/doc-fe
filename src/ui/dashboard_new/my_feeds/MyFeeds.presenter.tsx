@@ -3,9 +3,11 @@ import { Grid } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { PendingActionType } from "../../../state/ducks/dashboard/types";
+import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
-import ApprovalClose from "../line_items/approvals/approval_close/approvalClose";
+import ApprovalApproved from "../line_items/approvals/approval_approved/approvalApproved";
+import ApprovalReject from "../line_items/approvals/approval_reject/approvalReject";
+import ApprovalRelease from "../line_items/approvals/approval_release/approvalRelease";
 import PendingReview from "../line_items/approvals/pending_review/pendingReview";
 import TaskApproval from "../line_items/approvals/task_approval/taskApproval";
 import PurchaseOrder from "../line_items/purchase_order/purchaseOrder";
@@ -24,29 +26,39 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
       {
         feedItems.map((pendingAction, index) => {
           switch (pendingAction.type) {
-            case PendingActionType.PENDING_REVIEW:
+            case ActionTypes.PENDING_REVIEW:
               return <PendingReview  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 approvers ={pendingAction.approvers}/>;
-            case PendingActionType.PENDING_TRAINING_RECORDS:
+            case ActionTypes.PENDING_TRAINING_RECORDS:
               return <PendingTraining  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 approvers ={pendingAction.approvers}/>;
-            case PendingActionType.PURCHASE_ORDERS:
+            case ActionTypes.PURCHASE_ORDERS:
               return <PurchaseOrder  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 approvers ={pendingAction.approvers}/>;
-            case PendingActionType.PENDING_DOC_CONTROL:
-            case PendingActionType.PENDING_TASK:
+            case ActionTypes.PENDING_DOC_CONTROL:
+            case ActionTypes.PENDING_TASK:
               return <TaskApproval  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 approvers ={pendingAction.approvers}/>;
-            case PendingActionType.APPROVED_APPROVAL_REQUESTS:
-              return <ApprovalClose  id={pendingAction.id} type={pendingAction.type}
+            case ActionTypes.APPROVED_APPROVAL_REQUESTS:
+              return <ApprovalApproved  id={pendingAction.id} type={pendingAction.type}
+                title ={pendingAction.title} documentId={pendingAction.documentId}
+                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                approvers ={pendingAction.approvers}/>;
+            case ActionTypes.RELEASE_APPROVAL_REQUESTS:
+              return <ApprovalRelease  id={pendingAction.id} type={pendingAction.type}
+                title ={pendingAction.title} documentId={pendingAction.documentId}
+                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                approvers ={pendingAction.approvers}/>;
+            case ActionTypes.REJECT_APPROVAL_REQUESTS:
+              return <ApprovalReject  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 approvers ={pendingAction.approvers}/>;

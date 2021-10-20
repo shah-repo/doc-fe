@@ -6,17 +6,23 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 import SendIcon from "@material-ui/icons/Send";
 import React from "react";
-import { styles } from "./approvalChange.styles";
+import { styles } from "./calDue.styles";
 
 interface Props {
-  pendingAction: any;
+  id: string;
+  type: string;
+  title: string;
+  documentId: string;
+  status: string;
+  timestamp: string;
+  approvers: string[];
 }
-const approvalChangePresenter: React.FunctionComponent<Props> = ({
-  pendingAction,
+const calDuePresenter: React.FunctionComponent<Props> = ({
+  id, title,
 }) => {
   const classes = styles();
   // eslint-disable-next-line no-console
-  console.log("approvalChangePresenter");
+  console.log("calDuePresenter");
   return (
     <ListItem>
       <ListItemAvatar>
@@ -35,10 +41,10 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
             className={classes.inline}
             color="textPrimary"
           >
-            <b>{pendingAction.id} </b>
+            <b>{id} </b>
           </Typography>
-          - {pendingAction.title}
-          {" — Approval Change …"}
+          - {title}
+          {" — cal Due in 7 days…"}
         </React.Fragment>
       } />
 
@@ -46,4 +52,4 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default approvalChangePresenter;
+export default calDuePresenter;
