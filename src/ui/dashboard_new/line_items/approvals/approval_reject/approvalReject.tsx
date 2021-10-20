@@ -24,7 +24,7 @@ const approvalRejectPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("approvalRejectPresenter");
   return (
-    <ListItem>
+    <ListItem button>
       <ListItemAvatar>
         <Avatar>
           <SendIcon />

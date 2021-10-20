@@ -6,5 +6,8 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
   }
   ));
