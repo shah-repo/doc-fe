@@ -124,6 +124,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     top: 18,
     left: 15,
   },
+  tabItemText: {
+    marginLeft: 10,
+  },
   tabContent: {},
 }));
 
@@ -159,8 +162,12 @@ const DashboardTabs: React.FunctionComponent = () => {
               {...a11yProps(0)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
-                  {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}{" "}
-                  &nbsp;&nbsp;<span>My Feed (26)</span>
+                  {/* {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}{" "}
+                  &nbsp;&nbsp;<span>My Feed (26)</span> */}
+                  <Grid item={true} sm={12}>
+                    {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
+                    <span className={classes.tabItemText}>My Feed (26)</span>
+                  </Grid>
                 </Grid>
               }
             />
@@ -169,8 +176,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                 {...a11yProps(1)}
                 label={
                   <Grid container={true} justify="center" alignItems="center">
-                    {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}{" "}
-                    &nbsp;&nbsp;<span>Training</span>
+                    <Grid item={true} sm={12}>
+                      {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}
+                      <span className={classes.tabItemText}>Trainings (10) </span>
+                    </Grid>
                   </Grid>
                 }
               />
@@ -179,13 +188,15 @@ const DashboardTabs: React.FunctionComponent = () => {
               {...a11yProps(2)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
-                  {(isDashboardAdmin && value === 2) ||
+                  <Grid item={true} sm={12}>
+                    {(isDashboardAdmin && value === 2) ||
                   (!isDashboardAdmin && value === 1) ? (
-                      <RecentSelectedIcon />
-                    ) : (
-                      <RecentIcon />
-                    )}{" "}
-                  &nbsp;&nbsp;<span>Recent</span>
+                        <RecentSelectedIcon />
+                      ) : (
+                        <RecentIcon />
+                      )}
+                    <span className={classes.tabItemText}>Recent</span>
+                  </Grid>
                 </Grid>
               }
             />
