@@ -10,7 +10,7 @@ interface Props {
 const RecentsPresenter: React.FunctionComponent<Props> = ({ recentsData }) => {
   const classes = styles();
   const renderItems = () => (
-    <List dense className={classes.root}>
+    <List className={classes.root}>
       {recentsData.map((data, index) => (
         <RecentsItem
           key={index}
