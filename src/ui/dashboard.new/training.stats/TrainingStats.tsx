@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function DashboardChart() {
+const TrainingStatsLineItemsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
@@ -25,6 +25,6 @@ function DashboardChart() {
         {/* <TrainingLineItems /> */}
       </CardContent>
     </Card>);
-}
+};
 
-export default DashboardChart;
+export default TrainingStatsLineItemsContainer;

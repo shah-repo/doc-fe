@@ -7,14 +7,13 @@ import Text from "../../components/Text";
 
 const useStyles = makeStyles((theme: Theme) => ({
   outline: {
-    // border: "1px solid grey",
     overflow: "auto",
     minHeight: "calc(100vh - 145px)",
     maxHeight: "calc(100vh - 145px)",
   },
 }));
 
-function MyFeeds() {
+const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
@@ -23,6 +22,6 @@ function MyFeeds() {
         {/* <MyFeedsPresenter /> */}
       </CardContent>
     </Card>);
-}
+};
 
-export default MyFeeds;
+export default MyFeedsLineItemsContainer;

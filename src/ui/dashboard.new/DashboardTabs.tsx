@@ -136,7 +136,7 @@ function a11yProps(index: any) {
   };
 }
 
-export default function CustomizedTabs() {
+const DashboardTabs: React.FunctionComponent = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
@@ -215,4 +215,6 @@ export default function CustomizedTabs() {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default DashboardTabs;

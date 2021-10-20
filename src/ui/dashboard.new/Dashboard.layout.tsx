@@ -3,7 +3,7 @@ import React from "react";
 import { styles } from "./Dashboard.styles";
 import DashboardTabs from "./DashboardTabs";
 
-const DashboardPresenter: React.FunctionComponent = () => {
+const DashboardLayout: React.FunctionComponent = () => {
   const classes = styles();
 
   return (
@@ -15,4 +15,4 @@ const DashboardPresenter: React.FunctionComponent = () => {
   );
 };
 
-export default DashboardPresenter;
+export default DashboardLayout;

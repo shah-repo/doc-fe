@@ -7,14 +7,13 @@ import Text from "../../components/Text";
 
 const useStyles = makeStyles((theme: Theme) => ({
   outline: {
-    // border: "1px solid grey",
     overflow: "auto",
     minHeight: "calc(100vh - 145px)",
     maxHeight: "calc(100vh - 145px)",
   },
 }));
 
-function Trainings() {
+const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
@@ -23,6 +22,6 @@ function Trainings() {
         {/* <TrainingsPresenter /> */}
       </CardContent>
     </Card>);
-}
+};
 
-export default Trainings;
+export default TrainingsLineItemsContainer;
