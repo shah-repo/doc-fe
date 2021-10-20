@@ -6,8 +6,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ReactComponent as TrainingIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as RecentSelectedIcon } from "../../../../../assets/images/recent_selected_myfeed_li.svg";
+import { ReactComponent as OverdueIcon } from "../../../../../assets/images/myfeeds_overdue.svg";
+import { ReactComponent as WarningIcon } from "../../../../../assets/images/myfeeds_warning.svg";
+import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingTraining.styles";
 interface Props {
@@ -18,10 +19,10 @@ interface Props {
   status: string;
   timestamp: string;
   verbose: string;
-  approvers: string[];
+  dueDate: string;
 }
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
-  id, title, status, verbose, timestamp, approvers,
+  id, title, status, timestamp, dueDate,
 }) => {
   const classes = styles();
   const StyleChip = withStyles({
@@ -29,18 +30,13 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       backgroundColor: Colors.white,
     },
     colorPrimary: {
-      color: Colors.latest_blue_varient,
+      color: status === "OVERDUE" ? Colors.red : Colors.latest_yellow_varient,
     },
   })(Chip);
   // eslint-disable-next-line no-console
   console.log("Pending Training Presenter ::");
   return (
     <ListItem button>
-      {/* <ListItemAvatar>
-        <Avatar>
-          <SendIcon />
-        </Avatar>
-      </ListItemAvatar> */}
       <ListItemIcon>
         <TrainingIcon />
       </ListItemIcon>
@@ -54,45 +50,21 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 className={classes.typography}
                 color="textPrimary"
               >
-                <b>{id} </b>
-              </Typography>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.typography}
-                color="textPrimary"
-              >
-                {title}lll
+                 Your Training {status === "OVERDUE"  ? "" : "On"} {id} {title} is
               </Typography>&nbsp;
               <Typography
                 component="span"
                 variant="body2"
-                className={classes.typography}
-                color="textPrimary"
+                className={status === "OVERDUE"  ? classes.typographyOverdue : classes.typographyDueInfewDays}
               >
-                <StyleChip size="small" icon={<RecentSelectedIcon />}
+                <StyleChip size="small" icon={status === "OVERDUE" ? <OverdueIcon /> : <WarningIcon />}
                   color="primary" label={status}/>
-              </Typography>&nbsp;
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.typography}
-                color="textPrimary"
-              >
-                {verbose}
+                  . {dueDate}
               </Typography>
             </Grid>
           </Grid>
           <Grid container={true} >
             <Grid item={true} md={12} sm={12} >
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.typography}
-                color="textPrimary"
-              >
-                {approvers.join(",")}
-              </Typography>
               <Typography
                 component="span"
                 variant="caption"
