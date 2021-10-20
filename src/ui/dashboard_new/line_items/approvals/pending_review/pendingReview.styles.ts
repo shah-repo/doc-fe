@@ -9,5 +9,15 @@ export const styles = makeStyles((theme: Theme) =>
     nested: {
       paddingLeft: theme.spacing(4),
     },
+    typography: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+    },
+    timestampContainer: {
+      fontSize: "12px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+    },
   }
   ));
