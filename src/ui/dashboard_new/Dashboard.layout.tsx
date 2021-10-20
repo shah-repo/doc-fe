@@ -7,13 +7,11 @@ const DashboardPresenter: React.FunctionComponent = () => {
   const classes = styles();
 
   return (
-    <>
-      <Grid container={true} className={classes.root} alignItems="center" justify="center">
-        <Grid item={true} className={classes.item} sm={12} >
-          <DashboardTabs />
-        </Grid>
+    <Grid container={true} className={classes.root} alignItems="center" justify="center">
+      <Grid item={true} className={classes.item} sm={12} >
+        <DashboardTabs />
       </Grid>
-    </>
+    </Grid>
   );
 };
 
