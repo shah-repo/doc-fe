@@ -1,17 +1,10 @@
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
-
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
       margin: "auto",
       flex: 1,
-      // minHeight: "calc(100vh - 65px)",
-    },
-    list: {
-      overflow: "auto",
-      maxHeight: "calc(100vh - 216px)",
     },
     item: {
       flexGrow: 1,
@@ -19,20 +12,5 @@ export const styles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       minHeight: "0",
     },
-    createDocumentLink: {
-      textDecoration: "none",
-    },
-    buttons: {
-      display: "block",
-      clear: "both",
-      height: 50,
-    },
-    actionsContainer: {
-      padding: 20,
-    },
-    noPendingActions: {
-      margin: theme.spacing(2),
-      fontFamily: "Open Sans, sans-serif;",
-    },
-  },
-  ));
+  })
+);
