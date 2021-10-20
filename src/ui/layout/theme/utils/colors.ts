@@ -14,6 +14,7 @@ enum Colors {
   blue = "#0066FF",
   medium_blue= "#5C9DFC",
   background_blue="#DBE9FF",
+  latest_blue_varient="#3080EA",
   // red
   red = "#c40000",
   dark_red = "#a10808",

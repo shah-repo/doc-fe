@@ -20,6 +20,7 @@ interface Props {
   status: string;
   timestamp: string;
   approvers: string[];
+  verbose: string;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id, type, title,

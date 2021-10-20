@@ -22,6 +22,7 @@ interface Props {
     documentId: string;
     status: string;
     timestamp: string;
+    verbose: string;
     approvers: string[];
   }[];
 }
@@ -38,37 +39,44 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
               return <PendingReview  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_TRAINING_RECORDS:
               return <PendingTraining  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PURCHASE_ORDERS:
               return <PurchaseOrder  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_DOC_CONTROL:
             case ActionTypes.PENDING_TASK:
               return <TaskApproval  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.APPROVED_APPROVAL_REQUESTS:
               return <ApprovalApproved  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.RELEASE_APPROVAL_REQUESTS:
               return <ApprovalRelease  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.REJECT_APPROVAL_REQUESTS:
               return <ApprovalReject  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
 
             default:

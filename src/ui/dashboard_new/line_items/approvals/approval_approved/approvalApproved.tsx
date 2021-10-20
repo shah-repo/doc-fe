@@ -15,6 +15,7 @@ interface Props {
   documentId: string;
   status: string;
   timestamp: string;
+  verbose: string;
   approvers: string[];
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({

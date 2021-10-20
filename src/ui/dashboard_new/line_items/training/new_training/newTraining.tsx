@@ -16,6 +16,7 @@ interface Props {
   status: string;
   timestamp: string;
   approvers: string[];
+  verbose: string;
 }
 const NewTrainingPresenter: React.FunctionComponent<Props> = ({
   id, type, title,

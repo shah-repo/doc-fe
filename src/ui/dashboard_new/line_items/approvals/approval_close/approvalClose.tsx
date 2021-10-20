@@ -16,6 +16,7 @@ interface Props {
   status: string;
   timestamp: string;
   approvers: string[];
+  verbose: string;
 }
 const approvalClosePresenter: React.FunctionComponent<Props> = ({
   id, title,
