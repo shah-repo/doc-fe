@@ -64,7 +64,7 @@ const Header: React.FunctionComponent<Props> = ({
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleOpenMenu(event)}
                 classes={{ root: classes.headerButton }}
               >
-                <UserAvatar avatar={avatar} />
+                <UserAvatar avatar={avatar} name={name} />
                 <Typography
                   id="Header-welcomeText"
                   variant="caption"

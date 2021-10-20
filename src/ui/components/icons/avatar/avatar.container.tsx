@@ -8,7 +8,15 @@ interface OwnProps {
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
   setFile: (value: Nullable<File>) => void;
+  name: string;
 }
+
+export const getInitalsFromName = (name: string) => {
+  const array = name.split(" ");
+  return array.length <= 1
+    ? name.charAt(0) + name.charAt(1)
+    : array[0].charAt(0) + array[1].charAt(0);
+};
 
 type Props = OwnProps;
 const AvatarContainer: React.FunctionComponent<Props> = ({
@@ -17,15 +25,18 @@ const AvatarContainer: React.FunctionComponent<Props> = ({
   previewAvatar,
   setPreviewAvatar,
   setFile,
+  name,
 }) => {
-  const logo = !avatar ? "/avatar_placeholder.svg" : avatar;
+  const userInitials = getInitalsFromName(name);
+
   return (
     <AvatarPresenter
-      src={logo}
+      src={avatar}
       showEditUser={showEditUser}
       previewAvatar={previewAvatar}
       setPreviewAvatar={setPreviewAvatar}
       setFile={setFile}
+      userInitials={userInitials}
     />
   );
 };

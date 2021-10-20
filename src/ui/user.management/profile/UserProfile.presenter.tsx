@@ -110,6 +110,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         previewAvatar={previewAvatar}
         setPreviewAvatar={setPreviewAvatar}
         setFile={setFile}
+        name={name}
       />
       <DialogContent
         canManageUsers={canManageUsers}
