@@ -3,6 +3,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
+import Text from "../../components/Text";
 
 const useStyles = makeStyles((theme: Theme) => ({
   outline: {
@@ -18,7 +19,7 @@ function Recents() {
   return (
     <Card className={classes.outline}>
       <CardContent>
-      Recent Container
+        <Text translation={"recent.container.title"} />
         {/* <RecentsPresenter /> */}
       </CardContent>
     </Card>);
