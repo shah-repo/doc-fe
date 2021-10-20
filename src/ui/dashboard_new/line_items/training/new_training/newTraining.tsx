@@ -69,7 +69,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               <Typography
                 component="span"
                 variant="caption"
-                className={classes.timestampContainer}
+                className={classes.typography}
                 color="textSecondary"
               >
                 {approvers.join(",")}
