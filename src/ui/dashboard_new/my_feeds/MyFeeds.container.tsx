@@ -72,16 +72,6 @@ const feedItems = [
     requestedBy: "Josh",
   },
   {
-    id: "ID6",
-    title: "APPROVED_APPROVAL_REQUESTS",
-    type: "APPROVED_APPROVAL_REQUESTS",
-    documentId: "DocId",
-    status: "IN_REVIEW",
-    timestamp: "Apr 23, 2021  9:12 AM",
-    verbose: "pending approvals from",
-    approvers: ["Ganesh", "Nishanth"],
-  },
-  {
     id: "ID1",
     title: "PENDING_REVIEW",
     type: "PENDING_REVIEW",
@@ -111,16 +101,6 @@ const feedItems = [
     timestamp: "Apr 07, 2021  9:12 AM",
     approvers: ["Ganesh", "Nishanth"],
     requestedBy: "Ramesh",
-  },
-  {
-    id: "ID6",
-    title: "APPROVED_APPROVAL_REQUESTS",
-    type: "APPROVED_APPROVAL_REQUESTS",
-    documentId: "DocId",
-    verbose: "pending approvals from",
-    status: "IN_REVIEW",
-    timestamp: "Mar 27, 2021  9:12 AM",
-    approvers: ["Ganesh", "Nishanth"],
   },
 ];
 
