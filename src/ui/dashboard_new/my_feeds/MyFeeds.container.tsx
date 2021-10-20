@@ -1,27 +1,67 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
+import MyFeedsPresenter from "./MyFeeds.presenter";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  outline: {
-    // border: "1px solid grey",
-    overflow: "auto",
-    minHeight: "calc(100vh - 145px)",
-    maxHeight: "calc(100vh - 145px)",
+const feedItems = [
+  {
+    id: "ID1",
+    title: "PENDING_REVIEW",
+    type: "PENDING_REVIEW",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
   },
-}));
+  {
+    id: "ID2",
+    title: "PENDING_TRAINING_RECORDS",
+    type: "PENDING_TRAINING_RECORDS",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
+  },
+  {
+    id: "ID3",
+    title: "PURCHASE_ORDERS",
+    type: "PURCHASE_ORDERS",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
+  },
+  {
+    id: "ID4",
+    title: "PENDING_DOC_CONTROL",
+    type: "PENDING_DOC_CONTROL",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
+  },
+  {
+    id: "ID5",
+    title: "PENDING_TASK",
+    type: "PENDING_TASK",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
+  },
+  {
+    id: "ID6",
+    title: "APPROVED_APPROVAL_REQUESTS",
+    type: "APPROVED_APPROVAL_REQUESTS",
+    documentId: "DocId",
+    status: "IN_REVIEW",
+    timestamp: "30 th Oct",
+    approvers: ["Ganesh", "Nishanth"],
+  },
+];
 
 function MyFeeds() {
-  const classes = useStyles();
   return (
-    <Card className={classes.outline}>
-      <CardContent>
-      My Feed Container
-        {/* <MyFeedsPresenter /> */}
-      </CardContent>
-    </Card>);
+    <MyFeedsPresenter {...{ feedItems }}/>);
 }
 
 export default MyFeeds;
