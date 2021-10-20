@@ -43,7 +43,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 className={classes.typography}
                 color="textPrimary"
               >
-                <b>{requestedBy}</b>
+                <b>{requestedBy}</b> &nbsp;
               </Typography>
               <Typography
                 component="span"
@@ -52,7 +52,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 color="textPrimary"
               >
                 {verbose} {id}
-              </Typography>
+              </Typography> &nbsp;
               <Typography
                 component="span"
                 variant="body2"
