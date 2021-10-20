@@ -21,11 +21,10 @@ interface Props {
   status: string;
   timestamp: string;
   verbose: string;
-  requestedBy: string;
   approvers: string[];
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
-  id, title, timestamp, verbose, status, requestedBy,
+  id, title, timestamp, verbose, status,
 }) => {
   const classes = styles();
   const StyleChip = withStyles({

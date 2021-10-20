@@ -69,13 +69,13 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
+                requestedBy={pendingAction.requestedBy}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.APPROVED_APPROVAL_REQUESTS:
               return <ApprovalApproved  id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
-                requestedBy={pendingAction.requestedBy}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.RELEASE_APPROVAL_REQUESTS:
               return <ApprovalRelease  id={pendingAction.id} type={pendingAction.type}
