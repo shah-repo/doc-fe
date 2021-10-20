@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -19,17 +20,17 @@ declare global {
 }
 
 Cypress.Commands.add("ebEnterPartName", (params: { name: string }) => {
-  cy.get("[data-cy=\"name\"]").type(params.name);
+  cy.get("[data-cy=\"name\"]").arrowType(params.name);
 });
 
 Cypress.Commands.add("ebEnterPartDescription", (params: { description: string }) => {
-  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").click();
-  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().type(params.description);
-  cy.get("[data-cy=\"form.builder.field.description\"]>div").click().wait(1000);
+  cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
+  cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear().arrowType(params.description);
+  cy.get("[data-cy=\"form.builder.field.description\"]>div").arrowClick();
 });
 
 Cypress.Commands.add("ebChoosePartType", (params: {partName: string}) => {
-  cy.get("[data-cy=\"document.documentType.id\"]").type(params.partName + "{downarrow}{enter}");
+  cy.get("[data-cy=\"document.documentType.id\"]").arrowType(params.partName + "{downarrow}{enter}");
 });
 
 Cypress.Commands.add("ebCheckIfPartIsInSummary", (params: {partName: string}) => {
@@ -48,17 +49,21 @@ Cypress.Commands.add("ebVerifyNewRevisionCreated", () => {
 Cypress.Commands.add("ebClickClone", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy=\"CloneEBButton\"]").click();
+    cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
 });
 
 
 Cypress.Commands.add("ebApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.wait(500);
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-    cy.get("[data-cy=\"common.confirm\"]").click();
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
