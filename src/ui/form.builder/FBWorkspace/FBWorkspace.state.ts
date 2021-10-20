@@ -192,9 +192,6 @@ class FBWorkspaceState extends FBSchemaState {
       case "form":
       case "formDesign":
         body = {
-          formDocument: {
-            id: this.document?.formDocument?.id,
-          },
           formInput: omit(values,
             Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
           ...mode === "formDesign" && this.isOutputSchema && { schema },

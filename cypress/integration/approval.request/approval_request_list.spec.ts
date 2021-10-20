@@ -5,12 +5,12 @@ import faker from "faker";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
@@ -65,7 +65,6 @@ context("Approval request landing page test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -191,14 +190,8 @@ context("Approval request landing page test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -217,12 +210,10 @@ context("Approval request landing page test", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: "Draft" });
-      cy.wait(5000);
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
-      cy.wait(3000);
     });
 
     it("Send to review", () => {
@@ -241,7 +232,9 @@ context("Approval request landing page test", () => {
   context("Verify most recent edited AR is first on list", () => {
     it("Verify first AR is: " + approvalRequestName, () => {
       SystemRequirement("REQ-0800");
-      cy.alFilterByTitle({ title: approvalRequestName });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+        cy.alFilterByTitle({ title: approvalRequestName });
+      });
     });
   });
 

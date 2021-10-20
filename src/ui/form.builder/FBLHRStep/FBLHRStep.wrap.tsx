@@ -51,6 +51,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
 
+    if (!(isOutput && stepLHRs)) {
+      formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
+    }
+
     // MARK: @helpers
     React.useEffect(() => {
       if (lhrStepState.stepLHRs) {
@@ -162,8 +166,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const setDisplayToMPI = () => {
       if (isOutput && stepLHRs) {
         lhrStepState.setIsHovering(true);
-      formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
-       formState?.getInputState(name)?.setRender();
+        formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
+        formState?.getInputState(name)?.setRender();
       }
     };
 

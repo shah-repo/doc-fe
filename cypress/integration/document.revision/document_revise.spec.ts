@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let initialArDocument;
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
@@ -63,19 +62,12 @@ context("Document revise test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -163,9 +155,9 @@ context("Document revise test", () => {
     it("Verify 'Test document for revising' revision is set to 1.1", () => {
       SystemRequirement("REQ-0580", "REQ-0370");
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-      cy.wait(1000);
+
       cy.dlVerifyFilterByRev({ revision: "1.1" });
-      cy.wait(1000);
+
     });
   });
 
@@ -191,11 +183,11 @@ context("Document revise test", () => {
     it("Verify 'Test document for revising' revision is set to 2", () => {
       SystemRequirement("REQ-0580", "REQ-0370");
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByStatus({ status: "Released" });
-      cy.wait(1000);
+
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-      cy.wait(1000);
+
       cy.dlVerifyFilterByRev({ revision: "2" });
     });
   });
@@ -232,7 +224,7 @@ context("Document revise test", () => {
       });
 
       it("Add created document revision", () => {
-        cy.arClickAddDocument().wait(500);
+        cy.arClickAddDocument();
         cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -268,13 +260,13 @@ context("Document revise test", () => {
       it("Verify 'Test document for revising' revision is set to '1A'", () => {
         SystemRequirement("REQ-0580", "REQ-0370");
         cy.navigToDocumentList();
-        cy.wait(1000);
+
         cy.dlClearFilters();
-        cy.wait(1000);
+
         cy.dlFilterByStatus({ status: "Released" });
-        cy.wait(1000);
+
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-        cy.wait(1000);
+
         cy.dlVerifyFilterByRev({ revision: "1A" });
       });
     });
@@ -299,7 +291,7 @@ context("Document revise test", () => {
       });
 
       it("Click Create a Approval Request button", () => {
-        cy.cmpClickCreateApprovalRequest();
+        cy.arClickCreateAnAR();
       });
 
       it("Enter title AR title: 'AR for Upgrade to Obsolete'", () => {
@@ -312,7 +304,7 @@ context("Document revise test", () => {
       });
 
       it("Add created document revision", () => {
-        cy.arClickAddDocument().wait(500);
+        cy.arClickAddDocument();
         cy.arChoseSpecificProposedDocument({ name: documentRevisionName });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -346,13 +338,13 @@ context("Document revise test", () => {
       it("Verify 'Test document for revising' revision is set to 'OBS'", () => {
         SystemRequirement("REQ-0580", "REQ-0370");
         cy.navigToDocumentList();
-        cy.wait(1000);
+
         cy.dlClearFilters();
-        cy.wait(1000);
+
         cy.dlFilterByStatus({ status: "Obsolete" });
-        cy.wait(1000);
+
         cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
-        cy.wait(1000);
+
         cy.dlVerifyFilterByRev({ revision: "OBS" });
       });
     });

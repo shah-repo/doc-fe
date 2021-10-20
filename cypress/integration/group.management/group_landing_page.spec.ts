@@ -8,7 +8,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let adminLoginResponse;
-let multipleCompanies;
 let secondEmployee;
 let thirdEmployee;
 let fourthEmployee;
@@ -47,7 +46,6 @@ context("Group Landing Page Flow", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1;
         done();
       });
     });
@@ -58,7 +56,6 @@ context("Group Landing Page Flow", () => {
           email: USERS[1].email,
         }).then((response) => {
           adminLoginResponse = response;
-          multipleCompanies = loginResponse.employees.length > 1;
           done();
         });
       });
@@ -88,14 +85,8 @@ context("Group Landing Page Flow", () => {
   });
 
   context("Login company admin", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
