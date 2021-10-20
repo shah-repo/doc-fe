@@ -13,6 +13,7 @@ import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
+import Colors from "../layout/theme/utils/colors";
 import MyFeeds from "./my.feeds/MyFeeds.container";
 import Recents from "./recents/Recents.container";
 import TrainingStats from "./training.stats/TrainingStats";
@@ -66,11 +67,8 @@ const StyledTabs = withStyles({
     "backgroundColor": "transparent",
     "& > span": {
       width: "100%",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: Colors.white,
     },
-  },
-  selected: {
-    backgroundColor: "red",
   },
 })((props: StyledTabsProps) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
@@ -84,7 +82,7 @@ const WrapTab = withStyles((theme: Theme) =>
     root: {
       "min-width": "125px",
       /* Font Gray */
-      "color": "#767B87",
+      "color": Colors.font_gray,
       "borderRadius": "100px",
       /* Heading 21 */
       "position": "static",
@@ -111,9 +109,9 @@ const WrapTab = withStyles((theme: Theme) =>
     selected: {
       "opacity": 1,
       /* Enlil Navy */
-      "color": "#011FBB",
+      "color": Colors.navy,
       "font-weight": 600,
-      "backgroundColor": "#F5F8FF",
+      "backgroundColor": Colors.sky_blue,
     },
   })
 )((props: WrapTabProps) => <Tab disableRipple {...props} />);
