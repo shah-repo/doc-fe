@@ -6,10 +6,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import ListIcon from "@material-ui/icons/List";
 import React from "react";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/myfeed.expand.svg";
+import { ReactComponent as MinizeIcon } from "../../../../../assets/images/myfeed.mimimize.svg";
 import { ReactComponent as RecentHoveredIcon } from "../../../../../assets/images/myfeed_recent_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as RecentSelectedIcon } from "../../../../../assets/images/recent_selected_myfeed_li.svg";
@@ -58,7 +58,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <ListItem button onClick={handleClick} onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
-        {open ? <ChevronRight /> : <ExpandMore />}
+        {open ? <MinizeIcon /> : <ExpandIcon />}
         <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
