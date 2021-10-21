@@ -109,9 +109,7 @@ const recentsData = [
 ];
 
 const RecentsContainer: React.FunctionComponent<{}> = () => {
-  const loadRecents = useActionCreator(
-    dashboardActions.loadRecentsList
-  );
+  const loadRecents = useActionCreator(dashboardActions.loadRecentsList);
   const loadRecentsListAsyncState = useSelector(
     dashboardSelectors.getLoadRecentsListAsyncInfo
   );

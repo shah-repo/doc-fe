@@ -9,7 +9,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const groupName = `Group ${moment().format("X")}`;
 
@@ -50,21 +49,14 @@ context("Autocomplete 'Official Groups' test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -79,23 +71,23 @@ context("Autocomplete 'Official Groups' test", () => {
       });
 
       it("Select 'Official' radio button", () => {
-        cy.get("input[value=\"official\"]").click();
+        cy.get("input[value=\"official\"]").arrowClick();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").type(groupName);
+        cy.get("#Group-groupName").arrowType(groupName);
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").click().type("{downarrow}{enter}");
+        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").click();
+        cy.get("#Group-createGroup").arrowClick();
       });
 
       it("Close dialog box", () => {
-        cy.get("#DialogContent-close").click();
+        cy.get("#DialogContent-close").arrowClick();
       });
     });
 
@@ -142,7 +134,7 @@ context("Autocomplete 'Official Groups' test", () => {
           });
 
           it("Select 'Official Groups' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Official Groups{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Official Groups{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -166,9 +158,9 @@ context("Autocomplete 'Official Groups' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const groups = response.body;

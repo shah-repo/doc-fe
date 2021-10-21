@@ -13,7 +13,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let formDocumentType;
 let subassemblyDocumentType;
 let adminEmployee;
@@ -519,7 +518,6 @@ context("Inspection flow", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -670,14 +668,8 @@ context("Inspection flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -1099,15 +1091,15 @@ context("Inspection flow", () => {
           cy.fbEnterLabel({ label: "Height" });
           cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
           cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").type("20");
-          cy.get("[name=\"editorConfig.range.to\"]").type("150");
+          cy.get("[name=\"editorConfig.range.from\"]").arrowType("20");
+          cy.get("[name=\"editorConfig.range.to\"]").arrowType("150");
           cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
           cy.get("[name=\"editorConfig.inspection\"]").check();
           cy.get("[name=\"editorConfig.passValue\"]").check();
-          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
-          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
-          cy.get("[id$=\"editorConfig.aql\"]").click();
-          cy.get("ul[role=listbox]>li").contains("1.0").click();
+          cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
+          cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
+          cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1119,15 +1111,15 @@ context("Inspection flow", () => {
           cy.fbEnterLabel({ label: "Width" });
           cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
           cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").type("20");
-          cy.get("[name=\"editorConfig.range.to\"]").type("150");
+          cy.get("[name=\"editorConfig.range.from\"]").arrowType("20");
+          cy.get("[name=\"editorConfig.range.to\"]").arrowType("150");
           cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
           cy.get("[name=\"editorConfig.inspection\"]").check();
           cy.get("[name=\"editorConfig.passValue\"]").check();
-          cy.get("[name=\"editorConfig.pass.value.from\"]").type("20");
-          cy.get("[name=\"editorConfig.pass.value.to\"]").type("150");
-          cy.get("[id$=\"editorConfig.aql\"]").click();
-          cy.get("ul[role=listbox]>li").contains("1.0").click();
+          cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
+          cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
+          cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1170,13 +1162,13 @@ context("Inspection flow", () => {
       });
 
       it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Make").click();
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
       });
 
       it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Batch").click();
+        cy.get("[id$=\"unit-of-measure\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Batch").arrowClick();
       });
 
       it("Select traceability required", () => {
@@ -1259,9 +1251,7 @@ context("Inspection flow", () => {
 
   context("Create Inspection document", () => {
     it("Create inspection from Form", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromFormRecord();
     });
 
     it("Enters title 'Inspection Document'", () => {
@@ -1277,7 +1267,7 @@ context("Inspection flow", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").type("12");
+      cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
 
     it("Check 100% override", () => {
@@ -1286,89 +1276,89 @@ context("Inspection flow", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-      cy.wait(5000);
+
     });
 
     it("Add 'Expiry Date'", () => {
-      cy.get("input[name=expiry-date]").parent().find("button").click();
-      cy.wait(500);
-      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().click();
-      cy.wait(5000);
+      cy.get("input[name=expiry-date]").parent().find("button").arrowClick();
+
+      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+
     });
 
     context("Fill samples with values", () => {
       it("Insert height for 'SAMPLE-1'", () => {
-        cy.get("input[name^=height]").eq(0).type("30");
+        cy.get("input[name^=height]").eq(0).arrowType("30");
       });
 
       it("Insert width for 'SAMPLE-1'", () => {
-        cy.get("input[name^=width]").eq(0).type("30");
+        cy.get("input[name^=width]").eq(0).arrowType("30");
       });
 
       it("Insert height for 'SAMPLE-2'", () => {
-        cy.get("input[name^=height]").eq(1).type("40");
+        cy.get("input[name^=height]").eq(1).arrowType("40");
       });
 
       it("Insert width for 'SAMPLE-2'", () => {
-        cy.get("input[name^=width]").eq(1).type("40");
+        cy.get("input[name^=width]").eq(1).arrowType("40");
       });
 
       it("Insert height for 'SAMPLE-3'", () => {
-        cy.get("input[name^=height]").eq(2).type("50");
+        cy.get("input[name^=height]").eq(2).arrowType("50");
       });
 
       it("Insert width for 'SAMPLE-3'", () => {
-        cy.get("input[name^=width]").eq(2).type("50");
+        cy.get("input[name^=width]").eq(2).arrowType("50");
       });
 
       it("Insert height for 'SAMPLE-4'", () => {
-        cy.get("input[name^=height]").eq(3).type("60");
+        cy.get("input[name^=height]").eq(3).arrowType("60");
       });
 
       it("Insert width for 'SAMPLE-4'", () => {
-        cy.get("input[name^=width]").eq(3).type("60");
+        cy.get("input[name^=width]").eq(3).arrowType("60");
       });
 
       it("Insert height for 'SAMPLE-5'", () => {
-        cy.get("input[name^=height]").eq(4).type("70");
+        cy.get("input[name^=height]").eq(4).arrowType("70");
       });
 
       it("Insert width for 'SAMPLE-5'", () => {
-        cy.get("input[name^=width]").eq(4).type("70");
+        cy.get("input[name^=width]").eq(4).arrowType("70");
       });
 
       it("Insert height for 'SAMPLE-6'", () => {
-        cy.get("input[name^=height]").eq(5).type("80");
+        cy.get("input[name^=height]").eq(5).arrowType("80");
       });
 
       it("Insert width for 'SAMPLE-6'", () => {
-        cy.get("input[name^=width]").eq(5).type("80");
+        cy.get("input[name^=width]").eq(5).arrowType("80");
       });
     });
 
     context("Fill lot summary", () => {
       it("Fill 'Accepted' textfield", () => {
-        cy.get("[name=lot_summary_accepted]").type("1");
+        cy.get("[name=lot_summary_accepted]").arrowType("1");
       });
 
       it("Fill 'Scrapped' textfield", () => {
-        cy.get("[name=lot_summary_scrapped]").type("1");
+        cy.get("[name=lot_summary_scrapped]").arrowType("1");
       });
 
       it("Fill 'Rework' textfield", () => {
-        cy.get("[name=lot_summary_rework]").type("4");
+        cy.get("[name=lot_summary_rework]").arrowType("4");
       });
 
       it("Fill 'Use As Is' textfield", () => {
-        cy.get("[name=lot_summary_use_as_is]").type("2");
+        cy.get("[name=lot_summary_use_as_is]").arrowType("2");
       });
 
       it("Fill 'Return To Vendor' textfield", () => {
-        cy.get("[name=lot_summary_return_to_vendor]").type("1");
+        cy.get("[name=lot_summary_return_to_vendor]").arrowType("1");
       });
 
       it("Fill 'Restricted Use' textfield", () => {
-        cy.get("[name=lot_summary_restricted_use]").type("3");
+        cy.get("[name=lot_summary_restricted_use]").arrowType("3");
       });
     });
 

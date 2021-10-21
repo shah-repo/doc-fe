@@ -19,6 +19,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   recents,
   recentsData,
 }) => {
+  // eslint-disable-next-line no-console
   console.log("Recents API Data:: ", recents);
   const classes = styles();
   const renderItems = () => (

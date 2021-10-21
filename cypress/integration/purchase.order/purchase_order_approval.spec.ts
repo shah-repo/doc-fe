@@ -14,7 +14,6 @@ Cypress.Screenshot.defaults({
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let thirdEmployee;
@@ -74,7 +73,6 @@ context("PO approval test", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         cy.grpAPICreateNewGroup({
           payload: {
             name: "Group with access to restricted doc types",
@@ -115,19 +113,12 @@ context("PO approval test", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
     it("Navigate to document list", () => {
@@ -259,9 +250,9 @@ context("PO approval test", () => {
     it("Click 'Save' document", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
-      cy.wait(500);
+
     });
 
     it("Approve and release document", () => {
@@ -328,7 +319,7 @@ context("PO approval test", () => {
 
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
@@ -344,10 +335,10 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wait(2000);
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
       });
     });
 
@@ -358,15 +349,15 @@ context("PO approval test", () => {
     it("Create document in 'Pending approval' state", () => {
       SystemRequirement("REQ-1520");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Click on 'Withdraw Submission' button", () => {
       SystemRequirement("REQ-1530");
-      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").click();
+      cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"AlertDialog-continueButton\"]").click();
+        cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
     });
 
@@ -415,16 +406,16 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.wait(2000);
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
       });
     });
 
     it("Create document in 'Pending approval' state", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
@@ -432,14 +423,8 @@ context("PO approval test", () => {
       cy.authLogout();
     });
 
-    it(`Log in with '${USERS[3].name}'`, () => {
-      cy.authLogin({
-        email: USERS[3].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
     it("Check for PO notification on dashboard", () => {
@@ -450,13 +435,16 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
-      cy.get("[data-cy=\"transition-reject\"]").first().click().wait(300);
-      cy.get("#AlertDialog-continueButton").click();
+      cy.get("[data-cy=\"transition-reject\"]").first().arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+        cy.get("#AlertDialog-continueButton").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
 
     it("Navigate to Doc List", () => {
-      cy.navigToDocumentList().wait(2000);
+      cy.navigToDocumentList();
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {

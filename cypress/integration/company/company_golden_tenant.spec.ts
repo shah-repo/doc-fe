@@ -1388,10 +1388,7 @@ context("Create company with golden tenant", () => {
 
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed'", () => {
@@ -1403,7 +1400,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'First document'", () => {
-      cy.get("[data-cy^=document-title-]").type("First document");
+      cy.get("[data-cy^=document-title-]").arrowType("First document");
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
@@ -1420,22 +1417,22 @@ context("Create company with golden tenant", () => {
 
     it("Enters document description 'First document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("First document description", { force: true });
+        .click({ force: true }).arrowType("First document description", { force: true });
     });
 
     it("Selects document type as 'Form'", () => {
-      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").click();
-      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").click();
+      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
+      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
-      cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").click();
+      cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
       cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
-        .contains("li", "Clinical Protocol").click();
+        .contains("li", "Clinical Protocol").arrowClick();
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.get("[name^=training-required-]").eq(1).arrowClick();
     });
 
     it("Save document", () => {
@@ -1460,10 +1457,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed 2'", () => {
@@ -1475,7 +1469,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").type("Second document");
+      cy.get("[data-cy^=document-title-]").arrowType("Second document");
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
@@ -1488,14 +1482,14 @@ context("Create company with golden tenant", () => {
 
     it("Enters document description 'Second document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("Second document description", { force: true });
-      cy.get("[data-cy^=document-title-]").click();
+        .click({ force: true }).arrowType("Second document description", { force: true });
+      cy.get("[data-cy^=document-title-]").arrowClick();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
-      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").click();
+      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
       cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
-        .contains("li", "Clinical Protocol").click();
+        .contains("li", "Clinical Protocol").arrowClick();
     });
 
     it("Selects 'No' training required option", () => {
@@ -1524,10 +1518,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Company'", () => {
@@ -1540,17 +1531,17 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-name-]").type(newCompanyName);
+      cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-admin-email-]").type(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -1587,15 +1578,16 @@ context("Create company with golden tenant", () => {
 
     it("Include Seed documents", () => {
       SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
-      cy.wait(1500);
-      cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
-      cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00002{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
+      });
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
     });
 
     it("Upload logo picture 'image.jpg'", () => {
       SystemRequirement("REQ-3500");
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).click();
+      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 

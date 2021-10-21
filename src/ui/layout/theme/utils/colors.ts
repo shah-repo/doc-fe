@@ -37,7 +37,7 @@ enum Colors {
   pale_green = "#f0f7d2",
   // yellow
   light_yellow = "#FFF3CD",
-  dark_yellow = "#856404"
+  dark_yellow = "#856404",
 }
 
 export default Colors;

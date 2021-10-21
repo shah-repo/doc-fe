@@ -25,8 +25,8 @@ const TrainingRequest: React.FunctionComponent<Props> = ({
     { id: "dashboard.title.training" },
     {
       docId: trainingRecord?.trainingPlan?.document.docId,
-      docTitle: trainingRecord?.documentRevision?.name,
       version: trainingRecord?.documentRevision?.displayRevision,
+      docTitle: trainingRecord?.documentRevision?.name,
     },
   ));
 
