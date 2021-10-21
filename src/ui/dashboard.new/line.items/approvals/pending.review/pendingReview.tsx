@@ -33,13 +33,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
+    },
+    colorPrimary: {
       color: Colors.latest_blue_varient,
     },
   })(Chip);
 
-  const HoverStyleChip = withStyles({
+  const  HoverStyleChip = withStyles({
     root: {
       backgroundColor: Colors.latest_blue_varient,
+    },
+    colorPrimary: {
       color: Colors.white,
     },
   })(Chip);
@@ -91,9 +95,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                 >
                   {!hoverItem &&
-                  <NormalStyleChip size="small" icon={<RecentSelectedIcon />}
+                  <NormalStyleChip size="small" color="primary" icon={<RecentSelectedIcon />}
                     label={status}/>}
-                  {hoverItem && <HoverStyleChip size="small" icon={<RecentHoveredIcon/>}
+                  {hoverItem && <HoverStyleChip color="primary" size="small" icon={<RecentHoveredIcon/>}
                     label={status}/>}
                 </Typography>&nbsp;
                 <Typography
