@@ -170,7 +170,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   }
                   color="textSecondary"
                 >
-                  . {dueDate}
+                  &nbsp;. {dueDate}
                 </Typography>
               </Grid>
             </Grid>
