@@ -19,6 +19,11 @@ export const styles = makeStyles((theme: Theme) =>
     typography: {
       fontSize: "14px",
       fontFamily: "Sora",
+      fontWeight: 400,
+    },
+    typographyBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
       fontWeight: 600,
     },
     timestampContainer: {

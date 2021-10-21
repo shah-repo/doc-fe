@@ -30,18 +30,20 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id, status, title, verbose, timestamp,
 }) => {
   const classes = styles();
-  const StyleChip = withStyles({
+  const NormalStyleChip = withStyles({
     root: {
-      "backgroundColor": Colors.white,
-      "&:hover": {
-        backgroundColor: Colors.latest_blue_varient,
-        color: Colors.white,
-      },
-    },
-    colorPrimary: {
+      backgroundColor: Colors.white,
       color: Colors.latest_blue_varient,
     },
   })(Chip);
+
+  const HoverStyleChip = withStyles({
+    root: {
+      backgroundColor: Colors.latest_blue_varient,
+      color: Colors.white,
+    },
+  })(Chip);
+
   const [open, setOpen] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handleClick = () => {
@@ -56,8 +58,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log(" Pending Review Presenter :::");
   return (
-    <div onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
-      <ListItem button onClick={handleClick}>
+    <>
+      <ListItem button onClick={handleClick} onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
         {open ? <MinizeIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
         <ListItemIcon>
           <PendingReviewIcon />
@@ -72,12 +74,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  <b>{id} </b>
+                  {id}&nbsp;
                 </Typography>
                 <Typography
                   component="span"
                   variant="body2"
-                  className={classes.typography}
+                  className={classes.typographyBold}
                   color="textPrimary"
                 >
                   {title}
@@ -88,13 +90,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  <StyleChip size="small" icon={hoverItem ? <RecentHoveredIcon/> : <RecentSelectedIcon />}
-                    color="primary" label={status}/>
+                  {!hoverItem &&
+                  <NormalStyleChip size="small" icon={<RecentSelectedIcon />}
+                    label={status}/>}
+                  {hoverItem && <HoverStyleChip size="small" icon={<RecentHoveredIcon/>}
+                    label={status}/>}
                 </Typography>&nbsp;
                 <Typography
                   component="span"
                   variant="body2"
-                  className={classes.typography}
+                  className={classes.typographyBold}
                   color="textPrimary"
                 >
                   {verbose}
@@ -174,8 +179,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           </ListItem>
         </List>
       </Collapse>
-
-    </div>
+    </>
   );
 };
 
