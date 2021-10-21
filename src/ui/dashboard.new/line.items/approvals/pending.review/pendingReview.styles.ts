@@ -1,5 +1,5 @@
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -9,12 +9,31 @@ export const styles = makeStyles((theme: Theme) =>
     nested: {
       // paddingLeft: theme.spacing(4),
       marginLeft: "40px",
-      borderLeft: "1px solid #7C4EFF",
+      borderLeft: "1px solid #CBD5E0",
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
     },
     icon: {
       width: "7px",
+    },
+    listItemIcon: {
+      paddingLeft: "5px",
+    },
+    actionIcons: {
+      /* Action Icons */
+      /* Auto Layout */
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "0px 10px",
+      position: "absolute",
+      width: "44px",
+      height: "62px",
+      right: "0px",
+      top: "0px",
+      /* Highlight */
+      background: Colors.sky_blue,
     },
     typography: {
       fontSize: "14px",
@@ -26,10 +45,20 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       fontWeight: 600,
     },
-    timestampContainer: {
-      fontSize: "12px",
+    typographyStatus: {
       fontFamily: "Sora",
-      fontWeight: 400,
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "14px",
+      lineHeight: "15px",
+    },
+    timestampContainer: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "12px",
+      lineHeight: "22px",
+      color: Colors.font_gray,
     },
   }
   ));

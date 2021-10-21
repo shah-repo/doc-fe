@@ -39,52 +39,52 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
         feedItems.map((pendingAction, index) => {
           switch (pendingAction.type) {
             case ActionTypes.PENDING_REVIEW:
-              return <PendingReview  id={pendingAction.id} type={pendingAction.type}
+              return <PendingReview id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.NEW_TRAINING_RECORDS:
-              return <NewTraining  id={pendingAction.id} type={pendingAction.type}
+              return <NewTraining id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 dueDate ={pendingAction.dueDate}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_TRAINING_RECORDS:
-              return <PendingTraining  id={pendingAction.id} type={pendingAction.type}
+              return <PendingTraining id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 dueDate ={pendingAction.dueDate}/>;
             case ActionTypes.PURCHASE_ORDERS:
-              return <PurchaseOrder  id={pendingAction.id} type={pendingAction.type}
+              return <PurchaseOrder id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_DOC_CONTROL:
             case ActionTypes.PENDING_TASK:
-              return <TaskApproval  id={pendingAction.id} type={pendingAction.type}
+              return <TaskApproval id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 requestedBy={pendingAction.requestedBy}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.APPROVED_APPROVAL_REQUESTS:
-              return <ApprovalApproved  id={pendingAction.id} type={pendingAction.type}
+              return <ApprovalApproved id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.RELEASE_APPROVAL_REQUESTS:
-              return <ApprovalRelease  id={pendingAction.id} type={pendingAction.type}
+              return <ApprovalRelease id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.REJECT_APPROVAL_REQUESTS:
-              return <ApprovalReject  id={pendingAction.id} type={pendingAction.type}
+              return <ApprovalReject id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}

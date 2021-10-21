@@ -1,5 +1,5 @@
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,6 +14,25 @@ export const styles = makeStyles((theme: Theme) =>
     },
     icon: {
       width: "7px",
+    },
+    listItemIcon: {
+      paddingLeft: "5px",
+    },
+    actionIcons: {
+      /* Action Icons */
+      /* Auto Layout */
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "0px 10px",
+      position: "absolute",
+      width: "44px",
+      height: "62px",
+      right: "0px",
+      top: "0px",
+      /* Highlight */
+      background: Colors.sky_blue,
     },
     typography: {
       fontSize: "14px",
@@ -30,10 +49,20 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       fontWeight: 700,
     },
-    timestampContainer: {
-      fontSize: "12px",
+    typographyStatus: {
       fontFamily: "Sora",
-      fontWeight: 400,
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "14px",
+      lineHeight: "15px",
+    },
+    timestampContainer: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "12px",
+      lineHeight: "22px",
+      color: Colors.font_gray,
     },
     gridContainer: {
       paddingLeft: "14px",
