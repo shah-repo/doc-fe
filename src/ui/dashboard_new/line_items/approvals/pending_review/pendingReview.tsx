@@ -10,6 +10,7 @@ import ChevronRight from "@material-ui/icons/ChevronRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ListIcon from "@material-ui/icons/List";
 import React from "react";
+import { ReactComponent as RecentHoveredIcon } from "../../../../../assets/images/myfeed_recent_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as RecentSelectedIcon } from "../../../../../assets/images/recent_selected_myfeed_li.svg";
 import Colors from "../../../../layout/theme/utils/colors";
@@ -31,21 +32,32 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const StyleChip = withStyles({
     root: {
-      backgroundColor: Colors.white,
+      "backgroundColor": Colors.white,
+      "&:hover": {
+        backgroundColor: Colors.latest_blue_varient,
+        color: Colors.white,
+      },
     },
     colorPrimary: {
       color: Colors.latest_blue_varient,
     },
   })(Chip);
   const [open, setOpen] = React.useState(false);
+  const [hoverItem, setHoverItem] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
+  const onhoverItem = () => {
+    setHoverItem(!hoverItem);
+  };
+  const onMouseLeaveItem = () => {
+    setHoverItem(!hoverItem);
+  };
   // eslint-disable-next-line no-console
-  console.log("PendingReviewPresenter :::");
+  console.log(" Pending Review Presenter :::");
   return (
     <>
-      <ListItem button onClick={handleClick}>
+      <ListItem button onClick={handleClick} onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
         {open ? <ChevronRight /> : <ExpandMore />}
         <ListItemIcon>
           <PendingReviewIcon />
@@ -76,7 +88,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  <StyleChip size="small" icon={<RecentSelectedIcon />}
+                  <StyleChip size="small" icon={hoverItem ? <RecentHoveredIcon/> : <RecentSelectedIcon />}
                     color="primary" label={status}/>
                 </Typography>&nbsp;
                 <Typography
