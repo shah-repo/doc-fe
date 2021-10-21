@@ -162,6 +162,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
           cy.visit(CONFIG.FE_URL, { timeout: 50000 });
         });
         addTestContext("user", loginResponse.email);
+        cy.log(loginResponse.email);
       });
     });
 });
