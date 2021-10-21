@@ -3,25 +3,25 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
+import Text from "../../components/Text";
 
 const useStyles = makeStyles((theme: Theme) => ({
   outline: {
-    // border: "1px solid grey",
     overflow: "auto",
     minHeight: "calc(100vh - 145px)",
     maxHeight: "calc(100vh - 145px)",
   },
 }));
 
-function Trainings() {
+const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
       <CardContent>
-      Training Container
+        <Text translation={"training.container.title"} />
         {/* <TrainingsPresenter /> */}
       </CardContent>
     </Card>);
-}
+};
 
-export default Trainings;
+export default TrainingsLineItemsContainer;

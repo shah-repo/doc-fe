@@ -19,38 +19,41 @@ declare global {
 }
 
 Cypress.Commands.add("usrNavigateToUserManagement", () => {
-  cy.get("[data-cy=\"navigation.userManagement\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
+    cy.get("[data-cy=\"navigation.userManagement\"]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {
-  cy.get("#AddEmployeePresenter-openDialog").click();
+  cy.get("#AddEmployeePresenter-openDialog").arrowClick();
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonEmail").type(params.email);
+  cy.get("#AddEmployeeFormPresenter-commonEmail").arrowType(params.email);
 });
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonName").type(params.name);
+  cy.get("#AddEmployeeFormPresenter-commonName").arrowType(params.name);
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGetActive], () => {
-    cy.get("#AddEmployeeFormPresenter-submitForm").click();
+    cy.get("#AddEmployeeFormPresenter-submitForm").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {
-  cy.get("#AddEmployeeDialogPresenter-closeDialog").click();
+  cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
 });
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#clearFilter").click();
+    cy.get("#clearFilter").arrowClick();
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#email").type(params.email);
+    cy.get("#email").arrowType(params.email);
   });
   cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
 });

@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export default (theme: Theme) =>
@@ -11,7 +12,7 @@ export default (theme: Theme) =>
       "right": 60,
       "borderRadius": "12px 12px 0 0",
       "overflow": "auto",
-      "backgroundColor": "white",
+      "backgroundColor": Colors.white,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",

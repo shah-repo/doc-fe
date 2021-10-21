@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLogin;
 
 context("Autosave on leaving page while data is still not saved", () => {
   context("[API]Prepare company", () => {
@@ -36,6 +36,7 @@ context("Autosave on leaving page while data is still not saved", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLogin = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -46,21 +47,14 @@ context("Autosave on leaving page while data is still not saved", () => {
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLogin.id });
     });
   });
 
@@ -106,7 +100,7 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -130,8 +124,8 @@ context("Autosave on leaving page while data is still not saved", () => {
 
     it("Type 'Test description' inside title field", () => {
       cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .clear().type("Test description");
-      cy.get("[data-cy=field-description]>label").click();
+        .clear().arrowType("Test description");
+      cy.get("[data-cy=field-description]>label").arrowClick();
     });
 
     it("Navigate to document list and wait for pop-up to prompt for unsaved changes then click 'Cancel'", () => {
@@ -194,7 +188,7 @@ context("Autosave on leaving page while data is still not saved", () => {
   //   });
 
   //   it("Enter value for custom text field", () => {
-  //     cy.get("[name^=fb-textfield-]").type("Test disabled autosave");
+  //     cy.get("[name^=fb-textfield-]").arrowType("Test disabled autosave");
   //   });
 
   //   it("Navigate to document list and check if pop-up for unsaved data is prompted", () => {
@@ -218,7 +212,10 @@ context("Autosave on leaving page while data is still not saved", () => {
     });
 
     it("Enter value for custom text field", () => {
-      cy.get("[name^=fb-textfield-]").type("Test edit field second time");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[name^=fb-textfield-]").arrowType("Test edit field second time");
+        cy.unClick();
+      });
     });
 
     it("Save document", () => {

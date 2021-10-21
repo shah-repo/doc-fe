@@ -11,7 +11,7 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 let secondEmployee;
 let recordDocumentType;
 let testDocumentType;
@@ -67,6 +67,7 @@ context("Document form upgrade", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record Document");
           testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
@@ -82,7 +83,6 @@ context("Document form upgrade", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1;
         done();
       });
     });
@@ -141,7 +141,6 @@ context("Document form upgrade", () => {
                     index: 1,
                     type: "section",
                     name: "old-textfield-kn7fc209",
-                    omitFinalValidation: true,
                     validationMode: "default",
                     label: "Old section",
                     applicableOn: [
@@ -220,7 +219,6 @@ context("Document form upgrade", () => {
                 index: 0,
                 type: "section",
                 name: "old-section-kn7ffn15",
-                omitFinalValidation: true,
                 validationMode: "default",
                 label: "Old section",
                 applicableOn: [
@@ -267,14 +265,8 @@ context("Document form upgrade", () => {
   });
 
   context("Login user", () => {
-    it("Log user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -289,7 +281,7 @@ context("Document form upgrade", () => {
 
     it("Select the Record form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -307,7 +299,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -325,9 +317,9 @@ context("Document form upgrade", () => {
 
     it("Select the Document form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocTitle({ docTitle: "Test document form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -345,7 +337,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter text in old textfield", () => {
-        cy.get("[name^=\"old-textfield\"]").type("Test one");
+        cy.get("[name^=\"old-textfield\"]").arrowType("Test one");
       });
     });
 
@@ -363,9 +355,9 @@ context("Document form upgrade", () => {
 
     it("Select the created Record form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocTitle({ docTitle: "Record form" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -410,9 +402,9 @@ context("Document form upgrade", () => {
 
     it("Select the created Document form", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocId({ docId: "FM-00004" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -457,9 +449,9 @@ context("Document form upgrade", () => {
 
     it("Select document", () => {
       cy.dlClearFilters();
-      cy.wait(1000);
+
       cy.dlFilterByDocId({ docId: "TDT-00005" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
     });
 
@@ -482,7 +474,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
     });
 
@@ -511,9 +503,9 @@ context("Document form upgrade", () => {
 
     it("Select Record", () => {
       cy.dlFilterByDocId({ docId: "RD-00002" });
-      cy.wait(1000);
+
       cy.dlSelectFirstDocument();
-      cy.wait(1000);
+
     });
 
     it("Click on upgrade to new form", () => {
@@ -535,7 +527,7 @@ context("Document form upgrade", () => {
       });
 
       it("Enter value to new textfield", () => {
-        cy.get("input[name^=\"new-textfield\"]").type("Test two");
+        cy.get("input[name^=\"new-textfield\"]").arrowType("Test two");
       });
 
       context("Release updated record", () => {
@@ -573,6 +565,8 @@ context("Document form upgrade", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check that A.1 version was created", () => {

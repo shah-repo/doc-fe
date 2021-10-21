@@ -1,3 +1,4 @@
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 /* eslint-disable max-classes-per-file */
@@ -105,7 +106,7 @@ Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string;
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").click();
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
       cy.get("#attachments-button-file-clean-copy").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
@@ -128,7 +129,7 @@ Cypress.Commands.add("atchUploadAttachmentFail", (params: {fileName: string }) =
     });
   }).as("upload");
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.get("#AttachmentFieldPresenter-linkButton").click();
+    cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
     cy.get("#attachments-button-file-clean-copy").attachFile({
       fileContent: fileContent.toString(),
       fileName: params.fileName,
@@ -166,7 +167,7 @@ Cypress.Commands.add("attachFiles", { prevSubject: "element" },
 Cypress.Commands.add("atchUploadRedlineAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").click();
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
       cy.get("#attachments-button-file-red-line").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
@@ -185,7 +186,7 @@ Cypress.Commands.add("atchUploadRedlineVerifyCleanCopyStatus", (params: {fileNam
       cy.get("body").then(($body) => {
         const inputField = $body.find("#UploadFile-content");
         if (inputField.length === 0) {
-          cy.get("#AttachmentFieldPresenter-linkButton").click();
+          cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
         }
       });
       cy.get("#attachments-button-file-red-line").attachFile({
@@ -202,14 +203,14 @@ Cypress.Commands.add("atchUploadRedlineVerifyCleanCopyStatus", (params: {fileNam
 Cypress.Commands.add("atchSetPrimaryAttachment", (params: {fileName: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.SetPrimaryAttachment, () => {
     cy.get(`button[title="${params.fileName}"]`).rightclick();
-    cy.wait(500);
-    cy.get("[data-cy=\"set.attachment.as.primary\"]").click();
+
+    cy.get("[data-cy=\"set.attachment.as.primary\"]").arrowClick();
   });
 });
 
 Cypress.Commands.add("atchRemoveLastAttachment", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-    cy.get("[id=AttachmentIconPresenter-handleRemove]").last().click();
+    cy.get("[id=AttachmentIconPresenter-handleRemove]").last().arrowClick();
   });
 });
 
@@ -226,7 +227,7 @@ Cypress.Commands.add("atchCheckDisplayedAttachments", (params: {fileNames: strin
 
 Cypress.Commands.add("atchRemoveAttachment", (params: {fileName: string }) => {
   cy.xpath(`//span[@title="${params.fileName}"]`).trigger("mouseover");
-  cy.xpath(`//span[@title="${params.fileName}"]/../../div[3]`).click();
+  cy.xpath(`//span[@title="${params.fileName}"]/../../div[3]`).arrowClick();
 });
 
 Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attributes: string}) => {
@@ -234,7 +235,7 @@ Cypress.Commands.add("atchCheckAtributes", (params: {fileName: string; attribute
 });
 
 Cypress.Commands.add("closeAtchUploadDialog", () => {
-  cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").click();
+  cy.get("[data-cy=\"AttachmentFieldPresenter-handleRemove\"]").arrowClick();
 });
 
 Cypress.Commands.add("atchCheckDisplayedAtLast", (params: {fileName: string }) => {
@@ -248,7 +249,7 @@ Cypress.Commands.add("atchCheckRedLineIndicator", (params: {fileName: string }) 
 Cypress.Commands.add("atchNoPrimaryForRedline", (params: {fileName: string }) => {
   cy.get(`button[title="${params.fileName}"]`).rightclick();
   cy.get("[data-cy=\"set.attachment.as.primary\"]").should("not.be.visible");
-  cy.get("[data-cy=\"field-name\"]").click({ force: true });
+  cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileName: string }) => {
@@ -261,12 +262,12 @@ Cypress.Commands.add("atchDownloadFile", (params: {fileName: string; saveFileNam
     });
   }).as("attach");
   cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
-  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").click();
+  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(1)").arrowClick();
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
-      cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"passwordConfirm\"]").click();
+      cy.get("[id=\"passwordConfirm\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     }
   });
   cy.wait("@attach").then((res) => {
@@ -289,12 +290,12 @@ Cypress.Commands.add("atchDownloadCleanCopyFile", (params: {fileName: string; sa
     });
   }).as("attach");
   cy.get("div[data-cy=\"attachment\"]").contains(params.fileName).rightclick();
-  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(2)").click();
+  cy.get("div[id=\"simple-menu\"]>div>ul[role=\"menu\"]>li:nth-child(2)").arrowClick();
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
-      cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"passwordConfirm\"]").click();
+      cy.get("[id=\"passwordConfirm\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     }
   });
   cy.wait("@attach").then((res) => {
@@ -316,12 +317,12 @@ Cypress.Commands.add("atchDownloadAll", () => {
       }
     });
   }).as("attach");
-  cy.get("#AttachmentFieldPresenter-downloadAllButton").click();
+  cy.get("#AttachmentFieldPresenter-downloadAllButton").arrowClick();
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
-      cy.get("[id=\"passwordConfirm\"]").click();
-      cy.get("[data-cy=\"transition.action.password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"passwordConfirm\"]").click();
+      cy.get("[id=\"passwordConfirm\"]").arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     }
   });
   cy.wait("@attach").then((res) => {
@@ -361,7 +362,7 @@ Cypress.Commands.add("elDownloadFile", (params: {fileName: string; saveFileName:
     });
   }).as("attach");
   cy.contains(params.fileName).rightclick();
-  cy.contains(`Download attached file ${params.fileName}`).click();
+  cy.contains(`Download attached file ${params.fileName}`).arrowClick();
   cy.wait("@attach").then((res) => {
     const fileUrl = res.response?.body.toString();
     cy.downloadFile({

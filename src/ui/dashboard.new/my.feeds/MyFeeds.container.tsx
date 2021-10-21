@@ -1,10 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
-import MyFeedsPresenter from "./MyFeeds.presenter";
-
-// TC-00095 Work Ethics Briefing long title is long like t... IN REVIEW       pending approvals from
-// Josh, Julie, Charlie, Mathew, Rogers, Pierre, Jennifer, Jonelle, Jon, +3  •  Sep 02, 2021  8:12 AM
-
+import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 const feedItems = [
   {
     id: "TC-00095",
@@ -103,11 +99,7 @@ const feedItems = [
     requestedBy: "Ramesh",
   },
 ];
+const MyFeedsLineItemsContainer: React.FunctionComponent = () => (
+  <MyFeedsLineItemPresenter {...{ feedItems }}/>);
 
-
-function MyFeeds() {
-  return (
-    <MyFeedsPresenter {...{ feedItems }}/>);
-}
-
-export default MyFeeds;
+export default MyFeedsLineItemsContainer;

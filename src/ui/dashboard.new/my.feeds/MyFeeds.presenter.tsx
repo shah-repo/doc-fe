@@ -5,14 +5,14 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
-import ApprovalApproved from "../line_items/approvals/approval_approved/approvalApproved";
-import ApprovalReject from "../line_items/approvals/approval_reject/approvalReject";
-import ApprovalRelease from "../line_items/approvals/approval_release/approvalRelease";
-import PendingReview from "../line_items/approvals/pending_review/pendingReview";
-import TaskApproval from "../line_items/approvals/task_approval/taskApproval";
-import PurchaseOrder from "../line_items/purchase_order/purchaseOrder";
-import NewTraining from "../line_items/training/new_training/newTraining";
-import PendingTraining from "../line_items/training/pending_training/pendingTraining";
+import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
+import ApprovalReject from "../line.items/approvals/approval.reject/approvalReject";
+import ApprovalRelease from "../line.items/approvals/approval.release/approvalRelease";
+import PendingReview from "../line.items/approvals/pending.review/pendingReview";
+import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
+import PurchaseOrder from "../line.items/purchase.order/purchaseOrder";
+import NewTraining from "../line.items/training/new.training/newTraining";
+import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -29,7 +29,7 @@ interface Props {
     approvers: string[];
   }[];
 }
-const MyFeedsPresenter: React.FunctionComponent<Props> = ({
+const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   feedItems,
 }) => {
   const classes = styles();
@@ -115,4 +115,4 @@ const MyFeedsPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default MyFeedsPresenter;
+export default MyFeedsLineItemPresenter;

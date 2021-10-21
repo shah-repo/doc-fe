@@ -9,7 +9,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 let clinicalProtocolDocumentType;
 let group;
@@ -58,7 +57,6 @@ context("Approval request form", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -146,15 +144,8 @@ context("Approval request form", () => {
     });
   });
   context("Login user", () => {
-    it("Logs user in", () => {
-      SystemRequirement("REQ-4140");
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -203,7 +194,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -220,7 +211,7 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -332,7 +323,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -350,7 +341,7 @@ context("Approval request form", () => {
 
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -374,7 +365,7 @@ context("Approval request form", () => {
     // it("Add 'Implementation Task' to AR", () => {
     //   cy.fbClickAddNewHiddenBtn();
     //   cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-    //   cy.get("[data-cy=\"label\"]").type("Implementation Task");
+    //   cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
     //   cy.fbAddField();
     // });
   });

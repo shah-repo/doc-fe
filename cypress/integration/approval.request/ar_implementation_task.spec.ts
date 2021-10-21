@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 let componentSpecificationDocumentType;
 let group;
@@ -59,7 +58,6 @@ context("Approval request implementation tasks", () => {
         email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -107,14 +105,8 @@ context("Approval request implementation tasks", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -152,7 +144,7 @@ context("Approval request implementation tasks", () => {
     it("Add 'Implementation Task' to AR", () => {
       cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").type("Implementation Task");
+      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
       cy.fbAddField();
     });
 
@@ -172,7 +164,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -189,7 +181,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -211,13 +203,13 @@ context("Approval request implementation tasks", () => {
   context("Add implementation task and continue AR creation flow", () => {
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").click();
-      cy.get("[data-cy=\"title\"]").type("Task One");
-      cy.get("[data-cy=\"description\"]").next().type("Task Description");
-      cy.get("[data-cy=\"assigned\"]").type(`${USERS[2].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
+      cy.get("[data-cy=\"title\"]").arrowType("Task One");
+      cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
+      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[2].email}{downarrow}{enter}`);
       cy.poAddDateRequired();
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
       });
     });
 
@@ -251,12 +243,12 @@ context("Approval request implementation tasks", () => {
 
     it("Complete Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).click();
-      cy.get("[data-cy=\"description\"]").next().type("Task is done");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
+      cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
       });
-      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).click();
+      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
     });
 
     it("Check 'Implementation task' status is 'Done'", () => {
