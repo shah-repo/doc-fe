@@ -156,7 +156,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   className={status === "OVERDUE" ? classes.typographyOverdue : classes.typographyDueInfewDays}
                   color="textSecondary"
                 >
-                  . {dueDate}
+                  &nbsp;. {dueDate}
                 </Typography>
               </Grid>
             </Grid>
