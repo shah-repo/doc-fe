@@ -1,4 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import {
+  dashboardActions,
+  dashboardSelectors,
+} from "../../../state/ducks/dashboard.new";
+import useActionCreator from "../../hooks/useActionCreator";
 import RecentsPresenter from "./Recents.presenter";
 
 const recentsData = [
@@ -102,10 +108,26 @@ const recentsData = [
   },
 ];
 
-const RecentsContainer: React.FunctionComponent<{}> = () => (
-  <>
-    <RecentsPresenter {...{ recentsData }} />
-  </>
-);
+const RecentsContainer: React.FunctionComponent<{}> = () => {
+  const loadRecents = useActionCreator(
+    dashboardActions.loadRecentsList
+  );
+  const loadRecentsListAsyncState = useSelector(
+    dashboardSelectors.getLoadRecentsListAsyncInfo
+  );
+  const recents = useSelector(dashboardSelectors.recents);
+  return (
+    <>
+      <RecentsPresenter
+        {...{
+          loadRecents,
+          loadRecentsListAsyncState,
+          recents,
+          recentsData,
+        }}
+      />
+    </>
+  );
+};
 
 export default RecentsContainer;

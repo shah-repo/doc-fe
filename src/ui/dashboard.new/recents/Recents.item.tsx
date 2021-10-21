@@ -1,11 +1,15 @@
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { truncate } from "lodash";
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
 import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
-// import { styles } from "./Recents.styles";
+import { styles } from "./Recents.item.styles";
 interface Props {
   id: string;
   docId: string;
@@ -21,23 +25,24 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   title,
   createdAt,
 }) => {
-  // const classes = styles();
+  const classes = styles();
   const titleRender = (type, docId, title, createdAt) => (
-    <div>
+    <Typography display="inline" className={classes.titletext}>
       {`${docId} `}
       {type === "PO" && <span> to </span>}
-      <strong>
-        {truncate(`${title}`, {
+      <b>
+        {/* {truncate(`${title}`, {
           length: 30,
           separator: "...",
-        })}
-        .
-      </strong>{" "}
-      <small>{createdAt}</small>
-    </div>
+        })}{" "} */}
+        {title}
+        &#46;
+      </b>
+      <small>{` ${createdAt}`}</small>
+    </Typography>
   );
   return (
-    <ListItem key={id} button>
+    <ListItem key={id} button className={classes.listitem}>
       <ListItemIcon>
         <>
           {type === "PO" && <POIcon />}

@@ -1,9 +1,5 @@
-import { createStyles } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
+import { createStyles, Grid, Tab, Tabs, Toolbar } from "@material-ui/core";
 import { makeStyles, Theme, withStyles } from "@material-ui/core/styles";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
-import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
@@ -13,79 +9,52 @@ import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
-import MyFeeds from "./my_feeds/MyFeeds.container";
+import Colors from "../layout/theme/utils/colors";
+import MyFeeds from "./my.feeds/MyFeeds.container";
 import Recents from "./recents/Recents.container";
+import TrainingStats from "./training.stats/TrainingStats";
 import Trainings from "./trainings/Trainings.container";
-import TrainingStats from "./training_stats/TrainingStats";
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
   value: any;
   isDashboardAdmin: boolean;
 }
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, isDashboardAdmin, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-auto-tabpanel-${index}`}
-      aria-labelledby={`scrollable-auto-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Grid container={true}>
-          <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
-            {value === 0 && <MyFeeds />}
-            {value === 1 && isDashboardAdmin && <Trainings />}
-            {value === 1 && !isDashboardAdmin && <Recents />}
-            {value === 2 && isDashboardAdmin && <Recents />}
-          </Grid>
-          {isDashboardAdmin && (
-            <Grid item={true} md={4} sm={12}>
-              <TrainingStats />
-            </Grid>
-          )}
-        </Grid>
-      )}
-    </div>
-  );
-}
 interface StyledTabsProps {
-  // textColor: string;
   value: number;
   onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
 }
-
-const StyledTabs = withStyles({
-  indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
-    "& > span": {
-      width: "100%",
-      backgroundColor: "#FFFFFF",
-    },
-  },
-  selected: {
-    backgroundColor: "red",
-  },
-})((props: StyledTabsProps) => (
-  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
-));
-interface WrapTabProps {
+interface StyledTabProps {
   label: any;
 }
 
-const WrapTab = withStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  toolbar: {
+    top: 18,
+    left: 15,
+  },
+  tabItemText: {
+    marginLeft: 10,
+  },
+  tabContent: {},
+}));
+
+function dynamicObjProps(index: any) {
+  return {
+    "id": `scrollable-auto-tab-${index}`,
+    "aria-controls": `scrollable-auto-tabpanel-${index}`,
+  };
+}
+
+const StyledTab = withStyles((theme: Theme) =>
   createStyles({
     root: {
       "min-width": "125px",
       /* Font Gray */
-      "color": "#767B87",
+      "color": Colors.font_gray,
       "borderRadius": "100px",
       /* Heading 21 */
       "position": "static",
@@ -112,32 +81,56 @@ const WrapTab = withStyles((theme: Theme) =>
     selected: {
       "opacity": 1,
       /* Enlil Navy */
-      "color": "#011FBB",
+      "color": Colors.navy,
       "font-weight": 600,
-      "backgroundColor": "#F5F8FF",
+      "backgroundColor": Colors.sky_blue,
     },
   })
-)((props: WrapTabProps) => <Tab disableRipple {...props} />);
+)((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
+const StyledTabs = withStyles({
+  indicator: {
+    "display": "flex",
+    "justifyContent": "center",
+    "backgroundColor": "transparent",
+    "& > span": {
+      width: "100%",
+      backgroundColor: Colors.white,
+    },
   },
-  toolbar: {
-    top: 18,
-    left: 15,
-  },
-  tabContent: {},
-}));
+})((props: StyledTabsProps) => (
+  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
+));
 
-function a11yProps(index: any) {
-  return {
-    "id": `scrollable-auto-tab-${index}`,
-    "aria-controls": `scrollable-auto-tabpanel-${index}`,
-  };
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, isDashboardAdmin, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Grid container={true}>
+          <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
+            {value === 0 && <MyFeeds />}
+            {value === 1 && isDashboardAdmin && <Trainings />}
+            {((value === 2 && isDashboardAdmin) || (value === 1 && !isDashboardAdmin)) && <Recents />}
+          </Grid>
+          {isDashboardAdmin && (
+            <Grid item={true} md={4} sm={12}>
+              <TrainingStats />
+            </Grid>
+          )}
+        </Grid>
+      )}
+    </div>
+  );
 }
 
-export default function CustomizedTabs() {
+const DashboardTabs: React.FunctionComponent = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
@@ -158,37 +151,43 @@ export default function CustomizedTabs() {
             onChange={handleChange}
             aria-label="dashboard tabs"
           >
-            <WrapTab
-              {...a11yProps(0)}
+            <StyledTab
+              {...dynamicObjProps(0)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
-                  {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}{" "}
-                  &nbsp;&nbsp;<span>My Feed (26)</span>
+                  <Grid item={true} sm={12}>
+                    {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
+                    <span className={classes.tabItemText}>My Feed (26)</span>
+                  </Grid>
                 </Grid>
               }
             />
             {isDashboardAdmin && (
-              <WrapTab
-                {...a11yProps(1)}
+              <StyledTab
+                {...dynamicObjProps(1)}
                 label={
                   <Grid container={true} justify="center" alignItems="center">
-                    {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}{" "}
-                    &nbsp;&nbsp;<span>Training</span>
+                    <Grid item={true} sm={12}>
+                      {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}
+                      <span className={classes.tabItemText}>Trainings (10) </span>
+                    </Grid>
                   </Grid>
                 }
               />
             )}
-            <WrapTab
-              {...a11yProps(2)}
+            <StyledTab
+              {...dynamicObjProps(isDashboardAdmin ? 2 : 1)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
-                  {(isDashboardAdmin && value === 2) ||
+                  <Grid item={true} sm={12}>
+                    {(isDashboardAdmin && value === 2) ||
                   (!isDashboardAdmin && value === 1) ? (
-                      <RecentSelectedIcon />
-                    ) : (
-                      <RecentIcon />
-                    )}{" "}
-                  &nbsp;&nbsp;<span>Recent</span>
+                        <RecentSelectedIcon />
+                      ) : (
+                        <RecentIcon />
+                      )}
+                    <span className={classes.tabItemText}>Recent</span>
+                  </Grid>
                 </Grid>
               }
             />
@@ -216,4 +215,6 @@ export default function CustomizedTabs() {
       </Grid>
     </Grid>
   );
-}
+};
+
+export default DashboardTabs;

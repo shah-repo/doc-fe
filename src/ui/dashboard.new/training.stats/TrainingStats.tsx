@@ -1,8 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
+// import React from 'react'
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
+import Text from "../../components/Text";
 
 const useStyles = makeStyles((theme: Theme) => ({
   outline: {
@@ -13,15 +15,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function MyFeeds() {
+const TrainingStatsLineItemsContainer: React.FunctionComponent = () => {
   const classes = useStyles();
   return (
     <Card className={classes.outline}>
       <CardContent>
-      My Feed Container
-        {/* <MyFeedsPresenter /> */}
+        <Text translation={"training.stats.container.title"} />
+        {/* <TrainingChart /> */}
+        {/* <TrainingLineItems /> */}
       </CardContent>
     </Card>);
-}
+};
 
-export default MyFeeds;
+export default TrainingStatsLineItemsContainer;

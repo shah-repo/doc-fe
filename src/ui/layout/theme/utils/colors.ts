@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 enum Colors {
+  // white
   white = "#FFF",
+  background_white="#F5F8FF",
+  // black
   black = "#000",
+  font_black="#080B11",
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
@@ -9,11 +13,14 @@ enum Colors {
   gray = "#8A9DAD",
   dark_gray = "#474747",
   platinum_gray = "#e3e3e3",
+  font_gray = "#767B87",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
   medium_blue= "#5C9DFC",
   background_blue="#DBE9FF",
+  navy = "#011FBB",
+  sky_blue = "#F5F8FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",
