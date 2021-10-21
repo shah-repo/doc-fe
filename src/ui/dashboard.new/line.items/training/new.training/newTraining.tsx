@@ -38,7 +38,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   console.log("Pending Training Presenter ::");
   return (
     <ListItem button>
-      <ListItemIcon>
+      <ListItemIcon className={classes.listItemIcon}>
         <TrainingIcon />
       </ListItemIcon>
       <ListItemText primary= {

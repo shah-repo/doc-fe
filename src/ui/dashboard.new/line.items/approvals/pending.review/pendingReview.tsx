@@ -6,12 +6,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import ListIcon from "@material-ui/icons/List";
 import React from "react";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/myfeed.expand.svg";
 import { ReactComponent as MinizeIcon } from "../../../../../assets/images/myfeed.mimimize.svg";
 import { ReactComponent as RecentHoveredIcon } from "../../../../../assets/images/myfeed_recent_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
+import { ReactComponent as PendinngReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as RecentSelectedIcon } from "../../../../../assets/images/recent_selected_myfeed_li.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingReview.styles";
@@ -56,9 +56,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log(" Pending Review Presenter :::");
   return (
-    <>
-      <ListItem button onClick={handleClick} onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
-        {open ? <MinizeIcon /> : <ExpandIcon />}
+    <div onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
+      <ListItem button onClick={handleClick}>
+        {open ? <MinizeIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
         <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
@@ -115,25 +115,67 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </Grid>
           </React.Fragment>
         } />
-
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List dense disablePadding>
-          <ListItem className={classes.nested}>
+        <List dense disablePadding >
+          <ListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <ListIcon fontSize="small" />
+              <PendinngReviewItemIcon />
             </IconButton>
-            <ListItemText id={id} primary={ "This is sub list item 1" } />
+            <ListItemText id={id} primary={ <Typography
+              component="span"
+              variant="body2"
+              className={classes.typography}
+              color="textPrimary"
+            >
+              {"1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube"}
+            </Typography> } />
           </ListItem>
-          <ListItem className={classes.nested}>
+          <ListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <ListIcon fontSize="small" />
+              <PendinngReviewItemIcon />
             </IconButton>
-            <ListItemText id={id} primary={ "This is sub list item 2" } />
+            <ListItemText id={id}
+              primary={ <Typography
+                component="span"
+                variant="body2"
+                className={classes.typography}
+                color="textPrimary"
+              >
+                { "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip" }
+              </Typography> }/>
+          </ListItem>
+          <ListItem button className={classes.nested}>
+            <IconButton aria-label="listIcon">
+              <PendinngReviewItemIcon />
+            </IconButton>
+            <ListItemText id={id}
+              primary={ <Typography
+                component="span"
+                variant="body2"
+                className={classes.typography}
+                color="textPrimary"
+              >
+                { "3. SI-02062 . Rev 1 - 5mL Pipette Tip" }
+              </Typography> }/>
+          </ListItem>
+          <ListItem button className={classes.nested}>
+            <IconButton aria-label="listIcon">
+              <PendinngReviewItemIcon />
+            </IconButton>
+            <ListItemText id={id} className= {classes.typography}
+              primary={ <Typography
+                component="span"
+                variant="body2"
+                className={classes.typography}
+                color="textPrimary"
+              >
+                { "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter" }  </Typography> }/>
           </ListItem>
         </List>
       </Collapse>
-    </>
+
+    </div>
   );
 };
 

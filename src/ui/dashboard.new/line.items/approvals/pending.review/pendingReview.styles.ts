@@ -7,7 +7,14 @@ export const styles = makeStyles((theme: Theme) =>
       display: "inline",
     },
     nested: {
-      paddingLeft: theme.spacing(4),
+      // paddingLeft: theme.spacing(4),
+      marginLeft: "40px",
+      borderLeft: "1px solid #7C4EFF",
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    icon: {
+      width: "7px",
     },
     typography: {
       fontSize: "14px",

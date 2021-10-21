@@ -6,5 +6,8 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    listItemIcon: {
+      paddingLeft: "7px",
+    },
   }
   ));

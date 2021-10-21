@@ -7,6 +7,9 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    listItemIcon: {
+      paddingLeft: "7px",
+    },
     typographyDueInfewDays: {
       fontSize: "14px",
       fontFamily: "Sora",
