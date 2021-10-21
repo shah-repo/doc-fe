@@ -1,11 +1,19 @@
-// import Avatar from "@material-ui/core/Avatar";
+import { Collapse } from "@material-ui/core";
+import Chip from "@material-ui/core/Chip";
+import Grid from "@material-ui/core/Grid";
+import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import SendIcon from "@material-ui/icons/Send";
 import React from "react";
+import { ReactComponent as ExpandIcon } from "../../../../assets/images/myfeed.expand.svg";
+import { ReactComponent as MinizeIcon } from "../../../../assets/images/myfeed.mimimize.svg";
+import { ReactComponent as RecentHoveredIcon } from "../../../../assets/images/myfeed_recent_white.svg";
+import { ReactComponent as POIcon } from "../../../../assets/images/po.svg";
+import { ReactComponent as RecentSelectedIcon } from "../../../../assets/images/recent_selected_myfeed_li.svg";
+import Colors from "../../../layout/theme/utils/colors";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
@@ -18,39 +26,135 @@ interface Props {
   approvers: string[];
   verbose: string;
 }
-const purchaseOrderPresenter: React.FunctionComponent<Props> = ({
-  id, title,
+const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
+  id, status, title, verbose, timestamp,
 }) => {
   const classes = styles();
-  // eslint-disable-next-line no-console
-  console.log("purchaseOrderPresenter");
-  return (
-    <ListItem button>
-      {/* <ListItemAvatar >
-        <Avatar>
-          <SendIcon />
-        </Avatar>
-      </ListItemAvatar> */}
-      <ListItemIcon className={classes.listItemIcon}>
-        <SendIcon />
-      </ListItemIcon>
-      <ListItemText primary= {
-        <React.Fragment>
-          <Typography
-            component="span"
-            variant="body2"
-            className={classes.inline}
-            color="textPrimary"
-          >
-            <b>{id} </b>
-          </Typography>
-          - {title}
-          {" — Purchase Order…"}
-        </React.Fragment>
-      } />
+  const NormalStyleChip = withStyles({
+    root: {
+      backgroundColor: Colors.white,
+    },
+    colorPrimary: {
+      color: Colors.latest_blue_varient,
+    },
+  })(Chip);
 
-    </ListItem>
+  const  HoverStyleChip = withStyles({
+    root: {
+      backgroundColor: Colors.latest_blue_varient,
+    },
+    colorPrimary: {
+      color: Colors.white,
+    },
+  })(Chip);
+
+  const [open, setOpen] = React.useState(false);
+  const [hoverItem, setHoverItem] = React.useState(false);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const onhoverItem = () => {
+    setHoverItem(!hoverItem);
+  };
+  const onMouseLeaveItem = () => {
+    setHoverItem(!hoverItem);
+  };
+  // eslint-disable-next-line no-console
+  console.log("PO Presenter :::");
+  return (
+    <>
+      <ListItem button onClick={handleClick} onMouseEnter={onhoverItem} onMouseLeave={onMouseLeaveItem}>
+        {open ? <MinizeIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
+        <ListItemIcon>
+          <POIcon />
+        </ListItemIcon>
+        <ListItemText primary= {
+          <React.Fragment>
+            <Grid container={true}>
+              <Grid item={true} md={12} sm={12} >
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                >
+                  {id}&nbsp;
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typographyBold}
+                  color="textPrimary"
+                >
+                  to {title} is
+                </Typography>&nbsp;
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                >
+                  {!hoverItem &&
+                  <NormalStyleChip size="small" color="primary" icon={<RecentSelectedIcon />}
+                    label={status}/>}
+                  {hoverItem && <HoverStyleChip color="primary" size="small" icon={<RecentHoveredIcon/>}
+                    label={status}/>}
+                </Typography>&nbsp;
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typographyBold}
+                  color="textPrimary"
+                >
+                  {verbose}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid container={true} >
+              <Grid item={true} md={12} sm={12} >
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                >
+                . {timestamp}
+                </Typography>
+              </Grid>
+            </Grid>
+          </React.Fragment>
+        } />
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List dense disablePadding >
+          <ListItem button className={classes.nested}>
+            <Grid container className={classes.gridContainer}>
+              <Grid item md={3} sm={6}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typographyChildrenBold}
+                  color="textPrimary"
+                >
+                  <b>Supplier:</b>
+                </Typography>
+              </Grid>
+              <Grid item md={9} sm={6}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                >
+             Quality Circuits
+                </Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+        </List>
+      </Collapse>
+    </>
   );
 };
 
-export default purchaseOrderPresenter;
+export default PurchaseOrderItemPresenter;
