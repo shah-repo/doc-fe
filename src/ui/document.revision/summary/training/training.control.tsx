@@ -1,16 +1,16 @@
-import { Typography, WithStyles } from "@material-ui/core";
+import { Link, Typography, WithStyles } from "@material-ui/core";
 import React, { useMemo } from "react";
-import { trainingActions } from "../../../state/ducks/training";
-import { TrainingPlanTransition } from "../../../state/ducks/training/types";
-import { EffectiveDateFormValues } from "../../change.request/form/types";
-import Text from "../../components/Text";
-import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
-import { PasswordFormValues } from "../../components/transitionDialog/types";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
-import { TrainingControlProps } from "../utils/types";
-import styles from "./styles";
+import { trainingActions } from "../../../../state/ducks/training";
+import { TrainingPlanTransition } from "../../../../state/ducks/training/types";
+import { EffectiveDateFormValues } from "../../../change.request/form/types";
+import Text from "../../../components/Text";
+import { PasswordFormValues } from "../../../components/transitionDialog/types";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
+import { TrainingControlProps } from "../../utils/types";
+import styles from "../styles";
+import TrainingDialog from "./dialog/TrainingDialog";
 
 type Props = TrainingControlProps & WithStyles<typeof styles>;
 
@@ -52,10 +52,12 @@ const TrainingControl: React.FunctionComponent<Props> = ({
 
   return (
     <span style={{ margin: "50px 0 0 15px" }}>
-      <Typography display="inline" className={classes.trainingText}>
-        <Text translation="training.certify.completion" />
-      </Typography>
-      <TransitionDialog
+      <Link onClick={openDialog}>
+        <Typography display="inline" className={classes.trainingText}>
+          <Text translation="training.acknowledge.completion.link" />
+        </Typography>
+      </Link>
+      <TrainingDialog
         transitionDialog={dialog}
         openDialog={openDialog}
         onSubmit={onSubmit}

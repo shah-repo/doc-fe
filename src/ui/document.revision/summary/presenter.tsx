@@ -33,11 +33,11 @@ import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
-import CompleteTraining from "./complete.training";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
-import TrainingControl from "./training.control";
+import CompleteTraining from "./training/complete.training";
+import TrainingControl from "./training/training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;

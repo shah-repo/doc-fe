@@ -1,16 +1,16 @@
 import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { Document, DocumentRevisionDocument } from "../../../state/ducks/documentRevisions/types";
-import { trainingActions } from "../../../state/ducks/training";
-import { TrainingPlanTransition, TrainingRecord } from "../../../state/ducks/training/types";
-import { ApplicationState } from "../../../state/reducers";
-import { EffectiveDateFormValues, PasswordFormValues } from "../../change.request/form/types";
-import TransitionDialog from "../../components/transitionDialog/TransitionDialog";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
-import useDialog from "../../hooks/useDialog";
+import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import { Document, DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
+import { trainingActions } from "../../../../state/ducks/training";
+import { TrainingPlanTransition, TrainingRecord } from "../../../../state/ducks/training/types";
+import { ApplicationState } from "../../../../state/reducers";
+import { EffectiveDateFormValues, PasswordFormValues } from "../../../change.request/form/types";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
+import TrainingDialog from "./dialog/TrainingDialog";
 
 interface Props {
   trainingRecords: TrainingRecord[];
@@ -58,7 +58,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <TransitionDialog
+    <TrainingDialog
       transitionDialog={dialog}
       openDialog={openDialog}
       onSubmit={onSubmit}
