@@ -90,8 +90,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
-  // eslint-disable-next-line no-console
-  console.log(" Pending Review Presenter :::");
+  const openApproversModel = (e) => {
+    e.stopPropagation();
+    console.log("Please open Model popup here");
+  };
+
   return (
     <>
       <StyledListItem
@@ -170,6 +173,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typographyBold}
                     color="textSecondary"
                     style={hoverItem ? { textDecoration: "underline" } : {}}
+                    onClick={openApproversModel}
                   >
                     {approvers.join(",")}
                   </Typography>
