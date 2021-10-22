@@ -36,6 +36,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [open, setOpen] = React.useState(false);
 
+  const PoItems: any = [{ id: "Id1", isSupplier: true, ltext: "Supplier:", rtext: "Quality Circuits" },
+    { id: "Id2", isRegular: true, ltext: "Total:", rtext: "USD $5,200.50" },
+    { id: "Id3", isRegular: true, ltext: "Description:", rtext: "Flex circuits for the balloon catheter" },
+    { id: "Id4", isRegular: true, ltext: "Line Items:", rtext: "05" },
+    { id: "Id5", isAttachments: true, ltext: "Attachments" }];
+
   const attachments = [{ id: "AT-1", name: "Attached File.pdf" },
     { id: "AT-3", name: "Document.doc" }, { id: "AT-3", name: "Spreadsheet.xls" }];
   const StyledListItem = withStyles({
@@ -161,129 +167,86 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          <StyledListItem button className={classes.nested} disableRipple >
-            <Grid container className={classes.gridContainer}>
-              <Grid item md={3} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typographyChildrenBold}
-                  color="textPrimary"
-                >
-                  <b>Supplier:</b>
-                </Typography>
-              </Grid>
-              <Grid item md={9} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.linkText}
-                  color="textPrimary"
-                >
-                  Quality Circuits
-                </Typography>
-              </Grid>
-            </Grid>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested} disableRipple>
-            <Grid container className={classes.gridContainer}>
-              <Grid item md={3} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typographyChildrenBold}
-                  color="textPrimary"
-                >
-                  <b>Total:</b>
-                </Typography>
-              </Grid>
-              <Grid item md={9} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  USD $5,200.50
-                </Typography>
-              </Grid>
-            </Grid>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested} disableRipple>
-            <Grid container className={classes.gridContainer}>
-              <Grid item md={3} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typographyChildrenBold}
-                  color="textPrimary"
-                >
-                  <b>Description:</b>
-                </Typography>
-              </Grid>
-              <Grid item md={9} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  Flex circuits for the balloon catheter
-                </Typography>
-              </Grid>
-            </Grid>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested} disableRipple>
-            <Grid container className={classes.gridContainer}>
-              <Grid item md={3} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typographyChildrenBold}
-                  color="textPrimary"
-                >
-                  <b>Line Items:</b>
-                </Typography>
-              </Grid>
-              <Grid item md={9} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  05
-                </Typography>
-              </Grid>
-            </Grid>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested} disableRipple>
-            <Grid container className={classes.gridContainer}>
-              <Grid item md={3} sm={6}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typographyChildrenBold}
-                  color="textPrimary"
-                >
-                  <b>Attachments</b>
-                </Typography>
-              </Grid>
-              <Grid item md={9} sm={6}>
-                <Grid container justify="space-between" alignContent="center">
-                  { attachments.map((attachmentInfo, index) => (<Grid item key={index}>
-                    <AttachmentIcon /> <Typography
+          {PoItems.map((poItem) => {
+            if (poItem.isSupplier) {
+              return (<StyledListItem button className={classes.nested} disableRipple >
+                <Grid container className={classes.gridContainer}>
+                  <Grid item md={3} sm={6}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typographyChildrenBold}
+                      color="textPrimary"
+                    >
+                      <b>{poItem.ltext}</b>
+                    </Typography>
+                  </Grid>
+                  <Grid item md={9} sm={6}>
+                    <Typography
                       component="span"
                       variant="body2"
                       className={classes.linkText}
                       color="textPrimary"
-                    > {attachmentInfo.name}
+                    >
+                      { poItem.rtext}
                     </Typography>
-                  </Grid>))}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </StyledListItem>
+              </StyledListItem>); }
+            if (poItem.isRegular) {
+              return (<StyledListItem button className={classes.nested} disableRipple>
+                <Grid container className={classes.gridContainer}>
+                  <Grid item md={3} sm={6}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typographyChildrenBold}
+                      color="textPrimary"
+                    >
+                      <b>{poItem.ltext}</b>
+                    </Typography>
+                  </Grid>
+                  <Grid item md={9} sm={6}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                    >
+                      {poItem.rtext}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </StyledListItem>); }
+            if (poItem.isAttachments) {
+              return (<StyledListItem button className={classes.nested} disableRipple>
+                <Grid container className={classes.gridContainer}>
+                  <Grid item md={3} sm={6}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typographyChildrenBold}
+                      color="textPrimary"
+                    >
+                      <b>{poItem.ltext}</b>
+                    </Typography>
+                  </Grid>
+                  <Grid item md={9} sm={6}>
+                    <Grid container justify="space-between" alignContent="center">
+                      { attachments.map((attachmentInfo, index) => (<Grid item key={index}>
+                        <AttachmentIcon /> <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.linkText}
+                          color="textPrimary"
+                        > {attachmentInfo.name}
+                        </Typography>
+                      </Grid>))}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </StyledListItem>); }
+          })}
         </List>
       </Collapse>
     </>
