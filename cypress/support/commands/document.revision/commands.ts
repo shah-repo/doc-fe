@@ -52,6 +52,8 @@ declare global {
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickUpgradeForm(): Chainable<Subject>;
+      drVerifyTitle(params: { title: string }): Chainable<Subject>;
+      drVerifyDescription(params: { description: string }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -771,4 +773,12 @@ Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number
       const actual = cellContents.slice();
       cy.wrap(actual).should("deep.eq", cellContents.sort());
     });
+});
+
+Cypress.Commands.add("drVerifyTitle", (params: {title: string}) => {
+  cy.get("#Title-field").find("input").should("have.attr", "value", params.title);
+});
+
+Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
+  cy.get("[data-cy=\"RichTextEditor.description\"]").find("span[data-text]").should("have.text", params.description);
 });
