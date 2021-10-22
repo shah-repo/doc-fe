@@ -12,6 +12,12 @@ export const styles = makeStyles((theme: Theme) =>
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
     },
+    linkText: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+      color: "#011FBB",
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },
