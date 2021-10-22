@@ -103,7 +103,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  Your Training {status === "OVERDUE" ? "" : "on"} &nbsp;
+                  Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
                 </Typography>
                 <Typography
                   component="span"

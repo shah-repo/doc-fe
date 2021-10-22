@@ -9,11 +9,14 @@ enum Colors {
   gray = "#8A9DAD",
   dark_gray = "#474747",
   platinum_gray = "#e3e3e3",
+  font_gray = "#767B87",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
   medium_blue = "#5C9DFC",
   background_blue = "#DBE9FF",
+  navy = "#011FBB",
+  sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
   // red
   red = "#c40000",
@@ -35,9 +38,6 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
-  font_gray = "#767B87",
-  navy = "#011FBB",
-  sky_blue = "#F5F8FF",
 }
 
 export default Colors;
