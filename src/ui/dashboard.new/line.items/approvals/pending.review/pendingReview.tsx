@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
-import { Collapse, IconButton, List } from "@material-ui/core";
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import {
+  Chip,
+  Collapse,
+  Grid, IconButton, List, ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
@@ -15,6 +17,7 @@ import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingReview.styles";
@@ -38,6 +41,24 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   approvers,
 }) => {
   const classes = styles();
+
+  const PrListItems = [{
+    id: "id1",
+    text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
+  },
+  {
+    id: "id2",
+    text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
+  },
+  {
+    id: "id3",
+    text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
+  },
+  {
+    id: "id4",
+    text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
+  },
+  ];
 
   const StyledListItem = withStyles({
     root: {
@@ -67,6 +88,19 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
 
+  const StyleTooltip = withStyles({
+    arrow: {
+      color: Colors.black,
+    },
+    tooltip: {
+      backgroundColor: Colors.black,
+    },
+    tooltipPlacementTop: {
+      margin: "8px 0",
+    },
+  })(Tooltip);
+
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [viewItem, setViewItem] = React.useState(false);
@@ -90,28 +124,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const openApproversModel = (e) => {
     e.stopPropagation();
     console.log("Please open Model popup here");
   };
-
-  const PrListItems = [{
-    id: "id1",
-    text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-  },
-  {
-    id: "id2",
-    text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-  },
-  {
-    id: "id3",
-    text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-  },
-  {
-    id: "id4",
-    text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-  },
-  ];
 
   return (
     <>
@@ -209,8 +231,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {!open && hoverItem && (
-          <div>
-            <PinIcon onClick={handlePinClick} />
+          <div className={classes.actionIcons}>
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyleTooltip title="Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyleTooltip>
+            )}
           </div>
         )}
       </StyledListItem>

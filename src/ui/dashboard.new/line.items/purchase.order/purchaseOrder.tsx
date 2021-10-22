@@ -1,18 +1,22 @@
 /* eslint-disable no-console */
-import { Collapse } from "@material-ui/core";
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
+import {
+  Chip,
+  Collapse,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../assets/images/PO.svg";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../assets/images/warning_status_white.svg";
@@ -28,16 +32,21 @@ interface Props {
   timestamp: string;
   approvers: string[];
   verbose: string;
-
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
-  id, status, title, verbose, timestamp,
+  id,
+  status,
+  title,
+  verbose,
+  timestamp,
 }) => {
   const classes = styles();
-  const [open, setOpen] = React.useState(false);
 
-  const attachments = [{ id: "AT-1", name: "Attached File.pdf" },
-    { id: "AT-3", name: "Document.doc" }, { id: "AT-3", name: "Spreadsheet.xls" }];
+  const attachments = [
+    { id: "AT-1", name: "Attached File.pdf" },
+    { id: "AT-3", name: "Document.doc" },
+    { id: "AT-3", name: "Spreadsheet.xls" },
+  ];
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -66,7 +75,20 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
 
+  const StyleTooltip = withStyles({
+    arrow: {
+      color: Colors.black,
+    },
+    tooltip: {
+      backgroundColor: Colors.black,
+    },
+    tooltipPlacementTop: {
+      margin: "8px 0",
+    },
+  })(Tooltip);
 
+  const [pinHover, setPinHover] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handleClick = () => {
@@ -83,85 +105,125 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   // eslint-disable-next-line no-console
   console.log("PO Presenter :::");
   return (
     <>
-      <StyledListItem style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}} button
-        onClick={handleClick} onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
-        {open ? <CollapseIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
+      <StyledListItem
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        button
+        onClick={handleClick}
+        onMouseEnter={onMouseHoverItem}
+        onMouseLeave={onMouseLeaveItem}
+      >
+        {open ? (
+          <CollapseIcon className={classes.icon} />
+        ) : (
+          <ExpandIcon className={classes.icon} />
+        )}
         <ListItemIcon className={classes.listItemIcon}>
           <POIcon />
         </ListItemIcon>
-        <ListItemText primary= {
-          <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12} >
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {id}&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  to&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                >
-                  {title}&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  is&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyStatus}
-                  color="textSecondary"
-                >
-                  {!hoverItem && !open &&
-                  <NormalStyleChip size="small" color="primary" icon={<WarningIcon />}
-                    label={status}/>}
-                  {(hoverItem || open) && <HoverStyleChip color="primary" size="small" icon={<WarningWhiteIcon/>}
-                    label={status}/>}
-                </Typography>
+        <ListItemText
+          primary={
+            <React.Fragment>
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {id}&nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    to&nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                  >
+                    {title}&nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    is&nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyStatus}
+                    color="textSecondary"
+                  >
+                    {!hoverItem && !open && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<WarningIcon />}
+                        label={status}
+                      />
+                    )}
+                    {(hoverItem || open) && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={<WarningWhiteIcon />}
+                        label={status}
+                      />
+                    )}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container={true} >
-              <Grid item={true} md={12} sm={12} >
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.timestampContainer}
-                  color="textSecondary"
-                >
-                . {timestamp}
-                </Typography>
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                  >
+                    . {timestamp}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </React.Fragment>
-        } />
-        { !open && hoverItem && <div className={classes.actionIcons}><PinIcon onClick={handlePinClick} /></div> }
+            </React.Fragment>
+          }
+        />
+        {!open && hoverItem && (
+          <div className={classes.actionIcons}>
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyleTooltip title="Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyleTooltip>
+            )}
+          </div>
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          <StyledListItem button className={classes.nested} disableRipple >
+          <StyledListItem button className={classes.nested} disableRipple>
             <Grid container className={classes.gridContainer}>
               <Grid item md={3} sm={6}>
                 <Typography
@@ -271,15 +333,20 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               </Grid>
               <Grid item md={9} sm={6}>
                 <Grid container justify="space-between" alignContent="center">
-                  { attachments.map((attachmentInfo, index) => (<Grid item key={index}>
-                    <AttachmentIcon /> <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.linkText}
-                      color="textPrimary"
-                    > {attachmentInfo.name}
-                    </Typography>
-                  </Grid>))}
+                  {attachments.map((attachmentInfo, index) => (
+                    <Grid item key={index}>
+                      <AttachmentIcon />{" "}
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.linkText}
+                        color="textPrimary"
+                      >
+                        {" "}
+                        {attachmentInfo.name}
+                      </Typography>
+                    </Grid>
+                  ))}
                 </Grid>
               </Grid>
             </Grid>

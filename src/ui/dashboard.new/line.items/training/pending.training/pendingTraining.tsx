@@ -1,15 +1,19 @@
 /* eslint-disable no-console */
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import {
+  Chip,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
@@ -68,6 +72,19 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
 
+  const StyleTooltip = withStyles({
+    arrow: {
+      color: Colors.black,
+    },
+    tooltip: {
+      backgroundColor: Colors.black,
+    },
+    tooltipPlacementTop: {
+      margin: "8px 0",
+    },
+  })(Tooltip);
+
+  const [pinHover, setPinHover] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handlePinClick = () => {
@@ -80,6 +97,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
   };
   // eslint-disable-next-line no-console
   console.log("Pending Training Presenter ::");
@@ -191,7 +214,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       />
       {hoverItem && (
         <div className={classes.actionIcons}>
-          <PinIcon onClick={handlePinClick} />
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+          {pinHover && (
+            <StyleTooltip title="Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handlePinClick}
+                onMouseLeave={onMouseLeavePinIcon}
+              />
+            </StyleTooltip>
+          )}
         </div>
       )}
     </StyledListItem>
