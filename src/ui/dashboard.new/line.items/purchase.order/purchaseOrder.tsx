@@ -12,7 +12,7 @@ import React from "react";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
-import { ReactComponent as POIcon } from "../../../../assets/images/po.svg";
+import { ReactComponent as POIcon } from "../../../../assets/images/PO.svg";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../assets/images/warning_status_white.svg";
 import Colors from "../../../layout/theme/utils/colors";
@@ -32,6 +32,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id, status, title, verbose, timestamp,
 }) => {
   const classes = styles();
+  const [open, setOpen] = React.useState(false);
 
   const StyledListItem = withStyles({
     root: {
@@ -61,7 +62,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
 
-  const [open, setOpen] = React.useState(false);
+
   const [pinned, setPinned] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handleClick = () => {
@@ -82,7 +83,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   console.log("PO Presenter :::");
   return (
     <>
-      <StyledListItem button onClick={handleClick} onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
+      <StyledListItem style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}} button
+        onClick={handleClick} onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
         {open ? <CollapseIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
         <ListItemIcon className={classes.listItemIcon}>
           <POIcon />
@@ -154,7 +156,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         { !open && hoverItem && <div className={classes.actionIcons}><PinIcon onClick={handlePinClick} /></div> }
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List disablePadding>
+        <List disablePadding className={classes.collapsedList}>
           <StyledListItem button className={classes.nested}>
             <Grid container className={classes.gridContainer}>
               <Grid item md={3} sm={6}>
