@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { Grid, List, Typography } from "@material-ui/core";
 import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
@@ -30,9 +31,18 @@ const TrainingssLineItemPresenter: React.FunctionComponent<Props> = ({
         trainingItems.map((pendingAction, index) => {
           switch (pendingAction.type) {
             case ActionTypes.NEW_TRAINING_RECORDS:
-              return <NewTraining />;
+              return <NewTraining id={pendingAction.id} type={pendingAction.type}
+                title ={pendingAction.title} documentId={pendingAction.documentId}
+                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
+                dueDate ={pendingAction.dueDate}
+                approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_TRAINING_RECORDS:
-              return <PendingTraining />;
+              return <PendingTraining id={pendingAction.id} type={pendingAction.type}
+                title ={pendingAction.title} documentId={pendingAction.documentId}
+                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                verbose={pendingAction.verbose}
+                dueDate ={pendingAction.dueDate}/>;
             default:
               return null;
           }

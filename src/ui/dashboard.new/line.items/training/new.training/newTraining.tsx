@@ -1,7 +1,191 @@
+/* eslint-disable no-console */
+import Chip from "@material-ui/core/Chip";
+import Grid from "@material-ui/core/Grid";
 import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import React from "react";
-const PendingTrainingPresenter: React.FunctionComponent = () => (
-  <ListItem button>This is New Training Line Item</ListItem>
-);
+import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
+import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
+import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
+import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import Colors from "../../../../layout/theme/utils/colors";
+import { styles } from "./newTraining.styles";
+interface Props {
+  id: string;
+  type: string;
+  title: string;
+  documentId: string;
+  status: string;
+  timestamp: string;
+  verbose: string;
+  dueDate: string;
+  approvers: string[];
+}
+const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
+  id,
+  title,
+  status,
+  timestamp,
+  dueDate,
+  approvers,
+}) => {
+  const classes = styles();
+
+  const StyledListItem = withStyles({
+    root: {
+      "&:hover": {
+        backgroundColor: Colors.sky_blue,
+      },
+    },
+  })(ListItem);
+
+  const NormalStyleChip = withStyles({
+    root: {
+      backgroundColor: Colors.white,
+      borderRadius: "3px",
+    },
+    colorPrimary: {
+      color:
+        status === "OVERDUE"
+          ? Colors.latest_red_varient
+          : Colors.latest_yellow_varient,
+    },
+  })(Chip);
+
+  const HoverStyleChip = withStyles({
+    root: {
+      backgroundColor:
+        status === "OVERDUE"
+          ? Colors.latest_red_varient
+          : Colors.latest_yellow_varient,
+      borderRadius: "3px",
+    },
+    colorPrimary: {
+      color: Colors.white,
+    },
+  })(Chip);
+
+  const [pinned, setPinned] = React.useState(false);
+  const [hoverItem, setHoverItem] = React.useState(false);
+  const handlePinClick = () => {
+    console.log("Pin Clicked");
+    setPinned(!pinned);
+    console.log("Pinned:: ", !pinned);
+  };
+  const onMouseHoverItem = () => {
+    setHoverItem(true);
+  };
+  const onMouseLeaveItem = () => {
+    setHoverItem(false);
+  };
+  // eslint-disable-next-line no-console
+  console.log("Pending Training Presenter ::");
+  return (
+    <StyledListItem button onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
+      <ListItemIcon className={classes.listItemIcon}>
+        <TrainingIcon />
+      </ListItemIcon>
+      <ListItemText
+        primary={
+          <React.Fragment>
+            <Grid container={true}>
+              <Grid item={true} md={12} sm={12}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                >
+                  Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                >
+                  {id}&nbsp;
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.typographyBold}
+                  color="textSecondary"
+                >
+                  {title}&nbsp;
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.typographyStatus}
+                  color="textSecondary"
+                >
+                  {!hoverItem && (
+                    <NormalStyleChip
+                      size="small"
+                      color="primary"
+                      icon={
+                        status === "OVERDUE" ? <OverdueIcon /> : <WarningIcon />
+                      }
+                      label={status}
+                    />
+                  )}
+                  {hoverItem && (
+                    <HoverStyleChip
+                      color="primary"
+                      size="small"
+                      icon={
+                        status === "OVERDUE" ? (
+                          <OverdueWhiteIcon />
+                        ) : (
+                          <WarningWhiteIcon />
+                        )
+                      }
+                      label={status}
+                    />
+                  )}
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={status === "OVERDUE" ? classes.typographyOverdue : classes.typographyDueInfewDays}
+                  color="textSecondary"
+                >
+                  &nbsp;. {dueDate}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid container={true}>
+              <Grid item={true} md={12} sm={12}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.typographyBold}
+                  color="textSecondary"
+                >
+                  {approvers.join(",")}
+                </Typography>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                >
+                  . {timestamp}
+                </Typography>
+              </Grid>
+            </Grid>
+          </React.Fragment>
+        }
+      />
+      {hoverItem && <div className={classes.actionIcons}><PinIcon onClick={handlePinClick} /></div>}
+    </StyledListItem>
+  );
+};
 
 export default PendingTrainingPresenter;
