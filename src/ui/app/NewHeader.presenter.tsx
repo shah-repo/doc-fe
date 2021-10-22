@@ -1,5 +1,6 @@
 import { Button, FormControlLabel, Grid, Switch } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { WithStyles, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -47,22 +48,17 @@ const Header: React.FunctionComponent<Props> = ({
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
       <div className={classes.logo}></div>
-      <Grid
-        item={true}
-        justify="flex-start"
-        alignContent="center"
-        md={4}
-        sm={12}
-      >
-        <Grid container={true} justify="flex-start" alignContent="center">
-          <Typography className={classes.toolbarTitle}>
+      <Grid container={true} wrap="nowrap" justify="space-between" alignContent="center" >
+        <Grid
+          item={true}
+          zeroMinWidth
+        >
+          <Typography noWrap className={classes.toolbarTitle}>
             Welcome back, <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
-      </Grid>
-      <Grid item={true} alignItems="flex-end" justify="flex-end" md={8} sm={12}>
         <Grid item={true} className={classes.wrapContainer}>
-          <Grid container={true} justify="flex-end" alignItems="center">
+          <Box alignItems="center">
             {canToggleCustomLabels && (
               <FormControlLabel
                 control={
@@ -114,7 +110,7 @@ const Header: React.FunctionComponent<Props> = ({
                 />
               </Button>
             </ClickAwayListener>
-          </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Toolbar>
