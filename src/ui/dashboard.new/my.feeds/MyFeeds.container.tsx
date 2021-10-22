@@ -3,7 +3,7 @@ import React from "react";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 const feedItems = [
   {
-    id: "TC-00095",
+    id: "AR-00095",
     title: "Work Ethics Briefing",
     type: "PENDING_REVIEW",
     documentId: "DocId",
@@ -24,7 +24,7 @@ const feedItems = [
     approvers: [],
   },
   {
-    id: "ID2",
+    id: "ID235",
     title: "Clean room",
     type: "PENDING_TRAINING_RECORDS",
     documentId: "DocId",
@@ -35,7 +35,7 @@ const feedItems = [
     approvers: [],
   },
   {
-    id: "ID22",
+    id: "ID221",
     title: "Digitizing Documents",
     type: "PENDING_TRAINING_RECORDS",
     documentId: "DocId",
@@ -46,7 +46,7 @@ const feedItems = [
     approvers: [],
   },
   {
-    id: "ID22",
+    id: "ID2267",
     title: "Spray Painting Assembly",
     type: "NEW_TRAINING_RECORDS",
     documentId: "DocId",
@@ -79,7 +79,7 @@ const feedItems = [
     requestedBy: "Josh",
   },
   {
-    id: "ID1",
+    id: "ID1992",
     title: "PENDING_REVIEW",
     type: "PENDING_REVIEW",
     documentId: "DocId",
@@ -89,7 +89,7 @@ const feedItems = [
     approvers: ["Ganesh", "Nishant"],
   },
   {
-    id: "ID123",
+    id: "ID1235",
     title: "Manufacturing Documents",
     type: "PENDING_TRAINING_RECORDS",
     documentId: "DocId",

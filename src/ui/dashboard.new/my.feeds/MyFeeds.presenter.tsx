@@ -6,8 +6,6 @@ import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
-import ApprovalReject from "../line.items/approvals/approval.reject/approvalReject";
-import ApprovalRelease from "../line.items/approvals/approval.release/approvalRelease";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
 import PurchaseOrder from "../line.items/purchase.order/purchaseOrder";
@@ -64,7 +62,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
             case ActionTypes.PENDING_DOC_CONTROL:
-            case ActionTypes.PENDING_TASK:
               return <TaskApproval id={pendingAction.id} type={pendingAction.type}
                 title ={pendingAction.title} documentId={pendingAction.documentId}
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
@@ -77,19 +74,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 status={pendingAction.status} timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 approvers ={pendingAction.approvers}/>;
-            case ActionTypes.RELEASE_APPROVAL_REQUESTS:
-              return <ApprovalRelease id={pendingAction.id} type={pendingAction.type}
-                title ={pendingAction.title} documentId={pendingAction.documentId}
-                status={pendingAction.status} timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                approvers ={pendingAction.approvers}/>;
-            case ActionTypes.REJECT_APPROVAL_REQUESTS:
-              return <ApprovalReject id={pendingAction.id} type={pendingAction.type}
-                title ={pendingAction.title} documentId={pendingAction.documentId}
-                status={pendingAction.status} timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                approvers ={pendingAction.approvers}/>;
-
             default:
               return <Text key={index} translation="common.undefined" />;
           }
