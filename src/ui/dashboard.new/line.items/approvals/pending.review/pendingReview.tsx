@@ -90,8 +90,29 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
-  // eslint-disable-next-line no-console
-  console.log(" Pending Review Presenter :::");
+  const openApproversModel = (e) => {
+    e.stopPropagation();
+    console.log("Please open Model popup here");
+  };
+
+  const PrListItems = [{
+    id: "id1",
+    text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
+  },
+  {
+    id: "id2",
+    text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
+  },
+  {
+    id: "id3",
+    text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
+  },
+  {
+    id: "id4",
+    text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
+  },
+  ];
+
   return (
     <>
       <StyledListItem
@@ -170,6 +191,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typographyBold}
                     color="textSecondary"
                     style={hoverItem ? { textDecoration: "underline" } : {}}
+                    onClick={openApproversModel}
                   >
                     {approvers.join(",")}
                   </Typography>
@@ -194,12 +216,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
-          <StyledListItem button className={classes.nested}>
+          {PrListItems.map((prItem, index) => <StyledListItem button className={classes.nested} key={index}>
             <IconButton aria-label="listIcon">
               <PendingReviewItemIcon />
             </IconButton>
             <ListItemText
-              id={id}
+              id={prItem.id}
               primary={
                 <Typography
                   component="span"
@@ -208,7 +230,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                 >
                   {
-                    "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube"
+                    prItem.text
                   }
                 </Typography>
               }
@@ -216,73 +238,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             <div>
               <ViewIcon onClick={handleViewClick} />
             </div>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested}>
-            <IconButton aria-label="listIcon">
-              <PendingReviewItemIcon />
-            </IconButton>
-            <ListItemText
-              id={id}
-              primary={
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {"2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip"}
-                </Typography>
-              }
-            />
-            <div>
-              <ViewIcon onClick={handleViewClick} />
-            </div>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested}>
-            <IconButton aria-label="listIcon">
-              <PendingReviewItemIcon />
-            </IconButton>
-            <ListItemText
-              id={id}
-              primary={
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {"3. SI-02062 . Rev 1 - 5mL Pipette Tip"}
-                </Typography>
-              }
-            />
-            <div>
-              <ViewIcon onClick={handleViewClick} />
-            </div>
-          </StyledListItem>
-          <StyledListItem button className={classes.nested}>
-            <IconButton aria-label="listIcon">
-              <PendingReviewItemIcon />
-            </IconButton>
-            <ListItemText
-              id={id}
-              className={classes.typography}
-              primary={
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {
-                    "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter"
-                  }{" "}
-                </Typography>
-              }
-            />
-            <div>
-              <ViewIcon onClick={handleViewClick} />
-            </div>
-          </StyledListItem>
+          </StyledListItem>)}
         </List>
       </Collapse>
     </>
