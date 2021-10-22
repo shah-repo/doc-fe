@@ -36,7 +36,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [open, setOpen] = React.useState(false);
 
-  const attachments = [{ id: "AT-1", name: "Attached File.pdf" }, { id: "AT-3", name: "Document.doc" }, { id: "AT-3", name: "Spreadsheet.xls" }];
+  const attachments = [{ id: "AT-1", name: "Attached File.pdf" },
+    { id: "AT-3", name: "Document.doc" }, { id: "AT-3", name: "Spreadsheet.xls" }];
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -134,10 +135,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typographyStatus}
                   color="textSecondary"
                 >
-                  {!hoverItem &&
+                  {!hoverItem && !open &&
                   <NormalStyleChip size="small" color="primary" icon={<WarningIcon />}
                     label={status}/>}
-                  {hoverItem && <HoverStyleChip color="primary" size="small" icon={<WarningWhiteIcon/>}
+                  {(hoverItem || open) && <HoverStyleChip color="primary" size="small" icon={<WarningWhiteIcon/>}
                     label={status}/>}
                 </Typography>
               </Grid>

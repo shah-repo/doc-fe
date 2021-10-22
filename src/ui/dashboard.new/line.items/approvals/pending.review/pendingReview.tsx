@@ -136,7 +136,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typographyStatus}
                     color="textSecondary"
                   >
-                    {!hoverItem && (
+                    {!hoverItem && !open && (
                       <NormalStyleChip
                         size="small"
                         color="primary"
@@ -144,7 +144,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         label={status}
                       />
                     )}
-                    {hoverItem && (
+                    {(hoverItem || open) && (
                       <HoverStyleChip
                         color="primary"
                         size="small"
