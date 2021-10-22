@@ -8,13 +8,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/myfeed.expand.svg";
-import { ReactComponent as MinizeIcon } from "../../../../../assets/images/myfeed.mimimize.svg";
-import { ReactComponent as RecentHoveredIcon } from "../../../../../assets/images/myfeed_recent_white.svg";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
+import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PendinngReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as RecentSelectedIcon } from "../../../../../assets/images/recent_selected_myfeed_li.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingReview.styles";
@@ -101,7 +101,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         onMouseLeave={onMouseLeaveItem}
       >
         {open ? (
-          <MinizeIcon className={classes.icon} />
+          <CollapseIcon className={classes.icon} />
         ) : (
           <ExpandIcon className={classes.icon} />
         )}
@@ -139,7 +139,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       <NormalStyleChip
                         size="small"
                         color="primary"
-                        icon={<RecentSelectedIcon />}
+                        icon={<InReviewWhiteIcon />}
                         label={status}
                       />
                     )}
@@ -147,7 +147,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       <HoverStyleChip
                         color="primary"
                         size="small"
-                        icon={<RecentHoveredIcon />}
+                        icon={<InReviewIcon />}
                         label={status}
                       />
                     )}
@@ -194,7 +194,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <List dense disablePadding>
           <StyledListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <PendinngReviewItemIcon />
+              <PendingReviewItemIcon />
             </IconButton>
             <ListItemText
               id={id}
@@ -217,7 +217,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           </StyledListItem>
           <StyledListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <PendinngReviewItemIcon />
+              <PendingReviewItemIcon />
             </IconButton>
             <ListItemText
               id={id}
@@ -238,7 +238,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           </StyledListItem>
           <StyledListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <PendinngReviewItemIcon />
+              <PendingReviewItemIcon />
             </IconButton>
             <ListItemText
               id={id}
@@ -259,7 +259,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           </StyledListItem>
           <StyledListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
-              <PendinngReviewItemIcon />
+              <PendingReviewItemIcon />
             </IconButton>
             <ListItemText
               id={id}

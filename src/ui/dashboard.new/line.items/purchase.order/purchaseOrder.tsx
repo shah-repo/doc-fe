@@ -9,8 +9,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ReactComponent as ExpandIcon } from "../../../../assets/images/myfeed.expand.svg";
-import { ReactComponent as MinizeIcon } from "../../../../assets/images/myfeed.mimimize.svg";
+import { ReactComponent as CollapseIcon } from "../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
 import { ReactComponent as POIcon } from "../../../../assets/images/po.svg";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_status.svg";
@@ -83,7 +83,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem button onClick={handleClick} onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
-        {open ? <MinizeIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
+        {open ? <CollapseIcon className={classes.icon}/> : <ExpandIcon className={classes.icon}/>}
         <ListItemIcon className={classes.listItemIcon}>
           <POIcon />
         </ListItemIcon>
