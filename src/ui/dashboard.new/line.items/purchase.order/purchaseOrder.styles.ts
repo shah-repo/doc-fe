@@ -12,6 +12,9 @@ export const styles = makeStyles((theme: Theme) =>
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
     },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
+    },
     icon: {
       width: "7px",
     },

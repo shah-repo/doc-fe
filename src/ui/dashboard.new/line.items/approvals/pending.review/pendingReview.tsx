@@ -95,6 +95,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onClick={handleClick}
         onMouseEnter={onMouseHoverItem}
@@ -191,7 +192,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List dense disablePadding>
+        <List dense disablePadding className={classes.collapsedList}>
           <StyledListItem button className={classes.nested}>
             <IconButton aria-label="listIcon">
               <PendingReviewItemIcon />
