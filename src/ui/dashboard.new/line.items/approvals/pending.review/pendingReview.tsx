@@ -169,6 +169,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     variant="caption"
                     className={classes.typographyBold}
                     color="textSecondary"
+                    style={hoverItem ? { textDecoration: "underline" } : {}}
                   >
                     {approvers.join(",")}
                   </Typography>
