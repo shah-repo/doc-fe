@@ -10,7 +10,7 @@ export const styles = makeStyles((theme: Theme) =>
       paddingLeft: "7px",
     },
     actionIcon: {
-      paddingLeft: "5px",
+      paddingLeft: "10px",
     },
     actionIcons: {
       /* Action Icons */

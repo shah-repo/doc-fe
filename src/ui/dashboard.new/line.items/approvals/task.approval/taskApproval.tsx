@@ -1,17 +1,22 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-console */
-import { withStyles } from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Typography from "@material-ui/core/Typography";
+import {
+  Avatar,
+  Grid,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Tooltip,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
+import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
+import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./taskApproval.styles";
 interface Props {
@@ -34,10 +39,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   timestamp,
 }) => {
   const classes = styles();
-  const [pinned, setPinned] = React.useState(false);
-  const [approved, setApproved] = React.useState(false);
-  const [rejected, setRejected] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
 
   const StyledListItem = withStyles({
     root: {
@@ -46,6 +47,26 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       },
     },
   })(ListItem);
+
+  const StyleTooltip = withStyles({
+    arrow: {
+      color: Colors.black,
+    },
+    tooltip: {
+      backgroundColor: Colors.black,
+    },
+    tooltipPlacementTop: {
+      margin: "8px 0",
+    },
+  })(Tooltip);
+
+  const [pinHover, setPinHover] = React.useState(false);
+  const [approveHover, setApproveHover] = React.useState(false);
+  const [rejectHover, setRejectHover] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
+  const [approved, setApproved] = React.useState(false);
+  const [rejected, setRejected] = React.useState(false);
+  const [hoverItem, setHoverItem] = React.useState(false);
 
   const handlePinClick = () => {
     console.log("Pin Clicked");
@@ -67,6 +88,24 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
+  const onMouseHoverApproveIcon = () => {
+    setApproveHover(true);
+  };
+  const onMouseLeaveApproveIcon = () => {
+    setApproveHover(false);
+  };
+  const onMouseHoverRejectIcon = () => {
+    setRejectHover(true);
+  };
+  const onMouseLeaveRejectIcon = () => {
+    setRejectHover(false);
   };
   // eslint-disable-next-line no-console
   console.log("Task Approval Presenter ::::");
@@ -129,13 +168,41 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       {hoverItem && (
         <div className={classes.actionIcons}>
           <span>
-            <RejectIcon onClick={handleRejectClick} />
+            {!rejectHover && (
+              <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+            )}
+            {rejectHover && (
+              <StyleTooltip title="Reject" placement="top" arrow>
+                <RejectSolidIcon
+                  onClick={handleRejectClick}
+                  onMouseLeave={onMouseLeaveRejectIcon}
+                />
+              </StyleTooltip>
+            )}
           </span>
           <span className={classes.actionIcon}>
-            <ApproveIcon onClick={handleApproveClick} />
+            {!approveHover && (
+              <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+            )}
+            {approveHover && (
+              <StyleTooltip title="Approve" placement="top" arrow>
+                <ApproveSolidIcon
+                  onClick={handleApproveClick}
+                  onMouseLeave={onMouseLeaveApproveIcon}
+                />
+              </StyleTooltip>
+            )}
           </span>
           <span className={classes.actionIcon}>
-            <PinIcon onClick={handlePinClick} />
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyleTooltip title="Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyleTooltip>
+            )}
           </span>
         </div>
       )}

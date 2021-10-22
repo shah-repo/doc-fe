@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-console */
 import {
-  Chip, Grid, ListItem,
+  Chip,
+  Grid,
+  ListItem,
   ListItemIcon,
-  ListItemText, Tooltip, Typography,
+  ListItemText,
+  Tooltip,
+  Typography,
+  withStyles,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
@@ -75,8 +79,8 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
     },
   })(Tooltip);
 
-  const [pinHover, setPinHover] = React.useState(false);
   const [closeHover, setCloseHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
