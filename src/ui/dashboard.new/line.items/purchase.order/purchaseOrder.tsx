@@ -3,14 +3,14 @@ import {
   Chip,
   Collapse,
   Grid,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Tooltip,
   Typography,
+  withStyles,
 } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/collapse.svg";

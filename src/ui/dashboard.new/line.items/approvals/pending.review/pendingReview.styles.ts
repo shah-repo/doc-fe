@@ -13,11 +13,14 @@ export const styles = makeStyles((theme: Theme) =>
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
     },
+    customTooltipWidth: {
+      maxWidth: 500,
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },
     icon: {
-      width: "7px",
+      width: "10px",
     },
     listItemIcon: {
       paddingLeft: "5px",
@@ -63,5 +66,5 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "22px",
       color: Colors.font_gray,
     },
-  }
-  ));
+  })
+);

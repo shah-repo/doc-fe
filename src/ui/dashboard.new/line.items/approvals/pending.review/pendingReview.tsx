@@ -2,7 +2,10 @@
 import {
   Chip,
   Collapse,
-  Grid, IconButton, List, ListItem,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
   ListItemIcon,
   ListItemText,
   Tooltip,
@@ -19,6 +22,7 @@ import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/i
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
+import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingReview.styles";
 
@@ -42,22 +46,23 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const PrListItems = [{
-    id: "id1",
-    text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-  },
-  {
-    id: "id2",
-    text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-  },
-  {
-    id: "id3",
-    text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-  },
-  {
-    id: "id4",
-    text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-  },
+  const PrListItems = [
+    {
+      id: "id1",
+      text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
+    },
+    {
+      id: "id2",
+      text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
+    },
+    {
+      id: "id3",
+      text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
+    },
+    {
+      id: "id4",
+      text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
+    },
   ];
 
   const StyledListItem = withStyles({
@@ -101,9 +106,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
+  const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
-  const [viewItem, setViewItem] = React.useState(false);
+  // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -113,10 +119,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setPinned(!pinned);
     console.log("Pinned:: ", !pinned);
   };
-  const handleViewClick = () => {
+  const handleViewClick = (id: string) => {
     console.log("View Item Clicked");
-    setViewItem(!viewItem);
-    console.log("Viewed Item:: ", !viewItem);
+    // setViewItem(id);
+    console.log("Clicked View Item:: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
@@ -129,6 +135,15 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeavePinIcon = () => {
     setPinHover(false);
+  };
+  const onMouseHoverViewIcon = (id: string) => {
+    console.log("View Item Hovered");
+    setViewHoverItem(id);
+    console.log("Hovered View Item:: ", id);
+  };
+  const onMouseLeaveViewIcon = () => {
+    console.log("View Item Unhovered");
+    setViewHoverItem("");
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
@@ -246,29 +261,73 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
-          {PrListItems.map((prItem, index) => <StyledListItem button className={classes.nested} key={index}>
-            <IconButton aria-label="listIcon">
-              <PendingReviewItemIcon />
-            </IconButton>
-            <ListItemText
-              id={prItem.id}
-              primary={
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {
-                    prItem.text
-                  }
-                </Typography>
-              }
-            />
-            <div>
-              <ViewIcon onClick={handleViewClick} />
-            </div>
-          </StyledListItem>)}
+          {PrListItems.map((prItem, index) => (
+            <StyledListItem button className={classes.nested} key={index}>
+              <IconButton aria-label="listIcon">
+                <PendingReviewItemIcon />
+              </IconButton>
+              <ListItemText
+                id={prItem.id}
+                primary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {prItem.text}
+                  </Typography>
+                }
+              />
+              <div>
+                {viewHoverItem !== prItem.id && (
+                  <ViewIcon
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.id)}
+                  />
+                )}
+                {viewHoverItem === prItem.id && (
+                  <StyleTooltip
+                    classes={{ tooltip: classes.customTooltipWidth }}
+                    title={
+                      <React.Fragment>
+                        <Typography component="span" variant="caption">
+                          <strong>Description of change:</strong>
+                        </Typography>
+                        <br />
+                        <Typography noWrap component="span">
+                          This text is reserved for the description of change
+                          for this
+                          <br />
+                          release. It is an integral part of the approval
+                          request process...
+                        </Typography>
+                        <br />
+                        <br />
+                        <Typography component="span" variant="caption">
+                          <strong>Justification of change:</strong>
+                        </Typography>
+                        <br />
+                        <Typography noWrap component="span">
+                          This text is reserved for the justification of change
+                          for this
+                          <br />
+                          release. It is an integral part of the approval
+                          request process...
+                        </Typography>
+                      </React.Fragment>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ViewSolidIcon
+                      onClick={() => handleViewClick(prItem.id)}
+                      onMouseLeave={onMouseLeaveViewIcon}
+                    />
+                  </StyleTooltip>
+                )}
+              </div>
+            </StyledListItem>
+          ))}
         </List>
       </Collapse>
     </>
