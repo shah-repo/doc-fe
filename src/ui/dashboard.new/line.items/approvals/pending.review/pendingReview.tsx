@@ -290,11 +290,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     classes={{ tooltip: classes.customTooltipWidth }}
                     title={
                       <React.Fragment>
-                        <Typography component="span" variant="caption">
-                          <strong>Description of change:</strong>
+                        <Typography className={classes.viewTooltipText} component="span" variant="caption">
+                          Description of change:
                         </Typography>
                         <br />
-                        <Typography noWrap component="span">
+                        <Typography className={classes.typography} noWrap component="span">
                           This text is reserved for the description of change
                           for this
                           <br />
@@ -303,11 +303,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         </Typography>
                         <br />
                         <br />
-                        <Typography component="span" variant="caption">
-                          <strong>Justification of change:</strong>
+                        <Typography className={classes.viewTooltipText} component="span" variant="caption">
+                          Justification of change:
                         </Typography>
                         <br />
-                        <Typography noWrap component="span">
+                        <Typography className={classes.typography} noWrap component="span">
                           This text is reserved for the justification of change
                           for this
                           <br />

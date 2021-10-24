@@ -41,6 +41,13 @@ export const styles = makeStyles((theme: Theme) =>
       /* Highlight */
       background: Colors.sky_blue,
     },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
     typography: {
       fontSize: "14px",
       fontFamily: "Sora",
