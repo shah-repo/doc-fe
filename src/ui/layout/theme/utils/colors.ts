@@ -2,7 +2,6 @@
 enum Colors {
   // white
   white = "#FFF",
-  background_white="#F5F8FF",
   // black
   black = "#000",
   font_black="#080B11",

@@ -13,7 +13,7 @@ export const styles = makeStyles((theme: Theme) =>
       "height": "53px",
       "background": Colors.white,
       "&:hover": {
-        background: Colors.background_white,
+        background: Colors.sky_blue,
       },
     },
     titletext: {

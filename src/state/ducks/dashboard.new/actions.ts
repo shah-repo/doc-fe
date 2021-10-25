@@ -3,17 +3,17 @@ import { ApiAction } from "../../types";
 import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC, RECENTS_REMOVE } from "./constants";
 import { Recent, RecentsListAction, RecentsRemoveAction } from "./types";
 
-const pendingActionsList = (pendingActions: Recent[]): RecentsListAction => ({
+const recentsList = (recents: Recent[]): RecentsListAction => ({
   type: RECENTS_LIST,
-  payload: pendingActions,
+  payload: recents,
 });
 
 const loadRecentsList = (): ApiAction<Recent[]> => apiAction({
   url: `${DASHBOARD_RECENT_URL}`,
   method: "get",
   asyncType: RECENTS_LIST_ASYNC,
-  onSuccess: (pendingActions, dispatch) => {
-    dispatch(pendingActionsList(pendingActions));
+  onSuccess: (recents, dispatch) => {
+    dispatch(recentsList(recents));
   },
 });
 
@@ -23,7 +23,7 @@ const removeFromList = (index: number): RecentsRemoveAction => ({
 });
 
 export default {
-  pendingActionsList,
+  recentsList,
   loadRecentsList,
   removeFromList,
 };
