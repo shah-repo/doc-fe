@@ -15,6 +15,7 @@ declare global {
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebSelectFirstDocument(): Chainable<Subject>;
     }
   }
 }
@@ -56,6 +57,12 @@ Cypress.Commands.add("ebClickClone", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("ebSelectFirstDocument", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+  });
+});
 
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
