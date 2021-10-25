@@ -7,15 +7,17 @@ import {
 import React from "react";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
 import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
+import { ReactComponent as CRIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
 import { styles } from "./Recents.item.styles";
 interface Props {
+  index: number;
   id: string;
   docId: string;
   type: string;
   title: string;
-  createdAt: string;
+  accessedAt: string;
 }
 
 const RecentsLineItem: React.FunctionComponent<Props> = ({
@@ -23,10 +25,10 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   docId,
   type,
   title,
-  createdAt,
+  accessedAt,
 }) => {
   const classes = styles();
-  const titleRender = (type, docId, title, createdAt) => (
+  const titleRender = (type, docId, title, accessedAt) => (
     <Typography display="inline" className={classes.titletext}>
       {`${docId} `}
       {type === "PO" && <span> to </span>}
@@ -38,7 +40,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
         {title}
         &#46;
       </b>
-      <small>{` ${createdAt}`}</small>
+      <small>{` ${accessedAt}`}</small>
     </Typography>
   );
   return (
@@ -47,13 +49,14 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
         <>
           {type === "PO" && <POIcon />}
           {type === "MPI" && <MPIIcon />}
-          {type === "FM" && <FMIcon />}
-          {type === "SOP" && <SOPIcon />}
+          {type === "FORM" && <FMIcon />}
+          {type === "SUPPLIER" && <SOPIcon />}
+          {(type === "CHANGE_REQUEST" || type === "DAM") && <CRIcon />}
         </>
       </ListItemIcon>
       <ListItemText
         id={id}
-        primary={titleRender(type, docId, title, createdAt)}
+        primary={titleRender(type, docId, title, accessedAt)}
       />
     </ListItem>
   );

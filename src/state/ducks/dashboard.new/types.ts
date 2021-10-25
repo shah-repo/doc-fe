@@ -12,12 +12,16 @@ export enum RecentType {
   PENDING_TRAINING_RECORDS = "PENDING_TRAINING_RECORDS",
   PURCHASE_ORDERS = "PURCHASE_ORDERS",
   APPROVED_APPROVAL_REQUESTS = "APPROVED_APPROVAL_REQUESTS",
+  DOCUMENT = "DOCUMENT",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
 }
 
 export interface Recent {
+  itemType: RecentType;
   type: RecentType;
   userId: string;
   changeReq?: ChangeRequest;
+  document?: DocumentRevision;
   trainingRecord?: TrainingRecord;
   documentRevision?: DocumentRevision;
   docRev?: DocumentRevision;

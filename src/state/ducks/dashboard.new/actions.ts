@@ -8,14 +8,21 @@ const recentsList = (recents: Recent[]): RecentsListAction => ({
   payload: recents,
 });
 
-const loadRecentsList = (): ApiAction<Recent[]> => apiAction({
-  url: `${DASHBOARD_RECENT_URL}`,
-  method: "get",
-  asyncType: RECENTS_LIST_ASYNC,
-  onSuccess: (recents, dispatch) => {
-    dispatch(recentsList(recents));
-  },
-});
+const loadRecentsList = (): ApiAction<Recent[]> => {
+  const params = {
+    offset: 0,
+    limit: 20,
+  };
+  return apiAction({
+    url: `${DASHBOARD_RECENT_URL}`,
+    method: "get",
+    params,
+    asyncType: RECENTS_LIST_ASYNC,
+    onSuccess: (recents, dispatch) => {
+      dispatch(recentsList(recents));
+    },
+  });
+};
 
 const removeFromList = (index: number): RecentsRemoveAction => ({
   type: RECENTS_REMOVE,
