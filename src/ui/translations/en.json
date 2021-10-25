@@ -1071,5 +1071,5 @@
   "my.feed.container.title": "My Feed Container",
   "training.container.title": "Training Container",
   "recent.container.title": "Recent Container",
-  "training.stats.container.title": "Training Stats Container (Chart & Line Items)"
+  "training.stats.chart.title": "TRAININGS OUTSTANDING"
 }

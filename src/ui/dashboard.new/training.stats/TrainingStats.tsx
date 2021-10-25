@@ -1,30 +1,144 @@
-/* eslint-disable react/react-in-jsx-scope */
-// import React from 'react'
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
-import Text from "../../components/Text";
+import { styles } from "./TrainingStats.styles";
+import TrainingChart from "./tranining.chart/TrainingChart.container";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  outline: {
-    // border: "1px solid grey",
-    overflow: "auto",
-    minHeight: "calc(100vh - 145px)",
-    maxHeight: "calc(100vh - 145px)",
+const trainingData = [
+  {
+    id: "TC-00095",
+    title: "Work Ethics Briefing",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_REVIEW",
+    documentId: "DocId1",
+    status: "IN REVIEW",
+    verbose: "pending approvals from",
+    timestamp: "Sep 02, 2021  8:12 AM",
+    approvers: ["Josh", "Julie", "Mathew", "Rogers", "Pierre", "Jonelle", "Jon"],
   },
-}));
+  {
+    id: "PO-00895",
+    title: "Supply Items for Hemolysis",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PURCHASE_ORDERS",
+    documentId: "DocId2",
+    status: "PENDING",
+    dueDate: "Sep 23, 2021",
+    verbose: "",
+    timestamp: "Sep 04, 2021  9:12 AM",
+    approvers: [],
+  },
+  {
+    id: "ID2",
+    title: "Clean room",
+    type: "PENDING_TRAINING_RECORDS",
+    avatar: "Josh",
+    user: "Josh",
+    documentId: "DocId3",
+    status: "OVERDUE",
+    dueDate: "Sep 23, 2021",
+    verbose: "",
+    timestamp: "Sep 04, 2021  9:12 AM",
+    approvers: [],
+  },
+  {
+    id: "ID22",
+    title: "Digitizing Documents",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_TRAINING_RECORDS",
+    documentId: "DocId4",
+    status: "DUE IN 7 DAYS",
+    dueDate: "Nov 07, 2021",
+    verbose: "",
+    timestamp: "Oct 27, 2021  9:12 AM",
+    approvers: [],
+  },
+  {
+    id: "ID22",
+    title: "Spray Painting Assembly",
+    avatar: "Josh",
+    user: "Josh",
+    type: "NEW_TRAINING_RECORDS",
+    documentId: "DocId5",
+    status: "OVERDUE",
+    dueDate: "Nov 07, 2021",
+    verbose: "",
+    timestamp: "Oct 27, 2021  9:12 AM",
+    approvers: ["Josh", "Julie", "Mathew", "Rogers", "Pierre", "Jonelle", "Jon"],
+  },
+  {
+    id: "AR-00106",
+    title: "Corrective and Preventive Measures",
+    avatar: "Josh",
+    user: "Josh",
+    type: "APPROVED_APPROVAL_REQUESTS",
+    documentId: "DocId6",
+    status: "APPROVED",
+    verbose: "needs approval for",
+    timestamp: "Apr 27, 2021  9:12 AM",
+    approvers: [],
+    requestedBy: "Josh",
+  },
+  {
+    id: "SOP-00321",
+    title: "Corrective and Preventive Measures",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_DOC_CONTROL",
+    documentId: "DocId7",
+    status: "IN REVIEW",
+    verbose: "needs approvals from",
+    timestamp: "Jan 20, 2021  9:12 AM",
+    approvers: ["Ganesh", "Nishant"],
+    requestedBy: "Josh",
+  },
+  {
+    id: "ID1",
+    title: "PENDING_REVIEW",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_REVIEW",
+    documentId: "DocId8",
+    status: "IN REVIEW",
+    verbose: "pending approvals from",
+    timestamp: "May 05, 2021  9:12 AM",
+    approvers: ["Ganesh", "Nishant"],
+  },
+  {
+    id: "ID123",
+    title: "Manufacturing Documents",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_TRAINING_RECORDS",
+    documentId: "DocId9",
+    status: "DUE IN 7 DAYS",
+    dueDate: "Nov 03, 2021",
+    verbose: "",
+    timestamp: "Oct 27, 2021  9:12 AM",
+    approvers: [],
+  },
+  {
+    id: "SOP-00234",
+    title: "Catheter Balloon Spray Painting",
+    avatar: "Josh",
+    user: "Josh",
+    type: "PENDING_DOC_CONTROL",
+    documentId: "DocId10",
+    status: "IN REVIEW",
+    verbose: "needs approvals from",
+    timestamp: "Apr 07, 2021  9:12 AM",
+    approvers: ["Ganesh", "Nishant"],
+    requestedBy: "Ramesh",
+  },
+];
 
-const TrainingStatsLineItemsContainer: React.FunctionComponent = () => {
-  const classes = useStyles();
+function TrainingStats() {
+  const classes = styles();
   return (
-    <Card className={classes.outline}>
-      <CardContent>
-        <Text translation={"training.stats.container.title"} />
-        {/* <TrainingChart /> */}
-        {/* <TrainingLineItems /> */}
-      </CardContent>
-    </Card>);
-};
+    <div className={classes.outline}>
+      <TrainingChart trainingData={trainingData}/>
+    </div>);
+}
 
-export default TrainingStatsLineItemsContainer;
+export default TrainingStats;
