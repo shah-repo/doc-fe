@@ -7,6 +7,7 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
+import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
 import { StyledTab } from "./StyledTab";
@@ -46,7 +47,9 @@ const DashboardTabs: React.FunctionComponent = () => {
                 <Grid container={true} justify="center" alignItems="center">
                   <Grid item={true} sm={12}>
                     {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
-                    <span className={classes.tabItemText}>My Feed (26)</span>
+                    <span className={classes.tabItemText}>
+                      <Text translation={"my.feed.tab.title"} /> (26)
+                    </span>
                   </Grid>
                 </Grid>
               }
@@ -64,7 +67,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                         <TrainingIcon />
                       )}
                       <span className={classes.tabItemText}>
-                        Trainings (10){" "}
+                        <Text translation={"trainings.tab.title"} /> (10)
                       </span>
                     </Grid>
                   </Grid>
@@ -83,7 +86,9 @@ const DashboardTabs: React.FunctionComponent = () => {
                       ) : (
                         <RecentIcon />
                       )}
-                    <span className={classes.tabItemText}>Recent</span>
+                    <span className={classes.tabItemText}>
+                      <Text translation={"recent.tab.title"} />
+                    </span>
                   </Grid>
                 </Grid>
               }

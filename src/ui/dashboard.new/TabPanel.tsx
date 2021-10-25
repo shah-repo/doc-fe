@@ -6,8 +6,8 @@ import TrainingStats from "./training.stats/TrainingStats";
 import Trainings from "./trainings/Trainings.container";
 
 interface TabPanelProps {
-  index: any;
-  value: any;
+  index: number;
+  value: number;
   isDashboardAdmin: boolean;
 }
 

@@ -56,7 +56,8 @@ const Header: React.FunctionComponent<Props> = ({
       >
         <Grid item={true} zeroMinWidth>
           <Typography noWrap className={classes.toolbarTitle}>
-            Welcome back, <b className={classes.toolbarTitleName}>{name}!</b>
+            <Text translation="header.welcome.back" />,&nbsp;
+            <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
         <Grid item={true} className={classes.wrapContainer}>
