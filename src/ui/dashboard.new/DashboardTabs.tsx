@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function dynamicObjProps(index: any) {
   return {
-    "id": `scrollable-auto-tab-${index}`,
+    id: `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   };
 }
@@ -54,45 +54,45 @@ const StyledTab = withStyles((theme: Theme) =>
     root: {
       "min-width": "125px",
       /* Font Gray */
-      "color": Colors.font_gray,
-      "borderRadius": "100px",
+      color: Colors.font_gray,
+      borderRadius: "100px",
       /* Heading 21 */
-      "position": "static",
-      "left": "23.45%",
-      "right": "0%",
-      "top": "10.34%",
-      "bottom": "10.34%",
+      position: "static",
+      left: "23.45%",
+      right: "0%",
+      top: "10.34%",
+      bottom: "10.34%",
       "font-family": "Sora",
       "font-style": "normal",
       "font-weight": "normal",
       "font-size": "18px",
       "line-height": "23px",
       /* identical to box height */
-      "display": "flex",
+      display: "flex",
       "align-items": "center",
       "letter-spacing": "0.25px",
       "text-transform": "capitalize",
       /* Inside Auto Layout */
-      "flex": "none",
-      "order": 1,
+      flex: "none",
+      order: 1,
       "flex-grow": 0,
-      "margin": "0px 5px",
+      margin: "0px 5px",
     },
     selected: {
-      "opacity": 1,
+      opacity: 1,
       /* Enlil Navy */
-      "color": Colors.navy,
+      color: Colors.navy,
       "font-weight": 600,
-      "backgroundColor": Colors.sky_blue,
+      backgroundColor: Colors.sky_blue,
     },
   })
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const StyledTabs = withStyles({
   indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
     "& > span": {
       width: "100%",
       backgroundColor: Colors.white,
@@ -117,7 +117,8 @@ function TabPanel(props: TabPanelProps) {
           <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
             {value === 0 && <MyFeeds />}
             {value === 1 && isDashboardAdmin && <Trainings />}
-            {((value === 2 && isDashboardAdmin) || (value === 1 && !isDashboardAdmin)) && <Recents />}
+            {((value === 2 && isDashboardAdmin) ||
+              (value === 1 && !isDashboardAdmin)) && <Recents />}
           </Grid>
           {isDashboardAdmin && (
             <Grid item={true} md={4} sm={12}>
@@ -168,8 +169,14 @@ const DashboardTabs: React.FunctionComponent = () => {
                 label={
                   <Grid container={true} justify="center" alignItems="center">
                     <Grid item={true} sm={12}>
-                      {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}
-                      <span className={classes.tabItemText}>Trainings (10) </span>
+                      {value === 1 ? (
+                        <TrainingSelectedIcon />
+                      ) : (
+                        <TrainingIcon />
+                      )}
+                      <span className={classes.tabItemText}>
+                        Trainings (10){" "}
+                      </span>
                     </Grid>
                   </Grid>
                 }
@@ -181,11 +188,11 @@ const DashboardTabs: React.FunctionComponent = () => {
                 <Grid container={true} justify="center" alignItems="center">
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
-                  (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
+                    (!isDashboardAdmin && value === 1) ? (
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
                     <span className={classes.tabItemText}>Recent</span>
                   </Grid>
                 </Grid>

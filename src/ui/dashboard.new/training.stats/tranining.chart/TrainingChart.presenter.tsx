@@ -11,34 +11,42 @@ interface TrainingChartPresenterProps {
   dueInSeven: number;
 }
 
-function TrainingChartPresenter(props: TrainingChartPresenterProps) {
-  const { overdue, dueInSeven } = props;
-  const data = [
-    { value: dueInSeven, name: "Due in 7 days" },
-    { value: overdue, name: "Overdue" },
-  ];
-  DoughnutChartOptions.series[0].data = data;
-  const classes = styles();
-  const onEvents = {
-    mouseover: () => {
-      DoughnutChartOptions.color = [Colors.background_blue, Colors.background_blue];
-    },
-  };
-  return (
-    <div className={classes.chartContainer}>
-      <Grid container={true}>
-        <Grid item={true}>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
-            <Text translation={"training.stats.chart.title"} />
-          </Typography>
-          <ReactECharts
-            option={DoughnutChartOptions}
-            style={{ height: 250, width: 250 }}
-            onEvents={onEvents} />
+const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
+  ({ overdue, dueInSeven }) => {
+    const data = [
+      { value: dueInSeven, name: "Due in 7 days" },
+      { value: overdue, name: "Overdue" },
+    ];
+    DoughnutChartOptions.series[0].data = data;
+    const classes = styles();
+    const onEvents = {
+      mouseover: () => {
+        DoughnutChartOptions.color = [
+          Colors.background_blue,
+          Colors.background_blue,
+        ];
+      },
+    };
+    return (
+      <div className={classes.chartContainer}>
+        <Grid container={true}>
+          <Grid item={true}>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              <Text translation={"training.stats.chart.title"} />
+            </Typography>
+            <ReactECharts
+              option={DoughnutChartOptions}
+              style={{ height: 250, width: 250 }}
+              onEvents={onEvents}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
-  );
-}
+      </div>
+    );
+  };
 
 export default TrainingChartPresenter;
