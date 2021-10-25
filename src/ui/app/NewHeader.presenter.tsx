@@ -48,11 +48,13 @@ const Header: React.FunctionComponent<Props> = ({
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
       <div className={classes.logo}></div>
-      <Grid container={true} wrap="nowrap" justify="space-between" alignContent="center" >
-        <Grid
-          item={true}
-          zeroMinWidth
-        >
+      <Grid
+        container={true}
+        wrap="nowrap"
+        justify="space-between"
+        alignContent="center"
+      >
+        <Grid item={true} zeroMinWidth>
           <Typography noWrap className={classes.toolbarTitle}>
             Welcome back, <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
