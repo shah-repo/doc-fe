@@ -1,6 +1,5 @@
 import { Grid, List, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-// import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
 import React from "react";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
@@ -36,10 +35,11 @@ function TabPanel(props: TabPanelProps) {
           status={data.status}
           documentId={data.documentId}
           title={data.title}
-          date={data.timestamp}/>
+          date={data.timestamp}
+        />
       ))}
-    </List>);
-
+    </List>
+  );
 
   return (
     <div
@@ -60,7 +60,7 @@ function TabPanel(props: TabPanelProps) {
 
 function a11yProps(index: any) {
   return {
-    "id": `full-width-tab-${index}`,
+    id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
@@ -99,87 +99,88 @@ interface StyledTabsProps {
 
 const StyledTabs = withStyles({
   indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
     "& > span": {
       maxWidth: 40,
       width: "100%",
       backgroundColor: "#635ee7",
     },
   },
-})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+})((props: StyledTabsProps) => (
+  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
+));
 
-// interface StyledTabProps {
-//   label: string;
-// }
+const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
+  ({ overdueItems, dueInSevenItems }) => {
+    const all = overdueItems.concat(dueInSevenItems);
+    const [value, setValue] = React.useState(0);
 
-// const StyledTab = withStyles((theme: Theme) =>
-//   createStyles({
-//     // root: {
-//     //   "textTransform": "none",
-//     //   "color": "#fff",
-//     //   "fontWeight": theme.typography.fontWeightRegular,
-//     //   "fontSize": theme.typography.pxToRem(15),
-//     //   "marginRight": theme.spacing(1),
-//     //   "&:focus": {
-//     //     opacity: 1,
-//     //   },
-//     // },
-//   }),
-// )((props: StyledTabProps) => <Tab disableRipple {...props} />);
+    const classes = styles();
 
-export default function TrainingLineItemsPresenter(props: TrainingLineItemsProps) {
-  const { overdueItems, dueInSevenItems } = props;
-  const all = overdueItems.concat(dueInSevenItems);
-  const [value, setValue] = React.useState(0);
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+      setValue(newValue);
+    };
 
-  const classes = styles();
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    return (
+      <div className={classes.root}>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="full width tabs example"
+        >
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  {/* { value === 0 && <span className={classes.allTab}></span> } */}
+                  <span className={classes.allTab}></span>
+                  <span>ALL</span>
+                </Grid>
+              </Grid>
+            }
+            {...a11yProps(0)}
+          />
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  {/* { value === 1 && <span className={classes.dueInSevenTab}></span> } */}
+                  <span className={classes.dueInSevenTab}></span>
+                  <span> DUE IN 7 DAYS</span>
+                </Grid>
+              </Grid>
+            }
+            {...a11yProps(1)}
+          />
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  {/* { value === 2 && <span className={classes.overdueTab}></span> } */}
+                  <span className={classes.overdueTab}></span>
+                  <span> OVERDUE</span>
+                </Grid>
+              </Grid>
+            }
+            {...a11yProps(2)}
+          />
+        </StyledTabs>
+        <TabPanel value={value} index={0} panelData={all}>
+          ALL
+        </TabPanel>
+        <TabPanel value={value} index={1} panelData={dueInSevenItems}>
+          DUE IN 7 DAYS
+        </TabPanel>
+        <TabPanel value={value} index={2} panelData={overdueItems}>
+          OVERDUE
+        </TabPanel>
+      </div>
+    );
   };
 
-  return (
-    <div className={classes.root}>
-      <StyledTabs value={value} onChange={handleChange} aria-label="full width tabs example" >
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              {/* { value === 0 && <span className={classes.allTab}></span> } */}
-              <span className={classes.allTab}></span>
-              <span >ALL</span>
-            </Grid>
-          </Grid>
-        } {...a11yProps(0)} />
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              {/* { value === 1 && <span className={classes.dueInSevenTab}></span> } */}
-              <span className={classes.dueInSevenTab}></span>
-              <span > DUE IN 7 DAYS</span>
-            </Grid>
-          </Grid>
-        } {...a11yProps(1)} />
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              {/* { value === 2 && <span className={classes.overdueTab}></span> } */}
-              <span className={classes.overdueTab}></span>
-              <span > OVERDUE</span>
-            </Grid>
-          </Grid>
-        } {...a11yProps(2)} />
-      </StyledTabs>
-      <TabPanel value={value} index={0} panelData={all}>
-        ALL
-      </TabPanel>
-      <TabPanel value={value} index={1} panelData={dueInSevenItems}>
-        DUE IN 7 DAYS
-      </TabPanel>
-      <TabPanel value={value} index={2} panelData={overdueItems}>
-        OVERDUE
-      </TabPanel>
-    </div>
-  );
-}
+export default TrainingLineItemsPresenter;

@@ -1,4 +1,11 @@
-import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  Grid,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
@@ -13,12 +20,15 @@ interface TrainingItemProps {
   date: string;
 }
 
-function TrainingItem(props: TrainingItemProps) {
-  // const { avatar, firstName, documentId, status, title, date } = props;
+const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
+  firstName,
+  status,
+  date,
+  documentId,
+  title,
+}) => {
   const classes = styles();
-  const { firstName, status, date, documentId, title } = props;
   const isOverdue = status === "OVERDUE" ? true : false;
-
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -32,12 +42,17 @@ function TrainingItem(props: TrainingItemProps) {
       <Grid
         justify="space-between" // Add it here :)
         container
-      ><Grid item>
+      >
+        <Grid item>
           <b>{firstName}</b>
         </Grid>
         <Grid item>
-          { isOverdue && <span className={classes.typographyOverdue}>{status}</span>}
-          { !isOverdue && <span className={classes.typographyDueInfewDays}>{status}</span>}
+          {isOverdue && (
+            <span className={classes.typographyOverdue}>{status}</span>
+          )}
+          {!isOverdue && (
+            <span className={classes.typographyDueInfewDays}>{status}</span>
+          )}
         </Grid>
       </Grid>
       <b className={classes.biggerFont}>{documentId}</b>
@@ -58,6 +73,6 @@ function TrainingItem(props: TrainingItemProps) {
       />
     </StyledListItem>
   );
-}
+};
 
 export default TrainingItem;

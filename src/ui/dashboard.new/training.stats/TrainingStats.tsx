@@ -1,11 +1,6 @@
-/* eslint-disable react/react-in-jsx-scope */
-// import React from 'react'
-// import CardContent from "@material-ui/core/CardContent";
 import React from "react";
 import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
 import { styles } from "./TrainingStats.styles";
-import TrainingChart from "./tranining.chart/TrainingChart.container";
-
 
 const trainingData = [
   {
@@ -18,7 +13,15 @@ const trainingData = [
     status: "IN REVIEW",
     verbose: "pending approvals from",
     timestamp: "Sep 02, 2021  8:12 AM",
-    approvers: ["Josh", "Julie", "Mathew", "Rogers", "Pierre", "Jonelle", "Jon"],
+    approvers: [
+      "Josh",
+      "Julie",
+      "Mathew",
+      "Rogers",
+      "Pierre",
+      "Jonelle",
+      "Jon",
+    ],
   },
   {
     id: "PO-00895",
@@ -70,7 +73,15 @@ const trainingData = [
     dueDate: "Nov 07, 2021",
     verbose: "",
     timestamp: "Oct 27, 2021  9:12 AM",
-    approvers: ["Josh", "Julie", "Mathew", "Rogers", "Pierre", "Jonelle", "Jon"],
+    approvers: [
+      "Josh",
+      "Julie",
+      "Mathew",
+      "Rogers",
+      "Pierre",
+      "Jonelle",
+      "Jon",
+    ],
   },
   {
     id: "AR-00106",
@@ -138,13 +149,13 @@ const trainingData = [
   },
 ];
 
-function TrainingStats() {
+const TrainingStats: React.FunctionComponent = () => {
   const classes = styles();
   return (
     <div className={classes.outline}>
-      <TrainingChart trainingData={trainingData}/>
-      <TrainingLineItems trainingData={trainingData}/>
-    </div>);
-}
+      <TrainingLineItems trainingData={trainingData} />
+    </div>
+  );
+};
 
 export default TrainingStats;
