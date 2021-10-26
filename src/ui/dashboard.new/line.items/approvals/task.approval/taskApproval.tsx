@@ -19,6 +19,7 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./taskApproval.styles";
+
 interface Props {
   id: string;
   type: string;

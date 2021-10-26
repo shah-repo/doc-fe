@@ -19,6 +19,7 @@ import { ReactComponent as WarningIcon } from "../../../../../assets/images/warn
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingTraining.styles";
+
 interface Props {
   id: string;
   type: string;
