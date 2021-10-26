@@ -512,15 +512,15 @@ context("Bulk create record headers", () => {
             .find("button").arrowClick({ force: true });
         });
       });
+    });
 
-      context("Upload correct template", () => {
-        it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
-        });
+    context("Upload correct template", () => {
+      it("Upload template file", () => {
+        cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
+      });
 
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
