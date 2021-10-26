@@ -38,11 +38,26 @@ export interface TrainingRecordQuery {
   docId: string;
   docRevTitle: string;
   userName: string;
-  createdAtAfter: Date;
-  dueOn: Date;
-  completedAtAfter: Date;
+  createdAtAfter?: Date;
+  dueOn?: Date;
+  completedAtAfter?: Date;
   tcId: string;
+  documentRevision?: DocumentRevision;
+  trainingPlan?: TrainingPlan;
+  trId: string;
+  completedAt?: Date;
 }
+
+export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
+  isValid: true,
+  revision: 1,
+  docId: "",
+  docRevTitle: "",
+  userName: "",
+  tcId: "",
+  trId: "",
+};
+
 
 interface TrainingPlan {
   id: string;

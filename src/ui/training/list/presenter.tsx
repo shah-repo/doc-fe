@@ -1,10 +1,10 @@
 import { Box, Button, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
-import { TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
+import { DEFAULT_TRAINING_RECORD_QUERY, TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -15,6 +15,7 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import useDialog from "../../hooks/useDialog";
+import TrainingDetails from "../details/TrainingDetails";
 import { styles } from "./styles";
 
 interface Props {
@@ -32,6 +33,9 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const dialog = useDialog();
+  const trainingDetailsDialog = useDialog();
+
+  const [selectedTraining, setTraining] = useState<TrainingRecordQuery>(DEFAULT_TRAINING_RECORD_QUERY);
 
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
@@ -180,6 +184,11 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const customDataSet = (data: TrainingRecordQuery[]) =>
     data.filter((e) => e.isValid);
 
+  const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
+    setTraining(rowData);
+    trainingDetailsDialog.open();
+  };
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item={true} xs={6}>
@@ -212,6 +221,11 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           tableName={tableName}
           customDataSet={customDataSet}
+          onSelect={({ rowData }) => () => handleTrainingDetailsDialog(rowData)}
+        />
+        <TrainingDetails
+          dialog={trainingDetailsDialog}
+          training={selectedTraining}
         />
       </Grid>
     </Grid>
