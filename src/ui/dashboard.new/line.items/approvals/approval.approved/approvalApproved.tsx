@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-console */
 import {
   Chip,
   Grid,
@@ -24,7 +23,7 @@ import { styles } from "./approvalApproved.styles";
 interface Props {
   id: string;
   type: string;
-  title: string;
+  title: string | undefined;
   arId: string | undefined;
   arStatus: string | undefined;
   timestamp: string | undefined;
@@ -85,14 +84,10 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   const [closed, setClosed] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleCloseClick = () => {
-    console.log("Close Clicked");
     setClosed(!closed);
-    console.log("Closed:: ", !closed);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
