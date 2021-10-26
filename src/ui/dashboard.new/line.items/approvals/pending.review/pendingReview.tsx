@@ -104,7 +104,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     console.log("View Item Clicked");
     // setViewItem(id);
-    console.log("Clicked View Item:: ", id);
+    console.log("Clicked View Item :: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
