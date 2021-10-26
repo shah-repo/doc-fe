@@ -1,11 +1,13 @@
 import { Avatar, Box } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Nullable } from "../../../../state/ducks/common/types";
 import AvatarUploadContainer from "../../common/avatar.field/container";
 import styles from "./avatar.styles";
 
 interface OwnProps {
-  src: Nullable<string>;
+  avatar: Nullable<string>;
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
@@ -16,7 +18,7 @@ interface OwnProps {
 type Props = OwnProps;
 
 const AvatarPresenter: React.FunctionComponent<Props> = ({
-  src,
+  avatar,
   showEditUser,
   previewAvatar,
   setPreviewAvatar,
@@ -24,12 +26,13 @@ const AvatarPresenter: React.FunctionComponent<Props> = ({
   userInitials,
 }) => {
   const classes = styles();
-  // TO DO: Provide color from BE
+  const bgColor = useSelector(authSelectors.getAvatarInitialColor);
+
   const avatarRenderer = () => (
     <Box zIndex="modal" position="absolute" alignSelf="baseline">
-      {src ?
-        <img src={previewAvatar || src } className={classes.image} alt="Profile" /> :
-        <Avatar style={{ backgroundColor: "#00ff00" }} className={classes.image}>
+      {avatar ?
+        <img src={previewAvatar || avatar } className={classes.image} alt="Profile" /> :
+        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.image}>
           {userInitials}
         </Avatar>
       }

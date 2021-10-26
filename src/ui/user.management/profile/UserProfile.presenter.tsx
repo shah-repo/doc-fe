@@ -105,12 +105,14 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         setUsernameError={setUsernameError}
       />
       <AvatarContainer
-        avatar={avatar}
-        showEditUser={showEditUser}
-        previewAvatar={previewAvatar}
-        setPreviewAvatar={setPreviewAvatar}
-        setFile={setFile}
-        name={name}
+        {...{
+          avatar,
+          showEditUser,
+          previewAvatar,
+          setPreviewAvatar,
+          setFile,
+          name,
+        }}
       />
       <DialogContent
         canManageUsers={canManageUsers}

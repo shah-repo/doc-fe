@@ -1,7 +1,9 @@
 import { Avatar, Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../state/ducks/auth";
 import { Nullable } from "../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../components/icons/avatar/avatar.container";
+import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Colors from "../../layout/theme/utils/colors";
 
 const styles = makeStyles((theme: Theme) =>
@@ -26,14 +28,14 @@ const UserAvatar: React.FunctionComponent<Props> = ({
   name,
 }) => {
   const classes = styles();
-  const userInitials = getInitalsFromName(name);
-  // TO DO: Provide color from BE
+  const bgColor = useSelector(authSelectors.getAvatarInitialColor);
+
   return (
     <Box>
       {avatar ?
         <img src={avatar} className={classes.avatar} alt="UserProfile" /> :
-        <Avatar style={{ backgroundColor: "#00ff00" }} className={classes.avatar}>
-          {userInitials}
+        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.avatar}>
+          {getInitalsFromName(name)}
         </Avatar>
       }
     </Box>
