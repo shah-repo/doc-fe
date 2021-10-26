@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Chip,
   Collapse,
@@ -39,7 +40,7 @@ interface Props {
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
-const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
   arStatus,
@@ -406,4 +407,4 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingReviewPresenter;
+export default approvalClosedPresenter;

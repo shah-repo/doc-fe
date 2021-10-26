@@ -41,7 +41,7 @@ interface Props {
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
-const approvalChangePresenter: React.FunctionComponent<Props> = ({
+const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
   arStatus,
@@ -378,4 +378,4 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default approvalChangePresenter;
+export default approvalApprovedPresenter;
