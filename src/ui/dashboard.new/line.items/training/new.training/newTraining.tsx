@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { size } from "lodash";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -119,37 +120,52 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="center"
+              alignItems="center"
+            >
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   {id}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyBold}
                   color="textSecondary"
+                  noWrap
                 >
                   {title}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyStatus}
                   color="textSecondary"
+                  noWrap
                 >
                   {!hoverItem && (
                     <NormalStyleChip
@@ -176,6 +192,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     />
                   )}
                 </Typography>
+                &nbsp;&nbsp;&nbsp;
+              </Grid>
+              <Grid
+                item={true}
+                className={
+                  status === "OVERDUE" ? classes.redDot : classes.yellowDot
+                }
+              >
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
@@ -185,28 +212,48 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       : classes.typographyDueInfewDays
                   }
                   color="textSecondary"
+                  noWrap
                 >
-                  &nbsp;. {dueDate}
+                  &nbsp; {dueDate}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
+            <Grid container={true} wrap="nowrap">
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <StyleTooltip
+                  title={
+                    <>
+                      <Typography color="inherit">
+                        Assigned to {size(approvers)} users. <br />4 have
+                        Approved and 6 are Pending.
+                      </Typography>
+                    </>
+                  }
+                  placement="top-start"
                 >
-                  {approvers.join(",")}
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {approvers.join(",")}
+                  </Typography>
+                </StyleTooltip>
+              </Grid>
+              <Grid item={true} className={classes.grayDot}>
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.timestampContainer}
                   color="textSecondary"
+                  noWrap
                 >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                 </Typography>
               </Grid>
             </Grid>

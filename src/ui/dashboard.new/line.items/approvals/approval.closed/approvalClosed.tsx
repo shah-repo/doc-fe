@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { size } from "lodash";
 import React from "react";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
@@ -163,29 +164,36 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true}>
-                <Grid item={true} md={12} sm={12}>
+              <Grid container={true} wrap="nowrap">
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
                     className={classes.typography}
                     color="textPrimary"
+                    noWrap
                   >
                     {arId}&nbsp;
                   </Typography>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.typographyBold}
                     color="textSecondary"
+                    noWrap
                   >
                     {title}&nbsp;is&nbsp;
                   </Typography>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.typographyStatus}
                     color="textSecondary"
+                    noWrap
                   >
                     {!hoverItem && !open && (
                       <NormalStyleChip
@@ -206,24 +214,51 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     &nbsp;
                   </Typography>
                 </Grid>
-                <Grid item={true} md={12} sm={12}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    style={hoverItem ? { textDecoration: "underline" } : {}}
-                    onClick={openApproversModel}
+              </Grid>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Typography color="inherit">
+                          Assigned to {size(pendingApprovers)} users. <br />4
+                          have Approved and 6 are Pending.
+                        </Typography>
+                      </>
+                    }
+                    placement="top-start"
                   >
-                    {pendingApprovers?.join(",")}
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      style={hoverItem ? { textDecoration: "underline" } : {}}
+                      onClick={openApproversModel}
+                      noWrap
+                    >
+                      {pendingApprovers?.join(",")}
+                    </Typography>
+                  </StyleTooltip>
+                  &nbsp;&nbsp;
+                </Grid>
+                <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.timestampContainer}
                     color="textSecondary"
+                    noWrap
                   >
-                    . {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
