@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Grid,
@@ -92,9 +91,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const [hoverItem, setHoverItem] = React.useState(false);
 
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);

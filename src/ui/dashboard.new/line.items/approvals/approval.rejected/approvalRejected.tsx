@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Collapse,
@@ -116,14 +115,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setOpen(!open);
   };
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleViewClick = (id: string) => {
-    console.log("View Item Clicked");
     // setViewItem(id);
-    console.log("Clicked View Item:: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
@@ -138,17 +133,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setPinHover(false);
   };
   const onMouseHoverViewIcon = (id: string) => {
-    console.log("View Item Hovered");
     setViewHoverItem(id);
-    console.log("Hovered View Item:: ", id);
   };
   const onMouseLeaveViewIcon = () => {
-    console.log("View Item Unhovered");
     setViewHoverItem("");
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
-    console.log("Please open Model popup here");
   };
 
   return (
