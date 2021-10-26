@@ -7,17 +7,15 @@ interface TrainingChartProps {
   trainingData: any[];
 }
 
-const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
-  trainingData,
-}) => {
+function TrainingChart(props: TrainingChartProps) {
+  const { trainingData } = props;
+  // const classes = styles();
   // TO DO: Logic for count calculation needs to be updated based on actual data
-  const overdue = trainingData.filter(
-    (item) => item.status === "OVERDUE"
-  ).length;
-  const dueInSeven = trainingData.filter(
-    (item) => item.status === "DUE IN 7 DAYS"
-  ).length;
-  return <TrainingChartPresenter overdue={overdue} dueInSeven={dueInSeven} />;
-};
+  const overdue = trainingData.filter((item) => item.status === "OVERDUE").length;
+  const dueInSeven = trainingData.filter((item) => item.status === "DUE IN 7 DAYS").length;
+  return (
+    <TrainingChartPresenter overdue={overdue} dueInSeven={dueInSeven}/>
+  );
+}
 
 export default TrainingChart;
