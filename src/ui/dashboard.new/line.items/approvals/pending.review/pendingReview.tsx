@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Collapse,
@@ -32,7 +31,7 @@ import { styles } from "./pendingReview.styles";
 interface Props {
   id: string;
   type: string;
-  title: string;
+  title: string | undefined;
   arId: string | undefined;
   arStatus: string | undefined;
   timestamp: string | undefined;
@@ -101,14 +100,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setOpen(!open);
   };
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleViewClick = (id: string) => {
-    console.log("View Item Clicked");
     // setViewItem(id);
-    console.log("Clicked View Item :: ", id);
+    // console.log("Clicked View Item :: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
@@ -123,17 +119,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setPinHover(false);
   };
   const onMouseHoverViewIcon = (id: string) => {
-    console.log("View Item Hovered");
     setViewHoverItem(id);
-    console.log("Hovered View Item:: ", id);
   };
   const onMouseLeaveViewIcon = () => {
-    console.log("View Item Unhovered");
     setViewHoverItem("");
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
-    console.log("Please open Model popup here");
   };
 
   return (
@@ -144,13 +136,14 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
+        className={classes.listItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} />
         ) : (
           <ExpandIcon className={classes.icon} />
         )}
-        <ListItemIcon className={classes.listItemIcon}>
+        <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
         <ListItemText
@@ -158,7 +151,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true}>
                 <Grid item={true} md={12} sm={12}>
-                  <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <Typography
                       component="span"
                       variant="body2"

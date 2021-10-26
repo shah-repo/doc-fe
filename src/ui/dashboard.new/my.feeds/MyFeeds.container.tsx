@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
 import React from "react";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
+
 const feedItems = [
   {
     docRevs: [
@@ -15,6 +17,7 @@ const feedItems = [
       },
     ],
     arId: "DCO-00809",
+    arTitle: "AR Equipment Form",
     arStatus: "CLOSED",
     pendingApprovers: [],
     id: "300c586a-74b3-474e-9a3a-7984c0134f91",
@@ -34,6 +37,7 @@ const feedItems = [
       },
     ],
     arId: "DCO-00808",
+    arTitle: "AR Mirela Tests",
     arStatus: "APPROVED",
     pendingApprovers: [],
     id: "bd2ee880-0122-4817-803d-7a6b2b8bafeb",
@@ -60,6 +64,7 @@ const feedItems = [
         userName: "Zoran Kovacevic",
       },
     ],
+    arTitle: "AR Test4",
     id: "ab977165-56b1-4fca-8a61-e1ad20b5bfea",
     timestamp: "2021-10-21T11:26:36.838Z",
     type: "APPROVAL_REQ_APPROVER",
@@ -77,6 +82,7 @@ const feedItems = [
       },
     ],
     arId: "DCO-00807",
+    arTitle: "AR Asdf",
     arStatus: "IN_REVIEW",
     pendingApprovers: [
       {

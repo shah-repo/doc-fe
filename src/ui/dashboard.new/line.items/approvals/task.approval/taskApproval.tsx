@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-console */
 import {
   Avatar,
   Grid,
@@ -8,7 +7,7 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  withStyles,
+  withStyles
 } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -21,6 +20,7 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./taskApproval.styles";
+
 interface Props {
   id: string;
   type: string;
@@ -70,19 +70,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [hoverItem, setHoverItem] = React.useState(false);
 
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleApproveClick = () => {
-    console.log("Approve Clicked");
     setApproved(!approved);
-    console.log("Approved:: ", !approved);
   };
   const handleRejectClick = () => {
-    console.log("Reject Clicked");
     setRejected(!rejected);
-    console.log("Rejected:: ", !rejected);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
@@ -116,7 +110,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       onMouseEnter={onMouseHoverItem}
       onMouseLeave={onMouseLeaveItem}
     >
-      <ListItemAvatar className={classes.listItemIcon}>
+      <ListItemAvatar>
         <Avatar
           alt={docRevOwnerName}
           src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}

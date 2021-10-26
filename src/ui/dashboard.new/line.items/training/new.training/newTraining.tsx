@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Grid,
@@ -19,6 +18,7 @@ import { ReactComponent as WarningIcon } from "../../../../../assets/images/warn
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./newTraining.styles";
+
 interface Props {
   id: string;
   type: string;
@@ -91,9 +91,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const [hoverItem, setHoverItem] = React.useState(false);
 
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
