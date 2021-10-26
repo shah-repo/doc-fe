@@ -32,6 +32,7 @@ declare global {
       atchUploadUserListJSONForNCO(params: {fileName: string; queue: number }): Chainable<Subject>;
       elUploadAttachment(params: {fileName: string; el: string }): Chainable<Subject>;
       elDownloadFile(params: {fileName: string; saveFileName: string }): Chainable<Subject>;
+      excelDownloadTemplate(params: {saveFileName: string }): Chainable<Subject>;
       atchUploadRedlineVerifyCleanCopyStatus(params: {fileName: string}): Chainable<Subject>;
       atchDownloadCleanCopyFile(params: {fileName: string; saveFileName: string}): Chainable<Subject>;
       atchUploadTemplateForBLC(params: {fileName: string }): Chainable<Subject>;
@@ -386,5 +387,21 @@ Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) =
         lastModified: new Date().getTime(),
       });
     });
+  });
+});
+
+Cypress.Commands.add("excelDownloadTemplate", (params: {saveFileName: string  }) => {
+  cy.intercept({ pathname: "/api/v1/mass_create/generate_template/*" }, (req) => {
+    req.on("response", (res) => {
+      if (res.body !== "") {
+        const file = res.body;
+        res.send({ file });
+      }
+    });
+  }).as("attach");
+  cy.get("[data-cy=\"Download Excel Template\"]").arrowClick();
+  cy.wait("@attach").then((res) => {
+    const file = Cypress.Blob.arrayBufferToBinaryString(res.response?.body.file);
+    cy.writeFile("cypress/downloads/" + params.saveFileName, file, "binary");
   });
 });
