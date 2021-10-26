@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { size } from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -48,7 +49,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   pendingApprovers,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50";
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
   const StyledListItem = withStyles({
     root: {
@@ -149,8 +150,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true}>
-                <Grid item={true} md={12} sm={12}>
+              <Grid container={true} wrap="nowrap">
+                <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
                     style={{ textDecoration: "none", color: "inherit" }}
@@ -160,23 +161,35 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       variant="body2"
                       className={classes.typography}
                       color="textPrimary"
+                      noWrap
                     >
                       {arId}&nbsp;
                     </Typography>
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <Typography
                       component="span"
                       variant="caption"
                       className={classes.typographyBold}
                       color="textSecondary"
+                      noWrap
                     >
                       {title}&nbsp;
                     </Typography>
                   </Link>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.typographyStatus}
                     color="textSecondary"
+                    noWrap
                   >
                     {!hoverItem && !open && (
                       <NormalStyleChip
@@ -196,37 +209,68 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     )}
                     &nbsp;
                   </Typography>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
                     className={classes.typography}
                     color="textPrimary"
+                    noWrap
                   >
                     pending approvals from
                   </Typography>
                 </Grid>
-                <Grid item={true} md={12} sm={12}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    style={hoverItem ? { textDecoration: "underline" } : {}}
-                    onClick={openApproversModel}
+              </Grid>
+
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Typography color="inherit">
+                          Assigned to {size(pendingApprovers)} users. <br />4
+                          have Approved and 6 are Pending.
+                        </Typography>
+                      </>
+                    }
+                    placement="top-start"
                   >
-                    {pendingApprovers !== undefined
-                      ? pendingApprovers
-                        .map((approver) => approver.userName)
-                        .join(",")
-                      : ""}
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      style={hoverItem ? { textDecoration: "underline" } : {}}
+                      onClick={openApproversModel}
+                      noWrap
+                    >
+                      {pendingApprovers !== undefined
+                        ? pendingApprovers
+                          .map((approver) => approver.userName)
+                          .join(",")
+                        : ""}
+                    </Typography>
+                  </StyleTooltip>
+                  &nbsp;&nbsp;&nbsp;
+                </Grid>
+                <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.timestampContainer}
                     color="textSecondary"
+                    noWrap
                   >
-                    . {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

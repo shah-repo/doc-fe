@@ -1,7 +1,7 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     inline: {
       display: "inline",
@@ -77,5 +77,17 @@ export const styles = makeStyles((theme: Theme) =>
       paddingLeft: "14px",
       maxWidth: "calc(100% - 14px)",
     },
-  }
-  ));
+    truncateText: {
+      textOverflow: "ellipsis",
+      overflow: "auto",
+    },
+    grayDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      top: "12px",
+      position: "relative",
+      background: Colors.font_gray,
+    },
+  })
+);
