@@ -327,7 +327,7 @@ context("Bulk create record headers", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'Bulk create form", () => {
+    it("Enter title 'Bulk create form'", () => {
       cy.drEnterDocumentTitle({ name: "Bulk create form" });
     });
 
@@ -368,7 +368,7 @@ context("Bulk create record headers", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-      it("Enter title 'Bulk Creation document", () => {
+      it("Enter title 'Bulk Creation document'", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
       });
 
@@ -513,7 +513,7 @@ context("Bulk create record headers", () => {
         });
       });
 
-      context("Upload template with other option that is not provided", () => {
+      context("Upload correct template", () => {
         it("Upload template file", () => {
           cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
         });
