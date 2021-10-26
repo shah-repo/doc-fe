@@ -39,7 +39,7 @@ export const styles = makeStyles(() =>
       color: Colors.font_gray,
     },
     nested: {
-      marginLeft: "40px",
+      marginLeft: "32px",
       borderLeft: "1px solid #CBD5E0",
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
