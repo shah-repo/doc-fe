@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  withStyles,
+  withStyles
 } from "@material-ui/core";
 import React from "react";
 // import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";
@@ -30,6 +30,7 @@ interface Props {
   accessedAt: string;
   details?: any; // TO DO:: type definition needs to be added
 }
+
 const RecentsLineItem: React.FunctionComponent<Props> = ({
   id,
   docId,
@@ -59,6 +60,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
         style={open ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onClick={handleClick}
+        className={type === "PO" ? classes.listItem : ""}
       >
         {type === "PO" &&
           (open ? (
@@ -66,7 +68,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
           ) : (
             <ExpandIcon className={classes.icon} />
           ))}
-        <ListItemIcon className={type === "PO" ? "" : classes.listItemIcon}>
+        <ListItemIcon>
           <>
             {type === "PO" && <POIcon />}
             {type === "MPI" && <MPIIcon />}
@@ -204,14 +206,12 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item md={9} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="body2"
+                  <span
                     className={classes.typography}
-                    color="textPrimary"
-                  >
-                    {description || "N/A"}
-                  </Typography>
+                    dangerouslySetInnerHTML={{
+                      __html: (description as string) || "N/A",
+                    }}
+                  />
                 </Grid>
               </Grid>
             </StyledListItem>

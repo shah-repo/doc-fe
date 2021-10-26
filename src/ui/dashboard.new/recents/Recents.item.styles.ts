@@ -6,8 +6,8 @@ export const styles = makeStyles(() =>
     icon: {
       width: "15px",
     },
-    listItemIcon: {
-      paddingLeft: "17px",
+    listItem: {
+      paddingLeft: "1px",
     },
     typography: {
       fontSize: "14px",
