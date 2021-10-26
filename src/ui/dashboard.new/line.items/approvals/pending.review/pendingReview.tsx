@@ -6,8 +6,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
-  Tooltip,
+  ListItemText, Modal, Tooltip,
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -25,6 +24,7 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
 interface Props {
@@ -93,6 +93,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [emailModelopen, setEmailModelopen] = React.useState(false);
+
   const handleClick = () => {
     setOpen(!open);
   };
@@ -122,6 +124,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setEmailModelopen(true);
+  };
+  const handleEmailModelClose = () => {
+    setEmailModelopen(false);
   };
 
   return (
@@ -355,6 +361,14 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           ))}
         </List>
       </Collapse>
+      <Modal
+        open={emailModelopen}
+        onClose={handleEmailModelClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <EmailModal handleEmailModelClose={handleEmailModelClose} />
+      </Modal>
     </>
   );
 };
