@@ -6,8 +6,8 @@ export const styles = makeStyles(() =>
     inline: {
       display: "inline",
     },
-    listItemIcon: {
-      paddingLeft: "7px",
+    icon: {
+      width: "15px",
     },
     actionIcon: {
       paddingLeft: "10px",

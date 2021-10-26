@@ -7,7 +7,7 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  withStyles,
+  withStyles
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
@@ -105,7 +105,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       onMouseEnter={onMouseHoverItem}
       onMouseLeave={onMouseLeaveItem}
     >
-      <ListItemAvatar className={classes.listItemIcon}>
+      <ListItemAvatar>
         <Avatar
           alt={docRevOwnerName}
           src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
