@@ -17,7 +17,11 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
+import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import useAsync from "../../../../hooks/useAsync";
+import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
 interface Props {
   id: string;
@@ -71,11 +75,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   const handleApproveClick = () => {
     console.log("Approve Clicked");
+    openApproveDialog();
     setApproved(!approved);
     console.log("Approved:: ", !approved);
   };
   const handleRejectClick = () => {
     console.log("Reject Clicked");
+    openRejectDialog();
     setRejected(!rejected);
     console.log("Rejected:: ", !rejected);
   };
@@ -103,109 +109,154 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveRejectIcon = () => {
     setRejectHover(false);
   };
+  const transitionDialog = useDialog();
+  const transitionDialog1 = useDialog();
+  const async = useAsync<ChangeRequestTransitionResponse>({
+    onSuccess: () => {
+      // onSuccess && onSuccess();
+      // if (transition === "closed") {
+      // effectiveDateDialog.close();
+      // } else {
+      transitionDialog.close();
+      // }
+    },
+    onError: (error) => {
+      transitionDialog.close();
+    },
+  });
+
+  const openApproveDialog = () => {
+    async.reset();
+    transitionDialog.open();
+  };
+  const openRejectDialog = () => {
+    async.reset();
+    transitionDialog1.open();
+  };
+
   // eslint-disable-next-line no-console
   console.log("Task Approval Presenter ::::");
   return (
-    <StyledListItem
-      button
-      onMouseEnter={onMouseHoverItem}
-      onMouseLeave={onMouseLeaveItem}
-    >
-      <ListItemAvatar className={classes.listItemIcon}>
-        <Avatar
-          alt={docRevOwnerName}
-          src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-        />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  <b>{docRevOwnerName}</b> &nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
+    <>
+      <StyledListItem
+        button
+        onMouseEnter={onMouseHoverItem}
+        onMouseLeave={onMouseLeaveItem}
+      >
+        <ListItemAvatar className={classes.listItemIcon}>
+          <Avatar
+            alt={docRevOwnerName}
+            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
+          />
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <React.Fragment>
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    <b>{docRevOwnerName}</b> &nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
                   needs approval for
-                </Typography>{" "}
+                  </Typography>{" "}
                 &nbsp;
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  <b>{title}</b>
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    <b>{title}</b>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.timestampContainer}
-                  color="textSecondary"
-                >
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                  >
                   . {timestamp}
-                </Typography>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </React.Fragment>
-        }
+            </React.Fragment>
+          }
+        />
+        {hoverItem && (
+          <div className={classes.actionIcons}>
+            <span>
+              {!rejectHover && (
+                <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+              )}
+              {rejectHover && (
+                <StyleTooltip title="Reject" placement="top" arrow>
+                  <RejectSolidIcon
+                    onClick={handleRejectClick}
+                    onMouseLeave={onMouseLeaveRejectIcon}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+            <span className={classes.actionIcon}>
+              {!approveHover && (
+                <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+              )}
+              {approveHover && (
+                <StyleTooltip title="Approve" placement="top" arrow>
+                  <ApproveSolidIcon
+                    onClick={handleApproveClick}
+                    onMouseLeave={onMouseLeaveApproveIcon}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+            <span className={classes.actionIcon}>
+              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {pinHover && (
+                <StyleTooltip title="Pin item" placement="top" arrow>
+                  <PinSolidIcon
+                    onClick={handlePinClick}
+                    onMouseLeave={onMouseLeavePinIcon}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+          </div>
+        )}
+      </StyledListItem>
+      <ApproveDialogueContainer
+        transition="reject"
+        changeRequestId={id}
+        transitionDialog={transitionDialog1}
+        label="transition.action.reject"
+        // { ...{
+        //   transitionDialog,
+        // }}
       />
-      {hoverItem && (
-        <div className={classes.actionIcons}>
-          <span>
-            {!rejectHover && (
-              <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
-            )}
-            {rejectHover && (
-              <StyleTooltip title="Reject" placement="top" arrow>
-                <RejectSolidIcon
-                  onClick={handleRejectClick}
-                  onMouseLeave={onMouseLeaveRejectIcon}
-                />
-              </StyleTooltip>
-            )}
-          </span>
-          <span className={classes.actionIcon}>
-            {!approveHover && (
-              <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
-            )}
-            {approveHover && (
-              <StyleTooltip title="Approve" placement="top" arrow>
-                <ApproveSolidIcon
-                  onClick={handleApproveClick}
-                  onMouseLeave={onMouseLeaveApproveIcon}
-                />
-              </StyleTooltip>
-            )}
-          </span>
-          <span className={classes.actionIcon}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-            {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
-                />
-              </StyleTooltip>
-            )}
-          </span>
-        </div>
-      )}
-    </StyledListItem>
+      <ApproveDialogueContainer
+        transition="approve"
+        changeRequestId={id}
+        transitionDialog={transitionDialog}
+        label="transition.action.approve"
+        // { ...{
+        //   transitionDialog,
+        // }}
+      />
+    </>
   );
 };
 
