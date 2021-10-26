@@ -118,45 +118,63 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="center"
+              alignItems="center"
+            >
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   {id}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyBold}
                   color="textSecondary"
+                  noWrap
                 >
                   {title}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   is&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyStatus}
                   color="textSecondary"
+                  noWrap
                 >
                   {!hoverItem && (
                     <NormalStyleChip
@@ -183,6 +201,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     />
                   )}
                 </Typography>
+                &nbsp;&nbsp;&nbsp;
+              </Grid>
+              <Grid
+                item={true}
+                className={
+                  status === "OVERDUE" ? classes.redDot : classes.yellowDot
+                }
+              >
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
@@ -192,12 +221,16 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       : classes.typographyDueInfewDays
                   }
                   color="textSecondary"
+                  noWrap
                 >
-                  &nbsp;. {dueDate}
+                  &nbsp; {dueDate}
                 </Typography>
               </Grid>
             </Grid>
             <Grid container={true}>
+              <Grid item={true} className={classes.grayDot}>
+                &nbsp;
+              </Grid>
               <Grid item={true} md={12} sm={12}>
                 <Typography
                   component="span"
@@ -205,7 +238,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   className={classes.timestampContainer}
                   color="textSecondary"
                 >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                 </Typography>
               </Grid>
             </Grid>

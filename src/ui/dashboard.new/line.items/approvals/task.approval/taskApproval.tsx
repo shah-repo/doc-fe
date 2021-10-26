@@ -120,44 +120,55 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid container={true} wrap="nowrap">
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   <b>{docRevOwnerName}</b> &nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   needs approval for
                 </Typography>{" "}
+              </Grid>
                 &nbsp;
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   <b>{title}</b>
                 </Typography>
               </Grid>
             </Grid>
             <Grid container={true}>
+              <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+              </Grid>
               <Grid item={true} md={12} sm={12}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.timestampContainer}
                   color="textSecondary"
+                  noWrap
                 >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                 </Typography>
               </Grid>
             </Grid>

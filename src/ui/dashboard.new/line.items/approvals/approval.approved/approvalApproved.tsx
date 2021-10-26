@@ -126,32 +126,41 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid container={true} wrap="nowrap">
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   {arId}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item ={true}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typography}
+                  color="textPrimary"
+                  noWrap
+                >
+                  is&nbsp;
+                </Typography>
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyBold}
                   color="textSecondary"
+                  noWrap
                 >
                   {title}&nbsp;
                 </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  is&nbsp;
-                </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
@@ -176,8 +185,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                   )}
                 </Typography>
               </Grid>
+
             </Grid>
             <Grid container={true}>
+              <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+              </Grid>
               <Grid item={true} md={12} sm={12}>
                 <Typography
                   component="span"
@@ -185,7 +198,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                   className={classes.timestampContainer}
                   color="textSecondary"
                 >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                 </Typography>
               </Grid>
             </Grid>
