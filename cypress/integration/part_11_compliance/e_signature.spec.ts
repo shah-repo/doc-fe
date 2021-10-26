@@ -186,7 +186,6 @@ context("E-signature test", () => {
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
-      cy.wait(10000);
     });
 
     it("Logout user", () => {
@@ -198,7 +197,6 @@ context("E-signature test", () => {
   context("Activate first user", () => {
     it("Verify activation email", () => {
       cy.imapGetActivationLink({ userEmail: emailOfFirstUserToSignUp });
-      cy.wait(10000);
     });
 
     it("Enter password", () => {
@@ -245,7 +243,6 @@ context("E-signature test", () => {
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
-      cy.wait(10000);
     });
 
     it("Logout user", () => {
@@ -257,7 +254,6 @@ context("E-signature test", () => {
   context("Activate second user", () => {
     it("Verify activation email", () => {
       cy.imapGetActivationLink({ userEmail: emailOfSecondUserToSignUp });
-      cy.wait(10000);
     });
 
     it("Enter password", () => {
@@ -304,7 +300,6 @@ context("E-signature test", () => {
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
-      cy.wait(10000);
     });
 
     it("Logout user", () => {
@@ -316,7 +311,6 @@ context("E-signature test", () => {
   context("Activate third user", () => {
     it("Verify activation email", () => {
       cy.imapGetActivationLink({ userEmail: emailOfThirdUserToSignUp });
-      cy.wait(10000);
     });
 
     it("Enter password", () => {
