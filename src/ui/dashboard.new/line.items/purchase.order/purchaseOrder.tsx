@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Collapse,
@@ -114,9 +113,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     setOpen(!open);
   };
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
