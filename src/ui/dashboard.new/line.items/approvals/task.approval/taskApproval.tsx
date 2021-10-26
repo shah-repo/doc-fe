@@ -11,17 +11,20 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./taskApproval.styles";
 interface Props {
   id: string;
   type: string;
+  arId: string | undefined;
   timestamp: string | undefined;
   docRevOwnerAvatar?: string | undefined | null;
   docRevOwnerName: string | undefined;
@@ -29,12 +32,14 @@ interface Props {
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
+  arId,
   docRevOwnerName,
   timestamp,
   title,
   docRevOwnerAvatar,
 }) => {
   const classes = styles();
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50";
 
   const StyledListItem = withStyles({
     root: {
@@ -139,6 +144,16 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   needs approval for
                 </Typography>{" "}
                 &nbsp;
+                <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {arId}&nbsp;
+                  </Typography>
+                </Link>
                 <Typography
                   component="span"
                   variant="body2"

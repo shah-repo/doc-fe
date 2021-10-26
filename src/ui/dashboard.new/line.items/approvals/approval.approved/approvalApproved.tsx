@@ -11,6 +11,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as CloseIcon } from "../../../../../assets/images/close.svg";
@@ -18,6 +19,7 @@ import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/c
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./approvalApproved.styles";
 
@@ -32,12 +34,14 @@ interface Props {
   docRevs: any;
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   arStatus,
   title,
   timestamp,
 }) => {
   const classes = styles();
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50";
 
   const StyledListItem = withStyles({
     root: {
@@ -128,14 +132,17 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
           <React.Fragment>
             <Grid container={true}>
               <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {arId}&nbsp;
-                </Typography>
+                <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {arId}&nbsp;
+                  </Typography>
+                </Link>
                 <Typography
                   component="span"
                   variant="caption"

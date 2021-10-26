@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
@@ -23,6 +24,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./approvalRejected.styles";
@@ -38,6 +40,7 @@ interface Props {
   docRevs: any;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   arStatus,
   title,
@@ -46,7 +49,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   docRevs,
 }) => {
   const classes = styles();
-
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50";
   // const docRevs = [
   //   {
   //     id: "id1",
@@ -173,14 +176,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true}>
                 <Grid item={true} md={12} sm={12}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                  >
-                    {arId}&nbsp;
-                  </Typography>
+                  <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                    >
+                      {arId}&nbsp;
+                    </Typography>
+                  </Link>
                   <Typography
                     component="span"
                     variant="caption"
