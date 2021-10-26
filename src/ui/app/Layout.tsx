@@ -27,6 +27,7 @@ import styles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
+
 type Props = WithStyles<typeof styles>;
 
 const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
