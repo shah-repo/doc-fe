@@ -97,6 +97,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -114,6 +116,18 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -168,9 +182,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
                     >
-                      {arId}&nbsp;
-                    </Typography>
+                      {arId}
+                    </Typography>&nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -184,9 +201,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
                     >
-                      {title}&nbsp;
-                    </Typography>
+                      {title}
+                    </Typography>&nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>

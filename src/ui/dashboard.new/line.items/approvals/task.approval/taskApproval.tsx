@@ -68,6 +68,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
 
   const handlePinClick = () => {
     setPinned(!pinned);
@@ -83,6 +85,18 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -152,9 +166,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     variant="body2"
                     className={classes.typography}
                     color="textPrimary"
+                    style={hoverId ? { textDecoration: "underline" } : {}}
+                    onMouseEnter={onMouseHoverId}
+                    onMouseLeave={onMouseLeaveId}
                   >
-                    {arId}&nbsp;
-                  </Typography>
+                    {arId}
+                  </Typography>&nbsp;
                 </Link>
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -168,6 +185,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typographyBold}
                     color="textSecondary"
                     noWrap
+                    style={hoverTitle ? { textDecoration: "underline" } : {}}
+                    onMouseEnter={onMouseHoverTitle}
+                    onMouseLeave={onMouseLeaveTitle}
                   >
                     {title}
                   </Typography>

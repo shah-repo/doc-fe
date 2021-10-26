@@ -97,6 +97,8 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
 
@@ -114,6 +116,18 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -169,9 +183,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
                     >
-                      {arId}&nbsp;
-                    </Typography>
+                      {arId}
+                    </Typography>&nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -185,9 +202,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
                     >
-                      {title}&nbsp;
-                    </Typography>
+                      {title}
+                    </Typography>&nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -319,7 +339,8 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
+
                         </Typography>
                         <br />
                         <br />
@@ -336,7 +357,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }
