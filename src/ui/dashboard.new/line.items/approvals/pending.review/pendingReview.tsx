@@ -12,6 +12,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
@@ -22,6 +23,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../../modal.popups/email/EmailDialog";
@@ -38,6 +40,7 @@ interface Props {
   docRevs: any;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   timestamp,
   docRevs,
@@ -46,6 +49,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   pendingApprovers,
 }) => {
   const classes = styles();
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
   const StyledListItem = withStyles({
     root: {
@@ -93,6 +97,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -103,12 +109,25 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
+    // console.log("Clicked View Item :: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -138,7 +157,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
-        className = {classes.listItem}
+        className={classes.listItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} />
@@ -153,26 +172,42 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {arId}&nbsp;
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {arId}
+                    </Typography>&nbsp;
+                  </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {title}&nbsp;
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>&nbsp;
+                  </Link>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -326,7 +361,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
                         </Typography>
                         <br />
                         <br />
@@ -343,7 +378,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }

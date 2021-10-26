@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  Chip, Collapse, Grid, IconButton,
-  List, ListItem,
+  Chip,
+  Collapse,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
   ListItemIcon,
   ListItemText,
   Tooltip,
@@ -9,6 +13,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as CloseIcon } from "../../../../../assets/images/close.svg";
@@ -21,6 +26,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./approvalApproved.styles";
@@ -35,7 +41,8 @@ interface Props {
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
-const approvalChangePresenter: React.FunctionComponent<Props> = ({
+const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   arStatus,
   title,
@@ -43,6 +50,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   docRevs,
 }) => {
   const classes = styles();
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
   const StyledListItem = withStyles({
     root: {
@@ -89,6 +97,8 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
 
@@ -106,6 +116,18 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -139,9 +161,9 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
         className={classes.listItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon}  onClick={handleClick}/>
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  onClick={handleClick}/>
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon />
@@ -151,26 +173,42 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {arId}&nbsp;
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {arId}
+                    </Typography>&nbsp;
+                  </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {title}&nbsp;
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>&nbsp;
+                  </Link>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -180,7 +218,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                  is&nbsp;
+                    is&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -221,7 +259,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                     className={classes.timestampContainer}
                     color="textSecondary"
                   >
-                   &nbsp; {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -231,7 +269,9 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
         {!open && hoverItem && (
           <div className={classes.actionIcons}>
             <span>
-              {!closeHover && <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />}
+              {!closeHover && (
+                <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
+              )}
               {closeHover && (
                 <StyleTooltip title="Close" placement="top" arrow>
                   <CloseSolidIcon
@@ -299,7 +339,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
                         </Typography>
                         <br />
                         <br />
@@ -316,7 +356,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }
@@ -338,4 +378,4 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default approvalChangePresenter;
+export default approvalApprovedPresenter;

@@ -99,6 +99,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   timestamp={pendingAction.timestamp}
+                  arId={pendingAction.arId || "SOP-1003"}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                   title={pendingAction.docRevName}

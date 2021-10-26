@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Chip,
   Collapse,
@@ -13,6 +14,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -23,6 +25,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./approvalClosed.styles";
@@ -37,7 +40,8 @@ interface Props {
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
-const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+const approvalClosedPresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   arStatus,
   title,
@@ -46,7 +50,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   docRevs,
 }) => {
   const classes = styles();
-
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
   // const docRevs = [
   //   {
   //     id: "id1",
@@ -112,6 +116,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -126,6 +132,18 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -166,6 +184,44 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {arId}
+                    </Typography>&nbsp;
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>&nbsp;
+                  </Link>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -173,18 +229,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {arId}&nbsp;
-                  </Typography>
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {title}&nbsp;is&nbsp;
+                    is&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -323,7 +368,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
                         </Typography>
                         <br />
                         <br />
@@ -340,7 +385,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }
@@ -362,4 +407,4 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingReviewPresenter;
+export default approvalClosedPresenter;
