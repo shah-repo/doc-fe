@@ -21,6 +21,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { preventClick } from "../../helper";
 import { styles } from "./approvalApproved.styles";
 
 interface Props {
@@ -119,6 +120,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("approvalChangePresenter");
   return (
+
     <StyledListItem
       button
       onMouseEnter={onMouseHoverItem}
@@ -130,9 +132,9 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
 
                   <Typography
                     component="span"
@@ -142,60 +144,62 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                   >
                     {arId}&nbsp;
                   </Typography>
-                </Link>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                >
-                  {title}&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    onClick={preventClick}
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                  >
+                    {title}&nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
                   is&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyStatus}
-                  color="textSecondary"
-                >
-                  {!hoverItem && (
-                    <NormalStyleChip
-                      size="small"
-                      color="primary"
-                      icon={<ApprovedIcon />}
-                      label={arStatus}
-                    />
-                  )}
-                  {hoverItem && (
-                    <HoverStyleChip
-                      color="primary"
-                      size="small"
-                      icon={<ApprovedWhiteIcon />}
-                      label={arStatus}
-                    />
-                  )}
-                </Typography>
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    onClick={preventClick}
+                    className={classes.typographyStatus}
+                    color="textSecondary"
+                  >
+                    {!hoverItem && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<ApprovedIcon />}
+                        label={arStatus}
+                      />
+                    )}
+                    {hoverItem && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={<ApprovedWhiteIcon />}
+                        label={arStatus}
+                      />
+                    )}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.timestampContainer}
-                  color="textSecondary"
-                >
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                  >
                   . {timestamp}
-                </Typography>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
+            </Link>
           </React.Fragment>
         }
       />

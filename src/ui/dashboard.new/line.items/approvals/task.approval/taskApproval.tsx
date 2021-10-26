@@ -20,6 +20,7 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { preventClick } from "../../helper";
 import { styles } from "./taskApproval.styles";
 interface Props {
   id: string;
@@ -125,26 +126,27 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <React.Fragment>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  <b>{docRevOwnerName}</b> &nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
+            <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    onClick={preventClick}
+                    color="textPrimary"
+                  >
+                    <b>{docRevOwnerName}</b> &nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
                   needs approval for
-                </Typography>{" "}
+                  </Typography>{" "}
                 &nbsp;
-                <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -153,29 +155,30 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     {arId}&nbsp;
                   </Typography>
-                </Link>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  <b>{title}</b>
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    onClick={preventClick}
+                    color="textPrimary"
+                  >
+                    <b>{title}</b>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.timestampContainer}
-                  color="textSecondary"
-                >
+              <Grid container={true}>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                  >
                   . {timestamp}
-                </Typography>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
+            </Link>
           </React.Fragment>
         }
       />
