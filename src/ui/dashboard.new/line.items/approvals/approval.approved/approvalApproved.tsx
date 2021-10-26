@@ -340,7 +340,6 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                           component="span"
                         >
                           {prItem.descriptionOfChange}
-
                         </Typography>
                         <br />
                         <br />

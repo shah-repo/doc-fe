@@ -367,7 +367,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
                         </Typography>
                         <br />
                         <br />
@@ -384,7 +384,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }
