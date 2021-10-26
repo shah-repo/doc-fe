@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -131,13 +131,14 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
+        className = {classes.listItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} />
         ) : (
           <ExpandIcon className={classes.icon} />
         )}
-        <ListItemIcon className={classes.listItemIcon}>
+        <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
         <ListItemText

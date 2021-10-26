@@ -6,7 +6,7 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -138,13 +138,14 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        className={classes.listItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon}  onClick={handleClick}/>
         ) : (
           <ExpandIcon className={classes.icon}  onClick={handleClick}/>
         )}
-        <ListItemIcon className={classes.listItemIcon}>
+        <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
         <ListItemText

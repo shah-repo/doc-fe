@@ -20,10 +20,10 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.sky_blue,
     },
     icon: {
-      width: "10px",
+      width: "15px",
     },
-    listItemIcon: {
-      paddingLeft: "5px",
+    listItem: {
+      paddingLeft: "1px",
     },
     actionIcons: {
       /* Action Icons */

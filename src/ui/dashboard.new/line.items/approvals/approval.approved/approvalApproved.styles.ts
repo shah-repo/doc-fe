@@ -8,10 +8,10 @@ export const styles = makeStyles((theme: Theme) =>
       display: "inline",
     },
     icon: {
-      width: "10px",
+      width: "15px",
     },
-    listItemIcon: {
-      paddingLeft: "10px",
+    listItem: {
+      paddingLeft: "1px",
     },
     actionIcon: {
       paddingLeft: "10px",
