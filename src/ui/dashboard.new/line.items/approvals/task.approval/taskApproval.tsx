@@ -20,23 +20,19 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./taskApproval.styles";
 interface Props {
-  // pendingAction: any;
   id: string;
   type: string;
-  title: string;
-  documentId: string;
-  status: string;
-  timestamp: string;
-  approvers: string[];
-  verbose: string;
-  requestedBy: string;
+  timestamp: string | undefined;
+  docRevOwnerAvatar?: string | undefined | null;
+  docRevOwnerName: string | undefined;
+  title: string | undefined;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
-  title,
-  requestedBy,
-  verbose,
+  docRevOwnerName,
   timestamp,
+  title,
+  docRevOwnerAvatar,
 }) => {
   const classes = styles();
 
@@ -116,7 +112,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       onMouseLeave={onMouseLeaveItem}
     >
       <ListItemAvatar className={classes.listItemIcon}>
-        <Avatar alt={requestedBy} src="." />
+        <Avatar
+          alt={docRevOwnerName}
+          src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
+        />
       </ListItemAvatar>
       <ListItemText
         primary={
@@ -129,7 +128,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  <b>{requestedBy}</b> &nbsp;
+                  <b>{docRevOwnerName}</b> &nbsp;
                 </Typography>
                 <Typography
                   component="span"
@@ -137,7 +136,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  {verbose} {id}
+                  needs approval for
                 </Typography>{" "}
                 &nbsp;
                 <Typography

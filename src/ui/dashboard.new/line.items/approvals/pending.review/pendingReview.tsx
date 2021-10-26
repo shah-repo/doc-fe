@@ -23,6 +23,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingReview.styles";
 
@@ -30,40 +31,21 @@ interface Props {
   id: string;
   type: string;
   title: string;
-  documentId: string;
-  status: string;
-  timestamp: string;
-  approvers: string[];
-  verbose: string;
+  arId: string | undefined;
+  arStatus: string | undefined;
+  timestamp: string | undefined;
+  pendingApprovers: any[] | undefined;
+  docRevs: any;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
-  id,
-  status,
-  title,
-  verbose,
+  arId,
   timestamp,
-  approvers,
+  docRevs,
+  title,
+  arStatus,
+  pendingApprovers,
 }) => {
   const classes = styles();
-
-  const PrListItems = [
-    {
-      id: "id1",
-      text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-    },
-    {
-      id: "id2",
-      text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-    },
-    {
-      id: "id3",
-      text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-    },
-    {
-      id: "id4",
-      text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-    },
-  ];
 
   const StyledListItem = withStyles({
     root: {
@@ -178,7 +160,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typography}
                     color="textPrimary"
                   >
-                    {id}&nbsp;
+                    {arId}&nbsp;
                   </Typography>
                   <Typography
                     component="span"
@@ -199,7 +181,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewWhiteIcon />}
-                        label={status}
+                        label={arStatus}
                       />
                     )}
                     {(hoverItem || open) && (
@@ -207,7 +189,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewIcon />}
-                        label={status}
+                        label={arStatus}
                       />
                     )}
                     &nbsp;
@@ -218,7 +200,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typography}
                     color="textPrimary"
                   >
-                    {verbose}
+                    pending approvals from
                   </Typography>
                 </Grid>
                 <Grid item={true} md={12} sm={12}>
@@ -230,7 +212,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     style={hoverItem ? { textDecoration: "underline" } : {}}
                     onClick={openApproversModel}
                   >
-                    {approvers.join(",")}
+                    {pendingApprovers !== undefined
+                      ? pendingApprovers
+                          .map((approver) => approver.userName)
+                          .join(",")
+                      : ""}
                   </Typography>
                   <Typography
                     component="span"
@@ -261,13 +247,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
-          {PrListItems.map((prItem, index) => (
+          {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
                 <PendingReviewItemIcon />
               </IconButton>
               <ListItemText
-                id={prItem.id}
+                id={prItem.docId}
                 primary={
                   <Typography
                     component="span"
@@ -275,44 +261,52 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typography}
                     color="textPrimary"
                   >
-                    {prItem.text}
+                    {prItem.name}
                   </Typography>
                 }
               />
               <div>
-                {viewHoverItem !== prItem.id && (
+                {viewHoverItem !== prItem.docId && (
                   <ViewIcon
-                    onMouseEnter={() => onMouseHoverViewIcon(prItem.id)}
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
                   />
                 )}
-                {viewHoverItem === prItem.id && (
+                {viewHoverItem === prItem.docId && (
                   <StyleTooltip
                     classes={{ tooltip: classes.customTooltipWidth }}
                     title={
                       <React.Fragment>
-                        <Typography className={classes.viewTooltipText} component="span" variant="caption">
-                          Description of change:
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.closed.descriptionOfChangeTitle" />
                         </Typography>
                         <br />
-                        <Typography className={classes.typography} noWrap component="span">
-                          This text is reserved for the description of change
-                          for this
-                          <br />
-                          release. It is an integral part of the approval
-                          request process...
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.justificationOfChange}
                         </Typography>
                         <br />
                         <br />
-                        <Typography className={classes.viewTooltipText} component="span" variant="caption">
-                          Justification of change:
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.closed.JustificationChangeTitle" />
                         </Typography>
                         <br />
-                        <Typography className={classes.typography} noWrap component="span">
-                          This text is reserved for the justification of change
-                          for this
-                          <br />
-                          release. It is an integral part of the approval
-                          request process...
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.descriptionOfChange}
                         </Typography>
                       </React.Fragment>
                     }

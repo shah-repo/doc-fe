@@ -25,15 +25,15 @@ interface Props {
   id: string;
   type: string;
   title: string;
-  documentId: string;
-  status: string;
-  timestamp: string;
-  verbose: string;
-  approvers: string[];
+  arId: string | undefined;
+  arStatus: string | undefined;
+  timestamp: string | undefined;
+  pendingApprovers: any[] | undefined;
+  docRevs: any;
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
-  id,
-  status,
+  arId,
+  arStatus,
   title,
   timestamp,
 }) => {
@@ -134,7 +134,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                   className={classes.typography}
                   color="textPrimary"
                 >
-                  {id}&nbsp;
+                  {arId}&nbsp;
                 </Typography>
                 <Typography
                   component="span"
@@ -163,7 +163,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                       size="small"
                       color="primary"
                       icon={<ApprovedIcon />}
-                      label={status}
+                      label={arStatus}
                     />
                   )}
                   {hoverItem && (
@@ -171,7 +171,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                       color="primary"
                       size="small"
                       icon={<ApprovedWhiteIcon />}
-                      label={status}
+                      label={arStatus}
                     />
                   )}
                 </Typography>
