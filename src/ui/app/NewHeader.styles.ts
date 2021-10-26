@@ -2,6 +2,7 @@ import { createStyles, Theme } from "@material-ui/core";
 import EnlilLogo from "../../assets/images/enlil_logo.svg";
 import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
+
 export default (theme: Theme) =>
   createStyles({
     appBar: {
