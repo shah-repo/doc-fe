@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import React from "react";
 // import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";

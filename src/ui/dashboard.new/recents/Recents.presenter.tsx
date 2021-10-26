@@ -21,8 +21,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   loadRecentsListAsyncState,
   recents,
 }) => {
-  // eslint-disable-next-line no-console
-  console.log("Recents API Data:: ", recents);
   const classes = styles();
   const renderItems = () => (
     <List className={classes.root}>
