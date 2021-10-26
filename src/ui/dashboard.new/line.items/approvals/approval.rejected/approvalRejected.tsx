@@ -37,6 +37,7 @@ interface Props {
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   arId,
   arStatus,
@@ -362,4 +363,4 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingReviewPresenter;
+// export default PendingReviewPresenter;

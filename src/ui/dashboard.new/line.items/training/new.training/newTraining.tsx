@@ -31,6 +31,7 @@ interface Props {
   dueDate: string;
   approvers: string[];
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
   title,
@@ -277,4 +278,4 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingTrainingPresenter;
+// export default PendingTrainingPresenter;

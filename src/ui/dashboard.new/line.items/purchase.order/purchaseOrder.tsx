@@ -8,7 +8,7 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  withStyles,
+  withStyles
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";
@@ -32,6 +32,7 @@ interface Props {
   approvers: string[];
   verbose: string;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
   status,
@@ -359,4 +360,4 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PurchaseOrderItemPresenter;
+// export default PurchaseOrderItemPresenter;
