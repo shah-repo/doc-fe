@@ -34,17 +34,17 @@ export const styles = makeStyles((theme: Theme) =>
     typographyDueInfewDays: {
       fontFamily: "Sora",
       fontStyle: "normal",
-      fontWeight: "bold",
-      fontSize: "13px",
-      lineHeight: "16px",
+      fontWeight: 600,
+      fontSize: "12px",
+      lineHeight: "15px",
       color: Colors.latest_yellow_varient,
     },
     typographyOverdue: {
       fontFamily: "Sora",
       fontStyle: "normal",
-      fontWeight: "bold",
-      fontSize: "13px",
-      lineHeight: "16px",
+      fontWeight: 600,
+      fontSize: "12px",
+      lineHeight: "15px",
       color: Colors.latest_red_varient,
     },
     typography: {
@@ -72,21 +72,36 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "22px",
       color: Colors.font_gray,
     },
-    listitem: {
-      "background": Colors.white,
-      "&:hover": {
-        background: Colors.background_white,
-      },
+    name: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+      display: "flex",
+      alignItems: "center",
+      marginLeft: "5px",
     },
-    titletext: {
+    docIdAndTitle: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "22px",
+    },
+    date: {
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
-      color: Colors.font_black,
+      lineHeight: "15px",
     },
-    biggerFont: {
-      fontSize: "14px",
+    avatar: {
+      width: "30px",
+      height: "30px",
+    },
+    avatarSection: {
+      display: "flex",
     },
   }
   ));

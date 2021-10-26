@@ -23,14 +23,9 @@ function TrainingLineItems(props: TrainingLineItemsProps) {
   // const classes = styles();
   // TO DO: Logic for count calculation needs to be updated based on actual data
   const overdueItems = trainingData.filter((item) => item.status === "OVERDUE");
-  const dueInSevenItems = trainingData.filter(
-    (item) => item.status === "DUE IN 7 DAYS"
-  );
+  const dueInSevenItems = trainingData.filter((item) => item.status === "DUE IN 7 DAYS");
   return (
-    <TrainingLineItemsPresenter
-      overdueItems={overdueItems}
-      dueInSevenItems={dueInSevenItems}
-    />
+    <TrainingLineItemsPresenter overdueItems={overdueItems} dueInSevenItems={dueInSevenItems}/>
   );
 }
 

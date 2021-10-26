@@ -1,14 +1,5 @@
-import {
-  Avatar,
-  Grid,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Avatar, Grid, ListItem, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
-import Colors from "../../../layout/theme/utils/colors";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
@@ -20,59 +11,45 @@ interface TrainingItemProps {
   date: string;
 }
 
-const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
-  firstName,
-  status,
-  date,
-  documentId,
-  title,
-}) => {
+function TrainingItem(props: TrainingItemProps) {
   const classes = styles();
+  const { firstName, status, date, documentId, title } = props;
   const isOverdue = status === "OVERDUE" ? true : false;
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
 
   const titleRender = (firstName, status, documentId, title, date) => (
-    <Typography display="inline" className={classes.titletext}>
+    <Typography>
       <Grid
-        justify="space-between" // Add it here :)
+        justify="space-between"
         container
-      >
-        <Grid item>
-          <b>{firstName}</b>
+      ><Grid item className={classes.avatarSection}>
+          {/* <ListItemAvatar> */}
+          <Avatar className={classes.avatar} alt={firstName} src="." />
+          {/* </ListItemAvatar> */}
+          <span className={classes.name}>{firstName}</span>
         </Grid>
         <Grid item>
-          {isOverdue && (
-            <span className={classes.typographyOverdue}>{status}</span>
-          )}
-          {!isOverdue && (
-            <span className={classes.typographyDueInfewDays}>{status}</span>
-          )}
+          { isOverdue && <span className={classes.typographyOverdue}>{status}</span>}
+          { !isOverdue && <span className={classes.typographyDueInfewDays}>{status}</span>}
         </Grid>
       </Grid>
-      <b className={classes.biggerFont}>{documentId}</b>
-      <b className={classes.biggerFont}> {title}</b>
+      <b className={classes.docIdAndTitle}>{documentId}</b>
+      <b className={classes.docIdAndTitle}> {title}</b>
       <br />
-      <small>Date: {date}</small>
+      <small className={classes.date}>Date: {date}</small>
     </Typography>
   );
 
   return (
-    <StyledListItem button className={classes.listitem}>
-      <ListItemAvatar>
-        <Avatar alt={firstName} src="." />
-      </ListItemAvatar>
+    // <List className={classes.root}>
+    // <ListItem className={classes.listitem}>
+    <ListItem>
       <ListItemText
         id={documentId}
         primary={titleRender(firstName, status, documentId, title, date)}
       />
-    </StyledListItem>
+    </ListItem>
+    // </List>
   );
-};
+}
 
 export default TrainingItem;
