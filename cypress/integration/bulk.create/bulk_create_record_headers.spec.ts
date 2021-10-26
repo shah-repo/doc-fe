@@ -378,19 +378,19 @@ context("Bulk create record headers", () => {
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
+          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").click();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").click();
-        cy.get("ul[role=listbox]>li").contains("Test Document Type").click();
+        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
       });
 
       it("Select 'yes' to have Document id column", () => {
@@ -524,7 +524,7 @@ context("Bulk create record headers", () => {
       });
     });
 
-    context("Create bulk documents", () => {
+    context("Create bulk records", () => {
       it("Save bulk document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
@@ -533,31 +533,25 @@ context("Bulk create record headers", () => {
         cy.pmSubmitForApproval();
       });
 
-      it("Approve document", () => {
+      it("Approve record", () => {
         cy.ebApprove();
       });
     });
   });
 
-  context("Verify created documents", () => {
-    it("Navigate to document list", () => {
+  context("Verify created records", () => {
+    it("Navigate to records list and verify number of records", { retries: 2 }, () => {
+      cy.navigToDashboard();
       cy.navigToRecords();
-    });
-
-    it("Clear filter", () => {
-      cy.filterClear();
-    });
-
-    it("Verify number of documents", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 2 });
     });
 
-    it("Filter by doc-id", () => {
+    it("Filter by record-id", () => {
       cy.dlFilterByDocId({ docId: "TDT-00002" });
     });
 
     context("Verify voided record one data", () => {
-      it("Select first document", () => {
+      it("Select first record", () => {
         cy.dlSelectFirstDocument();
       });
 
@@ -574,17 +568,17 @@ context("Bulk create record headers", () => {
       });
     });
 
-    context("Verify document two data", () => {
-      it("Navigate to document list", () => {
+    context("Verify record two data", () => {
+      it("Navigate to record list", () => {
         cy.navigToRecords();
       });
 
-      it("Filter document two", () => {
+      it("Filter record two", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "TDT-00005" });
       });
 
-      it("Select first document", () => {
+      it("Select first record", () => {
         cy.dlSelectFirstDocument();
       });
 
