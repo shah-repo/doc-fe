@@ -409,7 +409,7 @@ context("Bulk create record headers", () => {
     context("Test invalid excel files for bulk create", () => {
       context("Upload template with wrong headers", () => {
         it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMisspeledHeaders.xlsx" });
+          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMisspelledHeaders.xlsx" });
         });
 
         it("Click save document", () => {
