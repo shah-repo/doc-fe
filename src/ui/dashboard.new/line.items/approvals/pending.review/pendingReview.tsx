@@ -167,15 +167,15 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     >
                       {arId}&nbsp;
                     </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                    >
+                      {title}&nbsp;
+                    </Typography>
                   </Link>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                  >
-                    {title}&nbsp;
-                  </Typography>
                   <Typography
                     component="span"
                     variant="caption"

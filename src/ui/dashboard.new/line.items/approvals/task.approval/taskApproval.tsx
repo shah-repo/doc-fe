@@ -153,15 +153,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     {arId}&nbsp;
                   </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    <b>{title}</b>
+                  </Typography>
                 </Link>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  <b>{title}</b>
-                </Typography>
               </Grid>
             </Grid>
             <Grid container={true}>

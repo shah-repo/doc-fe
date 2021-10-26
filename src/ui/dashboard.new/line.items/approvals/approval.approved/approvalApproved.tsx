@@ -119,6 +119,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("approvalChangePresenter");
   return (
+
     <StyledListItem
       button
       onMouseEnter={onMouseHoverItem}
@@ -133,7 +134,6 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
             <Grid container={true}>
               <Grid item={true} md={12} sm={12}>
                 <Link to={changeRequestEditPath(id)} style={{ textDecoration: "none", color: "inherit" }}>
-
                   <Typography
                     component="span"
                     variant="body2"
@@ -142,15 +142,15 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                   >
                     {arId}&nbsp;
                   </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                  >
+                    {title}&nbsp;
+                  </Typography>
                 </Link>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                >
-                  {title}&nbsp;
-                </Typography>
                 <Typography
                   component="span"
                   variant="body2"
