@@ -238,6 +238,13 @@ context("Purchase order HTML template form", () => {
                 </ul>
              </div>
              <div>
+             <strong>Tax</strong>                                                                             
+             <ul>
+                <li>Tax Rate: {{documentRevision.formInput.${poFieldName}.taxRate}}</li>
+                <li>Tax: {{documentRevision.formInput.${poFieldName}.tax}}</li>
+             </ul>
+            </div>
+             <div>
                 <strong>Approvals </strong>                                                                             
                 <ul>
                   {{#documentRevision.approvals}}
@@ -317,6 +324,10 @@ context("Purchase order HTML template form", () => {
         .click();
     });
 
+    it("Check Tax box", () => {
+      cy.poSelectTaxCheckbox();
+    });
+
     it("Click on 'Add' inside PO dialog box", () => {
       cy.poAddPOButtonClick();
     });
@@ -388,7 +399,9 @@ context("Purchase order HTML template form", () => {
             .and.contains(`GL codes: code 1`)
             .and.contains(`Total amount: 10`)
             .and.contains(`Name: ${USERS[1].name}`)
-            .and.contains(`Date: ${currentDate}`);
+            .and.contains(`Date: ${currentDate}`)
+            .and.contains(`Tax Rate: 9.25`)
+            .and.contains(`Tax: 0.93`);
         });
       });
     });
