@@ -260,8 +260,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Typography color="inherit">
-                          Assigned to {size(pendingApprovers)} users. <br />4
-                          have Approved and 6 are Pending.
+                          Assigned to {size(pendingApprovers)} users. <br />0
+                          have Approved and {size(pendingApprovers)} are Pending.
                         </Typography>
                       </>
                     }
@@ -402,7 +402,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <EmailModal handleEmailModelClose={handleEmailModelClose} />
+        <EmailModal handleEmailModelClose={handleEmailModelClose} pendingApprovers={pendingApprovers}/>
       </Modal>
     </>
   );

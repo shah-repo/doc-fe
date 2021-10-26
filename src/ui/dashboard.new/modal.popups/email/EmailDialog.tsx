@@ -11,64 +11,15 @@ import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/mode
 import Colors from "../../../layout/theme/utils/colors";
 import { styles } from "./EmailModal.styles";
 
-
-const PendingItems = [
-  {
-    id: "AR-00095",
-    name: "Josh Brandon",
-  },
-  {
-    id: "AR-00096",
-    name: "Trisha Quan",
-  },
-  {
-    id: "AR-00097",
-    name: "Jack Forney",
-  },
-  {
-    id: "AR-00098",
-    name: "Mathew Stevens ",
-  },
-  {
-    id: "AR-00099",
-    name: "Clarissa Kent",
-  },
-  {
-    id: "AR-00100",
-    name: "Josh Harvey ",
-  },
-  {
-    id: "AR-00101",
-    name: "Brandon",
-  },
-  {
-    id: "AR-00102",
-    name: "Josh Forney",
-  },
-  {
-    id: "AR-0103",
-    name: "Josh Stevens",
-  },
-  {
-    id: "AR-00104",
-    name: "David Copperfiled",
-  },
-  {
-    id: "AR-00115",
-    name: "Edward Poe",
-  },
-  {
-    id: "AR-00116",
-    name: "Edward Bradon",
-  },
-];
-
-
 interface EmailModalProps {
   handleEmailModelClose: () => void;
+  pendingApprovers: any;
 }
 
-export default function EmailModal(Props: EmailModalProps) {
+const EmailModal: React.FunctionComponent<EmailModalProps> = ({
+  handleEmailModelClose,
+  pendingApprovers,
+}) => {
   const classes = styles();
 
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
@@ -123,7 +74,7 @@ export default function EmailModal(Props: EmailModalProps) {
           <IconButton
             aria-label="close"
             className={classes.closemodel}
-            onClick={Props.handleEmailModelClose}
+            onClick={handleEmailModelClose}
           >
             <ModelCloseIcon />
           </IconButton>
@@ -174,7 +125,7 @@ export default function EmailModal(Props: EmailModalProps) {
           <IconButton
             aria-label="close"
             className={classes.closemodel}
-            onClick={Props.handleEmailModelClose}
+            onClick={handleEmailModelClose}
           >
             <ModelCloseIcon />
           </IconButton>
@@ -200,8 +151,9 @@ export default function EmailModal(Props: EmailModalProps) {
                       variant="h2"
                       component="h2"
                       className={classes.pendingtitle}
+                      noWrap
                     >
-                      {`PENDING(8)`}&nbsp;
+                      PENDING ({pendingApprovers?.length})
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -232,22 +184,22 @@ export default function EmailModal(Props: EmailModalProps) {
           className={classes.listrootpending}
         >
           <List dense disablePadding>
-            {PendingItems.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
+            {pendingApprovers.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
               {/* <StyledListItem button className={classes.nested}> */}
               <Avatar
                 className={classes.listitemicon}
-                alt={pending.name}
+                alt={pending.userName}
                 src="."
               />
               <ListItemText
-                id={pending.id}
+                id={pending.employeeId}
                 primary={
                   <Typography
                     component="span"
                     variant="h2"
                     className={classes.listitemtext}
                   >
-                    {pending.name}
+                    {pending.userName}
                   </Typography>
                 }
               />
@@ -274,8 +226,9 @@ export default function EmailModal(Props: EmailModalProps) {
                       variant="h2"
                       component="h2"
                       className={classes.approvedtitle}
+                      noWrap
                     >
-                      {`APPROVED(8)`}&nbsp;
+                      {`APPROVED (0)`}
                     </Typography>
                   </Grid>
 
@@ -291,22 +244,22 @@ export default function EmailModal(Props: EmailModalProps) {
           className={classes.listrootapproved}
         >
           <List dense disablePadding>
-            {PendingItems.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
+            {pendingApprovers.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
               {/* <StyledListItem button className={classes.nested}> */}
               <Avatar
                 className={classes.listitemicon}
-                alt={pending.name}
+                alt={pending.userName}
                 src="."
               />
               <ListItemText
-                id={pending.id}
+                id={pending.employeeId}
                 primary={
                   <Typography
                     component="span"
                     variant="h2"
                     className={classes.listitemtext}
                   >
-                    {pending.name}
+                    {pending.userName}
                   </Typography>
                 }
               />
@@ -320,5 +273,6 @@ export default function EmailModal(Props: EmailModalProps) {
   );
 
 
-}
+};
+export default EmailModal;
 
