@@ -62,4 +62,5 @@ export interface ReferenceSummary {
 
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
   documentRevisionId: string;
+  docDetails: Partial<DocumentRevision>;
 }

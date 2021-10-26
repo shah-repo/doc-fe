@@ -1,4 +1,4 @@
-import { Link, Typography, WithStyles } from "@material-ui/core";
+import { Box, Link } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { trainingActions } from "../../../../state/ducks/training";
 import { TrainingPlanTransition } from "../../../../state/ducks/training/types";
@@ -9,19 +9,19 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { TrainingControlProps } from "../../utils/types";
-import styles from "../styles";
 import TrainingDialog from "./dialog/TrainingDialog";
 
-type Props = TrainingControlProps & WithStyles<typeof styles>;
+type Props = TrainingControlProps;
 
 const TrainingControl: React.FunctionComponent<Props> = ({
-  classes,
   dataProp,
   documentRevisionId,
+  docDetails,
 }) => {
   const applyTransition = useActionCreator(trainingActions.applyTransition);
   const dialog = useDialog();
   const async = useAsync({ onSuccess: dialog.close });
+
   const trainingRecord = useMemo(() =>
     dataProp &&
     dataProp.find((record) => !record.completedAt && record.isValid)
@@ -51,11 +51,9 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <span style={{ margin: "50px 0 0 15px" }}>
+    <Box mt={5} ml={2}>
       <Link onClick={openDialog}>
-        <Typography display="inline" className={classes.trainingText}>
-          <Text translation="training.acknowledge.completion.link" />
-        </Typography>
+        <Text translation="training.acknowledge.completion.link" />
       </Link>
       <TrainingDialog
         transitionDialog={dialog}
@@ -64,8 +62,10 @@ const TrainingControl: React.FunctionComponent<Props> = ({
         asyncState={async.asyncState}
         transition={transition}
         label={label}
+        docDetails={docDetails}
+        trId={trainingRecord.trId}
       />
-    </span>
+    </Box>
   );
 };
 

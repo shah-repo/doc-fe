@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { Document, DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision, DocumentRevisionDocument } from "../../../../state/ducks/documentRevisions/types";
 import { trainingActions } from "../../../../state/ducks/training";
 import { TrainingPlanTransition, TrainingRecord } from "../../../../state/ducks/training/types";
 import { ApplicationState } from "../../../../state/reducers";
@@ -16,12 +16,14 @@ interface Props {
   trainingRecords: TrainingRecord[];
   id: string;
   document: DocumentRevisionDocument;
+  docDetails: Partial<DocumentRevision>;
 }
 
 const CompleteTraining: React.FunctionComponent<Props> = ({
   trainingRecords,
   id,
   document,
+  docDetails,
 }) => {
   const dialog = useDialog();
   const async = useAsync();
@@ -65,6 +67,7 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
       asyncState={async.asyncState}
       transition={transition}
       label={label}
+      docDetails={docDetails}
     />
   );
 };

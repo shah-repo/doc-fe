@@ -21,6 +21,7 @@ export interface TrainingRecord {
   isValid: boolean;
   trainingPlan?: TrainingPlan;
   documentRevision: Partial<DocumentRevision>;
+  trId: string;
 }
 
 export interface TrainingListData {
