@@ -1,6 +1,5 @@
 import React from "react";
 import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
-
 // import { styles } from "./TrainingLineItems.styles";
 
 interface TrainingLineItemsProps {
@@ -18,8 +17,7 @@ interface TrainingLineItemsProps {
   }[];
 }
 
-function TrainingLineItems(props: TrainingLineItemsProps) {
-  const { trainingData } = props;
+const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({ trainingData }) => {
   // const classes = styles();
   // TO DO: Logic for count calculation needs to be updated based on actual data
   const overdueItems = trainingData.filter((item) => item.status === "OVERDUE");
@@ -27,6 +25,6 @@ function TrainingLineItems(props: TrainingLineItemsProps) {
   return (
     <TrainingLineItemsPresenter overdueItems={overdueItems} dueInSevenItems={dueInSevenItems}/>
   );
-}
+};
 
 export default TrainingLineItems;

@@ -23,8 +23,7 @@ interface TabPanelProps {
   }[];
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, panelData, ...other } = props;
+const TabPanel: React.FunctionComponent<TabPanelProps> = ({ children, value, index, panelData, ...other }) => {
   const classes = styles();
   const renderItems = () => (
     <List className={classes.listRoot}>
@@ -56,7 +55,7 @@ function TabPanel(props: TabPanelProps) {
       </Grid>
     </div>
   );
-}
+};
 
 function a11yProps(index: any) {
   return {

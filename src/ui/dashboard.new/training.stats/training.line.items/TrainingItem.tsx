@@ -11,9 +11,8 @@ interface TrainingItemProps {
   date: string;
 }
 
-function TrainingItem(props: TrainingItemProps) {
+const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({ firstName, status, date, documentId, title }) => {
   const classes = styles();
-  const { firstName, status, date, documentId, title } = props;
   const isOverdue = status === "OVERDUE" ? true : false;
 
   const titleRender = (firstName, status, documentId, title, date) => (
@@ -40,16 +39,13 @@ function TrainingItem(props: TrainingItemProps) {
   );
 
   return (
-    // <List className={classes.root}>
-    // <ListItem className={classes.listitem}>
     <ListItem>
       <ListItemText
         id={documentId}
         primary={titleRender(firstName, status, documentId, title, date)}
       />
     </ListItem>
-    // </List>
   );
-}
+};
 
 export default TrainingItem;
