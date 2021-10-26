@@ -9,7 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -30,7 +30,7 @@ import { styles } from "./pendingReview.styles";
 interface Props {
   id: string;
   type: string;
-  title: string;
+  title: string | undefined;
   arId: string | undefined;
   arStatus: string | undefined;
   timestamp: string | undefined;
@@ -214,8 +214,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   >
                     {pendingApprovers !== undefined
                       ? pendingApprovers
-                          .map((approver) => approver.userName)
-                          .join(",")
+                        .map((approver) => approver.userName)
+                        .join(",")
                       : ""}
                   </Typography>
                   <Typography

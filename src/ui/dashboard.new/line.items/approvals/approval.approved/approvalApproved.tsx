@@ -24,7 +24,7 @@ import { styles } from "./approvalApproved.styles";
 interface Props {
   id: string;
   type: string;
-  title: string;
+  title: string | undefined;
   arId: string | undefined;
   arStatus: string | undefined;
   timestamp: string | undefined;
