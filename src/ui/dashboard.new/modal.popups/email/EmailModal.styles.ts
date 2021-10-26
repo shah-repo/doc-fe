@@ -200,7 +200,7 @@ export const styles = makeStyles((theme: Theme) =>
 
     pendingtitle: {
       "position": "static",
-      "width": "77px",
+      // "width": "77px",
       "height": "15px",
       "left": "calc(50% - 77px/2 - 146.5px)",
       "top": "calc(50% - 15px/2)",
@@ -223,26 +223,8 @@ export const styles = makeStyles((theme: Theme) =>
 
 
     approvedtitle: {
-      //       position: static;
-      // width: 89px;
-      // height: 15px;
-      // left: calc(50% - 89px/2 - 140.5px);
-      // top: calc(50% - 15px/2);
-
-      // font-family: Sora;
-      // font-style: normal;
-      // font-weight: bold;
-      // font-size: 12px;
-      // line-height: 15px;
-      // display: flex;
-      // align-items: center;
-
-      // /* Green Go */
-
-      // color: #0DB78D;
-
       position: "static",
-      width: "77px",
+      // width: "77px",
       height: "15px",
       left: "calc(50% - 77px/2 - 146.5px)",
       top: "calc(50% - 15px/2)",
