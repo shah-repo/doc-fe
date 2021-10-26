@@ -1,5 +1,4 @@
-import { createStyles, Grid, Tab, Tabs, Toolbar } from "@material-ui/core";
-import { makeStyles, Theme, withStyles } from "@material-ui/core/styles";
+import { Grid, Toolbar } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
@@ -8,135 +7,25 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
+import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
-import Colors from "../layout/theme/utils/colors";
-import MyFeeds from "./my.feeds/MyFeeds.container";
-import Recents from "./recents/Recents.container";
-import TrainingStats from "./training.stats/TrainingStats";
-import Trainings from "./trainings/Trainings.container";
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: any;
-  value: any;
-  isDashboardAdmin: boolean;
-}
-interface StyledTabsProps {
-  value: number;
-  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-}
-interface StyledTabProps {
-  label: any;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  toolbar: {
-    top: 18,
-    left: 15,
-  },
-  tabItemText: {
-    marginLeft: 10,
-  },
-  tabContent: {},
-}));
-
-function dynamicObjProps(index: any) {
-  return {
-    "id": `scrollable-auto-tab-${index}`,
-    "aria-controls": `scrollable-auto-tabpanel-${index}`,
-  };
-}
-
-const StyledTab = withStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "min-width": "125px",
-      /* Font Gray */
-      "color": Colors.font_gray,
-      "borderRadius": "100px",
-      /* Heading 21 */
-      "position": "static",
-      "left": "23.45%",
-      "right": "0%",
-      "top": "10.34%",
-      "bottom": "10.34%",
-      "font-family": "Sora",
-      "font-style": "normal",
-      "font-weight": "normal",
-      "font-size": "18px",
-      "line-height": "23px",
-      /* identical to box height */
-      "display": "flex",
-      "align-items": "center",
-      "letter-spacing": "0.25px",
-      "text-transform": "capitalize",
-      /* Inside Auto Layout */
-      "flex": "none",
-      "order": 1,
-      "flex-grow": 0,
-      "margin": "0px 5px",
-    },
-    selected: {
-      "opacity": 1,
-      /* Enlil Navy */
-      "color": Colors.navy,
-      "font-weight": 600,
-      "backgroundColor": Colors.sky_blue,
-    },
-  })
-)((props: StyledTabProps) => <Tab disableRipple {...props} />);
-
-const StyledTabs = withStyles({
-  indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
-    "& > span": {
-      width: "100%",
-      backgroundColor: Colors.white,
-    },
-  },
-})((props: StyledTabsProps) => (
-  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
-));
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, isDashboardAdmin, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-auto-tabpanel-${index}`}
-      aria-labelledby={`scrollable-auto-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Grid container={true}>
-          <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
-            {value === 0 && <MyFeeds />}
-            {value === 1 && isDashboardAdmin && <Trainings />}
-            {((value === 2 && isDashboardAdmin) || (value === 1 && !isDashboardAdmin)) && <Recents />}
-          </Grid>
-          {isDashboardAdmin && (
-            <Grid item={true} md={4} sm={12}>
-              <TrainingStats />
-            </Grid>
-          )}
-        </Grid>
-      )}
-    </div>
-  );
-}
+import { styles } from "./DashboardTabs.styles";
+import { StyledTab } from "./StyledTab";
+import { StyledTabs } from "./StyledTabs";
+import TabPanel from "./TabPanel";
 
 const DashboardTabs: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const classes = styles();
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
   /* TO DO:: For testing purpose only, this has been added.
   Once we get DASHBOARD_ADMIN tag from backend, this line should be removed. */
   isDashboardAdmin = true;
+
+  const dynamicObjProps = (index: any) => ({
+    "id": `scrollable-auto-tab-${index}`,
+    "aria-controls": `scrollable-auto-tabpanel-${index}`,
+  });
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -152,41 +41,54 @@ const DashboardTabs: React.FunctionComponent = () => {
             aria-label="dashboard tabs"
           >
             <StyledTab
+              disableRipple
               {...dynamicObjProps(0)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
                   <Grid item={true} sm={12}>
                     {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
-                    <span className={classes.tabItemText}>My Feed (26)</span>
+                    <span className={classes.tabItemText}>
+                      <Text translation={"my.feed.tab.title"} /> (26)
+                    </span>
                   </Grid>
                 </Grid>
               }
             />
             {isDashboardAdmin && (
               <StyledTab
+                disableRipple
                 {...dynamicObjProps(1)}
                 label={
                   <Grid container={true} justify="center" alignItems="center">
                     <Grid item={true} sm={12}>
-                      {value === 1 ? <TrainingSelectedIcon /> : <TrainingIcon />}
-                      <span className={classes.tabItemText}>Trainings (10) </span>
+                      {value === 1 ? (
+                        <TrainingSelectedIcon />
+                      ) : (
+                        <TrainingIcon />
+                      )}
+                      <span className={classes.tabItemText}>
+                        <Text translation={"trainings.tab.title"} /> (10)
+                      </span>
                     </Grid>
                   </Grid>
                 }
               />
             )}
             <StyledTab
+              disableRipple
               {...dynamicObjProps(isDashboardAdmin ? 2 : 1)}
               label={
                 <Grid container={true} justify="center" alignItems="center">
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
-                  (!isDashboardAdmin && value === 1) ? (
+                    (!isDashboardAdmin && value === 1) ? (
                         <RecentSelectedIcon />
                       ) : (
                         <RecentIcon />
                       )}
-                    <span className={classes.tabItemText}>Recent</span>
+                    <span className={classes.tabItemText}>
+                      <Text translation={"recent.tab.title"} />
+                    </span>
                   </Grid>
                 </Grid>
               }
@@ -194,7 +96,7 @@ const DashboardTabs: React.FunctionComponent = () => {
           </StyledTabs>
         </Toolbar>
       </Grid>
-      <Grid item={true} sm={12} className={classes.tabContent}>
+      <Grid item={true} sm={12}>
         <TabPanel
           value={value}
           index={0}
