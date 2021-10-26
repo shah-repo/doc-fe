@@ -243,7 +243,7 @@ context("Purchase order HTML template form", () => {
                 <li>Tax Rate: {{documentRevision.formInput.${poFieldName}.taxRate}}</li>
                 <li>Tax: {{documentRevision.formInput.${poFieldName}.tax}}</li>
              </ul>
-          </div>
+            </div>
              <div>
                 <strong>Approvals </strong>                                                                             
                 <ul>
