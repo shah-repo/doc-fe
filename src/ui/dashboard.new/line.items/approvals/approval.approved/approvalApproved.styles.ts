@@ -7,11 +7,34 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    icon: {
+      width: "10px",
+    },
     listItemIcon: {
       paddingLeft: "10px",
     },
     actionIcon: {
       paddingLeft: "10px",
+    },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
+    nested: {
+      // paddingLeft: theme.spacing(4),
+      marginLeft: "40px",
+      borderLeft: "1px solid #CBD5E0",
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    customTooltipWidth: {
+      maxWidth: 500,
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
     },
     actionIcons: {
       /* Action Icons */
