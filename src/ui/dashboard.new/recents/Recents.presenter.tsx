@@ -36,7 +36,9 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
               docId={data.document.docId}
               type={data.document.documentType.group}
               title={data.document.documentRevisions[0].name}
+              description={data.document.documentRevisions[0].description}
               accessedAt={moment.utc(data.accessedAt).local().startOf("seconds").fromNow()}
+              details={data.document.documentRevisions[0].precalc}
             />;
           case RecentType.CHANGE_REQUEST:
             return <RecentsItem

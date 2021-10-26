@@ -4,10 +4,10 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = makeStyles(() =>
   createStyles({
     icon: {
-      width: "7px",
+      width: "15px",
     },
     listItemIcon: {
-      paddingLeft: "5px",
+      paddingLeft: "17px",
     },
     typography: {
       fontSize: "14px",
@@ -37,6 +37,30 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       lineHeight: "22px",
       color: Colors.font_gray,
+    },
+    nested: {
+      marginLeft: "40px",
+      borderLeft: "1px solid #CBD5E0",
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    typographyChildrenBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 700,
+    },
+    gridContainer: {
+      paddingLeft: "14px",
+      maxWidth: "calc(100% - 14px)",
+    },
+    linkText: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+      color: Colors.navy,
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
     },
   })
 );
