@@ -6,9 +6,6 @@ export const styles = makeStyles(() =>
     inline: {
       display: "inline",
     },
-    icon: {
-      width: "15px",
-    },
     actionIcon: {
       paddingLeft: "10px",
     },

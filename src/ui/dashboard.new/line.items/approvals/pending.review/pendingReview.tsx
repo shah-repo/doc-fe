@@ -100,7 +100,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [hoverId, setHoverId] = React.useState(false);
   const [hoverTitle, setHoverTitle] = React.useState(false);
   const [hoverApprovers, setHoverApprovers] = React.useState(false);
-
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -178,7 +177,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
