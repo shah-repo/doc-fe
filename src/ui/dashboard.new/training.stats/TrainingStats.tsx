@@ -20,7 +20,7 @@ const TrainingStatsLineItemsContainer: React.FunctionComponent = () => {
   return (
     <Card className={classes.outline}>
       <CardContent>
-        <Text translation={"training.stats.container.title"} />
+        <Text translation={"dashboard.training.stats.container"} />
         {/* <TrainingChart /> */}
         {/* <TrainingLineItems /> */}
       </CardContent>
