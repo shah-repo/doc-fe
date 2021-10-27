@@ -12,6 +12,8 @@ interface Props {
   changeRequestId: string;
   transition: ChangeRequestTransition;
   buttonProps?: ButtonProps;
+  arId?: string;
+  title?: string;
   label: string;
   transitionDialog: any;
   onSuccess?: () => void;
@@ -19,13 +21,14 @@ interface Props {
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   changeRequestId,
+  arId,
+  title,
   transition,
   buttonProps,
   label,
   transitionDialog,
   onSuccess,
 }) => {
-  // const transitionDialog = useDialog();
   const effectiveDateDialog = useDialog();
   const applyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
 
@@ -43,15 +46,6 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-  // const openDialog = () => {
-  //   async.reset();
-  //   if (transition === "closed") {
-  //     effectiveDateDialog.open();
-  //   } else {
-  //     transitionDialog.open();
-  //   }
-  // };
-
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
       applyTransitionAction,
@@ -66,6 +60,8 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       asyncState={async.asyncState}
       buttonProps={buttonProps}
       transition={transition}
+      arId={arId}
+      title={title}
       label={label}
       { ...{
         transitionDialog,

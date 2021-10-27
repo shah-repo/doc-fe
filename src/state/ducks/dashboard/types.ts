@@ -28,6 +28,11 @@ export enum ActionTypes {
   NEW_TRAINING_RECORDS = "NEW_TRAINING_RECORDS",
 }
 
+export enum TransitionTypes {
+  TRANSITION_CLOSED = "closed",
+  TRANSITION_REJECT = "reject",
+}
+
 export interface PendingAction {
   type: PendingActionType;
   userId: string;

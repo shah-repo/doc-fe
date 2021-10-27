@@ -3,23 +3,25 @@ import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import moment from "moment";
 import React from "react";
-// import { ReactComponent as ModelCloseIcon } from "../../../../../../../../assets/images/modelClose.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../../../src/assets/images/modelClose.svg";
-// src/assets/images/modelClose.svg
+import { TransitionTypes } from "../../../../../../state/ducks/dashboard/types";
 import { AsyncState } from "../../../../../../state/types";
 import AlertDialog from "../../../../../app/alert.dialog/AlertDialog";
 import { EffectiveDateFormValues } from "../../../../../change.request/form/types";
-import EffectiveDateForm from "../../../../../components/effectiveDate/form/EffectiveDateForm";
 import { FormContext } from "../../../../../components/forms/FormContext";
+import Text from "../../../../../components/Text";
 import { DialogHandler } from "../../../../../hooks/useDialog";
+import ClosedActionForm from "./form/ClosedActionForm";
+import EffectiveDateForm from "./form/EffectiveDateForm";
 import PasswordFormApproval from "./form/PasswordForm";
 import styles from "./TransitionDialog.styles";
 import { PasswordFormValues, Transition } from "./types";
 
 interface TransitionDialogProps {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues) => void;
-  // openDialog: () => void;
   asyncState: AsyncState;
+  arId?: string;
+  title?: string;
   buttonProps?: ButtonProps;
   transition: Transition;
   label: string;
@@ -31,6 +33,8 @@ type Props = TransitionDialogProps & WithStyles<typeof styles>;
 
 const TransitionDialog: React.FunctionComponent<Props> =
   ({
+    arId,
+    title,
     classes,
     onSubmit,
     // openDialog,
@@ -45,25 +49,19 @@ const TransitionDialog: React.FunctionComponent<Props> =
       <PasswordFormApproval {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );
 
+    const isClosedTransition = transition === TransitionTypes.TRANSITION_CLOSED ? true : false;
+
     const renderCloseForm = (props: FormikProps<any>) => (
-      <EffectiveDateForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
+      <ClosedActionForm {...props} arId={arId} title={title} asyncState={asyncState} cancel={transitionDialog.close} />
     );
 
-    const isReject = transition === "reject" ? true : false;
+    const renderCloseDateForm = (props: FormikProps<any>) => (
+      <EffectiveDateForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
+    );
 
     const preventPropagation = (event: React.FormEvent) =>  event.stopPropagation();
     return (
       <div className={classes.container}>
-        {/* <Button
-          color= "secondary"
-          variant= "outlined"
-          aria-label={transition}
-          onClick={openDialog}
-          data-cy={`transition-${transition}`}
-          {...buttonProps}
-        >
-          <Text message={label} />
-        </Button> */}
         {effectiveDateDialog && (
           <AlertDialog
             dialog={effectiveDateDialog}
@@ -82,7 +80,6 @@ const TransitionDialog: React.FunctionComponent<Props> =
           disableBackdropClick={true}
           open={transitionDialog.isOpen}
           onSubmit={preventPropagation}
-          // className={classes.paper}
         >
           <div className={classes.paper}>
             <Grid container justify="space-between">
@@ -93,9 +90,10 @@ const TransitionDialog: React.FunctionComponent<Props> =
                   id="simple-modal-title"
                   className={classes.modeltitle}
                 >
-                  {/* <Text message={transition === "reject" ? "Reject Request" : "Approve Request"} /> */}
-                  {isReject && <span>Reject Request</span>}
-                  {!isReject && <span>Approve Request</span>}
+                  <Text translation={
+                    transition === TransitionTypes.TRANSITION_CLOSED ? "transition.action.close.title" :
+                      transition === TransitionTypes.TRANSITION_REJECT ? "transition.action.reject.title" :
+                        "transition.action.approve.title"} />
                 </Typography>
               </Grid>
               <Grid item>
@@ -108,19 +106,44 @@ const TransitionDialog: React.FunctionComponent<Props> =
                 </IconButton>
               </Grid>
             </Grid>
-            {/* <DialogTitle>
-            <Text translation={transition === "closed" ? "transition.action.close.date" : "transition.action.title"} />
-          </DialogTitle> */}
-            <DialogContent className={classes.pendingBox}>
+            <DialogContent className={!isClosedTransition ? classes.pendingBox : ""}>
               <FormContext.Provider value={{ submitOnChange: false }}>
                 <Formik
-                  initialValues={transition === "closed" ? { effectiveDate: "" } : { password: "" }}
+                  initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?
+                    { effectiveDate: "" } : { password: "" }}
                   onSubmit={onSubmit}
                 >
-                  {transition === "closed" ? renderCloseForm : renderPasswordForm}
+                  {transition === TransitionTypes.TRANSITION_CLOSED ? renderCloseForm : renderPasswordForm}
                 </Formik>
               </FormContext.Provider>
             </DialogContent>
+            { isClosedTransition && (
+              <>
+                <Grid container justify="space-between">
+                  <Grid item>
+                    <Typography
+                      variant="h2"
+                      component="h2"
+                      id="simple-modal-title"
+                      className={classes.modeltitle}
+                    >
+                      <Text translation="transition.action.cancel.schedule.title" />
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <DialogContent className={classes.pendingBox}>
+                  <FormContext.Provider value={{ submitOnChange: false }}>
+                    <Formik
+                      initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?
+                        { effectiveDate: "" } : { password: "" }}
+                      onSubmit={onSubmit}
+                    >
+                      {renderCloseDateForm}
+                    </Formik>
+                  </FormContext.Provider>
+                </DialogContent>
+              </>
+            )}
           </div>
         </Dialog>
       </div>
