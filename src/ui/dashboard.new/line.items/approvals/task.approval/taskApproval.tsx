@@ -28,11 +28,12 @@ import { styles } from "./taskApproval.styles";
 interface Props {
   id: string;
   type: string;
-  arId: string | undefined;
+  arId?: string | undefined;
+  arStatus?: string | undefined;
   timestamp: string | undefined;
   docRevOwnerAvatar?: string | undefined | null;
   docRevOwnerName: string | undefined;
-  title: string | undefined;
+  title?: string | undefined;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -165,7 +166,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -192,6 +193,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <Link
                     to={changeRequestEditPath(id)}
                     style={{ textDecoration: "none", color: "inherit" }}
+                    onMouseEnter={onMouseHoverId}
+                    onMouseLeave={onMouseLeaveId}
                   >
                     <Typography
                       component="span"
@@ -228,6 +231,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
               </Grid>
               <Grid container={true}>
+                <Grid item={true} className={classes.grayDot}>
+                &nbsp;
+                </Grid>
+              </Grid>
+              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+            &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
                 &nbsp;
                 </Grid>

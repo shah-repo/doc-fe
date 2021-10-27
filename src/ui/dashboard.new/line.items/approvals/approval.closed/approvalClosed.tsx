@@ -182,7 +182,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
@@ -360,7 +360,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                           component="span"
                           variant="caption"
                         >
-                          <Text translation="approval.closed.descriptionOfChangeTitle" />
+                          <Text translation="approval.tooltip.description.change.title" />
                         </Typography>
                         <br />
                         <Typography
@@ -377,7 +377,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                           component="span"
                           variant="caption"
                         >
-                          <Text translation="approval.closed.JustificationChangeTitle" />
+                          <Text translation="approval.tooltip.justification.change.title" />
                         </Typography>
                         <br />
                         <Typography

@@ -84,7 +84,6 @@ export const styles = makeStyles(() =>
       width: "4px",
       height: "4px",
       right: "4px",
-      top: "12px",
       position: "relative",
       background: Colors.font_gray,
     },

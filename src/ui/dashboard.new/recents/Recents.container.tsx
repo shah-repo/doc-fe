@@ -18,7 +18,7 @@ const RecentsLineItemsContainer: React.FunctionComponent = () => {
   return (
     <Card className={classes.outline}>
       <CardContent>
-        <Text translation={"recent.container.title"} />
+        <Text translation={"dashboard.recent.container"} />
         {/* <RecentsPresenter /> */}
       </CardContent>
     </Card>);
