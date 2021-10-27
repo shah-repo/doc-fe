@@ -11,14 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
       minWidth: 66,
       fontSize: "10px",
     },
-    outline: {
-      // border: "1px solid grey",
-      overflow: "auto",
-      height: "auto",
-    },
-    title: {
-      fontStyle: "normal",
-    },
     listRoot: {
       width: "100%",
       maxWidth: 360,

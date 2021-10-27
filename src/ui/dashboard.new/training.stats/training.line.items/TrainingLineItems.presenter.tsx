@@ -1,7 +1,7 @@
 import { Grid, List, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-// import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
 import React from "react";
+import Text from "../../../components/Text";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -57,7 +57,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({ children, value, ind
   );
 };
 
-function a11yProps(index: any) {
+function tabCustomClasses(index: any) {
   return {
     "id": `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
@@ -109,32 +109,11 @@ const StyledTabs = withStyles({
   },
 })((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
-// interface StyledTabProps {
-//   label: string;
-// }
-
-// const StyledTab = withStyles((theme: Theme) =>
-//   createStyles({
-//     // root: {
-//     //   "textTransform": "none",
-//     //   "color": "#fff",
-//     //   "fontWeight": theme.typography.fontWeightRegular,
-//     //   "fontSize": theme.typography.pxToRem(15),
-//     //   "marginRight": theme.spacing(1),
-//     //   "&:focus": {
-//     //     opacity: 1,
-//     //   },
-//     // },
-//   }),
-// )((props: StyledTabProps) => <Tab disableRipple {...props} />);
-
 export default function TrainingLineItemsPresenter(props: TrainingLineItemsProps) {
   const { overdueItems, dueInSevenItems } = props;
   const all = overdueItems.concat(dueInSevenItems);
   const [value, setValue] = React.useState(0);
-
   const classes = styles();
-
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -145,39 +124,40 @@ export default function TrainingLineItemsPresenter(props: TrainingLineItemsProps
         <Tab classes={{ root: classes.tab }} label={
           <Grid container={true} justify="center" alignItems="center">
             <Grid item={true} sm={12}>
-              {/* { value === 0 && <span className={classes.allTab}></span> } */}
               <span className={classes.allTab}></span>
-              <span className={classes.tabHeader}>ALL</span>
+              <span className={classes.tabHeader}>
+                <Text translation="training.stats.all" />
+              </span>
             </Grid>
           </Grid>
-        } {...a11yProps(0)} />
+        } {...tabCustomClasses(0)} />
         <Tab classes={{ root: classes.tab }} label={
           <Grid container={true} justify="center" alignItems="center">
             <Grid item={true} sm={12}>
-              {/* { value === 1 && <span className={classes.dueInSevenTab}></span> } */}
               <span className={classes.dueInSevenTab}></span>
-              <span className={classes.tabHeader} > DUE IN 7 DAYS</span>
+              <span className={classes.tabHeader} >
+                <Text translation="training.stats.duein7days" /></span>
             </Grid>
           </Grid>
-        } {...a11yProps(1)} />
+        } {...tabCustomClasses(1)} />
         <Tab classes={{ root: classes.tab }} label={
           <Grid container={true} justify="center" alignItems="center">
             <Grid item={true} sm={12}>
-              {/* { value === 2 && <span className={classes.overdueTab}></span> } */}
               <span className={classes.overdueTab}></span>
-              <span className={classes.tabHeader} > OVERDUE</span>
+              <span className={classes.tabHeader} >
+                <Text translation="training.stats.overdue" /></span>
             </Grid>
           </Grid>
-        } {...a11yProps(2)} />
+        } {...tabCustomClasses(2)} />
       </StyledTabs>
       <TabPanel value={value} index={0} panelData={all}>
-        ALL
+        <Text translation="training.stats.all" />
       </TabPanel>
       <TabPanel value={value} index={1} panelData={dueInSevenItems}>
-        DUE IN 7 DAYS
+        <Text translation="training.stats.duein7days" />
       </TabPanel>
       <TabPanel value={value} index={2} panelData={overdueItems}>
-        OVERDUE
+        <Text translation="training.stats.overdue" />
       </TabPanel>
     </div>
   );

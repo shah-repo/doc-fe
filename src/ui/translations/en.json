@@ -1075,5 +1075,10 @@
   "header.welcome.back": "Welcome Back",
   "common.my.feed": "My Feed",
   "common.trainings": "Trainings",
-  "common.recent": "Recent"
+  "common.recent": "Recent",
+  "training.stats.all": "ALL",
+  "training.stats.title": "TRAINING OUTSTANDING",
+  "training.stats.totalOutstanding": "Total Outstanding",
+  "training.stats.overdue": "OVERDUE",
+  "training.stats.duein7days": "DUE IN 7 DAYS"
 }

@@ -1,9 +1,10 @@
 import { Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
-// import ReactECharts from "echarts-for-react";
 import React from "react";
+import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
+import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
-import DoughnutChartOptions from "./DoughnutChartOptions";
+import ChartData from "../data/chartData.json";
 import { styles } from "./TrainingChart.styles";
 
 interface TrainingChartPresenterProps {
@@ -11,25 +12,25 @@ interface TrainingChartPresenterProps {
   dueInSeven: number;
 }
 
-function TrainingChartPresenter(props: TrainingChartPresenterProps) {
-  const { overdue, dueInSeven } = props;
+const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> = ({ overdue, dueInSeven }) => {
   const totalCount = overdue + dueInSeven;
   const data = [
     {
       value: dueInSeven,
-      name: "Due in 7 days",
+      name: TrainingStatusChartLabelTypes.DUE_IN_7_DAYS,
       itemStyle: {
         color: Colors.latest_yellow_varient,
       },
     },
     {
       value: overdue,
-      name: "Overdue",
+      name: "OVERDUE",
       itemStyle: {
         color: Colors.latest_red_varient,
       },
     },
   ];
+  const DoughnutChartOptions = ChartData.DoughnutChartOptions;
   const defaultTitle = {
     text: "" + totalCount,
     subtext: "Total Outstanding",
@@ -60,41 +61,36 @@ function TrainingChartPresenter(props: TrainingChartPresenterProps) {
     myChart.setOption(DoughnutChartOptions);
 
 
-    myChart.on("mouseover", (evt) => {
+    myChart.on("mouseover", (evt: any) => {
       DoughnutChartOptions.series.data.map((data, index) => {
-        if (index !== evt.dataIndex) {
+        if (index !== evt?.dataIndex) {
           DoughnutChartOptions.series.data[index].itemStyle.color = Colors.gray;
         }
       });
-      // eslint-disable-next-line dot-notation
-      DoughnutChartOptions.title.text = evt.data["value"];
-      // eslint-disable-next-line dot-notation
-      DoughnutChartOptions.title.subtext = evt.data["name"];
-      // eslint-disable-next-line dot-notation
-      if (evt.data["name"] === "Overdue") {
-      // eslint-disable-next-line dot-notation
+      DoughnutChartOptions.title.text = evt?.data?.value;
+      DoughnutChartOptions.title.subtext = evt?.data?.name;
+      if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
         DoughnutChartOptions.title.subtextStyle.color = Colors.latest_red_varient;
-      // eslint-disable-next-line dot-notation
-      } else if (evt.data["name"] === "Due in 7 days") {
+      } else if (evt.data?.name === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS) {
         DoughnutChartOptions.title.subtextStyle.color = Colors.latest_yellow_varient;
       }
       myChart.setOption(DoughnutChartOptions);
     });
-    myChart.on("mouseout", (e) => {
+    myChart.on("mouseout", (e: any) => {
       DoughnutChartOptions.title.text = "" + totalCount;
-      DoughnutChartOptions.title.subtext = "Total Outstanding";
+      DoughnutChartOptions.title.subtext = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
       DoughnutChartOptions.title.subtextStyle.color = Colors.gray;
       DoughnutChartOptions.series.data = [
         {
           value: dueInSeven,
-          name: "Due in 7 days",
+          name: TrainingStatusChartLabelTypes.DUE_IN_7_DAYS,
           itemStyle: {
             color: Colors.latest_yellow_varient,
           },
         },
         {
           value: overdue,
-          name: "Overdue",
+          name: "OVERDUE",
           itemStyle: {
             color: Colors.latest_red_varient,
           },
@@ -109,17 +105,13 @@ function TrainingChartPresenter(props: TrainingChartPresenterProps) {
       <Grid container={true}>
         <Grid item={true}>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
-          TRAINING OUTSTANDING
+            <Text translation="training.stats.title" />
           </Typography>
           <div id="main" style={{ height: 280, width: 280 }}></div>
-          {/* <ReactECharts
-            option={DoughnutChartOptions}
-            style={{ height: 280, width: 280 }}
-            onEvents={onEvents} /> */}
         </Grid>
       </Grid>
     </div>
   );
-}
+};
 
 export default TrainingChartPresenter;
