@@ -1,10 +1,11 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
+import ExportTrainingRecordToEmail from "../export.email/ExportTrainingRecordToEmail";
 import { styles } from "./styles";
 
 interface Props {
@@ -32,7 +33,11 @@ const TrainingDetails: React.FunctionComponent<Props> =
         </IconButton>
         <DialogTitle>
           <Typography className={classes.dialogTitle}>
-            <Text translation={"training.acknowledge.completion"} />
+            {
+              training.completedAt ?
+                <Text translation={"training.acknowledge.completion"}/> :
+                <Text translation={"common.training.record"}/>
+            }
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -76,21 +81,17 @@ const TrainingDetails: React.FunctionComponent<Props> =
                 <Box>
                   <span className={classes.itemContentBlue}>
                     {training.trainingPlan?.employee.user?.name}
-                  </span> | Trainee |
-                  <span>
-                  &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.MonthDateYearAlt)}
-                  </span>
+                  </span> | Trainee &nbsp;
+                  { training.completedAt &&
+                    <span>
+                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.MonthDateYearAlt)}
+                    </span>
+                  }
                 </Box>
               </Grid>
               <Grid item xs={12} className={classes.item}>
                 <Box display="flex" justifyContent="flex-start">
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    style={{ margin: 0 }}
-                  >
-                    <Text translation="common.send.to.email" />
-                  </Button>
+                  <ExportTrainingRecordToEmail id={training.id}/>
                 </Box>
               </Grid>
             </Grid>

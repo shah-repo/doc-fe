@@ -46,6 +46,7 @@ export interface TrainingRecordQuery {
   trainingPlan?: TrainingPlan;
   trId: string;
   completedAt?: Date;
+  id: string;
 }
 
 export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
@@ -56,6 +57,7 @@ export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
   userName: "",
   tcId: "",
   trId: "",
+  id: "",
 };
 
 

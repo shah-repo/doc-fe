@@ -40,6 +40,11 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
 
+  const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
+    setTraining(rowData);
+    trainingDetailsDialog.open();
+  };
+
   const headers = [
     { label: `DOC ID: ${tableCriteria.queryDict?.docId  || ""}`, key: "docId" },
     { label: `REVISION: ${tableCriteria.queryDict?.revision  || ""}`, key: "revision" },
@@ -183,11 +188,6 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
 
   const customDataSet = (data: TrainingRecordQuery[]) =>
     data.filter((e) => e.isValid);
-
-  const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
-    setTraining(rowData);
-    trainingDetailsDialog.open();
-  };
 
   return (
     <Grid container={true} className={classes.root}>
