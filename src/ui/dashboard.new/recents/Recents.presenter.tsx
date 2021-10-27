@@ -7,6 +7,7 @@ import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import RecentsItem from "./Recents.item";
 import { styles } from "./Recents.styles";
+
 interface Props {
   loadRecents: any;
   loadRecentsListAsyncState: AsyncState;
@@ -31,14 +32,15 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                 id={data.document.id}
                 docId={data.document.docId}
                 type={data.document.documentType.group}
+                revisionId={data.document.documentRevisions[0].id}
                 title={data.document.documentRevisions[0].name}
                 description={data.document.documentRevisions[0].description}
+                details={data.document.documentRevisions[0].precalc}
                 accessedAt={moment
                   .utc(data.accessedAt)
                   .local()
                   .startOf("seconds")
                   .fromNow()}
-                details={data.document.documentRevisions[0].precalc}
               />
             );
           case RecentType.CHANGE_REQUEST:

@@ -18,6 +18,7 @@ import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_a
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
+import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Recents.item.styles";
 
@@ -25,6 +26,7 @@ interface Props {
   index: number;
   id: string;
   docId: string;
+  revisionId?: string | undefined;
   type: string;
   title: string;
   description?: string;
@@ -35,6 +37,7 @@ interface Props {
 const RecentsLineItem: React.FunctionComponent<Props> = ({
   id,
   docId,
+  revisionId,
   type,
   title,
   description,
@@ -53,14 +56,12 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   const onMouseHoverId = () => {
     setHoverId(true);
   };
-
   const onMouseLeaveId = () => {
     setHoverId(false);
   };
   const onMouseHoverTitle = () => {
     setHoverTitle(true);
   };
-
   const onMouseLeaveTitle = () => {
     setHoverTitle(false);
   };
@@ -97,86 +98,120 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  {type === "CHANGE_REQUEST" && (
-                    <Link
-                      to={changeRequestEditPath(id)}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.typography}
-                        color="textPrimary"
-                        noWrap
-                        style={hoverId ? { textDecoration: "underline" } : {}}
-                        onMouseEnter={onMouseHoverId}
-                        onMouseLeave={onMouseLeaveId}
-                      >
-                        {docId}&nbsp;
-                      </Typography>
-                    </Link>
-                  )}
-                </Grid>
-                {type === "PO" && (
-                  <Grid item={true}>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true}>
+                {type === "CHANGE_REQUEST" && (
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <Typography
                       component="span"
                       variant="body2"
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
                     >
-                      to&nbsp;
+                      {docId}&nbsp;
                     </Typography>
-                  </Grid>
+                  </Link>
                 )}
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  {type === "CHANGE_REQUEST" && (
-                    <Link
-                      to={changeRequestEditPath(id)}
-                      style={{ textDecoration: "none", color: "inherit" }}
+                {type !== "CHANGE_REQUEST" && (
+                  <Link
+                    to={documentVersionPath(revisionId as string, id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
                     >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                        style={
-                          hoverTitle ? { textDecoration: "underline" } : {}
-                        }
-                        onMouseEnter={onMouseHoverTitle}
-                        onMouseLeave={onMouseLeaveTitle}
-                      >
-                        {title}
-                      </Typography>
-                    </Link>
-                  )}
-                  &nbsp;&nbsp;
-                </Grid>
-                <Grid item={true} className={classes.blackDot}>
-                  &nbsp;
-                </Grid>
+                      {docId}&nbsp;
+                    </Typography>
+                  </Link>
+                )}
+              </Grid>
+              {type === "PO" && (
                 <Grid item={true}>
                   <Typography
                     component="span"
-                    variant="caption"
-                    className={classes.timestampContainer}
-                    color="textSecondary"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                    noWrap
                   >
-                    &nbsp;{accessedAt}
+                    to&nbsp;
                   </Typography>
                 </Grid>
+              )}
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                {type === "CHANGE_REQUEST" && (
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
+                )}
+                {type !== "CHANGE_REQUEST" && (
+                  <Link
+                    to={documentVersionPath(revisionId as string, id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
+                )}
+                &nbsp;&nbsp;
               </Grid>
-            </React.Fragment>
+              <Grid item={true} className={classes.blackDot}>
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                >
+                  &nbsp;{accessedAt}
+                </Typography>
+              </Grid>
+            </Grid>
           }
         />
       </StyledListItem>
