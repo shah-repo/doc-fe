@@ -3,7 +3,9 @@ import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import moment from "moment";
 import React from "react";
-// import { ReactComponent as ModelCloseIcon } from "../../../../../../../../../assets/images/modelClose.svg";
+// import { ReactComponent as ModelCloseIcon } from "../../../../../../../../assets/images/modelClose.svg";
+import { ReactComponent as ModelCloseIcon } from "../../../../../../../src/assets/images/modelClose.svg";
+// src/assets/images/modelClose.svg
 import { AsyncState } from "../../../../../../state/types";
 import AlertDialog from "../../../../../app/alert.dialog/AlertDialog";
 import { EffectiveDateFormValues } from "../../../../../change.request/form/types";
@@ -102,8 +104,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
                   className={classes.closemodel}
                   onClick={transitionDialog.close}
                 >
-                X
-                  {/* <ModelCloseIcon /> */}
+                  <ModelCloseIcon />
                 </IconButton>
               </Grid>
             </Grid>
