@@ -4,7 +4,7 @@ import React from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
-import ChartData from "../data/chartData.json";
+import DoughnutChartOptions from "./DoughnutChartOptions";
 import { styles } from "./TrainingChart.styles";
 
 interface TrainingChartPresenterProps {
@@ -30,7 +30,6 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       },
     },
   ];
-  const DoughnutChartOptions = ChartData.DoughnutChartOptions;
   const defaultTitle = {
     text: "" + totalCount,
     subtext: "Total Outstanding",
