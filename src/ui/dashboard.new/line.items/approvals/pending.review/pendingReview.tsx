@@ -99,6 +99,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [hoverItem, setHoverItem] = React.useState(false);
   const [hoverId, setHoverId] = React.useState(false);
   const [hoverTitle, setHoverTitle] = React.useState(false);
+  const [hoverApprovers, setHoverApprovers] = React.useState(false);
+
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -128,6 +130,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveTitle = () => {
     setHoverTitle(false);
+  };
+  const onMouseHoverApprovers = () => {
+    setHoverApprovers(true);
+  };
+  const onMouseLeaveApprovers = () => {
+    setHoverApprovers(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -272,8 +280,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       variant="caption"
                       className={classes.typographyBold}
                       color="textSecondary"
-                      style={hoverItem ? { textDecoration: "underline" } : {}}
+                      style={hoverApprovers ? { textDecoration: "underline" } : {}}
                       onClick={openApproversModel}
+                      onMouseEnter={onMouseHoverApprovers}
+                      onMouseLeave={onMouseLeaveApprovers}
                       noWrap
                     >
                       {pendingApprovers !== undefined

@@ -248,7 +248,8 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container={true}>
+              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
                   &nbsp;
                 </Grid>

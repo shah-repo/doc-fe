@@ -153,7 +153,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  needs approval for&nbsp;
+                  needs approval for &nbsp;
                 </Typography>
               </Grid>
               <Grid item={true}>
@@ -169,6 +169,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     style={hoverId ? { textDecoration: "underline" } : {}}
                     onMouseEnter={onMouseHoverId}
                     onMouseLeave={onMouseLeaveId}
+                    noWrap
                   >
                     {arId}
                   </Typography>&nbsp;
@@ -194,7 +195,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Link>
               </Grid>
             </Grid>
-            <Grid container={true}>
+            <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+            &nbsp;&nbsp;
               <Grid item={true} className={classes.grayDot}>
                 &nbsp;
               </Grid>
