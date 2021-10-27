@@ -41,6 +41,8 @@ export interface TrainingRecordQuery {
   dueOn: Date;
   completedAtAfter: Date;
   tcId: string;
+  dueOnBefore: Date;
+  trId: string;
 }
 
 interface TrainingPlan {

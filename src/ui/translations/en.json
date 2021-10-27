@@ -377,6 +377,7 @@
   "common.type.here": "Type here...",
   "common.operators": "Operators",
   "common.select.migration.form": "Select Migration Form",
+  "common.trId": "TR ID",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

@@ -10,7 +10,7 @@ import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
@@ -35,6 +35,14 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
 
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
+
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    if (queryDict.dueOnBefore) {
+      queryDict.isCompleted = false;
+    }
+
+    return queryDict;
+  };
 
   const headers = [
     { label: `DOC ID: ${tableCriteria.queryDict?.docId  || ""}`, key: "docId" },
@@ -136,7 +144,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "dueOn",
+      key: "dueOnBefore",
       id: "TrainingListPresenter-dueDate",
       label: "common.due.date",
       columnOptions: {
@@ -147,7 +155,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: dueDateOption(),
-        defaultValue: tableCriteria.queryDict?.dueOn,
+        defaultValue: tableCriteria.queryDict?.dueOnBefore,
       },
     },
     {
@@ -162,6 +170,18 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.completedAt ?
           getFormattedDateString(rowData.completedAt, MomentFormats.DateTimeComplete) : "Pending",
+      },
+    },
+    {
+      key: "trId",
+      id: "TrainingListPresenter-trId",
+      label: "common.trId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.trId,
+        width: 75,
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict?.trId,
       },
     },
     {
@@ -212,6 +232,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           tableName={tableName}
           customDataSet={customDataSet}
+          customQuerySet={customQuerySet}
         />
       </Grid>
     </Grid>

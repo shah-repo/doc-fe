@@ -64,7 +64,7 @@ export const dueDateOption = () => [
   },
   {
     text: CompletedOnDateOptions.OVERDUE,
-    value: moment().startOf("day").toISOString(),
+    value: moment().endOf("day").toISOString(),
   },
 ];
 
