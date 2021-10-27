@@ -39,6 +39,8 @@ interface Props {
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -48,27 +50,11 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   pendingApprovers,
   docRevs,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-  // const docRevs = [
-  //   {
-  //     id: "id1",
-  //     text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-  //   },
-  //   {
-  //     id: "id2",
-  //     text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id3",
-  //     text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id4",
-  //     text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-  //   },
-  // ];
 
   const StyledListItem = withStyles({
     root: {
@@ -114,8 +100,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
+  const hoverItem = hoverItemId === arId;
   // const [viewItem, setViewItem] = React.useState("");
-  const [hoverItem, setHoverItem] = React.useState(false);
   const [hoverId, setHoverId] = React.useState(false);
   const [hoverTitle, setHoverTitle] = React.useState(false);
   const handleClick = () => {
@@ -127,11 +113,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
+
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(arId || id);
   };
   const onMouseHoverId = () => {
     setHoverId(true);
@@ -167,8 +151,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onClick={handleClick}
-        onMouseEnter={onMouseHoverItem}
-        onMouseLeave={onMouseLeaveItem}
+        onMouseEnter={onMouseHoverItemListItem}
         className={classes.listItem}
       >
         {open ? (

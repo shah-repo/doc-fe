@@ -40,6 +40,8 @@ interface Props {
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -48,6 +50,8 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   title,
   timestamp,
   docRevs,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
@@ -96,7 +100,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
   const [hoverId, setHoverId] = React.useState(false);
   const [hoverTitle, setHoverTitle] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -110,12 +113,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   };
   const handleCloseClick = () => {
     setClosed(!closed);
-  };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
   };
   const onMouseHoverId = () => {
     setHoverId(true);
@@ -150,13 +147,16 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
+  const hoverItem = hoverItemId === arId;
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(arId);
+  };
 
   return (
     <>
       <StyledListItem
         button
-        onMouseEnter={onMouseHoverItem}
-        onMouseLeave={onMouseLeaveItem}
+        onMouseEnter={onMouseHoverItemListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
       >

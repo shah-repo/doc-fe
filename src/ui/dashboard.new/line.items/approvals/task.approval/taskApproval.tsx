@@ -29,6 +29,8 @@ interface Props {
   docRevOwnerAvatar?: string | undefined | null;
   docRevOwnerName: string | undefined;
   title: string | undefined;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -37,6 +39,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   title,
   docRevOwnerAvatar,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
@@ -67,7 +71,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
+  const hoverItem = hoverItemId === arId;
   const [hoverId, setHoverId] = React.useState(false);
   const [hoverTitle, setHoverTitle] = React.useState(false);
 
@@ -79,12 +83,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
   const handleRejectClick = () => {
     setRejected(!rejected);
-  };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
   };
   const onMouseHoverId = () => {
     setHoverId(true);
@@ -116,13 +114,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveRejectIcon = () => {
     setRejectHover(false);
   };
-  // eslint-disable-next-line no-console
-  console.log("Task Approval Presenter ::::");
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(arId);
+  };
   return (
     <StyledListItem
       button
-      onMouseEnter={onMouseHoverItem}
-      onMouseLeave={onMouseLeaveItem}
+      onMouseEnter={onMouseHoverItemListItem}
     >
       <ListItemAvatar>
         <Avatar

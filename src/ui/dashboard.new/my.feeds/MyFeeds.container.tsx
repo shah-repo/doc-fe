@@ -116,6 +116,7 @@ const feedItems = [
         approvalStatus: "PENDING",
       },
     ],
+    arId: "SOP-1007",
     docRevApprovedApprovals: [],
     id: "8308c93c-b9bf-4efd-b1d2-bbc19ba48a21",
     timestamp: "2021-10-21T11:24:30.136Z",
@@ -143,6 +144,7 @@ const feedItems = [
         approvalStatus: "PENDING",
       },
     ],
+    arId: "SOP-1004",
     docRevApprovedApprovals: [],
     id: "097680e1-f980-4036-9cd9-4d6aff32b57e",
     timestamp: "2021-10-21T11:24:30.136Z",
@@ -155,6 +157,7 @@ const feedItems = [
     docRevOwnerName: "Zoran Kovacevic",
     docRevOwnerAvatar: null,
     docRevOwnerId: "09195c45-e2f3-4717-acb8-a21010bafdfd",
+    arId: "SOP-1003",
     docRevPendingApprovals: [
       {
         userName: "Zoran Kovacevic",
