@@ -353,10 +353,6 @@ context("PO test", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -501,10 +497,6 @@ context("PO test", () => {
   });
 
   context("Create Purchase Order document with Product option from Form document", () => {
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
-    });
-
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
     });
