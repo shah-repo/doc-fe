@@ -14,7 +14,7 @@ const loadRecentsList = (): ApiAction<Recent[]> => {
     limit: 20,
   };
   return apiAction({
-    url: `${DASHBOARD_RECENT_URL}`,
+    url: DASHBOARD_RECENT_URL,
     method: "get",
     params,
     asyncType: RECENTS_LIST_ASYNC,
