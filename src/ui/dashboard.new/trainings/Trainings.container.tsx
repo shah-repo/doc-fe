@@ -18,7 +18,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   return (
     <Card className={classes.outline}>
       <CardContent>
-        <Text translation={"training.container.title"} />
+        <Text translation={"dashboard.training.container"} />
         {/* <TrainingsPresenter /> */}
       </CardContent>
     </Card>);

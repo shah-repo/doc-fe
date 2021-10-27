@@ -18,7 +18,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   return (
     <Card className={classes.outline}>
       <CardContent>
-        <Text translation={"my.feed.container.title"} />
+        <Text translation={"dashboard.my.feed.container"} />
         {/* <MyFeedsPresenter /> */}
       </CardContent>
     </Card>);

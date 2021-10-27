@@ -12,9 +12,6 @@ const styles = () => ({
       backgroundColor: Colors.white,
     },
   },
-
 });
 
 export const StyledTabs = withStyles(styles)(Tabs);
-
-

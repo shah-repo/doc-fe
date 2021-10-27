@@ -48,7 +48,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
                     <span className={classes.tabItemText}>
-                      <Text translation={"my.feed.tab.title"} /> (26)
+                      <Text translation={"common.my.feed"} /> (26)
                     </span>
                   </Grid>
                 </Grid>
@@ -67,7 +67,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                         <TrainingIcon />
                       )}
                       <span className={classes.tabItemText}>
-                        <Text translation={"trainings.tab.title"} /> (10)
+                        <Text translation={"common.trainings"} /> (10)
                       </span>
                     </Grid>
                   </Grid>
@@ -87,7 +87,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                         <RecentIcon />
                       )}
                     <span className={classes.tabItemText}>
-                      <Text translation={"recent.tab.title"} />
+                      <Text translation={"common.recent"} />
                     </span>
                   </Grid>
                 </Grid>
