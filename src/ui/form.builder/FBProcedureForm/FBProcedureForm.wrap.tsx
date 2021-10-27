@@ -27,7 +27,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     partLoading,
     lotLoading,
     disabled,
-    mode,
+    mode = "eb",
     lhrStepIndex,
     name,
     ...props
@@ -70,7 +70,6 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.materials),
@@ -171,14 +170,27 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
       parentFormState?.unlockField(`${name}.${type}`);
     }
 
+    const customData = (type: FBProcedureFormFilterType, data: DocumentRevision[]) => {
+      if (type === FBProcedureFormFilterType.lots) {
+        if (mode === "mpi" || mode === "lhr") {
+          return data.filter((e) => e.status === DocumentRevisionStatus.Released);
+        }
+        if (mode === "eb") {
+          return data.filter((e) =>
+            e.status === DocumentRevisionStatus.Released ||
+            e.status === DocumentRevisionStatus.Draft);
+        }
+      }
+      return data;
+    };
+
     function handleFilter(
       data: DocumentRevision[],
       type: FBProcedureFormFilterType,
       inputValue: string,
     ) {
       const typeValue = formState?.getFieldValue(type);
-      data = type === FBProcedureFormFilterType.lots ?
-        data.filter((e) => e.status === DocumentRevisionStatus.Released) : data;
+      data = customData(type, data);
       let filtered = typeValue ? [] : data;
       const relation = type === FBProcedureFormFilterType.parts
         ? procedureFormState?.lots
