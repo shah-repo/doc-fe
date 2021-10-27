@@ -9,6 +9,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/expand.svg";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
@@ -16,6 +17,8 @@ import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
+import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
+import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Recents.item.styles";
 
@@ -23,6 +26,7 @@ interface Props {
   index: number;
   id: string;
   docId: string;
+  revisionId?: string | undefined;
   type: string;
   title: string;
   description?: string;
@@ -33,6 +37,7 @@ interface Props {
 const RecentsLineItem: React.FunctionComponent<Props> = ({
   id,
   docId,
+  revisionId,
   type,
   title,
   description,
@@ -43,8 +48,22 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   // TO DO: Needs to remove below line once we get icons for all the possible line item types
   const itemTypes = ["PO", "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
   const [open, setOpen] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const StyledListItem = withStyles({
     root: {
@@ -79,15 +98,53 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
-              <Grid
-                container={true}
-                md={12}
-                sm={12}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true}>
+                {type === "CHANGE_REQUEST" && (
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {docId}&nbsp;
+                    </Typography>
+                  </Link>
+                )}
+                {type !== "CHANGE_REQUEST" && (
+                  <Link
+                    to={documentVersionPath(revisionId as string, id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {docId}&nbsp;
+                    </Typography>
+                  </Link>
+                )}
+              </Grid>
+              {type === "PO" && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -96,49 +153,65 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    to&nbsp;
                   </Typography>
                 </Grid>
-                {type === "PO" && (
-                  <Grid item={true}>
+              )}
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                {type === "CHANGE_REQUEST" && (
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <Typography
                       component="span"
-                      variant="body2"
-                      className={classes.typography}
-                      color="textPrimary"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
                       noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
                     >
-                      to&nbsp;
+                      {title}
                     </Typography>
-                  </Grid>
+                  </Link>
                 )}
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                {type !== "CHANGE_REQUEST" && (
+                  <Link
+                    to={documentVersionPath(revisionId as string, id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    {title}
-                  </Typography>
-                  &nbsp;&nbsp;
-                </Grid>
-                <Grid item={true} className={classes.blackDot}>
-                  &nbsp;
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.timestampContainer}
-                    color="textSecondary"
-                  >
-                    &nbsp;{accessedAt}
-                  </Typography>
-                </Grid>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
+                )}
+                &nbsp;&nbsp;
               </Grid>
-            </React.Fragment>
+              <Grid item={true} className={classes.blackDot}>
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                >
+                  &nbsp;{accessedAt}
+                </Typography>
+              </Grid>
+            </Grid>
           }
         />
       </StyledListItem>
