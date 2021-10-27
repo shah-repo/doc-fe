@@ -332,7 +332,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                           component="span"
                           variant="caption"
                         >
-                          <Text translation="approval.closed.descriptionOfChangeTitle" />
+                          <Text translation="approval.tooltip.description.change.title" />
                         </Typography>
                         <br />
                         <Typography
@@ -349,7 +349,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                           component="span"
                           variant="caption"
                         >
-                          <Text translation="approval.closed.JustificationChangeTitle" />
+                          <Text translation="approval.tooltip.justification.change.title" />
                         </Typography>
                         <br />
                         <Typography

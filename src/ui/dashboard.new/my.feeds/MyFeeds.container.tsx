@@ -174,6 +174,7 @@ const feedItems = [
     type: "DEFAULT",
   },
 ];
+
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => (
   <MyFeedsLineItemPresenter {...{ feedItems }} />
 );
