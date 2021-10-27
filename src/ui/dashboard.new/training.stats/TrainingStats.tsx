@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
 import { styles } from "./TrainingStats.styles";
@@ -154,14 +154,10 @@ const trainingData = [
 const TrainingStats: React.FunctionComponent = () => {
   const classes = styles();
   return (
-    <Grid container={true} className={classes.outline}>
-      <Grid item={true}>
-        <TrainingChart trainingData={trainingData} />
-      </Grid>
-      <Grid item={true}>
-        <TrainingLineItems trainingData={trainingData} />
-      </Grid>
-    </Grid>
+    <Box className={classes.outline}>
+      <TrainingChart trainingData={trainingData} />
+      <TrainingLineItems trainingData={trainingData} />
+    </Box>
   );
 };
 
