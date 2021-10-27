@@ -9,26 +9,24 @@ export const styles = makeStyles(() =>
     listItem: {
       paddingLeft: "1px",
     },
+    truncateText: {
+      textOverflow: "ellipsis",
+      overflow: "auto",
+    },
     typography: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
-    },
-    truncateText: {
-      textOverflow: "ellipsis",
-      overflow: "auto",
     },
     typographyBold: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 600,
     },
-    blackDot: {
-      width: "4px",
-      height: "4px",
-      right: "4px",
-      position: "relative",
-      background: Colors.black,
+    typographyChildrenBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 700,
     },
     timestampContainer: {
       fontFamily: "Sora",
@@ -38,16 +36,18 @@ export const styles = makeStyles(() =>
       lineHeight: "22px",
       color: Colors.font_gray,
     },
+    blackDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      position: "relative",
+      background: Colors.black,
+    },
     nested: {
       marginLeft: "32px",
       borderLeft: "1px solid #CBD5E0",
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
-    },
-    typographyChildrenBold: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 700,
     },
     gridContainer: {
       paddingLeft: "14px",

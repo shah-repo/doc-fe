@@ -9,7 +9,6 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-// import { ReactComponent as AttachmentIcon } from "../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/expand.svg";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
@@ -41,6 +40,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   details,
 }) => {
   const classes = styles();
+  // TO DO: Needs to remove below line once we get icons for all the possible line item types
   const itemTypes = ["PO", "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -256,7 +256,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                     {(details.po_attachments &&
                       details.po_attachments.map((attachmentInfo, index) => (
                         <Grid item key={index}>
-                          {/* <AttachmentIcon />{" "} */}
                           <Typography
                             component="span"
                             variant="body2"
@@ -275,108 +274,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
           </List>
         </Collapse>
       )}
-      {/* <Collapse in={open} timeout="auto" unmountOnExit>
-        <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem) => {
-            if (poItem.isSupplier) {
-              return (
-                <StyledListItem button className={classes.nested} disableRipple>
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.typographyChildrenBold}
-                        color="textPrimary"
-                      >
-                        <b>{poItem.ltext}</b>
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.linkText}
-                        color="textPrimary"
-                      >
-                        {poItem.rtext}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isRegular) {
-              return (
-                <StyledListItem button className={classes.nested} disableRipple>
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.typographyChildrenBold}
-                        color="textPrimary"
-                      >
-                        <b>{poItem.ltext}</b>
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.typography}
-                        color="textPrimary"
-                      >
-                        {poItem.rtext}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isAttachments) {
-              return (
-                <StyledListItem button className={classes.nested} disableRipple>
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.typographyChildrenBold}
-                        color="textPrimary"
-                      >
-                        <b>{poItem.ltext}</b>
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignContent="center"
-                      >
-                        {attachments.map((attachmentInfo, index) => (
-                          <Grid item key={index}>
-                            <AttachmentIcon />{" "}
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.linkText}
-                              color="textPrimary"
-                            >
-                              {" "}
-                              {attachmentInfo.name}
-                            </Typography>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-          })}
-        </List>
-      </Collapse> */}
     </>
   );
 };

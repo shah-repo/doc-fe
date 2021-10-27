@@ -14,15 +14,13 @@ const RecentsContainer: React.FunctionComponent<{}> = () => {
   );
   const recents = useSelector(dashboardSelectors.recents);
   return (
-    <>
-      <RecentsPresenter
-        {...{
-          loadRecents,
-          loadRecentsListAsyncState,
-          recents,
-        }}
-      />
-    </>
+    <RecentsPresenter
+      {...{
+        loadRecents,
+        loadRecentsListAsyncState,
+        recents,
+      }}
+    />
   );
 };
 
