@@ -17,6 +17,7 @@ interface Props {
     id: string;
     type: string;
     timestamp?: string | undefined;
+    arTitle?: string | undefined;
     arStatus?: string | undefined;
     arId?: string | undefined;
     pendingApprovers?: any[] | undefined;
@@ -98,6 +99,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   timestamp={pendingAction.timestamp}
+                  arId={pendingAction.arId || "SOP-1003"}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                   title={pendingAction.docRevName}
@@ -112,11 +114,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
-                  title={
-                    pendingAction?.docRevs?.length
-                      ? pendingAction?.docRevs[0]?.name
-                      : ""
-                  }
+                  title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}
@@ -130,11 +128,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
-                  title={
-                    pendingAction?.docRevs?.length
-                      ? pendingAction?.docRevs[0]?.name
-                      : ""
-                  }
+                  title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}
@@ -148,11 +142,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
-                  title={
-                    pendingAction?.docRevs?.length
-                      ? pendingAction?.docRevs[0]?.name
-                      : ""
-                  }
+                  title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}

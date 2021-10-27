@@ -1,17 +1,39 @@
-
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../../layout/theme/utils/colors";
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     inline: {
       display: "inline",
     },
-    listItemIcon: {
-      paddingLeft: "10px",
+    icon: {
+      width: "15px",
+    },
+    listItem: {
+      paddingLeft: "1px",
     },
     actionIcon: {
       paddingLeft: "10px",
+    },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
+    nested: {
+      // paddingLeft: theme.spacing(4),
+      marginLeft: "40px",
+      borderLeft: "1px solid #CBD5E0",
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    customTooltipWidth: {
+      maxWidth: 500,
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
     },
     actionIcons: {
       /* Action Icons */
@@ -53,6 +75,18 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "12px",
       lineHeight: "22px",
       color: Colors.font_gray,
+    },
+    truncateText: {
+      textOverflow: "ellipsis",
+      overflow: "auto",
+    },
+    grayDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      top: "12px",
+      position: "relative",
+      background: Colors.font_gray,
     },
   }
   ));

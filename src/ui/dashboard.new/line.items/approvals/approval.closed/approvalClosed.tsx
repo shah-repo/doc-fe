@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Chip,
   Collapse,
@@ -12,7 +12,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { size } from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -23,6 +25,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./approvalClosed.styles";
@@ -30,14 +33,15 @@ import { styles } from "./approvalClosed.styles";
 interface Props {
   id: string;
   type: string;
-  title: string;
+  title: string | undefined;
   arId: string | undefined;
   arStatus: string | undefined;
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
 }
-const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+const approvalClosedPresenter: React.FunctionComponent<Props> = ({
+  id,
   arId,
   arStatus,
   title,
@@ -46,7 +50,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   docRevs,
 }) => {
   const classes = styles();
-
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
   // const docRevs = [
   //   {
   //     id: "id1",
@@ -112,24 +116,34 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   // const [viewItem, setViewItem] = React.useState("");
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleViewClick = (id: string) => {
-    console.log("View Item Clicked");
     // setViewItem(id);
-    console.log("Clicked View Item:: ", id);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -138,17 +152,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setPinHover(false);
   };
   const onMouseHoverViewIcon = (id: string) => {
-    console.log("View Item Hovered");
     setViewHoverItem(id);
-    console.log("Hovered View Item:: ", id);
   };
   const onMouseLeaveViewIcon = () => {
-    console.log("View Item Unhovered");
     setViewHoverItem("");
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
-    console.log("Please open Model popup here");
   };
 
   return (
@@ -159,41 +169,76 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         onClick={handleClick}
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
+        className={classes.listItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} />
         ) : (
           <ExpandIcon className={classes.icon} />
         )}
-        <ListItemIcon className={classes.listItemIcon}>
+        <ListItemIcon>
           <PendingReviewIcon />
         </ListItemIcon>
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true}>
-                <Grid item={true} md={12} sm={12}>
+              <Grid container={true} wrap="nowrap">
+                <Grid item={true}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                    >
+                      {arId}
+                    </Typography>&nbsp;
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>&nbsp;
+                  </Link>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
                     className={classes.typography}
                     color="textPrimary"
+                    noWrap
                   >
-                    {arId}&nbsp;
+                    is&nbsp;
                   </Typography>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                  >
-                    {title}&nbsp;is&nbsp;
-                  </Typography>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.typographyStatus}
                     color="textSecondary"
+                    noWrap
                   >
                     {!hoverItem && !open && (
                       <NormalStyleChip
@@ -214,24 +259,51 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     &nbsp;
                   </Typography>
                 </Grid>
-                <Grid item={true} md={12} sm={12}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    style={hoverItem ? { textDecoration: "underline" } : {}}
-                    onClick={openApproversModel}
+              </Grid>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Typography color="inherit">
+                          Assigned to {size(pendingApprovers)} users. <br />4
+                          have Approved and 6 are Pending.
+                        </Typography>
+                      </>
+                    }
+                    placement="top-start"
                   >
-                    {pendingApprovers?.join(",")}
-                  </Typography>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      style={hoverItem ? { textDecoration: "underline" } : {}}
+                      onClick={openApproversModel}
+                      noWrap
+                    >
+                      {pendingApprovers?.join(",")}
+                    </Typography>
+                  </StyleTooltip>
+                  &nbsp;&nbsp;
+                </Grid>
+                <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.timestampContainer}
                     color="textSecondary"
+                    noWrap
                   >
-                    . {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -296,7 +368,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.justificationOfChange}
+                          {prItem.descriptionOfChange}
                         </Typography>
                         <br />
                         <br />
@@ -313,7 +385,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                           component="span"
                         >
-                          {prItem.descriptionOfChange}
+                          {prItem.justificationOfChange}
                         </Typography>
                       </React.Fragment>
                     }
@@ -335,4 +407,4 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingReviewPresenter;
+export default approvalClosedPresenter;

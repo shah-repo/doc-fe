@@ -14,6 +14,7 @@ import AutosaveToggle from "./autosave/autosave";
 import styles from "./NewHeader.styles";
 import UserAvatar from "./UserMenu/UserAvatar";
 import UserMenu from "./UserMenu/UserMenu.container";
+
 interface Props extends WithStyles<typeof styles> {
   email: string;
   name: string;

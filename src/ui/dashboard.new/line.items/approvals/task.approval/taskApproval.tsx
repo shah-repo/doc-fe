@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-console */
 import {
   Avatar,
   Grid,
@@ -11,6 +10,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
@@ -18,14 +18,17 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
+
 interface Props {
   id: string;
   type: string;
+  arId: string | undefined;
   timestamp: string | undefined;
   docRevOwnerAvatar?: string | undefined | null;
   docRevOwnerName: string | undefined;
@@ -33,12 +36,14 @@ interface Props {
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
+  arId,
   docRevOwnerName,
   timestamp,
   title,
   docRevOwnerAvatar,
 }) => {
   const classes = styles();
+  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
   const StyledListItem = withStyles({
     root: {
@@ -67,29 +72,37 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
+  const [hoverId, setHoverId] = React.useState(false);
+  const [hoverTitle, setHoverTitle] = React.useState(false);
 
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const handleApproveClick = () => {
-    console.log("Approve Clicked");
     openApproveDialog();
     setApproved(!approved);
-    console.log("Approved:: ", !approved);
   };
   const handleRejectClick = () => {
-    console.log("Reject Clicked");
     openRejectDialog();
     setRejected(!rejected);
-    console.log("Rejected:: ", !rejected);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
   };
   const onMouseLeaveItem = () => {
     setHoverItem(false);
+  };
+  const onMouseHoverId = () => {
+    setHoverId(true);
+  };
+  const onMouseLeaveId = () => {
+    setHoverId(false);
+  };
+  const onMouseHoverTitle = () => {
+    setHoverTitle(true);
+  };
+  const onMouseLeaveTitle = () => {
+    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -137,13 +150,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line no-console
   console.log("Task Approval Presenter ::::");
   return (
-    <>
+    <React.Fragment>
       <StyledListItem
         button
         onMouseEnter={onMouseHoverItem}
         onMouseLeave={onMouseLeaveItem}
       >
-        <ListItemAvatar className={classes.listItemIcon}>
+        <ListItemAvatar>
           <Avatar
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
@@ -152,44 +165,81 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true}>
-                <Grid item={true} md={12} sm={12}>
+              <Grid container={true} wrap="nowrap">
+                <Grid item={true}>
                   <Typography
                     component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
                   >
-                    <b>{docRevOwnerName}</b> &nbsp;
+                    {docRevOwnerName} &nbsp;
                   </Typography>
+                </Grid>
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
                     className={classes.typography}
                     color="textPrimary"
+                    noWrap
                   >
-                  needs approval for
-                  </Typography>{" "}
-                &nbsp;
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                  >
-                    <b>{title}</b>
+                  needs approval for&nbsp;
                   </Typography>
+                </Grid>
+                <Grid item={true}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      style={hoverId ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverId}
+                      onMouseLeave={onMouseLeaveId}
+                      noWrap
+                    >
+                      {arId}
+                    </Typography>&nbsp;
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    to={changeRequestEditPath(id)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                      style={hoverTitle ? { textDecoration: "underline" } : {}}
+                      onMouseEnter={onMouseHoverTitle}
+                      onMouseLeave={onMouseLeaveTitle}
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
                 </Grid>
               </Grid>
               <Grid container={true}>
+                <Grid item={true} className={classes.grayDot}>
+                &nbsp;
+                </Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
                     variant="caption"
                     className={classes.timestampContainer}
                     color="textSecondary"
+                    noWrap
                   >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -256,7 +306,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         //   transitionDialog,
         // }}
       />
-    </>
+    </React.Fragment>
   );
 };
 
