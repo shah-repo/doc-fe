@@ -489,6 +489,7 @@
   "transition.action.close.date": "Select effective date",
   "transition.action.close.title": "Close Approval Request",
   "transition.action.cancel.discription": "will be closed. Would you like to close this?",
+  "transition.action.close.date.discription": "Secheduled to close on ",
   "transition.action.approve.title": "Approve Request",
   "transition.action.cancel.schedule.title": "Schedule Later",
   "transition.action.reject.title": "Reject Request",

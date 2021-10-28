@@ -37,7 +37,6 @@ const TransitionDialog: React.FunctionComponent<Props> =
     title,
     classes,
     onSubmit,
-    // openDialog,
     asyncState,
     buttonProps,
     transition,
@@ -131,7 +130,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
                     </Typography>
                   </Grid>
                 </Grid>
-                <DialogContent className={classes.pendingBox}>
+                <DialogContent>
                   <FormContext.Provider value={{ submitOnChange: false }}>
                     <Formik
                       initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?

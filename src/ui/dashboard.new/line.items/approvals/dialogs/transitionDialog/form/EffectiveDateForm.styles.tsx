@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -15,7 +16,7 @@ export default (theme: Theme) =>
       height: "25px",
       left: "calc(50% - 92px/2 + 139px)",
       top: "calc(50% - 25px/2)",
-      background: "#011FBB",
+      background: Colors.navy,
       borderRadius: "200px",
       flex: "none",
       order: 1,
@@ -29,11 +30,43 @@ export default (theme: Theme) =>
       fontSize: "12px",
       lineHeight: "15px",
       textTransform: "uppercase",
-      color: "#FFFFFF",
+      color: Colors.white,
     },
     cancelButton: {
       float: "right",
       marginRight: theme.spacing(1),
+    },
+    pendingBox: {
+      flexDirection: "column",
+      height: "auto",
+      overflowY: "auto",
+      top: "48px",
+      left: "20px",
+      border: "1px solid #F5F8FF",
+      display: "flex",
+      padding: "20px",
+      backgroundColor: Colors.white,
+      boxSizing: "border-box",
+      alignItems: "flex-start",
+      borderRadius: "8px",
+    },
+    closeLaterDiscription: {
+      position: "static",
+      left: "10.42%",
+      right: "0%",
+      top: "0%",
+      bottom: "0%",
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSeight: "normal",
+      fontSize: "12px",
+      lineHeight: "15px",
+      textAlign: "right",
+      color: "#080B11",
+      flex: "none",
+      order: 1,
+      flexGrow: 0,
+      margin: "0px 10px",
     },
     closeLaterSubmitButton: {
       display: "flex",
