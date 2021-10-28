@@ -8,8 +8,8 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/expand.svg";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
@@ -48,22 +48,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
   // TO DO: Needs to remove below line once we get icons for all the possible line item types
   const itemTypes = ["PO", "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
   const [open, setOpen] = React.useState(false);
-  const [hoverId, setHoverId] = React.useState(false);
-  const [hoverTitle, setHoverTitle] = React.useState(false);
+
   const handleClick = () => {
     setOpen(!open);
-  };
-  const onMouseHoverId = () => {
-    setHoverId(true);
-  };
-  const onMouseLeaveId = () => {
-    setHoverId(false);
-  };
-  const onMouseHoverTitle = () => {
-    setHoverTitle(true);
-  };
-  const onMouseLeaveTitle = () => {
-    setHoverTitle(false);
   };
   const StyledListItem = withStyles({
     root: {
@@ -78,14 +65,13 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onClick={handleClick}
         className={type === "PO" ? classes.listItem : ""}
       >
         {type === "PO" &&
           (open ? (
-            <CollapseIcon className={classes.icon} />
+            <CollapseIcon className={classes.icon} onClick={handleClick}/>
           ) : (
-            <ExpandIcon className={classes.icon} />
+            <ExpandIcon className={classes.icon} onClick={handleClick}/>
           ))}
         <ListItemIcon>
           <>
@@ -107,8 +93,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
               <Grid item={true}>
                 {type === "CHANGE_REQUEST" && (
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -116,9 +103,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {docId}&nbsp;
                     </Typography>
@@ -126,8 +110,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                 )}
                 {type !== "CHANGE_REQUEST" && (
                   <Link
-                    to={documentVersionPath(revisionId as string, id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={documentVersionPath(revisionId as string, id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -135,9 +120,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {docId}&nbsp;
                     </Typography>
@@ -160,8 +142,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 {type === "CHANGE_REQUEST" && (
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -169,9 +152,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>
@@ -179,8 +159,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                 )}
                 {type !== "CHANGE_REQUEST" && (
                   <Link
-                    to={documentVersionPath(revisionId as string, id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={documentVersionPath(revisionId as string, id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -188,9 +169,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>
