@@ -1,11 +1,7 @@
 import { Button, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
-// import moment from "moment";
 import * as React from "react";
-// import { getStartOfDayDateString, TIME_ZONE } from "../../../../../../../common/utils/date";
 import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
-// import DatePickerField from "../../../../../../components/forms/fields/DatePickerField";
-// import { required, validator } from "../../../../../../components/forms/fields/validators/index";
 import FormMessage from "../../../../../../components/forms/FormMessage";
 import FormProgress from "../../../../../../components/forms/FormProgress";
 import SubmitButton from "../../../../../../components/forms/SubmitButton";

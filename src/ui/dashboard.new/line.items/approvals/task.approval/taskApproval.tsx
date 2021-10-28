@@ -127,12 +127,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const transitionDialog1 = useDialog();
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
-      // onSuccess && onSuccess();
-      // if (transition === "closed") {
-      // effectiveDateDialog.close();
-      // } else {
       transitionDialog.close();
-      // }
     },
     onError: (error) => {
       transitionDialog.close();
@@ -148,8 +143,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     transitionDialog1.open();
   };
 
-  // eslint-disable-next-line no-console
-  console.log("Task Approval Presenter ::::");
   return (
     <React.Fragment>
       <StyledListItem
@@ -302,18 +295,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         changeRequestId={id}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
-        // { ...{
-        //   transitionDialog,
-        // }}
       />
       <ApproveDialogueContainer
         transition="approve"
         changeRequestId={id}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
-        // { ...{
-        //   transitionDialog,
-        // }}
       />
     </React.Fragment>
   );

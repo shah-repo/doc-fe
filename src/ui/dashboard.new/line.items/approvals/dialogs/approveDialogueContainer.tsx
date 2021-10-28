@@ -55,7 +55,6 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
 
   return (
     <TransitionDialog
-      // openDialog={openDialog}
       onSubmit={onSubmit}
       asyncState={async.asyncState}
       buttonProps={buttonProps}

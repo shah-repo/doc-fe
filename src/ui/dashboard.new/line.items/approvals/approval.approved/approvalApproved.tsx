@@ -162,12 +162,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   };
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
-      // onSuccess && onSuccess();
-      // if (transition === "closed") {
-      // effectiveDateDialog.close();
-      // } else {
       transitionDialog.close();
-      // }
     },
     onError: (error) => {
       transitionDialog.close();
@@ -405,9 +400,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
         title={title}
         transitionDialog={transitionDialog}
         label="transition.action.reject"
-        // { ...{
-        //   transitionDialog,
-        // }}
       />
     </>
   );
