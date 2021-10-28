@@ -26,6 +26,8 @@ interface Props {
   timestamp: string;
   verbose: string;
   dueDate: string;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -34,6 +36,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   status,
   timestamp,
   dueDate,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   const StyledListItem = withStyles({
@@ -68,22 +72,18 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
   const [pinned, setPinned] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
+  const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     setPinned(!pinned);
   };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(id);
   };
 
   return (
     <StyledListItem
       button
-      onMouseEnter={onMouseHoverItem}
-      onMouseLeave={onMouseLeaveItem}
+      onMouseEnter={onMouseHoverItemListItem}
     >
       <ListItemIcon className={classes.listItemIcon}>
         <TrainingIcon />
