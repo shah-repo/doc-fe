@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
@@ -14,6 +15,8 @@ export default makeStyles((theme: Theme) =>
       width: "196px",
       height: "196px",
       borderRadius: "50%",
+      fontSize: "70px",
+      color: Colors.white,
     },
   }),
 );

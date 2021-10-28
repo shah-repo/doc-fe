@@ -8,6 +8,7 @@ export const DEFAULT_SELECTED_EMPLOYEE: GetEmployeeResponse = {
     id: "",
     name: "",
     email: "",
+    initialColor: "",
   },
   groups: [],
 };
