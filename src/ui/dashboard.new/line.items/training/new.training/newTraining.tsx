@@ -8,6 +8,7 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -15,6 +16,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./newTraining.styles";
 
@@ -28,6 +30,8 @@ interface Props {
   verbose: string;
   dueDate: string;
   approvers: string[];
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -37,6 +41,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   dueDate,
   approvers,
+  onMouseHoverItem,
+  hoverItemId,
 }) => {
   const classes = styles();
   const StyledListItem = withStyles({
@@ -71,22 +77,21 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
   const [pinned, setPinned] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
+  const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     setPinned(!pinned);
   };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(id);
   };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
-  };
+  const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
+  const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
+
 
   return (
     <StyledListItem
       button
-      onMouseEnter={onMouseHoverItem}
-      onMouseLeave={onMouseLeaveItem}
+      onMouseEnter={onMouseHoverItemListItem}
     >
       <ListItemIcon className={classes.listItemIcon}>
         <TrainingIcon />
@@ -112,26 +117,38 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Typography>
               </Grid>
               <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                  noWrap
+                <Link
+                  href={documentVersionPath(documentRevId, existingId)}
+                  color="inherit"
+                  className= {classes.link}
                 >
-                  {id}&nbsp;
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                    noWrap
+                  >
+                    {id}&nbsp;
+                  </Typography>
+                </Link>
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                  noWrap
+                <Link
+                  href={documentVersionPath(documentRevId, existingId)}
+                  color="inherit"
+                  className= {classes.link}
                 >
-                  {title}&nbsp;
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {title}&nbsp;
+                  </Typography>
+                </Link>
               </Grid>
               <Grid item={true}>
                 <Typography
@@ -199,15 +216,21 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               alignItems="center"
             >
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                  noWrap
+                <Link
+                  href="#"
+                  color="inherit"
+                  className= {classes.link}
                 >
-                  {approvers.join(",")}
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {approvers.join(",")}
+                  </Typography>
+                </Link>
                 &nbsp;
               </Grid>
               <Grid item={true} className={classes.grayDot}>

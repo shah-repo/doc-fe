@@ -25,8 +25,15 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   trainingItems,
 }) => {
   const classes = styles();
+  const [hoverItemId, setHoverItemId] = React.useState("");
+  const onMouseHoverItem = (id) => {
+    setHoverItemId(id);
+  };
+  const onMouseLeaveItem = () => {
+    setHoverItemId("");
+  };
   const renderPendingActions = () => (
-    <List dense className={classes.root}>
+    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case ActionTypes.NEW_TRAINING_RECORDS:
@@ -42,6 +49,8 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                 verbose={pendingAction.verbose}
                 dueDate={pendingAction.dueDate}
                 approvers={pendingAction.approvers}
+                hoverItemId= {hoverItemId}
+                onMouseHoverItem= {onMouseHoverItem}
               />
             );
           case ActionTypes.PENDING_TRAINING_RECORDS:
@@ -56,6 +65,8 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                 timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
                 dueDate={pendingAction.dueDate}
+                hoverItemId= {hoverItemId}
+                onMouseHoverItem= {onMouseHoverItem}
               />
             );
           default:
