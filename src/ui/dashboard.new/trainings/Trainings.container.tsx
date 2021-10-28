@@ -1,5 +1,6 @@
 import React from "react";
 import TrainingsLineItemPresenter from "./Trainings.presenter";
+
 const trainingItems = [
   {
     id: "TC-00095",
