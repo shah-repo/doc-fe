@@ -203,11 +203,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
               </Grid>
-              <Grid container={true}>
-                <Grid item={true} className={classes.grayDot}>
-                &nbsp;
-                </Grid>
-              </Grid>
               <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
             &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
