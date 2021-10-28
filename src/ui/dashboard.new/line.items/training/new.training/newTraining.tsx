@@ -2,13 +2,15 @@ import {
   Box,
   Chip,
   Grid,
+  Link,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Tooltip,
   Typography,
   withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
+import { size } from "lodash";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -76,6 +78,18 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       color: Colors.white,
     },
   })(Chip);
+
+  const StyleTooltip = withStyles({
+    arrow: {
+      color: Colors.black,
+    },
+    tooltip: {
+      backgroundColor: Colors.black,
+    },
+    tooltipPlacementTop: {
+      margin: "8px 0",
+    },
+  })(Tooltip);
   const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
@@ -87,12 +101,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
   const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
 
-
   return (
-    <StyledListItem
-      button
-      onMouseEnter={onMouseHoverItemListItem}
-    >
+    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
       <ListItemIcon className={classes.listItemIcon}>
         <TrainingIcon />
       </ListItemIcon>
@@ -120,7 +130,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Link
                   href={documentVersionPath(documentRevId, existingId)}
                   color="inherit"
-                  className= {classes.link}
+                  className={classes.link}
                 >
                   <Typography
                     component="span"
@@ -137,7 +147,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Link
                   href={documentVersionPath(documentRevId, existingId)}
                   color="inherit"
-                  className= {classes.link}
+                  className={classes.link}
                 >
                   <Typography
                     component="span"
@@ -216,21 +226,27 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               alignItems="center"
             >
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <Link
-                  href="#"
-                  color="inherit"
-                  className= {classes.link}
+                <StyleTooltip
+                  title={
+                    <Typography color="inherit">
+                      Assigned to {size(approvers)} users. <br />4 have Approved
+                      and 6 are Pending.
+                    </Typography>
+                  }
+                  placement="top-start"
                 >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {approvers.join(",")}
-                  </Typography>
-                </Link>
+                  <Link href="#" color="inherit" className={classes.link}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {approvers.join(",")}
+                    </Typography>
+                  </Link>
+                </StyleTooltip>
                 &nbsp;
               </Grid>
               <Grid item={true} className={classes.grayDot}>
