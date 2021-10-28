@@ -9,12 +9,12 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -39,6 +39,8 @@ interface Props {
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -48,27 +50,11 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   pendingApprovers,
   docRevs,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-  // const docRevs = [
-  //   {
-  //     id: "id1",
-  //     text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-  //   },
-  //   {
-  //     id: "id2",
-  //     text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id3",
-  //     text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id4",
-  //     text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-  //   },
-  // ];
 
   const StyledListItem = withStyles({
     root: {
@@ -114,10 +100,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
-  // const [viewItem, setViewItem] = React.useState("");
-  const [hoverItem, setHoverItem] = React.useState(false);
-  const [hoverId, setHoverId] = React.useState(false);
-  const [hoverTitle, setHoverTitle] = React.useState(false);
+  const hoverItem = hoverItemId === arId;
   const handleClick = () => {
     setOpen(!open);
   };
@@ -127,23 +110,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
-  };
-  const onMouseHoverId = () => {
-    setHoverId(true);
-  };
-  const onMouseLeaveId = () => {
-    setHoverId(false);
-  };
-  const onMouseHoverTitle = () => {
-    setHoverTitle(true);
-  };
-  const onMouseLeaveTitle = () => {
-    setHoverTitle(false);
+
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(arId || id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -167,8 +136,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onClick={handleClick}
-        onMouseEnter={onMouseHoverItem}
-        onMouseLeave={onMouseLeaveItem}
+        onMouseEnter={onMouseHoverItemListItem}
         className={classes.listItem}
       >
         {open ? (
@@ -185,8 +153,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -194,9 +163,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
                     </Typography>&nbsp;
@@ -204,8 +170,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -213,9 +180,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>&nbsp;
@@ -283,7 +247,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       variant="caption"
                       className={classes.typographyBold}
                       color="textSecondary"
-                      style={hoverItem ? { textDecoration: "underline" } : {}}
                       onClick={openApproversModel}
                       noWrap
                     >
