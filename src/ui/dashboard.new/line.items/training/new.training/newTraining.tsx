@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Chip,
   Grid,
@@ -39,7 +38,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   approvers,
 }) => {
   const classes = styles();
-
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -47,7 +45,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       },
     },
   })(ListItem);
-
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
@@ -60,7 +57,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           : Colors.latest_yellow_varient,
     },
   })(Chip);
-
   const HoverStyleChip = withStyles({
     root: {
       backgroundColor:
@@ -73,13 +69,10 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       color: Colors.white,
     },
   })(Chip);
-
   const [pinned, setPinned] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handlePinClick = () => {
-    console.log("Pin Clicked");
     setPinned(!pinned);
-    console.log("Pinned:: ", !pinned);
   };
   const onMouseHoverItem = () => {
     setHoverItem(true);
@@ -87,6 +80,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
+
   return (
     <StyledListItem
       button

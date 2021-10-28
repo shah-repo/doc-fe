@@ -1,10 +1,12 @@
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import {
+  Chip,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -25,6 +27,7 @@ interface Props {
   verbose: string;
   dueDate: string;
 }
+
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
   title,
@@ -33,7 +36,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   dueDate,
 }) => {
   const classes = styles();
-
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -41,7 +43,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       },
     },
   })(ListItem);
-
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
@@ -54,7 +55,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           : Colors.latest_yellow_varient,
     },
   })(Chip);
-
   const HoverStyleChip = withStyles({
     root: {
       backgroundColor:
@@ -67,7 +67,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       color: Colors.white,
     },
   })(Chip);
-
   const [pinned, setPinned] = React.useState(false);
   const [hoverItem, setHoverItem] = React.useState(false);
   const handlePinClick = () => {
@@ -79,6 +78,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
+
   return (
     <StyledListItem
       button

@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { Grid, List, Typography } from "@material-ui/core";
 import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
@@ -21,6 +20,7 @@ interface Props {
     approvers: string[];
   }[];
 }
+
 const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   trainingItems,
 }) => {
@@ -57,7 +57,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           default:
-            return null;
+            return <Text key={index} translation="common.undefined" />;
         }
       })}
     </List>
