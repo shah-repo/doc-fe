@@ -1,5 +1,6 @@
 import { Box, Button, Grid } from "@material-ui/core";
-import { isEmpty } from "lodash";
+import { isEmpty, omit } from "lodash";
+import moment from "moment";
 import React, { useState } from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -10,10 +11,11 @@ import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
+import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import TrainingDetails from "../details/TrainingDetails";
 import { styles } from "./styles";
@@ -40,6 +42,19 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
 
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    const findDueDateOption = dueDateOption().find((e) => e.value === queryDict.dueOnBefore)?.text;
+    queryDict = omit(queryDict, ["dueOnAfter", "isCompleted"]);
+
+    if (queryDict.dueOnBefore) {
+      if (findDueDateOption === CompletedOnDateOptions.NEXT_WEEK) {
+        queryDict.dueOnAfter = moment().toISOString();
+      }
+      queryDict.isCompleted = false;
+    }
+    return queryDict;
+  };
+
   const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
     setTraining(rowData);
     trainingDetailsDialog.open();
@@ -54,7 +69,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       label: `ASSIGN DATE: ${getDateOption(documentRevisionEffectiveDateOption, "createdAtAfter")  || ""}`,
       key: "createdAtAfter",
     },
-    { label: `DUE DATE: ${getDateOption(dueDateOption, "dueOn")  || ""}`, key: "dueOn" },
+    { label: `DUE DATE: ${getDateOption(dueDateOption, "dueOnBefore")  || ""}`, key: "dueOnBefore" },
     {
       label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
       key: "completedAtAfter",
@@ -145,7 +160,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "dueOn",
+      key: "dueOnBefore",
       id: "TrainingListPresenter-dueDate",
       label: "common.due.date",
       columnOptions: {
@@ -156,7 +171,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: dueDateOption(),
-        defaultValue: tableCriteria.queryDict?.dueOn,
+        defaultValue: tableCriteria.queryDict?.dueOnBefore,
       },
     },
     {
@@ -171,6 +186,18 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.completedAt ?
           getFormattedDateString(rowData.completedAt, MomentFormats.DateTimeComplete) : "Pending",
+      },
+    },
+    {
+      key: "trId",
+      id: "TrainingListPresenter-trId",
+      label: "common.trId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.trId,
+        width: 75,
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict?.trId,
       },
     },
     {
@@ -221,6 +248,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           tableName={tableName}
           customDataSet={customDataSet}
+          customQuerySet={customQuerySet}
           onSelect={({ rowData }) => () => handleTrainingDetailsDialog(rowData)}
         />
         <TrainingDetails

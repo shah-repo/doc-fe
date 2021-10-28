@@ -42,9 +42,10 @@ export interface TrainingRecordQuery {
   dueOn?: Date;
   completedAtAfter?: Date;
   tcId: string;
+  dueOnBefore?: Date;
+  trId: string;
   documentRevision?: DocumentRevision;
   trainingPlan?: TrainingPlan;
-  trId: string;
   completedAt?: Date;
   id: string;
 }

@@ -377,6 +377,7 @@
   "common.type.here": "Type here...",
   "common.operators": "Operators",
   "common.select.migration.form": "Select Migration Form",
+  "common.trId": "TR ID",
   "common.acknowledge": "Acknowledge",
   "common.training.record": "Training Record",
   "common.email.sent": "Email Sent!",

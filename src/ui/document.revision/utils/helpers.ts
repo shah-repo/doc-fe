@@ -59,28 +59,12 @@ export const documentRevisionEffectiveDateOption = () => [
 
 export const dueDateOption = () => [
   {
-    text: ReleasedDateOptions.LAST_WEEK,
-    value: moment().subtract(7, "d").startOf("day").toISOString(),
-  },
-  {
-    text: ReleasedDateOptions.LAST_TWO_WEEKS,
-    value: moment().subtract(14, "d").startOf("day").toISOString(),
-  },
-  {
-    text: ReleasedDateOptions.LAST_MONTH,
-    value: moment().subtract(30, "d").startOf("day").toISOString(),
-  },
-  {
     text: CompletedOnDateOptions.NEXT_WEEK,
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
   {
-    text: CompletedOnDateOptions.NEXT_TWO_WEEKS,
-    value: moment().add(14, "d").startOf("day").toISOString(),
-  },
-  {
-    text: CompletedOnDateOptions.NEXT_MONTH,
-    value: moment().add(30, "d").startOf("day").toISOString(),
+    text: CompletedOnDateOptions.OVERDUE,
+    value: moment().endOf("day").toISOString(),
   },
 ];
 
