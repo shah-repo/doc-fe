@@ -132,10 +132,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <React.Fragment>
-      <StyledListItem
-        button
-        onMouseEnter={onMouseHoverItemListItem}
-      >
+      <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
         <ListItemAvatar>
           <Avatar
             alt={docRevOwnerName}
@@ -145,7 +142,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -165,14 +167,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                  needs approval for&nbsp;
+                    needs approval for&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -182,14 +184,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -203,10 +206,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
               </Grid>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
-            &nbsp;&nbsp;
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
-                &nbsp;
+                  &nbsp;
                 </Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
@@ -216,7 +224,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                  &nbsp; {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

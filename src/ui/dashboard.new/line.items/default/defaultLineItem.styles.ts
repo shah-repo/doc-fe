@@ -1,8 +1,7 @@
-
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     link: {
       color: Colors.black,
@@ -17,6 +16,5 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       fontWeight: 600,
     },
-
-  }
-  ));
+  })
+);

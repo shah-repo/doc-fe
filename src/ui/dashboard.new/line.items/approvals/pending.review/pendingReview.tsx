@@ -6,7 +6,9 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText, Modal, Tooltip,
+  ListItemText,
+  Modal,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
@@ -145,9 +147,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         className={classes.listItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon}  onClick={handleClick} />
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon}  onClick={handleClick}/>
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon />
@@ -155,12 +157,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -170,14 +177,15 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -187,7 +195,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {title}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -243,7 +252,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       <>
                         <Typography color="inherit">
                           Assigned to {size(pendingApprovers)} users. <br />0
-                          have Approved and {size(pendingApprovers)} are Pending.
+                          have Approved and {size(pendingApprovers)} are
+                          Pending.
                         </Typography>
                       </>
                     }
@@ -253,7 +263,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       href="#"
                       color="inherit"
                       onClick={openApproversModel}
-                      className= {classes.link}
+                      className={classes.link}
                     >
                       <Typography
                         component="span"
@@ -389,7 +399,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <EmailModal handleEmailModelClose={handleEmailModelClose} pendingApprovers={pendingApprovers}/>
+        <EmailModal
+          handleEmailModelClose={handleEmailModelClose}
+          pendingApprovers={pendingApprovers}
+        />
       </Modal>
     </>
   );

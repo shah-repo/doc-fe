@@ -3,10 +3,16 @@ import { Form } from "formik";
 import moment from "moment";
 import * as React from "react";
 import { ReactComponent as ScheduleIcon } from "../../../../../../../assets/images/ScheduleIcon.svg";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../../../../../common/utils/date";
+import {
+  getStartOfDayDateString,
+  TIME_ZONE,
+} from "../../../../../../../common/utils/date";
 import { AsyncState } from "../../../../../../../state/types";
 import DatePickerStaticField from "../../../../../../components/forms/fields/DatePickerStaticField";
-import { required, validator } from "../../../../../../components/forms/fields/validators/index";
+import {
+  required,
+  validator,
+} from "../../../../../../components/forms/fields/validators/index";
 import FormMessage from "../../../../../../components/forms/FormMessage";
 import FormProgress from "../../../../../../components/forms/FormProgress";
 import SubmitButton from "../../../../../../components/forms/SubmitButton";
@@ -17,7 +23,11 @@ interface EffectiveDateFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
   cancel: () => void;
 }
-const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ cancel, classes, asyncState }) => (
+const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({
+  cancel,
+  classes,
+  asyncState,
+}) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
     <Box className={classes.pendingBox}>
@@ -29,9 +39,13 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
       />
     </Box>
     <FormProgress asyncState={asyncState} />
-    <Grid container className={classes.closeLaterDiscription} justify="space-between">
+    <Grid
+      container
+      className={classes.closeLaterDiscription}
+      justify="space-between"
+    >
       <Grid zeroMinWidth item={true}>
-        <ScheduleIcon  className={classes.ScheduleIcon}/>
+        <ScheduleIcon className={classes.ScheduleIcon} />
         <Text translation="transition.action.close.date.discription" />
         {"10/28/2021"}
       </Grid>

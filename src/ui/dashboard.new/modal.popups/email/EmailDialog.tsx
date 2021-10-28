@@ -1,7 +1,15 @@
 import {
   Avatar,
   Box,
-  Button, Collapse, Grid, IconButton, List, ListItem, ListItemText, Modal, Typography,
+  Button,
+  Collapse,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Modal,
+  Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -21,18 +29,16 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   pendingApprovers,
 }) => {
   const classes = styles();
-
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openPending, setOpenPending] = React.useState(true);
   const [openApproved, setOpenApproved] = React.useState(false);
 
-
   const handleClickPending = () => {
     setOpenPending(!openPending);
   };
+
   const handleClickApproved = () => {
     setOpenApproved(!openApproved);
-    // console.log(openApproved);
   };
 
   const handleApiAlertModelOpen = () => {
@@ -45,20 +51,13 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
   };
+
   const StyledListItem = withStyles({
-    root: {
-      "backgroundColor": Colors.white,
-      // "marginTop": "5%",
-      "&:hover": {
-        // backgroundColor: Colors.sky_blue,
-      },
-    },
+    root: { "backgroundColor": Colors.white, "&:hover": {} },
   })(ListItem);
+
   const apiAlertModelbody = (
-
-    <div className={classes.emailPaper}>
-
-
+    <Box className={classes.emailPaper}>
       <Grid container justify="space-between">
         <Grid item>
           <Typography
@@ -67,7 +66,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-              Email Confirmation
+            Email Confirmation
           </Typography>
         </Grid>
         <Grid item>
@@ -80,8 +79,12 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           </IconButton>
         </Grid>
       </Grid>
-
-      <Grid container justify="space-between" alignItems="center" className={classes.confroot}>
+      <Grid
+        container
+        justify="space-between"
+        alignItems="center"
+        className={classes.confroot}
+      >
         <Grid item>
           <Typography
             variant="h2"
@@ -89,7 +92,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesg}
           >
-              EMAIL SENT TO ALL
+            EMAIL SENT TO ALL
           </Typography>
         </Grid>
         <Grid item>
@@ -99,17 +102,14 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-              Sent: 10/5/21
+            Sent: 10/5/21
           </Typography>
         </Grid>
       </Grid>
-    </div>
-
-
+    </Box>
   );
-
   return (
-    <div className={classes.paper}>
+    <Box component="div" className={classes.paper}>
       <Grid container justify="space-between">
         <Grid item>
           <Typography
@@ -118,7 +118,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-              Approval Status
+            Approval Status
           </Typography>
         </Grid>
         <Grid item>
@@ -131,8 +131,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           </IconButton>
         </Grid>
       </Grid>
-
-      <Box className={classes.pendingBox}>
+      <Box component="div" className={classes.pendingBox}>
         <StyledListItem button onClick={handleClickPending}>
           {openPending ? (
             <CollapseIcon className={classes.iconupdown} />
@@ -143,9 +142,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             primary={
               <React.Fragment>
                 <Grid container justify="space-between">
-                  {/* <Grid item={true} className={classes.yellowDot}>
-                  &nbsp;&nbsp;
-                  </Grid> */}
                   <Grid item>
                     <Typography
                       variant="h2"
@@ -184,38 +180,36 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           className={classes.listrootpending}
         >
           <List dense disablePadding>
-            {pendingApprovers.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
-              {/* <StyledListItem button className={classes.nested}> */}
-              <Avatar
-                className={classes.listitemicon}
-                alt={pending.userName}
-                src="."
-              />
-              <ListItemText
-                id={pending.employeeId}
-                primary={
-                  <Typography
-                    component="span"
-                    variant="h2"
-                    className={classes.listitemtext}
-                  >
-                    {pending.userName}
-                  </Typography>
-                }
-              />
-            </StyledListItem>)}
-
-
+            {pendingApprovers.map((pending, index) => (
+              <StyledListItem button key={index}>
+                <Avatar
+                  className={classes.listitemicon}
+                  alt={pending.userName}
+                  src="."
+                />
+                <ListItemText
+                  id={pending.employeeId}
+                  primary={
+                    <Typography
+                      component="span"
+                      variant="h2"
+                      className={classes.listitemtext}
+                    >
+                      {pending.userName}
+                    </Typography>
+                  }
+                />
+              </StyledListItem>
+            ))}
           </List>
         </Collapse>
       </Box>
-      <Box className={classes.approvedBox}>
-
+      <Box component="div" className={classes.approvedBox}>
         <StyledListItem button onClick={handleClickApproved}>
           {openApproved ? (
-            <CollapseIcon className={classes.icon} />
+            <CollapseIcon className={classes.iconupdown} />
           ) : (
-            <ExpandIcon className={classes.icon} />
+            <ExpandIcon className={classes.iconupdown} />
           )}
           <ListItemText
             primary={
@@ -231,7 +225,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                       {`APPROVED (0)`}
                     </Typography>
                   </Grid>
-
                 </Grid>
               </React.Fragment>
             }
@@ -244,35 +237,31 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           className={classes.listrootapproved}
         >
           <List dense disablePadding>
-            {pendingApprovers.map((pending, index) => <StyledListItem button className={classes.nested} key={index}>
-              {/* <StyledListItem button className={classes.nested}> */}
-              <Avatar
-                className={classes.listitemicon}
-                alt={pending.userName}
-                src="."
-              />
-              <ListItemText
-                id={pending.employeeId}
-                primary={
-                  <Typography
-                    component="span"
-                    variant="h2"
-                    className={classes.listitemtext}
-                  >
-                    {pending.userName}
-                  </Typography>
-                }
-              />
-            </StyledListItem>)}
-
+            {pendingApprovers.map((pending, index) => (
+              <StyledListItem button key={index}>
+                <Avatar
+                  className={classes.listitemicon}
+                  alt={pending.userName}
+                  src="."
+                />
+                <ListItemText
+                  id={pending.employeeId}
+                  primary={
+                    <Typography
+                      component="span"
+                      variant="h2"
+                      className={classes.listitemtext}
+                    >
+                      {pending.userName}
+                    </Typography>
+                  }
+                />
+              </StyledListItem>
+            ))}
           </List>
         </Collapse>
       </Box>
-
-    </div>
+    </Box>
   );
-
-
 };
 export default EmailModal;
-

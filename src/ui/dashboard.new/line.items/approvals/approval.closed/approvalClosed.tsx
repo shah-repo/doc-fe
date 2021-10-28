@@ -149,7 +149,12 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Link
                     href={changeRequestEditPath(id)}
@@ -164,7 +169,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -181,7 +187,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {title}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>

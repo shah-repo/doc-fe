@@ -1,7 +1,6 @@
 import { createStyles, Theme } from "@material-ui/core";
 import Colors from "../../../../../layout/theme/utils/colors";
 
-
 export default (theme: Theme) =>
   createStyles({
     container: {
@@ -13,7 +12,6 @@ export default (theme: Theme) =>
       height: "18px",
       left: "calc(50% - 194.98px/2 - 107.51px)",
       top: "calc(50% - 18px/2)",
-
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",
