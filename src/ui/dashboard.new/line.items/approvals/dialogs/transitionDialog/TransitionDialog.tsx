@@ -105,11 +105,11 @@ const TransitionDialog: React.FunctionComponent<Props> =
                 </IconButton>
               </Grid>
             </Grid>
-            <DialogContent className={!isClosedTransition ? classes.pendingBox : ""}>
+            <DialogContent className={!isClosedTransition ? classes.pendingBox : classes.closedDialogueContent}>
               <FormContext.Provider value={{ submitOnChange: false }}>
                 <Formik
                   initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?
-                    { effectiveDate: "" } : { password: "" }}
+                    { effectiveDate: moment.utc().toISOString() } : { password: "" }}
                   onSubmit={onSubmit}
                 >
                   {transition === TransitionTypes.TRANSITION_CLOSED ? renderCloseForm : renderPasswordForm}
@@ -130,7 +130,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
                     </Typography>
                   </Grid>
                 </Grid>
-                <DialogContent>
+                <DialogContent className={classes.closedDialogueContent}>
                   <FormContext.Provider value={{ submitOnChange: false }}>
                     <Formik
                       initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?

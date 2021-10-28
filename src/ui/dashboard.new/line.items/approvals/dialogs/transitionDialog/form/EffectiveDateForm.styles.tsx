@@ -39,6 +39,8 @@ export default (theme: Theme) =>
     pendingBox: {
       flexDirection: "column",
       height: "auto",
+      width: "410px",
+      marginBottom: "12px",
       overflowY: "auto",
       top: "48px",
       left: "20px",
@@ -66,7 +68,6 @@ export default (theme: Theme) =>
       flex: "none",
       order: 1,
       flexGrow: 0,
-      margin: "0px 10px",
     },
     closeLaterSubmitButton: {
       display: "flex",
@@ -93,5 +94,8 @@ export default (theme: Theme) =>
       lineHeight: "15px",
       textTransform: "uppercase",
       color: "#FFFFFF",
+    },
+    ScheduleIcon: {
+      margin: "0px 5px 0px 0px",
     },
   });

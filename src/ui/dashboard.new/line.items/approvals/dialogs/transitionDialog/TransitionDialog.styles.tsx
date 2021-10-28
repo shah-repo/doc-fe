@@ -105,4 +105,7 @@ export default (theme: Theme) =>
       flexGrow: 0,
       margin: "0px 20px",
     },
+    closedDialogueContent: {
+      padding: 0,
+    },
   });

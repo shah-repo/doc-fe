@@ -69,7 +69,7 @@ export default (theme: Theme) =>
       overflow: "auto",
     },
     pendingBox: {
-      flexDirection: "column",
+      flexDirection: "row",
       height: "auto",
       width: "410px",
       marginBottom: "25px",
@@ -83,5 +83,6 @@ export default (theme: Theme) =>
       boxSizing: "border-box",
       alignItems: "flex-start",
       borderRadius: "8px",
+      flexWrap: "wrap",
     },
   });
