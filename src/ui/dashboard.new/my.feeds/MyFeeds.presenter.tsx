@@ -36,8 +36,15 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   feedItems,
 }) => {
   const classes = styles();
+  const [hoverItemId, setHoverItemId] = React.useState("");
+  const onMouseHoverItem = (arId) => {
+    setHoverItemId(arId);
+  };
+  const onMouseLeaveItem = () => {
+    setHoverItemId("");
+  };
   const renderPendingActions = () => (
-    <List dense className={classes.root}>
+    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {feedItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
           // case ActionTypes.APPROVAL_REQ_OWNER:
@@ -99,10 +106,12 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   timestamp={pendingAction.timestamp}
-                  arId={pendingAction.arId || "SOP-1003"}
+                  arId={pendingAction.arId || pendingAction.id}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                   title={pendingAction.docRevName}
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
                 />
               )
             );
@@ -119,6 +128,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}
                   pendingApprovers={pendingAction.pendingApprovers}
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
                 />
               );
             }
@@ -133,6 +144,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}
                   pendingApprovers={pendingAction.pendingApprovers}
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
                 />
               );
             }
@@ -147,6 +160,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   arStatus={pendingAction.arStatus}
                   timestamp={pendingAction.timestamp}
                   pendingApprovers={pendingAction.pendingApprovers}
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
                 />
               );
             }
@@ -155,6 +170,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               <DefaultLineItem
                 type={pendingAction.type}
                 status={pendingAction.arStatus || pendingAction.docRevStatus}
+                onMouseHoverItem={onMouseHoverItem}
               />
             );
         }
