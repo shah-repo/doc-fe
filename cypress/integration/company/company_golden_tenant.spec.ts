@@ -1689,6 +1689,135 @@ context("Create company with golden tenant", () => {
         .should("have.value", "FM-00001 - rev 1 - AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
     });
+  });
+
+  context("Check group management", () => {
+    it("Navigates to Group management", () => {
+      cy.grpNavigateToGroupManagement();
+    });
+
+    it("Click on 'All Users' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "All Users" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "CR_OWNER_AS_APPROVER")
+        .and("contain.text", "CR_ON_APPROVER_LIST")
+        .and("contain.text", "EMPLOYEE_GET");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "QMS_DEFAULT")
+        .and("contain.text", "FB_COMPONENT_INLINE_APPROVAL");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'User Management' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "User Management" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
+        .and("contain.text", "EMPLOYEE_DELETE")
+        .and("contain.text", "EMPLOYEE_GET")
+        .and("contain.text", "EMPLOYEE_UPDATE")
+        .and("contain.text", "GROUP_UPDATE");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "USER_MANAGEMENT");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Group Management' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Group Management" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "GROUP_CREATE")
+        .and("contain.text", "GROUP_UPDATE")
+        .and("contain.text", "GROUP_DELETE")
+        .and("contain.text", "GROUP_CREATE_UNOFFICIAL")
+        .and("contain.text", "GROUP_UPDATE_UNOFFICIAL");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "GROUP_MANAGEMENT");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Company Admin' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Company Admin" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
+        .and("contain.text", "EMPLOYEE_DELETE")
+        .and("contain.text", "EMPLOYEE_UPDATE")
+        .and("contain.text", "GROUP_CREATE")
+        .and("contain.text", "GROUP_UPDATE")
+        .and("contain.text", "SLACK_APP_INSTALL")
+        .and("contain.text", "COMPANY_UPDATE_CURRENT")
+        .and("contain.text", "DOCUMENT_OWNER_CHANGE")
+        .and("contain.text", "DEVELOPERS");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "FB_COMPONENT_PURCHASE_ORDER")
+        .and("contain.text", "FB_COMPONENT_RECEIVE_PURCHASE_ORDER")
+        .and("contain.text", "GROUP_MANAGEMENT")
+        .and("contain.text", "USER_MANAGEMENT")
+        .and("contain.text", "OWNERSHIP_CHANGE")
+        .and("contain.text", "FB_COMPONENT_EQUIPMENT_MAINTENANCE")
+        .and("contain.text", "DOCUMENT_TYPE_MANAGEMENT");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Enlil Super User' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Enlil Super User" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "DEVELOPERS")
+        .and("contain.text", "FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED")
+        .and("contain.text", "HTML_UPDATE")
+        .and("contain.text", "REMOTE_VALIDATORS_REFRESH")
+        .and("contain.text", "GROUP_DELETE")
+        .and("contain.text", "DOC_REV_OBS_TO_RELEASED")
+        .and("contain.text", "COMPANY_DROPBOX_INTEGRATION")
+        .and("contain.text", "COMPANY_UPDATE_CURRENT");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "NAVIGATION_WITH_RESTRICTED_DOC_TYPES")
+        .and("contain.text", "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES")
+        .and("contain.text", "USER_MANAGEMENT")
+        .and("contain.text", "DOCUMENT_TYPE_MANAGEMENT")
+        .and("contain.text", "PAGE_DETAILS_MANAGEMENT")
+        .and("contain.text", "COMPANY_CONFIG_WHITELABELING")
+        .and("contain.text", "COMPANY_CONFIG_NAVIGATION")
+        .and("contain.text", "COMPANY_CONFIG_DOCUMENT_REV_STAGES")
+        .and("contain.text", "LABEL_TOOLTIPS");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'CEO' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "CEO" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'QA' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "QA" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'R&D' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "R&D" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'OPS' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "OPS" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'RA' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "RA" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Clinical' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Clinical" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Marketing' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Marketing" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Doc Admin' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Doc Admin" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
 
     it("Log out user", () => {
       cy.authLogout();
