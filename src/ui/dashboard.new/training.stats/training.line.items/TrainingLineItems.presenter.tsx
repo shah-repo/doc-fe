@@ -72,6 +72,7 @@ function tabCustomClasses(index: any) {
 }
 
 interface TrainingLineItemsProps {
+  infoChangeTab: (newValue: number) => void;
   overdueItems: {
     id: string;
     title: string;
@@ -127,6 +128,7 @@ export default function TrainingLineItemsPresenter(
   const classes = styles();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
+    props.infoChangeTab(newValue);
   };
 
   return (

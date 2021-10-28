@@ -4,19 +4,21 @@ import TrainingChartPresenter from "./TrainingChart.presenter";
 
 interface TrainingChartProps {
   trainingData: any[];
+  tabValue: number;
 }
 
 const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
   trainingData,
+  tabValue,
 }) => {
   // TO DO: Logic for count calculation needs to be updated based on actual data
   const overdue = trainingData.filter(
-    (item) => TrainingStatusChartLabelTypes.OVERDUE
+    (item) => item.status === TrainingStatusChartLabelTypes.OVERDUE
   ).length;
   const dueInSeven = trainingData.filter(
-    (item) => TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
+    (item) => item.status ===  TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
   ).length;
-  return <TrainingChartPresenter overdue={overdue} dueInSeven={dueInSeven} />;
+  return <TrainingChartPresenter tabValue={tabValue} overdue={overdue} dueInSeven={dueInSeven} />;
 };
 
 export default TrainingChart;

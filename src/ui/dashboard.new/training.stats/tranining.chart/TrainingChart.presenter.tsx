@@ -10,10 +10,11 @@ import { styles } from "./TrainingChart.styles";
 interface TrainingChartPresenterProps {
   overdue: number;
   dueInSeven: number;
+  tabValue: number;
 }
 
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
-  ({ overdue, dueInSeven }) => {
+  ({ overdue, dueInSeven, tabValue }) => {
     const totalCount = overdue + dueInSeven;
     const data = [
       {
@@ -67,6 +68,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             DoughnutChartOptions.series.data[index].itemStyle.color =
               Colors.gray;
           }
+          return null;
         });
         DoughnutChartOptions.title.text = evt?.data?.value;
         DoughnutChartOptions.title.subtext = evt?.data?.name;
@@ -104,6 +106,61 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         ];
         myChart.setOption(DoughnutChartOptions);
       });
+      const updateChart = (tabValue) => {
+        let text = "";
+        let subText = "";
+        let color = "";
+        let data = {};
+        if (tabValue === 0) {
+          text = "" + totalCount;
+          subText = "Total Outstanding";
+          color = Colors.gray;
+          data = [
+            {
+              value: dueInSeven,
+              name: "Due in 7 days",
+              itemStyle: {
+                color: Colors.latest_yellow_varient,
+              },
+            },
+            {
+              value: overdue,
+              name: "Overdue",
+              itemStyle: {
+                color: Colors.latest_red_varient,
+              },
+            },
+          ];
+        } else if (tabValue === 1) {
+          DoughnutChartOptions.series.data.map((data, index) => {
+            if (index !== 0) {
+              DoughnutChartOptions.series.data[index].itemStyle.color = Colors.gray;
+            }
+            return null;
+          });
+          data = DoughnutChartOptions.series.data;
+          text = "" + dueInSeven;
+          subText = "Due in 7 days";
+          color = Colors.latest_yellow_varient;
+        } else if (tabValue === 2) {
+          DoughnutChartOptions.series.data.map((data, index) => {
+            if (index !== 1) {
+              DoughnutChartOptions.series.data[index].itemStyle.color = Colors.gray;
+            }
+            return null;
+          });
+          data = DoughnutChartOptions.series.data;
+          text = "" + overdue;
+          subText = "Overdue";
+          color = Colors.latest_red_varient;
+        }
+        DoughnutChartOptions.title.text = text;
+        DoughnutChartOptions.title.subtext = subText;
+        DoughnutChartOptions.title.subtextStyle.color = color;
+        DoughnutChartOptions.series.data = data as any[];
+        myChart.setOption(DoughnutChartOptions);
+      };
+      updateChart(tabValue);
     });
 
     return (
