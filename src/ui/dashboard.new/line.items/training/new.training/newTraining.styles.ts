@@ -66,5 +66,29 @@ export const styles = makeStyles(() =>
       lineHeight: "22px",
       color: Colors.font_gray,
     },
+    truncateText: {
+      textOverflow: "ellipsis",
+      overflow: "auto",
+    },
+    redDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      position: "relative",
+      background: Colors.latest_red_varient,
+    },
+    yellowDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      position: "relative",
+      background: Colors.latest_yellow_varient,
+    },
+    grayDot: {
+      width: "4px",
+      height: "4px",
+      position: "relative",
+      background: Colors.font_gray,
+    },
   })
 );

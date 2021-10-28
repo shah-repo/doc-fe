@@ -1,4 +1,5 @@
 import {
+  Box,
   Chip,
   Grid,
   ListItem,
@@ -93,37 +94,52 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       <ListItemText
         primary={
           <>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="body2"
                   className={classes.typography}
                   color="textPrimary"
+                  noWrap
                 >
                   {id}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyBold}
                   color="textSecondary"
+                  noWrap
                 >
                   {title}&nbsp;
                 </Typography>
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyStatus}
                   color="textSecondary"
+                  noWrap
                 >
                   {!hoverItem && (
                     <NormalStyleChip
@@ -150,6 +166,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     />
                   )}
                 </Typography>
+                &nbsp;&nbsp;
+              </Grid>
+              <Grid
+                item={true}
+                className={
+                  status === "OVERDUE" ? classes.redDot : classes.yellowDot
+                }
+              >
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
@@ -159,28 +186,42 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       : classes.typographyDueInfewDays
                   }
                   color="textSecondary"
+                  noWrap
                 >
-                  &nbsp;. {dueDate}
+                  &nbsp; {dueDate}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.typographyBold}
                   color="textSecondary"
+                  noWrap
                 >
                   {approvers.join(",")}
                 </Typography>
+                &nbsp;
+              </Grid>
+              <Grid item={true} className={classes.grayDot}>
+                &nbsp;
+              </Grid>
+              <Grid item={true}>
                 <Typography
                   component="span"
                   variant="caption"
                   className={classes.timestampContainer}
                   color="textSecondary"
+                  noWrap
                 >
-                  . {timestamp}
+                  &nbsp; {timestamp}
                 </Typography>
               </Grid>
             </Grid>
@@ -188,9 +229,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         }
       />
       {hoverItem && (
-        <div className={classes.actionIcons}>
+        <Box component="div" className={classes.actionIcons}>
           <PinIcon onClick={handlePinClick} />
-        </div>
+        </Box>
       )}
     </StyledListItem>
   );
