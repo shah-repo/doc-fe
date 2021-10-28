@@ -1746,6 +1746,7 @@ context("Create company with golden tenant", () => {
         .and("contain.text", "OWNERSHIP_CHANGE")
         .and("contain.text", "FB_COMPONENT_EQUIPMENT_MAINTENANCE")
         .and("contain.text", "DOCUMENT_TYPE_MANAGEMENT");
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
       cy.grpCloseDialog();
     });
 
