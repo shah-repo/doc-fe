@@ -1,0 +1,64 @@
+[{
+    "id": "TC-001",
+    "title": "Clean room",
+    "type": "PENDING_TRAINING_RECORDS",
+    "documentId": "DocId",
+    "status": "OVERDUE",
+    "dueDate": "Sep 23, 2021",
+    "verbose": "",
+    "timestamp": "Sep 04, 2021  9:12 AM",
+    "approvers": []
+  },
+  {
+    "id": "TC-002",
+    "title": "Manufacturing Unit",
+    "type": "NEW_TRAINING_RECORDS",
+    "documentId": "DocId",
+    "status": "DUE IN 7 DAYS",
+    "dueDate": "Dec 15, 2021",
+    "verbose": "",
+    "timestamp": "Oct 18, 2021  5:18 PM",
+    "approvers": ["Shiv", "Nish", "Ganesh", "Rajesh", "Rajnish", "Abhishek"]
+  },
+  {
+    "id": "TC-003",
+    "title": "Digitizing Documents",
+    "type": "PENDING_TRAINING_RECORDS",
+    "documentId": "DocId",
+    "status": "DUE IN 7 DAYS",
+    "dueDate": "Nov 07, 2021",
+    "verbose": "",
+    "timestamp": "Oct 27, 2021  9:12 AM",
+    "approvers": []
+  },
+  {
+    "id": "TC-004",
+    "title": "Spray Painting Assembly",
+    "type": "NEW_TRAINING_RECORDS",
+    "documentId": "DocId",
+    "status": "OVERDUE",
+    "dueDate": "Nov 07, 2021",
+    "verbose": "",
+    "timestamp": "Oct 27, 2021  9:12 AM",
+    "approvers": [
+      "Josh",
+      "Julie",
+      "Mathew",
+      "Rogers",
+      "Pierre",
+      "Jonelle",
+      "Jon"
+    ]
+  },
+  {
+    "id": "TC-005",
+    "title": "Manufacturing Documents",
+    "type": "PENDING_TRAINING_RECORDS",
+    "documentId": "DocId",
+    "status": "DUE IN 7 DAYS",
+    "dueDate": "Nov 03, 2021",
+    "verbose": "",
+    "timestamp": "Oct 27, 2021  9:12 AM",
+    "approvers": []
+  }
+]

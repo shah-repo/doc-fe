@@ -32,6 +32,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
           case ActionTypes.NEW_TRAINING_RECORDS:
             return (
               <NewTraining
+                key={index}
                 id={pendingAction.id}
                 type={pendingAction.type}
                 title={pendingAction.title}
@@ -46,6 +47,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
           case ActionTypes.PENDING_TRAINING_RECORDS:
             return (
               <PendingTraining
+                key={index}
                 id={pendingAction.id}
                 type={pendingAction.type}
                 title={pendingAction.title}
