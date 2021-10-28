@@ -47,7 +47,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   // TO DO: Needs to remove below line once we get icons for all the possible line item types
-  const itemTypes = ["PO", "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
+  const itemTypes = [RecentGroupType.PO, "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -66,9 +66,9 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        className={type === "PO" ? classes.listItem : ""}
+        className={type === RecentGroupType.PO ? classes.listItem : ""}
       >
-        {type === "PO" &&
+        {type === RecentGroupType.PO &&
           (open ? (
             <CollapseIcon className={classes.icon} onClick={handleClick}/>
           ) : (
@@ -92,7 +92,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
               alignItems="center"
             >
               <Grid item={true}>
-                {type === "CHANGE_REQUEST" && (
+                {type === RecentGroupType.CHANGE_REQUEST && (
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
@@ -109,7 +109,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                     </Typography>
                   </Link>
                 )}
-                {type !== "CHANGE_REQUEST" && (
+                {type !== RecentGroupType.CHANGE_REQUEST && (
                   <Link
                     href={documentVersionPath(revisionId as string, id)}
                     color="inherit"
@@ -127,7 +127,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   </Link>
                 )}
               </Grid>
-              {type === "PO" && (
+              {type === RecentGroupType.PO && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -141,7 +141,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                 </Grid>
               )}
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                {type === "CHANGE_REQUEST" && (
+                {type === RecentGroupType.CHANGE_REQUEST && (
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
@@ -158,7 +158,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                     </Typography>
                   </Link>
                 )}
-                {type !== "CHANGE_REQUEST" && (
+                {type !== RecentGroupType.CHANGE_REQUEST && (
                   <Link
                     href={documentVersionPath(revisionId as string, id)}
                     color="inherit"
@@ -194,7 +194,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
           }
         />
       </StyledListItem>
-      {type === "PO" && (
+      {type === RecentGroupType.PO && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List disablePadding className={classes.collapsedList}>
             <StyledListItem button className={classes.nested} disableRipple>
