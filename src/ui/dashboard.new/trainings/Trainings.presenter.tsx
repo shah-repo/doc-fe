@@ -21,51 +21,64 @@ interface Props {
     approvers: string[];
   }[];
 }
-const TrainingssLineItemPresenter: React.FunctionComponent<Props> = ({
+const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   trainingItems,
 }) => {
   const classes = styles();
   const renderPendingActions = () => (
     <List dense className={classes.root}>
-      {
-        trainingItems.map((pendingAction, index) => {
-          switch (pendingAction.type) {
-            case ActionTypes.NEW_TRAINING_RECORDS:
-              return <NewTraining id={pendingAction.id} type={pendingAction.type}
-                title ={pendingAction.title} documentId={pendingAction.documentId}
-                status={pendingAction.status} timestamp={pendingAction.timestamp}
+      {trainingItems.map((pendingAction, index) => {
+        switch (pendingAction.type) {
+          case ActionTypes.NEW_TRAINING_RECORDS:
+            return (
+              <NewTraining
+                id={pendingAction.id}
+                type={pendingAction.type}
+                title={pendingAction.title}
+                documentId={pendingAction.documentId}
+                status={pendingAction.status}
+                timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
-                dueDate ={pendingAction.dueDate}
-                approvers ={pendingAction.approvers}/>;
-            case ActionTypes.PENDING_TRAINING_RECORDS:
-              return <PendingTraining id={pendingAction.id} type={pendingAction.type}
-                title ={pendingAction.title} documentId={pendingAction.documentId}
-                status={pendingAction.status} timestamp={pendingAction.timestamp}
+                dueDate={pendingAction.dueDate}
+                approvers={pendingAction.approvers}
+              />
+            );
+          case ActionTypes.PENDING_TRAINING_RECORDS:
+            return (
+              <PendingTraining
+                id={pendingAction.id}
+                type={pendingAction.type}
+                title={pendingAction.title}
+                documentId={pendingAction.documentId}
+                status={pendingAction.status}
+                timestamp={pendingAction.timestamp}
                 verbose={pendingAction.verbose}
-                dueDate ={pendingAction.dueDate}/>;
-            default:
-              return null;
-          }
-        })
-      }
+                dueDate={pendingAction.dueDate}
+              />
+            );
+          default:
+            return null;
+        }
+      })}
     </List>
   );
   const renderNoPendingActions = trainingItems.length === 0 && (
     <Typography className={classes.noPendingActions}>
-      <Text translation="dashboard.noPendingActions" dataCy="dashboard.noPendingActions"/>
+      <Text
+        translation="dashboard.noPendingActions"
+        dataCy="dashboard.noPendingActions"
+      />
     </Typography>
   );
 
   return (
-
     <Grid container={true} spacing={5}>
       <Grid item={true} md={12} sm={12}>
         {trainingItems.length > 0 && renderPendingActions()}
         {renderNoPendingActions}
       </Grid>
     </Grid>
-
   );
 };
 
-export default TrainingssLineItemPresenter;
+export default TrainingsLineItemPresenter;

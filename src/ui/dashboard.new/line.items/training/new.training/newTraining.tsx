@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
-import Chip from "@material-ui/core/Chip";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import {
+  Chip,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -27,6 +29,7 @@ interface Props {
   dueDate: string;
   approvers: string[];
 }
+
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
   title,
@@ -84,16 +87,18 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItem(false);
   };
-  // eslint-disable-next-line no-console
-  console.log("Pending Training Presenter ::");
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItem} onMouseLeave={onMouseLeaveItem}>
+    <StyledListItem
+      button
+      onMouseEnter={onMouseHoverItem}
+      onMouseLeave={onMouseLeaveItem}
+    >
       <ListItemIcon className={classes.listItemIcon}>
         <TrainingIcon />
       </ListItemIcon>
       <ListItemText
         primary={
-          <React.Fragment>
+          <>
             <Grid container={true}>
               <Grid item={true} md={12} sm={12}>
                 <Typography
@@ -154,7 +159,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Typography
                   component="span"
                   variant="caption"
-                  className={status === "OVERDUE" ? classes.typographyOverdue : classes.typographyDueInfewDays}
+                  className={
+                    status === "OVERDUE"
+                      ? classes.typographyOverdue
+                      : classes.typographyDueInfewDays
+                  }
                   color="textSecondary"
                 >
                   &nbsp;. {dueDate}
@@ -181,10 +190,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Typography>
               </Grid>
             </Grid>
-          </React.Fragment>
+          </>
         }
       />
-      {hoverItem && <div className={classes.actionIcons}><PinIcon onClick={handlePinClick} /></div>}
+      {hoverItem && (
+        <div className={classes.actionIcons}>
+          <PinIcon onClick={handlePinClick} />
+        </div>
+      )}
     </StyledListItem>
   );
 };
