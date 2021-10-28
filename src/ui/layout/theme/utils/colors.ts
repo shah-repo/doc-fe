@@ -10,6 +10,7 @@ enum Colors {
   dark_gray = "#474747",
   platinum_gray = "#e3e3e3",
   font_gray = "#767B87",
+  medium_light_shade_gray = "A2A2A2",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
