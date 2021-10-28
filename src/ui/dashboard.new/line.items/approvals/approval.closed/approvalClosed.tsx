@@ -9,7 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import { withStyles } from "@material-ui/core/styles";
@@ -135,14 +135,13 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onClick={handleClick}
         onMouseEnter={onMouseHoverItemListItem}
         className={classes.listItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} />
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} />
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon />
