@@ -25,7 +25,6 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
           variant="body2"
           className={classes.typography}
           color="textPrimary"
-          // noWrap
         >
           {arId}
         </Typography>&nbsp;
@@ -36,7 +35,6 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
           variant="caption"
           className={classes.typographyBold}
           color="textSecondary"
-          // noWrap
         >
           {title}
         </Typography>&nbsp;
@@ -47,7 +45,6 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
           variant="body2"
           className={classes.typography}
           color="textPrimary"
-          // noWrap
         >
           <Text translation="transition.action.cancel.discription" />
         </Typography>
