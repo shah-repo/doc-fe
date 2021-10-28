@@ -62,6 +62,9 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         document.getElementById("main") as HTMLInputElement
       );
       myChart.setOption(DoughnutChartOptions);
+      window.onresize = function() {
+        myChart.resize();
+      };
       myChart.on("mouseover", (evt: any) => {
         DoughnutChartOptions.series.data.map((data, index) => {
           if (index !== evt?.dataIndex) {
@@ -174,7 +177,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             >
               <Text translation="training.stats.title" />
             </Typography>
-            <div id="main" style={{ height: 280, width: 280 }}></div>
+            <div id="main" style={{
+              height: "280px",
+              maxHeight: "calc(100vh - 145px)",
+            }}></div>
           </Grid>
         </Grid>
       </div>
