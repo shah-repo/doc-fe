@@ -24,6 +24,11 @@ export enum ActionTypes {
   NEW_TRAINING_RECORDS="NEW_TRAINING_RECORDS"
 }
 
+export enum TrainingStatus {
+  OVERDUE = "OVERDUE",
+  DUE_IN_7_DAYS = "DUE IN 7 DAYS",
+}
+
 export interface PendingAction {
   type: PendingActionType;
   userId: string;

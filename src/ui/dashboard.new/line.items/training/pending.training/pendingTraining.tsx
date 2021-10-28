@@ -16,6 +16,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingTraining.styles";
@@ -57,7 +58,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
     colorPrimary: {
       color:
-        status === "OVERDUE"
+        status === TrainingStatus.OVERDUE
           ? Colors.latest_red_varient
           : Colors.latest_yellow_varient,
     },
@@ -65,7 +66,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const HoverStyleChip = withStyles({
     root: {
       backgroundColor:
-        status === "OVERDUE"
+        status === TrainingStatus.OVERDUE
           ? Colors.latest_red_varient
           : Colors.latest_yellow_varient,
       borderRadius: "3px",
@@ -107,7 +108,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
+                  Your Training {status === TrainingStatus.OVERDUE ? "" : "on"}&nbsp;
                 </Typography>
               </Grid>
               <Grid item={true}>
@@ -168,7 +169,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       size="small"
                       color="primary"
                       icon={
-                        status === "OVERDUE" ? <OverdueIcon /> : <WarningIcon />
+                        status === TrainingStatus.OVERDUE ? <OverdueIcon /> : <WarningIcon />
                       }
                       label={status}
                     />
@@ -178,7 +179,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="primary"
                       size="small"
                       icon={
-                        status === "OVERDUE" ? (
+                        status === TrainingStatus.OVERDUE ? (
                           <OverdueWhiteIcon />
                         ) : (
                           <WarningWhiteIcon />
@@ -193,7 +194,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               <Grid
                 item={true}
                 className={
-                  status === "OVERDUE" ? classes.redDot : classes.yellowDot
+                  status === TrainingStatus.OVERDUE ? classes.redDot : classes.yellowDot
                 }
               >
                 &nbsp;
@@ -203,7 +204,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   component="span"
                   variant="caption"
                   className={
-                    status === "OVERDUE"
+                    status === TrainingStatus.OVERDUE
                       ? classes.typographyOverdue
                       : classes.typographyDueInfewDays
                   }
