@@ -1,6 +1,6 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     chartContainer: {
       overflow: "auto",

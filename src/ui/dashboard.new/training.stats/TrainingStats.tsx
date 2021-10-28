@@ -18,4 +18,3 @@ const TrainingStats: React.FunctionComponent = () => {
 };
 
 export default TrainingStats;
-
