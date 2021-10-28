@@ -13,7 +13,4 @@ export default (theme: Theme) =>
       width: "100%",
       paddingLeft: theme.spacing(3),
     },
-    trainingText: {
-      marginRight: 20,
-    },
   });
