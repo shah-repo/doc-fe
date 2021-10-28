@@ -15,6 +15,9 @@ export const styles = makeStyles(() =>
     customTooltipWidth: {
       maxWidth: 500,
     },
+    link: {
+      color: Colors.black,
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },

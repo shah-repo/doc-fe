@@ -9,7 +9,6 @@ import { Form } from "formik";
 import * as React from "react";
 import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
 import FormMessage from "../../../../../../components/forms/FormMessage";
-import FormProgress from "../../../../../../components/forms/FormProgress";
 import SubmitButton from "../../../../../../components/forms/SubmitButton";
 import Text from "../../../../../../components/Text";
 import styles from "./ClosedActionForm.styles";
@@ -30,37 +29,41 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
 }) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
-    <Grid container={true} className={classes.pendingBox}>
+    <Grid container={true} className={classes.pendingBox} justify="flex-start" alignItems="center">
       <Grid item={true}>
         <Typography
           component="span"
           variant="body2"
           className={classes.typography}
           color="textPrimary"
-          noWrap
         >
           {arId}
         </Typography>
         &nbsp;
       </Grid>
-      <Grid zeroMinWidth item={true} className={classes.truncateText}>
+      <Grid zeroMinWidth item={true}>
         <Typography
           component="span"
           variant="caption"
           className={classes.typographyBold}
           color="textSecondary"
-          noWrap
         >
           {title}
         </Typography>
         &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true}>
-        <Text translation="transition.action.cancel.discription" />
+        <Typography
+          component="span"
+          variant="body2"
+          className={classes.typography}
+          color="textPrimary"
+        >
+          <Text translation="transition.action.cancel.discription" />
+        </Typography>
       </Grid>
     </Grid>
 
-    <FormProgress asyncState={asyncState} />
     <SubmitButton
       id="confirmEffectiveDate"
       asyncState={asyncState}

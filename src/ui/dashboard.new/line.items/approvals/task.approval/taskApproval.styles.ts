@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     actionIcon: {
       paddingLeft: "10px",
     },
+    link: {
+      color: Colors.black,
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */

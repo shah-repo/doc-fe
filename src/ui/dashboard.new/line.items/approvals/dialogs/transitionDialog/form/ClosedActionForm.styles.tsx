@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -16,7 +17,7 @@ export default (theme: Theme) =>
       height: "25px",
       left: "calc(50% - 92px/2 + 139px)",
       top: "calc(50% - 25px/2)",
-      background: "#011FBB",
+      background: Colors.navy,
       borderRadius: "200px",
       flex: "none",
       order: 1,
@@ -30,7 +31,7 @@ export default (theme: Theme) =>
       fontSize: "12px",
       lineHeight: "15px",
       textTransform: "uppercase",
-      color: "#FFFFFF",
+      color: Colors.white,
     },
     cancelButton: {
       float: "right",
@@ -48,7 +49,7 @@ export default (theme: Theme) =>
       display: "flex",
       alignItems: "center",
       textAlign: "right",
-      color: "#080B11",
+      color: Colors.modal_cancel_color,
       flex: "none",
       order: 0,
       flexGrow: 0,
@@ -64,24 +65,22 @@ export default (theme: Theme) =>
       fontFamily: "Sora",
       fontWeight: 600,
     },
-    truncateText: {
-      textOverflow: "ellipsis",
-      overflow: "auto",
-    },
     pendingBox: {
-      flexDirection: "column",
+      flexDirection: "row",
       height: "auto",
       width: "410px",
       marginBottom: "25px",
       overflowY: "auto",
       top: "48px",
       left: "20px",
-      border: "1px solid #F5F8FF",
+      border: "1px solid",
+      borderColor: Colors.sky_blue,
       display: "flex",
       padding: "20px",
-      backgroundColor: "#FFF",
+      backgroundColor: Colors.white,
       boxSizing: "border-box",
       alignItems: "flex-start",
       borderRadius: "8px",
+      flexWrap: "wrap",
     },
   });

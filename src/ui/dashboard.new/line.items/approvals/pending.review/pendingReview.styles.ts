@@ -6,6 +6,9 @@ export const styles = makeStyles(() =>
     inline: {
       display: "inline",
     },
+    link: {
+      color: Colors.black,
+    },
     nested: {
       marginLeft: "40px",
       borderLeft: "1px solid #CBD5E0",

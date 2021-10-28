@@ -12,8 +12,8 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as CloseIcon } from "../../../../../assets/images/close.svg";
@@ -44,6 +44,8 @@ interface Props {
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
+  hoverItemId: string;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -52,6 +54,8 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   title,
   timestamp,
   docRevs,
+  hoverItemId,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
@@ -100,12 +104,10 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [closed, setClosed] = React.useState(false);
-  const [hoverItem, setHoverItem] = React.useState(false);
-  const [hoverId, setHoverId] = React.useState(false);
-  const [hoverTitle, setHoverTitle] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const transitionDialog = useDialog();
+  const hoverItem = hoverItemId === arId;
 
   const handleClick = () => {
     setOpen(!open);
@@ -120,24 +122,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const openClosedDialog = () => {
     async.reset();
     transitionDialog.open();
-  };
-  const onMouseHoverItem = () => {
-    setHoverItem(true);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItem(false);
-  };
-  const onMouseHoverId = () => {
-    setHoverId(true);
-  };
-  const onMouseLeaveId = () => {
-    setHoverId(false);
-  };
-  const onMouseHoverTitle = () => {
-    setHoverTitle(true);
-  };
-  const onMouseLeaveTitle = () => {
-    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -168,13 +152,15 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem(arId);
+  };
 
   return (
     <>
       <StyledListItem
         button
-        onMouseEnter={onMouseHoverItem}
-        onMouseLeave={onMouseLeaveItem}
+        onMouseEnter={onMouseHoverItemListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
       >
@@ -197,8 +183,9 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -206,9 +193,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
                     </Typography>
@@ -217,8 +201,9 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -226,9 +211,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>

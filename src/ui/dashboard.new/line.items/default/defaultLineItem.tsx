@@ -12,10 +12,12 @@ import { styles } from "./defaultLineItem.styles";
 interface Props {
   type: string;
   status: string | undefined;
+  onMouseHoverItem: (arId: string | undefined) => void;
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
   type,
   status,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
 
@@ -27,8 +29,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
     },
   })(ListItem);
 
+  const onMouseHoverItemListItem = () => {
+    onMouseHoverItem("");
+  };
+
   return (
-    <StyledListItem button>
+    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
       <ListItemText
         primary={
           <React.Fragment>

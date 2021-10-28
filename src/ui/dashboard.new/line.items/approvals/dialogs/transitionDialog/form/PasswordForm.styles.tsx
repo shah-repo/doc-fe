@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -15,7 +16,7 @@ export default (theme: Theme) =>
       height: "25px",
       left: "calc(50% - 92px/2 + 139px)",
       top: "calc(50% - 25px/2)",
-      background: "#011FBB",
+      background: Colors.navy,
       borderRadius: "200px",
       flex: "none",
       order: 1,
@@ -29,7 +30,7 @@ export default (theme: Theme) =>
       fontSize: "12px",
       lineHeight: "15px",
       textTransform: "uppercase",
-      color: "#FFFFFF",
+      color: Colors.white,
     },
     cancelButton: {
       float: "right",
@@ -47,7 +48,7 @@ export default (theme: Theme) =>
       display: "flex",
       alignItems: "center",
       textAlign: "right",
-      color: "#080B11",
+      color: Colors.modal_cancel_color,
       flex: "none",
       order: 0,
       flexGrow: 0,
