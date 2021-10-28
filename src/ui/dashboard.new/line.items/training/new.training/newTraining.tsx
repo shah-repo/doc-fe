@@ -19,6 +19,7 @@ import { ReactComponent as TrainingIcon } from "../../../../../assets/images/tra
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./newTraining.styles";
@@ -124,7 +125,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  Your Training {status === TrainingStatus.OVERDUE ? "" : "on"}&nbsp;
+                  <Text
+                    translation={
+                      status === TrainingStatus.OVERDUE
+                        ? "your.training"
+                        : "your.training.on"
+                    }
+                  />
+                  &nbsp;
                 </Typography>
               </Grid>
               <Grid item={true}>
@@ -174,7 +182,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       size="small"
                       color="primary"
                       icon={
-                        status === TrainingStatus.OVERDUE ? <OverdueIcon /> : <WarningIcon />
+                        status === TrainingStatus.OVERDUE ? (
+                          <OverdueIcon />
+                        ) : (
+                          <WarningIcon />
+                        )
                       }
                       label={status}
                     />
@@ -199,7 +211,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               <Grid
                 item={true}
                 className={
-                  status === TrainingStatus.OVERDUE ? classes.redDot : classes.yellowDot
+                  status === TrainingStatus.OVERDUE
+                    ? classes.redDot
+                    : classes.yellowDot
                 }
               >
                 &nbsp;
@@ -230,8 +244,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip
                   title={
                     <Typography color="inherit">
-                      Assigned to {size(approvers)} users. <br />4 have Approved
-                      and 6 are Pending.
+                      <Text
+                        translation="assigned.to.users"
+                        values={{ count: size(approvers) }}
+                      />
+                      <br />4 have Approved and 6 are Pending.
                     </Typography>
                   }
                   placement="top-start"

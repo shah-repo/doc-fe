@@ -1075,5 +1075,8 @@
   "header.welcome.back": "Welcome Back",
   "common.my.feed": "My Feed",
   "common.trainings": "Trainings",
-  "common.recent": "Recent"
+  "common.recent": "Recent",
+  "your.training": "Your Training",
+  "your.training.on": "Your Training on",
+  "assigned.to.users": "Assigned to {count} users."
 }
