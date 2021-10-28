@@ -194,6 +194,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
+                    onClick={openApproversModel}
                     className={classes.typographyStatus}
                     color="textSecondary"
                     noWrap
