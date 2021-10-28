@@ -23,7 +23,13 @@ interface TabPanelProps {
   }[];
 }
 
-const TabPanel: React.FunctionComponent<TabPanelProps> = ({ children, value, index, panelData, ...other }) => {
+const TabPanel: React.FunctionComponent<TabPanelProps> = ({
+  children,
+  value,
+  index,
+  panelData,
+  ...other
+}) => {
   const classes = styles();
   const renderItems = () => (
     <List className={classes.listRoot}>
@@ -35,10 +41,11 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({ children, value, ind
           status={data.status}
           documentId={data.documentId}
           title={data.title}
-          date={data.timestamp}/>
+          date={data.timestamp}
+        />
       ))}
-    </List>);
-
+    </List>
+  );
 
   return (
     <div
@@ -107,9 +114,13 @@ const StyledTabs = withStyles({
       backgroundColor: "#635ee7",
     },
   },
-})((props: StyledTabsProps) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+})((props: StyledTabsProps) => (
+  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
+));
 
-export default function TrainingLineItemsPresenter(props: TrainingLineItemsProps) {
+export default function TrainingLineItemsPresenter(
+  props: TrainingLineItemsProps
+) {
   const { overdueItems, dueInSevenItems } = props;
   const all = overdueItems.concat(dueInSevenItems);
   const [value, setValue] = React.useState(0);
@@ -120,35 +131,53 @@ export default function TrainingLineItemsPresenter(props: TrainingLineItemsProps
 
   return (
     <div className={classes.root}>
-      <StyledTabs value={value} onChange={handleChange} aria-label="full width tabs example" >
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              <span className={classes.allTab}></span>
-              <span className={classes.tabHeader}>
-                <Text translation="training.stats.all" />
-              </span>
+      <StyledTabs
+        value={value}
+        onChange={handleChange}
+        aria-label="full width tabs example"
+      >
+        <Tab
+          classes={{ root: classes.tab }}
+          label={
+            <Grid container={true} justify="center" alignItems="center">
+              <Grid item={true} sm={12}>
+                <span className={classes.allTab}></span>
+                <span className={classes.tabHeader}>
+                  <Text translation="training.stats.all" />
+                </span>
+              </Grid>
             </Grid>
-          </Grid>
-        } {...tabCustomClasses(0)} />
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              <span className={classes.dueInSevenTab}></span>
-              <span className={classes.tabHeader} >
-                <Text translation="training.stats.duein7days" /></span>
+          }
+          {...tabCustomClasses(0)}
+        />
+        <Tab
+          classes={{ root: classes.tab }}
+          label={
+            <Grid container={true} justify="center" alignItems="center">
+              <Grid item={true} sm={12}>
+                <span className={classes.dueInSevenTab}></span>
+                <span className={classes.tabHeader}>
+                  <Text translation="training.stats.duein7days" />
+                </span>
+              </Grid>
             </Grid>
-          </Grid>
-        } {...tabCustomClasses(1)} />
-        <Tab classes={{ root: classes.tab }} label={
-          <Grid container={true} justify="center" alignItems="center">
-            <Grid item={true} sm={12}>
-              <span className={classes.overdueTab}></span>
-              <span className={classes.tabHeader} >
-                <Text translation="training.stats.overdue" /></span>
+          }
+          {...tabCustomClasses(1)}
+        />
+        <Tab
+          classes={{ root: classes.tab }}
+          label={
+            <Grid container={true} justify="center" alignItems="center">
+              <Grid item={true} sm={12}>
+                <span className={classes.overdueTab}></span>
+                <span className={classes.tabHeader}>
+                  <Text translation="training.stats.overdue" />
+                </span>
+              </Grid>
             </Grid>
-          </Grid>
-        } {...tabCustomClasses(2)} />
+          }
+          {...tabCustomClasses(2)}
+        />
       </StyledTabs>
       <TabPanel value={value} index={0} panelData={all}>
         <Text translation="training.stats.all" />

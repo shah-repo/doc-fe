@@ -1,4 +1,3 @@
-
 const DoughnutChartOptions = {
   title: {
     text: "16",
@@ -22,10 +21,7 @@ const DoughnutChartOptions = {
   colorBy: "data",
   series: {
     type: "pie",
-    radius: [
-      "68%",
-      "93%",
-    ],
+    radius: ["68%", "93%"],
     avoidLabelOverlap: false,
     legend: {
       show: false,
@@ -64,6 +60,5 @@ const DoughnutChartOptions = {
     ],
   },
 };
-
 
 export default DoughnutChartOptions;

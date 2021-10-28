@@ -17,12 +17,21 @@ interface TrainingLineItemsProps {
   }[];
 }
 
-const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({ trainingData }) => {
+const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
+  trainingData,
+}) => {
   // TO DO: Logic for count calculation needs to be updated based on actual data
-  const overdueItems = trainingData.filter((item) => item.status === TrainingStatusChartLabelTypes.OVERDUE);
-  const dueInSevenItems = trainingData.filter((item) => item.status === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS);
+  const overdueItems = trainingData.filter(
+    (item) => item.status === TrainingStatusChartLabelTypes.OVERDUE
+  );
+  const dueInSevenItems = trainingData.filter(
+    (item) => item.status === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
+  );
   return (
-    <TrainingLineItemsPresenter overdueItems={overdueItems} dueInSevenItems={dueInSevenItems}/>
+    <TrainingLineItemsPresenter
+      overdueItems={overdueItems}
+      dueInSevenItems={dueInSevenItems}
+    />
   );
 };
 
