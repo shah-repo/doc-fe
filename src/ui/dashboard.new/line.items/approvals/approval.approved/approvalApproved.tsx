@@ -189,7 +189,12 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
@@ -206,7 +211,8 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -225,7 +231,8 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -266,8 +273,13 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
-              &nbsp;&nbsp;
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
                   &nbsp;
                 </Grid>

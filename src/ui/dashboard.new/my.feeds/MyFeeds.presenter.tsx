@@ -40,53 +40,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <List dense className={classes.root}>
       {feedItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
-          // case ActionTypes.APPROVAL_REQ_OWNER:
-          // case ActionTypes.PENDING_REVIEW:
-          //   return (
-          //     <PendingReview
-          //       id={pendingAction.id}
-          //       type={pendingAction.type}
-          //       documentId={pendingAction.documentId}
-          //       status={pendingAction.status}
-          //       timestamp={pendingAction.timestamp}
-          //       verbose={pendingAction.verbose}
-          //       approvers={pendingAction.approvers}
-          //     />
-          //   );
-          // case ActionTypes.NEW_TRAINING_RECORDS:
-          //   return (
-          //     <NewTraining
-          //       id={pendingAction.id}
-          //       type={pendingAction.type}
-          //       timestamp={pendingAction.timestamp}
-          //     />
-          //   );
-          // case ActionTypes.PENDING_TRAINING_RECORDS:
-          //   return (
-          //     <PendingTraining
-          //       id={pendingAction.id}
-          //       type={pendingAction.type}
-          //       title={pendingAction.title}
-          //       documentId={pendingAction.documentId}
-          //       status={pendingAction.status}
-          //       timestamp={pendingAction.timestamp}
-          //       verbose={pendingAction.verbose}
-          //       dueDate={pendingAction.dueDate}
-          //     />
-          //   );
-          // case ActionTypes.PURCHASE_ORDERS:
-          //   return (
-          //     <PurchaseOrder
-          //       id={pendingAction.id}
-          //       type={pendingAction.type}
-          //       title={pendingAction.title}
-          //       documentId={pendingAction.documentId}
-          //       status={pendingAction.status}
-          //       timestamp={pendingAction.timestamp}
-          //       verbose={pendingAction.verbose}
-          //       approvers={pendingAction.approvers}
-          //     />
-          //   );
           case ActionTypes.PENDING_DOC_CONTROL:
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:

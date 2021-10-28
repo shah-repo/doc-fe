@@ -23,7 +23,6 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     nested: {
-      // paddingLeft: theme.spacing(4),
       marginLeft: "40px",
       borderLeft: "1px solid #CBD5E0",
       maxWidth: "calc( 100% - 40px)",
@@ -87,5 +86,5 @@ export const styles = makeStyles(() =>
       position: "relative",
       background: Colors.font_gray,
     },
-  }
-  ));
+  })
+);

@@ -1,4 +1,10 @@
-import { Button, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Typography,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
 import { Form } from "formik";
 import * as React from "react";
 import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
@@ -15,8 +21,13 @@ interface ClosedActionFormProps extends WithStyles<typeof styles> {
   title?: string;
 }
 
-const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
-({ cancel, classes, asyncState, arId, title }) => (
+const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
+  cancel,
+  classes,
+  asyncState,
+  arId,
+  title,
+}) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
     <Grid container={true} className={classes.pendingBox}>
@@ -29,7 +40,8 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
           noWrap
         >
           {arId}
-        </Typography>&nbsp;
+        </Typography>
+        &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true} className={classes.truncateText}>
         <Typography
@@ -40,7 +52,8 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> =
           noWrap
         >
           {title}
-        </Typography>&nbsp;
+        </Typography>
+        &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true}>
         <Text translation="transition.action.cancel.discription" />

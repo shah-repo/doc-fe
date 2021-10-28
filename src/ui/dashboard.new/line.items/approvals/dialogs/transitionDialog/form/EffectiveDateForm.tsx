@@ -2,10 +2,16 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
 import moment from "moment";
 import * as React from "react";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../../../../../common/utils/date";
+import {
+  getStartOfDayDateString,
+  TIME_ZONE,
+} from "../../../../../../../common/utils/date";
 import { AsyncState } from "../../../../../../../state/types";
 import DatePickerField from "../../../../../../components/forms/fields/DatePickerField";
-import { required, validator } from "../../../../../../components/forms/fields/validators/index";
+import {
+  required,
+  validator,
+} from "../../../../../../components/forms/fields/validators/index";
 import FormMessage from "../../../../../../components/forms/FormMessage";
 import FormProgress from "../../../../../../components/forms/FormProgress";
 import SubmitButton from "../../../../../../components/forms/SubmitButton";
@@ -16,7 +22,11 @@ interface EffectiveDateFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
   cancel: () => void;
 }
-const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ cancel, classes, asyncState }) => (
+const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({
+  cancel,
+  classes,
+  asyncState,
+}) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
     <Box className={classes.pendingBox}>
@@ -28,7 +38,7 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({ ca
       />
     </Box>
     <FormProgress asyncState={asyncState} />
-    <Grid container className={classes.closeLaterDiscription} >
+    <Grid container className={classes.closeLaterDiscription}>
       <Grid zeroMinWidth item={true}>
         <Text translation="transition.action.close.date.discription" />
         {"10/27/2021"}

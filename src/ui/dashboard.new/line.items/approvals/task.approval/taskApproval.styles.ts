@@ -61,5 +61,5 @@ export const styles = makeStyles(() =>
       position: "relative",
       background: Colors.font_gray,
     },
-  }
-  ));
+  })
+);

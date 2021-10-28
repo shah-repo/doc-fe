@@ -6,7 +6,9 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText, Modal, Tooltip,
+  ListItemText,
+  Modal,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -177,7 +179,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
@@ -194,7 +201,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -213,7 +221,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -268,7 +277,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       <>
                         <Typography color="inherit">
                           Assigned to {size(pendingApprovers)} users. <br />0
-                          have Approved and {size(pendingApprovers)} are Pending.
+                          have Approved and {size(pendingApprovers)} are
+                          Pending.
                         </Typography>
                       </>
                     }
@@ -279,7 +289,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       variant="caption"
                       className={classes.typographyBold}
                       color="textSecondary"
-                      style={hoverApprovers ? { textDecoration: "underline" } : {}}
+                      style={
+                        hoverApprovers ? { textDecoration: "underline" } : {}
+                      }
                       onClick={openApproversModel}
                       onMouseEnter={onMouseHoverApprovers}
                       onMouseLeave={onMouseLeaveApprovers}
@@ -411,7 +423,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <EmailModal handleEmailModelClose={handleEmailModelClose} pendingApprovers={pendingApprovers}/>
+        <EmailModal
+          handleEmailModelClose={handleEmailModelClose}
+          pendingApprovers={pendingApprovers}
+        />
       </Modal>
     </>
   );

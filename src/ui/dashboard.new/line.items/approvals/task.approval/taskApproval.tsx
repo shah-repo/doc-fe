@@ -159,7 +159,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -179,7 +184,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                  needs approval for&nbsp;
+                    needs approval for&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -200,7 +205,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -225,13 +231,18 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               </Grid>
               <Grid container={true}>
                 <Grid item={true} className={classes.grayDot}>
-                &nbsp;
+                  &nbsp;
                 </Grid>
               </Grid>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
-            &nbsp;&nbsp;
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
-                &nbsp;
+                  &nbsp;
                 </Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
@@ -241,7 +252,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                  &nbsp; {timestamp}
+                    &nbsp; {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

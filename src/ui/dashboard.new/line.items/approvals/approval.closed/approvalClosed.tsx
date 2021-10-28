@@ -51,24 +51,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-  // const docRevs = [
-  //   {
-  //     id: "id1",
-  //     text: "1. SI-02053 . Rev 1 - Micro - Hematocrit Capillary Test Tube",
-  //   },
-  //   {
-  //     id: "id2",
-  //     text: "2. SI-02060 . Rev 2A - 100-1000µL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id3",
-  //     text: "3. SI-02062 . Rev 1 - 5mL Pipette Tip",
-  //   },
-  //   {
-  //     id: "id4",
-  //     text: "4. SI-02066 . Rev B - 304 Stainless Steel Ball, 1/8 Diameter",
-  //   },
-  // ];
 
   const StyledListItem = withStyles({
     root: {
@@ -182,7 +164,12 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <React.Fragment>
-              <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
                 <Grid item={true}>
                   <Link
                     to={changeRequestEditPath(id)}
@@ -199,7 +186,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -218,7 +206,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
-                    </Typography>&nbsp;
+                    </Typography>
+                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>

@@ -1,7 +1,6 @@
+import { createStyles, makeStyles } from "@material-ui/core";
 
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-
-export const styles = makeStyles((theme: Theme) =>
+export const styles = makeStyles(() =>
   createStyles({
     noPendingActions: {
       color: "red",
@@ -12,5 +11,5 @@ export const styles = makeStyles((theme: Theme) =>
       minHeight: "calc(100vh - 160px)",
       maxHeight: "calc(100vh - 160px)",
     },
-  }
-  ));
+  })
+);

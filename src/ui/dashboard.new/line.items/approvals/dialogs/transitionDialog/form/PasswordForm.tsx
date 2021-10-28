@@ -3,7 +3,10 @@ import { Form } from "formik";
 import * as React from "react";
 import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
 import InputField from "../../../../../../components/forms/fields/Input";
-import { required, validator } from "../../../../../../components/forms/fields/validators";
+import {
+  required,
+  validator,
+} from "../../../../../../components/forms/fields/validators";
 import FormMessage from "../../../../../../components/forms/FormMessage";
 import FormProgress from "../../../../../../components/forms/FormProgress";
 import SubmitButton from "../../../../../../components/forms/SubmitButton";
@@ -15,7 +18,11 @@ interface PasswordFormProps extends WithStyles<typeof styles> {
   cancel: () => void;
 }
 
-const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({ cancel, classes, asyncState }) => (
+const PasswordFormApproval: React.FunctionComponent<PasswordFormProps> = ({
+  cancel,
+  classes,
+  asyncState,
+}) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
     <InputField

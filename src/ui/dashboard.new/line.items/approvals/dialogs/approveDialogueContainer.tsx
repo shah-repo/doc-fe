@@ -1,8 +1,14 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
 import { changeRequestsActions } from "../../../../../state/ducks/changeRequest";
-import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
-import { EffectiveDateFormValues, PasswordFormValues } from "../../../../change.request/form/types";
+import {
+  ChangeRequestTransition,
+  ChangeRequestTransitionResponse,
+} from "../../../../../state/ducks/changeRequest/types";
+import {
+  EffectiveDateFormValues,
+  PasswordFormValues,
+} from "../../../../change.request/form/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
@@ -30,7 +36,9 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   onSuccess,
 }) => {
   const effectiveDateDialog = useDialog();
-  const applyTransitionAction = useActionCreator(changeRequestsActions.applyTransition);
+  const applyTransitionAction = useActionCreator(
+    changeRequestsActions.applyTransition
+  );
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
@@ -49,7 +57,10 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     async.start(
       applyTransitionAction,
-      changeRequestId, values, transition, async,
+      changeRequestId,
+      values,
+      transition,
+      async
     );
   };
 
@@ -62,7 +73,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       arId={arId}
       title={title}
       label={label}
-      { ...{
+      {...{
         transitionDialog,
         effectiveDateDialog,
       }}
