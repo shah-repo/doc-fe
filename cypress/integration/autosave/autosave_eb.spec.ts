@@ -127,7 +127,7 @@ context("Autosave EB test", () => {
 
     it("Add attachment and check autosave", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
         cy.elUploadAttachment({
           fileName: "image.jpg",
           el: "fb-mediaalbum-upload-",
@@ -135,32 +135,54 @@ context("Autosave EB test", () => {
       });
     });
 
-    it("Add 'Material' to step #1 and check autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
+    it("While autosaving fill step #1 description and check autosave", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
         });
-        cy.get("[data-cy=\"title\"]").arrowType("Material");
-        cy.get("[data-cy=\"partLot\"]").arrowType("test");
-        cy.get("[name=\"quantity\"]").arrowType("2");
-        cy.get("[data-cy=\"unit\"]").arrowType("Day{downarrow}{enter}");
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      });
+      }).as("response");
+
+      cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+      cy.wait("@response");
     });
 
-    it("Add 'Equipment' to step #1 and check autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
-        cy.get("[data-cy=\"title\"]").arrowType("Equipment");
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    it("Add 'Material' to step #1 and check autosave", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
       });
+      cy.get("[data-cy=\"title\"]").arrowType("Material");
+      cy.get("[data-cy=\"partLot\"]").arrowType("test");
+      cy.get("[name=\"quantity\"]").arrowType("2");
+      cy.get("[data-cy=\"unit\"]").arrowType("Day{downarrow}{enter}");
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
-    it("Delete Material and check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").parent()
-          .find("button").last().arrowClick();
-      });
+    it("While autosaving add 'Equipment' to step #1 and check autosave", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
+      cy.get("[data-cy=\"title\"]").arrowType("Equipment");
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.wait("@response");
+    });
+
+    it("While autosaving, delete Material and check for autosave", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").parent()
+        .find("button").last().arrowClick();
+      cy.wait("@response");
     });
 
     it("Delete attachment and check autosave", () => {
