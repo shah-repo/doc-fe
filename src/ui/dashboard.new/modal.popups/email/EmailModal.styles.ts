@@ -47,7 +47,7 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       /* Font Black */
-      color: "#080B11",
+      color: Colors.modal_cancel_color,
     },
     closemodel: {
       left: "20.55%",
@@ -101,7 +101,7 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       /* AR AIR Color */
-      color: "#0DB78D",
+      color: Colors.latest_green_varient,
     },
     listitemicon: {
       position: "relative",
@@ -109,7 +109,7 @@ export const styles = makeStyles((theme: Theme) =>
       right: "77.94%",
       top: "0%",
       bottom: "0%",
-      background: "#A2A2A2",
+      background: Colors.medium_light_shade_gray,
       width: "30px",
       height: "30px",
     },
@@ -154,7 +154,7 @@ export const styles = makeStyles((theme: Theme) =>
       position: "relative",
       width: "450px",
       height: "133px",
-      background: "#F5F8FF",
+      background: Colors.sky_blue,
       borderRadius: "8px",
       left: "51%",
     },
@@ -169,7 +169,7 @@ export const styles = makeStyles((theme: Theme) =>
       left: "33px",
       top: "48px",
       /* White */
-      background: "#FFFFFF",
+      background: Colors.white,
       border: "1px solid #F5F8FF",
       boxSizing: "border-box",
       borderRadius: "8px",
@@ -184,7 +184,7 @@ export const styles = makeStyles((theme: Theme) =>
       letterSpacing: "0.5px",
       textTransform: "uppercase",
       /* Enlil Navy */
-      color: "#011FBB",
+      color: Colors.navy,
     },
     confmesgdate: {
       position: "absolute",
@@ -199,7 +199,7 @@ export const styles = makeStyles((theme: Theme) =>
       textAlign: "right",
       letterSpacing: "0.5px",
       /* Font Gray */
-      color: "#767B87",
+      color: Colors.font_gray,
     },
     pendingBox: {
       flexDirection: "column",
@@ -211,7 +211,7 @@ export const styles = makeStyles((theme: Theme) =>
       border: "1px solid #F5F8FF",
       display: "flex",
       padding: "20px",
-      backgroundColor: "#FFF",
+      backgroundColor: Colors.white,
       boxSizing: "border-box",
       alignItems: "flex-start",
       borderRadius: "8px",
@@ -227,7 +227,7 @@ export const styles = makeStyles((theme: Theme) =>
       border: "1px solid #F5F8FF",
       display: "flex",
       padding: "20px",
-      backgroundColor: "#FFF",
+      backgroundColor: Colors.white,
       boxSizing: "border-box",
       alignItems: "flex-start",
       borderRadius: "8px",
