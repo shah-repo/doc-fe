@@ -33,6 +33,9 @@ export const styles = makeStyles(() =>
       lineHeight: "16px",
       color: Colors.latest_yellow_varient,
     },
+    link: {
+      color: Colors.black,
+    },
     typographyOverdue: {
       fontFamily: "Sora",
       fontStyle: "normal",

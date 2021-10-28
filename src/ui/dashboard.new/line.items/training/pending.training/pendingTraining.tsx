@@ -7,6 +7,7 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
@@ -14,6 +15,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { styles } from "./pendingTraining.styles";
 
@@ -79,6 +81,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
+  const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
+  const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
 
   return (
     <StyledListItem
@@ -101,22 +105,34 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 >
                   Your Training {status === "OVERDUE" ? "" : "on"}&nbsp;
                 </Typography>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
+                <Link
+                  href={documentVersionPath(documentRevId, existingId)}
+                  color="inherit"
+                  className= {classes.link}
                 >
-                  {id}&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {id}&nbsp;
+                  </Typography>
+                </Link>
+                <Link
+                  href={documentVersionPath(documentRevId, existingId)}
+                  color="inherit"
+                  className= {classes.link}
                 >
-                  {title}&nbsp;
-                </Typography>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                  >
+                    {title}&nbsp;
+                  </Typography>
+                </Link>
                 <Typography
                   component="span"
                   variant="body2"

@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    link: {
+      color: Colors.black,
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */
