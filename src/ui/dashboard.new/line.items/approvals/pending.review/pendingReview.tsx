@@ -9,10 +9,10 @@ import {
   ListItemText, Modal, Tooltip,
   Typography,
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
@@ -99,11 +99,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
-  // const [viewItem, setViewItem] = React.useState("");
-  // const [hoverItem, setHoverItem] = React.useState(false);
-  const [hoverId, setHoverId] = React.useState(false);
-  const [hoverTitle, setHoverTitle] = React.useState(false);
-  const [hoverApprovers, setHoverApprovers] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -120,24 +115,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
 
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(arId);
-  };
-  const onMouseHoverId = () => {
-    setHoverId(true);
-  };
-  const onMouseLeaveId = () => {
-    setHoverId(false);
-  };
-  const onMouseHoverTitle = () => {
-    setHoverTitle(true);
-  };
-  const onMouseLeaveTitle = () => {
-    setHoverTitle(false);
-  };
-  const onMouseHoverApprovers = () => {
-    setHoverApprovers(true);
-  };
-  const onMouseLeaveApprovers = () => {
-    setHoverApprovers(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -164,14 +141,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onClick={handleClick}
         onMouseEnter={onMouseHoverItemListItem}
         className={classes.listItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} />
+          <CollapseIcon className={classes.icon}  onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} />
+          <ExpandIcon className={classes.icon}  onClick={handleClick}/>
         )}
         <ListItemIcon>
           <PendingReviewIcon />
@@ -182,8 +158,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -191,9 +168,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
                     </Typography>&nbsp;
@@ -201,8 +175,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -210,9 +185,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>&nbsp;
@@ -276,23 +248,26 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     }
                     placement="top-start"
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      style={hoverApprovers ? { textDecoration: "underline" } : {}}
+                    <Link
+                      href="#"
+                      color="inherit"
                       onClick={openApproversModel}
-                      onMouseEnter={onMouseHoverApprovers}
-                      onMouseLeave={onMouseLeaveApprovers}
-                      noWrap
+                      className= {classes.link}
                     >
-                      {pendingApprovers !== undefined
-                        ? pendingApprovers
-                          .map((approver) => approver.userName)
-                          .join(",")
-                        : ""}
-                    </Typography>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {pendingApprovers !== undefined
+                          ? pendingApprovers
+                            .map((approver) => approver.userName)
+                            .join(",")
+                          : ""}
+                      </Typography>
+                    </Link>
                   </StyleTooltip>
                   &nbsp;&nbsp;&nbsp;
                 </Grid>

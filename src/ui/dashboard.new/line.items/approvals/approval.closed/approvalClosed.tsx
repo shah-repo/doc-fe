@@ -9,12 +9,12 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -101,9 +101,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === arId;
-  // const [viewItem, setViewItem] = React.useState("");
-  const [hoverId, setHoverId] = React.useState(false);
-  const [hoverTitle, setHoverTitle] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -116,18 +113,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
 
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(arId || id);
-  };
-  const onMouseHoverId = () => {
-    setHoverId(true);
-  };
-  const onMouseLeaveId = () => {
-    setHoverId(false);
-  };
-  const onMouseHoverTitle = () => {
-    setHoverTitle(true);
-  };
-  const onMouseLeaveTitle = () => {
-    setHoverTitle(false);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -168,8 +153,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap" justify="flex-start" alignItems="center">
                 <Grid item={true}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -177,9 +163,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typography}
                       color="textPrimary"
                       noWrap
-                      style={hoverId ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverId}
-                      onMouseLeave={onMouseLeaveId}
                     >
                       {arId}
                     </Typography>&nbsp;
@@ -187,8 +170,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    to={changeRequestEditPath(id)}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className= {classes.link}
                   >
                     <Typography
                       component="span"
@@ -196,9 +180,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       className={classes.typographyBold}
                       color="textSecondary"
                       noWrap
-                      style={hoverTitle ? { textDecoration: "underline" } : {}}
-                      onMouseEnter={onMouseHoverTitle}
-                      onMouseLeave={onMouseLeaveTitle}
                     >
                       {title}
                     </Typography>&nbsp;
@@ -266,7 +247,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                       variant="caption"
                       className={classes.typographyBold}
                       color="textSecondary"
-                      style={hoverItem ? { textDecoration: "underline" } : {}}
                       onClick={openApproversModel}
                       noWrap
                     >
