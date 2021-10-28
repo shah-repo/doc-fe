@@ -78,7 +78,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
   return (
-    <div className={classes.container}>
+    <div>
       {effectiveDateDialog && (
         <AlertDialog
           dialog={effectiveDateDialog}

@@ -3,9 +3,6 @@ import Colors from "../../../../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
-    container: {
-      display: "inline-block",
-    },
     modeltitle: {
       position: "static",
       width: "194.98px",
