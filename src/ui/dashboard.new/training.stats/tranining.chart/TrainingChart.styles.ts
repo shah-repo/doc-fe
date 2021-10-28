@@ -6,6 +6,8 @@ export const styles = makeStyles(() =>
       overflow: "auto",
       marginLeft: "10%",
       marginTop: "10%",
+      maxHeight: "calc(100vh- 145px)",
+      minHeight: "calc(100vh- 145px)",
     },
     title: {
       fontFamily: "Sora",

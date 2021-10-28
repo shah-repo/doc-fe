@@ -50,5 +50,8 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "10px",
       lineHeight: "13px",
     },
+    lineItemContent: {
+      height: "100px",
+    },
   })
 );
