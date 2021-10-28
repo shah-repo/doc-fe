@@ -1078,5 +1078,6 @@
   "common.recent": "Recent",
   "your.training": "Your Training",
   "your.training.on": "Your Training on",
-  "assigned.to.users": "Assigned to {count} users."
+  "assigned.users.count": "Assigned to {count} users.",
+  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending."
 }

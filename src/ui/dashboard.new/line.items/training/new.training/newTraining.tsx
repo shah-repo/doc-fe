@@ -245,10 +245,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   title={
                     <Typography color="inherit">
                       <Text
-                        translation="assigned.to.users"
+                        translation="assigned.users.count"
                         values={{ count: size(approvers) }}
                       />
-                      <br />4 have Approved and 6 are Pending.
+                      <br />
+                      <Text
+                        translation="approved.and.pending.count"
+                        values={{ approved: 4, pending: 6 }}
+                      />
                     </Typography>
                   }
                   placement="top-start"
