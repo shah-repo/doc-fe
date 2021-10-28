@@ -17,6 +17,7 @@ import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
+import { RecentGroupType } from "../../../state/ducks/dashboard.new/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
@@ -75,11 +76,11 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
           ))}
         <ListItemIcon>
           <>
-            {type === "PO" && <POIcon />}
-            {type === "MPI" && <MPIIcon />}
-            {type === "FORM" && <FMIcon />}
-            {(type === "CHANGE_REQUEST" || type === "DAM") && <ApprovalIcon />}
-            {(type === "SUPPLIER" || !itemTypes.includes(type)) && <SOPIcon />}
+            {type === RecentGroupType.PO && <POIcon />}
+            {type === RecentGroupType.MPI && <MPIIcon />}
+            {type === RecentGroupType.FORM && <FMIcon />}
+            {(type === RecentGroupType.CHANGE_REQUEST || type === RecentGroupType.DAM) && <ApprovalIcon />}
+            {(type === RecentGroupType.SUPPLIER || !itemTypes.includes(type)) && <SOPIcon />}
           </>
         </ListItemIcon>
         <ListItemText
