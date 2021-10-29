@@ -10,16 +10,11 @@ interface TabPanelProps {
   index: number;
   value: number;
   panelData: {
-    id: string;
-    title: string;
-    avatar: string;
-    user: string;
-    type: string;
-    documentId: string;
+    docTitle: string;
+    user: {avatar: string | null; name: string};
+    docId: string;
     status: string;
-    verbose: string;
-    timestamp: string;
-    approvers: string[];
+    dueOn: string;
   }[];
 }
 
@@ -35,13 +30,13 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
     <List className={classes.listRoot}>
       {panelData.map((data, index) => (
         <TrainingItem
-          key={data.id}
-          avatar={data.avatar}
-          firstName={data.user}
+          key={index}
+          avatar={data.user.avatar}
+          firstName={data.user.name.split(" ")[0]}
           status={data.status}
-          documentId={data.documentId}
-          title={data.title}
-          date={data.timestamp}
+          documentId={data.docId}
+          title={data.docTitle}
+          date={data.dueOn}
         />
       ))}
     </List>
@@ -75,28 +70,18 @@ function tabCustomClasses(index: any) {
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
   overdueItems: {
-    id: string;
-    title: string;
-    avatar: string;
-    user: string;
-    type: string;
-    documentId: string;
+    docTitle: string;
+    user: {avatar: string | null; name: string};
+    docId: string;
     status: string;
-    verbose: string;
-    timestamp: string;
-    approvers: string[];
+    dueOn: string;
   }[];
   dueInSevenItems: {
-    id: string;
-    title: string;
-    avatar: string;
-    user: string;
-    type: string;
-    documentId: string;
+    docTitle: string;
+    user: {avatar: string | null; name: string};
+    docId: string;
     status: string;
-    verbose: string;
-    timestamp: string;
-    approvers: string[];
+    dueOn: string;
   }[];
 }
 
@@ -120,9 +105,7 @@ const StyledTabs = withStyles({
   <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
 ));
 
-export default function TrainingLineItemsPresenter(
-  props: TrainingLineItemsProps
-) {
+const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> = (props) => {
   const { overdueItems, dueInSevenItems } = props;
   const all = overdueItems.concat(dueInSevenItems);
   const [value, setValue] = React.useState(0);
@@ -193,4 +176,6 @@ export default function TrainingLineItemsPresenter(
       </TabPanel>
     </Box>
   );
-}
+};
+
+export default TrainingLineItemsPresenter;

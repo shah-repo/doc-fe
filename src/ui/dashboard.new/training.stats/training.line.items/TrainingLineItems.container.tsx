@@ -5,16 +5,11 @@ import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
   trainingData: {
-    id: string;
-    title: string;
-    avatar: string;
-    user: string;
-    type: string;
-    documentId: string;
+    docTitle: string;
+    user: {avatar: string | null; name: string};
+    docId: string;
     status: string;
-    verbose: string;
-    timestamp: string;
-    approvers: string[];
+    dueOn: string;
   }[];
 }
 
@@ -27,7 +22,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     (item) => item.status === TrainingStatusChartLabelTypes.OVERDUE
   );
   const dueInSevenItems = trainingData.filter(
-    (item) => item.status === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
+    (item) => item.status === TrainingStatusChartLabelTypes.DUE
   );
   return (
     <TrainingLineItemsPresenter

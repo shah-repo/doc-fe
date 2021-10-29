@@ -10,7 +10,7 @@ import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
-  avatar: string;
+  avatar: string | null;
   firstName: string;
   documentId: string;
   title: string;
@@ -44,10 +44,33 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           )}
         </Grid>
       </Grid>
-      <b className={classes.docIdAndTitle}>{documentId}</b>
-      <b className={classes.docIdAndTitle}> {title}</b>
-      <br />
-      <small className={classes.date}>Date: {date}</small>
+      <Grid
+        container={true}
+        wrap="nowrap"
+        justify="flex-start"
+        alignItems="center"
+      >
+        <Grid item={true}>
+          <b className={classes.docIdAndTitle}>{documentId}</b>
+        </Grid>
+        &nbsp;
+        <Grid item={true}>
+          <span
+            className={classes.docIdAndTitle}
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
+        </Grid>
+      </Grid>
+      <Grid
+        container={true}
+        wrap="nowrap"
+        justify="flex-start"
+        alignItems="center"
+      >
+        <Grid item={true}>
+          <small className={classes.date}>Due date: {date}</small>
+        </Grid>
+      </Grid>
     </Typography>
   );
 
