@@ -35,6 +35,7 @@ let emailsFromInbox;
 let companyId;
 let lhrDocUrl;
 let thirdEmployee;
+let fourthEmployee;
 
 const dateAfterEmailShouldArrive = new Date();
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
@@ -279,6 +280,7 @@ context("Change owner before completing LHRs", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
@@ -975,6 +977,30 @@ context("Change owner before completing LHRs", () => {
       });
     });
 
+    context("Change owner of LHR", () => {
+      it(`Change owner of LHR to ${USERS[4].name}`, () => {
+        cy.drChangeOwnerFromMenu({ employee: USERS[4].name });
+      });
+    });
+
+    context("Login new owner and navigate to LHR", () => {
+      it("Logout admin user", () => {
+        cy.authLogout();
+      });
+
+      it("Login new LHR owner to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[4], employeeId: fourthEmployee.id });
+      });
+
+      it("Navig to LHR", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+          cy.visit(lhrDocUrl);
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
     context("Start LHRs", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
@@ -1011,20 +1037,6 @@ context("Change owner before completing LHRs", () => {
           lhrs1DocUrl = url;
         });
       });
-    });
-  });
-
-  context("Change owner of LHR", () => {
-    it("Navigate to LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-        cy.get("a").contains("LHR-00004").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it(`Change owner of LHR to ${USERS[4].name}`, () => {
-      cy.drChangeOwnerFromMenu({ employee: USERS[4].name });
     });
   });
 
@@ -1143,9 +1155,9 @@ context("Change owner before completing LHRs", () => {
     it("Verify emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
+          sentToUser: USERS[4].email,
           contains: [
-            `Hello <b>${USERS[1].name},</b><br>`,
+            `Hello <b>${USERS[4].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
             `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
             `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
@@ -1172,9 +1184,9 @@ context("Change owner before completing LHRs", () => {
     it("Verify emails that should not be received", () => {
       const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[4].email,
+          sentToUser: USERS[1].email,
           contains: [
-            `Hello <b>${USERS[4].name},</b><br>`,
+            `Hello <b>${USERS[1].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
             `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
             `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
