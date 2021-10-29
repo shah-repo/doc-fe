@@ -28,6 +28,7 @@ export const styles = makeStyles(() =>
       display: "flex",
       alignItems: "center",
       marginLeft: "5px",
+      color: Colors.font_black,
     },
     docIdAndTitle: {
       fontFamily: "Sora",
@@ -35,6 +36,7 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "22px",
+      color: Colors.font_black,
     },
     date: {
       fontFamily: "Sora",
@@ -42,6 +44,7 @@ export const styles = makeStyles(() =>
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "15px",
+      color: Colors.font_gray,
     },
     avatar: {
       width: "30px",

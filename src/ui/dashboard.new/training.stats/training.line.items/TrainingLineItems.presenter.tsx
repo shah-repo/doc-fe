@@ -2,6 +2,7 @@ import { Box, Grid, List, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import Text from "../../../components/Text";
+import Colors from "../../../layout/theme/utils/colors";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -11,7 +12,7 @@ interface TabPanelProps {
   value: number;
   panelData: {
     docTitle: string;
-    user: {avatar: string | null; name: string};
+    user: { avatar: string | null; name: string };
     docId: string;
     status: string;
     dueOn: string;
@@ -71,14 +72,14 @@ interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
   overdueItems: {
     docTitle: string;
-    user: {avatar: string | null; name: string};
+    user: { avatar: string | null; name: string };
     docId: string;
     status: string;
     dueOn: string;
   }[];
   dueInSevenItems: {
     docTitle: string;
-    user: {avatar: string | null; name: string};
+    user: { avatar: string | null; name: string };
     docId: string;
     status: string;
     dueOn: string;
@@ -97,85 +98,86 @@ const StyledTabs = withStyles({
     "backgroundColor": "transparent",
     "top": "33px",
     "& > span": {
-      width: "50%",
-      backgroundColor: "#635ee7",
+      flexGrow: 1,
+      border: `1px solid ${Colors.navy}`,
     },
   },
 })((props: StyledTabsProps) => (
   <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
 ));
 
-const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> = (props) => {
-  const { overdueItems, dueInSevenItems } = props;
-  const all = overdueItems.concat(dueInSevenItems);
-  const [value, setValue] = React.useState(0);
-  const classes = styles();
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-    props.infoChangeTab(newValue);
-  };
+const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
+  (props) => {
+    const { overdueItems, dueInSevenItems } = props;
+    const all = overdueItems.concat(dueInSevenItems);
+    const [value, setValue] = React.useState(0);
+    const classes = styles();
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+      setValue(newValue);
+      props.infoChangeTab(newValue);
+    };
 
-  return (
-    <Box component="div" className={classes.root}>
-      <StyledTabs
-        value={value}
-        onChange={handleChange}
-        aria-label="full width tabs example"
-      >
-        <Tab
-          classes={{ root: classes.tab }}
-          label={
-            <Grid container={true} justify="center" alignItems="center">
-              <Grid item={true} sm={12}>
-                <span className={classes.allTab}></span>
-                <span className={classes.tabHeader}>
-                  <Text translation="training.stats.all" />
-                </span>
+    return (
+      <Box component="div" className={classes.root}>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="full width tabs example"
+        >
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  <span className={classes.allTab}></span>
+                  <span className={classes.tabHeader}>
+                    <Text translation="training.stats.all" />
+                  </span>
+                </Grid>
               </Grid>
-            </Grid>
-          }
-          {...tabCustomClasses(0)}
-        />
-        <Tab
-          classes={{ root: classes.tab }}
-          label={
-            <Grid container={true} justify="center" alignItems="center">
-              <Grid item={true} sm={12}>
-                <span className={classes.dueInSevenTab}></span>
-                <span className={classes.tabHeader}>
-                  <Text translation="training.stats.duein7days" />
-                </span>
+            }
+            {...tabCustomClasses(0)}
+          />
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  <span className={classes.dueInSevenTab}></span>
+                  <span className={classes.tabHeader}>
+                    <Text translation="training.stats.duein7days" />
+                  </span>
+                </Grid>
               </Grid>
-            </Grid>
-          }
-          {...tabCustomClasses(1)}
-        />
-        <Tab
-          classes={{ root: classes.tab }}
-          label={
-            <Grid container={true} justify="center" alignItems="center">
-              <Grid item={true} sm={12}>
-                <span className={classes.overdueTab}></span>
-                <span className={classes.tabHeader}>
-                  <Text translation="training.stats.overdue" />
-                </span>
+            }
+            {...tabCustomClasses(1)}
+          />
+          <Tab
+            classes={{ root: classes.tab }}
+            label={
+              <Grid container={true} justify="center" alignItems="center">
+                <Grid item={true} sm={12}>
+                  <span className={classes.overdueTab}></span>
+                  <span className={classes.tabHeader}>
+                    <Text translation="training.stats.overdue" />
+                  </span>
+                </Grid>
               </Grid>
-            </Grid>
-          }
-          {...tabCustomClasses(2)}
-        />
-      </StyledTabs>
-      <TabPanel value={value} index={0} panelData={all}>
-        <Text translation="training.stats.all" />
-      </TabPanel>
-      <TabPanel value={value} index={1} panelData={dueInSevenItems}>
-        <Text translation="training.stats.duein7days" />
-      </TabPanel>
-      <TabPanel value={value} index={2} panelData={overdueItems}>
-        <Text translation="training.stats.overdue" />
-      </TabPanel>
-    </Box>
-  );
-};
+            }
+            {...tabCustomClasses(2)}
+          />
+        </StyledTabs>
+        <TabPanel value={value} index={0} panelData={all}>
+          <Text translation="training.stats.all" />
+        </TabPanel>
+        <TabPanel value={value} index={1} panelData={dueInSevenItems}>
+          <Text translation="training.stats.duein7days" />
+        </TabPanel>
+        <TabPanel value={value} index={2} panelData={overdueItems}>
+          <Text translation="training.stats.overdue" />
+        </TabPanel>
+      </Box>
+    );
+  };
 
 export default TrainingLineItemsPresenter;
