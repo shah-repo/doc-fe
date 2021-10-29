@@ -15,7 +15,6 @@ interface Props {
   loadRecents: any;
   loadRecentsListAsyncState: AsyncState;
   recents: RecentItems[];
-  // recents: any[]; // TO DO:: type definition needs to be added
 }
 
 const RecentsPresenter: React.FunctionComponent<Props> = ({
