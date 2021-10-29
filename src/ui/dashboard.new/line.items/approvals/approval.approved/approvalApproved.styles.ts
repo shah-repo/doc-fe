@@ -26,7 +26,7 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     nested: {
-      marginLeft: "40px",
+      marginLeft: "32px",
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
