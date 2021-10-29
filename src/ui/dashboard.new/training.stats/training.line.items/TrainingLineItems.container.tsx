@@ -5,16 +5,11 @@ import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
   trainingData: {
-    id: string;
-    title: string;
-    avatar: string;
-    user: string;
-    type: string;
-    documentId: string;
+    docTitle: string;
+    user: {avatar: string | null; name: string};
+    docId: string;
     status: string;
-    verbose: string;
-    timestamp: string;
-    approvers: string[];
+    dueOn: string;
   }[];
 }
 
