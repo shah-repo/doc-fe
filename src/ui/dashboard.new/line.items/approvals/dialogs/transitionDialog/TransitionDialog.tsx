@@ -1,10 +1,14 @@
 import {
+  Box,
+  ButtonProps,
   Dialog,
   DialogContent,
-  Grid, IconButton, Typography,
-  withStyles, WithStyles,
+  Grid,
+  IconButton,
+  Typography,
+  withStyles,
+  WithStyles,
 } from "@material-ui/core";
-import { ButtonProps } from "@material-ui/core/Button";
 import { Formik, FormikProps } from "formik";
 import moment from "moment";
 import React from "react";
@@ -78,7 +82,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   const preventPropagation = (event: React.FormEvent) =>
     event.stopPropagation();
   return (
-    <div>
+    <>
       {effectiveDateDialog && (
         <AlertDialog
           dialog={effectiveDateDialog}
@@ -100,7 +104,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
         open={transitionDialog.isOpen}
         onSubmit={preventPropagation}
       >
-        <div className={classes.paper}>
+        <Box component="div" className={classes.paper}>
           <Grid container justify="space-between">
             <Grid item>
               <Typography
@@ -130,18 +134,29 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
               </IconButton>
             </Grid>
           </Grid>
-          <DialogContent className={!isClosedTransition ? classes.pendingBox : classes.closedDialogueContent}>
+          <DialogContent
+            className={
+              !isClosedTransition
+                ? classes.pendingBox
+                : classes.closedDialogueContent
+            }
+          >
             <FormContext.Provider value={{ submitOnChange: false }}>
               <Formik
-                initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?
-                  { effectiveDate: moment.utc().toISOString() } : { password: "" }}
+                initialValues={
+                  transition === TransitionTypes.TRANSITION_CLOSED
+                    ? { effectiveDate: moment.utc().toISOString() }
+                    : { password: "" }
+                }
                 onSubmit={onSubmit}
               >
-                {transition === TransitionTypes.TRANSITION_CLOSED ? renderCloseForm : renderPasswordForm}
+                {transition === TransitionTypes.TRANSITION_CLOSED
+                  ? renderCloseForm
+                  : renderPasswordForm}
               </Formik>
             </FormContext.Provider>
           </DialogContent>
-          { isClosedTransition && (
+          {isClosedTransition && (
             <>
               <Grid container justify="space-between">
                 <Grid item>
@@ -158,8 +173,11 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
               <DialogContent className={classes.closedDialogueContent}>
                 <FormContext.Provider value={{ submitOnChange: false }}>
                   <Formik
-                    initialValues={transition === TransitionTypes.TRANSITION_CLOSED ?
-                      { effectiveDate: "" } : { password: "" }}
+                    initialValues={
+                      transition === TransitionTypes.TRANSITION_CLOSED
+                        ? { effectiveDate: "" }
+                        : { password: "" }
+                    }
                     onSubmit={onSubmit}
                   >
                     {renderCloseDateForm}
@@ -168,9 +186,9 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
               </DialogContent>
             </>
           )}
-        </div>
+        </Box>
       </Dialog>
-    </div>
+    </>
   );
 };
 

@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  Avatar,
-  Grid,
-  ListItem,
+  Avatar, Box, Grid, Link, ListItem,
   ListItemAvatar,
   ListItemText,
   Tooltip,
   Typography,
   withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
@@ -131,7 +128,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <React.Fragment>
+    <>
       <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
         <ListItemAvatar>
           <Avatar
@@ -141,7 +138,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         </ListItemAvatar>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -228,11 +225,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {hoverItem && (
-          <div className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons}>
             <span>
               {!rejectHover && (
                 <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
@@ -270,7 +267,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-          </div>
+          </Box>
         )}
       </StyledListItem>
       <ApproveDialogueContainer
@@ -285,7 +282,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />
-    </React.Fragment>
+    </>
   );
 };
 

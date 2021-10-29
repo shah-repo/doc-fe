@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
+  Box,
   Chip,
   Collapse,
   Grid,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -12,7 +14,6 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
@@ -174,7 +175,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -185,7 +186,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -203,7 +204,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -276,11 +277,11 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {!open && hoverItem && (
-          <div className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons}>
             <span>
               {!closeHover && (
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
@@ -305,7 +306,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-          </div>
+          </Box>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -328,7 +329,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 }
               />
-              <div>
+              <Box component="div">
                 {viewHoverItem !== prItem.docId && (
                   <ViewIcon
                     onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
@@ -338,7 +339,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     classes={{ tooltip: classes.customTooltipWidth }}
                     title={
-                      <React.Fragment>
+                      <>
                         <Typography
                           className={classes.viewTooltipText}
                           component="span"
@@ -371,7 +372,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         >
                           {prItem.justificationOfChange}
                         </Typography>
-                      </React.Fragment>
+                      </>
                     }
                     placement="top"
                     arrow
@@ -382,7 +383,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     />
                   </StyleTooltip>
                 )}
-              </div>
+              </Box>
             </StyledListItem>
           ))}
         </List>

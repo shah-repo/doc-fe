@@ -1,7 +1,7 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 import Colors from "../../../../../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export default () =>
   createStyles({
     modeltitle: {
       position: "static",

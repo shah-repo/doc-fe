@@ -37,7 +37,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
     <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
       <ListItemText
         primary={
-          <React.Fragment>
+          <>
             <Grid container={true}>
               <Grid item={true} md={12} sm={12}>
                 <Typography
@@ -58,7 +58,7 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
                 </Typography>
               </Grid>
             </Grid>
-          </React.Fragment>
+          </>
         }
       />
     </StyledListItem>

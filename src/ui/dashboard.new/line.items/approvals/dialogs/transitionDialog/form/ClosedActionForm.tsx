@@ -29,7 +29,12 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
 }) => (
   <Form className={classes.form}>
     <FormMessage asyncState={asyncState} />
-    <Grid container={true} className={classes.pendingBox} justify="flex-start" alignItems="center">
+    <Grid
+      container={true}
+      className={classes.pendingBox}
+      justify="flex-start"
+      alignItems="center"
+    >
       <Grid item={true}>
         <Typography
           component="span"
@@ -63,7 +68,6 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
         </Typography>
       </Grid>
     </Grid>
-
     <SubmitButton
       id="confirmEffectiveDate"
       asyncState={asyncState}
