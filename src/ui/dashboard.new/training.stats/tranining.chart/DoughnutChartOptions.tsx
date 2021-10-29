@@ -1,3 +1,5 @@
+import Colors from "../../../layout/theme/utils/colors";
+
 const DoughnutChartOptions = {
   title: {
     text: "16",
@@ -30,7 +32,7 @@ const DoughnutChartOptions = {
       show: false,
     },
     itemStyle: {
-      borderColor: "#fff",
+      borderColor: Colors.white,
       borderWidth: 2,
     },
     label: {
@@ -47,14 +49,14 @@ const DoughnutChartOptions = {
         value: 12,
         name: "Due in 7 days",
         itemStyle: {
-          color: "#FEAA2C",
+          color: Colors.latest_yellow_varient,
         },
       },
       {
         value: 3,
         name: "Overdue",
         itemStyle: {
-          color: "#EC2B00",
+          color: Colors.latest_red_varient,
         },
       },
     ],

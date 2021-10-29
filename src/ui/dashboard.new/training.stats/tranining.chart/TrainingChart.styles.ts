@@ -15,5 +15,9 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       fontSize: "16px",
     },
+    scroll: {
+      height: "280px",
+      maxHeight: "calc(100vh - 145px)",
+    },
   })
 );

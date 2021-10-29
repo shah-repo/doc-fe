@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,7 @@ export const styles = makeStyles((theme: Theme) =>
       height: "5px",
       left: "15px",
       top: "21px",
-      background: "#767B87",
+      background: Colors.font_gray,
       borderRadius: "50%",
     },
     overdueTab: {
@@ -34,7 +35,7 @@ export const styles = makeStyles((theme: Theme) =>
       height: "5px !important",
       left: "3px",
       top: "21px",
-      background: "#F14822",
+      background: Colors.trinary_red,
       borderRadius: "50%",
     },
     dueInSevenTab: {
@@ -43,7 +44,7 @@ export const styles = makeStyles((theme: Theme) =>
       height: "5px !important",
       left: "3px",
       top: "21px",
-      background: "#FEAA2C",
+      background: Colors.latest_yellow_varient,
       borderRadius: "50%",
     },
     tabHeader: {
