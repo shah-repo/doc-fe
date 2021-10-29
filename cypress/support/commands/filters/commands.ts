@@ -32,27 +32,35 @@ declare global {
 Cypress.Commands.add("filterPO", (params: {docId: string; version: string; poStatus: string;
   supplier: string; partNumber: string; amount: string; owner: string; issueDate: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").type(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.version\"]").type(params.version);
+    cy.get("[id=\"dynamicParams.precalc.version\"]").arrowType(params.version).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_status\"]").type(params.poStatus);
+    cy.get("[id=\"dynamicParams.precalc.po_status\"]").arrowType(params.poStatus).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.supplier\"]").type(params.supplier);
+    cy.get("[id=\"dynamicParams.precalc.supplier\"]").arrowType(params.supplier).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_amount\"]").type(params.amount);
+    cy.get("[id=\"dynamicParams.precalc.po_amount\"]").arrowType(params.amount).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").type(params.partNumber);
+    cy.get("[id=\"dynamicParams.precalc.po_partNumber\"]").arrowType(params.partNumber).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").type(params.owner).wait(1000);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
-  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").type(params.issueDate);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.issueDate\"]").arrowType(params.issueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; version: string; poStatus: string;
@@ -70,53 +78,68 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
 Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
   title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").type(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.revision\"]").type(params.revision);
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id$=\"select-displayStatus\"]").click();
-    cy.get("ul[role=listbox]>li").contains(params.eqState).click();
+    cy.get("[id$=\"select-displayStatus\"]").arrowClick();
+    cy.get("ul[role=listbox]>li").contains(params.eqState).arrowClick().wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"name\"]").type(params.title);
+    cy.get("[id=\"name\"]").arrowType(params.title).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").type(params.owner);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
-  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").type(params.calDueDate);
-  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").type(params.pmDueDate);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").arrowType(params.calDueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").arrowType(params.pmDueDate).wait(500);
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").type(params.eqStatus);
+    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").arrowType(params.eqStatus).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").type(params.docId);
+    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.revision\"]").type(params.revision);
+    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").click();
-    cy.get("ul[role=listbox] > li").contains(params.state).click();
+    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
+    cy.get("ul[role=listbox] > li").contains(params.state).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"name\"]").type(params.title);
+    cy.get("[id=\"name\"]").arrowType(params.title).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").type(params.owner);
+    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"mui-component-select-releasedAfter\"]").click();
-    cy.get("ul[role=listbox] > li").contains(params.releasedDate).click();
+    cy.get("[id=\"mui-component-select-releasedAfter\"]").arrowClick();
+    cy.get("ul[role=listbox] > li").contains(params.releasedDate).arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.formDocId\"]").type(params.formId);
+    cy.get("[id=\"dynamicParams.precalc.formDocId\"]").arrowType(params.formId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckIfRecordsFilterPersists", (params: {docId: string; revision: string; state: string;
@@ -131,11 +154,12 @@ Cypress.Commands.add("filterCheckIfRecordsFilterPersists", (params: {docId: stri
 });
 
 Cypress.Commands.add("filterPOVersion", (params: { version: string }) => {
-  cy.get("[id=\"dynamicParams.precalc.version\"]").type(params.version);
+  cy.get("[id=\"dynamicParams.precalc.version\"]").arrowType(params.version);
 });
 
 Cypress.Commands.add("filterClear", () => {
-  cy.get("[id=\"clearFilter\"]").click();
+  cy.get("[id=\"clearFilter\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckNumberOfDisplayedRecords", (params: { numberOfRecords: string }) => {
@@ -153,5 +177,5 @@ Cypress.Commands.add("filterGetFirstValueFromList", (params: { value: string }) 
 });
 
 Cypress.Commands.add("filterSupplierTitle", (params: {name: string}) => {
-  cy.get("[id=\"name\"]").click().type(params.name);
+  cy.get("[id=\"name\"]").arrowClick().arrowType(params.name);
 });

@@ -9,7 +9,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 
 const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp = `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`;
@@ -32,6 +32,7 @@ context("Sign up user flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -40,25 +41,16 @@ context("Sign up user flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1;
         done();
       });
     });
   });
 
   context("Login company admin", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -99,13 +91,12 @@ context("Sign up user flow", () => {
 
     it("Enter password", () => {
       SystemRequirement("REQ-4110");
-      cy.authEnterSignUpPassword({ password: "Tester1!" });
+      cy.authEnterSignUpPassword();
     });
 
     it("Enter password for confirmation", () => {
       SystemRequirement("REQ-4110");
-      cy.authEnterSignUpConfirmPassword({ password: "Tester1!" });
-      cy.wait(1500);
+      cy.authEnterSignUpConfirmPassword();
     });
 
     it("Click 'SIGN IN'", () => {
@@ -128,7 +119,6 @@ context("Sign up user flow", () => {
     it("Log user in", () => {
       cy.authLogin({
         email: emailOfUserToSignUp,
-        password: "Tester1!",
       });
     });
 

@@ -5,7 +5,7 @@ import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual,
 import { reaction } from "mobx";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -317,7 +317,11 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
-            submitForm();
+            if (type && FBAutosave.includes(type)) {
+              workspaceState.saveDocRev(formState?.getValues());
+            } else {
+              submitForm();
+            }
           }
         }
       );

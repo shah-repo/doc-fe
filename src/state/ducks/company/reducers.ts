@@ -25,6 +25,7 @@ export const COMPANY_DEFAULT_STATE: SelectCompanyState = {
   acctCodes: [],
   helloSignIntegrationEnabled: false,
   navigation: DEFAULT_NAVIGATION_ITEMS,
+  scheduledForDeletion: false,
 };
 
 const AUTOSAVE_DEFAULT_STATE = {

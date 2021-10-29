@@ -13,7 +13,8 @@ Cypress.Screenshot.defaults({
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
+let employeeLoginAdmin;
+let employeeLoginIndividual;
 let adminEmployee;
 let docTypes: any[];
 const DAMDocumentTypes: string[] = [];
@@ -77,6 +78,8 @@ context("Document Approval Matrix Flow", () => {
           company = response;
           adminEmployee = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           docTypes = company.documentTypes || [];
+          employeeLoginAdmin = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          employeeLoginIndividual = company.employees.find((employee) => employee.user.email === INDIVIDUAL_USER.email);
           done();
         });
       });
@@ -85,25 +88,16 @@ context("Document Approval Matrix Flow", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
 
     it("Open Group Management", () => {
@@ -256,7 +250,7 @@ context("Document Approval Matrix Flow", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
       });
-      cy.wait(500);
+
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -313,7 +307,7 @@ context("Document Approval Matrix Flow", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
       });
     });
   });
@@ -340,7 +334,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
     });
   });
 
@@ -488,7 +482,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
-      cy.get("#root").contains(DAMTitle).click();
+      cy.get("#root").contains(DAMTitle).arrowClick();
     });
 
     it("Revise document", () => {
@@ -499,7 +493,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Role: Role Two", () => {
     it("Open 'Add Role' dialog", () => {
       cy.drAddAnotherRoleBtn();
-      cy.wait(1000);
+
     });
 
     it(`Fill role name: ${roleTwo}`, () => {
@@ -538,7 +532,7 @@ context("Document Approval Matrix Flow", () => {
   context("Add New Document Type", () => {
     it("Click on 'Add Item' button", () => {
       cy.drOpenCloseSidebarDrawer();
-      cy.wait(1000);
+
       cy.drAddApprovalMatrixItem();
     });
 
@@ -596,7 +590,7 @@ context("Document Approval Matrix Flow", () => {
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
 
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
     });
   });
 
@@ -702,14 +696,14 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Type password in Approve and Release dialog", () => {
-      cy.get("input[name=password]").type("Tester1!");
+      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
     });
 
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ReleaseDocRev,
         () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
         });
     });
   });
@@ -727,29 +721,22 @@ context("Document Approval Matrix Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: INDIVIDUAL_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: INDIVIDUAL_USER, employeeId: employeeLoginIndividual.id });
     });
   });
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
-      cy.wait(1000);
-      cy.get("#root").contains("Approve").click();
+
+      cy.get("#root").contains("Approve").arrowClick();
     });
 
     it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
         () => {
-          cy.get(`[data-cy="passwordConfirm"]`).click();
+          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
     });
   });
@@ -785,15 +772,8 @@ context("Document Approval Matrix Flow", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
   });
 
@@ -803,7 +783,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
-      cy.get("#root").contains(DAMTitle).click();
+      cy.get("#root").contains(DAMTitle).arrowClick();
     });
 
     it("Revise document", () => {

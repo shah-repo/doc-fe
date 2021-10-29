@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let supplierDocumentType;
 let adminEmployee;
 let group;
@@ -51,10 +50,9 @@ context("Create company via API and create Suppliers document", () => {
   it("[API] Login admin tester", (done: any) => {
     cy.authApiLogin({
       email: USERS[1].email,
-      password: "Tester1!",
+      password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
     }).then((response) => {
       loginResponse = response;
-      multipleCompanies = loginResponse.employees.length > 1 ? true : false;
       done();
     });
   });
@@ -99,15 +97,8 @@ context("Create company via API and create Suppliers document", () => {
     });
   });
 
-  it("Logs user in", () => {
-    cy.authLogin({
-      email: USERS[1].email,
-      password: "Tester1!",
-    });
-  });
-
-  it("Selects company", () => {
-    cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+  it("Login user to dashboard", () => {
+    cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
   });
 
   it("Navigate to document list", () => {
@@ -127,12 +118,12 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click on 'Form' document type", () => {
-    cy.drSelectDocumentType({ documentType: "Form" }).wait(500);
+    cy.drSelectDocumentType({ documentType: "Form" });
   });
 
   it("Click on 'Supplier' document type", () => {
     SystemRequirement("REQ-2400");
-    cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+    cy.drSelectOutputDocumentType({ documentType: "Supplier" });
   });
 
   it("Select 'Numeric' revision stage", () => {
@@ -180,7 +171,7 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Filter supplier Title/Name", () => {
-    cy.filterSupplierTitle({ name: "Test" }).wait(300);
+    cy.filterSupplierTitle({ name: "Test" });
   });
 
   it("Check for filtered values", () => {
@@ -190,7 +181,7 @@ context("Create company via API and create Suppliers document", () => {
 
   it("Clear filter", () => {
     SystemRequirement("REQ-2310");
-    cy.filterClear().wait(300);
+    cy.filterClear();
     cy.filterCheckNumberOfDisplayedRecords({ numberOfRecords: "2" });
   });
 
@@ -216,11 +207,11 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   it("Click on 'Form' document type", () => {
-    cy.drSelectDocumentType({ documentType: "Form" }).wait(500);
+    cy.drSelectDocumentType({ documentType: "Form" });
   });
 
   it("Click on 'Supplier' document type", () => {
-    cy.drSelectOutputDocumentType({ documentType: "Supplier" }).wait(500);
+    cy.drSelectOutputDocumentType({ documentType: "Supplier" });
   });
 
   it("Select 'Numeric' revision stage", () => {

@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const approvalRequestTitle = `ApprovalRequest${moment().format("X")}`;
 let arDocCount = 0;
@@ -51,25 +50,16 @@ context("Autocomplete 'Approval requests' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -89,13 +79,12 @@ context("Autocomplete 'Approval requests' test", () => {
 
       it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
-        cy.wait(2000);
       });
 
       it("Click Create Approval Request", () => {
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostChangeRequests], () => {
-            cy.get("[data-cy=\"navigation.createChangeRequest\"]").click();
+            cy.get("[data-cy=\"navigation.createChangeRequest\"]").arrowClick();
           });
       });
 
@@ -147,7 +136,7 @@ context("Autocomplete 'Approval requests' test", () => {
           });
 
           it("Select 'Approval requests' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Approval requests{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Approval requests{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -191,9 +180,9 @@ context("Autocomplete 'Approval requests' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const approvalRequests = response.body;

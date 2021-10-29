@@ -7,7 +7,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLogin;
 
 const approvalRequestTitle = "Approval request from newly created form";
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
@@ -61,6 +61,7 @@ context("Document Attachment Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLogin = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -69,25 +70,16 @@ context("Document Attachment Flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLogin.id });
     });
   });
 
@@ -190,7 +182,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Download all attachments with redline document", () => {
@@ -212,7 +204,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Revise document", () => {
@@ -225,7 +217,7 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Select Superseded version of document without redline attachments", () => {
@@ -246,7 +238,7 @@ context("Document Attachment Flow", () => {
         });
 
         it("Select Obsolete revision option", () => {
-          cy.get("[id=\"RevisionTypeChange-obsolete\"]").click();
+          cy.get("[id=\"RevisionTypeChange-obsolete\"]").arrowClick();
         });
 
         it("Clicks Save button", () => {
@@ -255,12 +247,12 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.wait(2000);
+
         });
 
         it("Download all attachments without redline document on Obsolete version", () => {
           SystemRequirement("REQ-0380");
-          cy.atchDownloadAll().wait(2000);
+          cy.atchDownloadAll();
         });
       });
     });
@@ -323,7 +315,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Add created document revision", () => {
-      cy.arClickAddDocument().wait(500);
+      cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00003" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

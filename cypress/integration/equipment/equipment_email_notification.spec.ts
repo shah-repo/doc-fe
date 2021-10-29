@@ -21,7 +21,6 @@ const THIRD_USER = USERS[28];
 let createdCompany;
 let loginResponse;
 let adminEmployeeLoginResponse;
-let multipleCompanies;
 let adminEmployee;
 let equipmentDocumentType;
 let formDocumentType;
@@ -94,10 +93,8 @@ context("Test Equipment maintenance email notifications", () => {
     it("[API] Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -361,15 +358,8 @@ context("Test Equipment maintenance email notifications", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
     });
   });
 
@@ -393,7 +383,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Enter description 'Equipment maintenance'", () => {
         cy.drEnterDocumentDescription({ description: "Equipment maintenance" });
-        cy.wait(5000);
+
       });
 
       it("Select 'Active' as EQ status", () => {
@@ -401,17 +391,17 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).click();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
-        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
       it("Enter preventative maintenance frequency", () => {
         SystemRequirement("REQ-2920");
-        cy.get("[name*=\"frequency\"]").eq(0).type("16");
+        cy.get("[name*=\"frequency\"]").eq(0).arrowType("16");
       });
 
       it("Type preventative maintenance instruction", () => {
@@ -622,26 +612,26 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
+        cy.get("[name=fb-primary-owner-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
+        cy.get("[name=fb-coordinator-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).click();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
-        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
       it("Enter preventative maintenance frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(0).type("4");
+        cy.get("[name*=\"frequency\"]").eq(0).arrowType("4");
       });
 
       it("Type preventative maintenance instruction", () => {
@@ -844,27 +834,27 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
+        cy.get("[name=fb-primary-owner-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
+        cy.get("[name=fb-coordinator-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).click();
-        cy.wait(500);
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
-        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
       it("Enter preventative maintenance frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(0).type("17");
+        cy.get("[name*=\"frequency\"]").eq(0).arrowType("17");
       });
 
       it("Type preventative maintenance instruction", () => {
@@ -1067,26 +1057,26 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).click();
+        cy.get("[name=fb-primary-owner-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").click();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).click();
+        cy.get("[name=fb-coordinator-eq]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).click();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).click();
-        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").click();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
       it("Enter preventative maintenance frequency", () => {
-        cy.get("[name*=\"frequency\"]").eq(0).type("1");
+        cy.get("[name*=\"frequency\"]").eq(0).arrowType("1");
       });
 
       it("Type preventative maintenance instruction", () => {

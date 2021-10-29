@@ -7,7 +7,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginSecond;
 
 context("Non-QMS Document Creation Flow", () => {
   context("[API]Prepare company", () => {
@@ -35,6 +35,7 @@ context("Non-QMS Document Creation Flow", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginSecond = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -43,25 +44,16 @@ context("Non-QMS Document Creation Flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginSecond.id });
     });
   });
 

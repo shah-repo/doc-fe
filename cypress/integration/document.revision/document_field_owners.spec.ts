@@ -7,7 +7,10 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginSecond;
+let employeeLoginThird;
+let employeeLoginFourth;
+let employeeLoginSeventh;
 
 context("Document Field Owners Test", () => {
   before(() => {
@@ -67,6 +70,10 @@ context("Document Field Owners Test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginSecond = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeLoginThird = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          employeeLoginFourth = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
+          employeeLoginSeventh = createdCompany.employees.find((employee) => employee.user.email === USERS[7].email);
           done();
         });
       });
@@ -75,25 +82,16 @@ context("Document Field Owners Test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginSecond.id });
     });
   });
 
@@ -187,7 +185,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").click();
+      cy.get("[data-cy='permission-icon']").arrowClick();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
@@ -204,22 +202,15 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
   });
 
   context(`Open created document and check for operators restrictions`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
-      cy.wait(2000);
+
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -248,7 +239,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Test First Field");
+      cy.get("[name^='text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -261,15 +252,8 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
 
@@ -277,7 +261,7 @@ context("Document Field Owners Test", () => {
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
-      cy.wait(2000);
+
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -285,7 +269,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").type("Test First Field");
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -302,22 +286,15 @@ context("Document Field Owners Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginSecond.id });
     });
   });
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
-      cy.wait(2000);
+
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -342,20 +319,13 @@ context("Document Field Owners Test", () => {
   });
 
   context("Log in with another user and approve document", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[7].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[7], employeeId: employeeLoginSeventh.id });
     });
 
     it("Navigate to records list", () => {
       cy.navigToRecords();
-      cy.wait(2000);
+
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -379,7 +349,7 @@ context("Document Field Owners Test", () => {
 
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 

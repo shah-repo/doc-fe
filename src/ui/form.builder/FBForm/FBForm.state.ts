@@ -18,6 +18,11 @@ class FBFormState extends FBSchemaState {
   public includeLocking = false;
   public expireLocks: Record<string, string> = {};
 
+  // This will be used for reaction on value change
+  // so that we can omit Input state
+  @observable public newValues = new Map<string, any>();
+  public oldValues = {};
+
   // Naming? Don't know, don't ask!
   @observable isBackdropOpen = false;
 
@@ -111,6 +116,8 @@ class FBFormState extends FBSchemaState {
   ) => {
     if (!fieldName) { return; }
     value = cloneDeep(value);
+    this.newValues.set(fieldName, value);
+    this.oldValues = cloneDeep(this.values);
     if (!omitFormValue) {
       lodashSet(this.values, fieldName, value);
     }
@@ -123,6 +130,7 @@ class FBFormState extends FBSchemaState {
     if (!fieldName) {
       return;
     }
+    this.newValues.set(fieldName, undefined);
     this.initialValues = omit(this.initialValues, fieldName);
     this.values = omit(this.getValues(), fieldName);
     this.validationValues = omit(this.validationValues, fieldName);

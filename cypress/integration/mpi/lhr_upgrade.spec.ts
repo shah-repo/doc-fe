@@ -11,7 +11,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
@@ -272,10 +271,8 @@ context("LHR Upgrade", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -387,15 +384,8 @@ context("LHR Upgrade", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -507,9 +497,9 @@ context("LHR Upgrade", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").type("Part document");
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").click();
+          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
         });
       });
 
@@ -519,7 +509,7 @@ context("LHR Upgrade", () => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").type("MPI document{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
           });
         });
       });
@@ -548,7 +538,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").type("10");
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
     });
 
     it("Select 'R&D' build type", () => {
@@ -582,7 +572,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Click Revise document button", () => {
-      cy.get("[data-cy=\"updateRecord\"]").click();
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
     });
 
     it("change Part title to 'Part document 1'", () => {
@@ -624,9 +614,9 @@ context("LHR Upgrade", () => {
 
       it("Click 'START MPI'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).click();
+          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
         });
-        cy.wait(500);
+
       });
 
       it("Turn off autosave", () => {
@@ -634,21 +624,21 @@ context("LHR Upgrade", () => {
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").type("10");
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").type("8");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
       });
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").type("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-approvals-approvals\"]").click();
+        cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -680,7 +670,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Click Revise document button", () => {
-      cy.get("[data-cy=\"updateRecord\"]").click();
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
     });
 
     it("change MPI title to 'MPI document 1'", () => {
@@ -715,3 +705,4 @@ context("LHR Upgrade", () => {
 });
 
 export { };
+

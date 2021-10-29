@@ -9,7 +9,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 
 const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let supplierFieldName;
@@ -69,11 +68,9 @@ context("Purchase order HTML template form", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -81,11 +78,9 @@ context("Purchase order HTML template form", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         baererSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -156,15 +151,8 @@ context("Purchase order HTML template form", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -206,52 +194,16 @@ context("Purchase order HTML template form", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Select 'Purchase Order' from list", () => {
-      cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-    });
-
-    it("Fill label field with 'New Purchase Order with Product item'", () => {
-      cy.fbEnterPOLabelName({ name: "New Purchase Order with Product item" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
-    });
-
-    it("Click 'Add New Field'", () => {
-      cy.fbAddNewFieldWhenHidden();
-    });
-
-    it("Add supplier form builder field", () => {
-      cy.fbSelectCustomFieldToAdd({ name: "Supplier" });
-    });
-
-    it("Fill label field with 'Supplier'", () => {
-      cy.fbEnterLabel({ label: "Supplier" });
-    });
-
-    it("Click 'Add' to finish adding new field", () => {
-      cy.fbAddNewFieldButton();
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
             const response = res.body;
-            supplierFieldName = response.formTemplate.schema[1].name;
-            poFieldName = response.formTemplate.schema[2].name;
+            supplierFieldName = response.formTemplate.schema[3].name;
+            poFieldName = response.formTemplate.schema[5].name;
           }
         });
       }).as("response");
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.wait("@response");
     });
 
@@ -285,6 +237,13 @@ context("Purchase order HTML template form", () => {
                    <li>Total amount: {{documentRevision.formInput.${poFieldName}.totalAmount}}</li>
                 </ul>
              </div>
+             <div>
+             <strong>Tax</strong>                                                                             
+             <ul>
+                <li>Tax Rate: {{documentRevision.formInput.${poFieldName}.taxRate}}</li>
+                <li>Tax: {{documentRevision.formInput.${poFieldName}.tax}}</li>
+             </ul>
+            </div>
              <div>
                 <strong>Approvals </strong>                                                                             
                 <ul>
@@ -358,7 +317,15 @@ context("Purchase order HTML template form", () => {
 
     it("Add Required Date", () => {
       SystemRequirement("REQ-1420");
-      cy.poAddDateRequired();
+      // cy.poAddDateRequired();
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick();
+      cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
+      "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
+        .click();
+    });
+
+    it("Check Tax box", () => {
+      cy.poSelectTaxCheckbox();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -366,13 +333,21 @@ context("Purchase order HTML template form", () => {
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy^=\"supplier-\"]").type("SUP-00004{downarrow}{enter}");
+      cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00004{downarrow}{enter}");
+    });
+
+    it("Fill order Date", () => {
+      SystemRequirement("REQ-1420");
+      cy.xpath("//input[@name]/ ../div/button").last().arrowClick();
+      cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
+      "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
+        .click();
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
       });
     });
 
@@ -382,15 +357,15 @@ context("Purchase order HTML template form", () => {
 
     it("Click 'Submit for Approval' button", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
@@ -424,7 +399,9 @@ context("Purchase order HTML template form", () => {
             .and.contains(`GL codes: code 1`)
             .and.contains(`Total amount: 10`)
             .and.contains(`Name: ${USERS[1].name}`)
-            .and.contains(`Date: ${currentDate}`);
+            .and.contains(`Date: ${currentDate}`)
+            .and.contains(`Tax Rate: 9.25`)
+            .and.contains(`Tax: 0.93`);
         });
       });
     });

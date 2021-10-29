@@ -1284,7 +1284,6 @@ context("Create company with golden tenant", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -1297,7 +1296,6 @@ context("Create company with golden tenant", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1390,10 +1388,7 @@ context("Create company with golden tenant", () => {
 
   context("Create first document from Seed Form - form with output", () => {
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed'", () => {
@@ -1405,7 +1400,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'First document'", () => {
-      cy.get("[data-cy^=document-title-]").type("First document");
+      cy.get("[data-cy^=document-title-]").arrowType("First document");
     });
 
     it("Select 'Form with output' value on 'Type of document to be created'", () => {
@@ -1422,22 +1417,22 @@ context("Create company with golden tenant", () => {
 
     it("Enters document description 'First document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("First document description", { force: true });
+        .click({ force: true }).arrowType("First document description", { force: true });
     });
 
     it("Selects document type as 'Form'", () => {
-      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").click();
-      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").click();
+      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
+      cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
-      cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").click();
+      cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
       cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
-        .contains("li", "Clinical Protocol").click();
+        .contains("li", "Clinical Protocol").arrowClick();
     });
 
     it("Selects 'No' training required option", () => {
-      cy.get("[name^=training-required-]").eq(1).click();
+      cy.get("[name^=training-required-]").eq(1).arrowClick();
     });
 
     it("Save document", () => {
@@ -1462,10 +1457,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Seed 2'", () => {
@@ -1477,7 +1469,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").type("Second document");
+      cy.get("[data-cy^=document-title-]").arrowType("Second document");
     });
 
     it("Select 'Document' value on 'Type of document to be created'", () => {
@@ -1490,14 +1482,14 @@ context("Create company with golden tenant", () => {
 
     it("Enters document description 'Second document description'", () => {
       cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-        .click({ force: true }).type("Second document description", { force: true });
-      cy.get("[data-cy^=document-title-]").click();
+        .click({ force: true }).arrowType("Second document description", { force: true });
+      cy.get("[data-cy^=document-title-]").arrowClick();
     });
 
     it("Selects document type as 'Clinical Protocol'", () => {
-      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").click();
+      cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
       cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
-        .contains("li", "Clinical Protocol").click();
+        .contains("li", "Clinical Protocol").arrowClick();
     });
 
     it("Selects 'No' training required option", () => {
@@ -1526,10 +1518,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Create new document from form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetProposedDocId, CyRoutes.PostDocRev], () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enters title 'New Company'", () => {
@@ -1542,17 +1531,17 @@ context("Create company with golden tenant", () => {
 
     it(`Enters company name '${newCompanyName}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-name-]").type(newCompanyName);
+      cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-abbreviation-]").type(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
       SystemRequirement("REQ-3500");
-      cy.get("[name^=company-admin-email-]").type(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -1589,15 +1578,16 @@ context("Create company with golden tenant", () => {
 
     it("Include Seed documents", () => {
       SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").click();
-      cy.wait(1500);
-      cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00001{downarrow}{enter}");
-      cy.get("[name^=seed-documents-to-be-included-]").type("SEED-00002{downarrow}{enter}");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
+      });
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
     });
 
     it("Upload logo picture 'image.jpg'", () => {
       SystemRequirement("REQ-3500");
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).click();
+      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -1621,7 +1611,6 @@ context("Create company with golden tenant", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1700,6 +1689,136 @@ context("Create company with golden tenant", () => {
         .should("have.value", "FM-00001 - rev 1 - AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
     });
+  });
+
+  context("Check group management", () => {
+    it("Navigates to Group management", () => {
+      cy.grpNavigateToGroupManagement();
+    });
+
+    it("Click on 'All Users' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "All Users" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "CR_OWNER_AS_APPROVER")
+        .and("contain.text", "CR_ON_APPROVER_LIST")
+        .and("contain.text", "EMPLOYEE_GET");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "QMS_DEFAULT")
+        .and("contain.text", "FB_COMPONENT_INLINE_APPROVAL");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'User Management' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "User Management" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
+        .and("contain.text", "EMPLOYEE_DELETE")
+        .and("contain.text", "EMPLOYEE_GET")
+        .and("contain.text", "EMPLOYEE_UPDATE")
+        .and("contain.text", "GROUP_UPDATE");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "USER_MANAGEMENT");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Group Management' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Group Management" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "GROUP_CREATE")
+        .and("contain.text", "GROUP_UPDATE")
+        .and("contain.text", "GROUP_DELETE")
+        .and("contain.text", "GROUP_CREATE_UNOFFICIAL")
+        .and("contain.text", "GROUP_UPDATE_UNOFFICIAL");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "GROUP_MANAGEMENT");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Company Admin' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Company Admin" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "EMPLOYEE_CREATE")
+        .and("contain.text", "EMPLOYEE_DELETE")
+        .and("contain.text", "EMPLOYEE_UPDATE")
+        .and("contain.text", "GROUP_CREATE")
+        .and("contain.text", "GROUP_UPDATE")
+        .and("contain.text", "SLACK_APP_INSTALL")
+        .and("contain.text", "COMPANY_UPDATE_CURRENT")
+        .and("contain.text", "DOCUMENT_OWNER_CHANGE")
+        .and("contain.text", "DEVELOPERS");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "FB_COMPONENT_PURCHASE_ORDER")
+        .and("contain.text", "FB_COMPONENT_RECEIVE_PURCHASE_ORDER")
+        .and("contain.text", "GROUP_MANAGEMENT")
+        .and("contain.text", "USER_MANAGEMENT")
+        .and("contain.text", "OWNERSHIP_CHANGE")
+        .and("contain.text", "FB_COMPONENT_EQUIPMENT_MAINTENANCE")
+        .and("contain.text", "DOCUMENT_TYPE_MANAGEMENT");
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Enlil Super User' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Enlil Super User" });
+      cy.get("[id=\"Group-permissions\"]").should("contain.text", "DEVELOPERS")
+        .and("contain.text", "FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED")
+        .and("contain.text", "HTML_UPDATE")
+        .and("contain.text", "REMOTE_VALIDATORS_REFRESH")
+        .and("contain.text", "GROUP_DELETE")
+        .and("contain.text", "DOC_REV_OBS_TO_RELEASED")
+        .and("contain.text", "COMPANY_DROPBOX_INTEGRATION")
+        .and("contain.text", "COMPANY_UPDATE_CURRENT");
+      cy.get("[id=\"Group-addTags\"]").should("contain.text", "NAVIGATION_WITH_RESTRICTED_DOC_TYPES")
+        .and("contain.text", "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES")
+        .and("contain.text", "USER_MANAGEMENT")
+        .and("contain.text", "DOCUMENT_TYPE_MANAGEMENT")
+        .and("contain.text", "PAGE_DETAILS_MANAGEMENT")
+        .and("contain.text", "COMPANY_CONFIG_WHITELABELING")
+        .and("contain.text", "COMPANY_CONFIG_NAVIGATION")
+        .and("contain.text", "COMPANY_CONFIG_DOCUMENT_REV_STAGES")
+        .and("contain.text", "LABEL_TOOLTIPS");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'CEO' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "CEO" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'QA' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "QA" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'R&D' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "R&D" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'OPS' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "OPS" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'RA' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "RA" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Clinical' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Clinical" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Marketing' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Marketing" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
+
+    it("Click on 'Doc Admin' group and check default values", () => {
+      cy.grpSelectGroupWithoutClosingDialog({ name: "Doc Admin" });
+      cy.get("[id=\"Group-addParentGroups\"]").should("contain.text", "All Users");
+      cy.grpCloseDialog();
+    });
 
     it("Log out user", () => {
       cy.authLogout();
@@ -1710,7 +1829,6 @@ context("Create company with golden tenant", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       });
     });
 
@@ -1727,7 +1845,6 @@ context("Create company with golden tenant", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1766,7 +1883,6 @@ context("Create company with golden tenant", () => {
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       });
     });
 
@@ -1777,3 +1893,4 @@ context("Create company with golden tenant", () => {
 });
 
 export { };
+

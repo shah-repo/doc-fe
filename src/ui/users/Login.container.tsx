@@ -1,12 +1,13 @@
 import React from "react";
+import { useIntl } from "react-intl";
 import { connect } from "react-redux";
 import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import { logo } from "../../common/utils/helpers";
 import { authSelectors } from "../../state/ducks/auth";
 import { Employee } from "../../state/ducks/company/types";
 import { ApplicationState } from "../../state/reducers";
-import { toastInfo } from "../components/notifications";
-import { HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
+import { toastInfo, toastSuccess } from "../components/notifications";
+import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../constants/urls";
 import LoginPresenter from "./Login.presenter";
 import SwitchCompanyContainer from "./SwitchCompany/SwitchCompany.container";
 
@@ -16,12 +17,14 @@ interface StateProps {
   hasMultipleCompanies: boolean;
   passwordSoonToExpire: boolean;
   daysUntilPasswordExpires: number;
+  isScheduledForDeletion: boolean;
 }
 
 export type LoginContainerProps = StateProps & Pick<RouteComponentProps, "location">;
 
-export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
+const LoginContainer: React.FunctionComponent<LoginContainerProps> = (props) => {
   const { from } = props.location.state || { from: { pathname: HOME_URL } };
+  const intl = useIntl();
 
   if (props.isUserAuthenticated) {
     if (props.hasMultipleCompanies) {
@@ -37,6 +40,15 @@ export const LoginContainer: React.FunctionComponent<LoginContainerProps> = (pro
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 });
+
+    props.isScheduledForDeletion &&
+    toastSuccess(
+      <div>
+        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
+      </div>,
+      { autoClose: 15000 });
+
     return <Redirect to={from} />;
   }
 
@@ -53,6 +65,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   hasMultipleCompanies: authSelectors.hasMultipleCompanies(state),
   passwordSoonToExpire: authSelectors.getPasswordSoonToExpire(state),
   daysUntilPasswordExpires: authSelectors.getDaysUntilPasswordExpires(state),
+  isScheduledForDeletion: authSelectors.getIsScheduledForDeletion(state),
 });
 
 export default connect<StateProps, {}, {}, ApplicationState>(mapStateToProps)(LoginContainer);

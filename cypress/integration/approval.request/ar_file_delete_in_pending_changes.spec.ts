@@ -7,7 +7,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let secondEmployee;
 
 context("File delete in Pending Change", () => {
   context("[API]Prepare company", () => {
@@ -35,6 +35,7 @@ context("File delete in Pending Change", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -43,25 +44,16 @@ context("File delete in Pending Change", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
   });
 
@@ -134,7 +126,8 @@ context("File delete in Pending Change", () => {
       });
 
       it("Delete file test.docx", () => {
-        cy.contains("test.docx").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+        cy.contains("test.docx")
+          .parent().parent().find("#AttachmentIconPresenter-handleRemove").arrowClick({ force: true });
       });
 
       it("Check number of attachments after reload page", () => {
@@ -144,7 +137,8 @@ context("File delete in Pending Change", () => {
       });
 
       it("Delete file image.jpg", () => {
-        cy.contains("image.jpg").parent().parent().find("#AttachmentIconPresenter-handleRemove").click({ force: true });
+        cy.contains("image.jpg")
+          .parent().parent().find("#AttachmentIconPresenter-handleRemove").arrowClick({ force: true });
       });
 
       it("Check number of attachments after reload page", () => {
