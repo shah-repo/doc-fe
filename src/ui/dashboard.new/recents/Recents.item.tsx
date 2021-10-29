@@ -1,6 +1,6 @@
 import {
-  Collapse,
-  Grid, Link, List,
+  Grid,
+  Link,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -8,56 +8,42 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../assets/images/expand.svg";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
 import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
-import { RecentGroupType } from "../../../state/ducks/dashboard.new/types";
+import {
+  RecentDocType,
+  RecentItems,
+} from "../../../state/ducks/dashboard.new/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
-import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+// import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Recents.item.styles";
 
-interface Props {
-  index: number;
-  id: string;
-  docId: string;
-  revisionId?: string | undefined;
-  type: string;
-  title: string;
-  description?: string;
-  accessedAt: string;
-  details?: any; // TO DO:: type definition needs to be added
-}
-
-const RecentsLineItem: React.FunctionComponent<Props> = ({
-  id,
+const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
+  itemId,
   docId,
   revisionId,
-  type,
-  title,
-  description,
+  itemType,
+  docType,
+  docTitle,
   accessedAt,
-  details,
 }) => {
   const classes = styles();
   // TO DO: Needs to remove below line once we get icons for all the possible line item types
   const itemTypes = [
-    RecentGroupType.PO,
-    "MPI",
-    "FORM",
-    "SUPPLIER",
-    "CHANGE_REQUEST",
-    "DAM",
+    RecentDocType.PO,
+    RecentDocType.MPI,
+    RecentDocType.FORM,
+    RecentDocType.SUPPLIER,
+    RecentDocType.DAM,
+    RecentDocType.CHANGE_REQUEST,
+    RecentDocType.APPROVAL_REQUEST,
+    RecentDocType.PURCHASE_ORDER,
   ];
-  const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
   const StyledListItem = withStyles({
     root: {
       "&:hover": {
@@ -68,26 +54,18 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <StyledListItem
-        style={open ? { backgroundColor: Colors.sky_blue } : {}}
-        button
-        className={type === RecentGroupType.PO ? classes.listItem : ""}
-      >
-        {type === RecentGroupType.PO &&
-          (open ? (
-            <CollapseIcon className={classes.icon} onClick={handleClick} />
-          ) : (
-            <ExpandIcon className={classes.icon} onClick={handleClick} />
-          ))}
+      <StyledListItem button>
         <ListItemIcon>
           <>
-            {type === RecentGroupType.PO && <POIcon />}
-            {type === RecentGroupType.MPI && <MPIIcon />}
-            {type === RecentGroupType.FORM && <FMIcon />}
-            {(type === RecentGroupType.CHANGE_REQUEST ||
-              type === RecentGroupType.DAM) && <ApprovalIcon />}
-            {(type === RecentGroupType.SUPPLIER ||
-              !itemTypes.includes(type)) && <SOPIcon />}
+            {(docType === RecentDocType.PO ||
+              docType === RecentDocType.PURCHASE_ORDER) && <POIcon />}
+            {docType === RecentDocType.MPI && <MPIIcon />}
+            {docType === RecentDocType.FORM && <FMIcon />}
+            {(docType === RecentDocType.CHANGE_REQUEST ||
+              docType === RecentDocType.APPROVAL_REQUEST ||
+              docType === RecentDocType.DAM) && <ApprovalIcon />}
+            {(docType === RecentDocType.SUPPLIER ||
+              !itemTypes.includes(docType)) && <SOPIcon />}
           </>
         </ListItemIcon>
         <ListItemText
@@ -99,9 +77,10 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
               alignItems="center"
             >
               <Grid item={true}>
-                {type === RecentGroupType.CHANGE_REQUEST && (
+                {(docType === RecentDocType.CHANGE_REQUEST ||
+                  docType === RecentDocType.APPROVAL_REQUEST) && (
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(itemId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -116,25 +95,30 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                     </Typography>
                   </Link>
                 )}
-                {type !== RecentGroupType.CHANGE_REQUEST && (
-                  <Link
-                    href={documentVersionPath(revisionId as string, id)}
-                    color="inherit"
-                    className={classes.link}
+                {![
+                  RecentDocType.CHANGE_REQUEST,
+                  RecentDocType.APPROVAL_REQUEST,
+                ].includes(docType) && (
+                  // TO DO:: will add navigation for itemType: DOCUMENT, once we get revisionId in response
+                  // <Link
+                  //   href={documentVersionPath(revisionId as string, itemId)}
+                  //   color="inherit"
+                  //   className={classes.link}
+                  // >
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                    noWrap
                   >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.typography}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}&nbsp;
-                    </Typography>
-                  </Link>
+                    {docId}&nbsp;
+                  </Typography>
+                  // </Link>
                 )}
               </Grid>
-              {type === RecentGroupType.PO && (
+              {(docType === RecentDocType.PO ||
+                docType === RecentDocType.PURCHASE_ORDER) && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -148,9 +132,10 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                 </Grid>
               )}
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                {type === RecentGroupType.CHANGE_REQUEST && (
+                {(docType === RecentDocType.CHANGE_REQUEST ||
+                  docType === RecentDocType.APPROVAL_REQUEST) && (
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(itemId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -161,26 +146,30 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {title}
+                      {docTitle}
                     </Typography>
                   </Link>
                 )}
-                {type !== RecentGroupType.CHANGE_REQUEST && (
-                  <Link
-                    href={documentVersionPath(revisionId as string, id)}
-                    color="inherit"
-                    className={classes.link}
+                {![
+                  RecentDocType.CHANGE_REQUEST,
+                  RecentDocType.APPROVAL_REQUEST,
+                ].includes(docType) && (
+                  // TO DO:: will add navigation for itemType: DOCUMENT, once we get revisionId in response
+                  // <Link
+                  //   href={documentVersionPath(revisionId as string, itemId)}
+                  //   color="inherit"
+                  //   className={classes.link}
+                  // >
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {title}
-                    </Typography>
-                  </Link>
+                    {docTitle}
+                  </Typography>
+                  // </Link>
                 )}
                 &nbsp;&nbsp;
               </Grid>
@@ -201,138 +190,6 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
           }
         />
       </StyledListItem>
-      {type === RecentGroupType.PO && (
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List disablePadding className={classes.collapsedList}>
-            <StyledListItem button className={classes.nested} disableRipple>
-              <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyChildrenBold}
-                    color="textSecondary"
-                  >
-                    Supplier:
-                  </Typography>
-                </Grid>
-                <Grid item md={9} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.linkText}
-                    color="textPrimary"
-                  >
-                    {details.supplier || "N/A"}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </StyledListItem>
-            <StyledListItem button className={classes.nested} disableRipple>
-              <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyChildrenBold}
-                    color="textSecondary"
-                  >
-                    Total:
-                  </Typography>
-                </Grid>
-                <Grid item md={9} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                  >
-                    {details.po_amount || "N/A"}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </StyledListItem>
-            <StyledListItem button className={classes.nested} disableRipple>
-              <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyChildrenBold}
-                    color="textSecondary"
-                  >
-                    Description:
-                  </Typography>
-                </Grid>
-                <Grid item md={9} sm={6}>
-                  <span
-                    className={classes.typography}
-                    dangerouslySetInnerHTML={{
-                      __html: (description as string) || "N/A",
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </StyledListItem>
-            <StyledListItem button className={classes.nested} disableRipple>
-              <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyChildrenBold}
-                    color="textSecondary"
-                  >
-                    Line Items:
-                  </Typography>
-                </Grid>
-                <Grid item md={9} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                  >
-                    {details.po_lineItems || "N/A"}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </StyledListItem>
-            <StyledListItem button className={classes.nested} disableRipple>
-              <Grid container className={classes.gridContainer}>
-                <Grid item md={3} sm={6}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyChildrenBold}
-                    color="textSecondary"
-                  >
-                    Attachments:
-                  </Typography>
-                </Grid>
-                <Grid item md={9} sm={6}>
-                  <Grid container justify="space-between" alignContent="center">
-                    {(details.po_attachments &&
-                      details.po_attachments.map((attachmentInfo, index) => (
-                        <Grid item key={index}>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            className={classes.linkText}
-                            color="textPrimary"
-                          >
-                            {attachmentInfo.name}
-                          </Typography>
-                        </Grid>
-                      ))) ||
-                      "N/A"}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </StyledListItem>
-          </List>
-        </Collapse>
-      )}
     </>
   );
 };

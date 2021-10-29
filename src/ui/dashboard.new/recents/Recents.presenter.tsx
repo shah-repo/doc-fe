@@ -1,7 +1,10 @@
 import { Grid, List } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
-import { RecentType } from "../../../state/ducks/dashboard.new/types";
+import {
+  RecentItems,
+  RecentType,
+} from "../../../state/ducks/dashboard.new/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
@@ -11,7 +14,8 @@ import { styles } from "./Recents.styles";
 interface Props {
   loadRecents: any;
   loadRecentsListAsyncState: AsyncState;
-  recents: any; // TO DO:: type definition needs to be added
+  recents: RecentItems[];
+  // recents: any[]; // TO DO:: type definition needs to be added
 }
 
 const RecentsPresenter: React.FunctionComponent<Props> = ({
@@ -28,14 +32,12 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             return (
               <RecentsItem
                 key={index}
-                index={index}
-                id={data.document.id}
-                docId={data.document.docId}
-                type={data.document.documentType.group}
-                revisionId={data.document.documentRevisions[0].id}
-                title={data.document.documentRevisions[0].name}
-                description={data.document.documentRevisions[0].description}
-                details={data.document.documentRevisions[0].precalc}
+                itemId={data.itemId}
+                docId={data.docId}
+                itemType={data.itemType}
+                docType={data.docType}
+                revisionId={data.revisionId}
+                docTitle={data.docTitle}
                 accessedAt={moment
                   .utc(data.accessedAt)
                   .local()
@@ -47,11 +49,12 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             return (
               <RecentsItem
                 key={index}
-                index={index}
-                id={data.changeRequest.id}
-                docId={data.changeRequest.crId}
-                type={data.itemType}
-                title={data.changeRequest.title}
+                itemId={data.itemId}
+                docId={data.docId}
+                itemType={data.itemType}
+                docType={data.docType}
+                revisionId={data.revisionId}
+                docTitle={data.docTitle}
                 accessedAt={moment
                   .utc(data.accessedAt)
                   .local()

@@ -16,13 +16,25 @@ export enum RecentType {
   CHANGE_REQUEST = "CHANGE_REQUEST",
 }
 
-export enum RecentGroupType {
+export enum RecentDocType {
   PO = "PO",
   MPI = "MPI",
   FORM = "FORM",
   DAM = "DAM",
   SUPPLIER = "SUPPLIER",
   CHANGE_REQUEST = "CHANGE_REQUEST",
+  APPROVAL_REQUEST = "Approval Request",
+  PURCHASE_ORDER = "Purchase Order",
+}
+
+export interface RecentItems {
+  accessedAt: string;
+  itemType: string;
+  itemId: string;
+  docId: string;
+  docTitle: string;
+  docType: RecentDocType;
+  revisionId?: string | undefined;
 }
 
 export interface Recent {
