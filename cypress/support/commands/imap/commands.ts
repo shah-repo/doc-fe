@@ -28,6 +28,7 @@ declare global {
         emailsToTest: IMAPEmailsInTesting[];
         getEmailsSincedate: Date;
         assertNumberOfEmailsFoundInList: integer;}): Chainable;
+      imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
     }
   }
 }
@@ -114,6 +115,15 @@ Cypress.Commands.add("imapVerifyEmailsInList", (params: {
   params.emailsToTest.forEach((email) => {
     const numberOfEmails = getEmailsThatAreInReceivedList(params.receivedEmails, email);
     assert.lengthOf(numberOfEmails, params.assertNumberOfEmailsFoundInList);
+  });
+});
+
+Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) => {
+  cy.imapGetTextFromLastEmail({ userEmail: params.userEmail }).should((emailText) => {
+    const endingPosition = emailText.search("\" target");
+    const startingPosition = emailText.search("sign_up");
+    const activationLink = emailText.substring(startingPosition, endingPosition);
+    cy.visit(CONFIG.FE_URL + "/" + decodeHTMLEntities(activationLink));
   });
 });
 
