@@ -74,7 +74,8 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
 
   const handleFormChange = (value) => {
     const chosenForm = find(availableForms, (form) => form.id === value.value);
-    const chosenFormSchema = chosenForm?.formTemplate?.schema || [];
+    let chosenFormSchema = chosenForm?.formTemplate?.schema || [];
+    chosenFormSchema = chosenFormSchema.filter((obj) => !obj.deleted);
     const targetFormId = chosenForm?.id;
 
     getFormMappingTemplateAsync.start(
