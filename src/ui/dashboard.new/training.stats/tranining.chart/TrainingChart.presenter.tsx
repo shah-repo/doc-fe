@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
 import React from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
@@ -40,14 +40,14 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         fontFamily: "Sora",
         fontStyle: "normal",
         fontWeight: "bold",
-        color: "#080B11",
+        color: Colors.font_black,
         fontSize: 59,
       },
       subtextStyle: {
         fontFamily: "Sora",
         fontStyle: "normal",
         fontWeight: "bold",
-        color: "#767B87",
+        color: Colors.font_gray,
         fontSize: 12,
       },
       itemGap: -20,
@@ -137,7 +137,8 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         } else if (tabValue === 1) {
           DoughnutChartOptions.series.data.map((data, index) => {
             if (index !== 0) {
-              DoughnutChartOptions.series.data[index].itemStyle.color = Colors.gray;
+              DoughnutChartOptions.series.data[index].itemStyle.color =
+                Colors.gray;
             }
             return null;
           });
@@ -148,7 +149,8 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         } else if (tabValue === 2) {
           DoughnutChartOptions.series.data.map((data, index) => {
             if (index !== 1) {
-              DoughnutChartOptions.series.data[index].itemStyle.color = Colors.gray;
+              DoughnutChartOptions.series.data[index].itemStyle.color =
+                Colors.gray;
             }
             return null;
           });
@@ -167,7 +169,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     });
 
     return (
-      <div className={classes.chartContainer}>
+      <Box component="div" className={classes.chartContainer}>
         <Grid container={true}>
           <Grid item={true}>
             <Typography
@@ -177,13 +179,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             >
               <Text translation="training.stats.title" />
             </Typography>
-            <div id="main" style={{
-              height: "280px",
-              maxHeight: "calc(100vh - 145px)",
-            }}></div>
+            <Box component="div" id="main" className={classes.scroll}></Box>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     );
   };
 

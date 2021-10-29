@@ -1,4 +1,4 @@
-import { Grid, List, Tab, Tabs } from "@material-ui/core";
+import { Box, Grid, List, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import Text from "../../../components/Text";
@@ -48,7 +48,8 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   );
 
   return (
-    <div
+    <Box
+      component="div"
       role="tabpanel"
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
@@ -60,7 +61,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
           {renderItems()}
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 };
 
@@ -132,7 +133,7 @@ export default function TrainingLineItemsPresenter(
   };
 
   return (
-    <div className={classes.root}>
+    <Box component="div" className={classes.root}>
       <StyledTabs
         value={value}
         onChange={handleChange}
@@ -190,6 +191,6 @@ export default function TrainingLineItemsPresenter(
       <TabPanel value={value} index={2} panelData={overdueItems}>
         <Text translation="training.stats.overdue" />
       </TabPanel>
-    </div>
+    </Box>
   );
 }
