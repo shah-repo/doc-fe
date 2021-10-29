@@ -27,7 +27,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     (item) => item.status === TrainingStatusChartLabelTypes.OVERDUE
   );
   const dueInSevenItems = trainingData.filter(
-    (item) => item.status === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
+    (item) => item.status === TrainingStatusChartLabelTypes.DUE
   );
   return (
     <TrainingLineItemsPresenter

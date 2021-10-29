@@ -101,7 +101,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           },
           {
             value: overdue,
-            name: "OVERDUE",
+            name: TrainingStatusChartLabelTypes.OVERDUE,
             itemStyle: {
               color: Colors.latest_red_varient,
             },
@@ -179,7 +179,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             >
               <Text translation="training.stats.title" />
             </Typography>
-            <Box component="div" id="main" className={classes.scroll}></Box>
+            <Box component="div" id="main" className={classes.chartScroll}></Box>
           </Grid>
         </Grid>
       </Box>
