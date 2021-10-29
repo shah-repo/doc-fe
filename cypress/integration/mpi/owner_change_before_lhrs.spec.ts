@@ -40,7 +40,7 @@ let fourthEmployee;
 const dateAfterEmailShouldArrive = new Date();
 const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
-context("Change owner before completing LHRs", () => {
+context("Change owner before starting LHRs", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
