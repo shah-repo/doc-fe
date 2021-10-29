@@ -1099,8 +1099,8 @@ context("LHRs email notifications", () => {
           contains: [
             "Hello <b>Giovanni Reynolds,</b><br>",
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 95)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 95)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
         {
@@ -1108,8 +1108,8 @@ context("LHRs email notifications", () => {
           contains: [
             "Hello <b>Harry Bartoletti,</b><br>",
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 95)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 95)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
       ];
