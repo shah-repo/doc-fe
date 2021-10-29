@@ -1,14 +1,12 @@
 import {
   Collapse,
-  Grid,
-  List,
+  Grid, Link, List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Typography,
   withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
 import React from "react";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/expand.svg";
@@ -47,7 +45,14 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   // TO DO: Needs to remove below line once we get icons for all the possible line item types
-  const itemTypes = [RecentGroupType.PO, "MPI", "FORM", "SUPPLIER", "CHANGE_REQUEST", "DAM"];
+  const itemTypes = [
+    RecentGroupType.PO,
+    "MPI",
+    "FORM",
+    "SUPPLIER",
+    "CHANGE_REQUEST",
+    "DAM",
+  ];
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -70,17 +75,19 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
       >
         {type === RecentGroupType.PO &&
           (open ? (
-            <CollapseIcon className={classes.icon} onClick={handleClick}/>
+            <CollapseIcon className={classes.icon} onClick={handleClick} />
           ) : (
-            <ExpandIcon className={classes.icon} onClick={handleClick}/>
+            <ExpandIcon className={classes.icon} onClick={handleClick} />
           ))}
         <ListItemIcon>
           <>
             {type === RecentGroupType.PO && <POIcon />}
             {type === RecentGroupType.MPI && <MPIIcon />}
             {type === RecentGroupType.FORM && <FMIcon />}
-            {(type === RecentGroupType.CHANGE_REQUEST || type === RecentGroupType.DAM) && <ApprovalIcon />}
-            {(type === RecentGroupType.SUPPLIER || !itemTypes.includes(type)) && <SOPIcon />}
+            {(type === RecentGroupType.CHANGE_REQUEST ||
+              type === RecentGroupType.DAM) && <ApprovalIcon />}
+            {(type === RecentGroupType.SUPPLIER ||
+              !itemTypes.includes(type)) && <SOPIcon />}
           </>
         </ListItemIcon>
         <ListItemText
@@ -96,7 +103,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -113,7 +120,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   <Link
                     href={documentVersionPath(revisionId as string, id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -145,7 +152,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -162,7 +169,7 @@ const RecentsLineItem: React.FunctionComponent<Props> = ({
                   <Link
                     href={documentVersionPath(revisionId as string, id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
