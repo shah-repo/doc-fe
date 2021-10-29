@@ -100,6 +100,7 @@ class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    zipupload: FBEditorLabel,
     blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,
