@@ -981,9 +981,9 @@ context("Bulk create flow", () => {
         cy.drVerifyDescription({ description: "description for second bulk document" });
       });
 
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[2].name });
-      });
+      // it("Verify owner", () => {
+      //   cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+      // });
 
       it("Verify Training", () => {
         cy.drIsTrainingRequired({ shouldBe: true });
