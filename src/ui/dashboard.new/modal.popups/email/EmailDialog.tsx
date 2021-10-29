@@ -10,8 +10,8 @@ import {
   ListItemText,
   Modal,
   Typography,
+  withStyles,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
@@ -140,7 +140,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <React.Fragment>
+              <>
                 <Grid container justify="space-between">
                   <Grid item>
                     <Typography
@@ -169,7 +169,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     </Modal>
                   </Grid>
                 </Grid>
-              </React.Fragment>
+              </>
             }
           />
         </StyledListItem>
@@ -213,7 +213,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <React.Fragment>
+              <>
                 <Grid container justify="flex-start">
                   <Grid item>
                     <Typography
@@ -226,7 +226,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     </Typography>
                   </Grid>
                 </Grid>
-              </React.Fragment>
+              </>
             }
           />
         </StyledListItem>

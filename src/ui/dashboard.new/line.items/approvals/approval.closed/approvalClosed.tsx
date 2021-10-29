@@ -1,18 +1,19 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
+  Box,
   Chip,
   Collapse,
   Grid,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Tooltip,
   Typography,
+  withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
@@ -148,7 +149,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -159,7 +160,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -177,7 +178,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   <Link
                     href={changeRequestEditPath(id)}
                     color="inherit"
-                    className= {classes.link}
+                    className={classes.link}
                   >
                     <Typography
                       component="span"
@@ -276,11 +277,11 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {!open && hoverItem && (
-          <div className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip title="Pin item" placement="top" arrow>
@@ -290,7 +291,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 />
               </StyleTooltip>
             )}
-          </div>
+          </Box>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -313,7 +314,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 }
               />
-              <div>
+              <Box component="div">
                 {viewHoverItem !== prItem.docId && (
                   <ViewIcon
                     onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
@@ -323,7 +324,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     classes={{ tooltip: classes.customTooltipWidth }}
                     title={
-                      <React.Fragment>
+                      <>
                         <Typography
                           className={classes.viewTooltipText}
                           component="span"
@@ -356,7 +357,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                         >
                           {prItem.justificationOfChange}
                         </Typography>
-                      </React.Fragment>
+                      </>
                     }
                     placement="top"
                     arrow
@@ -367,7 +368,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     />
                   </StyleTooltip>
                 )}
-              </div>
+              </Box>
             </StyledListItem>
           ))}
         </List>

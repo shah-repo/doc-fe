@@ -1,8 +1,10 @@
 import {
+  Box,
   Chip,
   Collapse,
   Grid,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -10,9 +12,8 @@ import {
   Modal,
   Tooltip,
   Typography,
+  withStyles,
 } from "@material-ui/core";
-import Link from "@material-ui/core/Link";
-import { withStyles } from "@material-ui/core/styles";
 import { size } from "lodash";
 import React from "react";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -111,7 +112,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
-    // console.log("Clicked View Item :: ", id);
   };
   const hoverItem = hoverItemId === arId;
 
@@ -156,7 +156,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -297,11 +297,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {!open && hoverItem && (
-          <div className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip title="Pin item" placement="top" arrow>
@@ -311,7 +311,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 />
               </StyleTooltip>
             )}
-          </div>
+          </Box>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -334,7 +334,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 }
               />
-              <div>
+              <Box component="div">
                 {viewHoverItem !== prItem.docId && (
                   <ViewIcon
                     onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
@@ -344,7 +344,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     classes={{ tooltip: classes.customTooltipWidth }}
                     title={
-                      <React.Fragment>
+                      <>
                         <Typography
                           className={classes.viewTooltipText}
                           component="span"
@@ -377,7 +377,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         >
                           {prItem.justificationOfChange}
                         </Typography>
-                      </React.Fragment>
+                      </>
                     }
                     placement="top"
                     arrow
@@ -388,7 +388,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     />
                   </StyleTooltip>
                 )}
-              </div>
+              </Box>
             </StyledListItem>
           ))}
         </List>
