@@ -33,14 +33,35 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
           <Avatar className={classes.avatar} alt={firstName} src="." />
-          <span className={classes.name}>{firstName}</span>
+          <Typography
+            component="span"
+            variant="body2"
+            className={classes.name}
+            color="textPrimary"
+          >
+            {firstName}
+          </Typography>
         </Grid>
         <Grid item>
           {isOverdue && (
-            <span className={classes.typographyOverdue}>{status}</span>
+            <Typography
+              component="span"
+              variant="body2"
+              className={classes.typographyOverdue}
+              color="textPrimary"
+            >
+              {status}
+            </Typography>
           )}
           {!isOverdue && (
-            <span className={classes.typographyDueInfewDays}>{status}</span>
+            <Typography
+              component="span"
+              variant="body2"
+              className={classes.typographyDueInfewDays}
+              color="textPrimary"
+            >
+              {status}
+            </Typography>
           )}
         </Grid>
       </Grid>
@@ -51,14 +72,24 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
         alignItems="center"
       >
         <Grid item={true}>
-          <b className={classes.docIdAndTitle}>{documentId}</b>
-        </Grid>
-        &nbsp;
-        <Grid item={true}>
-          <span
+          <Typography
+            component="span"
+            variant="body2"
             className={classes.docIdAndTitle}
+            color="textPrimary"
+          >
+            {documentId}
+          </Typography>
+          &nbsp;
+        </Grid>
+        <Grid item={true}>
+          <Typography
+            component="span"
+            variant="body2"
+            className={classes.docIdAndTitle}
+            color="textPrimary"
             dangerouslySetInnerHTML={{ __html: title }}
-          />
+          ></Typography>
         </Grid>
       </Grid>
       <Grid
@@ -68,7 +99,14 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
         alignItems="center"
       >
         <Grid item={true}>
-          <small className={classes.date}>Due date: {date}</small>
+          <Typography
+            component="span"
+            variant="body2"
+            className={classes.date}
+            color="textPrimary"
+          >
+            Due date: {date}
+          </Typography>
         </Grid>
       </Grid>
     </Typography>
