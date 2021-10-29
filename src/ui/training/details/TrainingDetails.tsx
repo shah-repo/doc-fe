@@ -33,11 +33,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
         </IconButton>
         <DialogTitle>
           <Typography className={classes.dialogTitle}>
-            {
-              training.completedAt ?
-                <Text translation={"training.acknowledge.completion"}/> :
-                <Text translation={"common.training.record"}/>
-            }
+            <Text translation={"common.training.record"}/>
           </Typography>
         </DialogTitle>
         <DialogContent>
