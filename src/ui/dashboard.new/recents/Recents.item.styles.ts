@@ -3,18 +3,13 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
-    icon: {
-      width: "15px",
-    },
     link: {
       color: Colors.black,
-    },
-    listItem: {
-      paddingLeft: "1px",
     },
     truncateText: {
       textOverflow: "ellipsis",
       overflow: "auto",
+      paddingTop: "1px",
     },
     typography: {
       fontSize: "14px",

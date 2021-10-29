@@ -1,0 +1,25 @@
+[{
+    "accessedAt": "2021-10-29T08:38:31.614Z",
+    "itemType": "DOCUMENT",
+    "itemId": "73caccab-6a52-4b74-96ac-8140392fb2ba",
+    "docId": "PO-00001",
+    "docTitle": "Test",
+    "docType": "Purchase Order"
+  },
+  {
+    "accessedAt": "2021-10-29T08:46:34.721Z",
+    "itemType": "CHANGE_REQUEST",
+    "itemId": "2a4bab4e-7ebc-4406-bc3e-614f44c13e6d",
+    "docId": "AR-00001",
+    "docTitle": "Releasing PO-00001, Test",
+    "docType": "Approval Request"
+  },
+  {
+    "accessedAt": "2021-10-28T08:38:31.614Z",
+    "itemType": "DOCUMENT",
+    "itemId": "73caccab-6a52-4b74-96ac-8140312fb2ba",
+    "docId": "SUP-00001",
+    "docTitle": "Corrective and Preventive Maintenance",
+    "docType": "SUPPLIER"
+  }
+]
