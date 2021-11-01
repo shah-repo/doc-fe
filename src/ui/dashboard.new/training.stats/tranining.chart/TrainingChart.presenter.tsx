@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
-import React from "react";
+import React, { useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
@@ -15,6 +15,7 @@ interface TrainingChartPresenterProps {
 
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
   ({ overdue, dueInSeven, tabValue }) => {
+    console.log("tabValue :::", tabValue);
     const totalCount = overdue + dueInSeven;
     const data = [
       {
@@ -57,12 +58,13 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
     const classes = styles();
-    setTimeout(function() {
+    // setTimeout(function () {
+    useEffect(() => {
       const myChart = echarts.init(
         document.getElementById("main") as HTMLInputElement
       );
-      myChart.setOption(DoughnutChartOptions);
-      window.onresize = function() {
+      myChart.setOption(DoughnutChartOptions, true);
+      window.onresize = function () {
         myChart.resize();
       };
       myChart.on("mouseover", (evt: any) => {
@@ -166,7 +168,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.setOption(DoughnutChartOptions);
       };
       updateChart(tabValue);
-    });
+      return () => {
+        myChart.off("mouseover");
+        myChart.off("mouseout");
+      };
+    }, [tabValue]);
+    // });
 
     return (
       <Box component="div" className={classes.chartContainer}>
@@ -179,7 +186,11 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
             >
               <Text translation="training.stats.title" />
             </Typography>
-            <Box component="div" id="main" className={classes.chartScroll}></Box>
+            <Box
+              component="div"
+              id="main"
+              className={classes.chartScroll}
+            ></Box>
           </Grid>
         </Grid>
       </Box>

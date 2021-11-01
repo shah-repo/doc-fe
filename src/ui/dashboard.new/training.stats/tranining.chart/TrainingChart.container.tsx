@@ -1,28 +1,24 @@
 import React from "react";
-import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
 import TrainingChartPresenter from "./TrainingChart.presenter";
+import { useSelector } from "react-redux";
+import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/trainingStats";
 
 interface TrainingChartProps {
-  trainingData: any[];
   tabValue: number;
 }
 
 const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
-  trainingData,
   tabValue,
 }) => {
-  // TO DO: Logic for count calculation needs to be updated based on actual data
-  const overdue = trainingData.filter(
-    (item) => item.status === TrainingStatusChartLabelTypes.OVERDUE
-  ).length;
-  const dueInSeven = trainingData.filter(
-    (item) => item.status === TrainingStatusChartLabelTypes.DUE
-  ).length;
+  const overdueTrainingData = useSelector(
+    trainingStatsSelectors.overdueTrainingData
+  );
+  const dueTrainingData = useSelector(trainingStatsSelectors.dueTrainingData);
   return (
     <TrainingChartPresenter
       tabValue={tabValue}
-      overdue={overdue}
-      dueInSeven={dueInSeven}
+      overdue={overdueTrainingData?.length || 0}
+      dueInSeven={dueTrainingData?.length || 0}
     />
   );
 };

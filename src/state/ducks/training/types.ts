@@ -1,6 +1,9 @@
 import { Id } from "../common/types";
 import { Employee } from "../company/types";
-import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions/types";
+import {
+  DocumentRevision,
+  DocumentRevisionDocument,
+} from "../documentRevisions/types";
 
 enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",

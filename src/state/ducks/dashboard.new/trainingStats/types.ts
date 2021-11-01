@@ -1,6 +1,6 @@
 import { TRAINING_STATS_LIST } from "./constants";
 
-export enum Status {
+export enum TrainingStatusTypes {
   OVERDUE = "OVERDUE",
   DUE = "DUE",
 }
@@ -24,7 +24,7 @@ export interface User {
 
 export interface TrainingStats {
   user: User;
-  status: Status;
+  status: TrainingStatusTypes;
   dueOn: string;
   docTitle: string;
   docId: string;

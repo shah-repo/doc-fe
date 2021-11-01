@@ -5,6 +5,8 @@ import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
+import { useSelector } from "react-redux";
+import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/trainingStats";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -70,20 +72,6 @@ function tabCustomClasses(index: any) {
 
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
-  overdueItems: {
-    docTitle: string;
-    user: { avatar: string | null; name: string };
-    docId: string;
-    status: string;
-    dueOn: string;
-  }[];
-  dueInSevenItems: {
-    docTitle: string;
-    user: { avatar: string | null; name: string };
-    docId: string;
-    status: string;
-    dueOn: string;
-  }[];
 }
 
 interface StyledTabsProps {
@@ -108,7 +96,10 @@ const StyledTabs = withStyles({
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   (props) => {
-    const { overdueItems, dueInSevenItems } = props;
+    const overdueItems = useSelector(
+      trainingStatsSelectors.overdueTrainingData
+    );
+    const dueInSevenItems = useSelector(trainingStatsSelectors.dueTrainingData);
     const all = overdueItems.concat(dueInSevenItems);
     const [value, setValue] = React.useState(0);
     const classes = styles();
