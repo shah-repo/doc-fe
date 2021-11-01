@@ -70,36 +70,28 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: "8px",
     },
     pendingtitle: {
-      "position": "static",
-      "height": "15px",
-      "left": "calc(50% - 77px/2 - 146.5px)",
-      "top": "calc(50% - 15px/2)",
-      "marginTop": "7%",
-      "fontFamily": "Sora",
-      "fontStyle": "normal",
-      "fontWeight": "bold",
-      "fontSize": "12px",
-      "lineHeight": "15px",
-      "display": "flex",
-      "alignItems": "center",
-      /* AR AIR Color */
-      "color": Colors.latest_yellow_varient,
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
-    },
-    approvedtitle: {
-      position: "static",
-      height: "15px",
-      left: "calc(50% - 77px/2 - 146.5px)",
-      top: "calc(50% - 15px/2)",
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      display: "flex",
-      alignItems: "center",
+      /* AR AIR Color */
+      color: Colors.latest_yellow_varient,
+    },
+    lastseentitle: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "12px",
+      lineHeight: "15px",
+      color: Colors.font_gray,
+    },
+    approvedtitle: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
       /* AR AIR Color */
       color: Colors.latest_green_varient,
     },
@@ -189,7 +181,7 @@ export const styles = makeStyles((theme: Theme) =>
     confmesgdate: {
       position: "absolute",
       left: "70.67%",
-      top: "26%",
+      top: "calc(50% - 11px/2)",
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "normal",
@@ -236,6 +228,12 @@ export const styles = makeStyles((theme: Theme) =>
       width: "20px",
       position: "static",
       bottom: "5px",
+    },
+    successIcon: {
+      position: "relative",
+      width: "20px",
+      right: "7px",
+      top: "7px",
     },
   })
 );
