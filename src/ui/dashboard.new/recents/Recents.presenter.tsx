@@ -4,7 +4,7 @@ import React from "react";
 import {
   RecentItems,
   RecentType,
-} from "../../../state/ducks/dashboard.new/types";
+} from "../../../state/ducks/dashboard.new/recents/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";

@@ -1,7 +1,7 @@
-import { apiAction } from "../../factories";
-import { ApiAction } from "../../types";
-import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC, RECENTS_REMOVE } from "./constants";
-import { RecentItems, RecentsListAction, RecentsRemoveAction } from "./types";
+import { apiAction } from "../../../factories";
+import { ApiAction } from "../../../types";
+import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC } from "./constants";
+import { RecentItems, RecentsListAction } from "./types";
 
 const recentsList = (recents: RecentItems[]): RecentsListAction => ({
   type: RECENTS_LIST,
@@ -11,7 +11,7 @@ const recentsList = (recents: RecentItems[]): RecentsListAction => ({
 const loadRecentsList = (): ApiAction<RecentItems[]> => {
   const params = {
     offset: 0,
-    limit: 20,
+    limit: 50,
   };
   return apiAction({
     url: DASHBOARD_RECENT_URL,
@@ -24,13 +24,7 @@ const loadRecentsList = (): ApiAction<RecentItems[]> => {
   });
 };
 
-const removeFromList = (index: number): RecentsRemoveAction => ({
-  type: RECENTS_REMOVE,
-  payload: index,
-});
-
 export default {
   recentsList,
   loadRecentsList,
-  removeFromList,
 };

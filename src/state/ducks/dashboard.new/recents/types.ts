@@ -1,4 +1,4 @@
-import { RECENTS_LIST, RECENTS_REMOVE } from "./constants";
+import { RECENTS_LIST } from "./constants";
 
 export enum RecentType {
   DOCUMENT = "DOCUMENT",
@@ -6,14 +6,10 @@ export enum RecentType {
 }
 
 export enum RecentDocType {
-  PO = "PO",
-  MPI = "MPI",
-  DAM = "DAM",
-  CHANGE_REQUEST = "CHANGE_REQUEST",
   APPROVAL_REQUEST = "Approval Request",
   PURCHASE_ORDER = "Purchase Order",
   FORM = "Form",
-  SUPPLIER = "Suppliers",
+  SUPPLIERS = "Suppliers",
 }
 
 export interface RecentItems {
@@ -29,11 +25,6 @@ export interface RecentItems {
 export interface RecentsListAction {
   type: typeof RECENTS_LIST;
   payload: RecentItems[];
-}
-
-export interface RecentsRemoveAction {
-  type: typeof RECENTS_REMOVE;
-  payload: number;
 }
 
 export type RecentsState = RecentItems[];

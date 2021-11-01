@@ -1,6 +1,6 @@
-import { default as dashboardReducer } from "./reducers";
+import { combineReducers } from "redux";
+import recents from "./recents";
 
-export { default as dashboardActions } from "./actions";
-export { default as dashboardSelectors } from "./selectors";
-
-export default dashboardReducer;
+export default combineReducers({
+  recents,
+});
