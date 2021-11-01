@@ -8,12 +8,12 @@ export enum RecentType {
 export enum RecentDocType {
   PO = "PO",
   MPI = "MPI",
-  FORM = "FORM",
   DAM = "DAM",
-  SUPPLIER = "SUPPLIER",
   CHANGE_REQUEST = "CHANGE_REQUEST",
   APPROVAL_REQUEST = "Approval Request",
   PURCHASE_ORDER = "Purchase Order",
+  FORM = "Form",
+  SUPPLIER = "Suppliers",
 }
 
 export interface RecentItems {
