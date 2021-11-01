@@ -26,13 +26,6 @@ export interface TrainingRecord {
   documentRevision: Partial<DocumentRevision>;
 }
 
-export enum TrainingStatusChartLabelTypes {
-  OVERDUE = "OVERDUE",
-  DUE_IN_7_DAYS = "DUE IN 7 DAYS",
-  DUE = "DUE",
-  TOTAL_OUTSTANDING = "Total Outstanding",
-}
-
 export interface TrainingListData {
   documentRevision: DocumentRevision;
   trainingPlan: TrainingPlan;

@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
 import React, { useEffect } from "react";
-import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
+import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import DoughnutChartOptions from "./DoughnutChartOptions";
@@ -15,19 +15,18 @@ interface TrainingChartPresenterProps {
 
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
   ({ overdue, dueInSeven, tabValue }) => {
-    console.log("tabValue :::", tabValue);
     const totalCount = overdue + dueInSeven;
     const data = [
       {
         value: dueInSeven,
-        name: TrainingStatusChartLabelTypes.DUE_IN_7_DAYS,
+        name: TrainingStatusChartLabelTypes.DUE,
         itemStyle: {
           color: Colors.latest_yellow_varient,
         },
       },
       {
         value: overdue,
-        name: "OVERDUE",
+        name: TrainingStatusChartLabelTypes.OVERDUE,
         itemStyle: {
           color: Colors.latest_red_varient,
         },
@@ -35,7 +34,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     ];
     const defaultTitle = {
       text: "" + totalCount,
-      subtext: "Total Outstanding",
+      subtext: TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING,
       padding: [-10, 0, 0, 0],
       textStyle: {
         fontFamily: "Sora",
@@ -58,13 +57,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
     const classes = styles();
-    // setTimeout(function () {
     useEffect(() => {
       const myChart = echarts.init(
         document.getElementById("main") as HTMLInputElement
       );
       myChart.setOption(DoughnutChartOptions, true);
-      window.onresize = function () {
+      window.onresize = function() {
         myChart.resize();
       };
       myChart.on("mouseover", (evt: any) => {
@@ -81,7 +79,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           DoughnutChartOptions.title.subtextStyle.color =
             Colors.latest_red_varient;
         } else if (
-          evt.data?.name === TrainingStatusChartLabelTypes.DUE_IN_7_DAYS
+          evt.data?.name === TrainingStatusChartLabelTypes.DUE
         ) {
           DoughnutChartOptions.title.subtextStyle.color =
             Colors.latest_yellow_varient;
@@ -96,7 +94,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         DoughnutChartOptions.series.data = [
           {
             value: dueInSeven,
-            name: TrainingStatusChartLabelTypes.DUE_IN_7_DAYS,
+            name: TrainingStatusChartLabelTypes.DUE,
             itemStyle: {
               color: Colors.latest_yellow_varient,
             },
@@ -118,19 +116,19 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         let data = {};
         if (tabValue === 0) {
           text = "" + totalCount;
-          subText = "Total Outstanding";
+          subText = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
           color = Colors.gray;
           data = [
             {
               value: dueInSeven,
-              name: "Due in 7 days",
+              name: TrainingStatusChartLabelTypes.DUE,
               itemStyle: {
                 color: Colors.latest_yellow_varient,
               },
             },
             {
               value: overdue,
-              name: "Overdue",
+              name: TrainingStatusChartLabelTypes.OVERDUE,
               itemStyle: {
                 color: Colors.latest_red_varient,
               },
@@ -146,7 +144,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           });
           data = DoughnutChartOptions.series.data;
           text = "" + dueInSeven;
-          subText = "Due in 7 days";
+          subText = TrainingStatusChartLabelTypes.DUE;
           color = Colors.latest_yellow_varient;
         } else if (tabValue === 2) {
           DoughnutChartOptions.series.data.map((data, index) => {
@@ -158,7 +156,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           });
           data = DoughnutChartOptions.series.data;
           text = "" + overdue;
-          subText = "Overdue";
+          subText = TrainingStatusChartLabelTypes.OVERDUE;
           color = Colors.latest_red_varient;
         }
         DoughnutChartOptions.title.text = text;
@@ -172,8 +170,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.off("mouseover");
         myChart.off("mouseout");
       };
-    }, [tabValue]);
-    // });
+    }, [tabValue, dueInSeven, overdue, totalCount]);
 
     return (
       <Box component="div" className={classes.chartContainer}>

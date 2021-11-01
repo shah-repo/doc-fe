@@ -5,6 +5,12 @@ export enum TrainingStatusTypes {
   DUE = "DUE",
 }
 
+export enum TrainingStatusChartLabelTypes {
+  OVERDUE = "Overdue",
+  DUE = "Due in 7 Days",
+  TOTAL_OUTSTANDING = "Total Outstanding",
+}
+
 export interface User {
   createdAt: string;
   updatedAt: string;

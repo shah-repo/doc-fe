@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
+import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
@@ -26,7 +26,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   title,
 }) => {
   const classes = styles();
-  const isOverdue = status === TrainingStatusChartLabelTypes.OVERDUE;
+  const isOverdue = status === TrainingStatusTypes.OVERDUE;
 
   const titleRender = (name, status, documentId, title, date) => (
     <Typography>

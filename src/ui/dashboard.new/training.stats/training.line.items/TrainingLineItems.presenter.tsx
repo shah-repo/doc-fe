@@ -1,12 +1,12 @@
 import { Box, Grid, List, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import React from "react";
+import { useSelector } from "react-redux";
+import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
-import { useSelector } from "react-redux";
-import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/trainingStats";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -65,7 +65,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 function tabCustomClasses(index: any) {
   return {
-    id: `full-width-tab-${index}`,
+    "id": `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
@@ -81,10 +81,10 @@ interface StyledTabsProps {
 
 const StyledTabs = withStyles({
   indicator: {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "transparent",
-    top: "33px",
+    "display": "flex",
+    "justifyContent": "center",
+    "backgroundColor": "transparent",
+    "top": "33px",
     "& > span": {
       flexGrow: 1,
       border: `1px solid ${Colors.navy}`,

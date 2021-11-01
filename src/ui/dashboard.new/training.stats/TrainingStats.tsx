@@ -1,16 +1,16 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-// import trainingStatsData from "./data/TrainingStatistics.json";
-import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
-import { styles } from "./TrainingStats.styles";
-import TrainingChart from "./tranining.chart/TrainingChart.container";
 import { useSelector } from "react-redux";
 import {
   trainingStatsActions,
   trainingStatsSelectors,
-} from "../../../state/ducks/dashboard.new/trainingStats";
+} from "../../../state/ducks/dashboard.new/training.stats";
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
+import TrainingChart from "./training.chart/TrainingChart.container";
+// import trainingStatsData from "./data/TrainingStatistics.json";
+import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
+import { styles } from "./TrainingStats.styles";
 
 const TrainingStatsContainer: React.FunctionComponent = () => {
   const classes = styles();
