@@ -15,6 +15,7 @@ import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
@@ -93,7 +94,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
   })(Tooltip);
   const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const handlePinClick = () => {
     setPinned(!pinned);
   };
@@ -291,7 +299,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       />
       {hoverItem && (
         <Box component="div" className={classes.actionIcons}>
-          <PinIcon onClick={handlePinClick} />
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+          {pinHover && (
+            <StyleTooltip title="Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handlePinClick}
+                onMouseLeave={onMouseLeavePinIcon}
+              />
+            </StyleTooltip>
+          )}
         </Box>
       )}
     </StyledListItem>
