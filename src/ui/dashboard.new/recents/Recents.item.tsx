@@ -106,7 +106,8 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
               )}
             </Grid>
             {(docType === RecentDocType.PO ||
-              docType === RecentDocType.PURCHASE_ORDER) && (
+              docType === RecentDocType.PURCHASE_ORDER) &&
+              docTitle && (
               <Grid item={true}>
                 <Typography
                   component="span"
@@ -115,7 +116,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  to&nbsp;
+                    to&nbsp;
                 </Typography>
               </Grid>
             )}

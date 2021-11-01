@@ -1,5 +1,10 @@
 import { RECENTS_LIST, RECENTS_REMOVE } from "./constants";
 
+export enum RecentType {
+  DOCUMENT = "DOCUMENT",
+  CHANGE_REQUEST = "CHANGE_REQUEST",
+}
+
 export enum RecentDocType {
   PO = "PO",
   MPI = "MPI",
