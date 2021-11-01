@@ -11,7 +11,7 @@ const recentsList = (recents: RecentItems[]): RecentsListAction => ({
 const loadRecentsList = (): ApiAction<RecentItems[]> => {
   const params = {
     offset: 0,
-    limit: 50,
+    limit: 20,
   };
   return apiAction({
     url: DASHBOARD_RECENT_URL,
