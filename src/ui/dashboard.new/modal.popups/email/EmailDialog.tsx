@@ -6,18 +6,18 @@ import {
   Grid,
   IconButton,
   List,
-  ListItem,
   ListItemText,
   Modal,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
+import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
-import Colors from "../../../layout/theme/utils/colors";
+import Text from "../../../components/Text";
 import { styles } from "./EmailModal.styles";
+import { StyledListItem } from "./StyledListItem";
 
 interface EmailModalProps {
   handleEmailModelClose: () => void;
@@ -45,16 +45,12 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
     setApiAlertModel(true);
     setTimeout(() => {
       handleApiAlertModelClose();
-    }, 3000);
+    }, 1000);
   };
 
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
   };
-
-  const StyledListItem = withStyles({
-    root: { "backgroundColor": Colors.white, "&:hover": {} },
-  })(ListItem);
 
   const apiAlertModelbody = (
     <Box className={classes.emailPaper}>
@@ -66,7 +62,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-            Email Confirmation
+            <Text translation="email.title" />
           </Typography>
         </Grid>
         <Grid item>
@@ -92,7 +88,8 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesg}
           >
-            EMAIL SENT TO ALL
+            <EmailSuccessIcon className={classes.successIcon} />
+            <Text translation="email.success.message" />
           </Typography>
         </Grid>
         <Grid item>
@@ -118,7 +115,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-            Approval Status
+            <Text translation="modal.title" />
           </Typography>
         </Grid>
         <Grid item>
@@ -132,44 +129,60 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         </Grid>
       </Grid>
       <Box component="div" className={classes.pendingBox}>
-        <StyledListItem button onClick={handleClickPending}>
+        <StyledListItem button>
           {openPending ? (
-            <CollapseIcon className={classes.iconupdown} />
+            <CollapseIcon
+              className={classes.iconupdown}
+              onClick={handleClickPending}
+            />
           ) : (
-            <ExpandIcon className={classes.iconupdown} />
+            <ExpandIcon
+              className={classes.iconupdown}
+              onClick={handleClickPending}
+            />
           )}
           <ListItemText
             primary={
-              <>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      className={classes.pendingtitle}
-                      noWrap
-                    >
-                      PENDING ({pendingApprovers?.length})
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleApiAlertModelOpen}
-                      className={classes.emailbutton}
-                    >
-                      EMAIL ALL
-                    </Button>
-                    <Modal
-                      open={apiAlertModelOpen}
-                      onClose={handleApiAlertModelClose}
-                      aria-labelledby="simple-modal-title"
-                      aria-describedby="simple-modal-description"
-                    >
-                      {apiAlertModelbody}
-                    </Modal>
-                  </Grid>
+              <Grid container justify="space-between" alignItems="center">
+                <Grid item>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    className={classes.pendingtitle}
+                    noWrap
+                  >
+                    <Text translation="modal.title.pending" />
+                    {` `}({pendingApprovers?.length})
+                  </Typography>
                 </Grid>
-              </>
+                <Grid item>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    className={classes.lastseentitle}
+                    noWrap
+                  >
+                    <Text translation="email.last.sent" />: Oct 08, 2021
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Button
+                    onClick={handleApiAlertModelOpen}
+                    className={classes.emailbutton}
+                  >
+                    <Text translation="email.button.title" />
+                  </Button>
+                  <Modal
+                    open={apiAlertModelOpen}
+                    onClose={handleApiAlertModelClose}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {apiAlertModelbody}
+                  </Modal>
+                </Grid>
+              </Grid>
             }
           />
         </StyledListItem>
@@ -205,28 +218,33 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         </Collapse>
       </Box>
       <Box component="div" className={classes.approvedBox}>
-        <StyledListItem button onClick={handleClickApproved}>
+        <StyledListItem button>
           {openApproved ? (
-            <CollapseIcon className={classes.iconupdown} />
+            <CollapseIcon
+              className={classes.iconupdown}
+              onClick={handleClickApproved}
+            />
           ) : (
-            <ExpandIcon className={classes.iconupdown} />
+            <ExpandIcon
+              className={classes.iconupdown}
+              onClick={handleClickApproved}
+            />
           )}
           <ListItemText
             primary={
-              <>
-                <Grid container justify="flex-start">
-                  <Grid item>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      className={classes.approvedtitle}
-                      noWrap
-                    >
-                      {`APPROVED (0)`}
-                    </Typography>
-                  </Grid>
+              <Grid container justify="flex-start">
+                <Grid item>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    className={classes.approvedtitle}
+                    noWrap
+                  >
+                    <Text translation="modal.title.approved" />
+                    {` (0)`}
+                  </Typography>
                 </Grid>
-              </>
+              </Grid>
             }
           />
         </StyledListItem>

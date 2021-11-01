@@ -1088,5 +1088,12 @@
   "common.trainings": "Trainings",
   "common.recent": "Recent",
   "approval.tooltip.justification.change.title": "Justification of change:",
-  "approval.tooltip.description.change.title": "Description of change:"
+  "approval.tooltip.description.change.title": "Description of change:",
+  "modal.title": "Approval Status",
+  "modal.title.pending": "PENDING",
+  "modal.title.approved": "APPROVED",
+  "email.last.sent": "Last sent",
+  "email.button.title": "EMAIL ALL",
+  "email.success.message": "EMAIL SENT TO ALL",
+  "email.title": "Email Confirmation"
 }

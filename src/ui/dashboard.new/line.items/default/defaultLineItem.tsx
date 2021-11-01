@@ -1,12 +1,6 @@
-import {
-  Grid,
-  ListItem,
-  ListItemText,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Grid, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
-import Colors from "../../../layout/theme/utils/colors";
+import { StyledListItem } from "../common/StyledListItem";
 import { styles } from "./defaultLineItem.styles";
 
 interface Props {
@@ -21,14 +15,6 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem("");
   };
@@ -37,28 +23,26 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
     <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
       <ListItemText
         primary={
-          <>
-            <Grid container={true}>
-              <Grid item={true} md={12} sm={12}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                >
-                  {type}&nbsp;
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyBold}
-                  color="textSecondary"
-                >
-                  {status}&nbsp;
-                </Typography>
-              </Grid>
+          <Grid container={true}>
+            <Grid item={true} md={12} sm={12}>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.typography}
+                color="textPrimary"
+              >
+                {type}&nbsp;
+              </Typography>
+              <Typography
+                component="span"
+                variant="caption"
+                className={classes.typographyBold}
+                color="textSecondary"
+              >
+                {status}&nbsp;
+              </Typography>
             </Grid>
-          </>
+          </Grid>
         }
       />
     </StyledListItem>

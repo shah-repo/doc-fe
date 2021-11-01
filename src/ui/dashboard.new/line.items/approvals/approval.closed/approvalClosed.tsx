@@ -1,18 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
-  Chip,
   Collapse,
   Grid,
   IconButton,
   Link,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -29,7 +25,11 @@ import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/vi
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./approvalClosed.styles";
+import { HoverStyleChip } from "./HoverStyleChipApprovalClosed";
+import { NormalStyleChip } from "./NormalStyleChipApprovalClosed";
 
 interface Props {
   id: string;
@@ -56,46 +56,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.font_gray,
-    },
-  })(Chip);
-
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.font_gray,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
