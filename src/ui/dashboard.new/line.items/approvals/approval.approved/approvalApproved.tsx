@@ -1,18 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
-  Chip,
   Collapse,
   Grid,
   IconButton,
   Link,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -33,8 +29,12 @@ import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
+import { HoverStyleChip } from "./HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "./NormalStyleChipApprovalApproved";
 
 interface Props {
   id: string;
@@ -60,46 +60,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.latest_green_varient,
-    },
-  })(Chip);
-
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.latest_green_varient,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [closeHover, setCloseHover] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);

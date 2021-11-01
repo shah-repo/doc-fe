@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  Avatar, Box, Grid, Link, ListItem,
+  Avatar,
+  Box,
+  Grid,
+  Link,
   ListItemAvatar,
   ListItemText,
-  Tooltip,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
@@ -18,7 +19,8 @@ import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/chan
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
-import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
 
@@ -46,26 +48,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);

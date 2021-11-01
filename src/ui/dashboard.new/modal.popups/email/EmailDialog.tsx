@@ -6,18 +6,16 @@ import {
   Grid,
   IconButton,
   List,
-  ListItem,
   ListItemText,
   Modal,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
-import Colors from "../../../layout/theme/utils/colors";
 import { styles } from "./EmailModal.styles";
+import { StyledListItem } from "./StyledListItem";
 
 interface EmailModalProps {
   handleEmailModelClose: () => void;
@@ -51,10 +49,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
   };
-
-  const StyledListItem = withStyles({
-    root: { "backgroundColor": Colors.white, "&:hover": {} },
-  })(ListItem);
 
   const apiAlertModelbody = (
     <Box className={classes.emailPaper}>
@@ -140,36 +134,34 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      className={classes.pendingtitle}
-                      noWrap
-                    >
-                      PENDING ({pendingApprovers?.length})
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleApiAlertModelOpen}
-                      className={classes.emailbutton}
-                    >
-                      EMAIL ALL
-                    </Button>
-                    <Modal
-                      open={apiAlertModelOpen}
-                      onClose={handleApiAlertModelClose}
-                      aria-labelledby="simple-modal-title"
-                      aria-describedby="simple-modal-description"
-                    >
-                      {apiAlertModelbody}
-                    </Modal>
-                  </Grid>
+              <Grid container justify="space-between">
+                <Grid item>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    className={classes.pendingtitle}
+                    noWrap
+                  >
+                    PENDING ({pendingApprovers?.length})
+                  </Typography>
                 </Grid>
-              </>
+                <Grid item>
+                  <Button
+                    onClick={handleApiAlertModelOpen}
+                    className={classes.emailbutton}
+                  >
+                    EMAIL ALL
+                  </Button>
+                  <Modal
+                    open={apiAlertModelOpen}
+                    onClose={handleApiAlertModelClose}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                  >
+                    {apiAlertModelbody}
+                  </Modal>
+                </Grid>
+              </Grid>
             }
           />
         </StyledListItem>
@@ -213,20 +205,18 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <>
-                <Grid container justify="flex-start">
-                  <Grid item>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      className={classes.approvedtitle}
-                      noWrap
-                    >
-                      {`APPROVED (0)`}
-                    </Typography>
-                  </Grid>
+              <Grid container justify="flex-start">
+                <Grid item>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    className={classes.approvedtitle}
+                    noWrap
+                  >
+                    {`APPROVED (0)`}
+                  </Typography>
                 </Grid>
-              </>
+              </Grid>
             }
           />
         </StyledListItem>

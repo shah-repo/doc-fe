@@ -1,18 +1,14 @@
 import {
   Box,
-  Chip,
   Collapse,
   Grid,
   IconButton,
   Link,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
   Modal,
-  Tooltip,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -30,6 +26,10 @@ import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../../modal.popups/email/EmailDialog";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
+import { HoverStyleChip } from "./HoverStyleChipPendingReview";
+import { NormalStyleChip } from "./NormalStyleChipPendingReview";
 import { styles } from "./pendingReview.styles";
 
 interface Props {
@@ -57,46 +57,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.latest_blue_varient,
-    },
-  })(Chip);
-
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.latest_blue_varient,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
