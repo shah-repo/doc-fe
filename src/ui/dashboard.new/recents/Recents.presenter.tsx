@@ -35,7 +35,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                 docId={data.docId}
                 itemType={data.itemType}
                 docType={data.docType}
-                revisionId={data.revisionId}
+                docRevId={data.docRevId}
                 docTitle={data.docTitle}
                 accessedAt={moment
                   .utc(data.accessedAt)
@@ -52,7 +52,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                 docId={data.docId}
                 itemType={data.itemType}
                 docType={data.docType}
-                revisionId={data.revisionId}
+                docRevId={data.docRevId}
                 docTitle={data.docTitle}
                 accessedAt={moment
                   .utc(data.accessedAt)

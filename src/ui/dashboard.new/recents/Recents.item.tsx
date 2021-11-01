@@ -18,14 +18,14 @@ import {
   RecentItems,
 } from "../../../state/ducks/dashboard.new/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
-// import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Recents.item.styles";
 
 const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   itemId,
   docId,
-  revisionId,
+  docRevId,
   itemType,
   docType,
   docTitle,
@@ -99,22 +99,21 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   RecentDocType.CHANGE_REQUEST,
                   RecentDocType.APPROVAL_REQUEST,
                 ].includes(docType) && (
-                  // TO DO:: will add navigation for itemType: DOCUMENT, once we get revisionId in response
-                  // <Link
-                  //   href={documentVersionPath(revisionId as string, itemId)}
-                  //   color="inherit"
-                  //   className={classes.link}
-                  // >
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
+                  <Link
+                    href={documentVersionPath(docRevId || "", itemId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {docId}&nbsp;
-                  </Typography>
-                  // </Link>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {docId}&nbsp;
+                    </Typography>
+                  </Link>
                 )}
               </Grid>
               {(docType === RecentDocType.PO ||
@@ -154,22 +153,21 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   RecentDocType.CHANGE_REQUEST,
                   RecentDocType.APPROVAL_REQUEST,
                 ].includes(docType) && (
-                  // TO DO:: will add navigation for itemType: DOCUMENT, once we get revisionId in response
-                  // <Link
-                  //   href={documentVersionPath(revisionId as string, itemId)}
-                  //   color="inherit"
-                  //   className={classes.link}
-                  // >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                  <Link
+                    href={documentVersionPath(docRevId || "", itemId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {docTitle}
-                  </Typography>
-                  // </Link>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docTitle}
+                    </Typography>
+                  </Link>
                 )}
                 &nbsp;&nbsp;
               </Grid>

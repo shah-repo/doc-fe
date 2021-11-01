@@ -1,14 +1,14 @@
 import { apiAction } from "../../factories";
 import { ApiAction } from "../../types";
 import { DASHBOARD_RECENT_URL, RECENTS_LIST, RECENTS_LIST_ASYNC, RECENTS_REMOVE } from "./constants";
-import { Recent, RecentsListAction, RecentsRemoveAction } from "./types";
+import { RecentItems, RecentsListAction, RecentsRemoveAction } from "./types";
 
-const recentsList = (recents: Recent[]): RecentsListAction => ({
+const recentsList = (recents: RecentItems[]): RecentsListAction => ({
   type: RECENTS_LIST,
   payload: recents,
 });
 
-const loadRecentsList = (): ApiAction<Recent[]> => {
+const loadRecentsList = (): ApiAction<RecentItems[]> => {
   const params = {
     offset: 0,
     limit: 20,

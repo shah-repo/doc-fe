@@ -34,7 +34,7 @@ export interface RecentItems {
   docId: string;
   docTitle: string;
   docType: RecentDocType;
-  revisionId?: string | undefined;
+  docRevId?: string;
 }
 
 export interface Recent {
@@ -52,7 +52,7 @@ export interface Recent {
 
 export interface RecentsListAction {
   type: typeof RECENTS_LIST;
-  payload: Recent[];
+  payload: RecentItems[];
 }
 
 export interface RecentsRemoveAction {
@@ -60,4 +60,4 @@ export interface RecentsRemoveAction {
   payload: number;
 }
 
-export type RecentsState = Recent[];
+export type RecentsState = RecentItems[];
