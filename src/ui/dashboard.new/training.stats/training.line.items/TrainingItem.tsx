@@ -11,7 +11,7 @@ import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
   avatar: string | null;
-  firstName: string;
+  name: string;
   documentId: string;
   title: string;
   status: string;
@@ -19,7 +19,7 @@ interface TrainingItemProps {
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
-  firstName,
+  name,
   status,
   date,
   documentId,
@@ -28,18 +28,18 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   const classes = styles();
   const isOverdue = status === TrainingStatusChartLabelTypes.OVERDUE;
 
-  const titleRender = (firstName, status, documentId, title, date) => (
+  const titleRender = (name, status, documentId, title, date) => (
     <Typography>
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
-          <Avatar className={classes.avatar} alt={firstName} src="." />
+          <Avatar className={classes.avatar} alt={name} src="." />
           <Typography
             component="span"
             variant="body2"
             className={classes.name}
             color="textPrimary"
           >
-            {firstName}
+            {name}
           </Typography>
         </Grid>
         <Grid item>
@@ -116,7 +116,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     <ListItem>
       <ListItemText
         id={documentId}
-        primary={titleRender(firstName, status, documentId, title, date)}
+        primary={titleRender(name, status, documentId, title, date)}
       />
     </ListItem>
   );

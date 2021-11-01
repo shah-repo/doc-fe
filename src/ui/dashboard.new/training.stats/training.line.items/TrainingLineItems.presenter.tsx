@@ -33,7 +33,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         <TrainingItem
           key={index}
           avatar={data.user.avatar}
-          firstName={data.user.name.split(" ")[0]}
+          name={data.user.name.split(" ")[0]}
           status={data.status}
           documentId={data.docId}
           title={data.docTitle}
@@ -63,7 +63,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 function tabCustomClasses(index: any) {
   return {
-    "id": `full-width-tab-${index}`,
+    id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
@@ -93,10 +93,10 @@ interface StyledTabsProps {
 
 const StyledTabs = withStyles({
   indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
-    "top": "33px",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    top: "33px",
     "& > span": {
       flexGrow: 1,
       border: `1px solid ${Colors.navy}`,

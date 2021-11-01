@@ -7,6 +7,7 @@ import { CLEAR_NON_AUTH_DATA, LOGOUT_USER } from "./ducks/auth/constants";
 import changeRequests from "./ducks/changeRequest";
 import company from "./ducks/company";
 import dashboard from "./ducks/dashboard";
+import trainingStats from "./ducks/dashboard.new/trainingStats";
 import documentRevisions from "./ducks/documentRevisions";
 import documentType from "./ducks/documentRevisions/documentType";
 import documents from "./ducks/documents";
@@ -55,6 +56,7 @@ const appReducer = combineReducers({
   changeRequests,
   documentRevisions,
   dashboard,
+  trainingStats,
   documentType: persistReducer(documentTypePersistConfig, documentType),
   company: persistReducer(companyPersistConfig, company),
   tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),
