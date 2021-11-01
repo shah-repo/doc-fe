@@ -3,7 +3,6 @@ import {
   Chip,
   Grid,
   Link,
-  ListItem,
   ListItemIcon,
   ListItemText,
   Typography,
@@ -13,6 +12,7 @@ import React from "react";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
@@ -20,6 +20,8 @@ import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyledTooltip } from "../../common/StyledTooltip";
 import { styles } from "./pendingTraining.styles";
 
 interface Props {
@@ -45,13 +47,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
+
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
@@ -76,8 +72,16 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       color: Colors.white,
     },
   })(Chip);
+
   const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const handlePinClick = () => {
     setPinned(!pinned);
   };
@@ -256,7 +260,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       />
       {hoverItem && (
         <Box component="div" className={classes.actionIcons}>
-          <PinIcon onClick={handlePinClick} />
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+          {pinHover && (
+            <StyledTooltip title="Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handlePinClick}
+                onMouseLeave={onMouseLeavePinIcon}
+              />
+            </StyledTooltip>
+          )}
         </Box>
       )}
     </StyledListItem>
