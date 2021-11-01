@@ -15,6 +15,7 @@ import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_do
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
+import Text from "../../../components/Text";
 import { styles } from "./EmailModal.styles";
 import { StyledListItem } from "./StyledListItem";
 
@@ -61,7 +62,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-            Email Confirmation
+            <Text translation="email.title" />
           </Typography>
         </Grid>
         <Grid item>
@@ -88,7 +89,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             className={classes.confmesg}
           >
             <EmailSuccessIcon className={classes.successIcon} />
-            EMAIL SENT TO ALL
+            <Text translation="email.success.message" />
           </Typography>
         </Grid>
         <Grid item>
@@ -114,7 +115,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.modeltitle}
           >
-            Approval Status
+            <Text translation="modal.title" />
           </Typography>
         </Grid>
         <Grid item>
@@ -150,7 +151,8 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     className={classes.pendingtitle}
                     noWrap
                   >
-                    PENDING ({pendingApprovers?.length})
+                    <Text translation="modal.title.pending" />
+                    {` `}({pendingApprovers?.length})
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -160,7 +162,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     className={classes.lastseentitle}
                     noWrap
                   >
-                    Last sent: Oct 08, 2021
+                    <Text translation="email.last.sent" />: Oct 08, 2021
                   </Typography>
                 </Grid>
 
@@ -169,7 +171,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     onClick={handleApiAlertModelOpen}
                     className={classes.emailbutton}
                   >
-                    EMAIL ALL
+                    <Text translation="email.button.title" />
                   </Button>
                   <Modal
                     open={apiAlertModelOpen}
@@ -238,7 +240,8 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     className={classes.approvedtitle}
                     noWrap
                   >
-                    {`APPROVED (0)`}
+                    <Text translation="modal.title.approved" />
+                    {` (0)`}
                   </Typography>
                 </Grid>
               </Grid>
