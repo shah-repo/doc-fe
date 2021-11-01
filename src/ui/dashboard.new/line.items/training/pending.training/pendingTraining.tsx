@@ -3,10 +3,8 @@ import {
   Chip,
   Grid,
   Link,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Typography,
   withStyles,
 } from "@material-ui/core";
@@ -22,6 +20,8 @@ import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyledTooltip } from "../../common/StyledTooltip";
 import { styles } from "./pendingTraining.styles";
 
 interface Props {
@@ -47,13 +47,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
+
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
@@ -78,17 +72,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       color: Colors.white,
     },
   })(Chip);
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
+
   const [pinned, setPinned] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -278,12 +262,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         <Box component="div" className={classes.actionIcons}>
           {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
           {pinHover && (
-            <StyleTooltip title="Pin item" placement="top" arrow>
+            <StyledTooltip title="Pin item" placement="top" arrow>
               <PinSolidIcon
                 onClick={handlePinClick}
                 onMouseLeave={onMouseLeavePinIcon}
               />
-            </StyleTooltip>
+            </StyledTooltip>
           )}
         </Box>
       )}

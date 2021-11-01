@@ -3,10 +3,8 @@ import {
   Chip,
   Grid,
   Link,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Typography,
   withStyles,
 } from "@material-ui/core";
@@ -23,6 +21,8 @@ import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyledTooltip } from "../../common/StyledTooltip";
 import { styles } from "./newTraining.styles";
 
 interface Props {
@@ -50,13 +50,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
 }) => {
   const classes = styles();
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
+
   const NormalStyleChip = withStyles({
     root: {
       backgroundColor: Colors.white,
@@ -82,17 +76,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     },
   })(Chip);
 
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
   const [pinned, setPinned] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -249,7 +232,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               alignItems="center"
             >
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <StyleTooltip
+                <StyledTooltip
                   title={
                     <Typography color="inherit">
                       <Text
@@ -276,7 +259,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       {approvers.join(",")}
                     </Typography>
                   </Link>
-                </StyleTooltip>
+                </StyledTooltip>
                 &nbsp;
               </Grid>
               <Grid item={true} className={classes.grayDot}>
@@ -301,12 +284,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         <Box component="div" className={classes.actionIcons}>
           {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
           {pinHover && (
-            <StyleTooltip title="Pin item" placement="top" arrow>
+            <StyledTooltip title="Pin item" placement="top" arrow>
               <PinSolidIcon
                 onClick={handlePinClick}
                 onMouseLeave={onMouseLeavePinIcon}
               />
-            </StyleTooltip>
+            </StyledTooltip>
           )}
         </Box>
       )}
