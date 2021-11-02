@@ -78,9 +78,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
           DoughnutChartOptions.title.subtextStyle.color =
             Colors.latest_red_varient;
-        } else if (
-          evt.data?.name === TrainingStatusChartLabelTypes.DUE
-        ) {
+        } else if (evt.data?.name === TrainingStatusChartLabelTypes.DUE) {
           DoughnutChartOptions.title.subtextStyle.color =
             Colors.latest_yellow_varient;
         }

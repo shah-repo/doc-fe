@@ -7,8 +7,6 @@ interface TrainingLineItemsProps {
 
 const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   infoChangeTab,
-}) => {
-  return <TrainingLineItemsPresenter infoChangeTab={infoChangeTab} />;
-};
+}) => <TrainingLineItemsPresenter infoChangeTab={infoChangeTab} />;
 
 export default TrainingLineItems;

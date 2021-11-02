@@ -8,7 +8,6 @@ import {
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
 import TrainingChart from "./training.chart/TrainingChart.container";
-// import trainingStatsData from "./data/TrainingStatistics.json";
 import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
 import { styles } from "./TrainingStats.styles";
 
