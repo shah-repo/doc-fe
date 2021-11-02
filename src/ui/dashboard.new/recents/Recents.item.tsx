@@ -7,11 +7,12 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as FMIcon } from "../../../assets/images/FM.svg";
+import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
 import {
-  RecentDocGroups,
+  RecentDocTypeGroups,
   RecentItems,
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
@@ -24,20 +25,22 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   docId,
   docRevId,
   itemType,
-  docType,
+  docTypeGroup,
   docTitle,
   accessedAt,
 }) => {
   const classes = styles();
-  const getIcon = (docType: RecentDocGroups) => {
-    switch (docType) {
-      case RecentDocGroups.APPROVAL_REQUEST:
+  const getIcon = (docTypeGroup: RecentDocTypeGroups) => {
+    switch (docTypeGroup) {
+      case RecentDocTypeGroups.CHANGE_REQUEST:
         return <ApprovalIcon />;
-      case RecentDocGroups.PURCHASE_ORDER:
+      case RecentDocTypeGroups.PO:
         return <POIcon />;
-      case RecentDocGroups.FORM:
+      case RecentDocTypeGroups.PI:
+        return <MPIIcon />;
+      case RecentDocTypeGroups.FORM:
         return <FMIcon />;
-      case RecentDocGroups.SUPPLIERS:
+      case RecentDocTypeGroups.SUPPLIER:
         return <SOPIcon />;
       default:
         return <SOPIcon />;
@@ -46,7 +49,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   return (
     <StyledListItem button>
       <ListItemIcon>
-        <>{getIcon(docType)}</>
+        <>{getIcon(docTypeGroup)}</>
       </ListItemIcon>
       <ListItemText
         primary={
@@ -57,7 +60,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             alignItems="center"
           >
             <Grid item={true}>
-              {docType === RecentDocGroups.APPROVAL_REQUEST && (
+              {docTypeGroup === RecentDocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -74,7 +77,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              {docType !== RecentDocGroups.APPROVAL_REQUEST && (
+              {docTypeGroup !== RecentDocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"
@@ -93,21 +96,8 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
               )}
             </Grid>
             &nbsp;
-            {docType === RecentDocGroups.PURCHASE_ORDER && docTitle && (
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                  noWrap
-                >
-                  to&nbsp;
-                </Typography>
-              </Grid>
-            )}
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
-              {docType === RecentDocGroups.APPROVAL_REQUEST && (
+              {docTypeGroup === RecentDocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -124,7 +114,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              {docType !== RecentDocGroups.APPROVAL_REQUEST && (
+              {docTypeGroup !== RecentDocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"

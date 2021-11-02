@@ -5,12 +5,8 @@ export enum RecentTypes {
   CHANGE_REQUEST = "CHANGE_REQUEST",
 }
 
-export enum RecentDocGroups {
-  APPROVAL_REQUEST = "Approval Request",
-  PURCHASE_ORDER = "Purchase Order",
-  FORM = "Form",
-  SUPPLIERS = "Suppliers",
-  // FORM = "FORM",
+export enum RecentDocTypeGroups {
+  FORM = "FORM",
   OTHER = "OTHER",
   PI = "PI",
   RECORD = "RECORD",
@@ -43,7 +39,7 @@ export interface RecentItems {
   itemId: string;
   docId: string;
   docTitle: string;
-  docType: RecentDocGroups;
+  docTypeGroup: RecentDocTypeGroups;
   docRevId?: string;
 }
 
