@@ -74,6 +74,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
       key: "completedAtAfter",
     },
+    { label: `TRN ID: ${tableCriteria.queryDict?.trId  || ""}`, key: "trId" },
     { label: `TC ID: ${tableCriteria.queryDict?.tcId  || ""}`, key: "tcId" },
   ];
   const renderTableData = () => {
@@ -87,6 +88,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
         dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
         completedAtAfter: e.completedAt ?
           getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
+        trId: e.trId,
         tcId: e.trainingPlan?.curriculumDocIds?.join(", "),
       }));
     }
