@@ -133,11 +133,18 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       };
       myChart.on("mouseover", (evt: any) => {
         DoughnutChartOptions.series.data.map((data, index) => {
-          if (index !== evt?.dataIndex) {
+          if (index === 0 && evt?.dataIndex === index) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_yellow_varient;
+            DoughnutChartOptions.series.data[index + 1].itemStyle.color =
               Colors.gray;
           }
-          return null;
+          if (index === 1 && evt?.dataIndex === index) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_red_varient;
+            DoughnutChartOptions.series.data[index - 1].itemStyle.color =
+              Colors.gray;
+          }
         });
         DoughnutChartOptions.title.text = evt?.data?.value;
         DoughnutChartOptions.title.subtext = evt?.data?.name;
@@ -182,4 +189,4 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     );
   };
 
-export default TrainingChartPresenter;
+export default React.memo(TrainingChartPresenter);

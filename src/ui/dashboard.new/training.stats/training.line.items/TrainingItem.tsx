@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import { styles } from "./TrainingItem.styles";
+import Text from "../../../components/Text";
 
 interface TrainingItemProps {
   avatar: string | null;
@@ -50,7 +51,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyOverdue}
               color="textPrimary"
             >
-              {status}
+              <Text translation="training.stats.overdue" />
             </Typography>
           )}
           {!isOverdue && (
@@ -60,7 +61,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyDueInfewDays}
               color="textPrimary"
             >
-              {status}
+              <Text translation="training.stats.duein7days" />
             </Typography>
           )}
         </Grid>
@@ -122,4 +123,4 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   );
 };
 
-export default TrainingItem;
+export default React.memo(TrainingItem);
