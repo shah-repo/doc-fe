@@ -1079,5 +1079,12 @@
   "your.training": "Your Training",
   "your.training.on": "Your Training on",
   "assigned.users.count": "Assigned to {count} users.",
-  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending."
+  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
+  "training.email.title": "Email Confirmation",
+  "training.email.success.message": "EMAIL SENT TO ALL",
+  "training.modal.title": "Training Status",
+  "modal.title.overdue": "OVERDUE",
+  "modal.title.dueindays": "DUE IN 7 DAYS",
+  "email.last.sent": "Last sent",
+  "email.button.title": "EMAIL ALL"
 }

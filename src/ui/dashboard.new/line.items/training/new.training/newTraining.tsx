@@ -5,6 +5,7 @@ import {
   Link,
   ListItemIcon,
   ListItemText,
+  Modal,
   Typography,
   withStyles,
 } from "@material-ui/core";
@@ -21,6 +22,7 @@ import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyledTooltip } from "../../common/StyledTooltip";
 import { styles } from "./newTraining.styles";
@@ -78,6 +80,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
 
   const [pinned, setPinned] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
+  const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -91,47 +94,32 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
+  const openDueModel = (e) => {
+    e.stopPropagation();
+    setEmailModelopen(true);
+  };
+  const handleEmailModelClose = () => {
+    setEmailModelopen(false);
+  };
   const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
   const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
 
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
-      <ListItemIcon className={classes.listItemIcon}>
-        <TrainingIcon />
-      </ListItemIcon>
-      <ListItemText
-        primary={
-          <>
-            <Grid
-              container={true}
-              wrap="nowrap"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.typography}
-                  color="textPrimary"
-                  noWrap
-                >
-                  <Text
-                    translation={
-                      status === TrainingStatus.OVERDUE
-                        ? "your.training"
-                        : "your.training.on"
-                    }
-                  />
-                  &nbsp;
-                </Typography>
-              </Grid>
-              <Grid item={true}>
-                <Link
-                  href={documentVersionPath(documentRevId, existingId)}
-                  color="inherit"
-                  className={classes.link}
-                >
+    <>
+      <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+        <ListItemIcon className={classes.listItemIcon}>
+          <TrainingIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -139,116 +127,39 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {id}&nbsp;
+                    <Text
+                      translation={
+                        status === TrainingStatus.OVERDUE
+                          ? "your.training"
+                          : "your.training.on"
+                      }
+                    />
+                    &nbsp;
                   </Typography>
-                </Link>
-              </Grid>
-              <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <Link
-                  href={documentVersionPath(documentRevId, existingId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                </Grid>
+                <Grid item={true}>
+                  <Link
+                    href={documentVersionPath(documentRevId, existingId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {title}&nbsp;
-                  </Typography>
-                </Link>
-              </Grid>
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.typographyStatus}
-                  color="textSecondary"
-                  noWrap
-                >
-                  {!hoverItem && (
-                    <NormalStyleChip
-                      size="small"
-                      color="primary"
-                      icon={
-                        status === TrainingStatus.OVERDUE ? (
-                          <OverdueIcon />
-                        ) : (
-                          <WarningIcon />
-                        )
-                      }
-                      label={status}
-                    />
-                  )}
-                  {hoverItem && (
-                    <HoverStyleChip
-                      color="primary"
-                      size="small"
-                      icon={
-                        status === TrainingStatus.OVERDUE ? (
-                          <OverdueWhiteIcon />
-                        ) : (
-                          <WarningWhiteIcon />
-                        )
-                      }
-                      label={status}
-                    />
-                  )}
-                </Typography>
-                &nbsp;&nbsp;
-              </Grid>
-              <Grid
-                item={true}
-                className={
-                  status === TrainingStatus.OVERDUE
-                    ? classes.redDot
-                    : classes.yellowDot
-                }
-              >
-                &nbsp;
-              </Grid>
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={
-                    status === TrainingStatus.OVERDUE
-                      ? classes.typographyOverdue
-                      : classes.typographyDueInfewDays
-                  }
-                  color="textSecondary"
-                  noWrap
-                >
-                  &nbsp; {dueDate}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              container={true}
-              wrap="nowrap"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <StyledTooltip
-                  title={
-                    <Typography color="inherit">
-                      <Text
-                        translation="assigned.users.count"
-                        values={{ count: size(approvers) }}
-                      />
-                      <br />
-                      <Text
-                        translation="approved.and.pending.count"
-                        values={{ approved: 4, pending: 6 }}
-                      />
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {id}&nbsp;
                     </Typography>
-                  }
-                  placement="top-start"
-                >
-                  <Link href="#" color="inherit" className={classes.link}>
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    href={documentVersionPath(documentRevId, existingId)}
+                    color="inherit"
+                    className={classes.link}
+                  >
                     <Typography
                       component="span"
                       variant="caption"
@@ -256,44 +167,162 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {approvers.join(",")}
+                      {title}&nbsp;
                     </Typography>
                   </Link>
-                </StyledTooltip>
-                &nbsp;
-              </Grid>
-              <Grid item={true} className={classes.grayDot}>
-                &nbsp;
-              </Grid>
-              <Grid item={true}>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.timestampContainer}
-                  color="textSecondary"
-                  noWrap
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    onClick={openDueModel}
+                    className={classes.typographyStatus}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {!hoverItem && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={
+                          status === TrainingStatus.OVERDUE ? (
+                            <OverdueIcon />
+                          ) : (
+                            <WarningIcon />
+                          )
+                        }
+                        label={status}
+                      />
+                    )}
+                    {hoverItem && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={
+                          status === TrainingStatus.OVERDUE ? (
+                            <OverdueWhiteIcon />
+                          ) : (
+                            <WarningWhiteIcon />
+                          )
+                        }
+                        label={status}
+                      />
+                    )}
+                  </Typography>
+                  &nbsp;&nbsp;
+                </Grid>
+                <Grid
+                  item={true}
+                  className={
+                    status === TrainingStatus.OVERDUE
+                      ? classes.redDot
+                      : classes.yellowDot
+                  }
                 >
-                  &nbsp; {timestamp}
-                </Typography>
+                  &nbsp;
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={
+                      status === TrainingStatus.OVERDUE
+                        ? classes.typographyOverdue
+                        : classes.typographyDueInfewDays
+                    }
+                    color="textSecondary"
+                    noWrap
+                  >
+                    &nbsp; {dueDate}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </>
-        }
-      />
-      {hoverItem && (
-        <Box component="div" className={classes.actionIcons}>
-          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-          {pinHover && (
-            <StyledTooltip title="Pin item" placement="top" arrow>
-              <PinSolidIcon
-                onClick={handlePinClick}
-                onMouseLeave={onMouseLeavePinIcon}
-              />
-            </StyledTooltip>
-          )}
-        </Box>
-      )}
-    </StyledListItem>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <StyledTooltip
+                    title={
+                      <Typography color="inherit">
+                        <Text
+                          translation="assigned.users.count"
+                          values={{ count: size(approvers) }}
+                        />
+                        <br />
+                        <Text
+                          translation="approved.and.pending.count"
+                          values={{ approved: 4, pending: 6 }}
+                        />
+                      </Typography>
+                    }
+                    placement="top-start"
+                  >
+                    <Link
+                      href="#"
+                      color="inherit"
+                      className={classes.link}
+                      onClick={openDueModel}
+                    >
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {approvers.join(",")}
+                      </Typography>
+                    </Link>
+                  </StyledTooltip>
+                  &nbsp;
+                </Grid>
+                <Grid item={true} className={classes.grayDot}>
+                  &nbsp;
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    &nbsp; {timestamp}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </>
+          }
+        />
+        {hoverItem && (
+          <Box component="div" className={classes.actionIcons}>
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyledTooltip title="Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyledTooltip>
+            )}
+          </Box>
+        )}
+      </StyledListItem>
+      <Modal
+        open={emailModelopen}
+        onClose={handleEmailModelClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <TrainingEmailModal
+          handleEmailModelClose={handleEmailModelClose}
+          dueApprovers={approvers}
+        />
+      </Modal>
+    </>
   );
 };
 
