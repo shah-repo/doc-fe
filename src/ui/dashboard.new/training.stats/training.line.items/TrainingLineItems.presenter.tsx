@@ -1,10 +1,9 @@
-import { Box, Grid, List, Tab, Tabs } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Box, Grid, List, Tab } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
+import { StyledTabs } from "./StyledTabs";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -73,26 +72,6 @@ function tabCustomClasses(index: any) {
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
 }
-
-interface StyledTabsProps {
-  value: number;
-  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-}
-
-const StyledTabs = withStyles({
-  indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
-    "top": "33px",
-    "& > span": {
-      flexGrow: 1,
-      border: `1px solid ${Colors.navy}`,
-    },
-  },
-})((props: StyledTabsProps) => (
-  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
-));
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   (props) => {
