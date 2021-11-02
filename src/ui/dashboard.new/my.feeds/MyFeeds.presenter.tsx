@@ -67,7 +67,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   id={pendingAction.id}
                   type={pendingAction.type}
                   timestamp={pendingAction.timestamp}
-                  arId={pendingAction.arId || pendingAction.id}
+                  arId={pendingAction.docId}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                   title={pendingAction.docRevName}
@@ -148,7 +148,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Grid container={true} spacing={5}>
+    <Grid container={true} spacing={5} className={classes.grid}>
       <Grid item={true} md={12} sm={12}>
         <AsyncGate
           asyncAction={loadMyFeeds}

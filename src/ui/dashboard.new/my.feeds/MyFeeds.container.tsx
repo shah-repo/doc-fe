@@ -2,10 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   dashboardMyFeedsActions,
-  dashboardMyFeedsSelectors,
+  dashboardMyFeedsSelectors
 } from "../../../state/ducks/dashboard.new/my.feeds";
 import useActionCreator from "../../hooks/useActionCreator";
-// import feedItems from "../data/MyFeedsLineItems.json";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
