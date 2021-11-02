@@ -11,7 +11,7 @@ import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_a
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
 import {
-  RecentDocType,
+  RecentDocGroups,
   RecentItems,
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
@@ -29,24 +29,24 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   accessedAt,
 }) => {
   const classes = styles();
-  // TO DO: Needs to remove below line once we get icons for all the possible line item types
-  const itemTypes = [
-    RecentDocType.APPROVAL_REQUEST,
-    RecentDocType.PURCHASE_ORDER,
-    RecentDocType.FORM,
-    RecentDocType.SUPPLIERS,
-  ];
-
+  const getIcon = (docType: RecentDocGroups) => {
+    switch (docType) {
+      case RecentDocGroups.APPROVAL_REQUEST:
+        return <ApprovalIcon />;
+      case RecentDocGroups.PURCHASE_ORDER:
+        return <POIcon />;
+      case RecentDocGroups.FORM:
+        return <FMIcon />;
+      case RecentDocGroups.SUPPLIERS:
+        return <SOPIcon />;
+      default:
+        return <SOPIcon />;
+    }
+  };
   return (
     <StyledListItem button>
       <ListItemIcon>
-        <>
-          {docType === RecentDocType.APPROVAL_REQUEST && <ApprovalIcon />}
-          {docType === RecentDocType.PURCHASE_ORDER && <POIcon />}
-          {docType === RecentDocType.FORM && <FMIcon />}
-          {(docType === RecentDocType.SUPPLIERS ||
-            !itemTypes.includes(docType)) && <SOPIcon />}
-        </>
+        <>{getIcon(docType)}</>
       </ListItemIcon>
       <ListItemText
         primary={
@@ -57,7 +57,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             alignItems="center"
           >
             <Grid item={true}>
-              {docType === RecentDocType.APPROVAL_REQUEST && (
+              {docType === RecentDocGroups.APPROVAL_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -70,11 +70,11 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    {docId}
                   </Typography>
                 </Link>
               )}
-              {docType !== RecentDocType.APPROVAL_REQUEST && (
+              {docType !== RecentDocGroups.APPROVAL_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"
@@ -87,12 +87,13 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    {docId}
                   </Typography>
                 </Link>
               )}
             </Grid>
-            {docType === RecentDocType.PURCHASE_ORDER && docTitle && (
+            &nbsp;
+            {docType === RecentDocGroups.PURCHASE_ORDER && docTitle && (
               <Grid item={true}>
                 <Typography
                   component="span"
@@ -106,7 +107,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
               </Grid>
             )}
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
-              {docType === RecentDocType.APPROVAL_REQUEST && (
+              {docType === RecentDocGroups.APPROVAL_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -123,7 +124,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              {docType !== RecentDocType.APPROVAL_REQUEST && (
+              {docType !== RecentDocGroups.APPROVAL_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"
@@ -140,8 +141,8 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              &nbsp;&nbsp;
             </Grid>
+            &nbsp;&nbsp;
             <Grid item={true} className={classes.blackDot}>
               &nbsp;
             </Grid>

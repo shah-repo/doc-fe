@@ -3,7 +3,7 @@ import moment from "moment";
 import React from "react";
 import {
   RecentItems,
-  RecentType,
+  RecentTypes,
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -27,7 +27,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
     <List className={classes.root}>
       {recents.map((data, index) => {
         switch (data.itemType) {
-          case RecentType.DOCUMENT:
+          case RecentTypes.DOCUMENT:
             return (
               <RecentsItem
                 key={index}
@@ -44,7 +44,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   .fromNow()}
               />
             );
-          case RecentType.CHANGE_REQUEST:
+          case RecentTypes.CHANGE_REQUEST:
             return (
               <RecentsItem
                 key={index}
