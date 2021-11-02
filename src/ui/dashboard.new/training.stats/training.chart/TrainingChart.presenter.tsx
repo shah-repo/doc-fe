@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
@@ -56,58 +56,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     };
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
+    let myChart;
     const classes = styles();
-    useEffect(() => {
-      const myChart = echarts.init(
-        document.getElementById("main") as HTMLInputElement
-      );
-      myChart.setOption(DoughnutChartOptions, true);
-      window.onresize = function() {
-        myChart.resize();
-      };
-      myChart.on("mouseover", (evt: any) => {
-        DoughnutChartOptions.series.data.map((data, index) => {
-          if (index !== evt?.dataIndex) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.gray;
-          }
-          return null;
-        });
-        DoughnutChartOptions.title.text = evt?.data?.value;
-        DoughnutChartOptions.title.subtext = evt?.data?.name;
-        if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
-          DoughnutChartOptions.title.subtextStyle.color =
-            Colors.latest_red_varient;
-        } else if (evt.data?.name === TrainingStatusChartLabelTypes.DUE) {
-          DoughnutChartOptions.title.subtextStyle.color =
-            Colors.latest_yellow_varient;
-        }
-        myChart.setOption(DoughnutChartOptions);
-      });
-      myChart.on("mouseout", (e: any) => {
-        DoughnutChartOptions.title.text = "" + totalCount;
-        DoughnutChartOptions.title.subtext =
-          TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
-        DoughnutChartOptions.title.subtextStyle.color = Colors.gray;
-        DoughnutChartOptions.series.data = [
-          {
-            value: dueInSeven,
-            name: TrainingStatusChartLabelTypes.DUE,
-            itemStyle: {
-              color: Colors.latest_yellow_varient,
-            },
-          },
-          {
-            value: overdue,
-            name: TrainingStatusChartLabelTypes.OVERDUE,
-            itemStyle: {
-              color: Colors.latest_red_varient,
-            },
-          },
-        ];
-        myChart.setOption(DoughnutChartOptions);
-      });
-      const updateChart = (tabValue) => {
+    const updateChart = useCallback(
+      (tabValue) => {
         let text = "";
         let subText = "";
         let color = "";
@@ -134,9 +86,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           ];
         } else if (tabValue === 1) {
           DoughnutChartOptions.series.data.map((data, index) => {
-            if (index !== 0) {
+            if (index === 1) {
               DoughnutChartOptions.series.data[index].itemStyle.color =
                 Colors.gray;
+            } else if (index === 0) {
+              DoughnutChartOptions.series.data[index].itemStyle.color =
+                Colors.latest_yellow_varient;
             }
             return null;
           });
@@ -146,7 +101,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           color = Colors.latest_yellow_varient;
         } else if (tabValue === 2) {
           DoughnutChartOptions.series.data.map((data, index) => {
-            if (index !== 1) {
+            if (index === 1) {
+              DoughnutChartOptions.series.data[index].itemStyle.color =
+                Colors.latest_red_varient;
+            } else if (index === 0) {
               DoughnutChartOptions.series.data[index].itemStyle.color =
                 Colors.gray;
             }
@@ -161,8 +119,40 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         DoughnutChartOptions.title.subtext = subText;
         DoughnutChartOptions.title.subtextStyle.color = color;
         DoughnutChartOptions.series.data = data as any[];
-        myChart.setOption(DoughnutChartOptions);
+        myChart?.setOption(DoughnutChartOptions);
+      },
+      [tabValue]
+    );
+    useEffect(() => {
+      myChart = echarts.init(
+        document.getElementById("main") as HTMLInputElement
+      );
+      myChart.setOption(DoughnutChartOptions, true);
+      window.onresize = function () {
+        myChart.resize();
       };
+      myChart.on("mouseover", (evt: any) => {
+        DoughnutChartOptions.series.data.map((data, index) => {
+          if (index !== evt?.dataIndex) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.gray;
+          }
+          return null;
+        });
+        DoughnutChartOptions.title.text = evt?.data?.value;
+        DoughnutChartOptions.title.subtext = evt?.data?.name;
+        if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
+          DoughnutChartOptions.title.subtextStyle.color =
+            Colors.latest_red_varient;
+        } else if (evt.data?.name === TrainingStatusChartLabelTypes.DUE) {
+          DoughnutChartOptions.title.subtextStyle.color =
+            Colors.latest_yellow_varient;
+        }
+        myChart.setOption(DoughnutChartOptions);
+      });
+      myChart.on("mouseout", (e: any) => {
+        updateChart(tabValue);
+      });
       updateChart(tabValue);
       return () => {
         myChart.off("mouseover");
