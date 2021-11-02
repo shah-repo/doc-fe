@@ -127,7 +127,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       myChart = echarts.init(
         document.getElementById("main") as HTMLInputElement
       );
-      myChart.setOption(DoughnutChartOptions, true);
+      myChart.setOption(DoughnutChartOptions);
       window.onresize = function () {
         myChart.resize();
       };

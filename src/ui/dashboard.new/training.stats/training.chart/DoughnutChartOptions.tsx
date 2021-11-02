@@ -2,15 +2,15 @@ import Colors from "../../../layout/theme/utils/colors";
 
 const DoughnutChartOptions = {
   title: {
-    text: "16",
-    subtext: "Total Outstanding",
+    text: "",
+    subtext: "",
     padding: [-10, 0, 0, 0],
     textStyle: {
-      color: "black",
+      color: Colors.black,
       fontSize: 59,
     },
     subtextStyle: {
-      color: "grey",
+      color: "",
       fontSize: 12,
     },
     itemGap: -20,
@@ -46,15 +46,15 @@ const DoughnutChartOptions = {
     },
     data: [
       {
-        value: 12,
-        name: "Due in 7 days",
+        value: 0,
+        name: "",
         itemStyle: {
           color: Colors.latest_yellow_varient,
         },
       },
       {
-        value: 3,
-        name: "Overdue",
+        value: 0,
+        name: "",
         itemStyle: {
           color: Colors.latest_red_varient,
         },
