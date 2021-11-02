@@ -2,9 +2,7 @@
 import {
   Avatar,
   Box,
-  Grid,
-  Link,
-  ListItemAvatar,
+  Grid, ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -16,7 +14,6 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -28,6 +25,7 @@ interface Props {
   id: string;
   type: string;
   arId?: string | undefined;
+  docRevId?: string | undefined;
   arStatus?: string | undefined;
   timestamp: string | undefined;
   docRevOwnerAvatar?: string | undefined | null;
@@ -39,6 +37,7 @@ interface Props {
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  docRevId,
   docRevOwnerName,
   timestamp,
   title,
@@ -47,8 +46,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
@@ -150,39 +147,41 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={changeRequestEditPath(id)}
+                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
+                  {/* <Link
+                    href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
+                  > */}
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                    noWrap
                   >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.typography}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {arId}
-                    </Typography>
+                    {arId}
+                  </Typography>
                     &nbsp;
-                  </Link>
+                  {/* </Link> */}
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(id)}
+                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
+                  {/* <Link
+                    href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
+                  > */}
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyBold}
+                    color="textSecondary"
+                    noWrap
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {title}
-                    </Typography>
-                  </Link>
+                    {title}
+                  </Typography>
+                  {/* </Link> */}
                 </Grid>
               </Grid>
               <Grid
