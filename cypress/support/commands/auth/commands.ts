@@ -164,7 +164,7 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         addTestContext("user", loginResponse.email);
-        cy.log(params.USER.email);
+        cy.log(loginResponse.email);
       });
     });
 });
