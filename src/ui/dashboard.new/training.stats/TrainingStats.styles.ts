@@ -4,8 +4,8 @@ export const styles = makeStyles(() =>
   createStyles({
     outline: {
       overflow: "hidden",
-      minHeight: "calc(100vh - 145px)",
-      maxHeight: "calc(100vh - 145px)",
+      minHeight: "calc(100vh - 123px)",
+      maxHeight: "calc(100vh - 123px)",
     },
   })
 );

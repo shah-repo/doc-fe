@@ -23,7 +23,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
-    "id": `scrollable-auto-tab-${index}`,
+    id: `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   });
 
@@ -82,10 +82,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
                     <span className={classes.tabItemText}>
                       <Text translation={"common.recent"} />
                     </span>
