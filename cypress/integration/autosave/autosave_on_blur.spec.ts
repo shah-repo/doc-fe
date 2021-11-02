@@ -1018,7 +1018,23 @@ context("Autosave on blur", () => {
       });
     });
 
-    // //TODO: Uncomment when Implementation task doesn't delete title ENC-7359
+    it("Upload attachment and check for autosave", () => {
+      cy.fixture("test.docx").then((fileContent) => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+            fileContent: fileContent.toString(),
+            fileName: "test.docx",
+            mimeType: "*",
+            filePath: `fixtures/test.docx`,
+          });
+        });
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
+      });
+    });
+
+    // TODO: Uncomment when Implementation task doesn't delete title ENC-7359
 
     // it("Add Implementation task and check for autosave", () => {
     //   cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
@@ -1040,66 +1056,54 @@ context("Autosave on blur", () => {
         cy.unClick();
       });
     });
-  });
-
-  context("Verify autosave of text editor change while TextField autosave is in process", () => {
-    it("Fill text editor field while autosaving TextField", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-textfield-]").clear().arrowType("New Test field");
-        cy.unClick();
-        cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
-          .click({ force: true }).arrowType("text editor", { force: true });
-      });
-    });
-
-    it("check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
-      });
-    });
-  });
-
-  context("Verify autosave of radiobutton change while Date autosave is in process", () => {
-    it("Select radiobutton while autosaving Date", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.xpath("//input[@name]/ ../div/button").arrowClick();
-        // eslint-disable-next-line max-len
-        cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
-          .last().arrowClick();
-        cy.unClick();
-        cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
-      });
-    });
-
-    it("check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
-      });
-    });
-  });
-
-  context("Check autosave for add/remove attachment on File upload", () => {
-    it("Upload attachment and check for autosave", () => {
-      cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
-        });
-      });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
-      });
-    });
 
     it("Delete Upload attachment and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).parent().parent()
           .find("button").first().click({ force: true });
       });
+    });
+  });
+
+  context("Verify autosave of text editor change while TextField autosave is in process", () => {
+    it("Fill TextField", () => {
+      cy.get("[name^=fb-textfield-]").clear().arrowType("New Test field");
+    });
+
+    it("While autosaving, fill text editor field", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).arrowType("text editor", { force: true });
+      cy.wait("@response", { responseTimeout: 60 * 1000 });
+    });
+  });
+
+  context("Verify autosave of radiobutton change while Date autosave is in process", () => {
+    it("Select Date", () => {
+      cy.xpath("//input[@name]/ ../div/button").arrowClick();
+      // eslint-disable-next-line max-len
+      cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
+        .last().arrowClick();
+    });
+
+    it("While autosaving, check radiobutton", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+      cy.wait("@response", { responseTimeout: 60 * 1000 });
     });
   });
 });

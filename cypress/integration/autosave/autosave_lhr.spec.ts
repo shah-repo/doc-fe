@@ -632,7 +632,7 @@ context("Autosave LHR", () => {
         }).as("response");
         cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("6");
         cy.unClick();
-        cy.wait("@response");
+        cy.wait("@response", { timeout: 30 * 1000 });
       });
 
       it("Change value in 'Accepted quntity' fields", () => {
@@ -682,9 +682,9 @@ context("Autosave LHR", () => {
       it("check approvers after reload page", () => {
         cy.reload();
         cy.get(".MuiAutocomplete-tag").eq(0)
-          .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-        cy.get(".MuiAutocomplete-tag").eq(1)
           .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
+        cy.get(".MuiAutocomplete-tag").eq(1)
+          .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
       });
 
       it("Remove second Approver'", () => {
