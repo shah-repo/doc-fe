@@ -3,7 +3,9 @@ import { Grid } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ActionTypes } from "../../../state/ducks/dashboard/types";
+import { ActionTypes } from "../../../state/ducks/dashboard.new/my.feeds/types";
+import { AsyncState } from "../../../state/types";
+import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
@@ -13,27 +15,33 @@ import DefaultLineItem from "../line.items/default/defaultLineItem";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
-  feedItems: {
-    id: string;
-    type: string;
-    timestamp?: string | undefined;
-    arTitle?: string | undefined;
-    arStatus?: string | undefined;
-    arId?: string | undefined;
-    pendingApprovers?: any[] | undefined;
-    docRevs?: any;
-    docId?: string | undefined;
-    docRevName?: string | undefined;
-    docRevStatus?: string | undefined;
-    docRevOwnerName?: string | undefined;
-    docRevOwnerAvatar?: string | undefined | null;
-    docRevOwnerId?: string | undefined;
-    docRevPendingApprovals?: any;
-    docRevApprovedApprovals?: any;
-  }[];
+  loadMyFeeds: any;
+  loadMyFeedsListAsyncState: AsyncState;
+  // feedItems: RecentItems[];
+  feedItems: any[];
 }
+// interface Props {
+//   feedItems: {
+//     id: string;
+//     type: string;
+//     timestamp?: string | undefined;
+//     arTitle?: string | undefined;
+//     arStatus?: string | undefined;
+//     arId?: string | undefined;
+//     pendingApprovers?: any[] | undefined;
+//     docRevs?: any;
+//     docId?: string | undefined;
+//     docRevName?: string | undefined;
+//     docRevStatus?: string | undefined;
+//     docRevOwnerName?: string | undefined;
+//     docRevOwnerAvatar?: string | undefined | null;
+//     docRevOwnerId?: string | undefined;
+//     docRevPendingApprovals?: any;
+//     docRevApprovedApprovals?: any;
+//   }[];
+// }
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
-  feedItems,
+  loadMyFeeds, loadMyFeedsListAsyncState, feedItems,
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
@@ -142,8 +150,14 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   return (
     <Grid container={true} spacing={5}>
       <Grid item={true} md={12} sm={12}>
-        {feedItems.length > 0 && renderPendingActions()}
-        {renderNoPendingActions}
+        <AsyncGate
+          asyncAction={loadMyFeeds}
+          asyncState={loadMyFeedsListAsyncState}
+          startActionOnMount={true}
+        >
+          {feedItems.length > 0 && renderPendingActions()}
+          {renderNoPendingActions}
+        </AsyncGate>
       </Grid>
     </Grid>
   );
