@@ -161,6 +161,8 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
           cy.visit(CONFIG.FE_URL, { timeout: 50000 });
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         addTestContext("user", loginResponse.email);
         cy.log(loginResponse.email);
       });
