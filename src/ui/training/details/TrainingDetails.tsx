@@ -80,7 +80,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   </span> | Trainee &nbsp;
                   { training.completedAt &&
                     <span>
-                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.MonthDateYearAlt)}
+                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.DateTime)}
                     </span>
                   }
                 </Box>
