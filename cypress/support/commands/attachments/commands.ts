@@ -405,4 +405,3 @@ Cypress.Commands.add("excelDownloadTemplate", (params: {saveFileName: string  })
     cy.writeFile("cypress/downloads/" + params.saveFileName, file, "binary");
   });
 });
-
