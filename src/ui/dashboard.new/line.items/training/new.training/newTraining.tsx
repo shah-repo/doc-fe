@@ -1,13 +1,11 @@
 import {
   Box,
-  Chip,
   Grid,
   Link,
   ListItemIcon,
   ListItemText,
   Modal,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -21,8 +19,9 @@ import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images
 import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
-import Colors from "../../../../layout/theme/utils/colors";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
+import { HoverStyleChip } from "../../common/HoverStyleChip";
+import { NormalStyleChip } from "../../common/NormalStyleChip";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyledTooltip } from "../../common/StyledTooltip";
 import { styles } from "./newTraining.styles";
@@ -52,32 +51,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
 }) => {
   const classes = styles();
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color:
-        status === TrainingStatus.OVERDUE
-          ? Colors.latest_red_varient
-          : Colors.latest_yellow_varient,
-    },
-  })(Chip);
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor:
-        status === TrainingStatus.OVERDUE
-          ? Colors.latest_red_varient
-          : Colors.latest_yellow_varient,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
   const [pinned, setPinned] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -182,6 +155,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   >
                     {!hoverItem && (
                       <NormalStyleChip
+                        {...(status === TrainingStatus.OVERDUE
+                          ? { status }
+                          : `${TrainingStatus.OVERDUE}`)}
                         size="small"
                         color="primary"
                         icon={
@@ -196,6 +172,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     )}
                     {hoverItem && (
                       <HoverStyleChip
+                        {...(status === TrainingStatus.OVERDUE
+                          ? { status }
+                          : `${TrainingStatus.OVERDUE}`)}
                         color="primary"
                         size="small"
                         icon={
