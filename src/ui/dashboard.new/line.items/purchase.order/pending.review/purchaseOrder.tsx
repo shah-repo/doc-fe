@@ -22,16 +22,16 @@ import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import Colors from "../../../../layout/theme/utils/colors";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-
+import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
+
 
 interface Props {
   id: string;
@@ -319,8 +319,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                              .map((approver) => approver.userName)
-                              .join(",")
+                            .map((approver) => approver.userName)
+                            .join(",")
                           : ""}
                       </Typography>
                     </Link>
