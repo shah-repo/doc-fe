@@ -202,7 +202,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                 <Avatar
                   className={classes.listitemicon}
                   alt={pending.userName}
-                  src="."
+                  src={pending.userAvatar || "."}
                 />
                 <ListItemText
                   id={pending.employeeId}
@@ -259,22 +259,22 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           className={classes.listrootapproved}
         >
           <List dense disablePadding>
-            {approvedApprovers?.map((pending, index) => (
+            {approvedApprovers?.map((approved, index) => (
               <StyledListItem button key={index}>
                 <Avatar
                   className={classes.listitemicon}
-                  alt={pending.userName}
-                  src="."
+                  alt={approved.userName}
+                  src={approved.userAvatar || "."}
                 />
                 <ListItemText
-                  id={pending.employeeId}
+                  id={approved.employeeId}
                   primary={
                     <Typography
                       component="span"
                       variant="h2"
                       className={classes.listitemtext}
                     >
-                      {pending.userName}
+                      {approved.userName}
                     </Typography>
                   }
                 />
