@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Button, Dialog, Grid } from "@material-ui/core";
 import { isEmpty, omit } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
@@ -36,8 +36,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dialog = useDialog();
   const trainingDetailsDialog = useDialog();
-
-  const [selectedTraining, setTraining] = useState<TrainingRecordQuery>(DEFAULT_TRAINING_RECORD_QUERY);
+  const [training, setTraining] = useState<TrainingRecordQuery>(DEFAULT_TRAINING_RECORD_QUERY);
 
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
@@ -56,8 +55,9 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
-    setTraining(rowData);
     trainingDetailsDialog.open();
+    setTraining(rowData);
+
   };
 
   const headers = [
@@ -254,10 +254,20 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
           customQuerySet={customQuerySet}
           onSelect={({ rowData }) => () => handleTrainingDetailsDialog(rowData)}
         />
-        <TrainingDetails
-          dialog={trainingDetailsDialog}
-          training={selectedTraining}
-        />
+        {
+          trainingDetailsDialog.isOpen &&
+          <Dialog
+            open={trainingDetailsDialog.isOpen}
+            classes={{ paper: classes.dialogContent }}
+            fullWidth
+            maxWidth="md"
+          >
+            <TrainingDetails
+              dialog={trainingDetailsDialog}
+              training={training}
+            />
+          </Dialog>
+        }
       </Grid>
     </Grid>
   );
