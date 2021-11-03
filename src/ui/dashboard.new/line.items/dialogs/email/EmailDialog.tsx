@@ -11,11 +11,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
-import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
-import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
-import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
-import Text from "../../../components/Text";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow_down.svg";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
+import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
+import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
+import Text from "../../../../components/Text";
 import { styles } from "./EmailModal.styles";
 import { StyledListItem } from "./StyledListItem";
 

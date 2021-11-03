@@ -1,16 +1,16 @@
 import { Button, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
 import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
-import InputField from "../../../../../../components/forms/fields/Input";
+import { AsyncState, AsyncStatus } from "../../../../../../state/types";
+import InputField from "../../../../../components/forms/fields/Input";
 import {
   required,
   validator,
-} from "../../../../../../components/forms/fields/validators";
-import FormMessage from "../../../../../../components/forms/FormMessage";
-import FormProgress from "../../../../../../components/forms/FormProgress";
-import SubmitButton from "../../../../../../components/forms/SubmitButton";
-import Text from "../../../../../../components/Text";
+} from "../../../../../components/forms/fields/validators";
+import FormMessage from "../../../../../components/forms/FormMessage";
+import FormProgress from "../../../../../components/forms/FormProgress";
+import SubmitButton from "../../../../../components/forms/SubmitButton";
+import Text from "../../../../../components/Text";
 import styles from "./PasswordForm.styles";
 
 interface PasswordFormProps extends WithStyles<typeof styles> {

@@ -29,7 +29,7 @@ import { Attachment } from "../../../../change.request/form/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
-import EmailModal from "../../../modal.popups/email/EmailDialog";
+import EmailModal from "../../dialogs/email/EmailDialog";
 // import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./purchaseOrder.styles";
 

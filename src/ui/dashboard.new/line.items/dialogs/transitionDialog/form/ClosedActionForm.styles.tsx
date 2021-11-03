@@ -1,18 +1,19 @@
 import { createStyles, Theme } from "@material-ui/core";
-import Colors from "../../../../../../layout/theme/utils/colors";
+import Colors from "../../../../../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
     form: {
       minWidth: 400,
+      width: 410,
     },
     submitButton: {
       display: "flex",
       flexDirection: "row",
       alignItems: "flex-start",
-      padding: "5px 15px",
+      padding: "5px 5px",
       position: "static",
-      width: "92px",
+      width: "100px",
       height: "25px",
       left: "calc(50% - 92px/2 + 139px)",
       top: "calc(50% - 25px/2)",
@@ -53,5 +54,33 @@ export default (theme: Theme) =>
       order: 0,
       flexGrow: 0,
       margin: "0px 20px",
+    },
+    typography: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+    },
+    typographyBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+    },
+    pendingBox: {
+      flexDirection: "row",
+      height: "auto",
+      width: "410px",
+      marginBottom: "25px",
+      overflowY: "auto",
+      top: "48px",
+      left: "20px",
+      border: "1px solid",
+      borderColor: Colors.sky_blue,
+      display: "flex",
+      padding: "20px",
+      backgroundColor: Colors.white,
+      boxSizing: "border-box",
+      alignItems: "flex-start",
+      borderRadius: "8px",
+      flexWrap: "wrap",
     },
   });

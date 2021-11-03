@@ -2,21 +2,21 @@ import { Box, Grid, withStyles, WithStyles } from "@material-ui/core";
 import { Form } from "formik";
 import moment from "moment";
 import * as React from "react";
-import { ReactComponent as ScheduleIcon } from "../../../../../../../assets/images/ScheduleIcon.svg";
+import { ReactComponent as ScheduleIcon } from "../../../../../../assets/images/ScheduleIcon.svg";
 import {
   getStartOfDayDateString,
   TIME_ZONE,
-} from "../../../../../../../common/utils/date";
-import { AsyncState } from "../../../../../../../state/types";
-import DatePickerStaticField from "../../../../../../components/forms/fields/DatePickerStaticField";
+} from "../../../../../../common/utils/date";
+import { AsyncState } from "../../../../../../state/types";
+import DatePickerStaticField from "../../../../../components/forms/fields/DatePickerStaticField";
 import {
   required,
   validator,
-} from "../../../../../../components/forms/fields/validators/index";
-import FormMessage from "../../../../../../components/forms/FormMessage";
-import FormProgress from "../../../../../../components/forms/FormProgress";
-import SubmitButton from "../../../../../../components/forms/SubmitButton";
-import Text from "../../../../../../components/Text";
+} from "../../../../../components/forms/fields/validators/index";
+import FormMessage from "../../../../../components/forms/FormMessage";
+import FormProgress from "../../../../../components/forms/FormProgress";
+import SubmitButton from "../../../../../components/forms/SubmitButton";
+import Text from "../../../../../components/Text";
 import styles from "./EffectiveDateForm.styles";
 
 interface EffectiveDateFormProps extends WithStyles<typeof styles> {

@@ -31,7 +31,7 @@ import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
+import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
 import { HoverStyleChip } from "./HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "./NormalStyleChipApprovalApproved";

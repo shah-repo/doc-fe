@@ -7,10 +7,10 @@ import {
 } from "@material-ui/core";
 import { Form } from "formik";
 import * as React from "react";
-import { AsyncState, AsyncStatus } from "../../../../../../../state/types";
-import FormMessage from "../../../../../../components/forms/FormMessage";
-import SubmitButton from "../../../../../../components/forms/SubmitButton";
-import Text from "../../../../../../components/Text";
+import { AsyncState, AsyncStatus } from "../../../../../../state/types";
+import FormMessage from "../../../../../components/forms/FormMessage";
+import SubmitButton from "../../../../../components/forms/SubmitButton";
+import Text from "../../../../../components/Text";
 import styles from "./ClosedActionForm.styles";
 
 interface ClosedActionFormProps extends WithStyles<typeof styles> {

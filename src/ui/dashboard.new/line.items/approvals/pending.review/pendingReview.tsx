@@ -25,9 +25,9 @@ import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/vi
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
-import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import EmailModal from "../../dialogs/email/EmailDialog";
 import { HoverStyleChip } from "./HoverStyleChipPendingReview";
 import { NormalStyleChip } from "./NormalStyleChipPendingReview";
 import { styles } from "./pendingReview.styles";

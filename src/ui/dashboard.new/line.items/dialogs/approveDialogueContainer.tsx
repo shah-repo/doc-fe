@@ -1,17 +1,17 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
-import { changeRequestsActions } from "../../../../../state/ducks/changeRequest";
+import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import {
   ChangeRequestTransition,
   ChangeRequestTransitionResponse,
-} from "../../../../../state/ducks/changeRequest/types";
+} from "../../../../state/ducks/changeRequest/types";
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
-} from "../../../../change.request/form/types";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import useAsync from "../../../../hooks/useAsync";
-import useDialog from "../../../../hooks/useDialog";
+} from "../../../change.request/form/types";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import TransitionDialog from "./transitionDialog/TransitionDialog";
 
 interface Props {

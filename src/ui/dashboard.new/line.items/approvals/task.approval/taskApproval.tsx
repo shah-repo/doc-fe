@@ -18,7 +18,7 @@ import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
+import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 // import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./taskApproval.styles";
 
