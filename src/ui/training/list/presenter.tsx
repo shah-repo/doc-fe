@@ -61,6 +61,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   };
 
   const headers = [
+    { label: `TRN ID: ${tableCriteria.queryDict?.trId  || ""}`, key: "trId" },
     { label: `DOC ID: ${tableCriteria.queryDict?.docId  || ""}`, key: "docId" },
     { label: `REVISION: ${tableCriteria.queryDict?.revision  || ""}`, key: "revision" },
     { label: `DOCUMENT TITLE: ${tableCriteria.queryDict?.docRevTitle  || ""}`, key: "docRevTitle" },
@@ -74,12 +75,13 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
       key: "completedAtAfter",
     },
-    { label: `TRN ID: ${tableCriteria.queryDict?.trId  || ""}`, key: "trId" },
     { label: `TC ID: ${tableCriteria.queryDict?.tcId  || ""}`, key: "tcId" },
   ];
+
   const renderTableData = () => {
     if (!isEmpty(data)) {
       return data.map((e) => ({
+        trId: e.trId,
         docId: e.trainingPlan.document.docId,
         revision: e.documentRevision.revision,
         docRevTitle: e.documentRevision.name,
@@ -88,7 +90,6 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
         dueOn: e.dueOn ? getFormattedDateString(e.dueOn, MomentFormats.MonthDateYear) : "",
         completedAtAfter: e.completedAt ?
           getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear) : "Pending",
-        trId: e.trId,
         tcId: e.trainingPlan?.curriculumDocIds?.join(", "),
       }));
     }
@@ -99,6 +100,18 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const exportedData = dialog.isOpen ? renderTableData() : [];
 
   const columns: TableColumnProps<TrainingRecordQuery>[] = [
+    {
+      key: "trId",
+      id: "TrainingListPresenter-trId",
+      label: "common.trId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.trId,
+        width: 75,
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict?.trId,
+      },
+    },
     {
       key: "docId",
       id: "TrainingListPresenter-id",
@@ -188,18 +201,6 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       columnOptions: {
         cellDataGetter: ({ rowData }) => rowData.completedAt ?
           getFormattedDateString(rowData.completedAt, MomentFormats.DateTimeComplete) : "Pending",
-      },
-    },
-    {
-      key: "trId",
-      id: "TrainingListPresenter-trId",
-      label: "common.trId",
-      columnOptions: {
-        cellDataGetter: ({ rowData }) => rowData.trId,
-        width: 75,
-      },
-      searchOptions: {
-        defaultValue: tableCriteria.queryDict?.trId,
       },
     },
     {
