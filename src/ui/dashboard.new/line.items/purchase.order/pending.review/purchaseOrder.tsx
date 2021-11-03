@@ -24,6 +24,12 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../../layout/theme/utils/colors";
+import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { Attachment } from "../../../../change.request/form/types";
+import useActionCreator from "../../../../hooks/useActionCreator";
+import useAsync from "../../../../hooks/useAsync";
+
 import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -144,6 +150,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
@@ -166,6 +173,15 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const async = useAsync<AttachmentDownloadResponse>({
+    onSuccess: (downloadInfo) => {
+      window.onbeforeunload = null;
+      downloadInfo && window.open(downloadInfo.url, "_blank");
+    },
+  });
+  const downloadAttachment = (attachment: Attachment) => () => {
+    async.start(downloadAction, attachment, async);
   };
   return (
     <>
@@ -303,8 +319,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                            .map((approver) => approver.userName)
-                            .join(",")
+                              .map((approver) => approver.userName)
+                              .join(",")
                           : ""}
                       </Typography>
                     </Link>
@@ -424,18 +440,25 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {attachments.map((attachmentInfo, index) => (
                           <Grid item key={index}>
-                            <AttachmentIcon />{" "}
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.linkText}
-                              color="textPrimary"
+                            <Link
+                              href="#"
+                              onClick={downloadAttachment(attachmentInfo)}
+                              color="inherit"
+                              className={classes.linkTextColor}
                             >
-                              {" " +
-                                attachmentInfo.name +
-                                "." +
-                                attachmentInfo.type}
-                            </Typography>
+                              <AttachmentIcon />{" "}
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                className={classes.linkText}
+                                color="textPrimary"
+                              >
+                                {" " +
+                                  attachmentInfo.name +
+                                  "." +
+                                  attachmentInfo.type}
+                              </Typography>
+                            </Link>
                           </Grid>
                         ))}
                       </Grid>

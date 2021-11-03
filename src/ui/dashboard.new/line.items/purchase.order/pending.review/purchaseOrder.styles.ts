@@ -15,11 +15,14 @@ export const styles = makeStyles(() =>
     link: {
       color: Colors.black,
     },
+    linkTextColor: {
+      color: Colors.navy,
+    },
     linkText: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
-      color: "#011FBB",
+      color: Colors.navy,
     },
     collapsedList: {
       backgroundColor: Colors.sky_blue,

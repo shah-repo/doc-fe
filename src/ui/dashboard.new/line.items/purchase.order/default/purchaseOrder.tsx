@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   Tooltip,
+  Link,
   Typography,
   withStyles,
 } from "@material-ui/core";
@@ -20,6 +21,11 @@ import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import Colors from "../../../../layout/theme/utils/colors";
+import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { Attachment } from "../../../../change.request/form/types";
+import useActionCreator from "../../../../hooks/useActionCreator";
+import useAsync from "../../../../hooks/useAsync";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
@@ -138,6 +144,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
+  const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
@@ -151,10 +158,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeavePinIcon = () => {
     setPinHover(false);
   };
-  // eslint-disable-next-line no-console
-  console.log("PO Presenter :::");
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
+  };
+  const async = useAsync<AttachmentDownloadResponse>({
+    onSuccess: (downloadInfo) => {
+      window.onbeforeunload = null;
+      downloadInfo && window.open(downloadInfo.url, "_blank");
+    },
+  });
+  const downloadAttachment = (attachment: Attachment) => () => {
+    async.start(downloadAction, attachment, async);
   };
   return (
     <>
@@ -366,16 +380,23 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {attachments.map((attachmentInfo, index) => (
                           <Grid item key={index}>
-                            <AttachmentIcon />{" "}
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.linkText}
-                              color="textPrimary"
+                            <Link
+                              href="#"
+                              onClick={downloadAttachment(attachmentInfo)}
+                              color="inherit"
+                              className={classes.linkTextColor}
                             >
-                              {" "}
-                              {attachmentInfo.name}
-                            </Typography>
+                              <AttachmentIcon />{" "}
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                className={classes.linkText}
+                                color="textPrimary"
+                              >
+                                {" "}
+                                {attachmentInfo.name}
+                              </Typography>
+                            </Link>
                           </Grid>
                         ))}
                       </Grid>
