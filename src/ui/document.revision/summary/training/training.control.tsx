@@ -32,7 +32,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   }
 
   const transition = TrainingPlanTransition.Complete;
-  const label = "training.completed";
+  const label = "training.complete";
 
   const openDialog = () => {
     async.reset();
@@ -52,7 +52,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
 
   return (
     <Box mt={5} ml={2}>
-      <Link onClick={openDialog}>
+      <Link onClick={openDialog} style={{ fontSize: "1rem" }}>
         <Text translation="training.acknowledge.completion.link" />
       </Link>
       <TrainingDialog
