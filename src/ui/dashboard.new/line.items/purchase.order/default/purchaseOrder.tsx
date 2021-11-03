@@ -95,13 +95,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       ltext: "Line Items:",
       rtext: purchaseOrdeLineItemCount,
     },
-    { id: "Id5", isAttachments: true, ltext: "Attachments" },
-  ];
-
-  const attachments = purchaseOrderAttachments || [
-    { id: "AT-1", name: "Attached File.pdf" },
-    { id: "AT-3", name: "Document.doc" },
-    { id: "AT-3", name: "Spreadsheet.xls" },
+    {
+      id: "Id5",
+      isAttachments: true,
+      ltext: "Attachments",
+      rtext: purchaseOrderAttachments || [],
+    },
   ];
 
   const StyledListItem = withStyles({
@@ -317,11 +316,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Grid item md={3} sm={6}>
                       <Typography
                         component="span"
-                        variant="body2"
+                        variant="caption"
                         className={classes.typographyChildrenBold}
-                        color="textPrimary"
+                        color="textSecondary"
                       >
-                        <b>{poItem.ltext}</b>
+                        {poItem.ltext}
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
@@ -345,11 +344,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Grid item md={3} sm={6}>
                       <Typography
                         component="span"
-                        variant="body2"
+                        variant="caption"
                         className={classes.typographyChildrenBold}
-                        color="textPrimary"
+                        color="textSecondary"
                       >
-                        <b>{poItem.ltext}</b>
+                        {poItem.ltext}
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
@@ -358,9 +357,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         variant="body2"
                         className={classes.typography}
                         color="textPrimary"
-                      >
-                        {poItem.rtext}
-                      </Typography>
+                        dangerouslySetInnerHTML={{ __html: poItem.rtext }}
+                      />
                     </Grid>
                   </Grid>
                 </StyledListItem>
@@ -373,11 +371,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Grid item md={3} sm={6}>
                       <Typography
                         component="span"
-                        variant="body2"
+                        variant="caption"
                         className={classes.typographyChildrenBold}
-                        color="textPrimary"
+                        color="textSecondary"
                       >
-                        <b>{poItem.ltext}</b>
+                        {poItem.ltext}
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
@@ -386,23 +384,24 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         justify="space-between"
                         alignContent="center"
                       >
-                        {attachments.map((attachmentInfo, index) => (
+                        {poItem.rtext.map((attachmentInfo, index) => (
                           <Grid item key={index}>
+                            <AttachmentIcon
+                              className={classes.attachmentIcon}
+                            />
                             <Link
                               href="#"
                               onClick={downloadAttachment(attachmentInfo)}
                               color="inherit"
                               className={classes.linkTextColor}
                             >
-                              <AttachmentIcon />{" "}
                               <Typography
                                 component="span"
                                 variant="body2"
                                 className={classes.linkText}
                                 color="textPrimary"
                               >
-                                {" "}
-                                {attachmentInfo.name}
+                                {` ${attachmentInfo.name}.${attachmentInfo.type}`}
                               </Typography>
                             </Link>
                           </Grid>
