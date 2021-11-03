@@ -76,6 +76,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
   const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
+  const dueApprovers = approvers.map((name, index) => ({
+    listitemicon: index,
+    userName: name,
+    employeeId: index,
+  }));
 
   return (
     <>
@@ -298,7 +303,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       >
         <TrainingEmailModal
           handleEmailModelClose={handleEmailModelClose}
-          dueApprovers={approvers}
+          dueApprovers={dueApprovers}
         />
       </Modal>
     </>

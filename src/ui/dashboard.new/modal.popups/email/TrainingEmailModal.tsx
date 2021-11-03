@@ -21,12 +21,14 @@ import { styles } from "./TrainingEmailModal.styles";
 
 interface TrainingEmailModalProps {
   handleEmailModelClose: () => void;
-  dueApprovers: any;
+  dueApprovers?: any;
+  overdueApprovers?: any;
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   handleEmailModelClose,
   dueApprovers,
+  overdueApprovers,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
@@ -152,7 +154,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     noWrap
                   >
                     <Text translation="modal.title.overdue" />
-                    {` `}({dueApprovers?.length})
+                    {` `}({overdueApprovers?.length || 0})
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -193,7 +195,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           className={classes.listrootdue}
         >
           <List dense disablePadding>
-            {dueApprovers.map((due, index) => (
+            {overdueApprovers?.map((due, index) => (
               <StyledListItem button key={index}>
                 <Avatar
                   className={classes.listitemicon}
@@ -241,7 +243,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     noWrap
                   >
                     <Text translation="modal.title.dueindays" />
-                    {` (0)`}
+                    {` `}({dueApprovers?.length || 0})
                   </Typography>
                 </Grid>
                 <Grid item>
