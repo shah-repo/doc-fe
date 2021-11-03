@@ -4,6 +4,10 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../common/utils/date";
+import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
@@ -68,7 +72,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               <TaskApproval
                 id={pendingAction.id}
                 type={pendingAction.type}
-                timestamp={pendingAction.timestamp}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
                 arId={pendingAction.docId}
                 docRevId={pendingAction.purchaseOrderSupplierDocRevId}
                 docRevOwnerName={pendingAction.docRevOwnerName}
@@ -79,13 +86,18 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER:
-            if (LINE_ITEMS_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus) {
+            if (
+              LINE_ITEMS_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus
+            ) {
               return (
                 <PurchaseOrderPendingReview
                   id={pendingAction.id}
                   docId={pendingAction.docId}
                   type={pendingAction.type}
-                  timestamp={pendingAction.timestamp}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
                   purchaseOrderSupplierDocRevId={
                     pendingAction.purchaseOrderSupplierDocRevId
                   }
@@ -122,7 +134,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 id={pendingAction.id}
                 docId={pendingAction.docId}
                 type={pendingAction.type}
-                timestamp={pendingAction.timestamp}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
                 purchaseOrderSupplierDocRevId={
                   pendingAction.purchaseOrderSupplierDocRevId
                 }
@@ -163,7 +178,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 <TaskApproval
                   id={pendingAction.id}
                   type={pendingAction.type}
-                  timestamp={pendingAction.timestamp}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
                   arId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
                   docRevOwnerName={pendingAction.docRevOwnerName}
@@ -185,7 +203,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
-                  timestamp={pendingAction.timestamp}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
                   pendingApprovers={pendingAction.pendingApprovers}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}
@@ -201,7 +222,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
-                  timestamp={pendingAction.timestamp}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
                   pendingApprovers={pendingAction.pendingApprovers}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}
@@ -217,7 +241,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   title={pendingAction?.arTitle}
                   docRevs={pendingAction.docRevs}
                   arStatus={pendingAction.arStatus}
-                  timestamp={pendingAction.timestamp}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
                   pendingApprovers={pendingAction.pendingApprovers}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}

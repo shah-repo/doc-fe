@@ -32,7 +32,6 @@ import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
-
 interface Props {
   id: string;
   docId: string;
@@ -214,17 +213,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     {docId}&nbsp;
                   </Typography>
                 </Grid>
-                {/* <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    {docRevName ? "to" : ""}&nbsp;
-                  </Typography>
-                </Grid> */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Typography
                     component="span"
@@ -296,8 +284,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Typography color="inherit">
-                          Assigned to {size(docRevPendingApprovals)} users.{" "}
-                          <br />0 have Approved and{" "}
+                          Assigned to{" "}
+                          {size(docRevPendingApprovals) +
+                            size(docRevApprovedApprovals)}{" "}
+                          users. <br />
+                          {size(docRevPendingApprovals)} have Approved and{" "}
                           {size(docRevApprovedApprovals)} are Pending.
                         </Typography>
                       </>
