@@ -26,11 +26,11 @@ import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../dialogs/email/EmailDialog";
-// import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
@@ -60,6 +60,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   status,
   docRevName,
+  purchaseOrderSupplierDocRevId,
+  purchaseOrderSupplierDocId,
   timestamp,
   hoverItemId,
   purchaseOrderCurrency,
@@ -386,14 +388,22 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.linkText}
-                        color="textPrimary"
+                      <Link
+                        href={documentVersionPath(
+                          purchaseOrderSupplierDocRevId || "",
+                          purchaseOrderSupplierDocId
+                        )}
+                        color="inherit"
                       >
-                        {poItem.rtext}
-                      </Typography>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.linkText}
+                          color="textPrimary"
+                        >
+                          {poItem.rtext}
+                        </Typography>
+                      </Link>
                     </Grid>
                   </Grid>
                 </StyledListItem>
