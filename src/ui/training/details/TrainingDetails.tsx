@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -21,13 +21,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
     const classes = styles();
 
     return (
-      <Dialog
-        disableBackdropClick={true}
-        open={dialog.isOpen}
-        classes={{ paper: classes.dialogContent }}
-        fullWidth
-        maxWidth="md"
-      >
+      <>
         <IconButton className={classes.closeButton} onClick={dialog.close}>
           <CloseIcon />
         </IconButton>
@@ -93,7 +87,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
             </Grid>
           </Grid>
         </DialogContent>
-      </Dialog>
+      </>
     );
   };
 
