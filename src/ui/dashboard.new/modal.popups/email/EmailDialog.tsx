@@ -22,11 +22,15 @@ import { StyledListItem } from "./StyledListItem";
 interface EmailModalProps {
   handleEmailModelClose: () => void;
   pendingApprovers: any;
+  timestamp?: any;
+  approvedApprovers?: any;
 }
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   handleEmailModelClose,
   pendingApprovers,
+  timestamp,
+  approvedApprovers,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
@@ -99,7 +103,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            Sent: 10/5/21
+            Sent: {timestamp || 10 / 5 / 21}
           </Typography>
         </Grid>
       </Grid>
@@ -241,7 +245,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     noWrap
                   >
                     <Text translation="modal.title.approved" />
-                    {` (0)`}
+                    {` `}({approvedApprovers?.length || 0})
                   </Typography>
                 </Grid>
               </Grid>
@@ -255,7 +259,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           className={classes.listrootapproved}
         >
           <List dense disablePadding>
-            {pendingApprovers.map((pending, index) => (
+            {approvedApprovers?.map((pending, index) => (
               <StyledListItem button key={index}>
                 <Avatar
                   className={classes.listitemicon}

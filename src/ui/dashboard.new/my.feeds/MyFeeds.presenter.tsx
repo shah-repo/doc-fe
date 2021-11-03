@@ -3,7 +3,10 @@ import { Grid } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ActionTypes } from "../../../state/ducks/dashboard.new/my.feeds/types";
+import {
+  ActionTypes,
+  PO_STATUS_TYPES,
+} from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
@@ -11,6 +14,8 @@ import ApprovalApproved from "../line.items/approvals/approval.approved/approval
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
+import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
+import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import { styles } from "./MyFeeds.styles";
 
@@ -41,7 +46,9 @@ interface Props {
 //   }[];
 // }
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
-  loadMyFeeds, loadMyFeedsListAsyncState, feedItems,
+  loadMyFeeds,
+  loadMyFeedsListAsyncState,
+  feedItems,
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
@@ -51,10 +58,100 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItemId("");
   };
+
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {feedItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
+          case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
+            return (
+              <TaskApproval
+                id={pendingAction.id}
+                type={pendingAction.type}
+                timestamp={pendingAction.timestamp}
+                arId={pendingAction.docId}
+                docRevId={pendingAction.purchaseOrderSupplierDocRevId}
+                docRevOwnerName={pendingAction.docRevOwnerName}
+                docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                title={pendingAction.docRevName}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
+          case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER:
+            if (PO_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus) {
+              return (
+                <PurchaseOrderPendingReview
+                  id={pendingAction.id}
+                  docId={pendingAction.docId}
+                  type={pendingAction.type}
+                  timestamp={pendingAction.timestamp}
+                  purchaseOrderSupplierDocRevId={
+                    pendingAction.purchaseOrderSupplierDocRevId
+                  }
+                  purchaseOrderSupplierDocId={
+                    pendingAction.purchaseOrderSupplierDocId
+                  }
+                  status={pendingAction.docRevStatus}
+                  docRevName={pendingAction.docRevName}
+                  docRevPendingApprovals={pendingAction.docRevPendingApprovals}
+                  docRevApprovedApprovals={
+                    pendingAction.docRevApprovedApprovals
+                  }
+                  purchaseOrderTotalAmount={
+                    pendingAction.purchaseOrderTotalAmount
+                  }
+                  purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                  purchaseOrderDescription={
+                    pendingAction.purchaseOrderDescription
+                  }
+                  purchaseOrdeLineItemCount={
+                    pendingAction.purchaseOrdeLineItemCount
+                  }
+                  purchaseOrderAttachments={
+                    pendingAction.purchaseOrderAttachments
+                  }
+                  purchaseSupplierName={pendingAction.purchaseSupplierName}
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
+                />
+              );
+            }
+            return (
+              <PurchaseOrder
+                id={pendingAction.id}
+                docId={pendingAction.docId}
+                type={pendingAction.type}
+                timestamp={pendingAction.timestamp}
+                purchaseOrderSupplierDocRevId={
+                  pendingAction.purchaseOrderSupplierDocRevId
+                }
+                purchaseOrderSupplierDocId={
+                  pendingAction.purchaseOrderSupplierDocId
+                }
+                status={pendingAction.docRevStatus}
+                docRevName={pendingAction.docRevName}
+                docRevPendingApprovals={pendingAction.docRevPendingApprovals}
+                docRevApprovedApprovals={pendingAction.docRevApprovedApprovals}
+                purchaseOrderTotalAmount={
+                  pendingAction.purchaseOrderTotalAmount
+                }
+                purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                purchaseOrderDescription={
+                  pendingAction.purchaseOrderDescription
+                }
+                purchaseOrdeLineItemCount={
+                  pendingAction.purchaseOrdeLineItemCount
+                }
+                purchaseOrderAttachments={
+                  pendingAction.purchaseOrderAttachments
+                }
+                purchaseSupplierName={pendingAction.purchaseSupplierName}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
+
           case ActionTypes.PENDING_DOC_CONTROL:
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
