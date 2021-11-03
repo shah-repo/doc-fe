@@ -262,6 +262,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     className={classes.typographyStatus}
                     color="textSecondary"
                     noWrap
+                    onClick={openApproversModel}
                   >
                     {!hoverItem && !open && (
                       <NormalStyleChip
