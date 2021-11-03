@@ -15,6 +15,7 @@ import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
+import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import Text from "../../../../components/Text";
 import { styles } from "./EmailModal.styles";
 import { StyledListItem } from "./StyledListItem";
@@ -49,7 +50,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
     setApiAlertModel(true);
     setTimeout(() => {
       handleApiAlertModelClose();
-    }, 1000);
+    }, 2000);
   };
 
   const handleApiAlertModelClose = () => {
@@ -103,7 +104,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            Sent: {timestamp || 10 / 5 / 21}
+            Sent: {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
       </Grid>
@@ -166,7 +167,8 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     className={classes.lastseentitle}
                     noWrap
                   >
-                    <Text translation="email.last.sent" />: Oct 08, 2021
+                    <Text translation="email.last.sent" />:{" "}
+                    {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
                   </Typography>
                 </Grid>
 
