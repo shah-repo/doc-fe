@@ -1034,21 +1034,20 @@ context("Autosave on blur", () => {
       });
     });
 
-    // TODO: Uncomment when Implementation task doesn't delete title ENC-7359
-
-    // it("Add Implementation task and check for autosave", () => {
-    //   cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
-    //   cy.get("[data-cy=\"title\"]").arrowType("Task One");
-    //   cy.get("[data-cy=\"description\"]").eq(1).next().arrowType("Task Description");
-    //   cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
-    //   cy.xpath("//input[@name]/ ../div/button").eq(1).arrowClick();
-    //   // eslint-disable-next-line max-len
-    //   cy.xpath(
-    // "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
-    // ).last()
-    //     .click();
-    //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).arrowClick({ force: true });
-    // });
+    it("Add Implementation task and check for autosave", () => {
+      cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
+      cy.get("[data-cy=\"title\"]").arrowType("Task One");
+      cy.get("#fb-mpiprocedure-ref-description").arrowClick({ force: true }).arrowType("Task Description");
+      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
+      cy.get("[name=\"dueDate\"]").parent().find("button").arrowClick({ force: true });
+      // eslint-disable-next-line max-len
+      cy.xpath(
+        "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
+      ).last().click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostTasks], () => {
+        cy.get("button[data-cy=\"fb-control-btn\"]").eq(8).arrowClick({ force: true });
+      });
+    });
 
     it("Select REQ and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -1081,7 +1080,7 @@ context("Autosave on blur", () => {
       cy.unClick();
       cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
         .click({ force: true }).arrowType("text editor", { force: true });
-      cy.wait("@response", { responseTimeout: 60 * 1000 });
+      cy.wait("@response", { responseTimeout: 65 * 1000 });
     });
   });
 
@@ -1103,7 +1102,7 @@ context("Autosave on blur", () => {
 
       cy.unClick();
       cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
-      cy.wait("@response", { responseTimeout: 60 * 1000 });
+      cy.wait("@response", { responseTimeout: 65 * 1000 });
     });
   });
 });

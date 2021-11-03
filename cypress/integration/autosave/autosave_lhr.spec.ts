@@ -570,24 +570,16 @@ context("Autosave LHR", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
-    it("check approvers after reload page", () => {
-      cy.reload();
-      cy.get(".MuiAutocomplete-tag").eq(1)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-    });
-
     it("Remove second Approver'", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
     });
 
     it("check approvers after reload page", () => {
       cy.reload();
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(1)
-        .should("not.exist");
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
 
     it("check initial quantity", () => {
@@ -636,7 +628,9 @@ context("Autosave LHR", () => {
       });
 
       it("Change value in 'Accepted quntity' fields", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").clear().arrowType("8");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowClick({ force: true })
+          .clear().arrowType("8");
+        cy.unClick();
       });
 
       it("While autosaving, enter 'Rejected quntity' for LHRs #1", () => {
@@ -661,17 +655,6 @@ context("Autosave LHR", () => {
         });
       });
 
-      it("check approvers before reload page", () => {
-        cy.get(".MuiAutocomplete-tag").eq(0)
-          .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      });
-
-      it("check approvers after reload page", () => {
-        cy.reload();
-        cy.get(".MuiAutocomplete-tag").eq(0)
-          .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      });
-
       it("Add second Approver'", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
@@ -679,24 +662,15 @@ context("Autosave LHR", () => {
         });
       });
 
-      it("check approvers after reload page", () => {
-        cy.reload();
-        cy.get(".MuiAutocomplete-tag").eq(0)
-          .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-        cy.get(".MuiAutocomplete-tag").eq(1)
-          .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      });
-
       it("Remove second Approver'", () => {
         cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
       });
 
-      it("check approvers after reload page", () => {
-        cy.reload();
-        cy.get(".MuiAutocomplete-tag").eq(0)
-          .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-        cy.get(".MuiAutocomplete-tag").eq(1)
-          .should("not.exist");
+      it("check approvers", () => {
+        cy.get("[name=\"fb-approvals-approvals-built-in\"]")
+          .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+        cy.get("[name=\"fb-approvals-approvals-built-in\"]")
+          .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
       });
 
       it("check Start quntity", () => {
