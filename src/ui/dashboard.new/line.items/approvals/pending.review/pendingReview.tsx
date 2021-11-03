@@ -22,6 +22,7 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
@@ -37,7 +38,7 @@ interface Props {
   type: string;
   title: string | undefined;
   arId: string | undefined;
-  arStatus: string | undefined;
+  arStatus: string;
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
@@ -173,7 +174,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewWhiteIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     {(hoverItem || open) && (
@@ -181,7 +182,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     &nbsp;

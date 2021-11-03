@@ -24,6 +24,7 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
@@ -41,7 +42,7 @@ interface Props {
   type: string;
   title: string | undefined;
   arId: string | undefined;
-  arStatus: string | undefined;
+  arStatus: string;
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   docRevs: any;
@@ -202,7 +203,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<ApprovedIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     {hoverItem && (
@@ -210,7 +211,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<ApprovedWhiteIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                   </Typography>

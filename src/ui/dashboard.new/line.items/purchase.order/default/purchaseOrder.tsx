@@ -12,16 +12,17 @@ import {
   withStyles,
 } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
+import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
-import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
-import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
@@ -119,13 +120,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       borderRadius: "3px",
     },
     colorPrimary: {
-      color: Colors.latest_yellow_varient,
+      color: Colors.latest_green_varient,
     },
   })(Chip);
 
   const HoverStyleChip = withStyles({
     root: {
-      backgroundColor: Colors.latest_yellow_varient,
+      backgroundColor: Colors.latest_green_varient,
       borderRadius: "3px",
     },
     colorPrimary: {
@@ -255,16 +256,16 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       <NormalStyleChip
                         size="small"
                         color="primary"
-                        icon={<WarningIcon />}
-                        label={status}
+                        icon={<ApprovedIcon />}
+                        label={STATUS_TYPES_LABEL[status]}
                       />
                     )}
                     {(hoverItem || open) && (
                       <HoverStyleChip
                         color="primary"
                         size="small"
-                        icon={<WarningWhiteIcon />}
-                        label={status}
+                        icon={<ApprovedWhiteIcon />}
+                        label={STATUS_TYPES_LABEL[status]}
                       />
                     )}
                   </Typography>

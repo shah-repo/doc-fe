@@ -22,6 +22,7 @@ export enum LINE_ITEMS_STATUS_TYPES {
   COMPLETED = "COMPLETED",
   REJECTED = "REJECTED",
   PENDING = "PENDING",
+  CLOSED = "CLOSED",
 }
 
 export enum STATUS_TYPES_LABEL {
@@ -30,6 +31,7 @@ export enum STATUS_TYPES_LABEL {
   COMPLETED = "COMPLETED",
   REJECTED = "REJECTED",
   PENDING = "PENDING",
+  CLOSED = "CLOSED",
 }
 
 export interface MyFeedsItems {
