@@ -207,7 +207,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    to&nbsp;
+                    {docRevName ? "to" : ""}&nbsp;
                   </Typography>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -218,7 +218,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevName || "NOT AVAILABLE"}&nbsp;
+                    {docRevName}&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -432,8 +432,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                               className={classes.linkText}
                               color="textPrimary"
                             >
-                              {" "}
-                              {attachmentInfo.name}
+                              {" " +
+                                attachmentInfo.name +
+                                "." +
+                                attachmentInfo.type}
                             </Typography>
                           </Grid>
                         ))}
