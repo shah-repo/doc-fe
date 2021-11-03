@@ -24,6 +24,9 @@ export const styles = makeStyles(() =>
       fontWeight: 400,
       color: Colors.navy,
     },
+    attachmentIcon: {
+      paddingTop: "2px",
+    },
     collapsedList: {
       backgroundColor: Colors.sky_blue,
     },
