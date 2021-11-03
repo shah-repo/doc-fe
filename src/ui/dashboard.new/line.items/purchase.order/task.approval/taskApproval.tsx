@@ -2,7 +2,8 @@
 import {
   Avatar,
   Box,
-  Grid, ListItemAvatar,
+  Grid,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -18,7 +19,7 @@ import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
+import ApproveDialogueContainer from "./POApprovalDialogContainer";
 // import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./taskApproval.styles";
 
@@ -164,7 +165,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     {arId}
                   </Typography>
                   {/* </Link> */}
-                    &nbsp;
+                  &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
@@ -254,13 +255,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <ApproveDialogueContainer
         transition="reject"
-        changeRequestId={id}
+        approvalId={id}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
-        changeRequestId={id}
+        approvalId={id}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />
