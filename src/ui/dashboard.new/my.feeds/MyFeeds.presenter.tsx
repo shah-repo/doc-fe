@@ -17,10 +17,11 @@ import Text from "../../components/Text";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
-import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
+import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
+import POTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -69,7 +70,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
         switch (pendingAction.type) {
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
             return (
-              <TaskApproval
+              <POTaskApproval
                 id={pendingAction.id}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
@@ -77,7 +78,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   MomentFormats.BriefDateTime
                 )}
                 arId={pendingAction.docId}
-                docRevId={pendingAction.purchaseOrderSupplierDocRevId}
+                docRevId={pendingAction.docRevId}
                 docRevOwnerName={pendingAction.docRevOwnerName}
                 docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                 title={pendingAction.docRevName}
@@ -93,6 +94,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 <PurchaseOrderPendingReview
                   id={pendingAction.id}
                   docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
@@ -133,6 +135,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               <PurchaseOrder
                 id={pendingAction.id}
                 docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
@@ -175,7 +178,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             return (
               pendingAction?.docRevStatus &&
               !["DRAFT", "WIP"].includes(pendingAction.docRevStatus) && (
-                <TaskApproval
+                <ARTaskApproval
                   id={pendingAction.id}
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(

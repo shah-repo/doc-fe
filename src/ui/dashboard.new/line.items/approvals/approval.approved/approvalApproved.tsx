@@ -233,7 +233,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     className={classes.timestampContainer}
                     color="textSecondary"
                   >
-                    &nbsp; {timestamp}
+                    &nbsp;{timestamp}
                   </Typography>
                 </Grid>
               </Grid>

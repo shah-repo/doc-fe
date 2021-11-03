@@ -19,6 +19,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
+// import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./taskApproval.styles";
 
 interface Props {
@@ -162,8 +163,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     {arId}
                   </Typography>
-                    &nbsp;
                   {/* </Link> */}
+                    &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
@@ -202,7 +203,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    &nbsp;{timestamp}
                   </Typography>
                 </Grid>
               </Grid>

@@ -199,7 +199,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -253,7 +252,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    &nbsp;{timestamp}
                   </Typography>
                 </Grid>
               </Grid>

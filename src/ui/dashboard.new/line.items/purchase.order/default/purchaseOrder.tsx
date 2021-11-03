@@ -2,12 +2,12 @@ import {
   Chip,
   Collapse,
   Grid,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Tooltip,
-  Link,
   Typography,
   withStyles,
 } from "@material-ui/core";
@@ -20,17 +20,19 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
-import Colors from "../../../../layout/theme/utils/colors";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Attachment } from "../../../../change.request/form/types";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import Colors from "../../../../layout/theme/utils/colors";
+// import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
   id: string;
   docId: string;
+  docRevId?: string | undefined;
   type: string;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
@@ -51,6 +53,7 @@ interface Props {
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
   docId,
+  docRevId,
   status,
   docRevName,
   timestamp,
@@ -191,6 +194,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
+                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
+                  {/* <Link
+                    href={documentVersionPath(docRevId || "", id)}
+                    color="inherit"
+                    className={classes.link}
+                  > */}
                   <Typography
                     component="span"
                     variant="body2"
@@ -198,21 +207,18 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    {docId}
                   </Typography>
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    to&nbsp;
-                  </Typography>
+                  {/* </Link> */}
+                  &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
+                  {/* <Link
+                    href={documentVersionPath(docRevId || "", id)}
+                    color="inherit"
+                    className={classes.link}
+                  > */}
                   <Typography
                     component="span"
                     variant="caption"
@@ -220,8 +226,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevName || "NOT AVAILABLE"}&nbsp;
+                    {docRevName}
                   </Typography>
+                  {/* </Link> */}
+                  &nbsp;
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -278,7 +286,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    &nbsp;{timestamp}
                   </Typography>
                 </Grid>
               </Grid>

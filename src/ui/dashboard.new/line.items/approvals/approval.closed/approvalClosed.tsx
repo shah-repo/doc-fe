@@ -230,7 +230,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    &nbsp;{timestamp}
                   </Typography>
                 </Grid>
               </Grid>
