@@ -1,5 +1,6 @@
 import { Grid, Toolbar } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
 import { ReactComponent as RecentIcon } from "../../assets/images/recent.svg";
@@ -8,6 +9,7 @@ import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import Text from "../components/Text";
+import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
 import { StyledTab } from "./StyledTab";
@@ -23,13 +25,14 @@ const DashboardTabs: React.FunctionComponent = () => {
   isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
-    "id": `scrollable-auto-tab-${index}`,
+    id: `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   });
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -48,7 +51,8 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
                     <span className={classes.tabItemText}>
-                      <Text translation={"common.my.feed"} /> (26)
+                      <Text translation={"common.my.feed"} /> (
+                      {feedItems?.length || 0})
                     </span>
                   </Grid>
                 </Grid>
@@ -82,10 +86,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
                     <span className={classes.tabItemText}>
                       <Text translation={"common.recent"} />
                     </span>
