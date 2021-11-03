@@ -25,7 +25,7 @@ export const styles = makeStyles(() =>
       backgroundColor: Colors.sky_blue,
     },
     icon: {
-      width: "10px",
+      width: "15px",
     },
     listItem: {
       paddingLeft: "1px",

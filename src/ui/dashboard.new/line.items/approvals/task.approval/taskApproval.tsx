@@ -143,7 +143,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    needs approval for&nbsp;
+                    needs your approval for&nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>

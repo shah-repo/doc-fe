@@ -2,14 +2,14 @@ import {
   Chip,
   Collapse,
   Grid,
-  List,
   Link,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Modal,
   Tooltip,
   Typography,
-  Modal,
   withStyles,
 } from "@material-ui/core";
 import { size } from "lodash";
@@ -17,11 +17,12 @@ import React from "react";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status.svg";
+import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
-import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
-import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../../layout/theme/utils/colors";
 import EmailModal from "../../../modal.popups/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
@@ -113,13 +114,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       borderRadius: "3px",
     },
     colorPrimary: {
-      color: Colors.latest_yellow_varient,
+      color: Colors.latest_blue_varient,
     },
   })(Chip);
 
   const HoverStyleChip = withStyles({
     root: {
-      backgroundColor: Colors.latest_yellow_varient,
+      backgroundColor: Colors.latest_blue_varient,
       borderRadius: "3px",
     },
     colorPrimary: {
@@ -156,8 +157,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeavePinIcon = () => {
     setPinHover(false);
   };
-  // eslint-disable-next-line no-console
-  console.log("PO Presenter :::");
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
@@ -199,7 +198,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     {docId}&nbsp;
                   </Typography>
                 </Grid>
-                <Grid item={true}>
+                {/* <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -209,7 +208,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   >
                     {docRevName ? "to" : ""}&nbsp;
                   </Typography>
-                </Grid>
+                </Grid> */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Typography
                     component="span"
@@ -244,16 +243,16 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       <NormalStyleChip
                         size="small"
                         color="primary"
-                        icon={<WarningIcon />}
-                        label={status}
+                        icon={<InReviewIcon />}
+                        label={STATUS_TYPES_LABEL[status]}
                       />
                     )}
                     {(hoverItem || open) && (
                       <HoverStyleChip
                         color="primary"
                         size="small"
-                        icon={<WarningWhiteIcon />}
-                        label={status}
+                        icon={<InReviewWhiteIcon />}
+                        label={STATUS_TYPES_LABEL[status]}
                       />
                     )}
                   </Typography>
@@ -304,8 +303,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                              .map((approver) => approver.userName)
-                              .join(",")
+                            .map((approver) => approver.userName)
+                            .join(",")
                           : ""}
                       </Typography>
                     </Link>

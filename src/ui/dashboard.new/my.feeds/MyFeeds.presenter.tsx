@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {
   ActionTypes,
-  PO_STATUS_TYPES,
+  LINE_ITEMS_STATUS_TYPES,
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -14,9 +14,9 @@ import ApprovalApproved from "../line.items/approvals/approval.approved/approval
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
-import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
-import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
+import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
+import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -79,7 +79,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER:
-            if (PO_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus) {
+            if (LINE_ITEMS_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus) {
               return (
                 <PurchaseOrderPendingReview
                   id={pendingAction.id}
