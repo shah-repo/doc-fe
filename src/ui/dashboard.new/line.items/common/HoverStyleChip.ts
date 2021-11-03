@@ -1,10 +1,13 @@
 import { Chip, withStyles } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
+import { TrainingStatus } from "../../../../state/ducks/dashboard/types";
 
 const styles = () => ({
   root: {
     backgroundColor: (props) =>
-      props.status ? Colors.latest_red_varient : Colors.latest_yellow_varient,
+      props.status === TrainingStatus.OVERDUE
+        ? Colors.latest_red_varient
+        : Colors.latest_yellow_varient,
     borderRadius: "3px",
   },
   colorPrimary: {

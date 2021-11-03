@@ -160,9 +160,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   >
                     {!hoverItem && (
                       <NormalStyleChip
-                        {...(status === TrainingStatus.OVERDUE
-                          ? { status }
-                          : `${TrainingStatus.OVERDUE}`)}
+                        {...{ status }}
                         size="small"
                         color="primary"
                         icon={
@@ -177,9 +175,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     )}
                     {hoverItem && (
                       <HoverStyleChip
-                        {...(status === TrainingStatus.OVERDUE
-                          ? { status }
-                          : `${TrainingStatus.OVERDUE}`)}
+                        {...{ status }}
                         color="primary"
                         size="small"
                         icon={
