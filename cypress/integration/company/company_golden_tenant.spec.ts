@@ -1576,11 +1576,16 @@ context("Create company with golden tenant", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
 
-    it("Include Seed documents", () => {
+    it("Refresh Seed documents input", () => {
       SystemRequirement("REQ-3570");
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Seed documents", () => {
+      SystemRequirement("REQ-3570");
       cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
       cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
     });
