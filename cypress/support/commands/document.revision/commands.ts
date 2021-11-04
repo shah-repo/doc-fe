@@ -559,6 +559,7 @@ Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
+  cy.listLoadingElementShouldNotExist();
   groups.forEach((group) => {
     cy.get("[data-cy=\"groups\"]").arrowClick();
     cy.get(".MuiAutocomplete-popper").contains(group).arrowClick();

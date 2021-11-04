@@ -237,11 +237,11 @@ context("Document Approval Matrix Flow", () => {
 
   context("Fills in Title and Description", () => {
     it(`type a title: ${DAMTitle}`, () => {
-      cy.drEnterDocumentTitle({ name: `${DAMTitle}{enter}` });
+      cy.drEnterDocumentTitle({ name: DAMTitle });
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Description" });
+      cy.drEnterDocumentDescriptionWithWait({ description: "Description" });
     });
   });
 
@@ -266,6 +266,8 @@ context("Document Approval Matrix Flow", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -482,7 +484,10 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
+      cy.dlClearFilters();
       cy.get("#root").contains(DAMTitle).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Revise document", () => {
@@ -506,6 +511,8 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       cy.drAddApprovalRole();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -524,8 +531,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0600");
-
       cy.drAddApprovalRole();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 

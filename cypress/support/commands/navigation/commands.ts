@@ -69,6 +69,7 @@ Cypress.Commands.add("navigToRecords", () => {
       ],
     });
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToParts", () => {
