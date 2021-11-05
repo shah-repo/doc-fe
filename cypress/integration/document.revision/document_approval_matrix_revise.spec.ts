@@ -190,6 +190,8 @@ context("Document Approval Matrix Revise", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -257,6 +259,8 @@ context("Document Approval Matrix Revise", () => {
         () => {
           cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
         });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -266,14 +270,16 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
-      cy.dlClearFilters();
-      cy.get("#root").contains(DAMTitle).click();
+      cy.drFilterDocListByNameAndStatus({ title: DAMTitle, status: "Released" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Revise document", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
+        cy.drClickReviseDocument();
+      });
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").should("be.visible");
     });
 
     it("Upgrade to administrative change", () => {
@@ -304,6 +310,8 @@ context("Document Approval Matrix Revise", () => {
         () => {
           cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
         });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -365,6 +373,8 @@ context("Document Approval Matrix Revise", () => {
         () => {
           cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
         });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -381,7 +391,10 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Revise document", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
+        cy.drClickReviseDocument();
+      });
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").should("be.visible");
     });
 
     it("Click edit DAM", () => {
@@ -395,7 +408,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and Release the document", () => {
@@ -451,6 +464,8 @@ context("Document Approval Matrix Revise", () => {
         () => {
           cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
         });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 });
