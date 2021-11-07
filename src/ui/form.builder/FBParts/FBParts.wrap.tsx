@@ -39,8 +39,10 @@ export const withFBParts = <T extends FBPartsProps>(
     // Register reaction on procedure value change
     function registerProcedureReaction(name: string) {
       reaction(
-        () => formState?.inputState.get(name)?.value,
-        (data) => partsState?.parts.set(name, data)
+        () => formState?.newValues.get(name),
+        (data) => {
+          partsState?.parts.set(name, data);
+        }
       );
 
       reaction(
