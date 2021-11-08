@@ -30,12 +30,6 @@ export const COMMON_INITIAL_VALUES = {
   deleteInFormDisabled: false,
   validationMode: "default",
   validationAttribute: "",
-  sampleItemsIndicator: {
-    enabled: false,
-    id: "",
-    sampleSection: false,
-    serialNumber: 0,
-  },
   rules: "",
   applicableOn: [],
   applicableValidationSchema: true,
@@ -121,7 +115,6 @@ export const withFBInput = <T extends FBInputProps>(
         deleted,
         deleteInFormDisabled,
         validationMode,
-        sampleItemsIndicator,
         validationAttribute,
         rules,
         applicableOn,
@@ -148,9 +141,6 @@ export const withFBInput = <T extends FBInputProps>(
       }
       if (!validationMode) {
         formState?.setFieldValue("validationMode", COMMON_INITIAL_VALUES.validationMode, withState, omitFormValue);
-      }
-      if (!sampleItemsIndicator) {
-        formState?.setFieldValue("sampleItemsIndicator", COMMON_INITIAL_VALUES.sampleItemsIndicator, withState, omitFormValue);
       }
       if (!validationAttribute) {
         formState?.setFieldValue("validationAttribute", COMMON_INITIAL_VALUES.validationAttribute, withState, omitFormValue);
