@@ -44,7 +44,6 @@ interface Props {
   arId: string | undefined;
   arStatus: string;
   timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
   docRevs: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;

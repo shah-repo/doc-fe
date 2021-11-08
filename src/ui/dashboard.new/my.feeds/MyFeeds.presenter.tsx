@@ -210,7 +210,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime
                   )}
-                  pendingApprovers={pendingAction.pendingApprovers}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}
                 />
@@ -229,7 +228,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime
                   )}
-                  pendingApprovers={pendingAction.pendingApprovers}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}
                 />

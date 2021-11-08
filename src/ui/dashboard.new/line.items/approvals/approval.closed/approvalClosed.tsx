@@ -10,7 +10,6 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
@@ -39,7 +38,7 @@ interface Props {
   arId: string | undefined;
   arStatus: string;
   timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
+
   docRevs: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
@@ -50,7 +49,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   arStatus,
   title,
   timestamp,
-  pendingApprovers,
   docRevs,
   hoverItemId,
   onMouseHoverItem,
@@ -85,9 +83,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
-  const openApproversModel = (e) => {
-    e.stopPropagation();
-  };
+
 
   return (
     <>
@@ -195,43 +191,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Typography color="inherit">
-                          <Text
-                            translation="assigned.users.count"
-                            values={{
-                              count: size(pendingApprovers),
-                            }}
-                          />
-                          <br />
-                          <Text
-                            translation="approved.and.pending.count"
-                            values={{
-                              approved: 4,
-                              pending: 6,
-                            }}
-                          />
-                        </Typography>
-                      </>
-                    }
-                    placement="top-start"
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      onClick={openApproversModel}
-                      noWrap
-                    >
-                      {pendingApprovers?.join(",")}
-                    </Typography>
-                  </StyleTooltip>
-                  &nbsp;&nbsp;
-                </Grid>
                 <Grid item={true} className={classes.grayDot}>
                   &nbsp;
                 </Grid>
