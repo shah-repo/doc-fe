@@ -41,6 +41,7 @@ interface Props {
   arStatus: string;
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
+  approvedApprovers: any[] | undefined;
   docRevs: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
@@ -53,6 +54,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   title,
   arStatus,
   pendingApprovers,
+  approvedApprovers,
   hoverItemId,
   onMouseHoverItem,
 }) => {
@@ -214,14 +216,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                           <Text
                             translation="assigned.users.count"
                             values={{
-                              count: size(pendingApprovers),
+                              count:
+                                size(pendingApprovers) +
+                                size(approvedApprovers),
                             }}
                           />
                           <br />
                           <Text
                             translation="approved.and.pending.count"
                             values={{
-                              approved: 0,
+                              approved: size(approvedApprovers),
                               pending: size(pendingApprovers),
                             }}
                           />

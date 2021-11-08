@@ -40,8 +40,7 @@ interface Props {
   purchaseOrderSupplierDocId: string;
   status: string;
   timestamp: string;
-  docRevPendingApprovals: any[];
-  docRevApprovedApprovals: any[];
+
   purchaseOrderAttachments: any[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
@@ -67,8 +66,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderDescription,
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
-  docRevPendingApprovals,
-  docRevApprovedApprovals,
   onMouseHoverItem,
 }) => {
   const classes = styles();
