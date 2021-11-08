@@ -1096,6 +1096,7 @@
   "email.button.title": "EMAIL ALL",
   "email.success.message": "EMAIL SENT TO ALL",
   "email.title": "Email Confirmation",
-  "your.training": "Your training",
-  "your.training.on": "Your training on"
+  "training.your": "Your training",
+  "training.your.on": "Your training on",
+  "training.assign": "A training is assigned to you"
 }

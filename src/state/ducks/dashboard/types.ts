@@ -32,14 +32,14 @@ export enum ActionTypes {
 export enum TrainingStatus {
   OVERDUE = "OVERDUE",
   DUE_IN_7_DAYS = "DUE IN 7 DAYS",
-  ASSIGNED = "OVERDUE",
+  ASSIGNED = "ASSIGNED",
   DUE = "DUE",
   COMPLETED = "COMPLETED",
 }
 export enum TrainingStatusLabels {
   OVERDUE = "OVERDUE",
   DUE = "DUE IN 7 DAYS",
-  ASSIGNED = "OVERDUE",
+  ASSIGNED = "ASSIGNED",
   COMPLETED = "COMPLETED",
 }
 
