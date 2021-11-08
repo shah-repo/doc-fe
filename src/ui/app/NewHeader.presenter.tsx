@@ -57,7 +57,8 @@ const Header: React.FunctionComponent<Props> = ({
       >
         <Grid item={true} zeroMinWidth>
           <Typography noWrap className={classes.toolbarTitle}>
-            <Text translation="header.welcome.back" />,&nbsp;
+            <Text translation="header.welcome.back" />
+            ,&nbsp;
             <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
@@ -89,7 +90,7 @@ const Header: React.FunctionComponent<Props> = ({
                 }
                 classes={{ root: classes.headerButton }}
               >
-                <UserAvatar avatar={avatar} />
+                <UserAvatar {...{ avatar, name }} />
                 <Typography
                   id="Header-welcomeText"
                   variant="caption"
