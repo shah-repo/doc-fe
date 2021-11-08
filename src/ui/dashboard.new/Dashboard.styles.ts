@@ -13,5 +13,12 @@ export const styles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       minHeight: "0",
     },
+    trainingStats: {
+      flexGrow: 1,
+      marginTop: "20px",
+      display: "flex",
+      flexDirection: "column",
+      minHeight: "0",
+    },
   })
 );

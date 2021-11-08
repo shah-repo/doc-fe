@@ -1,6 +1,9 @@
 import { Id } from "../common/types";
 import { Employee } from "../company/types";
-import { DocumentRevision, DocumentRevisionDocument } from "../documentRevisions/types";
+import {
+  DocumentRevision,
+  DocumentRevisionDocument,
+} from "../documentRevisions/types";
 
 enum TrainingPlanStatus {
   ACTIVE = "ACTIVE",
@@ -21,13 +24,6 @@ export interface TrainingRecord {
   isValid: boolean;
   trainingPlan?: TrainingPlan;
   documentRevision: Partial<DocumentRevision>;
-}
-
-export enum TrainingStatusChartLabelTypes {
-  OVERDUE = "OVERDUE",
-  DUE_IN_7_DAYS = "DUE IN 7 DAYS",
-  DUE = "DUE",
-  TOTAL_OUTSTANDING = "Total Outstanding",
 }
 
 export interface TrainingListData {

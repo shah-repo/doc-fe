@@ -1,8 +1,9 @@
-import { Box, Grid, List, Tab, Tabs } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Box, Grid, List, Tab } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
-import Colors from "../../../layout/theme/utils/colors";
+import { StyledTabs } from "./StyledTabs";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -33,7 +34,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         <TrainingItem
           key={index}
           avatar={data.user.avatar}
-          firstName={data.user.name.split(" ")[0]}
+          name={data.user.name.split(" ")[0]}
           status={data.status}
           documentId={data.docId}
           title={data.docTitle}
@@ -70,45 +71,14 @@ function tabCustomClasses(index: any) {
 
 interface TrainingLineItemsProps {
   infoChangeTab: (newValue: number) => void;
-  overdueItems: {
-    docTitle: string;
-    user: { avatar: string | null; name: string };
-    docId: string;
-    status: string;
-    dueOn: string;
-  }[];
-  dueInSevenItems: {
-    docTitle: string;
-    user: { avatar: string | null; name: string };
-    docId: string;
-    status: string;
-    dueOn: string;
-  }[];
 }
-
-interface StyledTabsProps {
-  value: number;
-  onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-}
-
-const StyledTabs = withStyles({
-  indicator: {
-    "display": "flex",
-    "justifyContent": "center",
-    "backgroundColor": "transparent",
-    "top": "33px",
-    "& > span": {
-      flexGrow: 1,
-      border: `1px solid ${Colors.navy}`,
-    },
-  },
-})((props: StyledTabsProps) => (
-  <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />
-));
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   (props) => {
-    const { overdueItems, dueInSevenItems } = props;
+    const overdueItems = useSelector(
+      trainingStatsSelectors.overdueTrainingData
+    );
+    const dueInSevenItems = useSelector(trainingStatsSelectors.dueTrainingData);
     const all = overdueItems.concat(dueInSevenItems);
     const [value, setValue] = React.useState(0);
     const classes = styles();

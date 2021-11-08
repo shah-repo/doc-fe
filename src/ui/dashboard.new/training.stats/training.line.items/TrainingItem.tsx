@@ -6,12 +6,13 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/training/types";
+import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import { styles } from "./TrainingItem.styles";
+import Text from "../../../components/Text";
 
 interface TrainingItemProps {
   avatar: string | null;
-  firstName: string;
+  name: string;
   documentId: string;
   title: string;
   status: string;
@@ -19,27 +20,27 @@ interface TrainingItemProps {
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
-  firstName,
+  name,
   status,
   date,
   documentId,
   title,
 }) => {
   const classes = styles();
-  const isOverdue = status === TrainingStatusChartLabelTypes.OVERDUE;
+  const isOverdue = status === TrainingStatusTypes.OVERDUE;
 
-  const titleRender = (firstName, status, documentId, title, date) => (
+  const titleRender = (name, status, documentId, title, date) => (
     <Typography>
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
-          <Avatar className={classes.avatar} alt={firstName} src="." />
+          <Avatar className={classes.avatar} alt={name} src="." />
           <Typography
             component="span"
             variant="body2"
             className={classes.name}
             color="textPrimary"
           >
-            {firstName}
+            {name}
           </Typography>
         </Grid>
         <Grid item>
@@ -50,7 +51,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyOverdue}
               color="textPrimary"
             >
-              {status}
+              <Text translation="training.stats.overdue" />
             </Typography>
           )}
           {!isOverdue && (
@@ -60,7 +61,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyDueInfewDays}
               color="textPrimary"
             >
-              {status}
+              <Text translation="training.stats.duein7days" />
             </Typography>
           )}
         </Grid>
@@ -116,10 +117,10 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     <ListItem>
       <ListItemText
         id={documentId}
-        primary={titleRender(firstName, status, documentId, title, date)}
+        primary={titleRender(name, status, documentId, title, date)}
       />
     </ListItem>
   );
 };
 
-export default TrainingItem;
+export default React.memo(TrainingItem);
