@@ -154,8 +154,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   )}
                 </Typography>
               </Grid>
-              {TrainingStatus.ASSIGNED !== status && (
-                <Grid item={true}>
+
+              <Grid item={true}>
+                {TrainingStatus.ASSIGNED !== status && (
                   <Typography
                     component="span"
                     variant="caption"
@@ -198,42 +199,42 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       />
                     )}
                   </Typography>
-                  &nbsp;&nbsp;
+                )}
+                &nbsp;&nbsp;
+              </Grid>
+              {status && TrainingStatus.COMPLETED !== status && (
+                <Grid
+                  item={true}
+                  className={
+                    TrainingStatus.ASSIGNED === status
+                      ? classes.grayDot
+                      : status === TrainingStatus.OVERDUE
+                      ? classes.redDot
+                      : classes.yellowDot
+                  }
+                >
+                  &nbsp;
                 </Grid>
               )}
-              {status &&
-                TrainingStatus.COMPLETED !== status &&
-                TrainingStatus.ASSIGNED !== status && (
-                  <Grid
-                    item={true}
+              {status && TrainingStatus.COMPLETED !== status && (
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
                     className={
-                      status === TrainingStatus.OVERDUE
-                        ? classes.redDot
-                        : classes.yellowDot
+                      status === TrainingStatus.ASSIGNED
+                        ? classes.typographyAssigned
+                        : status === TrainingStatus.OVERDUE
+                        ? classes.typographyOverdue
+                        : classes.typographyDueInfewDays
                     }
+                    color="textSecondary"
+                    noWrap
                   >
-                    &nbsp;
-                  </Grid>
-                )}
-              {status &&
-                TrainingStatus.COMPLETED !== status &&
-                TrainingStatus.ASSIGNED !== status && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={
-                        status === TrainingStatus.OVERDUE
-                          ? classes.typographyOverdue
-                          : classes.typographyDueInfewDays
-                      }
-                      color="textSecondary"
-                      noWrap
-                    >
-                      &nbsp; {dueOn}
-                    </Typography>
-                  </Grid>
-                )}
+                    &nbsp; {dueOn}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid
               container={true}

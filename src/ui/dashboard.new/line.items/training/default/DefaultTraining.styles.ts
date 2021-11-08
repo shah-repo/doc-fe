@@ -44,6 +44,14 @@ export const styles = makeStyles(() =>
       lineHeight: "16px",
       color: Colors.latest_red_varient,
     },
+    typographyAssigned: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "13px",
+      lineHeight: "16px",
+      color: Colors.font_gray,
+    },
     typography: {
       fontSize: "14px",
       fontFamily: "Sora",
