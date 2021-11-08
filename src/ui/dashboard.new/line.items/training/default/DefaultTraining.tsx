@@ -33,6 +33,8 @@ interface Props {
   type: string;
   docRevName: string | undefined;
   docId: string | undefined;
+  docDocumentId: string | undefined;
+  docRevId: string | undefined;
   status: string | undefined;
   timestamp: string | undefined;
   dueOn: string | undefined;
@@ -42,6 +44,8 @@ interface Props {
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
+  docDocumentId,
+  docRevId,
   docRevName,
   status,
   timestamp,
@@ -66,9 +70,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
-  const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
-  const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
-
+  docDocumentId = docDocumentId || "";
+  docRevId = docRevId || "";
   return (
     <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
       <ListItemIcon>
@@ -105,7 +108,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               )}
               <Grid item={true}>
                 <Link
-                  href={documentVersionPath(documentRevId, existingId)}
+                  href={documentVersionPath(docRevId, docDocumentId)}
                   color="inherit"
                   className={classes.link}
                 >
@@ -122,7 +125,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <Link
-                  href={documentVersionPath(documentRevId, existingId)}
+                  href={documentVersionPath(docRevId, docDocumentId)}
                   color="inherit"
                   className={classes.link}
                 >
