@@ -2,6 +2,7 @@ import { filter, isUndefined, union } from "lodash";
 import { action, observable, set } from "mobx";
 import { Attachment } from "../../../state/ducks/attachments/types";
 import { Id } from "../../../state/ducks/common/types";
+import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 class FBFileUploadState {
@@ -9,10 +10,20 @@ class FBFileUploadState {
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
   public attachmentsbyIdsApi: FBRequest<Attachment[], null> = new FBRequest();
+  public startAttachmentUnzipping:
+  FBRequest<{docRevisionId: string; attachmentId: string}, any> = new FBRequest();
 
   public constructor(files?: Attachment[]) {
     this.files = files || [];
   }
+
+  public startUnzipping = (values: {docRevisionId: string; attachmentId: string}) => {
+    this.startAttachmentUnzipping.set({
+      url: FBEndpoint.AttachmentUnzipping,
+      body: values,
+      method: "post",
+    });
+  };
 
   @action public addFile = (file: Attachment | undefined) => {
     if (isUndefined(file)) {

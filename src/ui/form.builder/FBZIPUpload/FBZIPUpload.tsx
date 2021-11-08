@@ -12,6 +12,7 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   files,
   readonly = false,
   disableFileUpload = false,
+  startUnzip,
 }) =>
   <>
     {!readonly && (
@@ -34,7 +35,7 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
           <FBButton
             key={`fb-zip-attachment-button-${name}`}
             label={"form.builder.unzip.files"}
-            onClick={() => { return; }}
+            onClick={() => { startUnzip(); }}
             {...{ disabled }}
           />
         </Grid>

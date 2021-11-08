@@ -17,6 +17,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     isInputOwner,
     gutter,
     disableFileUpload,
+    startUnzip,
     ...props
   }: T) => {
 
@@ -53,6 +54,12 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    startUnzip = () => {
+      const files = formState?.getFieldValue(name);
+      const docRevisionId = workspaceState?.document?.id || "";
+      fileUploadState?.startUnzipping({ docRevisionId, attachmentId: files?.[0].id });
+    };
+
     return Component({
       ...(props as T),
       fileUploadState,
@@ -62,6 +69,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
       name,
       gutter,
       disableFileUpload,
+      startUnzip,
     });
   };
 
