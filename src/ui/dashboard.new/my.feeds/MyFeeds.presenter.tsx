@@ -10,12 +10,19 @@ import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClos
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import TaskApproval from "../line.items/approvals/task.approval/taskApproval";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
+import TrainingItem from "../line.items/training/default/DefaultTraining";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
   feedItems: {
     id: string;
     type: string;
+    trainingStatus?: string;
+    dueOn?: string;
+    trainingRecordId?: string;
+    trId?: string;
+    docRevId?: string;
+    docDocumentId?: string;
     timestamp?: string | undefined;
     arTitle?: string | undefined;
     arStatus?: string | undefined;
@@ -47,6 +54,21 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {feedItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
+          case ActionTypes.TRAINING_STATUS_UPDATE:
+            return (
+              <TrainingItem
+                key={index}
+                id={pendingAction.id}
+                type={pendingAction.type}
+                docRevName={pendingAction.docRevName}
+                trId={pendingAction.trId}
+                status={pendingAction.trainingStatus}
+                timestamp={pendingAction.timestamp}
+                dueOn={pendingAction.dueOn}
+                hoverItemId={hoverItemId}
+                onMouseHoverItem={onMouseHoverItem}
+              />
+            );
           case ActionTypes.PENDING_DOC_CONTROL:
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
