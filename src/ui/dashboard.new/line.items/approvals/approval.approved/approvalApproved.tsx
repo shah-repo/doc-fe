@@ -30,12 +30,12 @@ import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
-import { HoverStyleChip } from "./HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "./NormalStyleChipApprovalApproved";
 
 interface Props {
   id: string;
@@ -44,7 +44,6 @@ interface Props {
   arId: string | undefined;
   arStatus: string;
   timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
   docRevs: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;

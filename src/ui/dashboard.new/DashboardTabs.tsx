@@ -8,8 +8,8 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
-import Text from "../components/Text";
 import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
+import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
 import { StyledTab } from "./StyledTab";
@@ -25,7 +25,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
-    id: `scrollable-auto-tab-${index}`,
+    "id": `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   });
 
@@ -86,10 +86,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                      <RecentSelectedIcon />
-                    ) : (
-                      <RecentIcon />
-                    )}
+                        <RecentSelectedIcon />
+                      ) : (
+                        <RecentIcon />
+                      )}
                     <span className={classes.tabItemText}>
                       <Text translation={"common.recent"} />
                     </span>
