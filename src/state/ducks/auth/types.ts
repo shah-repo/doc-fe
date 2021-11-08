@@ -114,6 +114,7 @@ export interface UserState {
   customLabels: boolean;
   passwordSoonToExpire: boolean;
   daysUntilPasswordExpires: number;
+  initialColor: string;
 }
 
 export interface IotCredentials {

@@ -84,6 +84,9 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       if (isVoided) {
         return documentRevision.voidedAt;
       }
+      if (isDeprecated) {
+        return documentRevision.deprecatedAt;
+      }
       return documentRevision.updatedAt;
     }
 

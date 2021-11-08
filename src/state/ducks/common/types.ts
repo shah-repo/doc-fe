@@ -22,6 +22,7 @@ export interface User {
   name: string;
   confirmed?: boolean;
   locked?: boolean;
+  initialColor: string;
 }
 
 export interface Approval {
