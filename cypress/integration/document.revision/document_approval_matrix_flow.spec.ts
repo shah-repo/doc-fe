@@ -309,8 +309,10 @@ context("Document Approval Matrix Flow", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -336,14 +338,18 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
+    // it("clicks on 'Save' button", () => {
+    //   cy.drClickCreateDocumentWithApiCallForForms();
+    // });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -491,7 +497,10 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Revise document", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
+        cy.drClickReviseDocument();
+      });
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
   });
 
@@ -597,8 +606,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
-
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 

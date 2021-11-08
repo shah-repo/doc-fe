@@ -279,7 +279,7 @@ context("Document Approval Matrix Revise", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
         cy.drClickReviseDocument();
       });
-      cy.get("span[data-cy=documentTypeApprovalMatrix]").should("be.visible");
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
 
     it("Upgrade to administrative change", () => {
@@ -394,7 +394,7 @@ context("Document Approval Matrix Revise", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
         cy.drClickReviseDocument();
       });
-      cy.get("span[data-cy=documentTypeApprovalMatrix]").should("be.visible");
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
 
     it("Click edit DAM", () => {
