@@ -37,7 +37,18 @@ const completeSelfTaughtTraining = (
   handlers,
 });
 
+const exportTrainingRecord = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/training_record/${id}/email`,
+    method: "post",
+    handlers,
+  });
+
 export default {
   applyTransition,
   completeSelfTaughtTraining,
+  exportTrainingRecord,
 };

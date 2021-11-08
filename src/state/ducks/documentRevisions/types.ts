@@ -321,6 +321,7 @@ export interface FBOutputDocumentType {
   id: string;
   documentTypeName?: string;
   groupOptions?: DocumentGroupOptionsType[];
+  active?: boolean;
 }
 
 export interface HeaderTableType {

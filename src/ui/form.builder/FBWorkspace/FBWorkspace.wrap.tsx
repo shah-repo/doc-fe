@@ -57,9 +57,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { formInput = {} } = document ?? {};
     workspaceState.formInput = formInput;
 
-    map(formInput, (value, key) => {
-      workspaceState?.setFormInputSync(key, value);
-    });
+    React.useEffect(() => {
+      map(formInput, (value, key) => {
+        workspaceState?.setFormInputSync(key, value);
+      });
+    }, [formInput, workspaceState]);
 
     const { groupOptions: formGroupOptions } = document?.document?.documentType || {};
     // We should include document type in FB
