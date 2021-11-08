@@ -54,7 +54,6 @@ export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
     "radiogroup",
     "paragraph",
     "fileupload",
-    "zipupload",
     "quantity",
     "timer",
     "purchaseorder",

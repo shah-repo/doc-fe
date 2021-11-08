@@ -117,14 +117,6 @@
     "copyableValue",
     "includeNotes"
   ],
-  "zipupload": [
-    "reviseDisabled",
-    "includeInInspection",
-    "includeInFaiInspection",
-    "deleteDisabled",
-    "copyableValue",
-    "includeNotes"
-  ],
   "quantity": [
     "reviseDisabled",
     "includeInInspection",

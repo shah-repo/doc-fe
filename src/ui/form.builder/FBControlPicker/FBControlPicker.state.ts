@@ -27,8 +27,8 @@ class FBControlPickerState {
 
   public get pickers(): FBControlPickerDataProps {
 
-    const isEQ = checkIsDocumentEquipment(
-      this.workspaceState?.document?.document?.documentType?.groupOptions);
+    const isEQ = checkIsDocumentEquipment(this.workspaceState?.document?.document?.documentType?.groupOptions);
+
     if (isEQ) {
       return {
         inputs: [
