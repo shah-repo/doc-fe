@@ -26,11 +26,11 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
+import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import EmailModal from "../../dialogs/email/EmailDialog";
-import { HoverStyleChip } from "./HoverStyleChipPendingReview";
-import { NormalStyleChip } from "./NormalStyleChipPendingReview";
 import { styles } from "./pendingReview.styles";
 
 interface Props {
@@ -211,9 +211,20 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Typography color="inherit">
-                          Assigned to {size(pendingApprovers)} users. <br />0
-                          have Approved and {size(pendingApprovers)} are
-                          Pending.
+                          <Text
+                            translation="assigned.users.count"
+                            values={{
+                              count: size(pendingApprovers),
+                            }}
+                          />
+                          <br />
+                          <Text
+                            translation="approved.and.pending.count"
+                            values={{
+                              approved: 0,
+                              pending: size(pendingApprovers),
+                            }}
+                          />
                         </Typography>
                       </>
                     }

@@ -1,15 +1,11 @@
 import {
-  Chip,
   Collapse,
   Grid,
   Link,
   List,
-  ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -28,6 +24,10 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
@@ -105,46 +105,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
-
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.latest_green_varient,
-    },
-  })(Chip);
-
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.latest_green_varient,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);

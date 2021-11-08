@@ -1,5 +1,5 @@
 import { Chip, withStyles } from "@material-ui/core";
-import Colors from "../../../../layout/theme/utils/colors";
+import Colors from "../../../layout/theme/utils/colors";
 
 const styles = () => ({
   root: {

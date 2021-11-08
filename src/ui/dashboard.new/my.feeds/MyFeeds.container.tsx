@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   dashboardMyFeedsActions,
-  dashboardMyFeedsSelectors
+  dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
 import useActionCreator from "../../hooks/useActionCreator";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";

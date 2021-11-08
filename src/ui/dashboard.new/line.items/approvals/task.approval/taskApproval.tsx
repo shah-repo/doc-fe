@@ -2,7 +2,8 @@
 import {
   Avatar,
   Box,
-  Grid, ListItemAvatar,
+  Grid,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -164,7 +165,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     {arId}
                   </Typography>
                   {/* </Link> */}
-                    &nbsp;
+                  &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   {/* TO DO:: Needs to uncomment once we get document revision id in the response */}

@@ -200,8 +200,20 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Typography color="inherit">
-                          Assigned to {size(pendingApprovers)} users. <br />4
-                          have Approved and 6 are Pending.
+                          <Text
+                            translation="assigned.users.count"
+                            values={{
+                              count: size(pendingApprovers),
+                            }}
+                          />
+                          <br />
+                          <Text
+                            translation="approved.and.pending.count"
+                            values={{
+                              approved: 4,
+                              pending: 6,
+                            }}
+                          />
                         </Typography>
                       </>
                     }

@@ -1,16 +1,10 @@
 import {
-  Chip,
   Collapse,
   Grid,
   Link,
-  List,
-  ListItem,
-  ListItemIcon,
+  List, ListItemIcon,
   ListItemText,
-  Modal,
-  Tooltip,
-  Typography,
-  withStyles,
+  Modal, Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -26,10 +20,15 @@ import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
+import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -109,45 +108,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
-  const StyledListItem = withStyles({
-    root: {
-      "&:hover": {
-        backgroundColor: Colors.sky_blue,
-      },
-    },
-  })(ListItem);
-
-  const NormalStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.white,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.latest_blue_varient,
-    },
-  })(Chip);
-
-  const HoverStyleChip = withStyles({
-    root: {
-      backgroundColor: Colors.latest_blue_varient,
-      borderRadius: "3px",
-    },
-    colorPrimary: {
-      color: Colors.white,
-    },
-  })(Chip);
-
-  const StyleTooltip = withStyles({
-    arrow: {
-      color: Colors.black,
-    },
-    tooltip: {
-      backgroundColor: Colors.black,
-    },
-    tooltipPlacementTop: {
-      margin: "8px 0",
-    },
-  })(Tooltip);
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -303,16 +263,24 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <StyleTooltip
                     title={
-                      <>
-                        <Typography color="inherit">
-                          Assigned to{" "}
-                          {size(docRevPendingApprovals) +
-                            size(docRevApprovedApprovals)}{" "}
-                          users. <br />
-                          {size(docRevPendingApprovals)} have Approved and{" "}
-                          {size(docRevApprovedApprovals)} are Pending.
-                        </Typography>
-                      </>
+                      <Typography color="inherit">
+                        <Text
+                          translation="assigned.users.count"
+                          values={{
+                            count:
+                              size(docRevPendingApprovals) +
+                              size(docRevApprovedApprovals),
+                          }}
+                        />
+                        <br />
+                        <Text
+                          translation="approved.and.pending.count"
+                          values={{
+                            approved: size(docRevPendingApprovals),
+                            pending: size(docRevApprovedApprovals),
+                          }}
+                        />
+                      </Typography>
                     }
                     placement="top-start"
                   >
@@ -459,7 +427,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {poItem.rtext.map((attachmentInfo, index) => (
                           <Grid item key={index}>
-                            <AttachmentIcon className={classes.attachmentIcon} />
+                            <AttachmentIcon
+                              className={classes.attachmentIcon}
+                            />
                             <Link
                               href="#"
                               onClick={downloadAttachment(attachmentInfo)}
