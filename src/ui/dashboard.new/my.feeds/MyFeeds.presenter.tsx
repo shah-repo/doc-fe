@@ -27,7 +27,6 @@ import { styles } from "./MyFeeds.styles";
 interface Props {
   loadMyFeeds: any;
   loadMyFeedsListAsyncState: AsyncState;
-  // feedItems: RecentItems[];
   feedItems: any[];
 }
 // interface Props {
@@ -71,7 +70,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
             return (
               <POTaskApproval
-                id={pendingAction.id}
+                id={pendingAction.docDocumentId}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
@@ -92,7 +91,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             ) {
               return (
                 <PurchaseOrderPendingReview
-                  id={pendingAction.id}
+                  id={pendingAction.docDocumentId}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
                   type={pendingAction.type}
@@ -133,7 +132,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             }
             return (
               <PurchaseOrder
-                id={pendingAction.id}
+                id={pendingAction.docDocumentId}
                 docId={pendingAction.docId}
                 docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
@@ -177,7 +176,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               pendingAction?.docRevStatus &&
               !["DRAFT", "WIP"].includes(pendingAction.docRevStatus) && (
                 <ARTaskApproval
-                  id={pendingAction.id}
+                  id={pendingAction.docDocumentId}
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,

@@ -153,41 +153,39 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             <React.Fragment>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
-                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
-                  {/* <Link
+                  <Link
                     href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
-                  > */}
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
                   >
-                    {docId}
-                  </Typography>
-                  {/* </Link> */}
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {docId}
+                    </Typography>
+                  </Link>
                   &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
-                  {/* <Link
+                  <Link
                     href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
-                  > */}
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
                   >
-                    {docRevName}
-                  </Typography>
-                  {/* </Link> */}
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docRevName}
+                    </Typography>
+                  </Link>
                   &nbsp;
                 </Grid>
                 <Grid item={true}>

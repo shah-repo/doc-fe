@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Grid,
+  Link,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -15,12 +16,12 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
-// import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { styles } from "./taskApproval.styles";
 
 interface Props {
@@ -149,41 +150,39 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
-                  {/* <Link
+                  <Link
                     href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
-                  > */}
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
                   >
-                    {arId}
-                  </Typography>
-                  {/* </Link> */}
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {arId}
+                    </Typography>
+                  </Link>
                   &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  {/* TO DO:: Needs to uncomment once we get document revision id in the response */}
-                  {/* <Link
+                  <Link
                     href={documentVersionPath(docRevId || "", id)}
                     color="inherit"
                     className={classes.link}
-                  > */}
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
                   >
-                    {title}
-                  </Typography>
-                  {/* </Link> */}
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
                 </Grid>
               </Grid>
               <Grid
