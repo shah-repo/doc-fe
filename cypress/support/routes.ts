@@ -519,8 +519,8 @@ export const routes: ICyRoutes =   {
       url: `/api/v1/auth/login`,
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 50 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   GetDocumentTypes: {

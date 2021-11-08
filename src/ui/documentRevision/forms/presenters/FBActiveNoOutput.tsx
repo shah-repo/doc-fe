@@ -14,6 +14,7 @@ import useGetHasPermission from "../../../hooks/useGetHasPermission";
 import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
+import { getActiveDocumentTypes } from "../transform";
 import RenderHtmlField from "./RenderHtmlField";
 
 interface Props {
@@ -38,12 +39,21 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
   isDisabled = false,
   outputDocs,
 }) => {
+  const classes = styles();
   const formik = useFormikContext();
   const { workspaceState } = FB.useStores();
-  const classes = styles();
-  const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeFormOptions);
+
+  const disabled: boolean = (docRevId !== undefined) || isDisabled;
+  const isdocRevStatusDraft =
+    isDocumentRevisionInDraft(status);
+  const isdocRevVersionOne = version === 1;
+  const outputDocEnabled: boolean =
+    (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
+
+  const documentTypes = getActiveDocumentTypes(useSelector(documentTypeSelectors.getDocumentTypeFormOptions));
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   const canUpdateHTML = useGetHasPermission(Permission.HTML_UPDATE);
+
   const outputDocumentTypeOptions: OptionType[] = React.useMemo(
     () =>
       documentTypes.reduce((acc: OptionType[], document) => {
@@ -54,12 +64,6 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       }, []),
     [documentTypes],
   );
-  const disabled: boolean = (docRevId !== undefined) || isDisabled;
-  const isdocRevStatusDraft =
-    isDocumentRevisionInDraft(status);
-  const isdocRevVersionOne = version === 1;
-  const outputDocEnabled: boolean =
-    (isdocRevVersionOne && isdocRevStatusDraft) || !disabled;
 
   const handleTypeChange = (value: ValueType<OptionType>) => {
     const formValue = {

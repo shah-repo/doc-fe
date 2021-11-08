@@ -19,6 +19,8 @@ declare global {
       equipClickCreateNew(): Chainable<Subject>;
       recFilterByRev(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
+      recVerifyTitle(params: {title: string }): Chainable<Subject>;
+      recVerifyDescription(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
     }
   }
@@ -149,6 +151,14 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
 
 Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
   cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains(params.stage);
+});
+
+Cypress.Commands.add("recVerifyTitle", (params: {title: string}) => {
+  cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("have.text", params.title);
+});
+
+Cypress.Commands.add("recVerifyDescription", (params: {description: string}) => {
+  cy.get("[data-cy=\"BaseWithhtml-editor\"] span>span").should("have.text", params.description);
 });
 
 Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {

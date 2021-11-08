@@ -1,6 +1,7 @@
 import moment from "moment";
 import { combineReducers } from "redux";
 import { MomentFormats } from "../../../common/utils/date";
+import Colors from "../../../ui/layout/theme/utils/colors";
 import asyncReducer from "../../reducers/asyncReducer";
 import { COMPANY_DEFAULT_STATE } from "../company/reducers";
 import { Employee } from "../company/types";
@@ -43,6 +44,7 @@ const USER_DEFAULT_STATE: UserState = {
   customLabels: false,
   daysUntilPasswordExpires: 90,
   passwordSoonToExpire: false,
+  initialColor: Colors.deep_purple,
 };
 
 type AuthUserActions =

@@ -31,7 +31,6 @@ declare global {
       recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
       recSelectPo(params: {poTitle: string}): Chainable<Subject>;
       recVerifyPOIsDisplayed(params: {loadedPoItems: PurchaseOrderItem[]}): Chainable<Subject>;
-      recClearFilter(): Chainable<Subject>;
     }
   }
 }

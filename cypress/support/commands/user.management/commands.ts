@@ -1,3 +1,4 @@
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -14,6 +15,7 @@ declare global {
       usrClickSaveButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
+      authLoginWithInvalidPassword(params: { email: string; password: string }): Chainable<Subject>;
     }
   }
 }
@@ -56,4 +58,17 @@ Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
     cy.get("#email").arrowType(params.email);
   });
   cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
+});
+
+Cypress.Commands.add("authLoginWithInvalidPassword", (params: { email: string; password: string }) => {
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.Login, () => {
+      cy.log(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-password\"]")
+        .arrowType(params.password)
+      ;
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
+    });
 });
