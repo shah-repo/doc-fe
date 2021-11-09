@@ -118,6 +118,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemAvatar>
           <Avatar
+            className={classes.avatar}
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
           />
@@ -215,7 +216,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {hoverItem && (
-          <Box component="div" className={classes.actionIcons} onMouseLeave={onMouseLeaveActionIcons}>
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
             <span>
               {!rejectHover && (
                 <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />

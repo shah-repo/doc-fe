@@ -33,6 +33,10 @@ export const styles = makeStyles(() =>
       fontFamily: "Sora",
       fontWeight: 400,
     },
+    avatar: {
+      width: "35px",
+      height: "35px",
+    },
     typographyBold: {
       fontSize: "14px",
       fontFamily: "Sora",
