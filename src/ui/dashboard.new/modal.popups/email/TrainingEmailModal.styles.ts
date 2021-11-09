@@ -27,7 +27,6 @@ export const styles = makeStyles((theme: Theme) =>
       padding: "15px 20px",
       position: "relative",
       width: "450px",
-      height: "548px",
       top: "12.5%",
       left: "35.5%",
       background: Colors.sky_blue,
