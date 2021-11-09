@@ -177,10 +177,11 @@ class FBWorkspaceState extends FBSchemaState {
 
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
+    if (!values) { return; }
     const { id, mode, autosave } = this;
     if (!autosave) { return; }
-    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     if (!id) { return; }
+    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     this.setDirty(true);
     let body = {};
     switch (mode) {
