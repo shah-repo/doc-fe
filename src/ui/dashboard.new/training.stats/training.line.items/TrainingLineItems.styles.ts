@@ -18,7 +18,7 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       margin: "0px 5px",
       overflow: "auto",
-      maxHeight: "calc(100vh - 515px)",
+      maxHeight: "calc(100vh - 490px)",
     },
     allTab: {
       position: "absolute",
