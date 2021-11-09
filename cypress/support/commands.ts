@@ -73,6 +73,9 @@ interface IdocumentTypeDto {
   fieldsConfig?: IfieldsConfig;
   canRedLine?: boolean;
   defaultTraining?: boolean;
+  hiddenForCreationForUsersWithoutTags?: any[];
+  defaultRevStage?: string;
+  active?: boolean;
 }
 
 export interface ICreateCompanyBootstrap {
