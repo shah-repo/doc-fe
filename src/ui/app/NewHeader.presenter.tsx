@@ -89,7 +89,7 @@ const Header: React.FunctionComponent<Props> = ({
                 }
                 classes={{ root: classes.headerButton }}
               >
-                <UserAvatar avatar={avatar} />
+                <UserAvatar {...{ avatar, name }} />
                 <Typography
                   id="Header-welcomeText"
                   variant="caption"
