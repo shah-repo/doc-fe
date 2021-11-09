@@ -72,6 +72,7 @@ interface IdocumentTypeDto {
   schema?: any;
   fieldsConfig?: IfieldsConfig;
   canRedLine?: boolean;
+  defaultTraining?: boolean;
 }
 
 export interface ICreateCompanyBootstrap {
