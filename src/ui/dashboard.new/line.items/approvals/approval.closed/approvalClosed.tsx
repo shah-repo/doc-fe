@@ -190,7 +190,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
-              >
+              >&nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
                   &nbsp;
                 </Grid>
