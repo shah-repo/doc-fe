@@ -1,4 +1,4 @@
-import { Grid, Toolbar } from "@material-ui/core";
+import { Grid, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
@@ -47,9 +47,21 @@ const DashboardTabs: React.FunctionComponent = () => {
                 <Grid container={true} justify="center" alignItems="center">
                   <Grid item={true} sm={12}>
                     {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
-                    <span className={classes.tabItemText}>
-                      <Text translation={"common.my.feed"} /> (26)
-                    </span>
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={classes.tabItemText}
+                    >
+                      <Text translation={"common.my.feed"} />
+                    </Typography>
+                    &nbsp;
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={classes.tabItemCount}
+                    >
+                      (26)
+                    </Typography>
                   </Grid>
                 </Grid>
               }
@@ -66,9 +78,21 @@ const DashboardTabs: React.FunctionComponent = () => {
                       ) : (
                         <TrainingIcon />
                       )}
-                      <span className={classes.tabItemText}>
-                        <Text translation={"common.trainings"} /> (10)
-                      </span>
+                      <Typography
+                        component="span"
+                        variant="inherit"
+                        className={classes.tabItemText}
+                      >
+                        <Text translation={"common.trainings"} />
+                      </Typography>
+                      &nbsp;
+                      <Typography
+                        component="span"
+                        variant="inherit"
+                        className={classes.tabItemCount}
+                      >
+                        (10)
+                      </Typography>
                     </Grid>
                   </Grid>
                 }
@@ -86,9 +110,13 @@ const DashboardTabs: React.FunctionComponent = () => {
                       ) : (
                         <RecentIcon />
                       )}
-                    <span className={classes.tabItemText}>
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={classes.tabItemText}
+                    >
                       <Text translation={"common.recent"} />
-                    </span>
+                    </Typography>
                   </Grid>
                 </Grid>
               }

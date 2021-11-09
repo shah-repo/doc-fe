@@ -7,10 +7,18 @@ export const styles = makeStyles(() =>
     },
     toolbar: {
       top: 18,
-      left: 15,
+      left: "1.6%",
     },
     tabItemText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
       marginLeft: 10,
+    },
+    tabItemCount: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSize: "14px",
+      fontWeight: 400,
     },
   })
 );
