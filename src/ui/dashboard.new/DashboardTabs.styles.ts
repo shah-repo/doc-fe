@@ -18,6 +18,7 @@ export const styles = makeStyles(() =>
       fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "14px",
+      fontWeight: 400,
     },
   })
 );
