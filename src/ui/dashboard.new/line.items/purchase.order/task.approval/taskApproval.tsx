@@ -70,23 +70,28 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     openRejectDialog();
     setRejected(!rejected);
   };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
-  const onMouseLeavePinIcon = () => {
+  const onMouseLeaveActionIcons = () => {
+    setApproveHover(false);
+    setRejectHover(false);
     setPinHover(false);
   };
+  const onMouseHoverPinIcon = () => {
+    setApproveHover(false);
+    setRejectHover(false);
+    setPinHover(true);
+  };
   const onMouseHoverApproveIcon = () => {
+    setPinHover(false);
+    setRejectHover(false);
     setApproveHover(true);
   };
-  const onMouseLeaveApproveIcon = () => {
-    setApproveHover(false);
-  };
   const onMouseHoverRejectIcon = () => {
+    setPinHover(false);
+    setApproveHover(false);
     setRejectHover(true);
   };
-  const onMouseLeaveRejectIcon = () => {
-    setRejectHover(false);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
@@ -98,7 +103,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
-
   const openApproveDialog = () => {
     async.reset();
     transitionDialog.open();
@@ -107,13 +111,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog1.open();
   };
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(id);
-  };
 
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemAvatar>
           <Avatar
             alt={docRevOwnerName}
@@ -213,7 +214,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {hoverItem && (
-          <Box component="div" className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons} onMouseLeave={onMouseLeaveActionIcons}>
             <span>
               {!rejectHover && (
                 <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
@@ -222,7 +223,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
                     onClick={handleRejectClick}
-                    onMouseLeave={onMouseLeaveRejectIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -235,7 +236,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
                     onClick={handleApproveClick}
-                    onMouseLeave={onMouseLeaveApproveIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -246,7 +247,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
-                    onMouseLeave={onMouseLeavePinIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}

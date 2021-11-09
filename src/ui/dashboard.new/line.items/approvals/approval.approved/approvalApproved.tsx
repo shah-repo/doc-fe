@@ -84,17 +84,20 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog.open();
   };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
-  const onMouseLeavePinIcon = () => {
+  const onMouseLeaveActionIcons = () => {
+    setCloseHover(false);
     setPinHover(false);
   };
+  const onMouseHoverPinIcon = () => {
+    setCloseHover(false);
+    setPinHover(true);
+  };
   const onMouseHoverCloseIcon = () => {
+    setPinHover(false);
     setCloseHover(true);
   };
-  const onMouseLeaveCloseIcon = () => {
-    setCloseHover(false);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
@@ -113,15 +116,12 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(id);
-  };
 
   return (
     <>
       <StyledListItem
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
       >
@@ -241,7 +241,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {!open && hoverItem && (
-          <Box component="div" className={classes.actionIcons}>
+          <Box component="div" className={classes.actionIcons} onMouseLeave={onMouseLeaveActionIcons}>
             <span>
               {!closeHover && (
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
@@ -250,7 +250,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Close" placement="top" arrow>
                   <CloseSolidIcon
                     onClick={handleCloseClick}
-                    onMouseLeave={onMouseLeaveCloseIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -261,7 +261,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
-                    onMouseLeave={onMouseLeavePinIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
