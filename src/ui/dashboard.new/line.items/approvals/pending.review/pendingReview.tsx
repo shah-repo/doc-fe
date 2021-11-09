@@ -44,7 +44,7 @@ interface Props {
   approvedApprovers: any[] | undefined;
   docRevs: any;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -76,10 +76,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
   const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
+    onMouseHoverItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

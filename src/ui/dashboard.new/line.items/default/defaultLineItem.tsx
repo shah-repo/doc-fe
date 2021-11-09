@@ -6,7 +6,7 @@ import { styles } from "./defaultLineItem.styles";
 interface Props {
   type: string;
   status: string | undefined;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
   type,

@@ -41,7 +41,7 @@ interface Props {
 
   docRevs: any;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string | undefined) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -58,7 +58,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
@@ -69,7 +69,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
     // setViewItem(id);
   };
   const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId || id);
+    onMouseHoverItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

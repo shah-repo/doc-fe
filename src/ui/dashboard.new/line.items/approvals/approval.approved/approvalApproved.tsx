@@ -46,7 +46,7 @@ interface Props {
   timestamp: string | undefined;
   docRevs: any;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -68,7 +68,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const transitionDialog = useDialog();
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
   const handleClick = () => {
     setOpen(!open);
@@ -114,7 +114,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
     },
   });
   const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
+    onMouseHoverItem(id);
   };
 
   return (
