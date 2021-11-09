@@ -101,6 +101,7 @@ context("Training Flow test", () => {
                     optionId: "36",
                     validators: {
                       required: true,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if_in: false,
                     },
                     placeholder: "Select documents for training",
@@ -129,7 +130,9 @@ context("Training Flow test", () => {
                     ],
                     validators: {
                       required: true,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if: false,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if_in: false,
                     },
                     rulesObject: {},
@@ -149,6 +152,7 @@ context("Training Flow test", () => {
                     label: "Training Frequency (in days)",
                     rules: "required_if:training-refresh-training-periodically,Yes",
                     validators: {
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if: {
                         name: "training-refresh-training-periodically",
                         value: [
@@ -269,6 +273,7 @@ context("Training Flow test", () => {
                     optionId: "36",
                     validators: {
                       required: true,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if_in: false,
                     },
                     placeholder: "Select documents for training",
@@ -297,7 +302,9 @@ context("Training Flow test", () => {
                     ],
                     validators: {
                       required: true,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if: false,
+                      // eslint-disable-next-line @typescript-eslint/camelcase
                       required_if_in: false,
                     },
                     rulesObject: {},
@@ -306,7 +313,8 @@ context("Training Flow test", () => {
                     ],
                     deleteDisabled: false,
                     validationMode: "default",
-                    validationAttribute: "Force retraining (everyone will be retrained regardless of their current status)",
+                    validationAttribute:
+                      "Force retraining (everyone will be retrained regardless of their current status)",
                     applicableValidationSchema: true,
                   },
                   {
