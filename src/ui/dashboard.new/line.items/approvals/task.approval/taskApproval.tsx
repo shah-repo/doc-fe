@@ -26,8 +26,9 @@ import { styles } from "./taskApproval.styles";
 
 interface Props {
   id: string;
+  docDocumentId: string;
   type: string;
-  arId?: string | undefined;
+  docId?: string | undefined;
   docRevId?: string | undefined;
   arStatus?: string | undefined;
   timestamp: string | undefined;
@@ -35,11 +36,12 @@ interface Props {
   docRevOwnerName: string | undefined;
   title?: string | undefined;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
-  arId,
+  docDocumentId,
+  docId,
   docRevId,
   docRevOwnerName,
   timestamp,
@@ -55,7 +57,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
   const handlePinClick = () => {
     setPinned(!pinned);
@@ -106,7 +108,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     transitionDialog1.open();
   };
   const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
+    onMouseHoverItem(id);
   };
 
   return (
@@ -151,7 +153,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", id)}
+                    href={documentVersionPath(docRevId || "", docDocumentId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -162,14 +164,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      {arId}
+                      {docId}
                     </Typography>
                   </Link>
                   &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", id)}
+                    href={documentVersionPath(docRevId || "", docDocumentId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -254,13 +256,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <ApproveDialogueContainer
         transition="reject"
-        changeRequestId={id}
+        changeRequestId={docDocumentId}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
-        changeRequestId={id}
+        changeRequestId={docDocumentId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />

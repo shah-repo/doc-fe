@@ -27,6 +27,7 @@ import { styles } from "./MyFeeds.styles";
 interface Props {
   loadMyFeeds: any;
   loadMyFeedsListAsyncState: AsyncState;
+  // TO DO:: Needs to add type definitions
   feedItems: any[];
 }
 // interface Props {
@@ -56,8 +57,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
-  const onMouseHoverItem = (arId) => {
-    setHoverItemId(arId);
+  const onMouseHoverItem = (id) => {
+    setHoverItemId(id);
   };
   const onMouseLeaveItem = () => {
     setHoverItemId("");
@@ -70,13 +71,14 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
             return (
               <POTaskApproval
-                id={pendingAction.docDocumentId}
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
                   MomentFormats.BriefDateTime
                 )}
-                arId={pendingAction.docId}
+                docId={pendingAction.docId}
                 docRevId={pendingAction.docRevId}
                 docRevOwnerName={pendingAction.docRevOwnerName}
                 docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
@@ -176,13 +178,14 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               pendingAction?.docRevStatus &&
               !["DRAFT", "WIP"].includes(pendingAction.docRevStatus) && (
                 <ARTaskApproval
-                  id={pendingAction.docDocumentId}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
                   type={pendingAction.type}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime
                   )}
-                  arId={pendingAction.docId}
+                  docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
