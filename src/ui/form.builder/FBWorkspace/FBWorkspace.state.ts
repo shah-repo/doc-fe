@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, map, omit, size } from "lodash";
+import { includes, isArray, isEmpty, isUndefined, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
@@ -202,8 +202,9 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
+    const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
     this.documentRevApi.set({
-      url: FBEndpoint.DocumentRevisionPatch,
+      url,
       urlValues: { id },
       body,
       method: "patch",

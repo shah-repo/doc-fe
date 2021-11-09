@@ -50,6 +50,11 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     ), []);
 
     useEffect(() => {
+      formState?.newValues.set(name, formValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
       reaction(
         () => formState?.inputState.get(`${name}.attachments`)?.value,
         (attachments) => {
