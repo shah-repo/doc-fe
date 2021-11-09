@@ -68,7 +68,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
-  const onMouseHoverItemListItem = () => {
+  const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
   const onMouseHoverPinIcon = () => {
@@ -90,7 +90,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
       >
         {open ? (

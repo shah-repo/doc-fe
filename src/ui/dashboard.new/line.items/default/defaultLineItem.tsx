@@ -15,12 +15,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const onMouseHoverItemListItem = () => {
+  const onMouseHoverListItem = () => {
     onMouseHoverItem("");
   };
 
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+    <StyledListItem button onMouseEnter={onMouseHoverListItem}>
       <ListItemText
         primary={
           <Grid container={true}>

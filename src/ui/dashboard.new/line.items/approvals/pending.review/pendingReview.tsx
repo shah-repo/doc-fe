@@ -78,7 +78,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const hoverItem = hoverItemId === id;
 
-  const onMouseHoverItemListItem = () => {
+  const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
   const onMouseHoverPinIcon = () => {
@@ -106,7 +106,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
       >
         {open ? (
