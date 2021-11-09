@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
@@ -128,7 +128,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         document.getElementById("main") as HTMLInputElement
       );
       myChart.setOption(DoughnutChartOptions);
-      window.onresize = function () {
+      window.onresize = function() {
         myChart.resize();
       };
       myChart.on("mouseover", (evt: any) => {
@@ -168,24 +168,18 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     }, [tabValue, dueInSeven, overdue, totalCount]);
 
     return (
-      <Box component="div" className={classes.chartContainer}>
-        <Grid container={true}>
-          <Grid item={true}>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              <Text translation="training.stats.title" />
-            </Typography>
-            <Box
-              component="div"
-              id="main"
-              className={classes.chartScroll}
-            ></Box>
-          </Grid>
+      <Grid container={true} className={classes.chartContainer}>
+        <Grid item={true}>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            <Text translation="training.stats.title" />
+          </Typography>
+          <Box component="div" id="main" className={classes.chartScroll}></Box>
         </Grid>
-      </Box>
+      </Grid>
     );
   };
 
