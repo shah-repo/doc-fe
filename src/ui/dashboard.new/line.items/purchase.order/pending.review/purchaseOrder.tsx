@@ -54,7 +54,7 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,

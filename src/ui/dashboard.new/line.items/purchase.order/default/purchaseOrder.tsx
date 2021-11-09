@@ -32,6 +32,7 @@ import { styles } from "./purchaseOrder.styles";
 
 interface Props {
   id: string;
+  docDocumentId: string;
   docId: string;
   docRevId?: string | undefined;
   type: string;
@@ -40,7 +41,6 @@ interface Props {
   purchaseOrderSupplierDocId: string;
   status: string;
   timestamp: string;
-
   purchaseOrderAttachments: any[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
@@ -48,10 +48,11 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
+  docDocumentId,
   docId,
   docRevId,
   status,
@@ -72,31 +73,31 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const PoItems: any = [
     {
-      id: "Id1",
+      id: "id1",
       isSupplier: true,
       ltext: "Supplier:",
       rtext: purchaseSupplierName,
     },
     {
-      id: "Id2",
+      id: "id2",
       isRegular: true,
       ltext: "Total:",
       rtext: purchaseOrderCurrency + purchaseOrderTotalAmount,
     },
     {
-      id: "Id3",
+      id: "id3",
       isRegular: true,
       ltext: "Description:",
       rtext: purchaseOrderDescription,
     },
     {
-      id: "Id4",
+      id: "id4",
       isRegular: true,
       ltext: "Line Items:",
       rtext: purchaseOrdeLineItemCount,
     },
     {
-      id: "Id5",
+      id: "id5",
       isAttachments: true,
       ltext: "Attachments",
       rtext: purchaseOrderAttachments || [],
@@ -154,7 +155,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", id)}
+                    href={documentVersionPath(docRevId || "", docDocumentId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -172,7 +173,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", id)}
+                    href={documentVersionPath(docRevId || "", docDocumentId)}
                     color="inherit"
                     className={classes.link}
                   >

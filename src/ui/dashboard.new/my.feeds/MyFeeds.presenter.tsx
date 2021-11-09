@@ -135,7 +135,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             }
             return (
               <PurchaseOrder
-                id={pendingAction.docDocumentId}
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
                 docId={pendingAction.docId}
                 docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
