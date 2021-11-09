@@ -24,7 +24,7 @@ export default (theme: Theme) =>
     },
     toolbarTitle: {
       position: "relative",
-      left: "4%",
+      left: "3%",
       top: "17%",
       fontFamily: "Sora",
       fontStyle: "normal",
