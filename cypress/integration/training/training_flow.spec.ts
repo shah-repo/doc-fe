@@ -1179,7 +1179,8 @@ context("Training Flow test", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
-            forceTrainingRecordId = res.body.trainingRecords[0].trId;
+            const index = res.body.trainingRecords.length;
+            forceTrainingRecordId = res.body.trainingRecords[index - 1].trId;
           }
         });
       }).as("response");
