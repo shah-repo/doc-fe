@@ -9,9 +9,6 @@ import TrainingStats from "./training.stats/TrainingStats";
 const DashboardLayout: React.FunctionComponent = () => {
   const classes = styles();
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
-  /* TO DO:: For testing purpose only, this has been added.
-  Once we get DASHBOARD_ADMIN tag from backend, this line should be removed. */
-  isDashboardAdmin = true;
 
   return (
     <Grid

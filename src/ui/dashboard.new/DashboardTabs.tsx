@@ -18,9 +18,6 @@ const DashboardTabs: React.FunctionComponent = () => {
   const classes = styles();
   const [value, setValue] = React.useState(0);
   let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
-  /* TO DO:: For testing purpose only, this has been added.
-  Once we get DASHBOARD_ADMIN tag from backend, this line should be removed. */
-  isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
     id: `scrollable-auto-tab-${index}`,
