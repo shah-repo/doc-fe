@@ -59,8 +59,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   const [closeHover, setCloseHover] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
   const [pinned, setPinned] = React.useState(false);
@@ -241,7 +239,11 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {!open && hoverItem && (
-          <Box component="div" className={classes.actionIcons} onMouseLeave={onMouseLeaveActionIcons}>
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
             <span>
               {!closeHover && (
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
