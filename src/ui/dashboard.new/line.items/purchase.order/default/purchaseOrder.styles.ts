@@ -60,9 +60,10 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     typography: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 400,
+      "fontSize": "14px",
+      "fontFamily": "Sora",
+      "fontWeight": 400,
+      "& > p": { margin: "0px" },
     },
     typographyBold: {
       fontSize: "14px",
