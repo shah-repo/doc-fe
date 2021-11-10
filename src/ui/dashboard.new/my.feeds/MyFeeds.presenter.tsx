@@ -87,6 +87,44 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 hoverItemId={hoverItemId}
               />
             );
+          case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED:
+            return (
+              <PurchaseOrder
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
+                docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
+                type={pendingAction.type}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                purchaseOrderSupplierDocRevId={
+                  pendingAction.purchaseOrderSupplierDocRevId
+                }
+                purchaseOrderSupplierDocId={
+                  pendingAction.purchaseOrderSupplierDocId
+                }
+                status={pendingAction.approvalStatusChanged}
+                docRevName={pendingAction.docRevName}
+                purchaseOrderTotalAmount={
+                  pendingAction.purchaseOrderTotalAmount
+                }
+                purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                purchaseOrderDescription={
+                  pendingAction.purchaseOrderDescription
+                }
+                purchaseOrdeLineItemCount={
+                  pendingAction.purchaseOrdeLineItemCount
+                }
+                purchaseOrderAttachments={
+                  pendingAction.purchaseOrderAttachments
+                }
+                purchaseSupplierName={pendingAction.purchaseSupplierName}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER:
             if (
               LINE_ITEMS_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus
