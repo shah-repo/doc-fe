@@ -10,6 +10,7 @@ export const styles = makeStyles(() =>
       overflow: "auto",
       minHeight: "calc(100vh - 160px)",
       maxHeight: "calc(100vh - 160px)",
+      marginLeft: "-11px",
     },
   })
 );
