@@ -27,6 +27,8 @@ declare global {
       navigToLots(): Chainable<Subject>;
       navigToLHR(): Chainable<Subject>;
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
+      navigToTrainingRecords(): Chainable<Subject>;
+      navigToTrainingCurriculums(): Chainable<Subject>;
     }
   }
 }
@@ -215,4 +217,28 @@ Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[
       }
     });
   }
+});
+
+Cypress.Commands.add("navigToTrainingRecords", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.TRAINING,
+        NavigationItems.TRAINING_RECORDS,
+      ],
+    });
+  });
+});
+
+Cypress.Commands.add("navigToTrainingCurriculums", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.TRAINING,
+        NavigationItems.TRAINING_CURRICULUMS,
+      ],
+    });
+  });
 });
