@@ -23,6 +23,18 @@ let createdRecivableFormDocument;
 let createdReceivable1;
 
 context("Autosave on blur", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -882,6 +894,14 @@ context("Autosave on blur", () => {
       cy.unClick();
       cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option2");
       cy.wait("@response", { responseTimeout: 65 * 1000 });
+    });
+
+    it("Check Checkbox values are saved", () => {
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.reload();
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").eq(0).should("be.checked");
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").eq(1).should("be.checked");
     });
 
     it("Uncheck Checkbox field and check for autosave", () => {
