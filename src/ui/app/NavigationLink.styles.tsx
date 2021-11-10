@@ -1,35 +1,36 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export const DRAWER_WIDTH = 240;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
     link: {
-      "color": theme.palette.secondary.contrastText,
-      "backgroundColor": theme.palette.secondary.main,
+      "color": Colors.drawer_link_color,
+      "backgroundColor": Colors.drawer_link_background,
       "&:hover": {
-        color: theme.palette.secondary.contrastText,
-        backgroundColor: theme.palette.secondary.main,
+        color: Colors.drawer_link_hover_color,
+        backgroundColor: Colors.drawer_link_hover_background,
       },
       "& svg": {
-        stroke: theme.palette.secondary.contrastText,
+        stroke: Colors.drawer_active_link_icon_color,
       },
     },
     childLink: {
       paddingLeft: theme.spacing(6),
     },
     activeLink: {
-      "backgroundColor": theme.palette.secondary.contrastText,
-      "color": theme.palette.secondary.main,
+      "backgroundColor": Colors.drawer_link_active_background,
+      "color": Colors.drawer_link_active_color,
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
       "&:hover": {
-        backgroundColor: theme.palette.secondary.contrastText,
-        color: theme.palette.secondary.main,
+        backgroundColor: Colors.drawer_link_active_hover_background,
+        color: Colors.drawer_link_active_hover_color,
       },
       "& svg": {
-        stroke: theme.palette.secondary.main,
+        stroke: Colors.drawer_active_link_icon_color,
       },
     },
     itemIcon: {
@@ -50,14 +51,14 @@ export default makeStyles((theme: Theme) =>
     icon: ({ iconLink }) => ({
       "width": 20,
       "height": 20,
-      "backgroundColor": theme.palette.secondary.contrastText,
+      "backgroundColor": Colors.drawer_active_link_icon_color,
       "mask":
         `url(${iconLink}) no-repeat center / contain`,
       "-webkit-mask":
         `url(${iconLink}) no-repeat center / contain`,
     }),
     iconActive: {
-      backgroundColor: `${theme.palette.secondary.main} !important`,
+      backgroundColor: `${Colors.drawer_link_icon_color} !important`,
     },
   })
 );

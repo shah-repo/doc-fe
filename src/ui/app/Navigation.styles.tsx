@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export const DRAWER_WIDTH = 240;
 
@@ -10,11 +11,11 @@ export default (theme: Theme) =>
     },
     drawerPaper: {
       width: DRAWER_WIDTH,
-      background: theme.palette.secondary.main,
+      background: Colors.drawer_background,
       zIndex: theme.zIndex.drawer + 2,
     },
     toolbar: {
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: Colors.drawer_background,
       marginTop: 20,
     },
     toolbarTitle: {
