@@ -31,12 +31,18 @@ export const styles = makeStyles(() =>
       color: Colors.font_black,
     },
     docIdAndTitle: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
-      fontSize: "14px",
-      lineHeight: "22px",
-      color: Colors.font_black,
+      "fontFamily": "Sora",
+      "fontStyle": "normal",
+      "fontWeight": 600,
+      "fontSize": "14px",
+      "lineHeight": "22px",
+      "color": Colors.font_black,
+      "& > p": {
+        margin: "0px",
+      },
+    },
+    contentSection: {
+      marginTop: "2%",
     },
     date: {
       fontFamily: "Sora",
