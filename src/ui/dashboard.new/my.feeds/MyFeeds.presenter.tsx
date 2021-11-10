@@ -202,7 +202,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             if (pendingAction.arStatus === "CLOSED") {
               return (
                 <ApprovalClosed
-                  id={pendingAction.id}
+                  id={pendingAction.arChangeRequestId}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
                   title={pendingAction?.arTitle}
@@ -220,7 +220,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             if (pendingAction.arStatus === "APPROVED") {
               return (
                 <ApprovalApproved
-                  id={pendingAction.id}
+                  id={pendingAction.arChangeRequestId}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
                   title={pendingAction?.arTitle}
