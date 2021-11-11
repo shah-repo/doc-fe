@@ -7,8 +7,8 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
-import { styles } from "./TrainingItem.styles";
 import Text from "../../../components/Text";
+import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
   avatar: string | null;
@@ -71,6 +71,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
         wrap="nowrap"
         justify="flex-start"
         alignItems="center"
+        className={classes.contentSection}
       >
         <Grid item={true}>
           <Typography
