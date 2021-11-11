@@ -186,7 +186,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       />
                     )}
                   </Typography>
-                  &nbsp;&nbsp;
                 </Grid>
                 <Grid
                   item={true}
@@ -195,9 +194,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       ? classes.redDot
                       : classes.yellowDot
                   }
-                >
-                  &nbsp;
-                </Grid>
+                ></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -210,7 +207,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {dueDate}
+                    {dueDate}
                   </Typography>
                 </Grid>
               </Grid>
@@ -254,11 +251,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Link>
                   </StyledTooltip>
-                  &nbsp;
                 </Grid>
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -267,7 +261,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
