@@ -49,6 +49,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Typography
                     component="span"
                     variant="inherit"
+                    // eslint-disable-next-line max-len
                     className={value === 0 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
                   >
                     <Text translation={"common.my.feed"} />
@@ -77,6 +78,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     <Typography
                       component="span"
                       variant="inherit"
+                      // eslint-disable-next-line max-len
                       className={value === 1 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
                     >
                       <Text translation={"common.trainings"} />
@@ -108,6 +110,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     component="span"
                     variant="inherit"
                     className={(isDashboardAdmin && value === 2) ||
+                        // eslint-disable-next-line max-len
                         (!isDashboardAdmin && value === 1) ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
 
                   >
