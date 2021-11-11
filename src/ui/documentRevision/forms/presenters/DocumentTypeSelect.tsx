@@ -48,6 +48,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
   const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
+
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
@@ -73,7 +74,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
   const options: SelectOption[] = React.useMemo(() => {
     if ((isNewOutput || isCreateMaintenance) && outputDocumentTypes) {
-      return outputDocumentTypes.map((e) =>
+      return (outputDocumentTypes.filter((type) => type.active)).map((e) =>
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
     }

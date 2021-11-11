@@ -63,9 +63,23 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
   @action public setApprovals = (approvals?: FBInlineApprovalBody[]) =>
     set(this, "approvals", approvals);
 
-  public addApproval = (approval: Partial<FBInlineApprovalBody>) => {
-    this.approvalApi.setBody(approval);
-    this.approvalApi.post();
+  public addApproval = (
+    approval: Partial<FBInlineApprovalBody>,
+    callback?: () => any
+  ) => {
+    this.approvalApi.set({
+      url: FBEndpoint.Approvals,
+      body: approval,
+      method: "post",
+    }, (data, error) => {
+      if (error) {
+        this.approvalApi.onError(error);
+      } else {
+        this.approvalApi.data = data;
+        this.approvalApi.onSuccess();
+        callback?.();
+      }
+    });
   };
 
   public applyTransition = (
