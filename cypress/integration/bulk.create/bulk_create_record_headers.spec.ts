@@ -1,5 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -15,6 +17,8 @@ let approvalRequestDocumentType;
 let testDocumentType;
 let formDocumentType;
 let createdDocumentForBulkCreation;
+const currentDate = moment().tz("America/Los_Angeles").format("x");
+const excelTemplateSaveName = currentDate + "excelTemplate.xlsx";
 
 context("Bulk create record headers", () => {
   before(() => {
@@ -285,6 +289,20 @@ context("Bulk create record headers", () => {
                       deleteInFormDisabled: false,
                       applicableValidationSchema: true,
                     },
+                    {
+                      name: "approvals-built-in",
+                      type: "approvals",
+                      index: 7,
+                      label: "Approvals",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      deleteDisabled: true,
+                      uniqueSchemaItem: true,
+                      validationAttribute: "Approvals",
+                      deleteInFormDisabled: true,
+                      applicableValidationSchema: true,
+                    },
                   ],
                 },
               },
@@ -406,6 +424,24 @@ context("Bulk create record headers", () => {
       });
     });
 
+    context("Test excel download", () => {
+      it("Download excel template file", () => {
+        cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
+      });
+
+      it("Verify file size to check for unsupported fields", () => {
+        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 15100, 15400);
+      });
+
+      it("Verify popup message", () => {
+        cy.checkToastMessageIsEqual({
+          message: "Excel Template Successfully Downloaded. " +
+        "Please open downloaded Excel Template and populate data. Then Upload to Import Data",
+        });
+        cy.closeAllAlertMessages();
+      });
+    });
+
     context("Test invalid excel files for bulk create", () => {
       context("Upload template with wrong headers", () => {
         it("Upload template file", () => {
@@ -512,6 +548,70 @@ context("Bulk create record headers", () => {
             .find("button").arrowClick({ force: true });
         });
       });
+
+      context("Upload valid template but change doc type configuration", () => {
+        it("Upload template file", () => {
+          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateWithTitle.xlsx" });
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Submit for approval", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        context("Change doc type configuration, make label C not visible", () => {
+          it("[API] Patch doc type", (done: any) => {
+            cy.drPatchDocType({
+              payload: {
+                documentTypeName: "Test Document Type",
+                documentTypeAcronym: "TDT-",
+                category: "Record",
+                group: "RECORD",
+                isQms: true,
+                canRedLine: true,
+                fieldsConfig: {
+                  C: {
+                    visible: false,
+                    required: false,
+                  },
+                },
+              },
+              docTypeId: testDocumentType[0].id,
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+
+        context("Try to approve bulk create", () => {
+          it("Approve record", () => {
+            cy.ebTryToApprove();
+          });
+
+          it("Verify error message", () => {
+            cy.checkToastMessageIsEqual({
+              message: "Headers do not match expected order or values, either headers were modified or " +
+              "configuration was updated. Please download sheet template and fill required data.; " +
+              "Uploaded template has more columns than generated template in row 1",
+            });
+            cy.closeAllAlertMessages();
+          });
+        });
+
+        context("Withdraw subbmision and remove file", () => {
+          it("Withdraw submission", () => {
+            cy.ebWithdrawSubmisison();
+          });
+
+          it("Remove file", () => {
+            cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+              .find("button").arrowClick({ force: true });
+          });
+        });
+      });
     });
 
     context("Upload correct template", () => {
@@ -556,7 +656,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
+        cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("not.exist");
       });
 
       it("Verify description", () => {
@@ -583,7 +683,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Second bulk document" });
+        cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("not.exist");
       });
 
       it("Verify description", () => {
