@@ -98,7 +98,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
@@ -109,7 +109,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                           : "your.training.on"
                       }
                     />
-                    &nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -121,11 +120,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
-                      {id}&nbsp;
+                      {id}
                     </Typography>
                   </Link>
                 </Grid>
@@ -138,11 +137,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
-                      {title}&nbsp;
+                      {title}
                     </Typography>
                   </Link>
                 </Grid>
@@ -151,7 +150,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     component="span"
                     variant="caption"
                     onClick={openDueModel}
-                    className={classes.typographyStatus}
+                    className={`${classes.typographyStatus} ${classes.margin7}`}
                     color="textSecondary"
                     noWrap
                   >
@@ -191,8 +190,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   item={true}
                   className={
                     status === TrainingStatus.OVERDUE
-                      ? classes.redDot
-                      : classes.yellowDot
+                      ? `${classes.redDot} ${classes.margin7}`
+                      : `${classes.yellowDot} ${classes.margin7}`
                   }
                 ></Grid>
                 <Grid item={true}>
@@ -243,7 +242,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       <Typography
                         component="span"
                         variant="caption"
-                        className={classes.typographyBold}
+                        className={`${classes.typographyBold} ${classes.margin7}`}
                         color="textSecondary"
                         noWrap
                       >
@@ -252,7 +251,10 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     </Link>
                   </StyledTooltip>
                 </Grid>
-                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid
+                  item={true}
+                  className={`${classes.grayDot} ${classes.margin7}`}
+                ></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
