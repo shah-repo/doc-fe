@@ -84,7 +84,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
     setCloseHover(false);
     // setPinHover(false);
   };
-  /*const onMouseHoverPinIcon = () => {
+  /* const onMouseHoverPinIcon = () => {
     setCloseHover(false);
     // setPinHover(true);
   };*/

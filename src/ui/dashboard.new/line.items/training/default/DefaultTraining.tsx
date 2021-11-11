@@ -205,8 +205,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     TrainingStatus.ASSIGNED === status
                       ? classes.grayDot
                       : status === TrainingStatus.OVERDUE
-                      ? classes.redDot
-                      : classes.yellowDot
+                        ? classes.redDot
+                        : classes.yellowDot
                   }
                 >
                   &nbsp;
@@ -221,8 +221,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       status === TrainingStatus.ASSIGNED
                         ? classes.typographyAssigned
                         : status === TrainingStatus.OVERDUE
-                        ? classes.typographyOverdue
-                        : classes.typographyDueInfewDays
+                          ? classes.typographyOverdue
+                          : classes.typographyDueInfewDays
                     }
                     color="textSecondary"
                     noWrap
