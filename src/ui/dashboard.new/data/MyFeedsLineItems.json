@@ -165,6 +165,58 @@
     "type": "APPROVAL_REQ_INLINE_APPROVER"
   },
   {
+    "trainingStatus": "OVERDUE",
+    "dueOn": "Nov 10",
+    "trainingRecordId": "ccd89577-d320-443b-af8a-eb393303cbb3",
+    "trId": "TRN-00012",
+    "docId": "LOT-00004",
+    "docDocumentId": "e238da46-c282-4306-9de8-34164bb05234",
+    "docRevName": "Spray Painting Assembly",
+    "docRevId": "679b8ee8-7b70-4459-a3d5-cb256a8aae83",
+    "id": "4daf57cf-a0a1-43ce-9914-4ee2316e57f5",
+    "timestamp": "2021-11-08T04:46:20.822Z",
+    "type": "TRAINING_STATUS_UPDATE"
+  },
+  {
+    "trainingStatus": "COMPLETED",
+    "dueOn": "Nov 24",
+    "trainingRecordId": "ccd89577-d320-443b-af8a-eb393303cbb3",
+    "trId": "TRN-00011",
+    "docId": "LOT-00005",
+    "docDocumentId": "e238da46-c282-4306-9de8-34164bb05233",
+    "docRevName": "ddde",
+    "docRevId": "679b8ee8-7b70-4459-a3d5-cb256a8aae83",
+    "id": "4daf57cf-a0a1-43ce-9914-4ee2316e5745",
+    "timestamp": "2021-11-08T04:46:20.822Z",
+    "type": "TRAINING_STATUS_UPDATE"
+  },
+  {
+    "trainingStatus": "ASSIGNED",
+    "dueOn": "Nov 24",
+    "trainingRecordId": "ccd89577-d320-443b-af8a-eb393303cbb3",
+    "trId": "TRN-00013",
+    "docId": "LOT-00002",
+    "docDocumentId": "e238da46-c282-4306-9de8-34164bb05233",
+    "docRevName": "New Training",
+    "docRevId": "679b8ee8-7b70-4459-a3d5-cb256a8abe83",
+    "id": "4daf57cf-a0a1-43ce-9914-4ee2316e5845",
+    "timestamp": "2021-11-08T04:46:20.822Z",
+    "type": "TRAINING_STATUS_UPDATE"
+  },
+  {
+    "trainingStatus": "DUE",
+    "dueOn": "Dec 2",
+    "trainingRecordId": "ccd89577-d320-443b-af8a-eb393303cbb3",
+    "trId": "TRN-00009",
+    "docId": "LOT-00005",
+    "docDocumentId": "e238da46-c282-4306-9de8-34164bb05234",
+    "docRevName": "Digitizing Documents",
+    "docRevId": "679b8ee8-7b70-4459-a3d5-cb256a8aae83",
+    "id": "4daf57cf-a0a1-43ce-9914-4ee2316e5735",
+    "timestamp": "2021-11-08T04:46:20.822Z",
+    "type": "TRAINING_STATUS_UPDATE"
+  },
+  {
     "docRevStatus": "DRAFT",
     "arId": "AR-00456",
     "id": "83ba9e6b-7654-4a11-a1e2-aa398f96c8d5",

@@ -17,8 +17,6 @@ import { ReactComponent as CollapseIcon } from "../../../../../assets/images/col
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
@@ -54,36 +52,35 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  const [pinHover, setPinHover] = React.useState(false);
+  // const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
-  const handlePinClick = () => {
-    setPinned(!pinned);
-  };
+  // const handlePinClick = () => {
+  //   setPinned(!pinned);
+  // };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
-  const onMouseLeavePinIcon = () => {
-    setPinHover(false);
-  };
+  // const onMouseHoverPinIcon = () => {
+  //   setPinHover(true);
+  // };
+  // const onMouseLeavePinIcon = () => {
+  //   setPinHover(false);
+  // };
   const onMouseHoverViewIcon = (id: string) => {
     setViewHoverItem(id);
   };
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
-
 
   return (
     <>
@@ -190,7 +187,8 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
-              >&nbsp;&nbsp;
+              >
+                &nbsp;&nbsp;
                 <Grid item={true} className={classes.grayDot}>
                   &nbsp;
                 </Grid>
@@ -209,7 +207,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {/* {!open && hoverItem && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -221,7 +219,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </Box>
-        )}
+        )} */}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Avatar,
-  Box,
   Grid,
   Link,
   ListItemAvatar,
@@ -9,8 +8,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
+// import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+// import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
@@ -18,7 +17,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import { StyleTooltip } from "../../common/StyleTooltip";
+// import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./rejected.styles";
 
 interface Props {
@@ -49,19 +48,19 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  const [pinHover, setPinHover] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinHover, setPinHover] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
-  const handlePinClick = () => {
-    setPinned(!pinned);
-  };
-  const onMouseLeaveActionIcons = () => {
-    setPinHover(false);
-  };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
+  // const handlePinClick = () => {
+  //   setPinned(!pinned);
+  // };
+  // const onMouseLeaveActionIcons = () => {
+  //   setPinHover(false);
+  // };
+  // const onMouseHoverPinIcon = () => {
+  //   setPinHover(true);
+  // };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -203,7 +202,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {/* {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -221,7 +220,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
             </span>
           </Box>
-        )}
+        )} */}
       </StyledListItem>
     </>
   );

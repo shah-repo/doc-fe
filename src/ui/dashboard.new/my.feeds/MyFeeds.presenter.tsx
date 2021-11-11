@@ -23,6 +23,7 @@ import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import POReject from "../line.items/purchase.order/rejected/reject";
 import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
 import POTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
+import TrainingItem from "../line.items/training/default/DefaultTraining";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -233,7 +234,23 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 hoverItemId={hoverItemId}
               />
             );
-
+          case ActionTypes.TRAINING_STATUS_UPDATE:
+            return (
+              <TrainingItem
+                key={index}
+                id={pendingAction.id}
+                type={pendingAction.type}
+                docRevName={pendingAction.docRevName}
+                docId={pendingAction.docId}
+                docDocumentId={pendingAction?.docDocumentId}
+                docRevId={pendingAction?.docRevId}
+                status={pendingAction.trainingStatus}
+                timestamp={pendingAction.timestamp}
+                dueOn={pendingAction.dueOn}
+                hoverItemId={hoverItemId}
+                onMouseHoverItem={onMouseHoverItem}
+              />
+            );
           case ActionTypes.PENDING_DOC_CONTROL:
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:

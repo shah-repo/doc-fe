@@ -18,8 +18,6 @@ import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
@@ -61,18 +59,18 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
-  const [pinHover, setPinHover] = React.useState(false);
+  // const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
-  const handlePinClick = () => {
-    setPinned(!pinned);
-  };
+  // const handlePinClick = () => {
+  //   setPinned(!pinned);
+  // };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
@@ -81,12 +79,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
-  const onMouseLeavePinIcon = () => {
-    setPinHover(false);
-  };
+  // const onMouseHoverPinIcon = () => {
+  //   setPinHover(true);
+  // };
+  // const onMouseLeavePinIcon = () => {
+  //   setPinHover(false);
+  // };
   const onMouseHoverViewIcon = (id: string) => {
     setViewHoverItem(id);
   };
@@ -275,7 +273,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {/* {!open && hoverItem && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -287,7 +285,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </Box>
-        )}
+        )} */}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

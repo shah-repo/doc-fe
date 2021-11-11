@@ -1097,5 +1097,8 @@
   "email.success.message": "EMAIL SENT TO ALL",
   "email.title": "Email Confirmation",
   "assigned.users.count": "Assigned to {count} users.",
-  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending."
+  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
+  "training.your": "Your training",
+  "training.your.on": "Your training on",
+  "training.assign": "A training is assigned to you"
 }
