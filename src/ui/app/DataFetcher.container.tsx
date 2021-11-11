@@ -41,6 +41,8 @@ const DataFetcherContainer: React.FunctionComponent = () => {
   const async = useAsync({
     onSuccess: (response) => {
       if (!isEqual(response, GroupWithGroupOptions)) {
+        // eslint-disable-next-line no-console
+        console.log(intl.formatMessage({ id: "common.document.type.mismatch" }));
         if (!Config.isProduction) { toastError(intl.formatMessage({ id: "common.document.type.mismatch" })); }
       }
     },
