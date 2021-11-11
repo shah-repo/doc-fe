@@ -21,8 +21,8 @@ export const styles = makeStyles(() =>
       alignItems: "center",
       padding: "0px 10px",
       position: "absolute",
-      width: "112px",
-      height: "58px",
+      width: "44px",
+      height: "62px",
       right: "0px",
       top: "0px",
       /* Highlight */
