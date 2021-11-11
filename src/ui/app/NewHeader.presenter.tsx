@@ -62,7 +62,12 @@ const Header: React.FunctionComponent<Props> = ({
             <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
-        <Grid item={true} className={classes.wrapContainer}>
+        <Grid
+          item={true}
+          className={classes.wrapContainer}
+          justify="flex-start"
+          alignItems="center"
+        >
           <Box alignItems="center">
             {canToggleCustomLabels && (
               <FormControlLabel

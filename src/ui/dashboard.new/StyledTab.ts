@@ -8,8 +8,6 @@ const styles = () => ({
     "minWidth": "125px",
     "color": Colors.font_gray,
     "borderRadius": "100px",
-    "fontFamily": "Sora",
-    "fontStyle": "normal",
     "font-weight": "normal",
     "fontSize": "18px",
     "lineHeight": "23px",
