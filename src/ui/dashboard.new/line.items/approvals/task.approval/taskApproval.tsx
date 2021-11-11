@@ -11,8 +11,6 @@ import {
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
@@ -49,17 +47,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
 
-  const [pinHover, setPinHover] = React.useState(false);
+  // const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === arId;
 
-  const handlePinClick = () => {
-    setPinned(!pinned);
-  };
+  // const handlePinClick = () => {
+  //   setPinned(!pinned);
+  // };
   const handleApproveClick = () => {
     openApproveDialog();
     setApproved(!approved);
@@ -68,12 +66,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     openRejectDialog();
     setRejected(!rejected);
   };
-  const onMouseHoverPinIcon = () => {
-    setPinHover(true);
-  };
-  const onMouseLeavePinIcon = () => {
-    setPinHover(false);
-  };
+  // const onMouseHoverPinIcon = () => {
+  //   setPinHover(true);
+  // };
+  // const onMouseLeavePinIcon = () => {
+  //   setPinHover(false);
+  // };
   const onMouseHoverApproveIcon = () => {
     setApproveHover(true);
   };
@@ -238,7 +236,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            <span className={classes.actionIcon}>
+            {/* <span className={classes.actionIcon}>
               {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
@@ -248,7 +246,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-            </span>
+            </span> */}
           </Box>
         )}
       </StyledListItem>
