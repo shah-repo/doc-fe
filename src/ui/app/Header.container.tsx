@@ -7,6 +7,7 @@ import { LOGIN_URL } from "../constants/urls";
 import FBStore from "../form.builder/stores/ui/FBStore";
 import useGetHasTag from "../hooks/useGetHasTag";
 import HeaderPresenter from "./Header.presenter";
+import NewHeaderPresenter from "./NewHeader.presenter";
 
 type Props = RouteComponentProps;
 
@@ -23,6 +24,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {
+  const isNewDashboard = location.pathname === "/dashboard";
   const [showUserProfile, setUserProfile] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -69,21 +71,38 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <HeaderPresenter
-      {...{
-        email,
-        name,
-        closeUserProfile,
-        showUserProfile,
-        avatar,
-        handleOpenMenu,
-        handleCloseMenu,
-        anchorEl,
-        customLabelsValue,
-        toggleCustomLabels,
-        canToggleCustomLabels,
-      }}
-    />
+    <>
+      {isNewDashboard && <NewHeaderPresenter
+        {...{
+          email,
+          name,
+          closeUserProfile,
+          showUserProfile,
+          avatar,
+          handleOpenMenu,
+          handleCloseMenu,
+          anchorEl,
+          customLabelsValue,
+          toggleCustomLabels,
+          canToggleCustomLabels,
+        }}
+      />}
+      {!isNewDashboard && <HeaderPresenter
+        {...{
+          email,
+          name,
+          closeUserProfile,
+          showUserProfile,
+          avatar,
+          handleOpenMenu,
+          handleCloseMenu,
+          anchorEl,
+          customLabelsValue,
+          toggleCustomLabels,
+          canToggleCustomLabels,
+        }}
+      />}
+    </>
   );
 };
 
