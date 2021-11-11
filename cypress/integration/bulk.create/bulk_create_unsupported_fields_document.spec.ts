@@ -1,0 +1,831 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+import moment from "moment";
+import "moment-timezone";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+let createdCompany;
+let loginResponse;
+let adminEmployee;
+let group;
+let initialArDocument;
+let approvalRequestDocumentType;
+let testDocumentType;
+let formDocumentType;
+let createdDocumentForBulkCreation;
+const currentDate = moment().tz("America/Los_Angeles").format("x");
+const excelTemplateSaveName = currentDate + "excelTemplate.xlsx";
+
+context("Bulk create unsupported fields on document", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
+              {
+                documentTypeName: "Test Document Type",
+                documentTypeAcronym: "TDT-",
+                group: "OTHER",
+                isQms: true,
+                canRedLine: true,
+              },
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
+          done();
+        });
+      });
+    });
+
+    context("[API]Create documents for bulk create", () => {
+      it("[API]Login first tester", (done: any) => {
+        cy.authApiLogin({
+          email: USERS[1].email,
+        }).then((response) => {
+          loginResponse = response;
+          done();
+        });
+      });
+
+      it("[API]Create Bulk Create form", (done: any) => {
+        cy.grpGetGroupByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          groupName: "Everyone",
+        }).then((response) => {
+          group = response;
+          cy.arGetArDocumentByName({
+            sessionId: loginResponse.sessionId,
+            employeeId: adminEmployee.id,
+            name: "AR Form",
+          }).then((response) => {
+            initialArDocument = response;
+            cy.drCreateDocumentRevision({
+              payload: {
+                attachments: [],
+                description: "<p>Document form for bulk create</p>",
+                document: {
+                  docId: "FM-00002",
+                  documentType: {
+                    id: formDocumentType[0].id,
+                  },
+                  securityList: {
+                    operators: [],
+                    securityEmployees: [],
+                    securityGroups: [
+                      {
+                        id: group.body[0].id,
+                      },
+                    ],
+                  },
+                },
+                name: "Document for bulk creation",
+                referenceTo: [],
+                retrain: false,
+                revisionChangeType: RevisionChangeType.NextRevision,
+                revisionStage: 1,
+                formTemplate: {
+                  outputDocumentTypes: [{
+                    id: testDocumentType[0].id,
+                  }],
+                  schema: [
+                    {
+                      name: "blc-text-field-kv6ef2ii",
+                      rows: 1,
+                      type: "textfield",
+                      index: 0,
+                      label: "BLC text field",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      placeholder: "",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC text field",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "-kv6effxq",
+                      type: "paragraph",
+                      index: 1,
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      paragraph: "<p>BLC paragraph text</p>",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-text-editor-kv6efdw2",
+                      type: "texteditor",
+                      index: 2,
+                      label: "BLC Text Editor",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC Text Editor",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-date-picker-kv6efc5r",
+                      type: "datepicker",
+                      index: 3,
+                      label: "BLC Date picker",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC Date picker",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-radio-button-group-kv6efaga",
+                      type: "radiogroup",
+                      index: 4,
+                      label: "BLC radio button group",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      options: [
+                        {
+                          text: "option1",
+                          value: "option1",
+                        },
+                        {
+                          text: "option2",
+                          value: "option2",
+                        },
+                        {
+                          text: "option3",
+                          value: "option3",
+                        },
+                      ],
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC radio button group",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-select-field-kv6ef7ot",
+                      type: "select",
+                      index: 5,
+                      label: "BLC select field",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      options: [
+                        {
+                          text: "option1",
+                          value: "option1",
+                        },
+                        {
+                          text: "option2",
+                          value: "option2",
+                        },
+                        {
+                          text: "option3",
+                          value: "option3",
+                        },
+                      ],
+                      placeholder: "",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC select field",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-checkbox-group-kv6ef53q",
+                      type: "checkboxgroup",
+                      index: 6,
+                      label: "BLC Checkbox group",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      options: [
+                        {
+                          text: "option1",
+                          value: "option1",
+                        },
+                        {
+                          text: "option2",
+                          value: "option2",
+                        },
+                        {
+                          text: "option3",
+                          value: "option3",
+                        },
+                      ],
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC Checkbox group",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-autocomplete-kv803wt2",
+                      type: "autocomplete",
+                      index: 7,
+                      label: "BLC autocomplete",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      optionId: "1",
+                      placeholder: "",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC autocomplete",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-quantity-kv804z8m",
+                      type: "quantity",
+                      index: 9,
+                      label: "BLC quantity",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC quantity",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-timer-kv8058rz",
+                      type: "timer",
+                      index: 10,
+                      label: "BLC timer",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC timer",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-po-kv80636x",
+                      type: "purchaseorder",
+                      index: 11,
+                      label: "BLC po",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC po",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-receive-kv806fzf",
+                      type: "poreceive",
+                      index: 12,
+                      label: "BLC receive",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC receive",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "-kv806ph2",
+                      type: "approvalMatrix",
+                      index: 13,
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-instruction-media-upload-kv80744w",
+                      type: "instructionsmediaupload",
+                      index: 14,
+                      label: "BLC instruction media upload",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      isTemplate: true,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC instruction media upload",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-evidence-media-upload-kv807eyt",
+                      type: "evidencemediaupload",
+                      index: 15,
+                      label: "BLC evidence media upload",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      isTemplate: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "BLC evidence media upload",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "fb-parts-kv807mm4",
+                      type: "parts",
+                      index: 16,
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      uniqueSchemaItem: true,
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "fb-procedure-section-kv807mm4",
+                      type: "section",
+                      index: 17,
+                      label: "form.builder.procedure",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "-kv807mmc",
+                      type: "procedure",
+                      index: 18,
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      stepIndex: 1,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+                        "copyableValue",
+                      ],
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "fb-mpi-procedure-section-kv807qce",
+                      type: "section",
+                      index: 19,
+                      label: "form.builder.mpiprocedure",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "-kv807qck",
+                      type: "mpiprocedure",
+                      index: 20,
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      stepIndex: 2,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      editorConfig: {
+                        equipment: [
+
+                        ],
+                        materials: [
+
+                        ],
+                        attachments: [
+
+                        ],
+                        description: "",
+                      },
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-equip-kv807ymj",
+                      type: "eqmaintenance",
+                      index: 21,
+                      label: "BLC equip",
+                      rules: "eq_maintenance_required",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      editorConfig: {
+                        type: "preventativeMaintenance",
+                      },
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+                        "deleteDisabled",
+                      ],
+                      validationAttribute: "BLC equip",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-text-with-range-kv808ai0",
+                      type: "textfieldwithrange",
+                      index: 22,
+                      label: "BLC text with range",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      placeholder: "",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      editorConfig: {
+
+                      },
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC text with range",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-suppliers-kv808n9y",
+                      type: "supplier",
+                      index: 23,
+                      label: "BLC suppliers",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC suppliers",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-lhrs-kv808yq3",
+                      type: "lhrstep",
+                      index: 24,
+                      label: "BLC lhrs",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      stepIndex: 3,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      editorConfig: {
+                        filters: {
+
+                        },
+                      },
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC lhrs",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-hyperlink-kv80ag5k",
+                      type: "hyperlink",
+                      index: 25,
+                      label: "BLC hyperlink",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      linkUrl: "https://www.google.hr/",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC hyperlink",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-file-upload-kv80aw6k",
+                      type: "fileupload",
+                      index: 26,
+                      label: "BLC file upload",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC file upload",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "blc-btf-kv80b7gb",
+                      type: "blanktplform",
+                      index: 27,
+                      label: "BLC BTF",
+                      rules: "",
+                      hidden: false,
+                      deleted: false,
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      defaultValue: [
+
+                      ],
+                      outputDisabled: false,
+                      validationMode: "default",
+                      editorProperties: [
+
+                      ],
+                      validationAttribute: "BLC BTF",
+                      deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                  ],
+                },
+              },
+              employeeId: adminEmployee.id as unknown as string,
+              sessionId: loginResponse.sessionId as unknown as string,
+            }).then((response) => {
+              createdDocumentForBulkCreation = response;
+              cy.drAPIApproveAndRelease({
+                documentId: createdDocumentForBulkCreation.id,
+                payload: {
+                  effectiveDate: (new Date()).toISOString(),
+                  documentType: { id: approvalRequestDocumentType[0].id },
+                  formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create form for bulk create", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'Bulk create form'", () => {
+      cy.drEnterDocumentTitle({ name: "Bulk create form" });
+    });
+
+    it("Enter description 'Bulk create form description'", () => {
+      cy.drEnterDocumentDescription({ description: "Bulk create form description" });
+    });
+
+    it("Select 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
+    });
+
+    context("Create and release form", () => {
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release Bulk create form", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
+  context("Start bulk creation flow", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Click create new from form button", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    context("Fill Bulk creation document atributes", () => {
+      it("Enter title 'Bulk Creation document'", () => {
+        cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
+      });
+
+      it("Enter description 'Bulk Creation document description'", () => {
+        cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
+      });
+
+      it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.unClick();
+        });
+      });
+
+      it("Select form to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+      });
+
+      it("Select document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
+      });
+
+      it("Select 'yes' to have Document id column", () => {
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Test downloaded excel", () => {
+      it("Download excel template file", () => {
+        cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
+      });
+
+      it("Verify file size to check for unsupported fields", () => {
+        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 9300, 9600);
+      });
+
+      it("Verify popup message", () => {
+        cy.checkToastMessageIsEqual({
+          message: "Excel Template Successfully Downloaded. " +
+        "Please open downloaded Excel Template and populate data. Then Upload to Import Data",
+        });
+        cy.closeAllAlertMessages();
+      });
+    });
+  });
+});
+
+export { };
