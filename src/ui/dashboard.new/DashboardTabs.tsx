@@ -1,4 +1,4 @@
-import { Grid, Toolbar, Typography } from "@material-ui/core";
+import { Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
@@ -44,26 +44,23 @@ const DashboardTabs: React.FunctionComponent = () => {
               disableRipple
               {...dynamicObjProps(0)}
               label={
-                <Grid container={true} justify="center" alignItems="center">
-                  <Grid item={true} sm={12}>
-                    {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
-                    <Typography
-                      component="span"
-                      variant="inherit"
-                      className={classes.tabItemText}
-                    >
-                      <Text translation={"common.my.feed"} />
-                    </Typography>
-                    &nbsp;
-                    <Typography
-                      component="span"
-                      variant="inherit"
-                      className={classes.tabItemCount}
-                    >
+                <Box display='flex' alignItems='center'>
+                  {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    className={value === 0 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+                  >
+                    <Text translation={"common.my.feed"} />
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    className={classes.tabItemCount}
+                  >
                       (26)
-                    </Typography>
-                  </Grid>
-                </Grid>
+                  </Typography>
+                </Box>
               }
             />
             {isDashboardAdmin && (
@@ -71,30 +68,28 @@ const DashboardTabs: React.FunctionComponent = () => {
                 disableRipple
                 {...dynamicObjProps(1)}
                 label={
-                  <Grid container={true} justify="center" alignItems="center">
-                    <Grid item={true} sm={12}>
-                      {value === 1 ? (
-                        <TrainingSelectedIcon />
-                      ) : (
-                        <TrainingIcon />
-                      )}
-                      <Typography
-                        component="span"
-                        variant="inherit"
-                        className={classes.tabItemText}
-                      >
-                        <Text translation={"common.trainings"} />
-                      </Typography>
-                      &nbsp;
-                      <Typography
-                        component="span"
-                        variant="inherit"
-                        className={classes.tabItemCount}
-                      >
+                  <Box display='flex' alignItems='center'>
+                    {value === 1 ? (
+                      <TrainingSelectedIcon />
+                    ) : (
+                      <TrainingIcon />
+                    )}
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={value === 1 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+                    >
+                      <Text translation={"common.trainings"} />
+                    </Typography>
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={classes.tabItemCount}
+                    >
                         (10)
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                    </Typography>
+                  </Box>
+
                 }
               />
             )}
@@ -102,23 +97,23 @@ const DashboardTabs: React.FunctionComponent = () => {
               disableRipple
               {...dynamicObjProps(isDashboardAdmin ? 2 : 1)}
               label={
-                <Grid container={true} justify="center" alignItems="center">
-                  <Grid item={true} sm={12}>
-                    {(isDashboardAdmin && value === 2) ||
+                <Box display='flex' alignItems='center'>
+                  {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
-                    <Typography
-                      component="span"
-                      variant="inherit"
-                      className={classes.tabItemText}
-                    >
-                      <Text translation={"common.recent"} />
-                    </Typography>
-                  </Grid>
-                </Grid>
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    className={(isDashboardAdmin && value === 2) ||
+                        (!isDashboardAdmin && value === 1) ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+
+                  >
+                    <Text translation={"common.recent"} />
+                  </Typography>
+                </Box>
               }
             />
           </StyledTabs>
