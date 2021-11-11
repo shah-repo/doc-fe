@@ -87,7 +87,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
@@ -98,7 +98,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                           : "training.your.on"
                       }
                     />
-                    &nbsp;
                   </Typography>
                 </Grid>
               )}
@@ -111,11 +110,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    {docId}
                   </Typography>
                 </Link>
               </Grid>
@@ -128,11 +127,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyBold}
+                    className={`${classes.typographyBold} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevName}&nbsp;
+                    {docRevName}
                   </Typography>
                 </Link>
               </Grid>
@@ -140,11 +139,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Typography
                   component="span"
                   variant="body2"
-                  className={classes.typography}
+                  className={`${classes.typography} ${classes.margin5}`}
                   color="textPrimary"
                   noWrap
                 >
-                  {TrainingStatus.ASSIGNED !== status ? "is" : ""}&nbsp;
+                  {TrainingStatus.ASSIGNED !== status ? "is" : ""}
                   {TrainingStatus.ASSIGNED === status && (
                     <Text translation="training.assign" />
                   )}
@@ -196,7 +195,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     )}
                   </Typography>
                 )}
-                &nbsp;&nbsp;
               </Grid>
               {status && TrainingStatus.COMPLETED !== status && (
                 <Grid
@@ -208,9 +206,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         ? classes.redDot
                         : classes.yellowDot
                   }
-                >
-                  &nbsp;
-                </Grid>
+                ></Grid>
               )}
               {status && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>
@@ -227,7 +223,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {dueOn}
+                    {dueOn}
                   </Typography>
                 </Grid>
               )}
@@ -238,10 +234,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              &nbsp;
-              <Grid item={true} className={classes.grayDot}>
-                &nbsp;
-              </Grid>
+              <Grid item={true} className={classes.grayDot}></Grid>
               <Grid item={true}>
                 <Typography
                   component="span"
@@ -250,7 +243,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textSecondary"
                   noWrap
                 >
-                  &nbsp; {timestamp}
+                  {timestamp}
                 </Typography>
               </Grid>
             </Grid>

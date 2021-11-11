@@ -116,13 +116,12 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -134,24 +133,23 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {title}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    is&nbsp;
+                    is
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -178,7 +176,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                         label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    &nbsp;
                   </Typography>
                 </Grid>
               </Grid>
@@ -188,10 +185,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                &nbsp;&nbsp;
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -200,7 +194,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp;{timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

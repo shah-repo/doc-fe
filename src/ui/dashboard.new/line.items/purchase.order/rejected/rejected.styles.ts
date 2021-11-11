@@ -61,8 +61,16 @@ export const styles = makeStyles(() =>
       width: "4px",
       height: "4px",
       right: "4px",
+      marginLeft: "4px",
+      marginRight: "5px",
       position: "relative",
       background: Colors.font_gray,
+    },
+    margin5: {
+      marginRight: "5px",
+    },
+    margin7: {
+      marginRight: "7px",
     },
   })
 );

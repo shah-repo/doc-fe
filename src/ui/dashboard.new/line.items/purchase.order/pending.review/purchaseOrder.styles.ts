@@ -105,5 +105,11 @@ export const styles = makeStyles(() =>
       paddingLeft: "14px",
       maxWidth: "calc(100% - 14px)",
     },
+    margin5: {
+      marginRight: "5px",
+    },
+    margin7: {
+      marginRight: "7px",
+    },
   })
 );

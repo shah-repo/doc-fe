@@ -8,15 +8,15 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 // import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 // import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 // import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./rejected.styles";
 
@@ -87,18 +87,18 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyBold}
+                    className={`${classes.typographyBold} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevOwnerName} &nbsp;
+                    {docRevOwnerName}
                   </Typography>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyStatus}
+                    className={`${classes.typographyStatus} ${classes.margin7}`}
                     color="textSecondary"
                     noWrap
                   >
@@ -124,11 +124,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    &nbsp;your&nbsp;
+                    your
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -140,7 +140,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
@@ -156,7 +156,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    &nbsp;to&nbsp;
+                    to
                   </Typography>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -183,10 +183,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                &nbsp;&nbsp;
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
@@ -195,7 +192,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp;{timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

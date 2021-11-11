@@ -133,13 +133,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -151,13 +150,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {title}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -165,7 +163,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     component="span"
                     variant="caption"
                     onClick={openApproversModel}
-                    className={classes.typographyStatus}
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
@@ -185,7 +183,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    &nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -206,7 +203,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <Grid
+                  zeroMinWidth
+                  item={true}
+                  className={`${classes.truncateText} ${classes.margin7}`}
+                >
                   <StyleTooltip
                     title={
                       <>
@@ -253,11 +254,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Link>
                   </StyleTooltip>
-                  &nbsp;&nbsp;&nbsp;
                 </Grid>
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid
+                  item={true}
+                  className={`${classes.grayDot} ${classes.margin5}`}
+                ></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -266,7 +267,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp;{timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

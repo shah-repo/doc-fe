@@ -28,18 +28,18 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
               <Typography
                 component="span"
                 variant="body2"
-                className={classes.typography}
+                className={`${classes.typography} ${classes.margin5}`}
                 color="textPrimary"
               >
-                {type}&nbsp;
+                {type}
               </Typography>
               <Typography
                 component="span"
                 variant="caption"
-                className={classes.typographyBold}
+                className={`${classes.typographyBold} ${classes.margin5}`}
                 color="textSecondary"
               >
-                {status}&nbsp;
+                {status}
               </Typography>
             </Grid>
           </Grid>

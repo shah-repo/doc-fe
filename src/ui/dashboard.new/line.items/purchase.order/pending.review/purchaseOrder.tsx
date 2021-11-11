@@ -165,7 +165,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
@@ -176,14 +176,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {docId}
                     </Typography>
                   </Link>
-                  &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
@@ -194,31 +193,30 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {docRevName}
                     </Typography>
                   </Link>
-                  &nbsp;
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    is&nbsp;
+                    is
                   </Typography>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyStatus}
+                    className={`${classes.typographyStatus} ${classes.margin7}`}
                     color="textSecondary"
                     noWrap
                     onClick={openApproversModel}
@@ -249,7 +247,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    &nbsp; pending approvals from
+                    pending approvals from
                   </Typography>
                 </Grid>
               </Grid>
@@ -259,7 +257,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <Grid
+                  zeroMinWidth
+                  item={true}
+                  className={`${classes.truncateText} ${classes.margin7}`}
+                >
                   <StyleTooltip
                     title={
                       <Typography color="inherit">
@@ -304,11 +306,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Link>
                   </StyleTooltip>
-                  &nbsp;&nbsp;&nbsp;
                 </Grid>
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid
+                  item={true}
+                  className={`${classes.grayDot} ${classes.margin5}`}
+                ></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -317,11 +319,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp;{timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {/* {!open && hoverItem && (

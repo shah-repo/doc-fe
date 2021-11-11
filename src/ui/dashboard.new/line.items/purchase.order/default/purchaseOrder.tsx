@@ -159,14 +159,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {docId}
                     </Typography>
                   </Link>
-                  &nbsp;
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
@@ -177,24 +176,23 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {docRevName}
                     </Typography>
                   </Link>
-                  &nbsp;
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    is&nbsp;
+                    is
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -230,9 +228,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -241,7 +237,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp;{timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>

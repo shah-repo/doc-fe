@@ -16,5 +16,8 @@ export const styles = makeStyles(() =>
       fontFamily: "Sora",
       fontWeight: 600,
     },
+    margin5: {
+      marginRight: "5px",
+    },
   })
 );

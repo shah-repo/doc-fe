@@ -93,6 +93,8 @@ export const styles = makeStyles(() =>
       width: "4px",
       height: "4px",
       right: "4px",
+      marginLeft: "4px",
+      marginRight: "5px",
       position: "relative",
       background: Colors.font_gray,
     },
@@ -104,6 +106,9 @@ export const styles = makeStyles(() =>
     gridContainer: {
       paddingLeft: "14px",
       maxWidth: "calc(100% - 14px)",
+    },
+    margin5: {
+      marginRight: "5px",
     },
   })
 );

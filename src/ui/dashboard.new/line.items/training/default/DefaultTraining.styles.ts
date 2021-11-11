@@ -98,8 +98,13 @@ export const styles = makeStyles(() =>
     grayDot: {
       width: "4px",
       height: "4px",
+      marginLeft: "4px",
+      marginRight: "5px",
       position: "relative",
       background: Colors.font_gray,
+    },
+    margin5: {
+      marginRight: "5px",
     },
   })
 );
