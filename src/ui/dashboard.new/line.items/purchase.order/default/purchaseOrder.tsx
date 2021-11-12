@@ -148,7 +148,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         </ListItemIcon>
         <ListItemText
           primary={
-            <React.Fragment>
+            <>
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
@@ -241,7 +241,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
               </Grid>
-            </React.Fragment>
+            </>
           }
         />
         {/* {!open && hoverItem && (
