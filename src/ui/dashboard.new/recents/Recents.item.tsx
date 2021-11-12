@@ -95,7 +95,6 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 </Link>
               )}
             </Grid>
-            &nbsp;
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
               {docTypeGroup === RecentDocTypeGroups.CHANGE_REQUEST && (
                 <Link
@@ -132,18 +131,19 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 </Link>
               )}
             </Grid>
-            &nbsp;&nbsp;
-            <Grid item={true} className={classes.blackDot}>
-              &nbsp;
-            </Grid>
+            <Grid
+              item={true}
+              className={`${classes.blackDot} ${classes.ml5}`}
+            ></Grid>
             <Grid item={true}>
               <Typography
                 component="span"
                 variant="caption"
-                className={classes.timestampContainer}
+                className={`${classes.timestampContainer} ${classes.ml5}`}
                 color="textSecondary"
+                noWrap
               >
-                &nbsp;{accessedAt}
+                {accessedAt}
               </Typography>
             </Grid>
           </Grid>

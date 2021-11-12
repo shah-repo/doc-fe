@@ -10,6 +10,14 @@ export const styles = makeStyles(() =>
       textOverflow: "ellipsis",
       overflow: "auto",
       paddingTop: "1px",
+      marginLeft: "5px",
+      marginRight: "5px",
+    },
+    ml5: {
+      marginLeft: "5px",
+    },
+    mr5: {
+      marginRight: "5px",
     },
     typography: {
       fontSize: "14px",
