@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
 import React, { useCallback, useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
@@ -125,7 +125,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     );
     useEffect(() => {
       myChart = echarts.init(
-        document.getElementById("main") as HTMLInputElement
+        document.getElementById("training-chart") as HTMLInputElement
       );
       myChart.setOption(DoughnutChartOptions);
       window.onresize = function() {
@@ -168,18 +168,21 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     }, [tabValue, dueInSeven, overdue, totalCount]);
 
     return (
-      <Grid container={true} className={classes.chartContainer}>
-        <Grid item={true}>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            <Text translation="training.stats.title" />
-          </Typography>
-          <Box component="div" id="main" className={classes.chartScroll}></Box>
-        </Grid>
-      </Grid>
+      <Box className={classes.chartContainer}>
+        <Typography
+          className={classes.title}
+          color="textSecondary"
+          gutterBottom
+        >
+          <Text translation="training.stats.title" />
+        </Typography>
+        <Box display='flex' alignItems='center'
+          justifyContent="center"
+        >
+          <div id="training-chart" className={classes.chartScroll}></div>
+        </Box>
+
+      </Box>
     );
   };
 

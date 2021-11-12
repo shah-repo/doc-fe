@@ -12,7 +12,7 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "10px",
     },
     listRoot: {
-      width: "100%",
+      width: "99%",
       backgroundColor: theme.palette.background.paper,
       margin: "0px 5px",
       overflow: "auto",

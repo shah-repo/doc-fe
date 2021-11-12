@@ -4,7 +4,6 @@ export const styles = makeStyles(() =>
   createStyles({
     chartContainer: {
       overflow: "auto",
-      marginLeft: "10%",
       marginTop: "10%",
       maxHeight: "calc(100vh- 145px)",
     },
