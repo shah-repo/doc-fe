@@ -7,8 +7,8 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
-import { styles } from "./TrainingItem.styles";
 import Text from "../../../components/Text";
+import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
   avatar: string | null;
@@ -76,12 +76,11 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           <Typography
             component="span"
             variant="body2"
-            className={classes.docIdAndTitle}
+            className={`${classes.docIdAndTitle} ${classes.margin5}`}
             color="textPrimary"
           >
             {documentId}
           </Typography>
-          &nbsp;
         </Grid>
         <Grid item={true}>
           <Typography
@@ -106,7 +105,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.date}
             color="textPrimary"
           >
-            Due date: {date}
+            <Text translation="common.due.date" />: {date}
           </Typography>
         </Grid>
       </Grid>
