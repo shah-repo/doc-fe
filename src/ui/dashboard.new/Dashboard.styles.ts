@@ -15,7 +15,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     trainingStats: {
       flexGrow: 1,
-      marginTop: "20px",
+      paddingTop: "80px",
       display: "flex",
       flexDirection: "column",
       minHeight: "0",
