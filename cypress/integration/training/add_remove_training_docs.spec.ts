@@ -925,24 +925,27 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Training record for doc1 should be as it is", () => {
       cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(1).invoke("text")
+      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 2);
     });
 
     it("Training record for doc3", () => {
       cy.get("#docId").clear().arrowType(releasedDoc3Id).wait(1000);
+      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc3Id).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(1).invoke("text")
+      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc3Id).and("contain", USERS[2].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 2);
     });
 
     it("Training record for doc2", () => {
       cy.get("#docId").clear().arrowType(releasedDoc2Id).wait(1000);
+      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc2Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
