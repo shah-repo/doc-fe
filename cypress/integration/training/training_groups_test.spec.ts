@@ -673,79 +673,6 @@ context("Training landing page test", () => {
   });
 
   context("Create form doc with different statuses", () => {
-    it("Form with Draft status", () => {
-      cy.navigToDocumentList();
-      cy.cmpClickCreateNewDocument();
-      cy.drEnterDocumentTitle({ name: "draft form" });
-      cy.drEnterDocumentDescription({ description: "test description" });
-      cy.drSelectDocumentType({ documentType: "Form" });
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.drCheckDocumentStatus({ status: "Draft" });
-    });
-
-    it("Form with In Review status", () => {
-      cy.navigToDocumentList();
-      cy.cmpClickCreateNewDocument();
-      cy.drEnterDocumentTitle({ name: "review form" });
-      cy.drEnterDocumentDescription({ description: "test description" });
-      cy.drSelectDocumentType({ documentType: "Form" });
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-      });
-      cy.drCheckDocumentStatus({ status: "In Review" });
-    });
-
-    it("Form with Pending change status", () => {
-      cy.navigToDocumentList();
-      cy.cmpClickCreateNewDocument();
-      cy.drEnterDocumentTitle({ name: "pending change form" });
-      cy.drEnterDocumentDescription({ description: "test description" });
-      cy.drSelectDocumentType({ documentType: "Form" });
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-      });
-      cy.authLogout();
-      cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.trRejectAR();
-      cy.authLogout();
-      cy.authLogin({ email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Form with Obsolete status", () => {
-      cy.navigToDocumentList();
-      cy.cmpClickCreateNewDocument();
-      cy.drEnterDocumentTitle({ name: "obsolete form" });
-      cy.drEnterDocumentDescription({ description: "test description" });
-      cy.drSelectDocumentType({ documentType: "Form" });
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
-      cy.drClickReviseDocument();
-      cy.get("#RevisionTypeChange-obsolete").click();
-      cy.recClickSaveBtn();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
-      cy.drCheckDocumentStatus({ status: "Obsolete" });
-    });
-
     it("Form with Released status", () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
@@ -782,34 +709,6 @@ context("Training landing page test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-    });
-
-    it("Form with Approved status", () => {
-      cy.navigToDocumentList();
-      cy.cmpClickCreateNewDocument();
-      cy.drEnterDocumentTitle({ name: "approved form" });
-      cy.drEnterDocumentDescription({ description: "test description" });
-      cy.drSelectDocumentType({ documentType: "Form" });
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-      cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.get("#HeaderInfo-docId").then((x) => { approvedFormId = x.text(); });
-      cy.navigToApprovalRequestList();
-      cy.cmpClickCreateApprovalRequest();
-      cy.arEnterApprovalRequestTitle({ title: "AR form" });
-      cy.arEnterApprovalRequestDescription({ description: "Description" });
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "approved form" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
-      cy.arSaveApiCall();
-      cy.arClickSendToReview();
-      cy.arApproveAR();
-      cy.drCheckDocumentStatus({ status: "Approved" });
     });
 
     it("Navigate to document list", () => {
@@ -854,6 +753,7 @@ context("Training landing page test", () => {
 
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
+      cy.reload();
       cy.navigToTrainingCurriculums();
     });
 
@@ -887,11 +787,6 @@ context("Training landing page test", () => {
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "revised form with superseded version");
-      cy.get(".MuiAutocomplete-popper ul li").should("contain", approvedFormId);
-      cy.get(".MuiAutocomplete-popper ul li").should("not.contain", "draft form");
-      cy.get(".MuiAutocomplete-popper ul li").should("not.contain", "review form");
-      cy.get(".MuiAutocomplete-popper ul li").should("not.contain", "pending change form");
-      cy.get(".MuiAutocomplete-popper ul li").should("not.contain", "obsolete form");
     });
 
     it("Select document to be trained on", () => {
