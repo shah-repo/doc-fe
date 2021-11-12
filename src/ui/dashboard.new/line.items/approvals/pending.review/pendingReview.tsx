@@ -193,7 +193,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    pending approvals from
+                    <Text translation="pending.approval" />
                   </Typography>
                 </Grid>
               </Grid>

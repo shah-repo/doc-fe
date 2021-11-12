@@ -14,6 +14,7 @@ import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
@@ -149,7 +150,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    needs your approval for
+                    <Text translation="require.approval" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>

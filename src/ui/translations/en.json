@@ -1100,5 +1100,7 @@
   "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
   "training.your": "Your training",
   "training.your.on": "Your training on",
-  "training.assign": "A training is assigned to you"
+  "training.assign": "A training is assigned to you",
+  "require.approval": "needs your approval for",
+  "pending.approval": "pending approvals from"
 }
