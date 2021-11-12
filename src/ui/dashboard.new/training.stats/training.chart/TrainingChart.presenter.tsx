@@ -176,12 +176,9 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         >
           <Text translation="training.stats.title" />
         </Typography>
-        <Box display='flex' alignItems='center'
-          justifyContent="center"
-        >
+        <Box display="flex" alignItems="center" justifyContent="center">
           <div id="training-chart" className={classes.chartScroll}></div>
         </Box>
-
       </Box>
     );
   };

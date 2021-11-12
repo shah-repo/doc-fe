@@ -14,9 +14,9 @@ export const styles = makeStyles((theme: Theme) =>
     listRoot: {
       width: "99%",
       backgroundColor: theme.palette.background.paper,
-      margin: "0px 5px",
+      padding: "0px 5px",
       overflow: "auto",
-      maxHeight: "calc(100vh - 510px)",
+      maxHeight: "calc(100vh - 500px)",
     },
     allTab: {
       position: "absolute",

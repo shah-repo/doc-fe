@@ -3,9 +3,9 @@ import { createStyles, makeStyles } from "@material-ui/core";
 export const styles = makeStyles(() =>
   createStyles({
     chartContainer: {
+      marginTop: "60px",
       overflow: "auto",
-      marginTop: "10%",
-      maxHeight: "calc(100vh- 145px)",
+      maxHeight: "calc(100vh - 300px)",
     },
     title: {
       fontFamily: "Sora",
@@ -13,14 +13,11 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       fontSize: "16px",
       lineHeight: "20px",
-      marginTop: "30px",
     },
     chartScroll: {
       position: "relative",
       width: "232px",
       height: "232px",
-      left: "29px",
-      maxHeight: "calc(100vh - 145px)",
     },
   })
 );
