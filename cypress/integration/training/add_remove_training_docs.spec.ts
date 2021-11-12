@@ -815,11 +815,10 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Complete trainings", () => {
     it("Open and complete second training", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").click();
-      cy.contains(`TRAINING: ${releasedDoc2Id} - Rev 1 released doc2`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      cy.get("#Dashboard-open-1").then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
       cy.trCompleteTraining();
     });
 
@@ -828,11 +827,10 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Open and complete first training", () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 1 released doc1`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      cy.get("#Dashboard-open-0").then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
       cy.trCompleteTraining();
     });
   });
