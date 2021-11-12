@@ -1097,5 +1097,6 @@
   "modal.title.overdue": "OVERDUE",
   "modal.title.dueindays": "DUE IN 7 DAYS",
   "email.last.sent": "Last sent",
-  "email.button.title": "EMAIL ALL"
+  "email.button.title": "EMAIL ALL",
+  "is": "is"
 }
