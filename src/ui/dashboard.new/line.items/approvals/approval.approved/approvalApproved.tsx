@@ -180,7 +180,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    is
+                    <Text translation="is" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -216,10 +216,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-
-                <Grid item={true} className={classes.grayDot}>
-
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"

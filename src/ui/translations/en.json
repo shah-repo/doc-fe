@@ -1102,5 +1102,9 @@
   "training.your.on": "Your training on",
   "training.assign": "A training is assigned to you",
   "require.approval": "needs your approval for",
-  "pending.approval": "pending approvals from"
+  "pending.approval": "pending approvals from",
+  "is": "is",
+  "your": "your",
+  "to": "to",
+  "sent": "Sent"
 }

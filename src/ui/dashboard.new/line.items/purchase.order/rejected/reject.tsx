@@ -13,6 +13,7 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 // import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
@@ -128,7 +129,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    your
+                    <Text translation="your" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -156,7 +157,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    to
+                    <Text translation="to" />
                   </Typography>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>

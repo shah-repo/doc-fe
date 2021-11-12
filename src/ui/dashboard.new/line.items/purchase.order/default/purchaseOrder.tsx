@@ -18,6 +18,7 @@ import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -192,7 +193,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    is
+                    <Text translation="is" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>

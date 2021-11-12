@@ -209,7 +209,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    is
+                    <Text translation="is" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
