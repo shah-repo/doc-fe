@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
@@ -107,7 +108,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.date}
             color="textPrimary"
           >
-            Due date: {date}
+            Due date: {getFormattedDateString(date, MomentFormats.BriefDateTime)}
           </Typography>
         </Grid>
       </Grid>

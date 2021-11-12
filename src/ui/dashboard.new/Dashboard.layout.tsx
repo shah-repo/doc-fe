@@ -1,14 +1,14 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { GroupTag } from "../../state/ducks/auth/types";
+import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./Dashboard.styles";
 import DashboardTabs from "./DashboardTabs";
-import useGetHasTag from "../hooks/useGetHasTag";
-import { GroupTag } from "../../state/ducks/auth/types";
 import TrainingStats from "./training.stats/TrainingStats";
 
 const DashboardLayout: React.FunctionComponent = () => {
   const classes = styles();
-  let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
+  const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   return (
     <Grid

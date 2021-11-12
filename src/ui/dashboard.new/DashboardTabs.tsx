@@ -17,7 +17,7 @@ import TabPanel from "./TabPanel";
 const DashboardTabs: React.FunctionComponent = () => {
   const classes = styles();
   const [value, setValue] = React.useState(0);
-  let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
+  const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   const dynamicObjProps = (index: any) => ({
     "id": `scrollable-auto-tab-${index}`,
