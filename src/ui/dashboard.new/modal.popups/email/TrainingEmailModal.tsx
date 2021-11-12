@@ -15,6 +15,10 @@ import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_do
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
+import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../../common/utils/date";
 import Text from "../../../components/Text";
 import { StyledListItem } from "./StyledListItem";
 import { styles } from "./TrainingEmailModal.styles";
@@ -23,12 +27,14 @@ interface TrainingEmailModalProps {
   handleEmailModelClose: () => void;
   dueApprovers?: any;
   overdueApprovers?: any;
+  timestamp?: any;
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   handleEmailModelClose,
   dueApprovers,
   overdueApprovers,
+  timestamp,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
@@ -101,7 +107,8 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            Sent: 10/5/21
+            <Text translation="sent" />:{" "}
+            {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
       </Grid>
@@ -164,7 +171,8 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     className={classes.lastseentitle}
                     noWrap
                   >
-                    <Text translation="email.last.sent" />: Oct 08, 2021
+                    <Text translation="email.last.sent" />:{" "}
+                    {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
                   </Typography>
                 </Grid>
 

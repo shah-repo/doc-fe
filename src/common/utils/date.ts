@@ -22,4 +22,5 @@ export enum MomentFormats {
   DayMonthDateYear = "ddd MMMM D YYYY",
   DateTimeSeconds = "M/D/YYYY hh:mm:ss A",
   Time = "hh:mm:ss A",
+  BriefDate="MMM D, YYYY"
 }

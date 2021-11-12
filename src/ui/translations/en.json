@@ -1098,5 +1098,6 @@
   "modal.title.dueindays": "DUE IN 7 DAYS",
   "email.last.sent": "Last sent",
   "email.button.title": "EMAIL ALL",
-  "is": "is"
+  "is": "is",
+  "sent": "Sent"
 }
