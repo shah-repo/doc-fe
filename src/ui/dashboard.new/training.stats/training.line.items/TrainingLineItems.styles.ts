@@ -6,7 +6,6 @@ export const styles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
-      width: 300,
     },
     tab: {
       minWidth: 66,
@@ -14,11 +13,10 @@ export const styles = makeStyles((theme: Theme) =>
     },
     listRoot: {
       width: "100%",
-      maxWidth: 360,
       backgroundColor: theme.palette.background.paper,
       margin: "0px 5px",
       overflow: "auto",
-      maxHeight: "calc(100vh - 515px)",
+      maxHeight: "calc(100vh - 510px)",
     },
     allTab: {
       position: "absolute",
