@@ -6,7 +6,6 @@ export const styles = makeStyles((theme: Theme) =>
       width: "100%",
       margin: "auto",
       flex: 1,
-      overflow: "hidden",
     },
     item: {
       flexGrow: 1,
