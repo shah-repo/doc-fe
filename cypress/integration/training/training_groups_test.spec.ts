@@ -15,7 +15,6 @@ let adminEmployee;
 let secondEmployee;
 let developersGroup;
 let releasedFormId;
-let approvedFormId;
 
 context("Training landing page test", () => {
   before(() => {
@@ -705,6 +704,9 @@ context("Training landing page test", () => {
       });
       cy.drCheckDocumentStatus({ status: "Released" });
       cy.get("[id='PreviewControlsContainer-revise']").arrowClick();
+      cy.wait(2000);
+      cy.get("[id='Title-field']>div>div:nth-child(2)").arrowClick();
+      cy.get("[id=\"Title-field\"]").arrowType("revised form with new released revision");
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -786,7 +788,8 @@ context("Training landing page test", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").click();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
-      cy.get(".MuiAutocomplete-popper ul li").should("contain", "revised form with superseded version");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "revised form with new released revision");
+      cy.get(".MuiAutocomplete-popper ul li").should("not.contain", "revised form with superseded version");
     });
 
     it("Select document to be trained on", () => {
