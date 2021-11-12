@@ -59,5 +59,8 @@ export const styles = makeStyles(() =>
     avatarSection: {
       display: "flex",
     },
+    margin5: {
+      marginRight: "5px",
+    },
   })
 );
