@@ -14,14 +14,13 @@ const DashboardLayout: React.FunctionComponent = () => {
     <Grid
       container={true}
       className={classes.root}
-      alignItems="center"
       justify="center"
     >
-      <Grid item={true} className={classes.item} sm={isDashboardAdmin ? 8 : 12}>
+      <Grid item={true} xs={12} sm={12} md={isDashboardAdmin ? 8 : 12} lg={isDashboardAdmin ? 8 : 12}>
         <DashboardTabs />
       </Grid>
       {isDashboardAdmin && (
-        <Grid item={true} className={classes.trainingStats} sm={4}>
+        <Grid item={true} className={classes.trainingStats} xs={6} sm={6} md={4} lg={4}>
           <TrainingStats />
         </Grid>
       )}
