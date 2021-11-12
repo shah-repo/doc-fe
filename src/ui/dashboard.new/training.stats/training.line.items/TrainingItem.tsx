@@ -6,7 +6,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../../common/utils/date";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
@@ -78,12 +81,11 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           <Typography
             component="span"
             variant="body2"
-            className={classes.docIdAndTitle}
+            className={`${classes.docIdAndTitle} ${classes.margin5}`}
             color="textPrimary"
           >
             {documentId}
           </Typography>
-          &nbsp;
         </Grid>
         <Grid item={true}>
           <Typography
@@ -108,7 +110,8 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
             className={classes.date}
             color="textPrimary"
           >
-            Due date: {getFormattedDateString(date, MomentFormats.BriefDateTime)}
+            <Text translation="common.due.date" />:{" "}
+            {getFormattedDateString(date, MomentFormats.BriefDateTime)}
           </Typography>
         </Grid>
       </Grid>
