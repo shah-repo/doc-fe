@@ -49,7 +49,7 @@ class FBControlPickerState {
         "radiogroup",
         "paragraph",
         "fileupload",
-        "zipupload",
+        "zipattachment",
         "blanktplform",
         "quantity",
         "timer",

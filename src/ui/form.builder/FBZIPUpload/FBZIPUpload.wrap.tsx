@@ -26,6 +26,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disableFileUpload = fileUploadState.files.length === 1;
+    const docRevisionId = workspaceState?.document?.id || "";
 
     useObserver(() => {
       files = fileUploadState?.files;
@@ -56,7 +57,6 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
 
     startUnzip = () => {
       const files = formState?.getFieldValue(name);
-      const docRevisionId = workspaceState?.document?.id || "";
       fileUploadState?.startUnzipping({ docRevisionId, attachmentId: files?.[0].id });
     };
 
@@ -69,6 +69,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
       name,
       gutter,
       disableFileUpload,
+      docRevisionId,
       startUnzip,
     });
   };

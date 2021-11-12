@@ -3,6 +3,7 @@ import { isEmpty } from "lodash";
 import React from "react";
 import { FBFileField, FBFilesPresenter, FBInput, FBProvider } from "..";
 import FBButton from "../components/inputs/FBButton";
+import FBZIPFileSocket from "./FBZIPFile.socket";
 import { FBFZIPUploadProps } from "./FBZIPUpload.types";
 import { withFBZIPUpload } from "./FBZIPUpload.wrap";
 
@@ -49,7 +50,8 @@ const FBZIPUpload: React.FunctionComponent<FBFZIPUploadProps> = ({
   ...props
 }) =>  (
   <FBProvider {...{ fileUploadState }}>
-    <FBInput {...props} type="zipupload">
+    <FBZIPFileSocket docRevisionId={props.docRevisionId} />
+    <FBInput {...props} type="zipattachment">
       <ZIPUploadChild  {...props}  />
     </FBInput>
   </FBProvider>

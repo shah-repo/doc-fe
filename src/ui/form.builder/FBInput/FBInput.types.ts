@@ -26,7 +26,7 @@ export type FBInputType =
   | "autocompleteasync"
   | "hyperlink"
   | "fileupload"
-  | "zipupload"
+  | "zipattachment"
   | "schemaItem"
   | "action"
   | "summarysection"

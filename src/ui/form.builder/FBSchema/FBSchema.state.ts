@@ -90,7 +90,7 @@ class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
-    zipupload: FBZIPUpload,
+    zipattachment: FBZIPUpload,
     blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,

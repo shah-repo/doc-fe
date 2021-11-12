@@ -101,7 +101,7 @@ class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
-    zipupload: FBEditorZIPUpload,
+    zipattachment: FBEditorZIPUpload,
     blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,

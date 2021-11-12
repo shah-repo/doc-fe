@@ -10,18 +10,26 @@ class FBFileUploadState {
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
   public attachmentsbyIdsApi: FBRequest<Attachment[], null> = new FBRequest();
-  public startAttachmentUnzipping:
-  FBRequest<{docRevisionId: string; attachmentId: string}, any> = new FBRequest();
+  public startAttachmentUnzippingApi: FBRequest<any, any> = new FBRequest();
+  public getZIPStatusApi: FBRequest<any, any> = new FBRequest();
 
   public constructor(files?: Attachment[]) {
     this.files = files || [];
   }
 
   public startUnzipping = (values: {docRevisionId: string; attachmentId: string}) => {
-    this.startAttachmentUnzipping.set({
+    this.startAttachmentUnzippingApi.set({
       url: FBEndpoint.AttachmentUnzipping,
       body: values,
       method: "post",
+    });
+  };
+
+  public getZIPStatus = ( attachmentId: string) => {
+    this.getZIPStatusApi.set({
+      url: FBEndpoint.AttachmentUnzipping,
+      urlValues: { attachmentId },
+      method: "get",
     });
   };
 

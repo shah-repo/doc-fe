@@ -599,7 +599,7 @@
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",
   "form.builder.blanktplform": "Blank Template Form",
-  "form.builder.zipupload": "ZIP File Upload",
+  "form.builder.zipattachment": "ZIP File Upload",
   "form.builder.unzip.files": "Unzip files",
   "form.builder.groups": "Groups",
   "form.builder.validator": "Verified",
@@ -1070,7 +1070,6 @@
   "maintenance.body": "We are currently upgrading our system to make it more useful for you.\nThank you for your patience.",
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new revision of the form is available. {clickHere} to upgrade to the latest revision.",
-
   "return.home": "Return home",
   "file.type.XLSX": "Microsoft Excel File",
   "file.type.XLS": "Microsoft Excel File",

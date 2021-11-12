@@ -12,7 +12,7 @@ export type FBEditorElementType =
   | "autocomplete"
   | "hyperlink"
   | "fileupload"
-  | "zipupload"
+  | "zipattachment"
   | "schemaSelect"
   | "schemaItem"
   | "action"

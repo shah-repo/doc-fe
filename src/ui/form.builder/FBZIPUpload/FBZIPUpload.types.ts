@@ -9,5 +9,6 @@ export type FBFZIPUploadProps =
   files?: Id[];
   disableFileUpload: boolean;
   startUnzip: () => void;
+  docRevisionId: string;
 };
 
