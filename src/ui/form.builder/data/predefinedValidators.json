@@ -71,32 +71,32 @@
     "rules": "required_if:validators.required_document_status,true",
     "validationMode": "visibility",
     "options": [{
-      "value": "DRAFT",
-      "text": "Draft"
-    }, {
-      "value": "PENDING_CHANGE",
-      "text": "Pending Change"
-    }, {
-      "value": "IN_REVIEW",
-      "text": "In Review"
-    }, {
-      "value": "RELEASED",
-      "text": "Released"
-    }, {
-      "value": "DEPRECATED",
-      "text": "Deprecated"
-    }, {
-      "value": "OBSOLETE",
-      "text": "Obsolete"
-    }, {
-      "value": "CANCELED",
-      "text": "Canceled"
-    },
-    {
-      "value": "APPROVED",
-      "text": "Approved"
-    }
-  ]
+        "value": "DRAFT",
+        "text": "Draft"
+      }, {
+        "value": "PENDING_CHANGE",
+        "text": "Pending Change"
+      }, {
+        "value": "IN_REVIEW",
+        "text": "In Review"
+      }, {
+        "value": "RELEASED",
+        "text": "Released"
+      }, {
+        "value": "DEPRECATED",
+        "text": "Deprecated"
+      }, {
+        "value": "OBSOLETE",
+        "text": "Obsolete"
+      }, {
+        "value": "CANCELED",
+        "text": "Canceled"
+      },
+      {
+        "value": "APPROVED",
+        "text": "Approved"
+      }
+    ]
   }, {
     "type": "checkbox",
     "name": "validators.required_document_type",
