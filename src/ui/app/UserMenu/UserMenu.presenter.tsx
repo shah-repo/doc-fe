@@ -1,7 +1,7 @@
 import { IconButton, ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import SyncAltOutlinedIcon from "@material-ui/icons/SyncAltOutlined";
 import React from "react";
@@ -9,7 +9,7 @@ import { Nullable } from "../../../state/ducks/common/types";
 import SwitchCompanyButtonContainer from "../../components/icons/SwitchCompanyButton/SwitchCompanyButton.container";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
-import { UserMenuContext } from "../Header.container";
+import { UserMenuContext } from "../NavigationProfile.container";
 
 interface Props {
   location: any;
@@ -33,7 +33,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <IconButton id="UserMenuButton" data-cy="UserMenuButton">
-        <ArrowDropDownIcon fontSize="small" />
+        <MoreHorizIcon style={{ position: "relative", top: "4px",  fontSize: "small", color: "white" }}  />
       </IconButton>
       <Menu
         id="UserMenu"

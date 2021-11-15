@@ -9,11 +9,11 @@ import Colors from "../../layout/theme/utils/colors";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
-      width: "24px",
-      height: "24px",
+      width: "48px",
+      height: "47px",
       borderRadius: "50%",
       margin: theme.spacing(0.7, 1, 0, 0),
-      fontSize: "10px",
+      fontSize: "12px",
       color: Colors.white,
     },
   }));
