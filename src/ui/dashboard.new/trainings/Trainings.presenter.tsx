@@ -2,6 +2,10 @@ import { Grid, List, Typography } from "@material-ui/core";
 import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
+import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../common/utils/date";
 import NewTraining from "../line.items/training/new.training/newTraining";
 import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./Trainings.styles";
@@ -49,7 +53,10 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                 docRevName={pendingAction.docRevName}
                 docDocumentId={pendingAction.docDocumentId}
                 trainingStatus={pendingAction.trainingStatus}
-                timestamp={pendingAction.timestamp}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
                 pendingTrainees={pendingAction.pendingTrainees}
                 hoverItemId={hoverItemId}
                 onMouseHoverItem={onMouseHoverItem}
@@ -66,9 +73,15 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                 docDocumentId={pendingAction.docDocumentId}
                 docRevId={pendingAction.docRevId}
                 trainingStatus={pendingAction.trainingStatus}
-                timestamp={pendingAction.timestamp}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
                 verbose={pendingAction.trainingStatus}
-                dueDate={pendingAction.dueOn}
+                dueDate={getFormattedDateString(
+                  pendingAction.dueOn,
+                  MomentFormats.ShortBriefDate
+                )}
                 hoverItemId={hoverItemId}
                 onMouseHoverItem={onMouseHoverItem}
               />
