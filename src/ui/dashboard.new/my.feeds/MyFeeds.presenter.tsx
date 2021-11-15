@@ -266,8 +266,14 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 docDocumentId={pendingAction?.docDocumentId}
                 docRevId={pendingAction?.docRevId}
                 status={pendingAction.trainingStatus}
-                timestamp={pendingAction.timestamp}
-                dueOn={pendingAction.dueOn}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                dueOn={getFormattedDateString(
+                  pendingAction.dueOn,
+                  MomentFormats.ShortBriefDate
+                )}
                 hoverItemId={hoverItemId}
                 onMouseHoverItem={onMouseHoverItem}
               />
