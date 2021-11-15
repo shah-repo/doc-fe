@@ -5,6 +5,8 @@ import {
   RecentItems,
   RecentTypes,
 } from "../../../state/ducks/dashboard.new/recents/types";
+import { ActionCreator } from "redux";
+import { ApiAction } from "../../../state/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
@@ -12,7 +14,7 @@ import RecentsItem from "./Recents.item";
 import { styles } from "./Recents.styles";
 
 interface Props {
-  loadRecents: any;
+  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
   loadRecentsListAsyncState: AsyncState;
   recents: RecentItems[];
 }
