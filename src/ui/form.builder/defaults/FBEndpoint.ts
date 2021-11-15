@@ -50,6 +50,7 @@ export enum FBEndpoint {
   RemoveOverride = "/lhr/lhrs/${id}/remove_override/${refId}",
   Notes = "/notes",
   DocumentRevisionPatch = "/document_revisions/${id}",
+  ChangeRequestPatch = "/change_requests/${id}",
   LockedFields = "/document_revision_field_locks/${id}",
   LockFields = "/document_revision_field_locks",
   LockFieldsExpire = "/document_revision_field_locks/${id}/expire",
@@ -57,5 +58,4 @@ export enum FBEndpoint {
   AttachmentUnzipping = "/attachment_job/start_unzipping",
   ZIPStatus = "/attachment_job/connected_to/${attachmentId}"
 }
-
 

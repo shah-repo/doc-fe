@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { compact, filter, isEmpty, isString, kebabCase, omit, size, union } from "lodash";
+import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, union } from "lodash";
 import React from "react";
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
@@ -54,9 +54,16 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       dialogState?.closeDialog();
     }
 
+    function setDefaultValue(formValues?: Dictionary<any>): Dictionary<any> {
+      return {
+        ...COMMON_INITIAL_VALUES,
+        ...formValues,
+      };
+    }
+
     handleAdd = () => {
       if (!type) { return; }
-      const formValues: FBSchemaProps = formState?.getValues() as FBSchemaProps;
+      const formValues: FBSchemaProps = setDefaultValue(formState?.getValues()) as FBSchemaProps;
       const {
         options,
         validators,
