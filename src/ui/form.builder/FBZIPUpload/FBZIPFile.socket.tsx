@@ -14,7 +14,7 @@ const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ doc
     () => fileUploadState?.startAttachmentUnzippingApi.data,
     (data) => {
       attachmentId = data.attachmentId;
-      topic = `+/document_revisions/${docRevisionId}/attachmentId/${data.attachmentId}/unzipJob/${data.id}/finished`;
+      topic = `+/unzipJob/${data.id}/${docRevisionId}/${attachmentId}/finished`;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
