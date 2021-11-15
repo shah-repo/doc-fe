@@ -2,6 +2,7 @@ import { find } from "lodash";
 import React from "react";
 import { FBControlPickerDataProps, FBEditorCustomControl, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 
@@ -26,9 +27,7 @@ class FBControlPickerState {
   };
 
   public get pickers(): FBControlPickerDataProps {
-
     const isEQ = checkIsDocumentEquipment(this.workspaceState?.document?.document?.documentType?.groupOptions);
-
     if (isEQ) {
       return {
         inputs: [
@@ -49,7 +48,7 @@ class FBControlPickerState {
         "radiogroup",
         "paragraph",
         "fileupload",
-        "zipattachment",
+        ...this.isOutputBulkCreate ? ["zipattachment"] as FBInputType[] : [],
         "blanktplform",
         "quantity",
         "timer",
@@ -86,6 +85,13 @@ class FBControlPickerState {
 
   private get hasApprovalMatrix(): boolean {
     return Boolean(find(this.workspaceState?.schema, { type: "approvalMatrix" }));
+  }
+
+  private get isOutputBulkCreate(): boolean | undefined {
+    const BLCdoc = find(this.workspaceState?.externalState?.documentType?.byId, (doc) =>
+      doc.groupOptions.includes(DOC_TYPE_GROUP_OPTION.BULK_CREATE));
+    const isBLCOutput = this.workspaceState?.document?.outputDocumentTypes.find((doc) => doc.value === BLCdoc.id);
+    return Boolean(isBLCOutput);
   }
 
   private get hasPurchaseOrder(): boolean | undefined {
