@@ -42,6 +42,7 @@ import "./commands/receivable/commands";
 import "./commands/records/commands";
 import "./commands/status/commands";
 import "./commands/suppliers/commands";
+import "./commands/training/commands";
 import "./commands/user.management/commands";
 import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:

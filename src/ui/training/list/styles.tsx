@@ -40,5 +40,8 @@ export const styles = makeStyles((theme: Theme) =>
     iconSvg: {
       fill: theme.palette.primary.main,
     },
+    dialogContent: {
+      padding: "25px",
+    },
   }),
 );
