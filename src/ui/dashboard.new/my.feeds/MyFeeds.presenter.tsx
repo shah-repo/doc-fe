@@ -255,7 +255,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 hoverItemId={hoverItemId}
               />
             );
-          case ActionTypes.TRAINING_STATUS_UPDATE:
+          case ActionTypes.TRAINING_STATUS_TRAINEE:
             return (
               <TrainingItem
                 key={index}
