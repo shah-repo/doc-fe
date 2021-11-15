@@ -655,7 +655,7 @@ context("Bulk create record headers", () => {
         cy.dlSelectFirstDocument();
       });
 
-      it("Verify title", () => {
+      it("Verify title is not existing", () => {
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("not.exist");
       });
 
@@ -682,7 +682,7 @@ context("Bulk create record headers", () => {
         cy.dlSelectFirstDocument();
       });
 
-      it("Verify title", () => {
+      it("Verify title is not existing", () => {
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("not.exist");
       });
 
