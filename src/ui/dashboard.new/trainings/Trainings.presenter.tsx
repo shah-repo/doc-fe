@@ -9,15 +9,17 @@ import { styles } from "./Trainings.styles";
 interface Props {
   trainingItems: {
     id: string;
+    docDocumentId: string;
+    docId: string;
+    docRevId: string;
+    docRevName: string;
+    dueOn?: string;
+    trainingRecordId?: string;
+    trId?: string;
     type: string;
-    title: string;
-    documentId: string;
-    status: string;
+    trainingStatus: string;
     timestamp: string;
-    verbose: string;
-    dueDate?: any;
-    requestedBy?: any;
-    approvers: string[];
+    pendingTrainees?: any;
   }[];
 }
 
@@ -36,37 +38,37 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
-          case ActionTypes.NEW_TRAINING_RECORDS:
+          case ActionTypes.TRAINING_STATUS_OWNER:
             return (
               <NewTraining
                 key={index}
                 id={pendingAction.id}
+                docId={pendingAction.docId}
                 type={pendingAction.type}
-                title={pendingAction.title}
-                documentId={pendingAction.documentId}
-                status={pendingAction.status}
+                docRevName={pendingAction.docRevName}
+                docDocumentId={pendingAction.docDocumentId}
+                trainingStatus={pendingAction.trainingStatus}
                 timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                dueDate={pendingAction.dueDate}
-                approvers={pendingAction.approvers}
-                hoverItemId= {hoverItemId}
-                onMouseHoverItem= {onMouseHoverItem}
+                pendingTrainees={pendingAction.pendingTrainees}
+                hoverItemId={hoverItemId}
+                onMouseHoverItem={onMouseHoverItem}
               />
             );
-          case ActionTypes.PENDING_TRAINING_RECORDS:
+          case ActionTypes.TRAINING_STATUS_TRAINEE:
             return (
               <PendingTraining
                 key={index}
                 id={pendingAction.id}
+                docId={pendingAction.docId}
                 type={pendingAction.type}
-                title={pendingAction.title}
-                documentId={pendingAction.documentId}
-                status={pendingAction.status}
+                title={pendingAction.docRevName}
+                documentId={pendingAction.docDocumentId}
+                trainingStatus={pendingAction.trainingStatus}
                 timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                dueDate={pendingAction.dueDate}
-                hoverItemId= {hoverItemId}
-                onMouseHoverItem= {onMouseHoverItem}
+                verbose={pendingAction.trainingStatus}
+                dueDate={pendingAction.dueOn}
+                hoverItemId={hoverItemId}
+                onMouseHoverItem={onMouseHoverItem}
               />
             );
           default:

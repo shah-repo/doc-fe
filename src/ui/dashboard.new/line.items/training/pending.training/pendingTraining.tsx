@@ -21,21 +21,23 @@ import { styles } from "./pendingTraining.styles";
 
 interface Props {
   id: string;
+  docId: string;
   type: string;
   title: string;
   documentId: string;
-  status: string;
+  trainingStatus: string;
   timestamp: string;
   verbose: string;
-  dueDate: string;
+  dueDate: string | undefined;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
+  docId,
   title,
-  status,
+  trainingStatus,
   timestamp,
   dueDate,
   hoverItemId,
@@ -84,7 +86,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 >
                   <Text
                     translation={
-                      status === TrainingStatus.OVERDUE
+                      trainingStatus === TrainingStatus.OVERDUE
                         ? "your.training"
                         : "your.training.on"
                     }
@@ -104,7 +106,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    {id}
+                    {docId}
                   </Typography>
                 </Link>
               </Grid>
@@ -146,40 +148,40 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 >
                   {!hoverItem && (
                     <NormalStyleChip
-                      {...{ status }}
+                      {...{ trainingStatus }}
                       size="small"
                       color="primary"
                       icon={
-                        status === TrainingStatus.OVERDUE ? (
+                        trainingStatus === TrainingStatus.OVERDUE ? (
                           <OverdueIcon />
                         ) : (
                           <WarningIcon />
                         )
                       }
-                      label={status}
+                      label={trainingStatus}
                     />
                   )}
                   {hoverItem && (
                     <HoverStyleChip
-                      {...{ status }}
+                      {...{ trainingStatus }}
                       color="primary"
                       size="small"
                       icon={
-                        status === TrainingStatus.OVERDUE ? (
+                        trainingStatus === TrainingStatus.OVERDUE ? (
                           <OverdueWhiteIcon />
                         ) : (
                           <WarningWhiteIcon />
                         )
                       }
-                      label={status}
+                      label={trainingStatus}
                     />
                   )}
                 </Typography>
               </Grid>
-              <Grid
+              {/* <Grid
                 item={true}
                 className={
-                  status === TrainingStatus.OVERDUE
+                  trainingStatus === TrainingStatus.OVERDUE
                     ? `${classes.redDot} ${classes.margin7}`
                     : `${classes.yellowDot} ${classes.margin7}`
                 }
@@ -189,7 +191,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   component="span"
                   variant="caption"
                   className={
-                    status === TrainingStatus.OVERDUE
+                    trainingStatus === TrainingStatus.OVERDUE
                       ? classes.typographyOverdue
                       : classes.typographyDueInfewDays
                   }
@@ -198,7 +200,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 >
                   {dueDate}
                 </Typography>
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid
               container={true}

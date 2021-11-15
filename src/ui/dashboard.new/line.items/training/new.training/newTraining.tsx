@@ -25,29 +25,29 @@ import { styles } from "./newTraining.styles";
 
 interface Props {
   id: string;
+  docId: string;
   type: string;
-  title: string;
-  documentId: string;
-  status: string;
+  docRevName: string;
+  docDocumentId: string;
+  trainingStatus: string;
   timestamp: string;
-  verbose: string;
-  dueDate: string;
-  approvers: string[];
+  pendingTrainees: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   id,
-  title,
-  status,
+  docId,
+  docRevName,
+  trainingStatus,
   timestamp,
-  dueDate,
-  approvers,
+  pendingTrainees,
   onMouseHoverItem,
   hoverItemId,
 }) => {
   const classes = styles();
+  // const dueDate = "JAN 12";
   // const [pinned, setPinned] = React.useState(false);
   // const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -73,11 +73,16 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const existingId = "66bbda6c-65a3-47aa-b3f5-c9566d201d96";
   const documentRevId = "466b89d4-7067-4c80-a8c9-4e3f47f2a2f6";
-  const dueApprovers = approvers.map((name, index) => ({
-    listitemicon: index,
-    userName: name,
-    employeeId: index,
-  }));
+  // const dueApprovers = pendingTrainees.map((name, index) => ({
+  //   listitemicon: index,
+  //   userName: employeeId,
+  //   employeeId: employeeId,
+  // }));
+  const pendingTraineesNames = pendingTrainees
+    .map((trainee) => {
+      return trainee.userName;
+    })
+    .join(",");
 
   return (
     <>
@@ -104,7 +109,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Text
                       translation={
-                        status === TrainingStatus.OVERDUE
+                        trainingStatus === TrainingStatus.OVERDUE
                           ? "your.training"
                           : "your.training.on"
                       }
@@ -124,7 +129,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      {id}
+                      {docId}
                     </Typography>
                   </Link>
                 </Grid>
@@ -141,7 +146,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {title}
+                      {docRevName}
                     </Typography>
                   </Link>
                 </Grid>
@@ -156,40 +161,40 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   >
                     {!hoverItem && (
                       <NormalStyleChip
-                        {...{ status }}
+                        {...{ trainingStatus }}
                         size="small"
                         color="primary"
                         icon={
-                          status === TrainingStatus.OVERDUE ? (
+                          trainingStatus === TrainingStatus.OVERDUE ? (
                             <OverdueIcon />
                           ) : (
                             <WarningIcon />
                           )
                         }
-                        label={status}
+                        label={trainingStatus}
                       />
                     )}
                     {hoverItem && (
                       <HoverStyleChip
-                        {...{ status }}
+                        {...{ trainingStatus }}
                         color="primary"
                         size="small"
                         icon={
-                          status === TrainingStatus.OVERDUE ? (
+                          trainingStatus === TrainingStatus.OVERDUE ? (
                             <OverdueWhiteIcon />
                           ) : (
                             <WarningWhiteIcon />
                           )
                         }
-                        label={status}
+                        label={trainingStatus}
                       />
                     )}
                   </Typography>
                 </Grid>
-                <Grid
+                {/* <Grid
                   item={true}
                   className={
-                    status === TrainingStatus.OVERDUE
+                    trainingStatus === TrainingStatus.OVERDUE
                       ? `${classes.redDot} ${classes.margin7}`
                       : `${classes.yellowDot} ${classes.margin7}`
                   }
@@ -199,7 +204,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     component="span"
                     variant="caption"
                     className={
-                      status === TrainingStatus.OVERDUE
+                      trainingStatus === TrainingStatus.OVERDUE
                         ? classes.typographyOverdue
                         : classes.typographyDueInfewDays
                     }
@@ -208,7 +213,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   >
                     {dueDate}
                   </Typography>
-                </Grid>
+                </Grid> */}
               </Grid>
               <Grid
                 container={true}
@@ -222,12 +227,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       <Typography color="inherit">
                         <Text
                           translation="assigned.users.count"
-                          values={{ count: size(approvers) }}
+                          values={{ count: size(pendingTrainees) }}
                         />
                         <br />
                         <Text
                           translation="approved.and.pending.count"
-                          values={{ approved: 4, pending: 6 }}
+                          values={{
+                            approved: 0,
+                            pending: pendingTrainees.length,
+                          }}
                         />
                       </Typography>
                     }
@@ -246,7 +254,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {approvers.join(",")}
+                        {pendingTraineesNames}
                       </Typography>
                     </Link>
                   </StyledTooltip>
@@ -292,7 +300,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       >
         <TrainingEmailModal
           handleEmailModelClose={handleEmailModelClose}
-          dueApprovers={dueApprovers}
+          dueApprovers={pendingTrainees}
         />
       </Modal>
     </>
