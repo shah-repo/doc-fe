@@ -18,6 +18,7 @@ import ApprovalApproved from "../line.items/approvals/approval.approved/approval
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
+import CalibrationItem from "../line.items/calibration/calibrationItem";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import POReject from "../line.items/purchase.order/rejected/reject";
@@ -70,6 +71,26 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {feedItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
+          case ActionTypes.EQ_MAINTENANCE_OWNER_OR_COORDINATOR:
+          case ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR:
+            return (
+              <CalibrationItem
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
+                type={pendingAction.type}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
+                docRevOwnerId={pendingAction.docRevOwnerId}
+                docRevName={pendingAction.docRevName}
+                equipmentInterval={pendingAction.equipmentInterval}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
             return (
               <POTaskApproval
