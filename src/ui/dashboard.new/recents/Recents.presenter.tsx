@@ -1,6 +1,6 @@
 import { Grid, List } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
+import { getHumanizedFormat } from "../../../common/utils/date";
 import {
   RecentItems,
   RecentTypes,
@@ -39,11 +39,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                 docTypeGroup={data.docTypeGroup}
                 docRevId={data.docRevId}
                 docTitle={data.docTitle}
-                accessedAt={moment
-                  .utc(data.accessedAt)
-                  .local()
-                  .startOf("seconds")
-                  .fromNow()}
+                accessedAt={getHumanizedFormat(data.accessedAt)}
               />
             );
           case RecentTypes.CHANGE_REQUEST:
@@ -56,11 +52,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                 docTypeGroup={data.docTypeGroup}
                 docRevId={data.docRevId}
                 docTitle={data.docTitle}
-                accessedAt={moment
-                  .utc(data.accessedAt)
-                  .local()
-                  .startOf("seconds")
-                  .fromNow()}
+                accessedAt={getHumanizedFormat(data.accessedAt)}
               />
             );
           default:
