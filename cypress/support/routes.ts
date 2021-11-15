@@ -765,7 +765,7 @@ export const routes: ICyRoutes =   {
   GetTrainingRecord: {
     requestConfig: {
       method: "GET",
-      url: "/api/v1/training_record",
+      url: "/api/v1/training_record*",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
