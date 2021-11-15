@@ -16,7 +16,7 @@ let secondEmployee;
 let developersGroup;
 let releasedFormId;
 
-context("Training landing page test", () => {
+context("Training user groups test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
