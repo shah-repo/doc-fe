@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFileUploadState, FBFZIPUploadProps } from "..";
+import { FB, FBFileUploadState, FBFZIPUploadProps, FBUnzipStatus } from "..";
 
 export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -17,26 +17,29 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     isInputOwner,
     gutter,
     disableFileUpload,
+    disableUnzipButton,
+    unzipStatus,
     startUnzip,
     ...props
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
     const formValue = formState?.getFieldValue(name) || defaultValue;
+    const docRevisionId = workspaceState?.document?.id || "";
+
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disableFileUpload = fileUploadState.files.length === 1;
-    const docRevisionId = workspaceState?.document?.id || "";
-
-    const getZIPAttachmentStatus = () => {
-      if (!files) {
-        return;
-      }
-      fileUploadState?.getZIPStatus(files[0].id);
-    };
+    disableUnzipButton = unzipStatus === FBUnzipStatus.FAILED ||
+                        unzipStatus === FBUnzipStatus.DONE ||
+                        unzipStatus === FBUnzipStatus.PROCESSING;
 
     useObserver(() => {
       files = fileUploadState?.files;
+    });
+
+    useObserver(() => {
+      unzipStatus = fileUploadState?.unzipStatus;
     });
 
     React.useEffect(() => {
@@ -51,7 +54,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
       reaction(
         () => fileUploadState?.getZIPStatusApi.data,
         (data) => {
-          console.log(data);
+          fileUploadState?.setUnzipStatus(data.status);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,6 +83,13 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const getZIPAttachmentStatus = () => {
+      if (!files) {
+        return;
+      }
+      fileUploadState?.getZIPStatus(files[0].id);
+    };
+
     startUnzip = () => {
       const files = formState?.getFieldValue(name);
       fileUploadState?.startUnzipping({ docRevisionId, attachmentId: files?.[0].id });
@@ -94,7 +104,9 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
       name,
       gutter,
       disableFileUpload,
+      disableUnzipButton,
       docRevisionId,
+      unzipStatus,
       startUnzip,
     });
   };

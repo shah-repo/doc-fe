@@ -7,14 +7,14 @@ import useMqttSubscription from "../../hooks/useMqttSubscription";
 const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ docRevisionId }) => {
   const { fileUploadState } = FB.useStores();
   const iotService = IotService.getInstance();
-  let topic: string;
-  let attachmentId: string;
+  const [topic, setTopic] = React.useState("");
+  const [attachmentId, setAttachmentId] = React.useState("");
 
   React.useEffect(() => reaction(
     () => fileUploadState?.startAttachmentUnzippingApi.data,
     (data) => {
-      attachmentId = data.attachmentId;
-      topic = `+/unzipJob/${data.id}/${docRevisionId}/${attachmentId}/finished`;
+      setAttachmentId(data.attachmentId);
+      setTopic(`+/unzipJob/${data.id}/${docRevisionId}/${data.attachmentId}/finished`);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);

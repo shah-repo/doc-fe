@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider } from "..";
@@ -13,6 +13,8 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   files,
   readonly = false,
   disableFileUpload = false,
+  disableUnzipButton = false,
+  unzipStatus,
   startUnzip,
 }) =>
   <>
@@ -33,11 +35,14 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
           />
         </Grid>
         <Grid item xs={4} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+          <Box>
+            {unzipStatus}
+          </Box>
           <FBButton
             key={`fb-zip-attachment-button-${name}`}
             label={"form.builder.unzip.files"}
             onClick={() => { startUnzip(); }}
-            {...{ disabled }}
+            disabled= {disableUnzipButton || disabled}
           />
         </Grid>
       </Grid>

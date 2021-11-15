@@ -7,6 +7,7 @@ import FBRequest from "../FBApi/FBApi.request";
 
 class FBFileUploadState {
   @observable public files: Id[] = [];
+  @observable public unzipStatus = "";
 
   public attachmentApi: FBRequest<Attachment, null> = new FBRequest();
   public attachmentsbyIdsApi: FBRequest<Attachment[], null> = new FBRequest();
@@ -45,6 +46,10 @@ class FBFileUploadState {
 
   @action public removeFile = (file: Attachment) => {
     set(this, "files", filter(this.files, (f) => f.id !== file.id));
+  };
+
+  @action public setUnzipStatus = (status: string) => {
+    set(this, "unzipStatus", status);
   };
 }
 
