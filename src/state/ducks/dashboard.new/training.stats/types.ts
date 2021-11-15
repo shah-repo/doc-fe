@@ -1,3 +1,4 @@
+import { Nullable } from "../../common/types";
 import { TRAINING_STATS_LIST } from "./constants";
 
 export enum TrainingStatusTypes {
@@ -22,9 +23,9 @@ interface User {
   locked: string;
   passwordExpires: string;
   passwordUpdatedAt: string;
-  passwordLastEmailSentAt: string | null;
-  permissions: string[] | null;
-  avatar: string | null;
+  passwordLastEmailSentAt: Nullable<string>;
+  permissions: Nullable<string>;
+  avatar: Nullable<string>;
   initialColor: string;
 }
 

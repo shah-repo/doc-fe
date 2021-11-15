@@ -1,6 +1,7 @@
 import { Box, Grid, List, Tab } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
 import { StyledTabs } from "./StyledTabs";
@@ -13,7 +14,7 @@ interface TabPanelProps {
   value: number;
   panelData: {
     docTitle: string;
-    user: { avatar: string | null; name: string };
+    user: { avatar: Nullable<string>; name: string };
     docId: string;
     status: string;
     dueOn: string;

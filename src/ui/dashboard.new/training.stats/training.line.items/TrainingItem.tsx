@@ -10,12 +10,13 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../../common/utils/date";
+import { Nullable } from "../../../../state/ducks/common/types";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
-  avatar: string | null;
+  avatar: Nullable<string>;
   name: string;
   documentId: string;
   title: string;
