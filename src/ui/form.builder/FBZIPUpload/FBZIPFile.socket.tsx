@@ -13,8 +13,12 @@ const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ doc
   React.useEffect(() => reaction(
     () => fileUploadState?.startAttachmentUnzippingApi.data,
     (data) => {
+      if (!data) {
+        return;
+      }
       setAttachmentId(data.attachmentId);
       setTopic(`+/unzipJob/${data.id}/${docRevisionId}/${data.attachmentId}/finished`);
+      fileUploadState?.setUnzipStatus(data.status);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);

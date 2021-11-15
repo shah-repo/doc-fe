@@ -29,10 +29,6 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
 
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    disableFileUpload = fileUploadState.files.length === 1;
-    disableUnzipButton = unzipStatus === FBUnzipStatus.FAILED ||
-                        unzipStatus === FBUnzipStatus.DONE ||
-                        unzipStatus === FBUnzipStatus.PROCESSING;
 
     useObserver(() => {
       files = fileUploadState?.files;
@@ -41,6 +37,11 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     useObserver(() => {
       unzipStatus = fileUploadState?.unzipStatus;
     });
+
+    disableFileUpload = fileUploadState?.files.length === 1;
+    disableUnzipButton = unzipStatus === FBUnzipStatus.FAILED ||
+    unzipStatus === FBUnzipStatus.DONE ||
+    unzipStatus === FBUnzipStatus.PROCESSING;
 
     React.useEffect(() => {
       if (isEmpty(files)) {
@@ -54,7 +55,10 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
       reaction(
         () => fileUploadState?.getZIPStatusApi.data,
         (data) => {
-          fileUploadState?.setUnzipStatus(data.status);
+          if (!data) {
+            return;
+          }
+          fileUploadState?.setUnzipStatus(data[0].status);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
