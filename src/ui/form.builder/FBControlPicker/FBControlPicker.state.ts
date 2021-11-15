@@ -2,9 +2,8 @@ import { find } from "lodash";
 import React from "react";
 import { FBControlPickerDataProps, FBEditorCustomControl, FBInputType, FBWorkspaceExternalState, FBWorkspaceState } from "..";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { store } from "../../../state/store";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentBulkCreate, checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 
 class FBControlPickerState {
 
@@ -89,7 +88,7 @@ class FBControlPickerState {
 
   private get isOutputBulkCreate(): boolean | undefined {
     const BLCdoc = find(this.workspaceState?.externalState?.documentType?.byId, (doc) =>
-      doc.groupOptions.includes(DOC_TYPE_GROUP_OPTION.BULK_CREATE));
+      checkIsDocumentBulkCreate(doc.groupOptions));
     const isBLCOutput = this.workspaceState?.document?.outputDocumentTypes.find((doc) => doc.value === BLCdoc.id);
     return Boolean(isBLCOutput);
   }

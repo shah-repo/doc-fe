@@ -1,11 +1,11 @@
 import { Grid } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
-import { FBFileField, FBFilesPresenter, FBInput, FBProvider } from "..";
+import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider } from "..";
 import FBButton from "../components/inputs/FBButton";
 import FBZIPFileSocket from "./FBZIPFile.socket";
-import { FBFZIPUploadProps } from "./FBZIPUpload.types";
 import { withFBZIPUpload } from "./FBZIPUpload.wrap";
+
 
 const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   name,

@@ -27,7 +27,7 @@ class FBFileUploadState {
 
   public getZIPStatus = ( attachmentId: string) => {
     this.getZIPStatusApi.set({
-      url: FBEndpoint.AttachmentUnzipping,
+      url: FBEndpoint.ZIPStatus,
       urlValues: { attachmentId },
       method: "get",
     });

@@ -1,8 +1,8 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFileUploadState } from "..";
-import { FBFZIPUploadProps } from "./FBZIPUpload.types";
+import { FB, FBFileUploadState, FBFZIPUploadProps } from "..";
 
 export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
   Component: React.FunctionComponent<T>,
@@ -28,9 +28,34 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
     disableFileUpload = fileUploadState.files.length === 1;
     const docRevisionId = workspaceState?.document?.id || "";
 
+    const getZIPAttachmentStatus = () => {
+      if (!files) {
+        return;
+      }
+      fileUploadState?.getZIPStatus(files[0].id);
+    };
+
     useObserver(() => {
       files = fileUploadState?.files;
     });
+
+    React.useEffect(() => {
+      if (isEmpty(files)) {
+        return;
+      }
+      getZIPAttachmentStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+      reaction(
+        () => fileUploadState?.getZIPStatusApi.data,
+        (data) => {
+          console.log(data);
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     React.useEffect(() => {
       reaction(

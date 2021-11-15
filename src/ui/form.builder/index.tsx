@@ -344,7 +344,6 @@ export * from "./FBWorkspaceBottomBar/FBWorkspaceBottomBar.types";
 export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWorkspaceTplActions";
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
 export { default as FBZIPUpload } from "./FBZIPUpload/FBZIPUpload";
-export { default as FBZIPUploadState } from "./FBZIPUpload/FBZIPUpload.state";
 export * from "./FBZIPUpload/FBZIPUpload.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
