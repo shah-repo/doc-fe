@@ -11,11 +11,11 @@ export default (theme: Theme) =>
     },
     drawerPaper: {
       width: DRAWER_WIDTH,
-      background: Colors.drawer_background,
+      background: Colors.mirage,
       zIndex: theme.zIndex.drawer + 2,
     },
     toolbar: {
-      backgroundColor: Colors.drawer_background,
+      backgroundColor: Colors.mirage,
       marginTop: 20,
     },
     toolbarTitle: {

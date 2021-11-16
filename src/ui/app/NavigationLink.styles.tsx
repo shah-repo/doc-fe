@@ -6,31 +6,31 @@ export const DRAWER_WIDTH = 240;
 export default makeStyles((theme: Theme) =>
   createStyles({
     link: {
-      "color": Colors.drawer_link_color,
-      "backgroundColor": Colors.drawer_link_background,
+      "color": Colors.white,
+      "backgroundColor": Colors.mirage,
       "&:hover": {
-        color: Colors.drawer_link_hover_color,
-        backgroundColor: Colors.drawer_link_hover_background,
+        color: Colors.white,
+        backgroundColor: Colors.bright_grey,
       },
       "& svg": {
-        stroke: Colors.drawer_active_link_icon_color,
+        stroke: Colors.white,
       },
     },
     childLink: {
       paddingLeft: theme.spacing(6),
     },
     activeLink: {
-      "backgroundColor": Colors.drawer_link_active_background,
-      "color": Colors.drawer_link_active_color,
+      "backgroundColor": Colors.bright_grey,
+      "color": Colors.white,
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
       "&:hover": {
-        backgroundColor: Colors.drawer_link_active_hover_background,
-        color: Colors.drawer_link_active_hover_color,
+        backgroundColor: Colors.bright_grey,
+        color: Colors.white,
       },
       "& svg": {
-        stroke: Colors.drawer_active_link_icon_color,
+        stroke: Colors.white,
       },
     },
     itemIcon: {
@@ -51,14 +51,14 @@ export default makeStyles((theme: Theme) =>
     icon: ({ iconLink }) => ({
       "width": 20,
       "height": 20,
-      "backgroundColor": Colors.drawer_active_link_icon_color,
+      "backgroundColor": Colors.white,
       "mask":
         `url(${iconLink}) no-repeat center / contain`,
       "-webkit-mask":
         `url(${iconLink}) no-repeat center / contain`,
     }),
     iconActive: {
-      backgroundColor: `${Colors.drawer_link_icon_color} !important`,
+      backgroundColor: `${Colors.white} !important`,
     },
   })
 );
