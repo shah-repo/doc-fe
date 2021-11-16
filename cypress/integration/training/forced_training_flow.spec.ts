@@ -707,7 +707,7 @@ context("Forced training flow", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .type("Training Curriculum test{downarrow}{enter}");
       });
     });
@@ -729,7 +729,7 @@ context("Forced training flow", () => {
     });
 
     it("Select refresh training periodically 'Yes'", () => {
-      cy.get("[name=training-refresh-training-periodically]").eq(0).click();
+      cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
     });
 
     it("Enter training refresh period days", () => {
@@ -755,7 +755,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
@@ -802,7 +802,7 @@ context("Forced training flow", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .type("One-Time Training Test{downarrow}{enter}");
       });
     });
@@ -824,7 +824,7 @@ context("Forced training flow", () => {
     });
 
     it("Select force training option 'Yes'", () => {
-      cy.get("[name=training-force-retraining-for-everyone]").eq(0).click();
+      cy.get("[name=training-force-retraining-for-everyone]").eq(0).arrowClick();
     });
 
     it("Select Users to train", () => {
@@ -847,7 +847,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
