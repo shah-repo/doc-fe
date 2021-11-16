@@ -88,7 +88,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: purchaseOrderCurrency + purchaseOrderTotalAmount,
+      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
     },
     {
       id: "id3",
@@ -300,8 +300,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                            .map((approver) => approver.userName)
-                            .join(",")
+                              .map((approver) => approver.userName)
+                              .join(",")
                           : ""}
                       </Typography>
                     </Link>

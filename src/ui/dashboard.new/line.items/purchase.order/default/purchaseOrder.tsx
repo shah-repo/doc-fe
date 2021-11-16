@@ -80,7 +80,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: purchaseOrderCurrency + purchaseOrderTotalAmount,
+      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
     },
     {
       id: "id3",
