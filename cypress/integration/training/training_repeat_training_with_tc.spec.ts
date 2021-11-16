@@ -666,8 +666,8 @@ context("Repeat Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .arrowType("Training Curriculum test{downarrow}{enter}");
       });
     });
 
@@ -684,25 +684,25 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify training options document types", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").click();
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("AR Form{downarrow}{enter}");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
-      cy.get("[name=training-refresh-training-periodically]").eq(0).click();
+      cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
     });
 
     it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").type("1");
+      cy.get("[name=training-validity]").arrowType("1");
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
     });
 
     it("Select Approver", () => {
@@ -714,7 +714,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {

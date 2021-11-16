@@ -686,8 +686,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
         CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
-          .type("One-Time Training test{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .arrowType("One-Time Training test{downarrow}{enter}");
       });
     });
 
@@ -695,7 +695,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.drEnterDocumentTitle({ name: "One-Time training title" });
     });
 
-    it("type a description", () => {
+    it("Type a description", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
@@ -704,16 +704,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
     });
 
     it("Select force training option 'Yes'", () => {
-      cy.get("[name=training-force-retraining-for-everyone]").eq(0).click();
+      cy.get("[name=training-force-retraining-for-everyone]").eq(0).arrowClick();
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
     });
 
     it("Select Approver", () => {
@@ -730,7 +730,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
