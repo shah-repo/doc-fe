@@ -767,7 +767,7 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Select Groups to train 'Developers'", () => {
+    it("Select Groups to train 'Group1 and Group2'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").type("Group1{downarrow}{enter}");
       cy.get("[data-cy=training-select-groups-to-train]").type("Group2{downarrow}{enter}");
     });
@@ -850,7 +850,7 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
     });
 
-    it("Add new Group to train 'Developers'", () => {
+    it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").type("Group3{downarrow}{enter}");
     });
 
