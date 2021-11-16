@@ -15,7 +15,7 @@ let adminEmployee;
 let secondEmployee;
 let developersGroup;
 
-context("Repeat Training with Training Curriculum", () => {
+context("Repeat One Time Training with Training Curriculum", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
