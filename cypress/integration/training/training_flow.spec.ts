@@ -1053,7 +1053,7 @@ context("Training Flow test", () => {
         });
     });
 
-    it("Verify expiry of 365 days and due of 30 days", () => {
+    it("Verify due of 30 days", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1061,11 +1061,11 @@ context("Training Flow test", () => {
             const dueOn = new Date(response.trainingRecords[0].dueOn);
             const todayDate = new Date();
             const diff = Math.ceil((dueOn - todayDate) / (1000 * 60 * 60 * 24));
-            expect(response.trainingRecords[0].trainingPlan.validity).to.equal(365);
             expect(diff).to.equal(30);
           }
         });
       }).as("response");
+      cy.wait("@response");
     });
 
     it("click complete training button", () => {
