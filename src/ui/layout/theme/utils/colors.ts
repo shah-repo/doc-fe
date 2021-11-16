@@ -38,17 +38,8 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   // Drawer color
-  drawer_background = "#121B21",
-  drawer_link_color = "#FFFFFF",
-  drawer_link_background = "#121B21",
-  drawer_link_hover_color = "#FFFFFF",
-  drawer_link_hover_background = "#32424E",
-  drawer_link_active_color = "#FFFFFF",
-  drawer_link_active_background = "#32424E",
-  drawer_link_icon_color = "#FFFFFF",
-  drawer_active_link_icon_color = "#FFFFFF",
-  drawer_link_active_hover_color="#FFFFFF",
-  drawer_link_active_hover_background="#32424E",
+  mirage="#121B21",
+  bright_grey = "#32424E",
   latest_yellow_varient = "#FEAA2C",
 }
 
