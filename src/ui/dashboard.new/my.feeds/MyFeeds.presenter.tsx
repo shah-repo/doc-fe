@@ -22,6 +22,7 @@ import CalibrationItem from "../line.items/calibration/calibrationItem";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import POApproverActions from "../line.items/purchase.order/approver.actions/approverActions";
+import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
 import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
 import POTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
@@ -147,6 +148,26 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   pendingAction.purchaseOrderAttachments
                 }
                 purchaseSupplierName={pendingAction.purchaseSupplierName}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
+          case ActionTypes.DIRECT_APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
+            return (
+              <NonPOApproverActions
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
+                docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
+                type={pendingAction.type}
+                approverName={pendingAction.approverName}
+                approverAvatar={pendingAction.approverAvatar}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                status={pendingAction.approvalStatusChanged}
+                docRevName={pendingAction.docRevName}
                 onMouseHoverItem={onMouseHoverItem}
                 hoverItemId={hoverItemId}
               />
