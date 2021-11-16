@@ -46,7 +46,9 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   <Text translation="training.doc.id.rev" />
                 </Typography>
                 <Box className={classes.itemContentBlue}>
-                  {training.trainingPlan?.document.docId}
+                  {training.trainingPlan?.document.docId}&nbsp;
+                  Rev &nbsp;
+                  {training.documentRevision?.displayRevision}
                 </Box>
               </Grid>
               <Grid item xs={12} className={classes.item}>
@@ -64,7 +66,10 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   <Text translation="training.acknowledge.completed.statement"/>
                 </span>
                 <span className={classes.itemContentBlue}>
-             &nbsp; {training.trainingPlan?.document.docId}
+                  &nbsp;
+                  {training.trainingPlan?.document.docId}&nbsp;
+                  Rev &nbsp;
+                  {training.documentRevision?.displayRevision}
                 </span>
               </Grid>
               <Grid item xs={12} className={classes.item}>
