@@ -53,6 +53,7 @@ export const toDocumentTypeIntialValues = (documentType) => ({
   isQms: documentType.isQms,
   needsSignature: documentType.needsSignature,
   defaultTraining: documentType.defaultTraining,
+  equipmentEnforceProd: documentType.equipmentEnforceProd,
   startingNumber: documentType.startingNumber,
   hiddenForCreationForUsersWithoutTags: enumToOptions(documentType.hiddenForCreationForUsersWithoutTags),
   defaultRevStage: enumToOptions([documentType.defaultRevStage]),

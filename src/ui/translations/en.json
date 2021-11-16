@@ -368,6 +368,7 @@
   "common.redline.message": "You are in redline mode",
   "common.qms": "Qms",
   "common.default.training": "Default Training",
+  "common.equipmentEnforceProd": "Equipment Enforce Prod",
   "common.starting.number": "Starting Number",
   "common.default.rev.stage": "Default Revision Stage",
   "common.hidden.message": "Hidden For Creation For Users Without Tags",
@@ -1068,7 +1069,6 @@
   "maintenance.body": "We are currently upgrading our system to make it more useful for you.\nThank you for your patience.",
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new revision of the form is available. {clickHere} to upgrade to the latest revision.",
-
   "return.home": "Return home",
   "file.type.XLSX": "Microsoft Excel File",
   "file.type.XLS": "Microsoft Excel File",
