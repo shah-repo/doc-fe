@@ -1,8 +1,14 @@
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { Nullable } from "../../state/ducks/common/types";
 import UserProfileContainer from "../user.management/profile/UserProfile.container";
@@ -11,7 +17,7 @@ import UserAvatar from "./UserMenu/UserAvatar";
 import UserMenu from "./UserMenu/UserMenu.container";
 
 interface Props extends WithStyles<typeof styles> {
-  // email: string;
+  email: string;
   name: string;
   closeUserProfile: () => void;
   showUserProfile: boolean;
@@ -23,7 +29,7 @@ interface Props extends WithStyles<typeof styles> {
 
 const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   classes,
-  // email,
+  email,
   name,
   closeUserProfile,
   showUserProfile,
@@ -32,7 +38,11 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   handleCloseMenu,
   anchorEl,
 }) => (
-  <Box alignItems="center"  justifyContent="space-between" className={classes.bottomPush}>
+  <Box
+    alignItems="center"
+    justifyContent="space-between"
+    className={classes.bottomPush}
+  >
     <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
       <Button
         disableFocusRipple={true}
@@ -42,27 +52,21 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         }
         classes={{ root: classes.headerButton }}
       >
-        <UserAvatar {...{ avatar, name }} />
-        <Box component="div" alignItems="center" className={classes.emailPosition}>
-          <Typography
-            id="Header-userName"
-            variant="caption"
-            className={classes.nameStyle}
-            noWrap={true}
-          >
-            {name}
-          </Typography>
-        </Box>
-        {/* <Box alignItems="center" className={classes.emailPosition}>
-          <Typography
-            id="Header-userName"
-            variant="caption"
-            className={classes.emailStyle}
-            noWrap={true}
-          >
-            {email}
-          </Typography>
-        </Box> */}
+        <List style={{ width: "85%" }}>
+          <ListItem style={{ padding: 0 }}>
+            <ListItemAvatar>
+              <UserAvatar {...{ avatar, name }} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <Typography className={classes.nameStyle} noWrap={true}> {name}</Typography>
+              }
+              secondary={
+                <Typography className={classes.emailStyle} noWrap={true}> {email}</Typography>
+              }
+            />
+          </ListItem>
+        </List>
         <UserMenu {...{ handleCloseMenu, anchorEl }} />
         <UserProfileContainer
           closeUserProfile={closeUserProfile}
