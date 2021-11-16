@@ -1,7 +1,5 @@
 import { Avatar, Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
-import { useSelector } from "react-redux";
-import { authSelectors } from "../../../state/ducks/auth";
 import { Nullable } from "../../../state/ducks/common/types";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Colors from "../../layout/theme/utils/colors";
@@ -10,11 +8,14 @@ const styles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
       width: "48px",
-      height: "47px",
+      height: "48px",
       borderRadius: "50%",
-      margin: theme.spacing(0.7, 1, 0, 0),
-      fontSize: "12px",
+      margin: theme.spacing(0, 1, 0, 1),
+      fontSize: "18px",
       color: Colors.white,
+      background: Colors.aqua_blue,
+      fontWeight: 600,
+      fontFamily: "Sora",
     },
   }));
 
@@ -28,13 +29,12 @@ const UserAvatar: React.FunctionComponent<Props> = ({
   name,
 }) => {
   const classes = styles();
-  const bgColor = useSelector(authSelectors.getAvatarInitialColor);
 
   return (
     <Box>
       {avatar ?
-        <img src={avatar} className={classes.avatar} alt="UserProfile" /> :
-        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.avatar}>
+        <Avatar className={classes.avatar} alt={name} src={avatar} /> :
+        <Avatar className={classes.avatar}>
           {getInitalsFromName(name)}
         </Avatar>
       }
