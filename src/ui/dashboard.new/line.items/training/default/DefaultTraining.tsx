@@ -21,21 +21,23 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
 import { HoverStyleChip } from "./DefaultHoverStyleChip";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import { NormalStyleChip } from "./DefaultNormalStyleChip";
 import { styles } from "./DefaultTraining.styles";
 
 interface Props {
   id: string;
   type: string;
-  docRevName: string | undefined;
-  docId: string | undefined;
-  docDocumentId: string | undefined;
-  docRevId: string | undefined;
-  status: string | undefined;
-  timestamp: string | undefined;
-  dueOn: string | undefined;
+  docRevName: Nullable<string>;
+  docRevVersion: string;
+  docId: string;
+  docDocumentId: string;
+  docRevId: string;
+  status: string;
+  timestamp: string;
+  dueOn: Nullable<string>;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -43,6 +45,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docDocumentId,
   docRevId,
   docRevName,
+  docRevVersion,
   status,
   timestamp,
   dueOn,
@@ -131,7 +134,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevName}
+                    {docRevName} {docRevVersion}
                   </Typography>
                 </Link>
               </Grid>
@@ -203,8 +206,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     TrainingStatus.ASSIGNED === status
                       ? classes.grayDot
                       : status === TrainingStatus.OVERDUE
-                        ? classes.redDot
-                        : classes.yellowDot
+                      ? classes.redDot
+                      : classes.yellowDot
                   }
                 ></Grid>
               )}
@@ -217,8 +220,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       status === TrainingStatus.ASSIGNED
                         ? classes.typographyAssigned
                         : status === TrainingStatus.OVERDUE
-                          ? classes.typographyOverdue
-                          : classes.typographyDueInfewDays
+                        ? classes.typographyOverdue
+                        : classes.typographyDueInfewDays
                     }
                     color="textSecondary"
                     noWrap

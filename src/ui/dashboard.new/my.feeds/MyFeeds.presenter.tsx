@@ -265,6 +265,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 docId={pendingAction.docId}
                 docDocumentId={pendingAction?.docDocumentId}
                 docRevId={pendingAction?.docRevId}
+                docRevVersion={pendingAction?.docRevVersion}
                 status={pendingAction.trainingStatus}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
