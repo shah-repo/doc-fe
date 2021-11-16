@@ -613,7 +613,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
   });
 
-  context("Created document with training required and complete training", () => {
+  context("Created document with training required", () => {
     it("Form with Released status", () => {
       cy.navigToDocumentList();
       cy.cmpClickCreateNewDocument();
