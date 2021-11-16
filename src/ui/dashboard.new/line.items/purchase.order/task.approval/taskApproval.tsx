@@ -23,19 +23,20 @@ import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import { styles } from "./taskApproval.styles";
 
 interface Props {
   id: string;
   docDocumentId: string;
   type: string;
-  docId?: string | undefined;
-  docRevId?: string | undefined;
-  arStatus?: string | undefined;
-  timestamp: string | undefined;
-  docRevOwnerAvatar?: string | undefined | null;
-  docRevOwnerName: string | undefined;
-  title?: string | undefined;
+  docId: string;
+  docRevId: string;
+  approvalId: string;
+  timestamp: string;
+  docRevOwnerAvatar: Nullable<string>;
+  docRevOwnerName: string;
+  docRevName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -43,10 +44,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
   docDocumentId,
   docId,
+  approvalId,
   docRevId,
   docRevOwnerName,
   timestamp,
-  title,
+  docRevName,
   docRevOwnerAvatar,
   hoverItemId,
   onMouseHoverItem,
@@ -183,7 +185,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {title}
+                      {docRevName}
                     </Typography>
                   </Link>
                 </Grid>
@@ -258,13 +260,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <ApproveDialogueContainer
         transition="reject"
-        approvalId={docDocumentId}
+        approvalId={approvalId}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
-        approvalId={docDocumentId}
+        approvalId={approvalId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />

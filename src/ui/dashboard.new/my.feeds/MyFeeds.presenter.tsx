@@ -17,6 +17,7 @@ import Text from "../../components/Text";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import DirectApprovalActionItem from "../line.items/approvals/direct.request.owner.actions/default";
+import DirectApprovalActionPRItem from "../line.items/approvals/direct.request.owner.actions/pending.review/pendingReview";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
 import CalibrationItem from "../line.items/calibration/calibrationItem";
@@ -94,10 +95,12 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
+          case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
             return (
               <POTaskApproval
                 id={pendingAction.id}
                 docDocumentId={pendingAction.docDocumentId}
+                approvalId={pendingAction.approvalId}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
@@ -107,7 +110,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 docRevId={pendingAction.docRevId}
                 docRevOwnerName={pendingAction.docRevOwnerName}
                 docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                title={pendingAction.docRevName}
+                docRevName={pendingAction.docRevName}
                 onMouseHoverItem={onMouseHoverItem}
                 hoverItemId={hoverItemId}
               />
@@ -257,6 +260,29 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_APPROVAL_REQ_OWNER:
+            if (pendingAction.docRevStatus === "IN_REVIEW") {
+              return (
+                <DirectApprovalActionPRItem
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  status={pendingAction.docRevStatus}
+                  docRevName={pendingAction.docRevName}
+                  docRevPendingApprovals={pendingAction.docRevPendingApprovals}
+                  docRevApprovedApprovals={
+                    pendingAction.docRevApprovedApprovals
+                  }
+                  onMouseHoverItem={onMouseHoverItem}
+                  hoverItemId={hoverItemId}
+                />
+              );
+            }
             return (
               <DirectApprovalActionItem
                 id={pendingAction.id}
@@ -298,10 +324,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 onMouseHoverItem={onMouseHoverItem}
               />
             );
-          case ActionTypes.PENDING_DOC_CONTROL:
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
-          case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
             return (
               pendingAction?.docRevStatus &&
               !["DRAFT", "WIP"].includes(pendingAction.docRevStatus) && (
