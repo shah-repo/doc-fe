@@ -1,4 +1,5 @@
 import {
+  Box,
   Grid,
   Link,
   ListItemIcon,
@@ -133,8 +134,12 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             </Grid>
             <Grid
               item={true}
-              className={`${classes.blackDot} ${classes.ml5}`}
-            ></Grid>
+              className={`${classes.ml5}`}
+            >
+              <Box
+                className={`${classes.blackDot}`}>
+              </Box>
+            </Grid>
             <Grid item={true}>
               <Typography
                 component="span"
