@@ -52,7 +52,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         }
         classes={{ root: classes.headerButton }}
       >
-        <List style={{ width: "85%" }}>
+        <List style={{ width: "98%" }}>
           <ListItem style={{ padding: 0 }}>
             <ListItemAvatar>
               <UserAvatar {...{ avatar, name }} />
@@ -65,9 +65,9 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
                 <Typography className={classes.emailStyle} noWrap={true}> {email}</Typography>
               }
             />
+            <UserMenu {...{ handleCloseMenu, anchorEl }} />
           </ListItem>
         </List>
-        <UserMenu {...{ handleCloseMenu, anchorEl }} />
         <UserProfileContainer
           closeUserProfile={closeUserProfile}
           showUserProfile={showUserProfile}
