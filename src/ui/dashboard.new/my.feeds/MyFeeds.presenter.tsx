@@ -21,7 +21,7 @@ import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
 import CalibrationItem from "../line.items/calibration/calibrationItem";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
-import POReject from "../line.items/purchase.order/rejected/reject";
+import POApproverActions from "../line.items/purchase.order/approver.actions/approverActions";
 import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
 import POTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
@@ -111,37 +111,16 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED:
-            if (
-              pendingAction.approvalStatusChanged ===
-              LINE_ITEMS_STATUS_TYPES.REJECTED
-            ) {
-              return (
-                <POReject
-                  id={pendingAction.id}
-                  docDocumentId={pendingAction.docDocumentId}
-                  docId={pendingAction.docId}
-                  docRevId={pendingAction.docRevId}
-                  type={pendingAction.type}
-                  timestamp={getFormattedDateString(
-                    pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
-                  )}
-                  docRevOwnerName={pendingAction.docRevOwnerName}
-                  docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                  status={pendingAction.approvalStatusChanged}
-                  docRevName={pendingAction.docRevName}
-                  onMouseHoverItem={onMouseHoverItem}
-                  hoverItemId={hoverItemId}
-                />
-              );
-            }
             return (
-              <PurchaseOrder
+              <POApproverActions
                 id={pendingAction.id}
                 docDocumentId={pendingAction.docDocumentId}
                 docId={pendingAction.docId}
                 docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
+                approverName={pendingAction.approverName}
+                approvalId={pendingAction.approvalId}
+                approverAvatar={pendingAction.approverAvatar}
                 timestamp={getFormattedDateString(
                   pendingAction.timestamp,
                   MomentFormats.BriefDateTime

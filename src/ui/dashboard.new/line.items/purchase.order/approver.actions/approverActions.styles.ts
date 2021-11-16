@@ -6,11 +6,35 @@ export const styles = makeStyles(() =>
     inline: {
       display: "inline",
     },
-    actionIcon: {
-      paddingLeft: "10px",
+    nested: {
+      marginLeft: "32px",
+      borderLeft: `1px solid ${Colors.light_gray_blue}`,
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
     },
     link: {
       color: Colors.black,
+    },
+    linkTextColor: {
+      color: Colors.navy,
+    },
+    linkText: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+      color: Colors.navy,
+    },
+    attachmentIcon: {
+      paddingTop: "2px",
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
+    },
+    icon: {
+      width: "15px",
+    },
+    listItem: {
+      paddingLeft: "1px",
     },
     actionIcons: {
       /* Action Icons */
@@ -28,10 +52,18 @@ export const styles = makeStyles(() =>
       /* Highlight */
       background: Colors.sky_blue,
     },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
     typography: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
+      "& > p": { margin: "0px" },
     },
     typographyBold: {
       fontSize: "14px",
@@ -65,6 +97,15 @@ export const styles = makeStyles(() =>
       marginRight: "5px",
       position: "relative",
       background: Colors.font_gray,
+    },
+    typographyChildrenBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 700,
+    },
+    gridContainer: {
+      paddingLeft: "14px",
+      maxWidth: "calc(100% - 14px)",
     },
     margin5: {
       marginRight: "5px",
