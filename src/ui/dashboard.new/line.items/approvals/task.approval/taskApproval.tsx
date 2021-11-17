@@ -15,8 +15,8 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
@@ -25,12 +25,10 @@ import { styles } from "./taskApproval.styles";
 
 interface Props {
   id: string;
-  docDocumentId: string;
   type: string;
-  docId?: string | undefined;
-  docRevId?: string | undefined;
-  arStatus?: string | undefined;
-  timestamp: string | undefined;
+  arId: string;
+  arChangeRequestId: string;
+  timestamp: string;
   docRevOwnerAvatar?: string | undefined | null;
   docRevOwnerName: string | undefined;
   title?: string | undefined;
@@ -39,9 +37,8 @@ interface Props {
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
-  docDocumentId,
-  docId,
-  docRevId,
+  arChangeRequestId,
+  arId,
   docRevOwnerName,
   timestamp,
   title,
@@ -155,7 +152,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -166,13 +163,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      {docId}
+                      {arId}
                     </Typography>
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -258,13 +255,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <ApproveDialogueContainer
         transition="reject"
-        changeRequestId={docDocumentId}
+        changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
-        changeRequestId={docDocumentId}
+        changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />
