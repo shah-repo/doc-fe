@@ -11,6 +11,8 @@ import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
 import { StyledTab } from "./StyledTab";
+import { useSelector } from "react-redux";
+import { trainingSelectors } from "../../state/ducks/dashboard.new/training";
 import { StyledTabs } from "./StyledTabs";
 import TabPanel from "./TabPanel";
 
@@ -23,13 +25,14 @@ const DashboardTabs: React.FunctionComponent = () => {
   isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
-    "id": `scrollable-auto-tab-${index}`,
+    id: `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   });
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+  const trainingItems = useSelector(trainingSelectors.trainingList);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -67,7 +70,8 @@ const DashboardTabs: React.FunctionComponent = () => {
                         <TrainingIcon />
                       )}
                       <span className={classes.tabItemText}>
-                        <Text translation={"common.trainings"} /> (10)
+                        <Text translation={"common.trainings"} /> (
+                        {trainingItems.length || 0})
                       </span>
                     </Grid>
                   </Grid>
@@ -82,10 +86,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                   <Grid item={true} sm={12}>
                     {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
                     <span className={classes.tabItemText}>
                       <Text translation={"common.recent"} />
                     </span>

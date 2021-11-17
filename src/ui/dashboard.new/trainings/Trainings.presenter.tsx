@@ -1,4 +1,4 @@
-import { Grid, List, Typography } from "@material-ui/core";
+import { Grid, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
@@ -77,12 +77,18 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
     </List>
   );
   const renderNoPendingActions = trainingItems.length === 0 && (
-    <Typography className={classes.noPendingActions}>
-      <Text
-        translation="dashboard.noPendingActions"
-        dataCy="dashboard.noPendingActions"
+    <List dense>
+      <ListItemText
+        primary={
+          <Typography className={classes.noPendingActions}>
+            <Text
+              translation="dashboard.noPendingActions"
+              dataCy="dashboard.noPendingActions"
+            />
+          </Typography>
+        }
       />
-    </Typography>
+    </List>
   );
 
   return (

@@ -242,4 +242,4 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default PendingTrainingPresenter;
+export default React.memo(PendingTrainingPresenter);
