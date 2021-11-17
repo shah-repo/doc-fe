@@ -33,7 +33,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <IconButton id="UserMenuButton" data-cy="UserMenuButton">
-        <MoreHorizIcon style={{ position: "relative", top: "4px",  fontSize: "small", color: "white" }}  />
+        <MoreHorizIcon fontSize="small"  style={{ color: Colors.white }}  />
       </IconButton>
       <Menu
         id="UserMenu"
