@@ -128,47 +128,49 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
                       <Text translation="is" />
                     </Typography>
                   </Grid>
-                  {STATUS_TYPES_LABEL.APPROVED === status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {!hoverItem && (
-                          <NormalStyleChip
-                            size="small"
-                            color="primary"
-                            icon={<ApprovedIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
-                          />
-                        )}
-                        {hoverItem && (
-                          <HoverStyleChip
-                            color="primary"
-                            size="small"
-                            icon={<ApprovedWhiteIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
-                          />
-                        )}
-                      </Typography>
-                    </Grid>
-                  )}
-                  {STATUS_TYPES_LABEL.APPROVED !== status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {status}
-                      </Typography>
-                    </Grid>
-                  )}
+                  {STATUS_TYPES_LABEL.APPROVED === status ||
+                    (STATUS_TYPES_LABEL.RELEASED === status && (
+                      <Grid item={true}>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyStatus} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          {!hoverItem && (
+                            <NormalStyleChip
+                              size="small"
+                              color="primary"
+                              icon={<ApprovedIcon />}
+                              label={STATUS_TYPES_LABEL[status]}
+                            />
+                          )}
+                          {hoverItem && (
+                            <HoverStyleChip
+                              color="primary"
+                              size="small"
+                              icon={<ApprovedWhiteIcon />}
+                              label={STATUS_TYPES_LABEL[status]}
+                            />
+                          )}
+                        </Typography>
+                      </Grid>
+                    ))}
+                  {STATUS_TYPES_LABEL.APPROVED !== status &&
+                    STATUS_TYPES_LABEL.RELEASED !== status && (
+                      <Grid item={true}>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyStatus} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          {status}
+                        </Typography>
+                      </Grid>
+                    )}
                 </Grid>
                 <Grid
                   container={true}

@@ -153,65 +153,68 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Typography>
               </Grid>
 
-              <Grid item={true}>
-                {TrainingStatus.ASSIGNED !== status && (
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyStatus}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {!hoverItem && (
-                      <NormalStyleChip
-                        {...{ status }}
-                        size="small"
-                        color="primary"
-                        icon={
-                          status === TrainingStatus.COMPLETED ? (
-                            <ApprovedIcon />
-                          ) : status === TrainingStatus.OVERDUE ? (
-                            <OverdueIcon />
-                          ) : (
-                            <WarningIcon />
-                          )
-                        }
-                        label={status && TrainingStatusLabels[status]}
-                      />
-                    )}
-                    {hoverItem && (
-                      <HoverStyleChip
-                        {...{ status }}
-                        color="primary"
-                        size="small"
-                        icon={
-                          status === TrainingStatus.COMPLETED ? (
-                            <ApprovedWhiteIcon />
-                          ) : status === TrainingStatus.OVERDUE ? (
-                            <OverdueWhiteIcon />
-                          ) : (
-                            <WarningWhiteIcon />
-                          )
-                        }
-                        label={status && TrainingStatusLabels[status]}
-                      />
-                    )}
-                  </Typography>
-                )}
-              </Grid>
-              {status && TrainingStatus.COMPLETED !== status && (
-                <Grid
-                  item={true}
-                  className={
-                    TrainingStatus.ASSIGNED === status
-                      ? classes.grayDot
-                      : status === TrainingStatus.OVERDUE
-                      ? classes.redDot
-                      : classes.yellowDot
-                  }
-                ></Grid>
+              {TrainingStatus[status] && (
+                <Grid item={true}>
+                  {TrainingStatus.ASSIGNED !== status && (
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyStatus}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {!hoverItem && (
+                        <NormalStyleChip
+                          {...{ status }}
+                          size="small"
+                          color="primary"
+                          icon={
+                            status === TrainingStatus.COMPLETED ? (
+                              <ApprovedIcon />
+                            ) : status === TrainingStatus.OVERDUE ? (
+                              <OverdueIcon />
+                            ) : (
+                              <WarningIcon />
+                            )
+                          }
+                          label={status && TrainingStatusLabels[status]}
+                        />
+                      )}
+                      {hoverItem && (
+                        <HoverStyleChip
+                          {...{ status }}
+                          color="primary"
+                          size="small"
+                          icon={
+                            status === TrainingStatus.COMPLETED ? (
+                              <ApprovedWhiteIcon />
+                            ) : status === TrainingStatus.OVERDUE ? (
+                              <OverdueWhiteIcon />
+                            ) : (
+                              <WarningWhiteIcon />
+                            )
+                          }
+                          label={status && TrainingStatusLabels[status]}
+                        />
+                      )}
+                    </Typography>
+                  )}
+                </Grid>
               )}
-              {status && TrainingStatus.COMPLETED !== status && (
+              {TrainingStatus[status] &&
+                TrainingStatus.COMPLETED !== status && (
+                  <Grid
+                    item={true}
+                    className={
+                      TrainingStatus.ASSIGNED === status
+                        ? classes.grayDot
+                        : status === TrainingStatus.OVERDUE
+                        ? classes.redDot
+                        : classes.yellowDot
+                    }
+                  ></Grid>
+                )}
+              {TrainingStatus[status] && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -229,6 +232,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     {dueOn}
                   </Typography>
                 </Grid>
+              )}
+              {!TrainingStatus[status] && (
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typographyStatus}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {status}
+                </Typography>
               )}
             </Grid>
             <Grid

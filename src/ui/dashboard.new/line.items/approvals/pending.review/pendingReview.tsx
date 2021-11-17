@@ -35,28 +35,24 @@ import { styles } from "./pendingReview.styles";
 interface Props {
   id: string;
   type: string;
-  title: string | undefined;
-  arId: string | undefined;
+  title: string;
+  arId: string;
   arStatus: string;
-  timestamp: string | undefined;
-  pendingApprovers:
-    | {
-        userName: string;
-        employeeId: string;
-        userAvatar: Nullable<string>;
-        userInitialColor: string;
-        approvalStatus: string;
-      }[]
-    | undefined;
-  approvedApprovers:
-    | {
-        userName: string;
-        employeeId: string;
-        userAvatar: Nullable<string>;
-        userInitialColor: string;
-        approvalStatus: string;
-      }[]
-    | undefined;
+  timestamp: string;
+  pendingApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  approvedApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
   docRevs: {
     documentRevisionId: string;
     documentId: string;
@@ -401,6 +397,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         <EmailModal
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={pendingApprovers}
+          approvedApprovers={approvedApprovers}
         />
       </Modal>
     </>

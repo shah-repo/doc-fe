@@ -19,15 +19,28 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../../../common/utils/date";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import { styles } from "./EmailModal.styles";
 import { StyledListItem } from "./StyledListItem";
 
 interface EmailModalProps {
   handleEmailModelClose: () => void;
-  pendingApprovers: any;
-  timestamp?: any;
-  approvedApprovers?: any;
+  pendingApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  timestamp?: string | undefined;
+  approvedApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
 }
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = ({
