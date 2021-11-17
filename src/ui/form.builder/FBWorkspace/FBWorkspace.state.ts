@@ -1,4 +1,4 @@
-import { includes, isArray, isEmpty, map, omit, size } from "lodash";
+import { includes, isArray, isEmpty, isUndefined, map, omit, size } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceConstructor, FBWorkspaceExternalState, FBWorkspaceMode } from "..";
 import { appGlobals } from "../../../appGlobals";
@@ -178,9 +178,10 @@ class FBWorkspaceState extends FBSchemaState {
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
+    if (mode === "form" && !values) { return; }
     if (!autosave) { return; }
-    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     if (!id) { return; }
+    const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     this.setDirty(true);
     let body = {};
     switch (mode) {
@@ -202,8 +203,9 @@ class FBWorkspaceState extends FBSchemaState {
     }
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
+    const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
     this.documentRevApi.set({
-      url: FBEndpoint.DocumentRevisionPatch,
+      url,
       urlValues: { id },
       body,
       method: "patch",

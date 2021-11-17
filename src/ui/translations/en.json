@@ -377,11 +377,15 @@
   "common.type.here": "Type here...",
   "common.operators": "Operators",
   "common.select.migration.form": "Select Migration Form",
-  "common.trId": "TR ID",
+  "common.trId": "TRN ID",
   "common.acknowledge": "Acknowledge",
   "common.training.record": "Training Record",
   "common.email.sent": "Email Sent!",
   "common.falied.email": "Failed to Send Email",
+  "common.click.here": "Click here",
+  "common.my.feed": "My Feed",
+  "common.trainings": "Trainings",
+  "common.recent": "Recent",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1064,7 +1068,7 @@
   "maintenance.body": "We are currently upgrading our system to make it more useful for you.\nThank you for your patience.",
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new revision of the form is available. {clickHere} to upgrade to the latest revision.",
-  "common.click.here": "Click here",
+
   "return.home": "Return home",
   "file.type.XLSX": "Microsoft Excel File",
   "file.type.XLS": "Microsoft Excel File",
@@ -1078,5 +1082,10 @@
   "tooltip.visibility.flag": "Visibility Flag Status: {visibilityFlag}",
   "dropbox.enable": "Enable Dropbox",
   "dropbox.connection.error": "There was an error connecting to Dropbox.",
-  "toast.notification.deletion": "This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to"
+  "toast.notification.deletion": "This company tenant is scheduled to be deleted. If there are concerns about this tenant being deleted, please reach out to",
+  "dashboard.my.feed.container": "My Feed Container",
+  "dashboard.training.container": "Training Container",
+  "dashboard.recent.container": "Recent Container",
+  "dashboard.training.stats.container": "Training Stats Container (Chart & Line Items)",
+  "header.welcome.back": "Welcome Back"
 }

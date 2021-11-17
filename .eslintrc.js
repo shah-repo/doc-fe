@@ -23,9 +23,11 @@ module.exports = {
     "@typescript-eslint",
     "react",
     "jsx-a11y",
-    "react-hooks"
+    "react-hooks",
+    "import"
   ],
   "rules": {
+    "import/newline-after-import": ["error", { "count": 1 }],
     "array-callback-return": [
       "warn"
     ],

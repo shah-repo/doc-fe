@@ -16,7 +16,7 @@ import { styles } from "./styles";
 interface Props {
   asyncState: AsyncState;
   cancel: () => void;
-  docDetails:  Partial<DocumentRevision>;
+  docDetails: Partial<DocumentRevision>;
   trId?: string;
 }
 
@@ -47,7 +47,9 @@ const TrainingForm: React.FunctionComponent<Props> = ({
               <Text translation="training.doc.id.rev" />
             </Typography>
             <Box className={classes.itemContentBlue}>
-              {docDetails.docId}
+              {docDetails.docId}&nbsp;
+             Rev &nbsp;
+              {docDetails.displayRevision}
             </Box>
           </Grid>
           <Grid item xs={12} className={classes.item}>
@@ -65,7 +67,9 @@ const TrainingForm: React.FunctionComponent<Props> = ({
               <Text translation="training.acknowledge.statement"/>
             </span>
             <span className={classes.itemContentBlue}>
-             &nbsp; {docDetails.docId}
+             &nbsp; {docDetails.docId}&nbsp;
+             Rev &nbsp;
+              {docDetails.displayRevision}
             </span>
           </Grid>
           <Grid item xs={12} className={classes.item}>
