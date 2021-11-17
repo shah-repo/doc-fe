@@ -11,7 +11,6 @@ type Props = RouteComponentProps;
 
 const HeaderContainer: React.FunctionComponent<Props> = ({
   location,
-  history,
 }) => {
   const isNewDashboard = location.pathname === "/dashboard";
   const name = useSelector(authSelectors.currentUserName);
@@ -23,21 +22,25 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   };
   return (
     <>
-      {isNewDashboard && <NewHeaderPresenter
-        {...{
-          name,
-          customLabelsValue,
-          toggleCustomLabels,
-          canToggleCustomLabels,
-        }}
-      />}
-      {!isNewDashboard && <HeaderPresenter
-        {...{
-          customLabelsValue,
-          toggleCustomLabels,
-          canToggleCustomLabels,
-        }}
-      />}
+      {isNewDashboard && (
+        <NewHeaderPresenter
+          {...{
+            name,
+            customLabelsValue,
+            toggleCustomLabels,
+            canToggleCustomLabels,
+          }}
+        />
+      )}
+      {!isNewDashboard && (
+        <HeaderPresenter
+          {...{
+            customLabelsValue,
+            toggleCustomLabels,
+            canToggleCustomLabels,
+          }}
+        />
+      )}
     </>
   );
 };
