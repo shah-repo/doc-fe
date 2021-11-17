@@ -724,7 +724,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+          .arrowType("Training Curriculum test{downarrow}{enter}");
       });
     });
 
@@ -759,7 +759,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").type("5");
+      cy.get("[name=training-validity]").arrowType("5");
     });
 
     it("Select Approver", () => {
@@ -767,8 +767,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
     });
 
     it("Save training", () => {
@@ -803,7 +803,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
   context("Verify training notifications on dashboard", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Verify training notification", () => {
@@ -814,7 +814,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
   context("Complete trainings", () => {
     it("Open and complete second training", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.get("#Dashboard-open-1").then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
@@ -823,7 +823,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Open and complete first training", () => {
@@ -837,7 +837,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").click();
+      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
@@ -895,7 +895,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Select Approver", () => {
       cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").click({ force: true });
+        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick({ force: true });
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
