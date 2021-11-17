@@ -723,7 +723,7 @@ context("Training Flow test", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
       cy.drClickReviseDocument();
-      cy.get("#RevisionTypeChange-obsolete").click();
+      cy.get("#RevisionTypeChange-obsolete").arrowClick();
       cy.recClickSaveBtn();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -790,8 +790,8 @@ context("Training Flow test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .arrowType("Training Curriculum test{downarrow}{enter}");
       });
     });
 
@@ -812,7 +812,7 @@ context("Training Flow test", () => {
     });
 
     it("Verify training options document types", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").click();
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
       // cy.get(".MuiAutocomplete-popper ul li").should("contain", "approved form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", approvedFormId);
@@ -823,15 +823,15 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
-      cy.get("[name=training-refresh-training-periodically]").eq(0).click();
+      cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
     });
 
     it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").type("5");
+      cy.get("[name=training-validity]").arrowType("5");
     });
 
     it("Trainee Details should be present", () => {
@@ -839,11 +839,11 @@ context("Training Flow test", () => {
     });
 
     it("Select Groups to train 'Developers'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").type("Developers{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Developers{downarrow}{enter}");
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
     });
 
     it("Select Approver", () => {
@@ -859,7 +859,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -925,8 +925,8 @@ context("Training Flow test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
         CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
-          .type("One-Time Training test{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .arrowType("One-Time Training test{downarrow}{enter}");
       });
     });
 
@@ -955,19 +955,19 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
     });
 
     it("Select force training option 'Yes'", () => {
-      cy.get("[name=training-force-retraining-for-everyone]").eq(0).click();
+      cy.get("[name=training-force-retraining-for-everyone]").eq(0).arrowClick();
     });
 
     it("Select training group 'Developers'", () => {
-      cy.get("[name=training-select-groups-to-train]").type("Developers{downarrow}{enter}");
+      cy.get("[name=training-select-groups-to-train]").arrowType("Developers{downarrow}{enter}");
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
     });
 
     it("Select Approver", () => {
@@ -979,7 +979,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
@@ -990,13 +990,13 @@ context("Training Flow test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().type("test training title");
+      cy.get("#name").clear().arrowType("test training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "test training title");
     });
 
     it("'One-Time training title' should be present", () => {
-      cy.get("#name").clear().type("One-Time training title");
+      cy.get("#name").clear().arrowType("One-Time training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title");
     });
@@ -1036,7 +1036,7 @@ context("Training Flow test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Verify training notification", () => {
@@ -1075,8 +1075,8 @@ context("Training Flow test", () => {
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").click();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").click();
+      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
+      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
@@ -1104,8 +1104,8 @@ context("Training Flow test", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview, CyRoutes.EmployeesGet,
         CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").click({ force: true })
-          .type("One-Time Training test{downarrow}{enter}");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .arrowType("One-Time Training test{downarrow}{enter}");
       });
     });
 
@@ -1122,15 +1122,15 @@ context("Training Flow test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
     });
 
     it("Select force training option 'Yes'", () => {
-      cy.get("[name=training-force-retraining-for-everyone]").eq(0).click();
+      cy.get("[name=training-force-retraining-for-everyone]").eq(0).arrowClick();
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
     });
 
     it("Select Approver", () => {
@@ -1142,7 +1142,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").click();
+      cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
@@ -1154,13 +1154,13 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
-      cy.get("#name").clear().type("One-Time training title1");
+      cy.get("#name").clear().arrowType("One-Time training title1");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title1");
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Verify training notification", () => {
@@ -1192,8 +1192,8 @@ context("Training Flow test", () => {
     });
 
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.training\"]").click();
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").click();
+      cy.get("[data-cy=\"navigation.training\"]").arrowClick();
+      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
