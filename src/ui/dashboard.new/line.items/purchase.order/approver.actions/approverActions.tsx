@@ -26,13 +26,15 @@ import {
   STATUS_TYPES_LABEL,
 } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
-import Text from "../../../../components/Text";
+// import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
+import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
+import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { styles } from "./approverActions.styles";
 
@@ -191,7 +193,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                       noWrap
                     >
                       {!hoverItem && (
-                        <NormalStyleChip
+                        <RejectedNormalStyleChip
                           size="small"
                           color="primary"
                           icon={<RejectIcon />}
@@ -199,7 +201,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         />
                       )}
                       {hoverItem && (
-                        <HoverStyleChip
+                        <RejectedHoverStyleChip
                           color="primary"
                           size="small"
                           icon={<RejectSolidIcon />}
@@ -251,7 +253,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Grid>
                   )}
-                <Grid item={true}>
+                {/* <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -261,7 +263,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Text translation="your" />
                   </Typography>
-                </Grid>
+                </Grid> */}
                 <Grid item={true}>
                   <Link
                     href={documentVersionPath(docRevId || "", docDocumentId)}
@@ -279,7 +281,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     </Typography>
                   </Link>
                 </Grid>
-                {docRevName && (
+                {/* {docRevName && (
                   <Grid item={true}>
                     <Typography
                       component="span"
@@ -291,7 +293,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                       <Text translation="to" />
                     </Typography>
                   </Grid>
-                )}
+                )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
                     href={documentVersionPath(docRevId || "", docDocumentId)}

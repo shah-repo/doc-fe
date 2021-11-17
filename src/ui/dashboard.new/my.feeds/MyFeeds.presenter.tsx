@@ -20,6 +20,7 @@ import DirectApprovalActionItem from "../line.items/approvals/direct.request.own
 import DirectApprovalActionPRItem from "../line.items/approvals/direct.request.owner.actions/pending.review/pendingReview";
 import PendingReview from "../line.items/approvals/pending.review/pendingReview";
 import ARTaskApproval from "../line.items/approvals/task.approval/taskApproval";
+import ARApproverActions from "../line.items/approvals/approver.actions/ar.approver/approverActions";
 import CalibrationItem from "../line.items/calibration/calibrationItem";
 import DefaultLineItem from "../line.items/default/defaultLineItem";
 import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
@@ -327,32 +328,48 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
           case ActionTypes.APPROVAL_REQ_APPROVER:
           case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             return (
-              pendingAction?.docRevStatus &&
-              !["DRAFT", "WIP"].includes(pendingAction.docRevStatus) && (
-                <ARTaskApproval
-                  id={pendingAction.id}
-                  docDocumentId={pendingAction.docDocumentId}
-                  type={pendingAction.type}
-                  timestamp={getFormattedDateString(
-                    pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
-                  )}
-                  docId={pendingAction.docId}
-                  docRevId={pendingAction.docRevId}
-                  docRevOwnerName={pendingAction.docRevOwnerName}
-                  docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                  title={pendingAction.docRevName}
-                  onMouseHoverItem={onMouseHoverItem}
-                  hoverItemId={hoverItemId}
-                />
-              )
+              <ARTaskApproval
+                id={pendingAction.id}
+                arChangeRequestId={pendingAction.arChangeRequestId}
+                type={pendingAction.type}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                arId={pendingAction.arId}
+                docRevOwnerName={pendingAction.onwerName}
+                docRevOwnerAvatar={pendingAction.ownerAvatar}
+                title={pendingAction.arTitle}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
+          case ActionTypes.APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
+            return (
+              <ARApproverActions
+                id={pendingAction.id}
+                arChangeRequestId={pendingAction.arChangeRequestId}
+                type={pendingAction.type}
+                arId={pendingAction.arId}
+                arTitle={pendingAction.arTitle}
+                approvalStatusChanged={pendingAction.approvalStatusChanged}
+                approverName={pendingAction.approverName}
+                approverAvatar={pendingAction.approverAvatar}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
             );
           case ActionTypes.APPROVED_APPROVAL_REQUESTS:
           case ActionTypes.APPROVAL_REQ_OWNER:
             if (pendingAction.arStatus === "CLOSED") {
               return (
                 <ApprovalClosed
-                  id={pendingAction.arChangeRequestId}
+                  id={pendingAction.id}
+                  arChangeRequestId={pendingAction.arChangeRequestId}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
                   title={pendingAction?.arTitle}
@@ -370,7 +387,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             if (pendingAction.arStatus === "APPROVED") {
               return (
                 <ApprovalApproved
-                  id={pendingAction.arChangeRequestId}
+                  id={pendingAction.id}
+                  arChangeRequestId={pendingAction.arChangeRequestId}
                   type={pendingAction.type}
                   arId={pendingAction.arId}
                   title={pendingAction?.arTitle}

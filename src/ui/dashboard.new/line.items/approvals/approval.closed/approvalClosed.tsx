@@ -32,18 +32,19 @@ import { NormalStyleChip } from "./NormalStyleChipApprovalClosed";
 interface Props {
   id: string;
   type: string;
-  title: string | undefined;
-  arId: string | undefined;
+  title: string;
+  arId: string;
+  arChangeRequestId: string;
   arStatus: string;
-  timestamp: string | undefined;
-
+  timestamp: string;
   docRevs: any;
   hoverItemId: string;
-  onMouseHoverItem: (id: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  arChangeRequestId,
   arStatus,
   title,
   timestamp,
@@ -109,7 +110,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -126,7 +127,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
