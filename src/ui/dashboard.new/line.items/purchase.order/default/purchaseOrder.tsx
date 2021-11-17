@@ -196,32 +196,47 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     <Text translation="is" />
                   </Typography>
                 </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyStatus}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {!hoverItem && !open && (
-                      <NormalStyleChip
-                        size="small"
-                        color="primary"
-                        icon={<ApprovedIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
-                    {(hoverItem || open) && (
-                      <HoverStyleChip
-                        color="primary"
-                        size="small"
-                        icon={<ApprovedWhiteIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
-                      />
-                    )}
-                  </Typography>
-                </Grid>
+                {STATUS_TYPES_LABEL[status] && (
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyStatus}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {!hoverItem && !open && (
+                        <NormalStyleChip
+                          size="small"
+                          color="primary"
+                          icon={<ApprovedIcon />}
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                      {(hoverItem || open) && (
+                        <HoverStyleChip
+                          color="primary"
+                          size="small"
+                          icon={<ApprovedWhiteIcon />}
+                          label={STATUS_TYPES_LABEL[status]}
+                        />
+                      )}
+                    </Typography>
+                  </Grid>
+                )}
+                {!STATUS_TYPES_LABEL[status] && (
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyStatus}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               <Grid
                 container={true}

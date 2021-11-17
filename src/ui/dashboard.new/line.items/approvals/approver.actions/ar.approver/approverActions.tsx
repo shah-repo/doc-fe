@@ -1,13 +1,18 @@
 import {
   Grid,
   Link,
+  Collapse,
+  List,
   ListItemAvatar,
   ListItemText,
   Avatar,
+  IconButton,
+  Box,
   Typography,
 } from "@material-ui/core";
 import React from "react";
-
+import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
@@ -15,14 +20,18 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/im
 // import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
 import { Nullable } from "../../../../../../state/ducks/common/types";
+import { ReactComponent as PendingReviewItemIcon } from "../../../../../../assets/images/pending_review_nested.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
-// import Text from "../../../../../components/Text";
+import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";
+import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
+import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../../common/NormalStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../../common/StyledListItem";
+import { StyleTooltip } from "../../../common/StyleTooltip";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -33,6 +42,15 @@ interface Props {
   arTitle: string;
   approvalStatusChanged: string;
   timestamp: string;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   approverName: string;
   approverAvatar: Nullable<string>;
   hoverItemId: string;
@@ -44,6 +62,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   arChangeRequestId,
   approvalStatusChanged,
   arTitle,
+  docRevs,
   approverName,
   approverAvatar,
   timestamp,
@@ -54,6 +73,9 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 
   // const [pinHover, setPinHover] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
+
+  const [open, setOpen] = React.useState(false);
+  const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;
   // const handlePinClick = () => {
   //   setPinned(!pinned);
@@ -64,16 +86,31 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   // const onMouseLeavePinIcon = () => {
   //   setPinHover(false);
   // };
+  const handleClick = () => {
+    setOpen(!open);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
+  };
+  const onMouseHoverViewIcon = (id: string) => {
+    setViewHoverItem(id);
+  };
+  const onMouseLeaveViewIcon = () => {
+    setViewHoverItem("");
   };
   return (
     <>
       <StyledListItem
-        style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onMouseEnter={onMouseHoverListItem}
+        className={classes.listItem}
       >
+        {open ? (
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
+        ) : (
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
+        )}
         <ListItemAvatar>
           <Avatar
             className={classes.avatar}
@@ -266,6 +303,82 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )} */}
       </StyledListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List dense disablePadding className={classes.collapsedList}>
+          {docRevs.map((prItem, index) => (
+            <StyledListItem button className={classes.nested} key={index}>
+              <IconButton aria-label="listIcon">
+                <PendingReviewItemIcon />
+              </IconButton>
+              <ListItemText
+                id={prItem.docId}
+                primary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {prItem.name}
+                  </Typography>
+                }
+              />
+              <Box component="div">
+                {viewHoverItem !== prItem.docId && (
+                  <ViewIcon
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
+                  />
+                )}
+                {viewHoverItem === prItem.docId && (
+                  <StyleTooltip
+                    classes={{ tooltip: classes.customTooltipWidth }}
+                    title={
+                      <>
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.description.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.descriptionOfChange}
+                        </Typography>
+                        <br />
+                        <br />
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.justification.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.justificationOfChange}
+                        </Typography>
+                      </>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
+                  </StyleTooltip>
+                )}
+              </Box>
+            </StyledListItem>
+          ))}
+        </List>
+      </Collapse>
     </>
   );
 };

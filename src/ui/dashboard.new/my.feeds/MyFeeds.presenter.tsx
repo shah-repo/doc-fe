@@ -330,6 +330,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             return (
               <ARTaskApproval
                 id={pendingAction.id}
+                docRevs={pendingAction.docRevs}
                 arChangeRequestId={pendingAction.arChangeRequestId}
                 type={pendingAction.type}
                 timestamp={getFormattedDateString(
@@ -350,6 +351,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 id={pendingAction.id}
                 arChangeRequestId={pendingAction.arChangeRequestId}
                 type={pendingAction.type}
+                docRevs={pendingAction.docRevs}
                 arId={pendingAction.arId}
                 arTitle={pendingAction.arTitle}
                 approvalStatusChanged={pendingAction.approvalStatusChanged}

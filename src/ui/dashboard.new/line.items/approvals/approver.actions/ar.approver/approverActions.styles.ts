@@ -10,6 +10,31 @@ export const styles = makeStyles(() =>
       width: "35px",
       height: "35px",
     },
+    icon: {
+      width: "15px",
+    },
+    listItem: {
+      paddingLeft: "1px",
+    },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
+    nested: {
+      marginLeft: "32px",
+      borderLeft: `1px solid ${Colors.light_gray_blue}`,
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    customTooltipWidth: {
+      maxWidth: 500,
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */

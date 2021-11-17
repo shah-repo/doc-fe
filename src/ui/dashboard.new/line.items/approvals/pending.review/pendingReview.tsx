@@ -40,7 +40,15 @@ interface Props {
   timestamp: string | undefined;
   pendingApprovers: any[] | undefined;
   approvedApprovers: any[] | undefined;
-  docRevs: any;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -248,8 +256,8 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       >
                         {pendingApprovers !== undefined
                           ? pendingApprovers
-                            .map((approver) => approver.userName)
-                            .join(",")
+                              .map((approver) => approver.userName)
+                              .join(",")
                           : ""}
                       </Typography>
                     </Link>
@@ -357,7 +365,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     arrow
                   >
                     <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.id)}
+                      onClick={() => handleViewClick(prItem.docId)}
                       onMouseLeave={onMouseLeaveViewIcon}
                     />
                   </StyleTooltip>

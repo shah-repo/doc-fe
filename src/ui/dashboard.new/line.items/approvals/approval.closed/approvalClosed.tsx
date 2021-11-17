@@ -37,7 +37,15 @@ interface Props {
   arChangeRequestId: string;
   arStatus: string;
   timestamp: string;
-  docRevs: any;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -64,9 +72,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   // const handlePinClick = () => {
   //   setPinned(!pinned);
   // };
-  const handleViewClick = (id: string) => {
-    // setViewItem(id);
-  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -284,10 +289,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.id)}
-                      onMouseLeave={onMouseLeaveViewIcon}
-                    />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
                   </StyleTooltip>
                 )}
               </Box>
