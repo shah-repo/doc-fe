@@ -1,4 +1,5 @@
 import { createStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export default (theme: Theme) =>
   createStyles({
@@ -31,7 +32,7 @@ export default (theme: Theme) =>
       fontWeight: "normal",
       fontSize: "11px",
       lineHeight: "14px",
-      color: "#FFFFFF",
+      color: Colors.white,
     },
     nameStyle: {
       fontFamily: "Sora",
@@ -39,7 +40,7 @@ export default (theme: Theme) =>
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
-      color: "#FFFFFF",
+      color: Colors.white,
       overflow: "hidden",
       textOverflow: "ellipsis",
       maxWidth: "8rem",
