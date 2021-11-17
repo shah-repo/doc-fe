@@ -10,6 +10,8 @@ enum Colors {
   dark_gray = "#474747",
   platinum_gray = "#e3e3e3",
   font_gray = "#767B87",
+  mirage="#121B21",
+  bright_grey = "#32424E",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -38,9 +40,6 @@ enum Colors {
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
-  // Drawer color
-  mirage="#121B21",
-  bright_grey = "#32424E",
   latest_yellow_varient = "#FEAA2C",
 }
 
