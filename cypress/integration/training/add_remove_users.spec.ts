@@ -687,7 +687,7 @@ context("Add/Remove users from Training Curriculum", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+          .arrowType("Training Curriculum test{downarrow}{enter}");
       });
     });
 
@@ -718,7 +718,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").type("5");
+      cy.get("[name=training-validity]").arrowType("5");
     });
 
     it("Select Approver", () => {
@@ -726,10 +726,10 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[3].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[4].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[3].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[4].name}{downarrow}{enter}`);
     });
 
     it("Save training", () => {
@@ -753,7 +753,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
   context("Complete trainings", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it(`Open and complete training for ${USERS[1].name}`, () => {
@@ -811,7 +811,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Add new User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[6].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[6].name}{downarrow}{enter}`);
     });
 
     it(`Remove users ${USERS[1].name} and ${USERS[3].name}`, () => {
@@ -832,7 +832,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("Select Approver", () => {
       cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").click({ force: true });
+        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick({ force: true });
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 

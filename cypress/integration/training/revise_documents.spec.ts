@@ -688,7 +688,7 @@ context("Revising Documents assigned as Training material", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+          .arrowType("Training Curriculum test{downarrow}{enter}");
       });
     });
 
@@ -719,7 +719,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Enter training refresh period days", () => {
-      cy.get("[name=training-validity]").type("5");
+      cy.get("[name=training-validity]").arrowType("5");
     });
 
     it("Select Approver", () => {
@@ -727,8 +727,8 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
     });
 
     it("Save training", () => {
@@ -752,7 +752,7 @@ context("Revising Documents assigned as Training material", () => {
 
   context("Complete training", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it(`Open and complete training for ${USERS[1]}`, () => {
@@ -767,7 +767,7 @@ context("Revising Documents assigned as Training material", () => {
 
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").click();
+      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
     it(`Training record for ${USERS[1].name} should be present`, () => {
@@ -848,7 +848,7 @@ context("Revising Documents assigned as Training material", () => {
 
   context(`Verify training notification for ${USERS[1].name}`, () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").click();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
     it("Verify training notification for doc with rev 2 should be present", () => {
