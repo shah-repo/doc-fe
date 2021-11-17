@@ -1,0 +1,33 @@
+import { TRAINING_LIST } from "./constants";
+
+export enum TrainingStatusTypes {
+  OVERDUE = "OVERDUE",
+  DUE = "DUE",
+  COMPLETED = "COMPLETED",
+  ASSIGNED = "ASSIGNED",
+}
+
+interface User {
+  employeeId: string;
+  userName: string;
+}
+export interface Training {
+  trainingStatus: string;
+  docId: string;
+  docDocumentId: string;
+  docRevName: string;
+  dueOn?: string | undefined;
+  trainingRecordId?: string | undefined;
+  trId?: string | undefined;
+  docRevId: string;
+  id: string;
+  type: string;
+  timestamp: string;
+  pendingTrainees?: User[] | undefined;
+}
+export interface TrainingListAction {
+  type: typeof TRAINING_LIST;
+  payload: Training[];
+}
+
+export type TrainingState = Training[];

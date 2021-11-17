@@ -13,6 +13,7 @@ import documents from "./ducks/documents";
 import pageDetails from "./ducks/pageDetails";
 import supplierSurvey from "./ducks/supplierSurvey";
 import tableSearch from "./ducks/tableSearch";
+import dashboardNew from "./ducks/dashboard.new";
 import userManagement from "./ducks/userManagement";
 import migrations from "./migrations";
 
@@ -55,6 +56,7 @@ const appReducer = combineReducers({
   changeRequests,
   documentRevisions,
   dashboard,
+  dashboardNew,
   documentType: persistReducer(documentTypePersistConfig, documentType),
   company: persistReducer(companyPersistConfig, company),
   tableSearch: persistReducer(tableSearchPersistConfig, tableSearch),

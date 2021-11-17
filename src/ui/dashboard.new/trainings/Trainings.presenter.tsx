@@ -7,29 +7,12 @@ import {
   MomentFormats,
 } from "../../../common/utils/date";
 import NewTraining from "../line.items/training/new.training/newTraining";
+import { useSelector } from "react-redux";
+import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./Trainings.styles";
 
-interface Props {
-  trainingItems: {
-    id: string;
-    docDocumentId: string;
-    docId: string;
-    docRevId: string;
-    docRevName: string;
-    dueOn?: string;
-    trainingRecordId?: string;
-    trId?: string;
-    type: string;
-    trainingStatus: string;
-    timestamp: string;
-    pendingTrainees?: any;
-  }[];
-}
-
-const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
-  trainingItems,
-}) => {
+const TrainingsLineItemPresenter: React.FunctionComponent = () => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
@@ -38,6 +21,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItemId("");
   };
+  const trainingItems = useSelector(trainingSelectors.trainingList);
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
