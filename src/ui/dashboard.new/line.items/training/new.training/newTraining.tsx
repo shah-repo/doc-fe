@@ -301,7 +301,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       >
         <TrainingEmailModal
           handleEmailModelClose={handleEmailModelClose}
-          dueApprovers={pendingTrainees}
+          pendingTrainees={pendingTrainees}
+          isOverDue={trainingStatus === TrainingStatus.OVERDUE}
         />
       </Modal>
     </>

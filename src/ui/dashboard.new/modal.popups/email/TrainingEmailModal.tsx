@@ -25,29 +25,29 @@ import { styles } from "./TrainingEmailModal.styles";
 
 interface TrainingEmailModalProps {
   handleEmailModelClose: () => void;
-  dueApprovers?: any;
-  overdueApprovers?: any;
-  timestamp?: any;
+  pendingTrainees?: any;
+  timestamp?: string | undefined;
+  isOverDue?: boolean;
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   handleEmailModelClose,
-  dueApprovers,
-  overdueApprovers,
+  pendingTrainees,
+  isOverDue,
   timestamp,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openOverdue, setOpenOverdue] = React.useState(true);
-  const [openDue, setOpenDue] = React.useState(false);
+  // const [openDue, setOpenDue] = React.useState(false);
 
   const handleClickOverdue = () => {
     setOpenOverdue(!openOverdue);
   };
 
-  const handleClickDue = () => {
-    setOpenDue(!openDue);
-  };
+  // const handleClickDue = () => {
+  //   setOpenDue(!openDue);
+  // };
 
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
@@ -157,14 +157,17 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                   <Typography
                     variant="h2"
                     component="h2"
-                    className={classes.overduetitle}
+                    className={
+                      isOverDue ? classes.overduetitle : classes.duetitle
+                    }
                     noWrap
                   >
-                    <Text translation="modal.title.overdue" />
-                    {` `}({overdueApprovers?.length || 0})
+                    {isOverDue && <Text translation="modal.title.overdue" />}
+                    {!isOverDue && <Text translation="modal.title.dueindays" />}
+                    {` `}({pendingTrainees?.length || 0})
                   </Typography>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Typography
                     variant="h2"
                     component="h2"
@@ -174,11 +177,12 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     <Text translation="email.last.sent" />:{" "}
                     {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
                   </Typography>
-                </Grid>
+                </Grid> */}
 
                 <Grid item>
                   <Button
                     onClick={handleApiAlertModelOpen}
+                    disabled
                     className={classes.emailbutton}
                   >
                     <Text translation="email.button.title" />
@@ -203,7 +207,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           className={classes.listrootdue}
         >
           <List dense disablePadding>
-            {overdueApprovers?.map((due, index) => (
+            {pendingTrainees?.map((due, index) => (
               <StyledListItem button key={index}>
                 <Avatar
                   className={classes.listitemicon}
@@ -227,7 +231,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           </List>
         </Collapse>
       </Box>
-      <Box component="div" className={classes.duesoonBox}>
+      {/* <Box component="div" className={classes.duesoonBox}>
         <StyledListItem button>
           {openDue ? (
             <CollapseIcon
@@ -251,7 +255,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     noWrap
                   >
                     <Text translation="modal.title.dueindays" />
-                    {` `}({dueApprovers?.length || 0})
+                    {` `}({pendingTrainees.length || 0})
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -281,7 +285,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           className={classes.listrootduesoon}
         >
           <List dense disablePadding>
-            {dueApprovers.map((due, index) => (
+            {pendingTrainees.map((due, index) => (
               <StyledListItem button key={index}>
                 <Avatar
                   className={classes.listitemicon}
@@ -304,7 +308,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             ))}
           </List>
         </Collapse>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
