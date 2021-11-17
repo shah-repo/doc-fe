@@ -102,7 +102,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       <Box paddingBottom="20px">
         <BottomLogo />
       </Box>
-
     </Drawer>
   );
 };
