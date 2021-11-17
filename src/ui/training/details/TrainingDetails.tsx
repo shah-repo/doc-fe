@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, DialogContent, DialogTitle, Grid, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -21,13 +21,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
     const classes = styles();
 
     return (
-      <Dialog
-        disableBackdropClick={true}
-        open={dialog.isOpen}
-        classes={{ paper: classes.dialogContent }}
-        fullWidth
-        maxWidth="md"
-      >
+      <>
         <IconButton className={classes.closeButton} onClick={dialog.close}>
           <CloseIcon />
         </IconButton>
@@ -52,7 +46,9 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   <Text translation="training.doc.id.rev" />
                 </Typography>
                 <Box className={classes.itemContentBlue}>
-                  {training.trainingPlan?.document.docId}
+                  {training.trainingPlan?.document.docId}&nbsp;
+                  Rev &nbsp;
+                  {training.documentRevision?.displayRevision}
                 </Box>
               </Grid>
               <Grid item xs={12} className={classes.item}>
@@ -70,7 +66,10 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   <Text translation="training.acknowledge.completed.statement"/>
                 </span>
                 <span className={classes.itemContentBlue}>
-             &nbsp; {training.trainingPlan?.document.docId}
+                  &nbsp;
+                  {training.trainingPlan?.document.docId}&nbsp;
+                  Rev &nbsp;
+                  {training.documentRevision?.displayRevision}
                 </span>
               </Grid>
               <Grid item xs={12} className={classes.item}>
@@ -80,7 +79,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
                   </span> | Trainee &nbsp;
                   { training.completedAt &&
                     <span>
-                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.MonthDateYearAlt)}
+                    | &nbsp; {getFormattedDateString(training.completedAt, MomentFormats.DateTime)}
                     </span>
                   }
                 </Box>
@@ -93,7 +92,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
             </Grid>
           </Grid>
         </DialogContent>
-      </Dialog>
+      </>
     );
   };
 
