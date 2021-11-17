@@ -39,7 +39,11 @@ interface Props {
   purchaseOrderSupplierDocId: string;
   status: string;
   timestamp: string;
-  purchaseOrderAttachments: any[];
+  purchaseOrderAttachments: {
+    name: string;
+    type: string;
+    id: string;
+  }[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
   purchaseOrderCurrency: string;

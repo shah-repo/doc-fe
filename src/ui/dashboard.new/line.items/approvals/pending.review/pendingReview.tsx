@@ -20,6 +20,7 @@ import { ReactComponent as PendingReviewIcon } from "../../../../../assets/image
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
@@ -38,8 +39,24 @@ interface Props {
   arId: string | undefined;
   arStatus: string;
   timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
-  approvedApprovers: any[] | undefined;
+  pendingApprovers:
+    | {
+        userName: string;
+        employeeId: string;
+        userAvatar: Nullable<string>;
+        userInitialColor: string;
+        approvalStatus: string;
+      }[]
+    | undefined;
+  approvedApprovers:
+    | {
+        userName: string;
+        employeeId: string;
+        userAvatar: Nullable<string>;
+        userInitialColor: string;
+        approvalStatus: string;
+      }[]
+    | undefined;
   docRevs: {
     documentRevisionId: string;
     documentId: string;

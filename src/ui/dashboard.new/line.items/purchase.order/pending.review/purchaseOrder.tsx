@@ -18,6 +18,7 @@ import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
@@ -43,9 +44,25 @@ interface Props {
   purchaseOrderSupplierDocId: string;
   status: string;
   timestamp: string;
-  docRevPendingApprovals: any[];
-  docRevApprovedApprovals: any[];
-  purchaseOrderAttachments: any[];
+  docRevPendingApprovals: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  docRevApprovedApprovals: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  purchaseOrderAttachments: {
+    name: string;
+    type: string;
+    id: string;
+  }[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
   purchaseOrderCurrency: string;

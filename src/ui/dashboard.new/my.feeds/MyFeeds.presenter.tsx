@@ -27,7 +27,8 @@ import PurchaseOrder from "../line.items/purchase.order/default/purchaseOrder";
 import POApproverActions from "../line.items/purchase.order/approver.actions/approverActions";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
 import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.review/purchaseOrder";
-import POTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
+import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
+import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
 import { styles } from "./MyFeeds.styles";
 
@@ -96,9 +97,48 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               />
             );
           case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
-          case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
             return (
               <POTaskApproval
+                id={pendingAction.id}
+                docDocumentId={pendingAction.docDocumentId}
+                approvalId={pendingAction.approvalId}
+                type={pendingAction.type}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                purchaseOrderSupplierDocRevId={
+                  pendingAction.purchaseOrderSupplierDocRevId
+                }
+                purchaseOrderSupplierDocId={
+                  pendingAction.purchaseOrderSupplierDocId
+                }
+                purchaseOrderTotalAmount={
+                  pendingAction.purchaseOrderTotalAmount
+                }
+                purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                purchaseOrderDescription={
+                  pendingAction.purchaseOrderDescription
+                }
+                purchaseOrdeLineItemCount={
+                  pendingAction.purchaseOrdeLineItemCount
+                }
+                purchaseOrderAttachments={
+                  pendingAction.purchaseOrderAttachments
+                }
+                purchaseSupplierName={pendingAction.purchaseSupplierName}
+                docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
+                docRevOwnerName={pendingAction.docRevOwnerName}
+                docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                docRevName={pendingAction.docRevName}
+                onMouseHoverItem={onMouseHoverItem}
+                hoverItemId={hoverItemId}
+              />
+            );
+          case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
+            return (
+              <NONPOTaskApproval
                 id={pendingAction.id}
                 docDocumentId={pendingAction.docDocumentId}
                 approvalId={pendingAction.approvalId}

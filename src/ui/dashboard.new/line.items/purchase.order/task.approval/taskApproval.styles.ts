@@ -12,6 +12,42 @@ export const styles = makeStyles(() =>
     link: {
       color: Colors.black,
     },
+    icon: {
+      width: "15px",
+    },
+    listItem: {
+      paddingLeft: "1px",
+    },
+    linkText: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+      color: Colors.navy,
+    },
+    linkTextColor: {
+      color: Colors.navy,
+    },
+    attachmentIcon: {
+      paddingTop: "2px",
+    },
+    nested: {
+      marginLeft: "32px",
+      borderLeft: `1px solid ${Colors.light_gray_blue}`,
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
+    },
+    typographyChildrenBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 700,
+    },
+    gridContainer: {
+      paddingLeft: "14px",
+      maxWidth: "calc(100% - 14px)",
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */
@@ -32,6 +68,7 @@ export const styles = makeStyles(() =>
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
+      "& > p": { margin: "0px" },
     },
     typographyBold: {
       fontSize: "14px",
