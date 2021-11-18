@@ -8,7 +8,7 @@ import {
   List,
   ListItemText,
   Modal,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -18,7 +18,7 @@ import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/em
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../../common/utils/date";
 import { emailAllActions } from "../../../../state/ducks/email.all";
 import { toastError } from "../../../components/notifications";
@@ -60,7 +60,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
     setApiAlertModel(true);
     setTimeout(() => {
       handleApiAlertModelClose();
-    }, 1000);
+    }, 2000);
   };
 
   const handleApiAlertModelClose = () => {
@@ -131,7 +131,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             className={classes.confmesgdate}
           >
             <Text translation="sent" />:{" "}
-            {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
+            {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
       </Grid>
@@ -254,84 +254,6 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           </List>
         </Collapse>
       </Box>
-      {/* <Box component="div" className={classes.duesoonBox}>
-        <StyledListItem button>
-          {openDue ? (
-            <CollapseIcon
-              className={classes.iconupdown}
-              onClick={handleClickDue}
-            />
-          ) : (
-            <ExpandIcon
-              className={classes.iconupdown}
-              onClick={handleClickDue}
-            />
-          )}
-          <ListItemText
-            primary={
-              <Grid container justify="space-between" alignItems="center">
-                <Grid item>
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className={classes.duetitle}
-                    noWrap
-                  >
-                    <Text translation="modal.title.dueindays" />
-                    {` `}({pendingTrainees.length || 0})
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Button
-                    onClick={handleApiAlertModelOpen}
-                    className={classes.emailbutton}
-                  >
-                    <Text translation="email.button.title" />
-                  </Button>
-                  <Modal
-                    open={apiAlertModelOpen}
-                    onClose={handleApiAlertModelClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                  >
-                    {apiAlertModelbody}
-                  </Modal>
-                </Grid>
-              </Grid>
-            }
-          />
-        </StyledListItem>
-        <Collapse
-          in={openDue}
-          timeout="auto"
-          unmountOnExit
-          className={classes.listrootduesoon}
-        >
-          <List dense disablePadding>
-            {pendingTrainees.map((due, index) => (
-              <StyledListItem button key={index}>
-                <Avatar
-                  className={classes.listitemicon}
-                  alt={due.userName}
-                  src="."
-                />
-                <ListItemText
-                  id={due.employeeId}
-                  primary={
-                    <Typography
-                      component="span"
-                      variant="h2"
-                      className={classes.listitemtext}
-                    >
-                      {due.userName}
-                    </Typography>
-                  }
-                />
-              </StyledListItem>
-            ))}
-          </List>
-        </Collapse>
-      </Box> */}
     </Box>
   );
 };
