@@ -17,5 +17,8 @@ export enum NavigationItems{
   INSPECTION = "inspection",
   DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
   SUPPLIER_MANAGEMENT = "supplierManagement",
-  LHR = "lhr"
+  LHR = "lhr",
+  TRAINING= "training",
+  TRAINING_RECORDS= "trainingRecords",
+  TRAINING_CURRICULUMS= "trainingCurriculums",
 }

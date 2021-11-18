@@ -26,10 +26,9 @@ export enum ReleasedDateOptions {
 }
 
 export enum CompletedOnDateOptions {
-  NEXT_WEEK = "Next 7 days",
-  NEXT_TWO_WEEKS = "Next 14 days",
-  NEXT_MONTH = "Next 30 days",
+  NEXT_WEEK = "Due in 7 days",
   PENDING = "Pending",
+  OVERDUE = "Overdue",
 }
 
 // Common
@@ -62,4 +61,5 @@ export interface ReferenceSummary {
 
 export interface TrainingControlProps extends DataProps<TrainingRecord[]> {
   documentRevisionId: string;
+  docDetails: Partial<DocumentRevision>;
 }

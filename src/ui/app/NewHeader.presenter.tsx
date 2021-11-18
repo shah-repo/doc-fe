@@ -57,11 +57,17 @@ const Header: React.FunctionComponent<Props> = ({
       >
         <Grid item={true} zeroMinWidth>
           <Typography noWrap className={classes.toolbarTitle}>
-            <Text translation="header.welcome.back" />,&nbsp;
+            <Text translation="header.welcome.back" />
+            ,&nbsp;
             <b className={classes.toolbarTitleName}>{name}!</b>
           </Typography>
         </Grid>
-        <Grid item={true} className={classes.wrapContainer}>
+        <Grid
+          item={true}
+          className={classes.wrapContainer}
+          justify="flex-start"
+          alignItems="center"
+        >
           <Box alignItems="center">
             {canToggleCustomLabels && (
               <FormControlLabel
@@ -89,7 +95,7 @@ const Header: React.FunctionComponent<Props> = ({
                 }
                 classes={{ root: classes.headerButton }}
               >
-                <UserAvatar avatar={avatar} />
+                <UserAvatar {...{ avatar, name }} />
                 <Typography
                   id="Header-welcomeText"
                   variant="caption"

@@ -23,6 +23,18 @@ let createdRecivableFormDocument;
 let createdReceivable1;
 
 context("Autosave on blur", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -631,7 +643,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
-      cy.fbGroupOptions("option1");
+      cy.fbGroupOptions("option1", "option2", "option3");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -804,6 +816,43 @@ context("Autosave on blur", () => {
       });
     });
 
+    it("Add Instructions Media upload", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+      cy.fbEnterNameValue({ name: "label", value: "instructions-media-upload" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    it("Add Evidence Media upload", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbEnterNameValue({ name: "label", value: "evidence-media-upload" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    it("Add image to Instructions Media Upload", () => {
+      cy.contains("instructions-media-upload").parentsUntil("li")
+        .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+        cy.elUploadAttachment({
+          fileName: "image.jpg",
+          el: "fb-mediaalbum-upload-instructions-media-upload",
+        });
+      });
+    });
+
+    it("Delete image from Instructions Media Upload", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+        cy.get(`[id^="fb-mediaalbum-upload-instructions-media-upload-"]`)
+          .parent().find("button").eq(3).click({ force: true });
+      });
+    });
+
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -834,8 +883,30 @@ context("Autosave on blur", () => {
     });
 
     it("Check Checkbox field and check for autosave", () => {
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option1");
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option2");
+      cy.wait("@response", { responseTimeout: 65 * 1000 });
+    });
+
+    it("Check Checkbox values are saved", () => {
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.reload();
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").eq(0).should("be.checked");
+      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").eq(1).should("be.checked");
+    });
+
+    it("Uncheck Checkbox field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check();
+        cy.get("[name^=fb-checkbox-group-]>label>span>span>input").uncheck("option1");
         cy.unClick();
       });
     });
@@ -843,6 +914,14 @@ context("Autosave on blur", () => {
     it("Select Autocomplete field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+        cy.unClick();
+      });
+    });
+
+    it("Remove Autocomplete field and check for autosave", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy^=fb-autocomplete-]").click();
+        cy.get("[name^=fb-autocomplete-]>div>div:nth-child(1)>div>div>button").eq(0).click();
         cy.unClick();
       });
     });
@@ -873,6 +952,14 @@ context("Autosave on blur", () => {
       });
     });
 
+    it("Select another value for select field and check for autosave", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[id^=\"mui-component-select-fb-select-field-\"]").arrowClick();
+        cy.get("[data-value=\"option2\"]").arrowClick();
+        cy.unClick();
+      });
+    });
+
     it("Select radiobutton and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[name^=\"fb-radiobutton-group-\"]").first().arrowClick();
@@ -880,25 +967,17 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("Upload attachment and check for autosave", () => {
-      cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
-        });
-      });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.unClick();
-      });
-    });
-
     it("Enter quantity value and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[name^=\"fb-quantity-\"]").arrowType("2");
+
+        cy.get("[data-cy=fb-quantity]").arrowClick();
+      });
+    });
+
+    it("Edit quantity value and check for autosave", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=\"fb-quantity-\"]").clear().arrowType("3");
 
         cy.get("[data-cy=fb-quantity]").arrowClick();
       });
@@ -991,33 +1070,146 @@ context("Autosave on blur", () => {
     });
 
     it("Select Approval and check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.unClick();
       });
     });
 
-    // //TODO: Uncomment when Implementation task doesn't delete title ENC-7359
+    it("Upload attachment and check for autosave", () => {
+      cy.fixture("test.docx").then((fileContent) => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+            fileContent: fileContent.toString(),
+            fileName: "test.docx",
+            mimeType: "*",
+            filePath: `fixtures/test.docx`,
+          });
+        });
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.unClick();
+      });
+    });
 
-    // it("Add Implementation task and check for autosave", () => {
-    //   cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
-    //   cy.get("[data-cy=\"title\"]").arrowType("Task One");
-    //   cy.get("[data-cy=\"description\"]").eq(1).next().arrowType("Task Description");
-    //   cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
-    //   cy.xpath("//input[@name]/ ../div/button").eq(1).arrowClick();
-    //   // eslint-disable-next-line max-len
-    //   cy.xpath(
-    // "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
-    // ).last()
-    //     .click();
-    //   cy.get("button[data-cy=\"fb-control-btn\"]").eq(7).arrowClick({ force: true });
-    // });
+    it("Add Implementation task and check for autosave", () => {
+      cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
+      cy.get("[data-cy=\"title\"]").arrowType("Task One");
+      cy.get("#fb-mpiprocedure-ref-description").arrowClick({ force: true }).arrowType("Task Description");
+      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
+      cy.get("[name=\"dueDate\"]").parent().find("button").arrowClick({ force: true });
+      // eslint-disable-next-line max-len
+      cy.xpath(
+        "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
+      ).last().click();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostTasks], () => {
+        cy.get("button[data-cy=\"fb-control-btn\"]").eq(8).arrowClick({ force: true });
+      });
+    });
 
     it("Select REQ and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy^=\"fb-select-doc-\"]").arrowType("FM-00001{downarrow}{enter}");
         cy.unClick();
       });
+    });
+
+    it("Delete Upload attachment and check for autosave", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).parent().parent()
+          .find("button").first().click({ force: true });
+      });
+    });
+  });
+
+  context("Verify autosave of radiobutton change while Date autosave is in process", () => {
+    it("Select Date", () => {
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
+      cy.xpath("//input[@name]/ ../div/button").arrowClick();
+      // eslint-disable-next-line max-len
+      cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]")
+        .last().arrowClick();
+    });
+
+    it("While autosaving, check radiobutton", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[name^=\"fb-radiobutton-group-\"]").last().arrowClick();
+      cy.wait("@response", { responseTimeout: 90 * 1000 });
+    });
+  });
+
+  context("Verify autosave of text editor change while TextField autosave is in process", () => {
+    it("Fill TextField", () => {
+      cy.progressBarShouldNotExist();
+      cy.get("[name^=fb-textfield-]").clear().arrowType("New Test field");
+    });
+
+    it("While autosaving, fill text editor field", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[data-cy^=fb-text-editor-]>div>div>div>div>div[contenteditable]>div")
+        .click({ force: true }).arrowType("text editor", { force: true });
+
+      cy.wait("@response", { responseTimeout: 90 * 1000 });
+    });
+  });
+
+  context("Verify autosave of quantity change while TextField autosave is in process", () => {
+    it("Fill TextField", () => {
+      cy.progressBarShouldNotExist();
+      cy.get("[name^=fb-textfield-]").clear().arrowType("Testing field while quantity is changed");
+    });
+
+    it("While autosaving, edit quantity field", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[name^=\"fb-quantity-\"]").clear().arrowType("3");
+      cy.get("[data-cy=fb-quantity]").arrowClick();
+
+      cy.wait("@response", { responseTimeout: 90 * 1000 });
+    });
+  });
+
+
+  context("Verify autosave of autocomplete change while TextField autosave is in process", () => {
+    it("Fill TextField", () => {
+      cy.progressBarShouldNotExist();
+      cy.get("[name^=fb-textfield-]").clear().arrowType("Testing field while autocomplete is selected");
+    });
+
+    it("While autosaving, edit autocomplete field", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+        req.reply((res) => {
+          res.setDelay(100);
+          res.setThrottle(1);
+        });
+      }).as("response");
+
+      cy.unClick();
+      cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+      cy.unClick();
+
+      cy.wait("@response", { responseTimeout: 90 * 1000 });
     });
   });
 });

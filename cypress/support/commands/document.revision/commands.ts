@@ -52,6 +52,13 @@ declare global {
       drVerifyFirstDocumentRevisionList(params: { revision: string }): Chainable<Subject>;
       drApproveAndReleaseDocumentWithSelectingApprover(users: string[], params?: { toastifyExists: boolean }): Chainable<Subject>;
       drClickUpgradeForm(): Chainable<Subject>;
+      drVerifyTitle(params: { title: string }): Chainable<Subject>;
+      drVerifyDescription(params: { description: string }): Chainable<Subject>;
+      drPatchDocType(params: {
+        docTypeId: string;
+        employeeId: string;
+        sessionId: string;
+        payload: any; }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -464,6 +471,8 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRevOwner, () => {
     cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
@@ -772,3 +781,29 @@ Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number
       cy.wrap(actual).should("deep.eq", cellContents.sort());
     });
 });
+
+Cypress.Commands.add("drVerifyTitle", (params: {title: string}) => {
+  cy.get("#Title-field").find("input").should("have.attr", "value", params.title);
+});
+
+Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
+  cy.get("[data-cy=\"RichTextEditor.description\"]").find("span[data-text]").should("have.text", params.description);
+});
+
+Cypress.Commands.add("drPatchDocType", (params: {
+  docTypeId: string;
+  employeeId: string;
+  sessionId: string;
+  payload: any; }) =>
+{
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/document_type/${params.docTypeId}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    body: params.payload,
+  }).then((response) => response ? response.body : {})
+    .then((response) => JSON.stringify(response));
+});
+

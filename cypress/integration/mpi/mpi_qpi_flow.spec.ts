@@ -342,32 +342,90 @@ context("Mpi/Qpi flow", () => {
           cy.drClickCreateDocumentWithApiCall();
         });
 
+        it("Turn on autosave", () => {
+          cy.cmpTurnOnAutosave();
+        });
+
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
         });
 
-        context("Fill step #1", () => {
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        context("Fill step #1 and check autosave", () => {
+          it("Add attachment and check autosave", () => {
+            cy.contains("Step #1").parentsUntil("li")
+              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+              cy.elUploadAttachment({
+                fileName: "image.jpg",
+                el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+              });
+            });
           });
 
-          it("Add 'Material one' to step #1", () => {
+          it("While autosaving, fill step #1 description and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+            cy.wait("@response");
+          });
+
+          it("Delete attachment and check autosave", () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get(`[id="fb-mediaalbum-upload-mpi-procedure-built-in.attachments"]`).parent()
+                .find("button").eq(3).click({ force: true });
+            });
+          });
+
+          it("Add 'Material one' to step #1 and check autosave", () => {
             cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
           });
 
-          it("Add 'Equipment one' to step #1", () => {
+          it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
             cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+            cy.wait("@response");
+          });
+
+          it("While autosaving, delete Material and check for autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
+              .find("button").last().click();
+            cy.wait("@response");
+          });
+        });
+
+        context("Refresh page and check data should exist", () => {
+          it("Refresh the page", () => {
+            cy.reload();
+          });
+
+          it("Step description should be exist", () => {
+            cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
+              .should("have.text", "Description of step one");
+          });
+
+          it("Equipment should be exist", () => {
+            cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
+              .should("have.text", "ET-00003 - Equipment one");
           });
         });
 
         context("Release MPI and verify state", () => {
-          it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
-          });
-
           it("Approve and release MPI document", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
               cy.drApproveAndReleaseDocumentWithoutSelectingForm();
