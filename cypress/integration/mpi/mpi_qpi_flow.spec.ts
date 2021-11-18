@@ -355,7 +355,7 @@ context("Mpi/Qpi flow", () => {
           it("Add attachment and check autosave", () => {
             cy.contains("Step #1").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.PatchDocRev], () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
               cy.elUploadAttachment({
                 fileName: "image.jpg",
                 el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
@@ -363,22 +363,15 @@ context("Mpi/Qpi flow", () => {
             });
           });
 
-          it("Fill step #1 description and check autosave", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-            });
-          });
-
-          it("Add 'Material one' to step #1 and check autosave", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-            });
-          });
-
-          it("Add 'Equipment one' to step #1 and check autosave", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-            });
+          it("While autosaving, fill step #1 description and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+            cy.wait("@response");
           });
 
           it("Delete attachment and check autosave", () => {
@@ -388,11 +381,31 @@ context("Mpi/Qpi flow", () => {
             });
           });
 
-          it("Delete Material and check for autosave", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
-                .find("button").last().click();
-            });
+          it("Add 'Material one' to step #1 and check autosave", () => {
+            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          });
+
+          it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+            cy.wait("@response");
+          });
+
+          it("While autosaving, delete Material and check for autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
+              .find("button").last().click();
+            cy.wait("@response");
           });
         });
 

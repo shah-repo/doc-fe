@@ -105,6 +105,21 @@ Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string;
   });
 });
 
+Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) => {
+  cy.fixture(`bulk.create/${params.fileName}`, "binary").then((fileContent) => {
+    cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
+      cy.get("input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
+        fileContent: Cypress.Blob.binaryStringToBlob(fileContent,
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+        mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        fileName: params.fileName,
+        encoding: "utf8",
+        lastModified: new Date().getTime(),
+      });
+    });
+  });
+});
+
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
@@ -371,21 +386,6 @@ Cypress.Commands.add("elDownloadFile", (params: {fileName: string; saveFileName:
       url: fileUrl,
       directory: "cypress/downloads",
       fileName: params.saveFileName,
-    });
-  });
-});
-
-Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) => {
-  cy.fixture(`bulk.create/${params.fileName}`, "binary").then((fileContent) => {
-    cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
-        fileContent: Cypress.Blob.binaryStringToBlob(fileContent,
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-        mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        fileName: params.fileName,
-        encoding: "utf8",
-        lastModified: new Date().getTime(),
-      });
     });
   });
 });

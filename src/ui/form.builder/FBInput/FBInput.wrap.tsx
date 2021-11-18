@@ -89,7 +89,6 @@ export const withFBInput = <T extends FBInputProps>(
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
-    const isDesignMode = workspaceState?.isMode("design") || workspaceState?.isMode("formDesign");
 
     useEffect(() => {
       includeNotes =
@@ -107,64 +106,6 @@ export const withFBInput = <T extends FBInputProps>(
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
     isInputOwner = workspaceState?.getIsInputOwner(name);
-
-    const setCommonDefaultValues = (initialValues: Dictionary<any> | null) => {
-      // This sets shared default values for all of the fields
-      if (!initialValues || isEmpty(initialValues)) {
-        return;
-      }
-      const {
-        hidden,
-        formValuesRules,
-        outputDisabled,
-        rulesObject,
-        deleted,
-        deleteInFormDisabled,
-        validationMode,
-        sampleItemsIndicator,
-        validationAttribute,
-        rules,
-        applicableOn,
-        applicableValidationSchema,
-      } = initialValues || {};
-
-      if (!hidden) {
-        formState?.setFieldValue("hidden", COMMON_INITIAL_VALUES.hidden, withState, omitFormValue);
-      }
-      if (!formValuesRules) {
-        formState?.setFieldValue("formValuesRules", COMMON_INITIAL_VALUES.formValuesRules, withState, omitFormValue);
-      }
-      if (!outputDisabled) {
-        formState?.setFieldValue("outputDisabled", COMMON_INITIAL_VALUES.outputDisabled, withState, omitFormValue);
-      }
-      if (!rulesObject) {
-        formState?.setFieldValue("rulesObject", COMMON_INITIAL_VALUES.rulesObject, withState, omitFormValue);
-      }
-      if (!deleted) {
-        formState?.setFieldValue("deleted", COMMON_INITIAL_VALUES.deleted, withState, omitFormValue);
-      }
-      if (!deleteInFormDisabled) {
-        formState?.setFieldValue("deleteInFormDisabled", COMMON_INITIAL_VALUES.deleteInFormDisabled, withState, omitFormValue);
-      }
-      if (!validationMode) {
-        formState?.setFieldValue("validationMode", COMMON_INITIAL_VALUES.validationMode, withState, omitFormValue);
-      }
-      if (!sampleItemsIndicator) {
-        formState?.setFieldValue("sampleItemsIndicator", COMMON_INITIAL_VALUES.sampleItemsIndicator, withState, omitFormValue);
-      }
-      if (!validationAttribute) {
-        formState?.setFieldValue("validationAttribute", COMMON_INITIAL_VALUES.validationAttribute, withState, omitFormValue);
-      }
-      if (!rules) {
-        formState?.setFieldValue("rules", COMMON_INITIAL_VALUES.rules, withState, omitFormValue);
-      }
-      if (!applicableOn) {
-        formState?.setFieldValue("applicableOn", COMMON_INITIAL_VALUES.applicableOn, withState, omitFormValue);
-      }
-      if (!applicableValidationSchema) {
-        formState?.setFieldValue("applicableValidationSchema", COMMON_INITIAL_VALUES.applicableValidationSchema, withState, omitFormValue);
-      }
-    };
 
     const setSpecificDefaultValue = (
       initialValues: Dictionary<any> | null,
@@ -243,7 +184,6 @@ export const withFBInput = <T extends FBInputProps>(
         },
       };
       const transDefault = (value[type || ""] || value.default)();
-      isDesignMode && setCommonDefaultValues(formState.initialValues);
 
       (name === "placeholder") && setSpecificDefaultValue(formState.initialValues, "placeholder");
       (name === "options") && setSpecificDefaultValue(formState.initialValues, "options");

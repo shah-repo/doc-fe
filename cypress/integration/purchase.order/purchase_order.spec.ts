@@ -709,19 +709,22 @@ context("PO test", () => {
     });
 
     context("Verify autosave of Requestor change while PO status autosave is in process", () => {
-      it("Fill Requestor field while autosaving PO status", () => {
+      it("Select PO Status", () => {
         cy.get("[id$=\"po-status-built-in\"]").eq(0).arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("ul[role=listbox]>li").contains("Open").arrowClick({ force: true });
-          cy.unClick();
-          cy.get("[data-cy^=\"requestor-\"]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-        });
+        cy.get("ul[role=listbox]>li").contains("Open").arrowClick({ force: true });
+        cy.unClick();
       });
 
-      it("check for autosave", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.unClick();
-        });
+      it("While autosaving, select requestor", () => {
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+          req.reply((res) => {
+            res.setDelay(100);
+            res.setThrottle(1);
+          });
+        }).as("response");
+
+        cy.get("[data-cy^=\"requestor-\"]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        cy.wait("@response", { responseTimeout: 30 * 1000 });
       });
     });
 
@@ -733,19 +736,22 @@ context("PO test", () => {
         });
       });
 
-      it("Fill Order Date field while autosaving Supplier", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType(`${documentSupplierRevisionName}{downarrow}{enter}`);
-          cy.unClick();
-          cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
-          cy.get(".MuiPickersDay-daySelected").arrowClick();
-        });
+      it("Select Supplier", () => {
+        cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType(`${documentSupplierRevisionName}{downarrow}{enter}`);
+        cy.unClick();
       });
 
-      it("check for autosave", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.unClick();
-        });
+      it("While autosaving, select order date", () => {
+        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+          req.reply((res) => {
+            res.setDelay(100);
+            res.setThrottle(1);
+          });
+        }).as("response");
+
+        cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.wait("@response", { responseTimeout: 30 * 1000 });
       });
     });
 
