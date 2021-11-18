@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,11 +23,17 @@ const styles = makeStyles((theme: Theme) =>
     evnTxt: {
       textAlign: "left",
       fontSize: 12,
-      fontWeight: "bold",
+      fontWeight: 600,
       letterSpacing: 0,
-      color: theme.palette.secondary.main,
-      margin: "10px 20px",
+      margin: "10px 15px",
       lineHeight: "28px",
+      fontFamily: "Sora",
+    },
+    evnTxtDev: {
+      background: Colors.bright_blue,
+    },
+    evnTxtDemo: {
+      background: Colors.deep_pink,
     },
   }),
 );

@@ -20,6 +20,7 @@ enum Colors {
   navy = "#011FBB",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
+  bright_blue="#0075FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -40,6 +41,8 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
+  // pink
+  deep_pink= "#F20083"
 }
 
 export default Colors;

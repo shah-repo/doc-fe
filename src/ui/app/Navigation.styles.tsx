@@ -23,10 +23,7 @@ export default (theme: Theme) =>
       textAlign: "center",
     },
     headerLink: {
-      "textDecoration": "none",
-      "color": theme.palette.common.white,
-      "&:hover": {
-        color: theme.palette.secondary.light,
-      },
+      textDecoration: "none",
+      color: theme.palette.common.white,
     },
   });
