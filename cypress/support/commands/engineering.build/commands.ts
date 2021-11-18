@@ -15,6 +15,9 @@ declare global {
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebSelectFirstDocument(): Chainable<Subject>;
+      ebTryToApprove(): Chainable<Subject>;
+      ebWithdrawSubmisison(): Chainable<Subject>;
     }
   }
 }
@@ -51,11 +54,19 @@ Cypress.Commands.add("ebClickClone", () => {
     CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"CloneEBButton\"]").arrowClick();
   });
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("ebSelectFirstDocument", () => {
+  cy.wrapWithWaitOnApiCalls([
+    CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
 
 Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
@@ -63,7 +74,23 @@ Cypress.Commands.add("ebApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebTryToApprove", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebWithdrawSubmisison", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+    cy.get("#AlertDialog-continueButton").arrowClick();
+  });
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });

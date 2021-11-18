@@ -1,4 +1,4 @@
-import { Grid, Toolbar } from "@material-ui/core";
+import { Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
@@ -44,14 +44,24 @@ const DashboardTabs: React.FunctionComponent = () => {
               disableRipple
               {...dynamicObjProps(0)}
               label={
-                <Grid container={true} justify="center" alignItems="center">
-                  <Grid item={true} sm={12}>
-                    {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
-                    <span className={classes.tabItemText}>
-                      <Text translation={"common.my.feed"} /> (26)
-                    </span>
-                  </Grid>
-                </Grid>
+                <Box display='flex' alignItems='center'>
+                  {value === 0 ? <MyFeedSelectedIcon /> : <MyFeedIcon />}
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    // eslint-disable-next-line max-len
+                    className={value === 0 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+                  >
+                    <Text translation={"common.my.feed"} />
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    className={classes.tabItemCount}
+                  >
+                      (26)
+                  </Typography>
+                </Box>
               }
             />
             {isDashboardAdmin && (
@@ -59,18 +69,29 @@ const DashboardTabs: React.FunctionComponent = () => {
                 disableRipple
                 {...dynamicObjProps(1)}
                 label={
-                  <Grid container={true} justify="center" alignItems="center">
-                    <Grid item={true} sm={12}>
-                      {value === 1 ? (
-                        <TrainingSelectedIcon />
-                      ) : (
-                        <TrainingIcon />
-                      )}
-                      <span className={classes.tabItemText}>
-                        <Text translation={"common.trainings"} /> (10)
-                      </span>
-                    </Grid>
-                  </Grid>
+                  <Box display='flex' alignItems='center'>
+                    {value === 1 ? (
+                      <TrainingSelectedIcon />
+                    ) : (
+                      <TrainingIcon />
+                    )}
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      // eslint-disable-next-line max-len
+                      className={value === 1 ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+                    >
+                      <Text translation={"common.trainings"} />
+                    </Typography>
+                    <Typography
+                      component="span"
+                      variant="inherit"
+                      className={classes.tabItemCount}
+                    >
+                        (10)
+                    </Typography>
+                  </Box>
+
                 }
               />
             )}
@@ -78,19 +99,24 @@ const DashboardTabs: React.FunctionComponent = () => {
               disableRipple
               {...dynamicObjProps(isDashboardAdmin ? 2 : 1)}
               label={
-                <Grid container={true} justify="center" alignItems="center">
-                  <Grid item={true} sm={12}>
-                    {(isDashboardAdmin && value === 2) ||
+                <Box display='flex' alignItems='center'>
+                  {(isDashboardAdmin && value === 2) ||
                     (!isDashboardAdmin && value === 1) ? (
-                        <RecentSelectedIcon />
-                      ) : (
-                        <RecentIcon />
-                      )}
-                    <span className={classes.tabItemText}>
-                      <Text translation={"common.recent"} />
-                    </span>
-                  </Grid>
-                </Grid>
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
+                  <Typography
+                    component="span"
+                    variant="inherit"
+                    className={(isDashboardAdmin && value === 2) ||
+                        // eslint-disable-next-line max-len
+                        (!isDashboardAdmin && value === 1) ? `${classes.tabItemText} ${classes.tabItemTextActive} ` : classes.tabItemText}
+
+                  >
+                    <Text translation={"common.recent"} />
+                  </Typography>
+                </Box>
               }
             />
           </StyledTabs>

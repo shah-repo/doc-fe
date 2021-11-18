@@ -1,11 +1,13 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
+import { compact, difference, filter, find, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Approval } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { DocumentStatus } from "../../../state/ducks/documents/types";
@@ -71,6 +73,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       disabled = true;
     }
 
+    const dispatch = useDispatch();
     const authUser = store.getState().auth.user;
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
@@ -90,6 +93,13 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     function includesApprover(group: FBRequiredApprover, approver: string): boolean {
       return (group.joinedEmployees as string[]).includes(approver);
     }
+
+    React.useEffect(() => {
+      const fieldValue = map(approvalsState?.getApprovals, "approver.id");
+      formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
+      formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     onApproveClick = (approvalId: string) => {
       dialogState?.config({
@@ -138,9 +148,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     };
 
     React.useEffect(() => reaction(
-      () => formState?.inputState.get("fb-approvals-" + name)?.value,
+      () => formState?.newValues.get(`fb-approvals-${name}`),
       (fieldValue: string[]) => {
-        const formValue: string[] = map(approvalsState?.getApprovals, "approver.id");
+        const formValue: string[] = get(formState?.oldValues, `fb-approvals-${name}`);
         addApprover(difference(fieldValue, formValue));
         removeApprover(difference(formValue, fieldValue));
       }
@@ -154,6 +164,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         type: "MASTER",
         fieldId: name,
         partOf: { id },
+      }, () => {
+        const { id } = workspaceState || {};
+        if (!id) { return; }
+        dispatch(documentRevisionsActions.loadAudit(id));
       }));
     }
 
@@ -213,8 +227,6 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       );
     });
 
-    const fieldValue = map(approvalsState?.getApprovals, "approver.id");
-    formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
 
     // TODO: check what is going on with the types,
     // had to add any, DocumentStatus and DocumentRevisionStatus are not the same

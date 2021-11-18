@@ -58,6 +58,9 @@ const getDaysUntilPasswordExpires = (state: ApplicationState): number =>
 const getPasswordSoonToExpire = (state: ApplicationState): boolean =>
   state.auth.user.passwordSoonToExpire;
 
+const getAvatarInitialColor = (state: ApplicationState): string =>
+  state.auth.user.initialColor;
+
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
@@ -132,4 +135,5 @@ export default {
   getDaysUntilPasswordExpires,
   getPasswordSoonToExpire,
   getIsScheduledForDeletion,
+  getAvatarInitialColor,
 };

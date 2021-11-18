@@ -1,20 +1,23 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React from "react";
+import { Box, Button, Dialog, Grid } from "@material-ui/core";
+import { isEmpty, omit } from "lodash";
+import moment from "moment";
+import React, { useState } from "react";
 import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
-import { TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
+import { DEFAULT_TRAINING_RECORD_QUERY, TrainingListData, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import Date from "../../components/Date";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import { TablePanel } from "../../components/table/panel";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import { TableDataProps, TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
+import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
+import TrainingDetails from "../details/TrainingDetails";
 import { styles } from "./styles";
 
 interface Props {
@@ -32,11 +35,33 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const dialog = useDialog();
+  const trainingDetailsDialog = useDialog();
+  const [training, setTraining] = useState<TrainingRecordQuery>(DEFAULT_TRAINING_RECORD_QUERY);
 
   const getDateOption = (dateOptions, id) => dateOptions().find((e) =>
     e.value === tableCriteria.queryDict?.[id])?.text;
 
+  const customQuerySet = (queryDict: TableSearchQueryType) => {
+    const findDueDateOption = dueDateOption().find((e) => e.value === queryDict.dueOnBefore)?.text;
+    queryDict = omit(queryDict, ["dueOnAfter", "isCompleted"]);
+
+    if (queryDict.dueOnBefore) {
+      if (findDueDateOption === CompletedOnDateOptions.NEXT_WEEK) {
+        queryDict.dueOnAfter = moment().toISOString();
+      }
+      queryDict.isCompleted = false;
+    }
+    return queryDict;
+  };
+
+  const handleTrainingDetailsDialog = (rowData: TrainingRecordQuery) => {
+    trainingDetailsDialog.open();
+    setTraining(rowData);
+
+  };
+
   const headers = [
+    { label: `TRN ID: ${tableCriteria.queryDict?.trId  || ""}`, key: "trId" },
     { label: `DOC ID: ${tableCriteria.queryDict?.docId  || ""}`, key: "docId" },
     { label: `REVISION: ${tableCriteria.queryDict?.revision  || ""}`, key: "revision" },
     { label: `DOCUMENT TITLE: ${tableCriteria.queryDict?.docRevTitle  || ""}`, key: "docRevTitle" },
@@ -45,16 +70,18 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       label: `ASSIGN DATE: ${getDateOption(documentRevisionEffectiveDateOption, "createdAtAfter")  || ""}`,
       key: "createdAtAfter",
     },
-    { label: `DUE DATE: ${getDateOption(dueDateOption, "dueOn")  || ""}`, key: "dueOn" },
+    { label: `DUE DATE: ${getDateOption(dueDateOption, "dueOnBefore")  || ""}`, key: "dueOnBefore" },
     {
       label: `COMPLETED ON: ${getDateOption(trainingCompletedOnDateOption, "completedAtAfter")  || ""}`,
       key: "completedAtAfter",
     },
     { label: `TC ID: ${tableCriteria.queryDict?.tcId  || ""}`, key: "tcId" },
   ];
+
   const renderTableData = () => {
     if (!isEmpty(data)) {
       return data.map((e) => ({
+        trId: e.trId,
         docId: e.trainingPlan.document.docId,
         revision: e.documentRevision.revision,
         docRevTitle: e.documentRevision.name,
@@ -73,6 +100,18 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
   const exportedData = dialog.isOpen ? renderTableData() : [];
 
   const columns: TableColumnProps<TrainingRecordQuery>[] = [
+    {
+      key: "trId",
+      id: "TrainingListPresenter-trId",
+      label: "common.trId",
+      columnOptions: {
+        cellDataGetter: ({ rowData }) => rowData.trId,
+        width: 75,
+      },
+      searchOptions: {
+        defaultValue: tableCriteria.queryDict?.trId,
+      },
+    },
     {
       key: "docId",
       id: "TrainingListPresenter-id",
@@ -136,7 +175,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       },
     },
     {
-      key: "dueOn",
+      key: "dueOnBefore",
       id: "TrainingListPresenter-dueDate",
       label: "common.due.date",
       columnOptions: {
@@ -147,7 +186,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       searchOptions: {
         searchType: "select",
         selectOptions: dueDateOption(),
-        defaultValue: tableCriteria.queryDict?.dueOn,
+        defaultValue: tableCriteria.queryDict?.dueOnBefore,
       },
     },
     {
@@ -212,7 +251,23 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
           cellMeasure={true}
           tableName={tableName}
           customDataSet={customDataSet}
+          customQuerySet={customQuerySet}
+          onSelect={({ rowData }) => () => handleTrainingDetailsDialog(rowData)}
         />
+        {
+          trainingDetailsDialog.isOpen &&
+          <Dialog
+            open={trainingDetailsDialog.isOpen}
+            classes={{ paper: classes.dialogContent }}
+            fullWidth
+            maxWidth="md"
+          >
+            <TrainingDetails
+              dialog={trainingDetailsDialog}
+              training={training}
+            />
+          </Dialog>
+        }
       </Grid>
     </Grid>
   );

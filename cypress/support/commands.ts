@@ -72,6 +72,10 @@ interface IdocumentTypeDto {
   schema?: any;
   fieldsConfig?: IfieldsConfig;
   canRedLine?: boolean;
+  defaultTraining?: boolean;
+  hiddenForCreationForUsersWithoutTags?: any[];
+  defaultRevStage?: string;
+  active?: boolean;
 }
 
 export interface ICreateCompanyBootstrap {
@@ -112,6 +116,7 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
   addTestContext("company", params.payload.name);
+  cy.log(params.payload.name);
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,

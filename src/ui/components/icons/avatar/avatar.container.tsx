@@ -1,6 +1,7 @@
 import React from "react";
 import { Nullable } from "../../../../state/ducks/common/types";
 import AvatarPresenter from "./avatar.presenter";
+import { getInitalsFromName } from "./helpers";
 
 interface OwnProps {
   avatar: string | null;
@@ -8,6 +9,7 @@ interface OwnProps {
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
   setFile: (value: Nullable<File>) => void;
+  name: string;
 }
 
 type Props = OwnProps;
@@ -17,15 +19,20 @@ const AvatarContainer: React.FunctionComponent<Props> = ({
   previewAvatar,
   setPreviewAvatar,
   setFile,
+  name,
 }) => {
-  const logo = !avatar ? "/avatar_placeholder.svg" : avatar;
+  const userInitials = getInitalsFromName(name);
+
   return (
     <AvatarPresenter
-      src={logo}
-      showEditUser={showEditUser}
-      previewAvatar={previewAvatar}
-      setPreviewAvatar={setPreviewAvatar}
-      setFile={setFile}
+      {...{
+        avatar,
+        showEditUser,
+        previewAvatar,
+        setPreviewAvatar,
+        setFile,
+        userInitials,
+      }}
     />
   );
 };
