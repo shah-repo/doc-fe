@@ -39,26 +39,7 @@ interface Props {
   // TO DO:: Needs to add type definitions
   feedItems: any[];
 }
-// interface Props {
-//   feedItems: {
-//     id: string;
-//     type: string;
-//     timestamp?: string | undefined;
-//     arTitle?: string | undefined;
-//     arStatus?: string | undefined;
-//     arId?: string | undefined;
-//     pendingApprovers?: any[] | undefined;
-//     docRevs?: any;
-//     docId?: string | undefined;
-//     docRevName?: string | undefined;
-//     docRevStatus?: string | undefined;
-//     docRevOwnerName?: string | undefined;
-//     docRevOwnerAvatar?: string | undefined | null;
-//     docRevOwnerId?: string | undefined;
-//     docRevPendingApprovals?: any;
-//     docRevApprovedApprovals?: any;
-//   }[];
-// }
+
 const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
