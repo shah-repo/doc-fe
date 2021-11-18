@@ -68,6 +68,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     children,
     childrenParts,
     parentParts,
+    displayRevision,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -84,6 +85,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   const docDetails: Partial<DocumentRevision> = {
     docId: document.docId,
     name,
+    displayRevision,
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
