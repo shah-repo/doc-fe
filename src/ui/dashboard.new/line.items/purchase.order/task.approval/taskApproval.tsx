@@ -16,6 +16,7 @@ import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
@@ -23,7 +24,6 @@ import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import { Nullable } from "../../../../../state/ducks/common/types";
 import { styles } from "./taskApproval.styles";
 
 interface Props {
@@ -35,6 +35,7 @@ interface Props {
   approvalId: string;
   timestamp: string;
   docRevOwnerAvatar: Nullable<string>;
+  docRevOwnerInitialColor: string;
   docRevOwnerName: string;
   docRevName: string;
   hoverItemId: string;
@@ -50,6 +51,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   docRevName,
   docRevOwnerAvatar,
+  docRevOwnerInitialColor,
   hoverItemId,
   onMouseHoverItem,
 }) => {
@@ -120,6 +122,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+            className={classes.avatar}
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
           />

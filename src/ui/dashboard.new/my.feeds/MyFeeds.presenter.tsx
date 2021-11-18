@@ -6,11 +6,11 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../common/utils/date";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES,
+  LINE_ITEMS_STATUS_TYPES
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -1150,6 +1150,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevId={pendingAction.docRevId}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}
