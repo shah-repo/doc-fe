@@ -69,7 +69,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
     setTimeout(() => {
-      // handleApiAlertModelClose();
       handleEmailModelClose();
     }, 2000);
   };
@@ -84,10 +83,8 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const async = useAsync({
     onSuccess: () => {
       handleApiAlertModelOpen();
-      // toastSuccess(intl.formatMessage({ id: "common.email.sent" }));
     },
     onError: () => {
-      // handleApiAlertModelOpen();
       toastError(intl.formatMessage({ id: "common.falied.email" }));
     },
   });
@@ -144,7 +141,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             className={classes.confmesgdate}
           >
             <Text translation="sent" />:{" "}
-            {/* {getFormattedDateString(timestamp, MomentFormats.BriefDate)} */}
             {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
