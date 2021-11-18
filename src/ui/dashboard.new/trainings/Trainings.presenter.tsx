@@ -9,7 +9,6 @@ import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
-import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./Trainings.styles";
 
 const TrainingsLineItemPresenter: React.FunctionComponent = () => {
@@ -42,29 +41,6 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
                   MomentFormats.BriefDateTime
                 )}
                 pendingTrainees={pendingAction.pendingTrainees}
-                hoverItemId={hoverItemId}
-                onMouseHoverItem={onMouseHoverItem}
-              />
-            );
-          case ActionTypes.TRAINING_STATUS_TRAINEE:
-            return (
-              <PendingTraining
-                key={index}
-                id={pendingAction.id}
-                docId={pendingAction.docId}
-                type={pendingAction.type}
-                title={pendingAction.docRevName}
-                docDocumentId={pendingAction.docDocumentId}
-                docRevId={pendingAction.docRevId}
-                trainingStatus={pendingAction.trainingStatus}
-                timestamp={getFormattedDateString(
-                  pendingAction.timestamp,
-                  MomentFormats.BriefDateTime
-                )}
-                dueDate={getFormattedDateString(
-                  pendingAction.dueOn,
-                  MomentFormats.ShortBriefDate
-                )}
                 hoverItemId={hoverItemId}
                 onMouseHoverItem={onMouseHoverItem}
               />
