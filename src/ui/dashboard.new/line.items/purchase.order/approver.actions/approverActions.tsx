@@ -1,29 +1,28 @@
 import {
+  Avatar,
   Collapse,
   Grid,
   Link,
   List,
   ListItemAvatar,
   ListItemText,
-  Avatar,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
-
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
+import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 // import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import { Nullable } from "../../../../../state/ducks/common/types";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import {
   ActionTypes,
-  STATUS_TYPES_LABEL,
+  STATUS_TYPES_LABEL
 } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 // import Text from "../../../../components/Text";
@@ -32,8 +31,8 @@ import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { styles } from "./approverActions.styles";
@@ -50,12 +49,12 @@ interface Props {
   status: string;
   timestamp: string;
   purchaseOrderAttachments?:
-    | {
-        name: string;
-        type: string;
-        id: string;
-      }[]
-    | undefined;
+  | {
+    name: string;
+    type: string;
+    id: string;
+  }[]
+  | undefined;
   purchaseOrdeLineItemCount?: number | undefined;
   purchaseOrderDescription?: string | undefined;
   purchaseOrderCurrency?: string | undefined;
@@ -64,6 +63,7 @@ interface Props {
   approverName: string;
   approvalId: string;
   approverAvatar: Nullable<string>;
+  approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -77,6 +77,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   approverName,
   approvalId,
   approverAvatar,
+  approverInitialColor,
   purchaseOrderSupplierDocRevId,
   purchaseOrderSupplierDocId,
   timestamp,
@@ -164,12 +165,14 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED &&
         open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
-        ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
-        )}
+            <CollapseIcon className={classes.icon} onClick={handleClick} />
+          ) : (
+            <ExpandIcon className={classes.icon} onClick={handleClick} />
+          )}
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${approverInitialColor}` }}
+            className={classes.avatar}
             alt={approverName}
             src={approverAvatar ? approverAvatar : "."}
           />
@@ -247,18 +250,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.REJECTED !== status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {status}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"

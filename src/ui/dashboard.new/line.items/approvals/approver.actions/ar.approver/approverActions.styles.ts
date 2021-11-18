@@ -52,9 +52,9 @@ export const styles = makeStyles(() =>
       background: Colors.sky_blue,
     },
     typography: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 400,
+      "fontSize": "14px",
+      "fontFamily": "Sora",
+      "fontWeight": 400,
       "& > p": { margin: "0px" },
     },
     typographyBold: {

@@ -2,11 +2,11 @@
 import {
   Avatar,
   Box,
-  Grid,
-  Link,
   Collapse,
-  List,
+  Grid,
   IconButton,
+  Link,
+  List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -14,23 +14,23 @@ import {
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
+import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
-import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import useDialog from "../../../../hooks/useDialog";
+import Colors from "../../../../layout/theme/utils/colors";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
-import Colors from "../../../../layout/theme/utils/colors";
 
 interface Props {
   id: string;
@@ -48,6 +48,7 @@ interface Props {
   arChangeRequestId: string;
   timestamp: string;
   docRevOwnerAvatar?: string | undefined | null;
+  docRevOwnerInitialColor: string;
   docRevOwnerName: string | undefined;
   title?: string | undefined;
   hoverItemId: string;
@@ -62,6 +63,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   title,
   docRevOwnerAvatar,
+  docRevOwnerInitialColor,
   hoverItemId,
   onMouseHoverItem,
 }) => {
@@ -154,6 +156,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         )}
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
             className={classes.avatar}
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}

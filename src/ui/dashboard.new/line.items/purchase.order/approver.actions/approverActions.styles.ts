@@ -6,6 +6,10 @@ export const styles = makeStyles(() =>
     inline: {
       display: "inline",
     },
+    avatar: {
+      width: "35px",
+      height: "35px",
+    },
     nested: {
       marginLeft: "32px",
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
@@ -60,9 +64,9 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     typography: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 400,
+      "fontSize": "14px",
+      "fontFamily": "Sora",
+      "fontWeight": 400,
       "& > p": { margin: "0px" },
     },
     typographyBold: {
