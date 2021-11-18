@@ -232,9 +232,10 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             {pendingTrainees?.map((due, index) => (
               <StyledListItem button key={index}>
                 <Avatar
+                  style={{ backgroundColor: `${due.userInitialColor}` }}
                   className={classes.listitemicon}
                   alt={due.userName}
-                  src="."
+                  src={due.userAvatar || "."}
                 />
                 <ListItemText
                   id={due.employeeId}

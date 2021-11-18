@@ -61,7 +61,6 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
                   pendingAction.timestamp,
                   MomentFormats.BriefDateTime
                 )}
-                verbose={pendingAction.trainingStatus}
                 dueDate={getFormattedDateString(
                   pendingAction.dueOn,
                   MomentFormats.ShortBriefDate

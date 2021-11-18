@@ -28,7 +28,6 @@ interface Props {
   docRevId: string;
   trainingStatus: string;
   timestamp: string;
-  verbose: string;
   dueDate: string | undefined;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
