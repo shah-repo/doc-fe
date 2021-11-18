@@ -395,6 +395,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         aria-describedby="simple-modal-description"
       >
         <EmailModal
+          id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={pendingApprovers}
           approvedApprovers={approvedApprovers}
