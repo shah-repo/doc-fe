@@ -36,14 +36,12 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
       if (documentId && !isEmpty(documentId)) {
         inputProps = { ...inputProps, deleted: true };
         workspaceState?.setSchemaItem(inputProps);
-        workspaceState?.saveDocRev();
         return;
       }
       if (inputProps?.type === "section") {
         bookmarkState?.removeBookmark(inputProps?.name as string);
       }
       workspaceState?.removeSchemaItem(inputProps);
-      workspaceState?.saveDocRev();
     };
 
     const markDownSchemaItem = () =>

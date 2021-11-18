@@ -68,9 +68,23 @@ class FBInlineApprovalState {
     this.setOptions(options);
   };
 
-  public approvalBody = (body: Partial<FBInlineApprovalBody>) => {
-    this.approvalApi.setBody(body);
-    this.approvalApi.post();
+  public approvalBody = (
+    body: Partial<FBInlineApprovalBody>,
+    callback?: () => any
+  ) => {
+    this.approvalApi.set({
+      url: FBEndpoint.Approvals,
+      body,
+      method: "post",
+    }, (data, error) => {
+      if (error) {
+        this.approvalApi.onError(error);
+      } else {
+        this.approvalApi.data = data;
+        this.approvalApi.onSuccess();
+        callback?.();
+      }
+    });
   };
 
   public approvalTransition = (
