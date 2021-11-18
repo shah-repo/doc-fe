@@ -59,7 +59,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     variant="inherit"
                     className={classes.tabItemCount}
                   >
-                    {feedItems?.length || 0})
+                    ({feedItems?.length || 0})
                   </Typography>
                 </Box>
               }
