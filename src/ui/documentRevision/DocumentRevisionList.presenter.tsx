@@ -76,6 +76,23 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     }
   }
 
+  const getDateValue = () => {
+    if (isRecord) {
+      if (isReleased) {
+        return documentRevision.releasedAt;
+      }
+      if (isVoided) {
+        return documentRevision.voidedAt;
+      }
+      if (isDeprecated) {
+        return documentRevision.deprecatedAt;
+      }
+      return documentRevision.updatedAt;
+    }
+
+    return documentRevision.obsoletedAt || documentRevision.effectiveDate;
+  };
+
   const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
   const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
 
@@ -129,11 +146,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         <SummaryInfo
           label={isRecord ? recordDateLabel : "common.effective.date"}
           value={
-            <DateFormatter
-              value={
-                isRecord ? (isReleased ? documentRevision.releasedAt : documentRevision.updatedAt ) :
-                  documentRevision.obsoletedAt || documentRevision.effectiveDate
-              }/>
+            <DateFormatter value={getDateValue()}/>
           }
         />
       </NavLink>
