@@ -1076,7 +1076,6 @@
   "maintenance.body": "We are currently upgrading our system to make it more useful for you.\nThank you for your patience.",
   "Administrative Change": "Administrative Change",
   "document.revision.upgrade.form.banner": "A new revision of the form is available. {clickHere} to upgrade to the latest revision.",
-
   "return.home": "Return home",
   "file.type.XLSX": "Microsoft Excel File",
   "file.type.XLS": "Microsoft Excel File",
@@ -1120,5 +1119,5 @@
   "is": "is",
   "your": "your",
   "to": "to",
-  "sent": "Sent"
+  "sent": "Sent",
 }
