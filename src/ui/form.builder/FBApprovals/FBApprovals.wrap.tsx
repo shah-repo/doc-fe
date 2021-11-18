@@ -96,7 +96,8 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     React.useEffect(() => {
       const fieldValue = map(approvalsState?.getApprovals, "approver.id");
-      formState?.setFieldValue(`fb-approvals-${name}`, fieldValue);
+      formState?.setFieldValue(`fb-approvals-${name}`, fieldValue, false);
+      formState?.inputState.get(`fb-approvals-${name}`)?.setRender();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
