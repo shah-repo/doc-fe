@@ -158,7 +158,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                           <WarningIcon />
                         )
                       }
-                      label={trainingStatus}
+                      label={trainingStatus === TrainingStatus.OVERDUE
+                        ? TrainingStatus.OVERDUE
+                        : TrainingStatus.DUE_IN_7_DAYS}
                     />
                   )}
                   {hoverItem && (
@@ -173,7 +175,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                           <WarningWhiteIcon />
                         )
                       }
-                      label={trainingStatus}
+                      label={trainingStatus === TrainingStatus.OVERDUE
+                        ? TrainingStatus.OVERDUE
+                        : TrainingStatus.DUE_IN_7_DAYS}
                     />
                   )}
                 </Typography>
