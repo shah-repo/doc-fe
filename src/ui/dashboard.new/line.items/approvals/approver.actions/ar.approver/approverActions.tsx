@@ -1,34 +1,34 @@
 import {
-  Grid,
-  Link,
+  Avatar,
+  Box,
   Collapse,
+  Grid,
+  IconButton,
+  Link,
   List,
   ListItemAvatar,
   ListItemText,
-  Avatar,
-  IconButton,
-  Box,
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
-import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
-import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/images/approved_status_white.svg";
-// import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
-import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
-import { Nullable } from "../../../../../../state/ducks/common/types";
+import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../../assets/images/pending_review_nested.svg";
-import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
-import Text from "../../../../../components/Text";
-import Colors from "../../../../../layout/theme/utils/colors";
+import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
+import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
+import { Nullable } from "../../../../../../state/ducks/common/types";
+import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
+// import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
+import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
+import Text from "../../../../../components/Text";
+import Colors from "../../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "../../../common/NormalStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../../common/HoverStyleChipApprovalRejected";
+import { NormalStyleChip } from "../../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
@@ -53,6 +53,7 @@ interface Props {
   }[];
   approverName: string;
   approverAvatar: Nullable<string>;
+  approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -65,12 +66,12 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   docRevs,
   approverName,
   approverAvatar,
+  approverInitialColor,
   timestamp,
   hoverItemId,
   onMouseHoverItem,
 }) => {
   const classes = styles();
-
   // const [pinHover, setPinHover] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
 
@@ -113,6 +114,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         )}
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${approverInitialColor}` }}
             className={classes.avatar}
             alt={approverName}
             src={approverAvatar ? approverAvatar : "."}
@@ -196,18 +198,18 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== approvalStatusChanged &&
                   STATUS_TYPES_LABEL.REJECTED !== approvalStatusChanged && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {approvalStatusChanged}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {approvalStatusChanged}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"

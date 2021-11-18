@@ -1205,6 +1205,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   type={pendingAction.type}
                   approverName={pendingAction.approverName}
                   approverAvatar={pendingAction.approverAvatar}
+                  approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime
@@ -1399,6 +1400,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   approvalStatusChanged={pendingAction.approvalStatusChanged}
                   approverName={pendingAction.approverName}
                   approverAvatar={pendingAction.approverAvatar}
+                  approverInitialColor={pendingAction.approverInitialColor}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime

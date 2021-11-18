@@ -1,17 +1,16 @@
 import {
+  Avatar,
   Grid,
   Link,
   ListItemAvatar,
   ListItemText,
-  Avatar,
   Typography,
 } from "@material-ui/core";
 import React from "react";
-
-import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
-import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
+import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
+import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 // import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
@@ -19,8 +18,8 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { styles } from "./approverActions.styles";
@@ -36,6 +35,7 @@ interface Props {
   timestamp: string;
   approverName: string;
   approverAvatar: Nullable<string>;
+  approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }
@@ -48,12 +48,12 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   docRevName,
   approverName,
   approverAvatar,
+  approverInitialColor,
   timestamp,
   hoverItemId,
   onMouseHoverItem,
 }) => {
   const classes = styles();
-
   // const [pinHover, setPinHover] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -78,6 +78,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       >
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${approverInitialColor}` }}
             className={classes.avatar}
             alt={approverName}
             src={approverAvatar ? approverAvatar : "."}
@@ -161,18 +162,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.REJECTED !== status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {status}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"
