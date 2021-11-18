@@ -210,7 +210,6 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                 </Grid> */}
                 <Grid item>
                   <Button
-                    // onClick={handleApiAlertModelOpen}
                     onClick={() => handleSendEmail()}
                     className={classes.emailbutton}
                   >
