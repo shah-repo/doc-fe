@@ -74,15 +74,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
-  // const dueApprovers = pendingTrainees.map((name, index) => ({
-  //   listitemicon: index,
-  //   userName: employeeId,
-  //   employeeId: employeeId,
-  // }));
   const pendingTraineesNames = pendingTrainees
-    .map((trainee) => {
-      return trainee.userName;
-    })
+    .map((trainee) => trainee.userName)
     .join(",");
 
   return (
@@ -300,6 +293,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         aria-describedby="simple-modal-description"
       >
         <TrainingEmailModal
+          id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingTrainees={pendingTrainees}
           isOverDue={trainingStatus === TrainingStatus.OVERDUE}

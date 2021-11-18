@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
@@ -19,11 +20,16 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../../common/utils/date";
+import { emailAllActions } from "../../../../state/ducks/email.all";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import { StyledListItem } from "./StyledListItem";
 import { styles } from "./TrainingEmailModal.styles";
 
 interface TrainingEmailModalProps {
+  id: string;
   handleEmailModelClose: () => void;
   pendingTrainees?: any;
   timestamp?: string | undefined;
@@ -31,6 +37,7 @@ interface TrainingEmailModalProps {
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
+  id,
   handleEmailModelClose,
   pendingTrainees,
   isOverDue,
@@ -58,6 +65,22 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
 
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
+  };
+
+  const intl = useIntl();
+  const sendEmail = useActionCreator(emailAllActions.sendEmail);
+
+  const async = useAsync({
+    onSuccess: () => {
+      handleApiAlertModelOpen();
+    },
+    onError: () => {
+      toastError(intl.formatMessage({ id: "common.falied.email" }));
+    },
+  });
+
+  const handleSendEmail = () => {
+    async.start(sendEmail, id, async);
   };
 
   const apiAlertModelbody = (
@@ -181,8 +204,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
 
                 <Grid item>
                   <Button
-                    onClick={handleApiAlertModelOpen}
-                    disabled
+                    onClick={() => handleSendEmail()}
                     className={classes.emailbutton}
                   >
                     <Text translation="email.button.title" />

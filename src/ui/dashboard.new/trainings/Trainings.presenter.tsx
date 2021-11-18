@@ -1,14 +1,14 @@
 import { Grid, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
-import { ActionTypes } from "../../../state/ducks/dashboard/types";
-import Text from "../../components/Text";
+import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../common/utils/date";
-import NewTraining from "../line.items/training/new.training/newTraining";
-import { useSelector } from "react-redux";
 import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
+import { ActionTypes } from "../../../state/ducks/dashboard/types";
+import Text from "../../components/Text";
+import NewTraining from "../line.items/training/new.training/newTraining";
 import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./Trainings.styles";
 
@@ -92,7 +92,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
   );
 
   return (
-    <Grid container={true} spacing={5}>
+    <Grid container={true} spacing={5} className={classes.grid}>
       <Grid item={true} md={12} sm={12}>
         {trainingItems.length > 0 && renderPendingActions()}
         {renderNoPendingActions}

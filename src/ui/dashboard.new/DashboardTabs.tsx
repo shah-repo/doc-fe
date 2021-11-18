@@ -25,7 +25,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   isDashboardAdmin = true;
 
   const dynamicObjProps = (index: any) => ({
-    id: `scrollable-auto-tab-${index}`,
+    "id": `scrollable-auto-tab-${index}`,
     "aria-controls": `scrollable-auto-tabpanel-${index}`,
   });
 
@@ -95,7 +95,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                       variant="inherit"
                       className={classes.tabItemCount}
                     >
-                      {trainingItems.length || 0})
+                      ({trainingItems.length || 0})
                     </Typography>
                   </Box>
                 }
@@ -108,10 +108,10 @@ const DashboardTabs: React.FunctionComponent = () => {
                 <Box display="flex" alignItems="center">
                   {(isDashboardAdmin && value === 2) ||
                   (!isDashboardAdmin && value === 1) ? (
-                    <RecentSelectedIcon />
-                  ) : (
-                    <RecentIcon />
-                  )}
+                      <RecentSelectedIcon />
+                    ) : (
+                      <RecentIcon />
+                    )}
                   <Typography
                     component="span"
                     variant="inherit"
