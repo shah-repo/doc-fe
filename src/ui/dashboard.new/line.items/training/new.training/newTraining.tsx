@@ -4,7 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -28,6 +28,7 @@ interface Props {
   docId: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   docDocumentId: string;
   docRevId: string;
   trainingStatus: string;
@@ -43,6 +44,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   docDocumentId,
   docRevName,
+  docRevVersion,
   trainingStatus,
   timestamp,
   pendingTrainees,
@@ -50,7 +52,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
 }) => {
   const classes = styles();
-  // const dueDate = "JAN 12";
   // const [pinned, setPinned] = React.useState(false);
   // const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -140,7 +141,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {docRevName}
+                      {docRevName} {docRevVersion}
                     </Typography>
                   </Link>
                 </Grid>
@@ -189,29 +190,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     )}
                   </Typography>
                 </Grid>
-                {/* <Grid
-                  item={true}
-                  className={
-                    trainingStatus === TrainingStatus.OVERDUE
-                      ? `${classes.redDot} ${classes.margin7}`
-                      : `${classes.yellowDot} ${classes.margin7}`
-                  }
-                ></Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={
-                      trainingStatus === TrainingStatus.OVERDUE
-                        ? classes.typographyOverdue
-                        : classes.typographyDueInfewDays
-                    }
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {dueDate}
-                  </Typography>
-                </Grid> */}
               </Grid>
               <Grid
                 container={true}

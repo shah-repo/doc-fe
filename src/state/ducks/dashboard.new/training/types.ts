@@ -16,9 +16,8 @@ export interface Training {
   docId: string;
   docDocumentId: string;
   docRevName: string;
-  dueOn?: string | undefined;
+  docRevVersion: string;
   trainingRecordId?: string | undefined;
-  trId?: string | undefined;
   docRevId: string;
   id: string;
   type: string;

@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../common/utils/date";
 import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
@@ -34,6 +34,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
                 docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
                 docRevName={pendingAction.docRevName}
+                docRevVersion={pendingAction.docRevVersion}
                 docDocumentId={pendingAction.docDocumentId}
                 trainingStatus={pendingAction.trainingStatus}
                 timestamp={getFormattedDateString(
