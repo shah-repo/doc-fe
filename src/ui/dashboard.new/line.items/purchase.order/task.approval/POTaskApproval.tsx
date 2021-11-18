@@ -1,11 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Avatar,
-  Box,
-  Grid,
-  Link,
-  Collapse,
-  List,
+  Box, Collapse, Grid,
+  Link, List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -13,28 +10,28 @@ import {
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
+import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 // import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 // import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
+import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
+import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
-import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
-import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
+import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
-import { Attachment } from "../../../../change.request/form/types";
-import { StyledListItem } from "../../common/StyledListItem";
-import { attachmentsActions } from "../../../../../state/ducks/attachments";
-import useActionCreator from "../../../../hooks/useActionCreator";
-import { StyleTooltip } from "../../common/StyleTooltip";
-import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
-import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import { Nullable } from "../../../../../state/ducks/common/types";
-import { styles } from "./taskApproval.styles";
 import Colors from "../../../../layout/theme/utils/colors";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
+import ApproveDialogueContainer from "./POApprovalDialogContainer";
+import { styles } from "./taskApproval.styles";
 
 interface Props {
   id: string;
@@ -45,6 +42,7 @@ interface Props {
   approvalId: string;
   timestamp: string;
   docRevOwnerAvatar: Nullable<string>;
+  docRevOwnerInitialColor: string;
   docRevOwnerName: string;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
@@ -72,6 +70,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   docRevName,
   docRevOwnerAvatar,
+  docRevOwnerInitialColor,
   purchaseOrderCurrency,
   purchaseSupplierName,
   purchaseOrderSupplierDocRevId,
@@ -207,6 +206,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         )}
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+            className={classes.avatar}
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
           />

@@ -1129,6 +1129,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevId={pendingAction.docRevId}
                   docRevOwnerName={pendingAction.docRevOwnerName}
                   docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
                   hoverItemId={hoverItemId}

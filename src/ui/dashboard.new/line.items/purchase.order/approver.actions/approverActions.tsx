@@ -6,7 +6,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -22,7 +22,7 @@ import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachmen
 import { Nullable } from "../../../../../state/ducks/common/types";
 import {
   ActionTypes,
-  STATUS_TYPES_LABEL
+  STATUS_TYPES_LABEL,
 } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 // import Text from "../../../../components/Text";
