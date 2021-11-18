@@ -65,7 +65,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
     setTimeout(() => {
-      handleApiAlertModelClose();
+      handleEmailModelClose();
     }, 2000);
   };
 
