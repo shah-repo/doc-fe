@@ -219,6 +219,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             {pendingApprovers.map((pending, index) => (
               <StyledListItem button key={index}>
                 <Avatar
+                  style={{ backgroundColor: `${pending.userInitialColor}` }}
                   className={classes.listitemicon}
                   alt={pending.userName}
                   src={pending.userAvatar || "."}
@@ -281,6 +282,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             {approvedApprovers?.map((approved, index) => (
               <StyledListItem button key={index}>
                 <Avatar
+                  style={{ backgroundColor: `${approved.userInitialColor}` }}
                   className={classes.listitemicon}
                   alt={approved.userName}
                   src={approved.userAvatar || "."}

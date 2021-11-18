@@ -317,8 +317,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                              .map((approver) => approver.userName)
-                              .join(",")
+                            .map((approver) => approver.userName)
+                            .join(",")
                           : ""}
                       </Typography>
                     </Link>
