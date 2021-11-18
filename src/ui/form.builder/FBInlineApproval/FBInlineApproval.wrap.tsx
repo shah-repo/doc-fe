@@ -2,7 +2,9 @@ import { difference, filter, find, isEmpty, isUndefined, map, pick, some, sortBy
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useMemo } from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
@@ -29,6 +31,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const dispatch = useDispatch();
     dialogState = FB.useRef(FBDialogState);
     const {
       id,
@@ -110,11 +113,8 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ), []);
 
     // Init
-    React.useEffect(() => {
-      const fieldValue = map(inlineApprovalState?.getApprovals, "approver.id");
-      formState?.setFieldValue(`fb-ia-${name}`, fieldValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const fieldValue = map(inlineApprovalState?.getApprovals, "approver.id");
+    formState?.setFieldValue(`fb-ia-${name}`, fieldValue);
 
     // On add approver
     React.useEffect(() => reaction(
@@ -185,6 +185,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         type: "SECTION",
         fieldId: name,
         partOf: { id },
+      }, () => {
+        const { id } = workspaceState || {};
+        if (!id) { return; }
+        dispatch(documentRevisionsActions.loadAudit(id));
       }));
     }
 

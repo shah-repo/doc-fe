@@ -11,6 +11,7 @@ const styles = makeStyles((theme: Theme) =>
       letterSpacing: 1,
       fontWeight: 100,
       marginTop: 20,
+      fontFamily: "Sora",
     },
     logo: {
       width: 60,

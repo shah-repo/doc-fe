@@ -6,7 +6,8 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 export default (theme: Theme) =>
   createStyles({
     appBar: {
-      background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
+      background:
+        "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
       fontSize: "1rem",
       height: "20%",
       zIndex: 0,
@@ -22,6 +23,9 @@ export default (theme: Theme) =>
       backgroundImage: `url(${EnlilLogo})`,
     },
     toolbarTitle: {
+      position: "relative",
+      left: "3%",
+      top: "17%",
       fontFamily: "Sora",
       fontStyle: "normal",
       fontSize: "27px",
@@ -43,13 +47,10 @@ export default (theme: Theme) =>
     name: {
       fontWeight: 600,
       color: Colors.white,
-      // color: theme.palette.primary.main,
     },
     toolbar: {
       marginLeft: 30 + DRAWER_WIDTH,
       paddingTop: 20,
-      // borderBottom: `1px solid ${Colors.medium_gray}`,
-      // minHeight: "40px",
     },
     headerButton: {
       "boxShadow": "none",

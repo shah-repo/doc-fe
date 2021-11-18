@@ -6,10 +6,10 @@ export default (theme: Theme) =>
   createStyles({
     newContent: {
       "position": "absolute",
-      "left": DRAWER_WIDTH + 60,
+      "left": DRAWER_WIDTH + 50,
       "top": 90,
       "bottom": 0,
-      "right": 60,
+      "right": 50,
       "borderRadius": "12px 12px 0 0",
       "overflow": "auto",
       "backgroundColor": Colors.white,

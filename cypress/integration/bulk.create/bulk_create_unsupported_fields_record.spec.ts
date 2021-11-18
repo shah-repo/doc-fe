@@ -20,7 +20,7 @@ let createdDocumentForBulkCreation;
 const currentDate = moment().tz("America/Los_Angeles").format("x");
 const excelTemplateSaveName = currentDate + "excelTemplate.xlsx";
 
-context("Bulk create unsupported fields", () => {
+context("Bulk create unsupported fields for records", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -49,7 +49,8 @@ context("Bulk create unsupported fields", () => {
               {
                 documentTypeName: "Test Document Type",
                 documentTypeAcronym: "TDT-",
-                group: "OTHER",
+                category: "Record",
+                group: "RECORD",
                 isQms: true,
                 canRedLine: true,
               },
@@ -687,6 +688,20 @@ context("Bulk create unsupported fields", () => {
                       deleteInFormDisabled: false,
                       applicableValidationSchema: true,
                     },
+                    {
+                      name: "approvals-built-in",
+                      type: "approvals",
+                      index: 28,
+                      label: "Approvals",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      deleteDisabled: true,
+                      uniqueSchemaItem: true,
+                      validationAttribute: "Approvals",
+                      deleteInFormDisabled: true,
+                      applicableValidationSchema: true,
+                    },
                   ],
                 },
               },
@@ -814,7 +829,7 @@ context("Bulk create unsupported fields", () => {
       });
 
       it("Verify file size to check for unsupported fields", () => {
-        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 9300, 9600);
+        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 15100, 15400);
       });
 
       it("Verify popup message", () => {
@@ -823,282 +838,6 @@ context("Bulk create unsupported fields", () => {
         "Please open downloaded Excel Template and populate data. Then Upload to Import Data",
         });
         cy.closeAllAlertMessages();
-      });
-    });
-
-    context("Upload file for bulk create", () => {
-      it("Upload file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "fullBulkCreateFlow.xlsx" });
-      });
-
-      it("Verify upload", () => {
-        cy.get("input[id=\"fb-attachment-field-fb-spreadsheet-for-import-file\"]")
-          .parent().parent().find("div:nth-child(3)")
-          .should("contain.text", "fullBulkCreateFlow.xlsx");
-      });
-    });
-
-    context("Create bulk documents", () => {
-      it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve record", () => {
-        cy.ebApprove();
-      });
-    });
-  });
-
-  context("Verify created documents", () => {
-    it("Navigate to records list and verify number of records", { retries: 2 }, () => {
-      cy.navigToDashboard();
-      cy.navigToDocumentList();
-      cy.dlClearFilters();
-      cy.dlVerifyDocCounter({ docCounterNumber: 5 });
-    });
-
-    it("Filter by doc-id", () => {
-      cy.dlFilterByDocId({ docId: "TDT-00002" });
-    });
-
-    context("Verify document one data", () => {
-      it("Select first document", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.drVerifyTitle({ title: "First bulk document" });
-      });
-
-      it("Verify description", () => {
-        cy.drVerifyDescription({ description: "description of first bulk document" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[1].name });
-      });
-
-      it("Verify Training", () => {
-        cy.drIsTrainingRequired({ shouldBe: false });
-      });
-
-      it("Verify text field value", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.attr", "value", "first bulk document");
-      });
-
-      it("Verify text editor value", () => {
-        cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
-          .should("have.text", "first bulk document");
-      });
-
-      it("Verify Date picker value", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "10/22/2021");
-      });
-
-      it("Verify radio button group", () => {
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
-      });
-
-      it("Verify Select field", () => {
-        cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option2");
-      });
-
-      it("Verify Checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
-      });
-
-      context("Verify unsupported fields are empty", () => {
-        it("Verify autocomplete is empty", () => {
-          cy.get("[data-cy^=\"blc-autocomplete-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify quantity is empty", () => {
-          cy.get("[name^=\"blc-quantity-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify timer is empty", () => {
-          cy.get("[name^=\"blc-timer-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify po is empty", () => {
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$0.00");
-        });
-
-        it("Verify receive is empty", () => {
-          cy.get("[data-cy^=\"porec-blc-receive\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify instruction media upload is empty", () => {
-          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]")
-            .parent()
-            .parent()
-            .should("have.attr", "disabled");
-        });
-
-        it("Verify evidence media upload is empty", () => {
-          cy.get("div.LazyLoad").should("not.exist");
-        });
-
-        it("Verify eb procedure", () => {
-          cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").should("not.exist");
-          cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]").should("not.exist");
-        });
-
-        it("Verify equip", () => {
-          cy.get("[id^=\"blc-equip-\"]").parent().parent().parent()
-            .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
-        });
-
-        it("Verify text with range is empty", () => {
-          cy.get("[name^=\"blc-text-with-range\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify supplier is empty", () => {
-          cy.get("[data-cy^=\"blc-suppliers\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify lhrs is empty", () => {
-          cy.get("[data-cy^=\"blc-lhrs\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify hyperlink is not changed", () => {
-          cy.get("[name^=\"blc-hyperlink\"]").should("have.text", "BLC hyperlink");
-        });
-
-        it("Verify no file on file upload", () => {
-          cy.get("[data-cy^=\"form.builder.no.description\"]").should("not.exist");
-        });
-      });
-    });
-
-    context("Verify document two data", () => {
-      it("Navigate to document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Filter document two", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00005" });
-      });
-
-      it("Select first document", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.drVerifyTitle({ title: "Second bulk document" });
-      });
-
-      it("Verify description", () => {
-        cy.drVerifyDescription({ description: "description for second bulk document" });
-      });
-
-      // it("Verify owner", () => {
-      //   cy.drVerifyDocumentOWner({ owner: USERS[2].name });
-      // });
-
-      it("Verify Training", () => {
-        cy.drIsTrainingRequired({ shouldBe: true });
-      });
-
-      it("Verify text field value", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.attr", "value", "second bulk document");
-      });
-
-      it("Verify text editor value", () => {
-        cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
-          .should("have.text", "second bulk document");
-      });
-
-      it("Verify Date picker value", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
-      });
-
-      it("Verify radio button group", () => {
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
-      });
-
-      it("Verify Select field", () => {
-        cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
-      });
-
-      it("Verify Checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
-      });
-
-      context("Verify unsupported fields are empty", () => {
-        it("Verify autocomplete is empty", () => {
-          cy.get("[data-cy^=\"blc-autocomplete-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify quantity is empty", () => {
-          cy.get("[name^=\"blc-quantity-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify timer is empty", () => {
-          cy.get("[name^=\"blc-timer-\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify po is empty", () => {
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$0.00");
-        });
-
-        it("Verify receive is empty", () => {
-          cy.get("[data-cy^=\"porec-blc-receive\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify instruction media upload is empty", () => {
-          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]")
-            .parent()
-            .parent()
-            .should("have.attr", "disabled");
-        });
-
-        it("Verify evidence media upload is empty", () => {
-          cy.get("div.LazyLoad").should("not.exist");
-        });
-
-        it("Verify eb procedure", () => {
-          cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").should("not.exist");
-          cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]").should("not.exist");
-        });
-
-        it("Verify equip", () => {
-          cy.get("[id^=\"blc-equip-\"]").parent().parent().parent()
-            .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
-        });
-
-        it("Verify text with range is empty", () => {
-          cy.get("[name^=\"blc-text-with-range\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify supplier is empty", () => {
-          cy.get("[data-cy^=\"blc-suppliers\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify lhrs is empty", () => {
-          cy.get("[data-cy^=\"blc-lhrs\"]").should("have.attr", "value", "");
-        });
-
-        it("Verify hyperlink is not changed", () => {
-          cy.get("[name^=\"blc-hyperlink\"]").should("have.text", "BLC hyperlink");
-        });
-
-        it("Verify no file on file upload", () => {
-          cy.get("[data-cy^=\"form.builder.no.description\"]").should("not.exist");
-        });
       });
     });
   });

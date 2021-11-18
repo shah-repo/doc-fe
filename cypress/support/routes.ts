@@ -92,6 +92,8 @@ export enum CyRoutes {
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
   StartMpi = "StartMpi",
+  GetTrainingRecord = "GetTrainingRecord",
+  PostCompleteTraining = "PostCompleteTraining",
 }
 
 export const routes: ICyRoutes =   {
@@ -758,6 +760,25 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 35 * 1000,
       requestTimeout: 30 * 1000,
+    },
+  },
+  GetTrainingRecord: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/training_record*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  PostCompleteTraining: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/training_record/*/complete",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
     },
   },
 };
