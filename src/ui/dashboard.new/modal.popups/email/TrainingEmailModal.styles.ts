@@ -46,7 +46,7 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       /* Font Black */
-      color: Colors.modal_cancel_color,
+      color: Colors.almost_black,
     },
     closemodel: {
       left: "20.55%",

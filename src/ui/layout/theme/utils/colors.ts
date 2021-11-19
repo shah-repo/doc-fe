@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 enum Colors {
   white = "#FFF",
+  // black
   black = "#000",
+  almost_black = "#080B11",
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
@@ -41,8 +43,6 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
-  // modal
-  modal_cancel_color = "#080B11",
 }
 
 export default Colors;
