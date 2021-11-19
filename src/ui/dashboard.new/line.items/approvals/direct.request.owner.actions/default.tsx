@@ -1,0 +1,214 @@
+import {
+  Grid,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
+import React from "react";
+import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
+import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
+import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import Text from "../../../../components/Text";
+import { documentVersionPath } from "../../../../document.revision/utils/paths";
+import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
+import { StyledListItem } from "../../common/StyledListItem";
+import { styles } from "./default.styles";
+
+interface Props {
+  id: string;
+  docDocumentId: string;
+  docId: string;
+  docRevId?: string;
+  type: string;
+  docRevName: string;
+  status: string;
+  timestamp: string;
+  hoverItemId: string;
+  onMouseHoverItem: (id: string) => void;
+}
+const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
+  ({
+    id,
+    docDocumentId,
+    docId,
+    docRevId,
+    status,
+    docRevName,
+    timestamp,
+    hoverItemId,
+    onMouseHoverItem,
+  }) => {
+    const classes = styles();
+
+    // const [pinHover, setPinHover] = React.useState(false);
+    // const [pinned, setPinned] = React.useState(false);
+    const hoverItem = hoverItemId === id;
+    // const handlePinClick = () => {
+    //   setPinned(!pinned);
+    // };
+    // const onMouseHoverPinIcon = () => {
+    //   setPinHover(true);
+    // };
+    // const onMouseLeavePinIcon = () => {
+    //   setPinHover(false);
+    // };
+    const onMouseHoverListItem = () => {
+      onMouseHoverItem(id);
+    };
+    return (
+      <>
+        <StyledListItem
+          style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+          button
+          onMouseEnter={onMouseHoverListItem}
+        >
+          <ListItemIcon>
+            <PendingReviewIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <>
+                <Grid
+                  container={true}
+                  wrap="nowrap"
+                  justify="flex-start"
+                  alignItems="center"
+                >
+                  <Grid item={true}>
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
+                    >
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {docId}
+                      </Typography>
+                    </Link>
+                  </Grid>
+                  <Grid
+                    zeroMinWidth
+                    item={true}
+                    className={classes.truncateText}
+                  >
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
+                    >
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      <Text translation="common.is" />
+                    </Typography>
+                  </Grid>
+                  {STATUS_TYPES_LABEL.APPROVED === status ||
+                    (STATUS_TYPES_LABEL.RELEASED === status && (
+                      <Grid item={true}>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyStatus} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          {!hoverItem && (
+                            <NormalStyleChip
+                              size="small"
+                              color="primary"
+                              icon={<ApprovedIcon />}
+                              label={STATUS_TYPES_LABEL[status]}
+                            />
+                          )}
+                          {hoverItem && (
+                            <HoverStyleChip
+                              color="primary"
+                              size="small"
+                              icon={<ApprovedWhiteIcon />}
+                              label={STATUS_TYPES_LABEL[status]}
+                            />
+                          )}
+                        </Typography>
+                      </Grid>
+                    ))}
+                  {STATUS_TYPES_LABEL.APPROVED !== status &&
+                    STATUS_TYPES_LABEL.RELEASED !== status && (
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyStatus} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {status}
+                      </Typography>
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid
+                  container={true}
+                  wrap="nowrap"
+                  justify="flex-start"
+                  alignItems="center"
+                >
+                  <Grid item={true} className={classes.grayDot}></Grid>
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.timestampContainer}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {timestamp}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </>
+            }
+          />
+          {/* { hoverItem && (
+          <div className={classes.actionIcons}>
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyleTooltip title="Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyleTooltip>
+            )}
+          </div>
+        )} */}
+        </StyledListItem>
+      </>
+    );
+  };
+
+export default DirectRequestOwnerActionItemsPresenter;

@@ -31,6 +31,11 @@ export enum TrainingStatus {
   DUE_IN_7_DAYS = "DUE IN 7 DAYS",
 }
 
+export enum TransitionTypes {
+  TRANSITION_CLOSED = "closed",
+  TRANSITION_REJECT = "reject",
+}
+
 export interface PendingAction {
   type: PendingActionType;
   userId: string;

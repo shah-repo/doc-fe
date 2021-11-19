@@ -25,6 +25,7 @@ enum Colors {
   navy = "#011FBB",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
+  light_gray_blue = "#CBD5E0",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -46,6 +47,8 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
+  // modal
+  modal_cancel_color = "#080B11",
 }
 
 export default Colors;

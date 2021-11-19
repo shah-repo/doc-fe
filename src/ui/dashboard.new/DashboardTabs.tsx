@@ -8,6 +8,7 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
+import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
 import { trainingSelectors } from "../../state/ducks/dashboard.new/training";
 import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
@@ -30,6 +31,7 @@ const DashboardTabs: React.FunctionComponent = () => {
     setValue(newValue);
   };
   const trainingItems = useSelector(trainingSelectors.trainingList);
+  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -63,7 +65,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     variant="inherit"
                     className={classes.tabItemCount}
                   >
-                    (26)
+                    ({feedItems?.length || 0})
                   </Typography>
                 </Box>
               }
