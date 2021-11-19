@@ -4,18 +4,22 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
+import moment from "moment";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
+import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
+import { TableSearchQueryType } from "../../../../components/table/types";
 import Text from "../../../../components/Text";
-import { documentVersionPath } from "../../../../document.revision/utils/paths";
+import { TRAINING_URL } from "../../../../constants/urls";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
@@ -52,6 +56,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   // const [pinned, setPinned] = React.useState(false);
   // const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -78,6 +83,30 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const pendingTraineesNames = pendingTrainees
     .map((trainee) => trainee.userName)
     .join(",");
+
+  const setTrainingSearchCriteria = () => {
+    const searchCriteria: TableSearchQueryType = {
+      isCompleted: false,
+      docId,
+      docRevTitle: docRevName,
+      revision: docRevVersion,
+    };
+    if (trainingStatus === TrainingStatus.OVERDUE) {
+      searchCriteria.dueOnBefore = moment().endOf("day").toISOString();
+    } else {
+      searchCriteria.dueOnAfter = moment().toISOString();
+      searchCriteria.dueOnBefore = moment()
+        .add(7, "d")
+        .startOf("day")
+        .toISOString();
+    }
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        { queryDict: searchCriteria },
+        "training"
+      )
+    );
+  };
 
   return (
     <>
@@ -113,9 +142,10 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId, docDocumentId)}
+                    href={TRAINING_URL}
                     color="inherit"
                     className={classes.link}
+                    onClick={setTrainingSearchCriteria}
                   >
                     <Typography
                       component="span"
@@ -130,9 +160,10 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId, docDocumentId)}
+                    href={TRAINING_URL}
                     color="inherit"
                     className={classes.link}
+                    onClick={setTrainingSearchCriteria}
                   >
                     <Typography
                       component="span"
@@ -166,9 +197,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                             <WarningIcon />
                           )
                         }
-                        label={trainingStatus === TrainingStatus.OVERDUE
-                          ? TrainingStatus.OVERDUE
-                          : TrainingStatus.DUE_IN_7_DAYS}
+                        label={
+                          trainingStatus === TrainingStatus.OVERDUE
+                            ? TrainingStatus.OVERDUE
+                            : TrainingStatus.DUE_IN_7_DAYS
+                        }
                       />
                     )}
                     {hoverItem && (
@@ -183,9 +216,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                             <WarningWhiteIcon />
                           )
                         }
-                        label={trainingStatus === TrainingStatus.OVERDUE
-                          ? TrainingStatus.OVERDUE
-                          : TrainingStatus.DUE_IN_7_DAYS}
+                        label={
+                          trainingStatus === TrainingStatus.OVERDUE
+                            ? TrainingStatus.OVERDUE
+                            : TrainingStatus.DUE_IN_7_DAYS
+                        }
                       />
                     )}
                   </Typography>
