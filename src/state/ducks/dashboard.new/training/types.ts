@@ -1,12 +1,5 @@
 import { TRAINING_LIST } from "./constants";
 
-export enum TrainingStatusTypes {
-  OVERDUE = "OVERDUE",
-  DUE = "DUE",
-  COMPLETED = "COMPLETED",
-  ASSIGNED = "ASSIGNED",
-}
-
 interface User {
   employeeId: string;
   userName: string;
