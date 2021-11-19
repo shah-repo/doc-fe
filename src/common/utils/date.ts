@@ -19,6 +19,8 @@ export const getFormattedStartOfDayDateString = (date: DateTypes) =>
 export const getFormattedDateString = (date: DateTypes, format = "") =>
   moment(date).tz(TIME_ZONE).format(format);
 
+export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf("seconds").fromNow();
+
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",
   MonthDateYearAlt = "MMMM D, YYYY",
