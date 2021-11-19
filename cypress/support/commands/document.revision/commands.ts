@@ -54,6 +54,11 @@ declare global {
       drClickUpgradeForm(): Chainable<Subject>;
       drVerifyTitle(params: { title: string }): Chainable<Subject>;
       drVerifyDescription(params: { description: string }): Chainable<Subject>;
+      drPatchDocType(params: {
+        docTypeId: string;
+        employeeId: string;
+        sessionId: string;
+        payload: any; }): Chainable<Subject>;
 
       /* Document Approval Matrix */
 
@@ -789,3 +794,21 @@ Cypress.Commands.add("drVerifyTitle", (params: {title: string}) => {
 Cypress.Commands.add("drVerifyDescription", (params: {description: string}) => {
   cy.get("[data-cy=\"RichTextEditor.description\"]").find("span[data-text]").should("have.text", params.description);
 });
+
+Cypress.Commands.add("drPatchDocType", (params: {
+  docTypeId: string;
+  employeeId: string;
+  sessionId: string;
+  payload: any; }) =>
+{
+  cy.request({
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/document_type/${params.docTypeId}`,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+    body: params.payload,
+  }).then((response) => response ? response.body : {})
+    .then((response) => JSON.stringify(response));
+});
+
