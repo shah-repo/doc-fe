@@ -14,7 +14,7 @@ const styles = () => ({
   },
   colorPrimary: {
     color: (props) =>
-      props.status === TrainingStatus.OVERDUE
+      props.trainingStatus === TrainingStatus.OVERDUE
         ? Colors.latest_red_varient
         : Colors.latest_yellow_varient,
   },

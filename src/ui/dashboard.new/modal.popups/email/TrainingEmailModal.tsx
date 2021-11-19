@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ExpandIcon } from "../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/email_success.svg";
@@ -19,45 +20,67 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../../common/utils/date";
+import { emailAllActions } from "../../../../state/ducks/email.all";
+import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import { StyledListItem } from "./StyledListItem";
 import { styles } from "./TrainingEmailModal.styles";
 
 interface TrainingEmailModalProps {
+  id: string;
   handleEmailModelClose: () => void;
-  dueApprovers?: any;
-  overdueApprovers?: any;
-  timestamp?: any;
+  pendingTrainees?: any;
+  timestamp?: string | undefined;
+  isOverDue?: boolean;
 }
 
 const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
+  id,
   handleEmailModelClose,
-  dueApprovers,
-  overdueApprovers,
+  pendingTrainees,
+  isOverDue,
   timestamp,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openOverdue, setOpenOverdue] = React.useState(true);
-  const [openDue, setOpenDue] = React.useState(false);
+  // const [openDue, setOpenDue] = React.useState(false);
 
   const handleClickOverdue = () => {
     setOpenOverdue(!openOverdue);
   };
 
-  const handleClickDue = () => {
-    setOpenDue(!openDue);
-  };
+  // const handleClickDue = () => {
+  //   setOpenDue(!openDue);
+  // };
 
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
     setTimeout(() => {
       handleApiAlertModelClose();
-    }, 1000);
+    }, 2000);
   };
 
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
+  };
+
+  const intl = useIntl();
+  const sendEmail = useActionCreator(emailAllActions.sendEmail);
+
+  const async = useAsync({
+    onSuccess: () => {
+      handleApiAlertModelOpen();
+    },
+    onError: () => {
+      toastError(intl.formatMessage({ id: "common.falied.email" }));
+    },
+  });
+
+  const handleSendEmail = () => {
+    async.start(sendEmail, id, async);
   };
 
   const apiAlertModelbody = (
@@ -108,7 +131,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             className={classes.confmesgdate}
           >
             <Text translation="common.sent" />:{" "}
-            {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
+            {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
       </Grid>
@@ -157,14 +180,17 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                   <Typography
                     variant="h2"
                     component="h2"
-                    className={classes.overduetitle}
+                    className={
+                      isOverDue ? classes.overduetitle : classes.duetitle
+                    }
                     noWrap
                   >
-                    <Text translation="common.overdue.caps" />
-                    {` `}({overdueApprovers?.length || 0})
+                    {isOverDue && <Text translation="common.overdue.caps" />}
+                    {!isOverDue && <Text translation="common.duein7days" />}
+                    {` `}({pendingTrainees?.length || 0})
                   </Typography>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Typography
                     variant="h2"
                     component="h2"
@@ -174,11 +200,11 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     <Text translation="email.last.sent" />:{" "}
                     {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
                   </Typography>
-                </Grid>
+                </Grid> */}
 
                 <Grid item>
                   <Button
-                    onClick={handleApiAlertModelOpen}
+                    onClick={() => handleSendEmail()}
                     className={classes.emailbutton}
                   >
                     <Text translation="email.button.title" />
@@ -203,90 +229,13 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           className={classes.listrootdue}
         >
           <List dense disablePadding>
-            {overdueApprovers?.map((due, index) => (
+            {pendingTrainees?.map((due, index) => (
               <StyledListItem button key={index}>
                 <Avatar
+                  style={{ backgroundColor: `${due.userInitialColor}` }}
                   className={classes.listitemicon}
                   alt={due.userName}
-                  src="."
-                />
-                <ListItemText
-                  id={due.employeeId}
-                  primary={
-                    <Typography
-                      component="span"
-                      variant="h2"
-                      className={classes.listitemtext}
-                    >
-                      {due.userName}
-                    </Typography>
-                  }
-                />
-              </StyledListItem>
-            ))}
-          </List>
-        </Collapse>
-      </Box>
-      <Box component="div" className={classes.duesoonBox}>
-        <StyledListItem button>
-          {openDue ? (
-            <CollapseIcon
-              className={classes.iconupdown}
-              onClick={handleClickDue}
-            />
-          ) : (
-            <ExpandIcon
-              className={classes.iconupdown}
-              onClick={handleClickDue}
-            />
-          )}
-          <ListItemText
-            primary={
-              <Grid container justify="space-between" alignItems="center">
-                <Grid item>
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className={classes.duetitle}
-                    noWrap
-                  >
-                    <Text translation="common.duein7days" />
-                    {` `}({dueApprovers?.length || 0})
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Button
-                    onClick={handleApiAlertModelOpen}
-                    className={classes.emailbutton}
-                  >
-                    <Text translation="email.button.title" />
-                  </Button>
-                  <Modal
-                    open={apiAlertModelOpen}
-                    onClose={handleApiAlertModelClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                  >
-                    {apiAlertModelbody}
-                  </Modal>
-                </Grid>
-              </Grid>
-            }
-          />
-        </StyledListItem>
-        <Collapse
-          in={openDue}
-          timeout="auto"
-          unmountOnExit
-          className={classes.listrootduesoon}
-        >
-          <List dense disablePadding>
-            {dueApprovers.map((due, index) => (
-              <StyledListItem button key={index}>
-                <Avatar
-                  className={classes.listitemicon}
-                  alt={due.userName}
-                  src="."
+                  src={due.userAvatar || "."}
                 />
                 <ListItemText
                   id={due.employeeId}

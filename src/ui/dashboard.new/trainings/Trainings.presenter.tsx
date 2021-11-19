@@ -1,29 +1,17 @@
-import { Grid, List, Typography } from "@material-ui/core";
+import { Grid, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../common/utils/date";
+import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
-import PendingTraining from "../line.items/training/pending.training/pendingTraining";
 import { styles } from "./Trainings.styles";
 
-interface Props {
-  trainingItems: {
-    id: string;
-    type: string;
-    title: string;
-    documentId: string;
-    status: string;
-    timestamp: string;
-    verbose: string;
-    dueDate?: any;
-    requestedBy?: any;
-    approvers: string[];
-  }[];
-}
-
-const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
-  trainingItems,
-}) => {
+const TrainingsLineItemPresenter: React.FunctionComponent = () => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
@@ -32,41 +20,30 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItemId("");
   };
+  const trainingItems = useSelector(trainingSelectors.trainingList);
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
-          case ActionTypes.NEW_TRAINING_RECORDS:
+          case ActionTypes.TRAINING_STATUS_OWNER:
             return (
               <NewTraining
                 key={index}
                 id={pendingAction.id}
+                docId={pendingAction.docId}
+                docRevId={pendingAction.docRevId}
                 type={pendingAction.type}
-                title={pendingAction.title}
-                documentId={pendingAction.documentId}
-                status={pendingAction.status}
-                timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                dueDate={pendingAction.dueDate}
-                approvers={pendingAction.approvers}
-                hoverItemId= {hoverItemId}
-                onMouseHoverItem= {onMouseHoverItem}
-              />
-            );
-          case ActionTypes.PENDING_TRAINING_RECORDS:
-            return (
-              <PendingTraining
-                key={index}
-                id={pendingAction.id}
-                type={pendingAction.type}
-                title={pendingAction.title}
-                documentId={pendingAction.documentId}
-                status={pendingAction.status}
-                timestamp={pendingAction.timestamp}
-                verbose={pendingAction.verbose}
-                dueDate={pendingAction.dueDate}
-                hoverItemId= {hoverItemId}
-                onMouseHoverItem= {onMouseHoverItem}
+                docRevName={pendingAction.docRevName}
+                docRevVersion={pendingAction.docRevVersion}
+                docDocumentId={pendingAction.docDocumentId}
+                trainingStatus={pendingAction.trainingStatus}
+                timestamp={getFormattedDateString(
+                  pendingAction.timestamp,
+                  MomentFormats.BriefDateTime
+                )}
+                pendingTrainees={pendingAction.pendingTrainees}
+                hoverItemId={hoverItemId}
+                onMouseHoverItem={onMouseHoverItem}
               />
             );
           default:
@@ -76,16 +53,22 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
     </List>
   );
   const renderNoPendingActions = trainingItems.length === 0 && (
-    <Typography className={classes.noPendingActions}>
-      <Text
-        translation="dashboard.noPendingActions"
-        dataCy="dashboard.noPendingActions"
+    <List dense>
+      <ListItemText
+        primary={
+          <Typography className={classes.noPendingActions}>
+            <Text
+              translation="dashboard.noPendingActions"
+              dataCy="dashboard.noPendingActions"
+            />
+          </Typography>
+        }
       />
-    </Typography>
+    </List>
   );
 
   return (
-    <Grid container={true} spacing={5}>
+    <Grid container={true} spacing={5} className={classes.grid}>
       <Grid item={true} md={12} sm={12}>
         {trainingItems.length > 0 && renderPendingActions()}
         {renderNoPendingActions}
