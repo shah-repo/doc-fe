@@ -22,33 +22,43 @@ import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/i
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
+import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
-import { HoverStyleChip } from "./HoverStyleChipApprovalApproved";
-import { NormalStyleChip } from "./NormalStyleChipApprovalApproved";
 
 interface Props {
   id: string;
   type: string;
-  title: string | undefined;
-  arId: string | undefined;
-  arStatus: string | undefined;
-  timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
-  docRevs: any;
+  title: string;
+  arId: string;
+  arChangeRequestId: string;
+  arStatus: string;
+  timestamp: string;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  arChangeRequestId,
   arStatus,
   title,
   timestamp,
@@ -57,8 +67,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   const [closeHover, setCloseHover] = React.useState(false);
   // const [pinHover, setPinHover] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
@@ -66,7 +74,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const transitionDialog = useDialog();
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
   const handleClick = () => {
     setOpen(!open);
@@ -82,20 +90,20 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog.open();
   };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const onMouseLeaveActionIcons = () => {
+    setCloseHover(false);
+    // setPinHover(false);
+  };
+  /* const onMouseHoverPinIcon = () => {
+    setCloseHover(false);
+    // setPinHover(true);
+  };*/
   const onMouseHoverCloseIcon = () => {
+    // setPinHover(false);
     setCloseHover(true);
   };
-  const onMouseLeaveCloseIcon = () => {
-    setCloseHover(false);
-  };
-  const handleViewClick = (id: string) => {
-    // setViewItem(id);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   const onMouseHoverViewIcon = (id: string) => {
     setViewHoverItem(id);
@@ -111,15 +119,12 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
-  };
 
   return (
     <>
       <StyledListItem
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
       >
@@ -142,49 +147,47 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {title}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    is&nbsp;
+                    <Text translation="is" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -200,7 +203,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<ApprovedIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     {hoverItem && (
@@ -208,7 +211,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<ApprovedWhiteIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                   </Typography>
@@ -220,10 +223,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                &nbsp;&nbsp;
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
@@ -231,7 +231,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     className={classes.timestampContainer}
                     color="textSecondary"
                   >
-                    &nbsp; {timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -239,7 +239,11 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {!open && hoverItem && (
-          <Box component="div" className={classes.actionIcons}>
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
             <span>
               {!closeHover && (
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
@@ -248,7 +252,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Close" placement="top" arrow>
                   <CloseSolidIcon
                     onClick={handleCloseClick}
-                    onMouseLeave={onMouseLeaveCloseIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -259,7 +263,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
-                    onMouseLeave={onMouseLeavePinIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -335,10 +339,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.id)}
-                      onMouseLeave={onMouseLeaveViewIcon}
-                    />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
                   </StyleTooltip>
                 )}
               </Box>
@@ -348,7 +349,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <ApproveDialogueContainer
         transition="closed"
-        changeRequestId={id}
+        changeRequestId={arChangeRequestId}
         arId={arId}
         title={title}
         transitionDialog={transitionDialog}

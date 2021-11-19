@@ -20,27 +20,50 @@ import { ReactComponent as PendingReviewIcon } from "../../../../../assets/image
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
-import EmailModal from "../../../modal.popups/email/EmailDialog";
+import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
+import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { HoverStyleChip } from "./HoverStyleChipPendingReview";
-import { NormalStyleChip } from "./NormalStyleChipPendingReview";
+import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
 interface Props {
   id: string;
   type: string;
-  title: string | undefined;
-  arId: string | undefined;
-  arStatus: string | undefined;
-  timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
-  docRevs: any;
+  title: string;
+  arId: string;
+  arStatus: string;
+  timestamp: string;
+  pendingApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  approvedApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -50,6 +73,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   title,
   arStatus,
   pendingApprovers,
+  approvedApprovers,
   hoverItemId,
   onMouseHoverItem,
 }) => {
@@ -71,10 +95,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const handleViewClick = (id: string) => {
     // setViewItem(id);
   };
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   // const onMouseHoverPinIcon = () => {
   //   setPinHover(true);
@@ -101,7 +125,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
       >
         {open ? (
@@ -130,13 +154,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
@@ -148,13 +171,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {title}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
@@ -162,7 +184,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     component="span"
                     variant="caption"
                     onClick={openApproversModel}
-                    className={classes.typographyStatus}
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
@@ -171,7 +193,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewWhiteIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     {(hoverItem || open) && (
@@ -179,10 +201,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    &nbsp;
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -193,25 +214,41 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    pending approvals from
+                    <Text translation="pending.approval" />
                   </Typography>
                 </Grid>
               </Grid>
-
               <Grid
                 container={true}
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <Grid
+                  zeroMinWidth
+                  item={true}
+                  className={`${classes.truncateText} ${classes.margin7}`}
+                >
                   <StyleTooltip
                     title={
                       <>
                         <Typography color="inherit">
-                          Assigned to {size(pendingApprovers)} users. <br />0
-                          have Approved and {size(pendingApprovers)} are
-                          Pending.
+                          <Text
+                            translation="assigned.users.count"
+                            values={{
+                              count:
+                                size(pendingApprovers) +
+                                size(approvedApprovers),
+                            }}
+                          />
+                          <br />
+                          <Text
+                            translation="approved.and.pending.count"
+                            values={{
+                              approved: size(approvedApprovers),
+                              pending: size(pendingApprovers),
+                            }}
+                          />
                         </Typography>
                       </>
                     }
@@ -238,11 +275,11 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Link>
                   </StyleTooltip>
-                  &nbsp;&nbsp;&nbsp;
                 </Grid>
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid
+                  item={true}
+                  className={`${classes.grayDot} ${classes.margin5}`}
+                ></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -251,7 +288,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -341,7 +378,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     arrow
                   >
                     <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.id)}
+                      onClick={() => handleViewClick(prItem.docId)}
                       onMouseLeave={onMouseLeaveViewIcon}
                     />
                   </StyleTooltip>
@@ -358,8 +395,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         aria-describedby="simple-modal-description"
       >
         <EmailModal
+          id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={pendingApprovers}
+          approvedApprovers={approvedApprovers}
         />
       </Modal>
     </>

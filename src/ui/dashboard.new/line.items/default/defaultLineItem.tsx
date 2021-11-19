@@ -6,7 +6,7 @@ import { styles } from "./defaultLineItem.styles";
 interface Props {
   type: string;
   status: string | undefined;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalChangePresenter: React.FunctionComponent<Props> = ({
   type,
@@ -15,12 +15,12 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
 
-  const onMouseHoverItemListItem = () => {
+  const onMouseHoverListItem = () => {
     onMouseHoverItem("");
   };
 
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+    <StyledListItem button onMouseEnter={onMouseHoverListItem}>
       <ListItemText
         primary={
           <Grid container={true}>
@@ -28,18 +28,18 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
               <Typography
                 component="span"
                 variant="body2"
-                className={classes.typography}
+                className={`${classes.typography} ${classes.margin5}`}
                 color="textPrimary"
               >
-                {type}&nbsp;
+                {type}
               </Typography>
               <Typography
                 component="span"
                 variant="caption"
-                className={classes.typographyBold}
+                className={`${classes.typographyBold} ${classes.margin5}`}
                 color="textSecondary"
               >
-                {status}&nbsp;
+                {status}
               </Typography>
             </Grid>
           </Grid>

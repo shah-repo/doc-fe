@@ -10,7 +10,6 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { size } from "lodash";
 import React from "react";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
@@ -20,6 +19,7 @@ import { ReactComponent as PendingReviewIcon } from "../../../../../assets/image
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
@@ -32,46 +32,48 @@ import { NormalStyleChip } from "./NormalStyleChipApprovalClosed";
 interface Props {
   id: string;
   type: string;
-  title: string | undefined;
-  arId: string | undefined;
-  arStatus: string | undefined;
-  timestamp: string | undefined;
-  pendingApprovers: any[] | undefined;
-  docRevs: any;
+  title: string;
+  arId: string;
+  arChangeRequestId: string;
+  arStatus: string;
+  timestamp: string;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  arChangeRequestId,
   arStatus,
   title,
   timestamp,
-  pendingApprovers,
   docRevs,
   hoverItemId,
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   // const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
   // const handlePinClick = () => {
   //   setPinned(!pinned);
   // };
-  const handleViewClick = (id: string) => {
-    // setViewItem(id);
-  };
-
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId || id);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   // const onMouseHoverPinIcon = () => {
   //   setPinHover(true);
@@ -85,16 +87,13 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
-  const openApproversModel = (e) => {
-    e.stopPropagation();
-  };
 
   return (
     <>
       <StyledListItem
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverItemListItem}
+        onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
       >
         {open ? (
@@ -116,49 +115,47 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
                     <Typography
                       component="span"
                       variant="caption"
-                      className={classes.typographyBold}
+                      className={`${classes.typographyBold} ${classes.margin5}`}
                       color="textSecondary"
                       noWrap
                     >
                       {title}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    is&nbsp;
+                    <Text translation="is" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -174,7 +171,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<CloseSolidIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
                     {(hoverItem || open) && (
@@ -182,10 +179,9 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<CloseWhiteIcon />}
-                        label={arStatus}
+                        label={STATUS_TYPES_LABEL[arStatus]}
                       />
                     )}
-                    &nbsp;
                   </Typography>
                 </Grid>
               </Grid>
@@ -195,34 +191,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Typography color="inherit">
-                          Assigned to {size(pendingApprovers)} users. <br />4
-                          have Approved and 6 are Pending.
-                        </Typography>
-                      </>
-                    }
-                    placement="top-start"
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      onClick={openApproversModel}
-                      noWrap
-                    >
-                      {pendingApprovers?.join(",")}
-                    </Typography>
-                  </StyleTooltip>
-                  &nbsp;&nbsp;
-                </Grid>
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -231,7 +200,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -320,10 +289,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.id)}
-                      onMouseLeave={onMouseLeaveViewIcon}
-                    />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
                   </StyleTooltip>
                 )}
               </Box>

@@ -1,5 +1,5 @@
 import { Chip, withStyles } from "@material-ui/core";
-import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
+import { TrainingStatus } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../../layout/theme/utils/colors";
 
 const styles = () => ({

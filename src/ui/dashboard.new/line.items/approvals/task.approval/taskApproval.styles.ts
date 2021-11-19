@@ -12,6 +12,31 @@ export const styles = makeStyles(() =>
     link: {
       color: Colors.black,
     },
+    icon: {
+      width: "15px",
+    },
+    listItem: {
+      paddingLeft: "1px",
+    },
+    viewTooltipText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "12px",
+      lineHeight: "15px",
+    },
+    nested: {
+      marginLeft: "32px",
+      borderLeft: `1px solid ${Colors.light_gray_blue}`,
+      maxWidth: "calc( 100% - 40px)",
+      paddingLeft: "25px",
+    },
+    customTooltipWidth: {
+      maxWidth: 500,
+    },
+    collapsedList: {
+      backgroundColor: Colors.sky_blue,
+    },
     actionIcons: {
       /* Action Icons */
       /* Auto Layout */
@@ -32,6 +57,10 @@ export const styles = makeStyles(() =>
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
+    },
+    avatar: {
+      width: "35px",
+      height: "35px",
     },
     typographyBold: {
       fontSize: "14px",
@@ -61,8 +90,16 @@ export const styles = makeStyles(() =>
       width: "4px",
       height: "4px",
       right: "4px",
+      marginLeft: "4px",
+      marginRight: "5px",
       position: "relative",
       background: Colors.font_gray,
+    },
+    margin5: {
+      marginRight: "5px",
+    },
+    margin7: {
+      marginRight: "7px",
     },
   })
 );

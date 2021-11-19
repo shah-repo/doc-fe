@@ -6,10 +6,11 @@ export const styles = makeStyles(() =>
       color: "red",
     },
     root: {
-      top: 20,
       overflow: "auto",
-      minHeight: "calc(100vh - 160px)",
-      maxHeight: "calc(100vh - 160px)",
+      maxHeight: "calc(100vh - 185px)",
+    },
+    grid: {
+      marginTop: 5,
     },
   })
 );

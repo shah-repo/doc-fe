@@ -2,8 +2,11 @@
 import {
   Avatar,
   Box,
+  Collapse,
   Grid,
+  IconButton,
   Link,
+  List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -11,53 +14,82 @@ import {
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
+import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
+import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
+import Colors from "../../../../layout/theme/utils/colors";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import ApproveDialogueContainer from "../dialogs/approveDialogueContainer";
+import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
 
 interface Props {
   id: string;
   type: string;
-  arId?: string | undefined;
-  arStatus?: string | undefined;
-  timestamp: string | undefined;
+  arId: string;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
+  arChangeRequestId: string;
+  timestamp: string;
   docRevOwnerAvatar?: string | undefined | null;
+  docRevOwnerInitialColor: string;
   docRevOwnerName: string | undefined;
   title?: string | undefined;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
+  arChangeRequestId,
   arId,
+  docRevs,
   docRevOwnerName,
   timestamp,
   title,
   docRevOwnerAvatar,
+  docRevOwnerInitialColor,
   hoverItemId,
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   // const [pinHover, setPinHover] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
-  const hoverItem = hoverItemId === arId;
+  const hoverItem = hoverItemId === id;
 
   // const handlePinClick = () => {
   //   setPinned(!pinned);
   // };
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const onMouseHoverViewIcon = (id: string) => {
+    setViewHoverItem(id);
+  };
+  const onMouseLeaveViewIcon = () => {
+    setViewHoverItem("");
+  };
   const handleApproveClick = () => {
     openApproveDialog();
     setApproved(!approved);
@@ -66,23 +98,28 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     openRejectDialog();
     setRejected(!rejected);
   };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const onMouseLeaveActionIcons = () => {
+    setApproveHover(false);
+    setRejectHover(false);
+    // setPinHover(false);
+  };
+  /* const onMouseHoverPinIcon = () => {
+    setApproveHover(false);
+    setRejectHover(false);
+    // setPinHover(true);
+  };*/
   const onMouseHoverApproveIcon = () => {
+    // setPinHover(false);
+    setRejectHover(false);
     setApproveHover(true);
   };
-  const onMouseLeaveApproveIcon = () => {
-    setApproveHover(false);
-  };
   const onMouseHoverRejectIcon = () => {
+    // setPinHover(false);
+    setApproveHover(false);
     setRejectHover(true);
   };
-  const onMouseLeaveRejectIcon = () => {
-    setRejectHover(false);
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
   };
   const transitionDialog = useDialog();
   const transitionDialog1 = useDialog();
@@ -103,15 +140,24 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog1.open();
   };
-  const onMouseHoverItemListItem = () => {
-    onMouseHoverItem(arId);
-  };
 
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+      <StyledListItem
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        button
+        className={classes.listItem}
+        onMouseEnter={onMouseHoverListItem}
+      >
+        {open ? (
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
+        ) : (
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
+        )}
         <ListItemAvatar>
           <Avatar
+            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+            className={classes.avatar}
             alt={docRevOwnerName}
             src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
           />
@@ -129,45 +175,44 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyBold}
+                    className={`${classes.typographyBold} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevOwnerName} &nbsp;
+                    {docRevOwnerName}
                   </Typography>
                 </Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    needs approval for&nbsp;
+                    <Text translation="require.approval" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.typography}
+                      className={`${classes.typography} ${classes.margin5}`}
                       color="textPrimary"
                       noWrap
                     >
                       {arId}
                     </Typography>
-                    &nbsp;
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={changeRequestEditPath(id)}
+                    href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
                   >
@@ -189,10 +234,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 justify="flex-start"
                 alignItems="center"
               >
-                &nbsp;&nbsp;
-                <Grid item={true} className={classes.grayDot}>
-                  &nbsp;
-                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true} md={12} sm={12}>
                   <Typography
                     component="span"
@@ -201,7 +243,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {timestamp}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
@@ -209,7 +251,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           }
         />
         {hoverItem && (
-          <Box component="div" className={classes.actionIcons}>
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
             <span>
               {!rejectHover && (
                 <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
@@ -218,7 +264,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
                     onClick={handleRejectClick}
-                    onMouseLeave={onMouseLeaveRejectIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -231,7 +277,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
                     onClick={handleApproveClick}
-                    onMouseLeave={onMouseLeaveApproveIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -242,7 +288,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
-                    onMouseLeave={onMouseLeavePinIcon}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
@@ -250,15 +296,91 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
       </StyledListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List dense disablePadding className={classes.collapsedList}>
+          {docRevs.map((prItem, index) => (
+            <StyledListItem button className={classes.nested} key={index}>
+              <IconButton aria-label="listIcon">
+                <PendingReviewItemIcon />
+              </IconButton>
+              <ListItemText
+                id={prItem.docId}
+                primary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {prItem.name}
+                  </Typography>
+                }
+              />
+              <Box component="div">
+                {viewHoverItem !== prItem.docId && (
+                  <ViewIcon
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
+                  />
+                )}
+                {viewHoverItem === prItem.docId && (
+                  <StyleTooltip
+                    classes={{ tooltip: classes.customTooltipWidth }}
+                    title={
+                      <>
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.description.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.descriptionOfChange}
+                        </Typography>
+                        <br />
+                        <br />
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.justification.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.justificationOfChange}
+                        </Typography>
+                      </>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
+                  </StyleTooltip>
+                )}
+              </Box>
+            </StyledListItem>
+          ))}
+        </List>
+      </Collapse>
       <ApproveDialogueContainer
         transition="reject"
-        changeRequestId={id}
+        changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
-        changeRequestId={id}
+        changeRequestId={arChangeRequestId}
         transitionDialog={transitionDialog}
         label="transition.action.approve"
       />

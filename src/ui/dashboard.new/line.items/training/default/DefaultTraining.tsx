@@ -13,10 +13,11 @@ import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import {
   TrainingStatus,
   TrainingStatusLabels,
-} from "../../../../../state/ducks/dashboard/types";
+} from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -27,15 +28,16 @@ import { styles } from "./DefaultTraining.styles";
 interface Props {
   id: string;
   type: string;
-  docRevName: string | undefined;
-  docId: string | undefined;
-  docDocumentId: string | undefined;
-  docRevId: string | undefined;
-  status: string | undefined;
-  timestamp: string | undefined;
-  dueOn: string | undefined;
+  docRevName: Nullable<string>;
+  docRevVersion: string;
+  docId: string;
+  docDocumentId: string;
+  docRevId: string;
+  status: string;
+  timestamp: string;
+  dueOn: Nullable<string>;
   hoverItemId: string;
-  onMouseHoverItem: (arId: string | undefined) => void;
+  onMouseHoverItem: (id: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -43,6 +45,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docDocumentId,
   docRevId,
   docRevName,
+  docRevVersion,
   status,
   timestamp,
   dueOn,
@@ -87,7 +90,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
@@ -98,7 +101,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                           : "training.your.on"
                       }
                     />
-                    &nbsp;
                   </Typography>
                 </Grid>
               )}
@@ -111,11 +113,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="body2"
-                    className={classes.typography}
+                    className={`${classes.typography} ${classes.margin5}`}
                     color="textPrimary"
                     noWrap
                   >
-                    {docId}&nbsp;
+                    {docId}
                   </Typography>
                 </Link>
               </Grid>
@@ -128,11 +130,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.typographyBold}
+                    className={`${classes.typographyBold} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {docRevName}&nbsp;
+                    {docRevName} {docRevVersion}
                   </Typography>
                 </Link>
               </Grid>
@@ -140,65 +142,67 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Typography
                   component="span"
                   variant="body2"
-                  className={classes.typography}
+                  className={`${classes.typography} ${classes.margin5}`}
                   color="textPrimary"
                   noWrap
                 >
-                  {TrainingStatus.ASSIGNED !== status ? "is" : ""}&nbsp;
+                  {TrainingStatus.ASSIGNED !== status ? "is" : ""}
                   {TrainingStatus.ASSIGNED === status && (
                     <Text translation="training.assign" />
                   )}
                 </Typography>
               </Grid>
 
-              <Grid item={true}>
-                {TrainingStatus.ASSIGNED !== status && (
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyStatus}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {!hoverItem && (
-                      <NormalStyleChip
-                        {...{ status }}
-                        size="small"
-                        color="primary"
-                        icon={
-                          status === TrainingStatus.COMPLETED ? (
-                            <ApprovedIcon />
-                          ) : status === TrainingStatus.OVERDUE ? (
-                            <OverdueIcon />
-                          ) : (
-                            <WarningIcon />
-                          )
-                        }
-                        label={status && TrainingStatusLabels[status]}
-                      />
-                    )}
-                    {hoverItem && (
-                      <HoverStyleChip
-                        {...{ status }}
-                        color="primary"
-                        size="small"
-                        icon={
-                          status === TrainingStatus.COMPLETED ? (
-                            <ApprovedWhiteIcon />
-                          ) : status === TrainingStatus.OVERDUE ? (
-                            <OverdueWhiteIcon />
-                          ) : (
-                            <WarningWhiteIcon />
-                          )
-                        }
-                        label={status && TrainingStatusLabels[status]}
-                      />
-                    )}
-                  </Typography>
-                )}
-                &nbsp;&nbsp;
-              </Grid>
-              {status && TrainingStatus.COMPLETED !== status && (
+              {TrainingStatus[status] && (
+                <Grid item={true}>
+                  {TrainingStatus.ASSIGNED !== status && (
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyStatus}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {!hoverItem && (
+                        <NormalStyleChip
+                          {...{ status }}
+                          size="small"
+                          color="primary"
+                          icon={
+                            status === TrainingStatus.COMPLETED ? (
+                              <ApprovedIcon />
+                            ) : status === TrainingStatus.OVERDUE ? (
+                              <OverdueIcon />
+                            ) : (
+                              <WarningIcon />
+                            )
+                          }
+                          label={status && TrainingStatusLabels[status]}
+                        />
+                      )}
+                      {hoverItem && (
+                        <HoverStyleChip
+                          {...{ status }}
+                          color="primary"
+                          size="small"
+                          icon={
+                            status === TrainingStatus.COMPLETED ? (
+                              <ApprovedWhiteIcon />
+                            ) : status === TrainingStatus.OVERDUE ? (
+                              <OverdueWhiteIcon />
+                            ) : (
+                              <WarningWhiteIcon />
+                            )
+                          }
+                          label={status && TrainingStatusLabels[status]}
+                        />
+                      )}
+                    </Typography>
+                  )}
+                </Grid>
+              )}
+              {TrainingStatus[status] &&
+                TrainingStatus.COMPLETED !== status && (
                 <Grid
                   item={true}
                   className={
@@ -208,11 +212,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         ? classes.redDot
                         : classes.yellowDot
                   }
-                >
-                  &nbsp;
-                </Grid>
+                ></Grid>
               )}
-              {status && TrainingStatus.COMPLETED !== status && (
+              {TrainingStatus[status] && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -227,9 +229,20 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    &nbsp; {dueOn}
+                    {dueOn}
                   </Typography>
                 </Grid>
+              )}
+              {!TrainingStatus[status] && (
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.typographyStatus}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {status}
+                </Typography>
               )}
             </Grid>
             <Grid
@@ -238,10 +251,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               justify="flex-start"
               alignItems="center"
             >
-              &nbsp;
-              <Grid item={true} className={classes.grayDot}>
-                &nbsp;
-              </Grid>
+              <Grid item={true} className={classes.grayDot}></Grid>
               <Grid item={true}>
                 <Typography
                   component="span"
@@ -250,7 +260,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textSecondary"
                   noWrap
                 >
-                  &nbsp; {timestamp}
+                  {timestamp}
                 </Typography>
               </Grid>
             </Grid>

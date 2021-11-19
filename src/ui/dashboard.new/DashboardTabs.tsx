@@ -1,5 +1,6 @@
 import { Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
 import { ReactComponent as RecentIcon } from "../../assets/images/recent.svg";
@@ -7,6 +8,7 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
+import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
 import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
@@ -17,10 +19,7 @@ import TabPanel from "./TabPanel";
 const DashboardTabs: React.FunctionComponent = () => {
   const classes = styles();
   const [value, setValue] = React.useState(0);
-  let isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
-  /* TO DO:: For testing purpose only, this has been added.
-  Once we get DASHBOARD_ADMIN tag from backend, this line should be removed. */
-  isDashboardAdmin = true;
+  const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   const dynamicObjProps = (index: any) => ({
     "id": `scrollable-auto-tab-${index}`,
@@ -30,6 +29,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -59,7 +59,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     variant="inherit"
                     className={classes.tabItemCount}
                   >
-                      (26)
+                    ({feedItems?.length || 0})
                   </Typography>
                 </Box>
               }

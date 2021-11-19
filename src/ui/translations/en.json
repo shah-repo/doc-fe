@@ -1094,6 +1094,8 @@
   "dashboard.training.container": "Training Container",
   "dashboard.recent.container": "Recent Container",
   "dashboard.training.stats.container": "Training Stats Container (Chart & Line Items)",
+  "dashboard.calibration.due": "is Due for Calibration in {noOfDays} days",
+  "dashboard.preventive.maintaince.due": "is Due for Preventive Maintaince in {noOfDays} days",
   "header.welcome.back": "Welcome Back",
   "my.feed.tab.title": "My Feed",
   "trainings.tab.title": "Trainings",
@@ -1107,7 +1109,15 @@
   "email.button.title": "EMAIL ALL",
   "email.success.message": "EMAIL SENT TO ALL",
   "email.title": "Email Confirmation",
+  "assigned.users.count": "Assigned to {count} users.",
+  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
   "training.your": "Your training",
   "training.your.on": "Your training on",
-  "training.assign": "A training is assigned to you"
+  "training.assign": "A training is assigned to you",
+  "require.approval": "needs your approval for",
+  "pending.approval": "pending approvals from",
+  "is": "is",
+  "your": "your",
+  "to": "to",
+  "sent": "Sent"
 }
