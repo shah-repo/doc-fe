@@ -8,7 +8,7 @@ import {
   List,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -18,7 +18,7 @@ import { ReactComponent as EmailSuccessIcon } from "../../../../assets/images/em
 import { ReactComponent as ModelCloseIcon } from "../../../../assets/images/model_close.svg";
 import {
   getFormattedDateString,
-  MomentFormats
+  MomentFormats,
 } from "../../../../common/utils/date";
 import { emailAllActions } from "../../../../state/ducks/email.all";
 import { toastError } from "../../../components/notifications";
