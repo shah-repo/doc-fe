@@ -5,7 +5,7 @@ enum Colors {
   background_white = "#F5F8FF",
   // black
   black = "#000",
-  font_black = "#080B11",
+  font_black="#080B11",
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
