@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 enum Colors {
+  // white
   white = "#FFF",
+  // black
   black = "#000",
+  font_black="#080B11",
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
