@@ -1087,5 +1087,10 @@
   "dashboard.training.container": "Training Container",
   "dashboard.recent.container": "Recent Container",
   "dashboard.training.stats.container": "Training Stats Container (Chart & Line Items)",
-  "header.welcome.back": "Welcome Back"
+  "header.welcome.back": "Welcome Back",
+  "training.stats.all": "ALL",
+  "training.stats.title": "TRAININGS OUTSTANDING",
+  "training.stats.totalOutstanding": "Total Outstanding",
+  "training.stats.overdue": "OVERDUE",
+  "training.stats.duein7days": "DUE IN 7 DAYS"
 }
