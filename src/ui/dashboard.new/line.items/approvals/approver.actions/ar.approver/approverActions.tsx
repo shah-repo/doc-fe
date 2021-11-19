@@ -22,7 +22,6 @@ import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view
 import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
-// import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
 import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";

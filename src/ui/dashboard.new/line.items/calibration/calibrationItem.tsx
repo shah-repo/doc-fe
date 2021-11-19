@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { documentVersionPath } from "../../../document.revision/utils/paths";
-import { StyledListItem } from "../common/StyledListItem";
+import { ReactComponent as EQIcon } from "../../../../assets/images/EQ.svg";
 import { ActionTypes } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../components/Text";
-import { ReactComponent as TrainingIcon } from "../../../../assets/images/training.svg";
+import { documentVersionPath } from "../../../document.revision/utils/paths";
+import { StyledListItem } from "../common/StyledListItem";
 import { styles } from "./calibrationItem.styles";
 
 interface Props {
@@ -59,7 +59,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemIcon>
-          <TrainingIcon />
+          <EQIcon />
         </ListItemIcon>
         <ListItemText
           primary={

@@ -9,7 +9,6 @@ import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-// import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
@@ -159,18 +158,18 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
                     ))}
                   {STATUS_TYPES_LABEL.APPROVED !== status &&
                     STATUS_TYPES_LABEL.RELEASED !== status && (
-                      <Grid item={true}>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                          className={`${classes.typographyStatus} ${classes.margin5}`}
-                          color="textSecondary"
-                          noWrap
-                        >
-                          {status}
-                        </Typography>
-                      </Grid>
-                    )}
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyStatus} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {status}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid
                   container={true}
