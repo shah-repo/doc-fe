@@ -13,6 +13,7 @@ import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import {
   TrainingStatus,
   TrainingStatusLabels,
@@ -21,7 +22,6 @@ import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
 import { HoverStyleChip } from "./DefaultHoverStyleChip";
-import { Nullable } from "../../../../../state/ducks/common/types";
 import { NormalStyleChip } from "./DefaultNormalStyleChip";
 import { styles } from "./DefaultTraining.styles";
 
@@ -203,17 +203,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               )}
               {TrainingStatus[status] &&
                 TrainingStatus.COMPLETED !== status && (
-                  <Grid
-                    item={true}
-                    className={
-                      TrainingStatus.ASSIGNED === status
-                        ? classes.grayDot
-                        : status === TrainingStatus.OVERDUE
+                <Grid
+                  item={true}
+                  className={
+                    TrainingStatus.ASSIGNED === status
+                      ? classes.grayDot
+                      : status === TrainingStatus.OVERDUE
                         ? classes.redDot
                         : classes.yellowDot
-                    }
-                  ></Grid>
-                )}
+                  }
+                ></Grid>
+              )}
               {TrainingStatus[status] && TrainingStatus.COMPLETED !== status && (
                 <Grid item={true}>
                   <Typography
@@ -223,8 +223,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       status === TrainingStatus.ASSIGNED
                         ? classes.typographyAssigned
                         : status === TrainingStatus.OVERDUE
-                        ? classes.typographyOverdue
-                        : classes.typographyDueInfewDays
+                          ? classes.typographyOverdue
+                          : classes.typographyDueInfewDays
                     }
                     color="textSecondary"
                     noWrap
