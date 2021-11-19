@@ -36,7 +36,7 @@ interface EmailModalProps {
     userInitialColor: string;
     approvalStatus: string;
   }[];
-  timestamp?: string | undefined;
+  timestamp?: string;
   approvedApprovers: {
     userName: string;
     employeeId: string;

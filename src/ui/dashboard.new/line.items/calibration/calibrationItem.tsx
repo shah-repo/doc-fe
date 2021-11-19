@@ -24,7 +24,7 @@ interface Props {
   docRevId: string;
   docRevOwnerId: string;
   equipmentInterval: number;
-  timestamp: string | undefined;
+  timestamp?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }

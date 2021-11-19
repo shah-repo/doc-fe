@@ -39,7 +39,7 @@ interface Props {
   id: string;
   docDocumentId: string;
   docId: string;
-  docRevId?: string | undefined;
+  docRevId?: string;
   type: string;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
@@ -51,13 +51,12 @@ interface Props {
     name: string;
     type: string;
     id: string;
-  }[]
-  | undefined;
-  purchaseOrdeLineItemCount?: number | undefined;
-  purchaseOrderDescription?: string | undefined;
-  purchaseOrderCurrency?: string | undefined;
-  purchaseOrderTotalAmount?: string | undefined;
-  purchaseSupplierName?: string | undefined;
+  }[];
+  purchaseOrdeLineItemCount?: number;
+  purchaseOrderDescription?: string;
+  purchaseOrderCurrency?: string;
+  purchaseOrderTotalAmount?: string;
+  purchaseSupplierName?: string;
   approverName: string;
   approvalId: string;
   approverAvatar: Nullable<string>;

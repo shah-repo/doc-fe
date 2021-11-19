@@ -22,6 +22,7 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { Nullable } from "../../../../../state/ducks/common/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
@@ -47,10 +48,10 @@ interface Props {
   }[];
   arChangeRequestId: string;
   timestamp: string;
-  docRevOwnerAvatar?: string | undefined | null;
+  docRevOwnerAvatar: Nullable<string>;
   docRevOwnerInitialColor: string;
-  docRevOwnerName: string | undefined;
-  title?: string | undefined;
+  docRevOwnerName?: string;
+  title?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
 }

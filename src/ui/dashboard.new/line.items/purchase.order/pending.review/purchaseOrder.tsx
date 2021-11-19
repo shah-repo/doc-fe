@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -37,7 +37,7 @@ interface Props {
   id: string;
   docDocumentId: string;
   docId: string;
-  docRevId?: string | undefined;
+  docRevId?: string;
   type: string;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;

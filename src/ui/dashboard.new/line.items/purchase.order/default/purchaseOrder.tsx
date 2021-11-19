@@ -32,7 +32,7 @@ interface Props {
   id: string;
   docDocumentId: string;
   docId: string;
-  docRevId?: string | undefined;
+  docRevId?: string;
   type: string;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
