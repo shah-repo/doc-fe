@@ -348,6 +348,7 @@
   "common.choose.template": "Choose a Template",
   "common.continue": "Continue",
   "common.overdue": "Overdue",
+  "common.overdue.caps": "OVERDUE",
   "common.yes.im.sure": "Yes, I'm sure",
   "common.work.in.progress": "Work In Progress",
   "common.due.by": "Due by",
@@ -388,6 +389,7 @@
   "common.recent": "Recent",
   "common.is": "is",
   "common.sent": "Sent",
+  "common.duein7days": "DUE IN 7 DAYS",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1096,8 +1098,9 @@
   "training.email.title": "Email Confirmation",
   "training.email.success.message": "EMAIL SENT TO ALL",
   "training.modal.title": "Training Status",
-  "modal.title.overdue": "OVERDUE",
-  "modal.title.dueindays": "DUE IN 7 DAYS",
+  "training.stats.all": "ALL",
+  "training.stats.title": "TRAININGS OUTSTANDING",
+  "training.stats.totalOutstanding": "Total Outstanding",
   "email.last.sent": "Last sent",
   "email.button.title": "EMAIL ALL"
 }

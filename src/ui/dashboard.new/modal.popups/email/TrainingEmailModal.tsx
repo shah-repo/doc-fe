@@ -160,7 +160,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     className={classes.overduetitle}
                     noWrap
                   >
-                    <Text translation="modal.title.overdue" />
+                    <Text translation="common.overdue.caps" />
                     {` `}({overdueApprovers?.length || 0})
                   </Typography>
                 </Grid>
@@ -250,7 +250,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     className={classes.duetitle}
                     noWrap
                   >
-                    <Text translation="modal.title.dueindays" />
+                    <Text translation="common.duein7days" />
                     {` `}({dueApprovers?.length || 0})
                   </Typography>
                 </Grid>

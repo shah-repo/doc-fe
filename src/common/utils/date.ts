@@ -13,10 +13,13 @@ export const getFormattedStartOfDayDateString = (date: DateTypes) => getStartOfD
 
 export const getFormattedDateString = (date: DateTypes, format = "") => moment(date).tz(TIME_ZONE).format(format);
 
+export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf("seconds").fromNow();
+
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",
   MonthDateYearAlt =  "MMMM D, YYYY",
   DateTime = "MMMM D, YYYY hh:mm A",
+  BriefDateTime = "MMM D, YYYY hh:mm A",
   DateTimeAlt = "D MMM YYYY hh:mm a",
   DateTimeComplete = "M/D/YYYY hh:mm A",
   DayMonthDateYear = "ddd MMMM D YYYY",

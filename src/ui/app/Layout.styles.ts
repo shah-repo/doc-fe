@@ -11,7 +11,6 @@ export default (theme: Theme) =>
       "bottom": 0,
       "right": 50,
       "borderRadius": "12px 12px 0 0",
-      "overflow": "auto",
       "backgroundColor": Colors.white,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
