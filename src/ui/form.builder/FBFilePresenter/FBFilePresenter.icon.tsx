@@ -65,6 +65,7 @@ const FBFilePresenterIcon: React.FunctionComponent<FBFilePresenterModeProps> = (
       </Box>
       <Box visibility={(!disabled && filePresenterState?.toolsVisible) ? "visible" : "hidden"}>
         <IconButton
+          data-cy={"remove-" + fileName}
           size="small"
           style={{
             borderRadius: 5,

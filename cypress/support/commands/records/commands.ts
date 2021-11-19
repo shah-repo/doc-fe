@@ -154,7 +154,7 @@ Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
 });
 
 Cypress.Commands.add("recVerifyTitle", (params: {title: string}) => {
-  cy.get("[data-cy=\"SummaryBaseProps-values\"]").should("have.text", params.title);
+  cy.get(" h5[id^=\"SummaryBaseProps\"]").should("have.text", params.title);
 });
 
 Cypress.Commands.add("recVerifyDescription", (params: {description: string}) => {
