@@ -28,7 +28,7 @@ export const styles = makeStyles(() =>
       display: "flex",
       alignItems: "center",
       marginLeft: "5px",
-      color: Colors.font_black,
+      color: Colors.almost_black,
     },
     docIdAndTitle: {
       "fontFamily": "Sora",
@@ -36,7 +36,7 @@ export const styles = makeStyles(() =>
       "fontWeight": 600,
       "fontSize": "14px",
       "lineHeight": "22px",
-      "color": Colors.font_black,
+      "color": Colors.almost_black,
       "& > p": {
         margin: "0px",
       },

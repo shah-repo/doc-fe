@@ -56,7 +56,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyOverdue}
               color="textPrimary"
             >
-              <Text translation="training.stats.overdue" />
+              <Text translation="common.overdue.caps" />
             </Typography>
           )}
           {!isOverdue && (
@@ -66,7 +66,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyDueInfewDays}
               color="textPrimary"
             >
-              <Text translation="training.stats.duein7days" />
+              <Text translation="common.duein7days" />
             </Typography>
           )}
         </Grid>

@@ -40,7 +40,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         fontFamily: "Sora",
         fontStyle: "normal",
         fontWeight: "bold",
-        color: Colors.font_black,
+        color: Colors.almost_black,
         fontSize: 59,
       },
       subtextStyle: {

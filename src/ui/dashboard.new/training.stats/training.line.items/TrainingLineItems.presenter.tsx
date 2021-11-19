@@ -116,7 +116,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
                 <Grid item={true} sm={12}>
                   <span className={classes.dueInSevenTab}></span>
                   <span className={classes.tabHeader}>
-                    <Text translation="training.stats.duein7days" />
+                    <Text translation="common.duein7days" />
                   </span>
                 </Grid>
               </Grid>
@@ -130,7 +130,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
                 <Grid item={true} sm={12}>
                   <span className={classes.overdueTab}></span>
                   <span className={classes.tabHeader}>
-                    <Text translation="training.stats.overdue" />
+                    <Text translation="common.overdue.caps" />
                   </span>
                 </Grid>
               </Grid>
@@ -142,10 +142,10 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           <Text translation="training.stats.all" />
         </TabPanel>
         <TabPanel value={value} index={1} panelData={dueInSevenItems}>
-          <Text translation="training.stats.duein7days" />
+          <Text translation="common.duein7days" />
         </TabPanel>
         <TabPanel value={value} index={2} panelData={overdueItems}>
-          <Text translation="training.stats.overdue" />
+          <Text translation="common.overdue.caps" />
         </TabPanel>
       </Box>
     );

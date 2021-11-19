@@ -1,0 +1,96 @@
+[
+  {
+    "trainingStatus": "DUE",
+    "dueOn": "2021-11-15T08:00:00.000Z",
+    "trainingRecordId": "7ffffc73-b1ee-48ce-8403-c2ae273418a9",
+    "trId": "TRN-00001",
+    "docId": "LOT-00002",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6723",
+    "docRevName": "Digitizing Documents",
+    "docRevId": "ee76a29b-b15f-4f3b-aa83-eb069df6bed4",
+    "id": "589c4444-8e9c-475e-babb-d8b8eb4c7894",
+    "timestamp": "2021-11-13T14:23:53.214Z",
+    "type": "TRAINING_STATUS_TRAINEE"
+  },
+  {
+    "trainingStatus": "OVERDUE",
+    "dueOn": "2021-11-15T08:00:00.000Z",
+    "trainingRecordId": "7ffffc73-b1ee-48ce-8403-c2ae273418a9",
+    "trId": "TRN-00001",
+    "docId": "LOT-00002",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6723",
+    "docRevName": "Sample processing",
+    "docRevId": "ee76a29b-b15f-4f3b-aa83-eb069df6bed4",
+    "id": "902c4444-8e9c-475e-babb-d8b8eb4c7894",
+    "timestamp": "2021-11-13T14:23:53.214Z",
+    "type": "TRAINING_STATUS_TRAINEE"
+  },
+  {
+    "trainingStatus": "DUE",
+    "docId": "LOT-00002",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6723",
+    "docRevName": "Training Room 1",
+    "docRevId": "ee76a29b-b15f-4f3b-aa83-eb069df6bed4",
+    "id": "enn8c796-9e05-49d7-9e71-b9fbed215c88",
+    "timestamp": "2021-11-13T14:23:53.381Z",
+    "type": "TRAINING_STATUS_OWNER",
+    "pendingTrainees": [
+      {
+        "employeeId": "0f9215e8-c575-4826-9bc6-d06540836bee",
+        "userName": "Zoran"
+      },
+      {
+        "employeeId": "0f9215e8-c575-4826-9bc6-d06540836bee",
+        "userName": "Veronika"
+      }
+    ]
+  },
+  {
+    "trainingStatus": "DUE",
+    "docId": "LOT-00003",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6723",
+    "docRevName": "Training Doc2",
+    "docRevId": "ee76a29b-b15l-4f3b-aa83-eb069dj6bed4",
+    "id": "eko8c796-9e05-49d7-4e71-b9fbed215c88",
+    "timestamp": "2021-11-13T14:23:53.381Z",
+    "type": "TRAINING_STATUS_OWNER",
+    "pendingTrainees": [
+      {
+        "employeeId": "0f9215e8-c575-4826-9bc6-d06540836bee",
+        "userName": "Abhishek"
+      }
+    ]
+  },
+  {
+    "trainingStatus": "OVERDUE",
+    "docId": "LOT-00003",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6733",
+    "docRevName": "Springs",
+    "docRevId": "ee76a29b-b15f-4f3b-aa83-eb069df6bed4",
+    "id": "rra8c796-9e05-49d7-9e71-b9fbed215c88",
+    "timestamp": "2021-11-13T14:23:53.381Z",
+    "type": "TRAINING_STATUS_OWNER",
+    "pendingTrainees": [
+      {
+        "employeeId": "0f9215e8-c575-4826-9bc6-d06540836bee",
+        "userName": "Ganesh"
+      }
+    ]
+  },
+  {
+    "trainingStatus": "DUE",
+    "docId": "LOT-00002",
+    "docDocumentId": "0f0b604e-25a5-4669-bf30-2a0e08fe6723",
+    "docRevName": "Clear Docs",
+    "docRevId": "ee76a29b-b15f-4f3b-aa83-eb069df6bed4",
+    "id": "lla8c796-9e05-49d7-9e71-b9fbed215c88",
+    "timestamp": "2021-11-13T14:23:53.381Z",
+    "type": "TRAINING_STATUS_OWNER",
+    "pendingTrainees": [
+      {
+        "employeeId": "0f9215e8-c575-4826-9bc6-d06540836bee",
+        "userName": "Shiv"
+      }
+    ]
+  }
+]

@@ -1,27 +1,29 @@
-/* eslint-disable react/react-in-jsx-scope */
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
-import Text from "../../components/Text";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  outline: {
-    overflow: "auto",
-    minHeight: "calc(100vh - 145px)",
-    maxHeight: "calc(100vh - 145px)",
-  },
-}));
+import { useSelector } from "react-redux";
+import {
+  trainingActions,
+  trainingSelectors,
+} from "../../../state/ducks/dashboard.new/training";
+import AsyncGate from "../../components/AsyncGate";
+import useActionCreator from "../../hooks/useActionCreator";
+import TrainingsLineItemPresenter from "./Trainings.presenter";
 
 const TrainingsLineItemsContainer: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
+  const loadTrainingListAsyncInfo = useSelector(
+    trainingSelectors.getLoadTrainingListAsyncInfo
+  );
   return (
-    <Card className={classes.outline}>
-      <CardContent>
-        <Text translation={"dashboard.training.container"} />
-        {/* <TrainingsPresenter /> */}
-      </CardContent>
-    </Card>);
+    <>
+      <AsyncGate
+        asyncAction={loadTrainingList}
+        asyncState={loadTrainingListAsyncInfo}
+        startActionOnMount={true}
+      >
+        <TrainingsLineItemPresenter />
+      </AsyncGate>
+    </>
+  );
 };
 
 export default TrainingsLineItemsContainer;
