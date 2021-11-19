@@ -11,20 +11,23 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
-import {
-  getFormattedDateString,
-  MomentFormats,
-} from "../../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { emailAllActions } from "../../../../../state/ducks/email.all";
+import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
+import useActionCreator from "../../../../hooks/useActionCreator";
+import useAsync from "../../../../hooks/useAsync";
 import { styles } from "./EmailModal.styles";
 import { StyledListItem } from "./StyledListItem";
 
 interface EmailModalProps {
+  id: string;
   handleEmailModelClose: () => void;
   pendingApprovers: {
     userName: string;
@@ -44,6 +47,7 @@ interface EmailModalProps {
 }
 
 const EmailModal: React.FunctionComponent<EmailModalProps> = ({
+  id,
   handleEmailModelClose,
   pendingApprovers,
   timestamp,
@@ -71,6 +75,22 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
 
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
+  };
+
+  const intl = useIntl();
+  const sendEmail = useActionCreator(emailAllActions.sendEmail);
+
+  const async = useAsync({
+    onSuccess: () => {
+      handleApiAlertModelOpen();
+    },
+    onError: () => {
+      toastError(intl.formatMessage({ id: "common.falied.email" }));
+    },
+  });
+
+  const handleSendEmail = () => {
+    async.start(sendEmail, id, async);
   };
 
   const apiAlertModelbody = (
@@ -121,7 +141,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             className={classes.confmesgdate}
           >
             <Text translation="sent" />:{" "}
-            {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
+            {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
       </Grid>
@@ -177,7 +197,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     {` `}({pendingApprovers?.length})
                   </Typography>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Typography
                     variant="h2"
                     component="h2"
@@ -187,11 +207,10 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Text translation="email.last.sent" />:{" "}
                     {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
                   </Typography>
-                </Grid>
-
+                </Grid> */}
                 <Grid item>
                   <Button
-                    onClick={handleApiAlertModelOpen}
+                    onClick={() => handleSendEmail()}
                     className={classes.emailbutton}
                   >
                     <Text translation="email.button.title" />
