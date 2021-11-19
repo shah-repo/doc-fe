@@ -268,7 +268,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    <Text translation="your" />
+                    <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
                 <Grid item={true}>
@@ -297,7 +297,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                       color="textPrimary"
                       noWrap
                     >
-                      <Text translation="to" />
+                      <Text translation="common.to" />
                     </Typography>
                   </Grid>
                 )} */}

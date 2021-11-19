@@ -197,7 +197,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    <Text translation="is" />
+                    <Text translation="common.is" />
                   </Typography>
                 </Grid>
                 {STATUS_TYPES_LABEL[status] && (

@@ -2,6 +2,7 @@
 enum Colors {
   // white
   white = "#FFF",
+  background_white = "#F5F8FF",
   // black
   black = "#000",
   font_black="#080B11",
@@ -33,6 +34,7 @@ enum Colors {
   medium_red = "#FF8183",
   opal_red = "#f05a5c",
   latest_red_varient = "#EC2B00",
+  trinary_red = "#F14822",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",

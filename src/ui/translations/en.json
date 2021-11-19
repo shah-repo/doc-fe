@@ -386,6 +386,10 @@
   "common.my.feed": "My Feed",
   "common.trainings": "Trainings",
   "common.recent": "Recent",
+  "common.is": "is",
+  "common.your": "your",
+  "common.to": "to",
+  "common.sent": "Sent",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1116,8 +1120,9 @@
   "training.assign": "A training is assigned to you",
   "require.approval": "needs your approval for",
   "pending.approval": "pending approvals from",
-  "is": "is",
-  "your": "your",
-  "to": "to",
-  "sent": "Sent"
+  "training.stats.all": "ALL",
+  "training.stats.title": "TRAININGS OUTSTANDING",
+  "training.stats.totalOutstanding": "Total Outstanding",
+  "training.stats.overdue": "OVERDUE",
+  "training.stats.duein7days": "DUE IN 7 DAYS"
 }
