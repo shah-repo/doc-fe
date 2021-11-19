@@ -133,7 +133,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   color="textPrimary"
                   noWrap
                 >
-                  <Text translation="is" />
+                  <Text translation="common.is" />
                 </Typography>
               </Grid>
               <Grid item={true}>

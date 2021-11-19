@@ -107,7 +107,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            <Text translation="sent" />:{" "}
+            <Text translation="common.sent" />:{" "}
             {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
