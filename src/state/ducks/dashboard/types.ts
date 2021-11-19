@@ -14,6 +14,11 @@ export enum PendingActionType {
   APPROVED_APPROVAL_REQUESTS = "APPROVED_APPROVAL_REQUESTS",
 }
 
+export enum TransitionTypes {
+  TRANSITION_CLOSED = "closed",
+  TRANSITION_REJECT = "reject",
+}
+
 export interface PendingAction {
   type: PendingActionType;
   userId: string;

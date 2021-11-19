@@ -1,5 +1,6 @@
 import { Box, Grid, Toolbar, Typography } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
 import { ReactComponent as MyFeedSelectedIcon } from "../../assets/images/my_feed_selected.svg";
 import { ReactComponent as RecentIcon } from "../../assets/images/recent.svg";
@@ -7,6 +8,7 @@ import { ReactComponent as RecentSelectedIcon } from "../../assets/images/recent
 import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab.svg";
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
+import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
 import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
@@ -27,6 +29,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
     <Grid container={true} className={classes.root}>
@@ -56,7 +59,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                     variant="inherit"
                     className={classes.tabItemCount}
                   >
-                      (26)
+                    ({feedItems?.length || 0})
                   </Typography>
                 </Box>
               }
