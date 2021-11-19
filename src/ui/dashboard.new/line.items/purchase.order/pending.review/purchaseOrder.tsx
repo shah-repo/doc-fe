@@ -15,7 +15,7 @@ import { ReactComponent as CollapseIcon } from "../../../../../assets/images/col
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status_white.svg";
-import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
+import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";

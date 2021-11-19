@@ -11,10 +11,8 @@ import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/app
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
-// import { ReactComponent as POIcon } from "../../../../../assets/images/po.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-// import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
