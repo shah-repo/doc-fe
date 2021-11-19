@@ -277,8 +277,6 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -293,6 +291,8 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params:
       cy.checkToastMessage({ exists: false });
     }
   }
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
@@ -307,9 +307,9 @@ Cypress.Commands.add("drApproveAndReleaseDocument", () => {
     () => {
       cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
     });
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
@@ -342,8 +342,6 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
     routesToWait, () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });
@@ -358,6 +356,8 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
       cy.checkToastMessage({ exists: false });
     }
   }
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drClickCreateSupplierWithApiCall", () => {
@@ -383,9 +383,9 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("drSaveDocumentWithoutaudit", () => {
@@ -402,9 +402,9 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastErro
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+  cy.checkToastMessage({ exists: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: true });
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
@@ -479,6 +479,8 @@ Cypress.Commands.add("drClickReviseDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("[data-cy=\"updateRecord\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drClickTrainingRequired", () => {
@@ -564,6 +566,7 @@ Cypress.Commands.add("drEnterApprovalRole", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
+  cy.listLoadingElementShouldNotExist();
   groups.forEach((group) => {
     cy.get("[data-cy=\"groups\"]").arrowClick();
     cy.get(".MuiAutocomplete-popper").contains(group).arrowClick();
@@ -571,6 +574,7 @@ Cypress.Commands.add("drEnterApprovingGroups", (...groups: string[]) => {
 });
 
 Cypress.Commands.add("drEnterApprovingUsers", (...employees: string[]) => {
+  cy.listLoadingElementShouldNotExist();
   employees.forEach((employee) => {
     cy.get("[data-cy=\"employees\"]").arrowClick();
     cy.get(".MuiAutocomplete-popper").contains(employee).arrowClick();
@@ -620,6 +624,7 @@ Cypress.Commands.add("drApproveAndReleaseDialog", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectTemplateReleaseDocument", (params: { template: string; selectDate?: boolean }) => {

@@ -92,6 +92,7 @@ export enum CyRoutes {
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
   StartMpi = "StartMpi",
+  ApprovalMatrix = "ApprovalMatrix",
   GetTrainingRecord = "GetTrainingRecord",
   PostCompleteTraining = "PostCompleteTraining",
 }
@@ -167,6 +168,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/lhr/start_mpi",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  ApprovalMatrix: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/approval_matrix",
     },
     callConfig: {
       responseTimeout: 30 * 1000,

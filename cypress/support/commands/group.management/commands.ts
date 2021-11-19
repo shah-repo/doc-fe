@@ -331,8 +331,9 @@ Cypress.Commands.add("grpSelectUnofficial", () => {
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {
     cy.get(`#Group-members`).arrowClick();
-
+    cy.wait(500);
     cy.get("div[id^=react-select]").contains(name).arrowClick();
+    cy.get("h4").contains("Members").click();
   });
 });
 

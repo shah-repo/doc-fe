@@ -418,6 +418,8 @@ context("E-signature test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to EB document", () => {
@@ -439,7 +441,11 @@ context("E-signature test", () => {
 
   context("Login in first user and approve AR and EB", () => {
     it("Login in first user to dashboard", () => {
-      cy.authLogin({ email: emailOfFirstUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfFirstUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR and EB", () => {
@@ -481,7 +487,11 @@ context("E-signature test", () => {
 
   context("Login in second user and approve AR and EB", () => {
     it("Login in second user to dashboard", () => {
-      cy.authLogin({ email: emailOfSecondUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfSecondUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR and EB", () => {
@@ -523,7 +533,11 @@ context("E-signature test", () => {
 
   context("Login in third user and approve AR and EB", () => {
     it("Login in third user to dashboard", () => {
-      cy.authLogin({ email: emailOfThirdUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfThirdUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
