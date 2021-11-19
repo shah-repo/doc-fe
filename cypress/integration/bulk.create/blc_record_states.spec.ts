@@ -790,7 +790,7 @@ context("Bulk create record headers", () => {
     });
 
     context("Add correct type and release bulk create", () => {
-      it("Select wrong document type to be used for bulk creation", () => {
+      it("Select correct document type to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
         cy.get("ul[role=listbox]>li").contains("Test Document Type").arrowClick();
       });
