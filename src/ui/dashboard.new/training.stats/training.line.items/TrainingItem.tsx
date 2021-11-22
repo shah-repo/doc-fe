@@ -11,6 +11,7 @@ import {
   MomentFormats,
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
+import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
@@ -27,6 +28,7 @@ interface TrainingItemProps {
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   name,
+  avatar,
   initialColor,
   status,
   date,
@@ -36,16 +38,33 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   const classes = styles();
   const isOverdue = status === TrainingStatusTypes.OVERDUE;
 
-  const titleRender = (name, initialColor, status, documentId, title, date) => (
+  const titleRender = (
+    avatar,
+    name,
+    initialColor,
+    status,
+    documentId,
+    title,
+    date
+  ) => (
     <Typography>
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
-          <Avatar
-            style={{ backgroundColor: `${initialColor}` }}
-            className={classes.avatar}
-            alt={name}
-            src="."
-          />
+          {avatar ? (
+            <Avatar
+              style={{ backgroundColor: `${initialColor}` }}
+              className={classes.avatar}
+              alt={name}
+              src={avatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${initialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(name)}
+            </Avatar>
+          )}
           <Typography
             component="span"
             variant="body2"
@@ -131,6 +150,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
       <ListItemText
         id={documentId}
         primary={titleRender(
+          avatar,
           name,
           initialColor,
           status,
