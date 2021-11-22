@@ -6360,6 +6360,14 @@ ecdsa-sig-formatter@1.0.11, ecdsa-sig-formatter@^1.0.11:
   dependencies:
     safe-buffer "^5.0.1"
 
+echarts@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.2.1.tgz#bd58ec011cd82def4a714e4038ef4b73b8417bc3"
+  integrity sha512-OJ79b22eqRfbSV8vYmDKmA+XWfNbr0Uk/OafWcFNIGDWti2Uw9A6eVCiJLmqPa9Sk+EWL+t5v26aak0z3gxiZw==
+  dependencies:
+    tslib "2.3.0"
+    zrender "5.2.1"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -16103,6 +16111,11 @@ tslib@1.10.0, tslib@^1.10.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
+tslib@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
+
 tslib@>=1.9.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.0.tgz#18d13fc2dce04051e20f074cc8387fd8089ce4f3"
@@ -17278,3 +17291,10 @@ yup@0.28.0:
     property-expr "^1.5.0"
     synchronous-promise "^2.0.6"
     toposort "^2.0.2"
+
+zrender@5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/zrender/-/zrender-5.2.1.tgz#5f4bbda915ba6d412b0b19dc2431beaad05417bb"
+  integrity sha512-M3bPGZuyLTNBC6LiNKXJwSCtglMp8XUEqEBG+2MdICDI3d1s500Y4P0CzldQGsqpRVB7fkvf3BKQQRxsEaTlsw==
+  dependencies:
+    tslib "2.3.0"
