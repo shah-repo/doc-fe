@@ -9,9 +9,11 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "35px",
       height: "35px",
-      fontSize: "18px",
+      fontSize: "14px",
+      fontWeight: 600,
       color: Colors.white,
       fontFamily: "Sora",
+      textTransform: "uppercase",
     },
     actionIcons: {
       /* Action Icons */
@@ -30,9 +32,9 @@ export const styles = makeStyles(() =>
       background: Colors.sky_blue,
     },
     typography: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 400,
+      "fontSize": "14px",
+      "fontFamily": "Sora",
+      "fontWeight": 400,
       "& > p": { margin: "0px" },
     },
     typographyBold: {

@@ -9,9 +9,11 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "35px",
       height: "35px",
-      fontSize: "18px",
+      fontSize: "14px",
       color: Colors.white,
       fontFamily: "Sora",
+      fontWeight: 600,
+      textTransform: "uppercase",
     },
     nested: {
       marginLeft: "32px",
@@ -67,9 +69,9 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     typography: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-      fontWeight: 400,
+      "fontSize": "14px",
+      "fontFamily": "Sora",
+      "fontWeight": 400,
       "& > p": { margin: "0px" },
     },
     typographyBold: {
