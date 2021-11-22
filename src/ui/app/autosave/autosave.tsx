@@ -8,7 +8,7 @@ import Colors from "../../layout/theme/utils/colors";
 
 const AutosaveToggle: React.FunctionComponent<any> = (location) => {
   const dispatch = useDispatch();
-  const isNewDashboard = location.pathname === "/dashboard";
+  const isNewDashboard = true;
   const canToggleAutosave = useGetHasPermission(Permission.DEVELOPERS);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
