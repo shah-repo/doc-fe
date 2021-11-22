@@ -300,9 +300,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         href={
                           poItem.rtext
                             ? documentVersionPath(
-                                purchaseOrderSupplierDocRevId || "",
-                                purchaseOrderSupplierDocId
-                              )
+                              purchaseOrderSupplierDocRevId || "",
+                              purchaseOrderSupplierDocId
+                            )
                             : "#"
                         }
                         color="inherit"
