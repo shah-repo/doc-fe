@@ -269,11 +269,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+                <RejectIcon
+                  data-cy="transition-reject"
+                  onMouseEnter={onMouseHoverRejectIcon}
+                />
               )}
               {rejectHover && (
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
+                    data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -282,11 +286,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+                <ApproveIcon
+                  data-cy="transition-approve"
+                  onMouseEnter={onMouseHoverApproveIcon}
+                />
               )}
               {approveHover && (
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
+                    data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />

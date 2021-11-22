@@ -162,7 +162,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedNormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<RejectIcon />}
+                          icon={<RejectIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[approvalStatusChanged]}
                         />
                       )}
@@ -170,7 +170,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedHoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<RejectSolidIcon />}
+                          icon={<RejectSolidIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[approvalStatusChanged]}
                         />
                       )}
@@ -190,7 +190,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <NormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<ApprovedIcon />}
+                          icon={<ApprovedIcon data-cy="transition-approve" />}
                           label={STATUS_TYPES_LABEL[approvalStatusChanged]}
                         />
                       )}
@@ -198,7 +198,9 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <HoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<ApprovedWhiteIcon />}
+                          icon={
+                            <ApprovedWhiteIcon data-cy="transition-approve" />
+                          }
                           label={STATUS_TYPES_LABEL[approvalStatusChanged]}
                         />
                       )}
