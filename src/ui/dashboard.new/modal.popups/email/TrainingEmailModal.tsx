@@ -185,7 +185,11 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     }
                     noWrap
                   >
-                    {isOverDue && <Text translation="common.overdue.caps" />}
+                    {isOverDue && (
+                      <span style={{ textTransform: "uppercase" }}>
+                        <Text translation="common.overdue" />
+                      </span>
+                    )}
                     {!isOverDue && <Text translation="common.duein7days" />}
                     {` `}({pendingTrainees?.length || 0})
                   </Typography>
