@@ -63,7 +63,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyOverdue}
               color="textPrimary"
             >
-              <Text translation="common.overdue.caps" />
+              <Text translation="common.overdue" />
             </Typography>
           )}
           {!isOverdue && (

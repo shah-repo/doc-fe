@@ -18,6 +18,7 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       lineHeight: "15px",
       color: Colors.latest_red_varient,
+      textTransform: "uppercase",
     },
     name: {
       fontFamily: "Sora",

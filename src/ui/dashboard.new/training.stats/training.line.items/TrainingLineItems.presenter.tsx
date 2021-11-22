@@ -66,7 +66,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 function tabCustomClasses(index: any) {
   return {
-    id: `full-width-tab-${index}`,
+    "id": `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
@@ -131,7 +131,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
                 <Grid item={true} sm={12}>
                   <span className={classes.overdueTab}></span>
                   <span className={classes.tabHeader}>
-                    <Text translation="common.overdue.caps" />
+                    <Text translation="common.overdue" />
                   </span>
                 </Grid>
               </Grid>
@@ -146,7 +146,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           <Text translation="common.duein7days" />
         </TabPanel>
         <TabPanel value={value} index={2} panelData={overdueItems}>
-          <Text translation="common.overdue.caps" />
+          <Text translation="common.overdue" />
         </TabPanel>
       </Box>
     );
