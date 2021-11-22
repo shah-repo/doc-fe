@@ -1100,7 +1100,7 @@
   "dashboard.recent.container": "Recent Container",
   "dashboard.training.stats.container": "Training Stats Container (Chart & Line Items)",
   "dashboard.calibration.due": "is Due for Calibration in {noOfDays} days",
-  "dashboard.preventive.maintaince.due": "is Due for Preventive Maintaince in {noOfDays} days",
+  "dashboard.preventive.maintenance.due": "is Due for Preventive Maintenance in {noOfDays} days",
   "header.welcome.back": "Welcome Back",
   "your.training": "Your Training",
   "your.training.on": "Your Training on",

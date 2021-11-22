@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Avatar,
-  Box, Collapse, Grid,
-  Link, List,
+  Box,
+  Collapse,
+  Grid,
+  Link,
+  List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -245,7 +248,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -262,7 +269,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docRevName
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -365,10 +376,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
-                          purchaseOrderSupplierDocRevId || "",
-                          purchaseOrderSupplierDocId || ""
-                        )}
+                        href={
+                          poItem.rtext
+                            ? documentVersionPath(
+                                purchaseOrderSupplierDocRevId || "",
+                                purchaseOrderSupplierDocId || ""
+                              )
+                            : "#"
+                        }
                         color="inherit"
                       >
                         <Typography
