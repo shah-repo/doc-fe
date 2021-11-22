@@ -61,7 +61,7 @@ export default () =>
       fontSize: "12px",
       lineHeight: "15px",
       textAlign: "right",
-      color: Colors.modal_cancel_color,
+      color: Colors.almost_black,
       flex: "none",
       order: 1,
       flexGrow: 0,
