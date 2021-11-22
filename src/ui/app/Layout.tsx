@@ -38,7 +38,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <Navigation />
   <SocketsContainer />
   <WatermarkFooterContainer />
-  <main  className={window.location.pathname === "/dashboard" ? classes.content : classes.newContent}>
+  <main  className={window.location.pathname === "/" ? classes.newContent : classes.content}>
     <DataFetcherContainer />
     <Switch>
       <Route path={DASHBOARD_URL} exact={true} component={DashboardContainer} />

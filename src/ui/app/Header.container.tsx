@@ -24,7 +24,7 @@ const HeaderContainer: React.FunctionComponent<Props> = ({
   location,
   history,
 }) => {
-  const isNewDashboard = true;
+  const isNewDashboard = location.pathname === "/";
   const [showUserProfile, setUserProfile] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
