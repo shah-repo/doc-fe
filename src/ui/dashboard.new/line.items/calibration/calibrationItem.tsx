@@ -72,7 +72,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               >
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -89,7 +93,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docRevName
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -116,7 +124,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       translation={
                         type === ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR
                           ? "dashboard.calibration.due"
-                          : "dashboard.preventive.maintaince.due"
+                          : "dashboard.preventive.maintenance.due"
                       }
                       values={{
                         noOfDays: equipmentInterval,
