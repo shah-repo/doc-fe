@@ -28,6 +28,7 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -167,12 +168,21 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${approverInitialColor}` }}
-            className={classes.avatar}
-            alt={approverName}
-            src={approverAvatar ? approverAvatar : "."}
-          />
+          {approverAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+              alt={approverName}
+              src={approverAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(approverName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={

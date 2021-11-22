@@ -19,6 +19,7 @@ import { ReactComponent as PendingReviewItemIcon } from "../../../../../../asset
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
+import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
@@ -112,12 +113,21 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${approverInitialColor}` }}
-            className={classes.avatar}
-            alt={approverName}
-            src={approverAvatar ? approverAvatar : "."}
-          />
+          {approverAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+              alt={approverName}
+              src={approverAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(approverName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -197,18 +207,18 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== approvalStatusChanged &&
                   STATUS_TYPES_LABEL.REJECTED !== approvalStatusChanged && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyStatus} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {approvalStatusChanged}
-                    </Typography>
-                  </Grid>
-                )}
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyStatus} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {approvalStatusChanged}
+                      </Typography>
+                    </Grid>
+                  )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"

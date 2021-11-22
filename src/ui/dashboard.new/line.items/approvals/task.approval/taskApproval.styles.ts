@@ -61,6 +61,9 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "35px",
       height: "35px",
+      fontSize: "18px",
+      color: Colors.white,
+      fontFamily: "Sora",
     },
     typographyBold: {
       fontSize: "14px",

@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "35px",
       height: "35px",
+      fontSize: "18px",
+      color: Colors.white,
+      fontFamily: "Sora",
     },
     nested: {
       marginLeft: "32px",
@@ -64,9 +67,9 @@ export const styles = makeStyles(() =>
       lineHeight: "15px",
     },
     typography: {
-      "fontSize": "14px",
-      "fontFamily": "Sora",
-      "fontWeight": 400,
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
       "& > p": { margin: "0px" },
     },
     typographyBold: {

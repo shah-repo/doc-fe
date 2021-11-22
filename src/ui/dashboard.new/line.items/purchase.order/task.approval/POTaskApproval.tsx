@@ -21,6 +21,7 @@ import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expan
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
@@ -208,12 +209,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
-            className={classes.avatar}
-            alt={docRevOwnerName}
-            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-          />
+          {docRevOwnerAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+              alt={docRevOwnerName}
+              src={docRevOwnerAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(docRevOwnerName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
