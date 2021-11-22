@@ -52,6 +52,12 @@ context("Bulk create record headers", () => {
                 group: "RECORD",
                 isQms: true,
                 canRedLine: true,
+                fieldsConfig: {
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                },
               },
               {
                 documentTypeName: "Additional Document Type",
@@ -60,6 +66,12 @@ context("Bulk create record headers", () => {
                 group: "RECORD",
                 isQms: true,
                 canRedLine: true,
+                fieldsConfig: {
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                },
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,

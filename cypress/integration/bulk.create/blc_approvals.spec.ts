@@ -51,6 +51,12 @@ context("Bulk create approvals block/inline test", () => {
                 group: "RECORD",
                 isQms: true,
                 canRedLine: true,
+                fieldsConfig: {
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                },
               },
               {
                 documentTypeName: "Approvals Inline Type",
@@ -59,6 +65,12 @@ context("Bulk create approvals block/inline test", () => {
                 group: "RECORD",
                 isQms: true,
                 canRedLine: true,
+                fieldsConfig: {
+                  A1: {
+                    label: "WIP",
+                    visible: true,
+                  },
+                },
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -258,6 +270,20 @@ context("Bulk create approvals block/inline test", () => {
                       group.body[0].id,
                     ],
                   },
+                },
+                {
+                  name: "approvals-built-in",
+                  type: "approvals",
+                  index: 2,
+                  label: "Approvals",
+                  applicableOn: [
+                    "ON_STATE_TO_IN_REVIEW",
+                  ],
+                  deleteDisabled: true,
+                  uniqueSchemaItem: true,
+                  validationAttribute: "Approvals",
+                  deleteInFormDisabled: true,
+                  applicableValidationSchema: true,
                 },
               ],
             },
@@ -474,462 +500,216 @@ context("Bulk create approvals block/inline test", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 12 });
     });
 
-    it("Filter by type and verify only 'Test Document Type' records are created", () => {
-      cy.pause();
-      cy.dlFilterByDocId({ docId: "TDT-" });
-      cy.dlVerifyDocCounter({ docCounterNumber: 8 });
-    });
+    context("Verify approvals block records data", () => {
+      context("Verify WIP records revision stage is alpha", () => {
+        it("Filter approvals block records in WIP state", () => {
+          cy.dlFilterByDocId({ docId: "ADT-" });
+        });
 
-    context("Verify record one data", () => {
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00004" });
+        it("Filter approvals block records in WIP state", () => {
+          cy.recFilterByState({ state: "WIP" });
+        });
+
+        it("Verify WIP records number", () => {
+          cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        });
+
+        it("Verify WIP records revision stage is alpha", () => {
+          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
+            expect($el.text()).to.equal("A");
+          });
+        });
       });
 
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
+      context("Verify Voided records revision stage is alpha", () => {
+        it("Filter approvals block records in WIP state", () => {
+          cy.recFilterByState({ state: "Voided" });
+        });
+
+        it("Verify WIP records number", () => {
+          cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        });
+
+        it("Verify WIP records revision stage is alpha", () => {
+          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
+            expect($el.text()).to.equal("A");
+          });
+        });
       });
 
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "-" });
-      });
+      context("Verify released records", () => {
+        context("Verify released record one", () => {
+          it("Filter by record-id", () => {
+            cy.dlClearFilters();
+            cy.dlFilterByDocId({ docId: "ADT-00007" });
+          });
 
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "description one" });
-      });
+          it("Select first record", () => {
+            cy.dlSelectFirstDocument();
+          });
 
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[2].name });
-      });
+          it("Verify owner", () => {
+            cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+          });
 
-      it("Verify no release date is present on WIP record", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Updated:");
-      });
+          it("Verify approver", () => {
+            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+              .should("contain", USERS[1].name);
+          });
 
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.text", "one");
-      });
+          it("Verify record release date", () => {
+            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+              .should("contain.text", "Released Date: 11/18/2021");
+          });
 
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("have.text", "one");
-      });
+          it("Verify record approve date", () => {
+            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+              .should("contain", "November 18, 2021");
+          });
+        });
 
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "11/16/2021");
-      });
+        context("Verify released record two", () => {
+          it("Navigate to records", () => {
+            cy.navigToRecords();
+          });
 
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"includeContext\"]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-radio-button-group\"]").should("have.text", "one");
-      });
+          it("Filter by record-id", () => {
+            cy.dlClearFilters();
+            cy.dlFilterByDocId({ docId: "ADT-00008" });
+          });
 
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "Other");
-        cy.get("[name^=\"input-context-blc-select-field\"]").should("have.text", "one");
-      });
+          it("Select first record", () => {
+            cy.dlSelectFirstDocument();
+          });
 
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=includeContext]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-checkbox-group\"]").should("have.text", "one");
-      });
-    });
+          it("Verify owner", () => {
+            cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+          });
 
-    context("Verify record two data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
+          it("Verify approver", () => {
+            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+              .should("contain", USERS[1].name);
+          });
 
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00005" });
-      });
+          it("Verify record release date", () => {
+            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+              .should("contain.text", "Released Date: 11/18/2021");
+          });
 
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.get("[id=Title-field] input").should("have.attr", "value", "title two");
-      });
-
-      it("Verify description", () => {
-        cy.get("div[data-cy=\"RichTextEditor.description\"] span[data-text]").should("not.exist");
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify no release date is present on WIP record", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Updated:");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.attr", "value", "two");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"] span[data-text]").should("have.text", "two");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "11/16/2021");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"option2\"]").should("have.attr", "checked");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "option2");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
+          it("Verify record approve date", () => {
+            cy.get("div[id=Presenter-FBWorkspace]>div:nth-child(2)>div>div:nth-child(5)")
+              .should("contain", "November 18, 2021");
+          });
+        });
       });
     });
 
-    context("Verify record three data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00006" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "Void" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify released date", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Voided Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("not.exist");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("not.exist");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("not.exist");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"option2\"]").should("not.exist");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("not.exist");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("not.exist");
-      });
-    });
-
-    context("Verify record four data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00007" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "Void" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify released date", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Voided Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("not.exist");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("not.exist");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("not.exist");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"option2\"]").should("not.exist");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("not.exist");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("not.exist");
-      });
-    });
-
-    context("Verify record five data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00008" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "Void" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify released date", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Voided Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("not.exist");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("not.exist");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("not.exist");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"option2\"]").should("not.exist");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("not.exist");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("not.exist");
-      });
-    });
-
-    context("Verify record six data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00009" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title six" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "description six" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify no release date is present on WIP record", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Released Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.text", "six");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("have.text", "six");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "11/16/2021");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"option1\"]").should("have.attr", "checked");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "option1");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=option1]").should("have.attr", "checked");
-      });
-    });
-
-    context("Verify record seven data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00010" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title seven" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "description seven" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify no release date is present on WIP record", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Released Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.text", "seven");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("have.text", "seven");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "11/16/2021");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"includeContext\"]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-radio-button-group\"]").should("have.text", "seven");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "Other");
-        cy.get("[name^=\"input-context-blc-select-field\"]").should("have.text", "seven");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=includeContext]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-checkbox-group\"]").should("have.text", "seven");
-      });
-    });
-
-    context("Verify record eight data", () => {
-      it("Navigate to records", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter by record-id", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00011" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "title eight" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "description eight" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[4].name });
-      });
-
-      it("Verify no release date is present on WIP record", () => {
-        cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-          .should("contain.text", "Released Date: 11/15/2021");
-      });
-
-      it("Verify BLC text field", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.text", "eight");
-      });
-
-      it("Verify BLC text editor", () => {
-        cy.get("[data-cy^=\"blc-text-editor\"]").should("have.text", "eight");
-      });
-
-      it("Verify BLC date picker", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "11/16/2021");
-      });
-
-      it("Verify BLC radio button group", () => {
-        cy.get("input[name^=\"blc-radio-button-group\"][value=\"includeContext\"]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-radio-button-group\"]").should("have.text", "eight");
-      });
-
-      it("Verify select field", () => {
-        cy.get("[id*=\"select-blc-select-field\"]").should("have.text", "Other");
-        cy.get("[name^=\"input-context-blc-select-field\"]").should("have.text", "eight");
-      });
-
-      it("Verify checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=includeContext]").should("have.attr", "checked");
-        cy.get("[name^=\"input-context-blc-checkbox-group\"]").should("have.text", "eight");
+    context("Verify approvals inline records data", () => {
+      context("Verify WIP records revision stage is alpha", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter approvals block records in WIP state", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "AIT-" });
+        });
+
+        it("Filter approvals block records in WIP state", () => {
+          cy.recFilterByState({ state: "WIP" });
+        });
+
+        it("Verify WIP records number", () => {
+          cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        });
+
+        it("Verify WIP records revision stage is alpha", () => {
+          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
+            expect($el.text()).to.equal("1");
+          });
+        });
+      });
+
+      context("Verify Voided records revision stage is alpha", () => {
+        it("Filter approvals block records in WIP state", () => {
+          cy.recFilterByState({ state: "Voided" });
+        });
+
+        it("Verify WIP records number", () => {
+          cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+        });
+
+        it("Verify WIP records revision stage is alpha", () => {
+          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
+            expect($el.text()).to.equal("1");
+          });
+        });
+      });
+
+      context("Verify released records", () => {
+        context("Verify released record one", () => {
+          it("Filter by record-id", () => {
+            cy.dlClearFilters();
+            cy.dlFilterByDocId({ docId: "AIT-00013" });
+          });
+
+          it("Select first record", () => {
+            cy.dlSelectFirstDocument();
+          });
+
+          it("Verify owner", () => {
+            cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+          });
+
+          it("Verify approver", () => {
+            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+              .should("contain", USERS[1].name);
+          });
+
+          it("Verify record release date", () => {
+            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+              .should("contain.text", "Released Date: 11/18/2021");
+          });
+
+          it("Verify record approve date", () => {
+            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+              .should("contain", "18 Nov 2021");
+          });
+        });
+
+        context("Verify released record two", () => {
+          it("Navigate to records", () => {
+            cy.navigToRecords();
+          });
+
+          it("Filter by record-id", () => {
+            cy.dlClearFilters();
+            cy.dlFilterByDocId({ docId: "AIT-00014" });
+          });
+
+          it("Select first record", () => {
+            cy.dlSelectFirstDocument();
+          });
+
+          it("Verify owner", () => {
+            cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+          });
+
+          it("Verify approver", () => {
+            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+              .should("contain", USERS[1].name);
+          });
+
+          it("Verify record release date", () => {
+            cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+              .should("contain.text", "Released Date: 11/18/2021");
+          });
+
+          it("Verify record approve date", () => {
+            cy.get("div[id=\"Presenter-FBWorkspace\"]>div:nth-child(2)>div>div:nth-child(3)")
+              .should("contain", "18 Nov 2021");
+          });
+        });
       });
     });
   });
