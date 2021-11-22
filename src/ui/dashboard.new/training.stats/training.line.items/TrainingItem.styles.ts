@@ -32,12 +32,12 @@ export const styles = makeStyles(() =>
       color: Colors.almost_black,
     },
     docIdAndTitle: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
-      fontSize: "14px",
-      lineHeight: "22px",
-      color: Colors.almost_black,
+      "fontFamily": "Sora",
+      "fontStyle": "normal",
+      "fontWeight": 600,
+      "fontSize": "14px",
+      "lineHeight": "22px",
+      "color": Colors.almost_black,
       "& > p": {
         margin: "0px",
       },
@@ -56,9 +56,11 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "30px",
       height: "30px",
-      fontSize: "14px",
+      fontSize: "12px",
+      fontWeight: 600,
       color: Colors.white,
       fontFamily: "Sora",
+      textTransform: "uppercase",
     },
     avatarSection: {
       display: "flex",
