@@ -25,11 +25,8 @@ enum Colors {
   navy = "#011FBB",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
-<<<<<<< HEAD
   bright_blue="#0075FF",
-=======
   light_gray_blue = "#CBD5E0",
->>>>>>> origin/develop
   // red
   red = "#c40000",
   dark_red = "#a10808",
