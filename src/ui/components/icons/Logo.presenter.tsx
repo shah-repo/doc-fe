@@ -22,11 +22,6 @@ const Logo: React.FunctionComponent<Props> = ({
   }
   return (
     <React.Fragment>
-      <img
-        id="logo"
-        src={logo}
-        alt="Logo"
-      />
       {
         showEnvironment &&
         <div className={`${classes.envCnt} ${evnTxtColor}`}>
@@ -35,6 +30,12 @@ const Logo: React.FunctionComponent<Props> = ({
           </span>
         </div>
       }
+      <img
+        className={!showEnvironment ? classes.logo : ""}
+        id="logo"
+        src={logo}
+        alt="Logo"
+      />
     </React.Fragment>
   );
 };

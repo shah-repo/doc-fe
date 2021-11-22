@@ -15,25 +15,27 @@ const styles = makeStyles((theme: Theme) =>
     },
     envCnt: {
       background: "0% 0% no-repeat padding-box",
-      borderRadius: 15,
       backgroundColor: theme.palette.secondary.contrastText,
-      width: "fit-content",
-      margin: "10px auto",
+      width: "100%",
+      marginBottom: 20,
     },
     evnTxt: {
-      textAlign: "left",
-      fontSize: 12,
+      textAlign: "center",
+      fontSize: 10,
       fontWeight: 600,
       letterSpacing: 0,
-      margin: "10px 15px",
-      lineHeight: "28px",
       fontFamily: "Sora",
     },
     evnTxtDev: {
-      background: Colors.bright_blue,
+      background: Colors.light_slate_blue,
     },
     evnTxtDemo: {
-      background: Colors.deep_pink,
+      background: Colors.cerulean,
+    },
+    logo: {
+      marginTop: 20,
+      paddingLeft: 24,
+      paddingRight: 24,
     },
   }),
 );
