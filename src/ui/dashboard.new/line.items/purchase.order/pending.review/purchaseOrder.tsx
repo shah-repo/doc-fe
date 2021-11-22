@@ -317,8 +317,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       >
                         {docRevPendingApprovals !== undefined
                           ? docRevPendingApprovals
-                            .map((approver) => approver.userName)
-                            .join(",")
+                              .map((approver) => approver.userName)
+                              .join(",")
                           : ""}
                       </Typography>
                     </Link>
@@ -376,10 +376,14 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
-                          purchaseOrderSupplierDocRevId || "",
-                          purchaseOrderSupplierDocId
-                        )}
+                        href={
+                          poItem.rtext
+                            ? documentVersionPath(
+                                purchaseOrderSupplierDocRevId || "",
+                                purchaseOrderSupplierDocId
+                              )
+                            : "#"
+                        }
                         color="inherit"
                       >
                         <Typography

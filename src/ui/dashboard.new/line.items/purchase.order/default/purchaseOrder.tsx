@@ -297,10 +297,14 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
-                          purchaseOrderSupplierDocRevId || "",
-                          purchaseOrderSupplierDocId
-                        )}
+                        href={
+                          poItem.rtext
+                            ? documentVersionPath(
+                                purchaseOrderSupplierDocRevId || "",
+                                purchaseOrderSupplierDocId
+                              )
+                            : "#"
+                        }
                         color="inherit"
                       >
                         <Typography
