@@ -23,6 +23,7 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
@@ -156,12 +157,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
-            className={classes.avatar}
-            alt={docRevOwnerName}
-            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-          />
+          {docRevOwnerAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+              alt={docRevOwnerName}
+              src={docRevOwnerAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(docRevOwnerName || "")}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
