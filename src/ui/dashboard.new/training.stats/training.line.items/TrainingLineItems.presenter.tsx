@@ -14,7 +14,7 @@ interface TabPanelProps {
   value: number;
   panelData: {
     docTitle: string;
-    user: { avatar: Nullable<string>; name: string };
+    user: { avatar: Nullable<string>; name: string; initialColor: string };
     docId: string;
     status: string;
     dueOn: string;
@@ -35,6 +35,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         <TrainingItem
           key={index}
           avatar={data.user.avatar}
+          initialColor={data.user.initialColor}
           name={data.user.name.split(" ")[0]}
           status={data.status}
           documentId={data.docId}
@@ -65,7 +66,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 function tabCustomClasses(index: any) {
   return {
-    "id": `full-width-tab-${index}`,
+    id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
 }
