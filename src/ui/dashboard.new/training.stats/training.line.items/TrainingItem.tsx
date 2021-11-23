@@ -11,8 +11,8 @@ import {
   MomentFormats,
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
+import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
 
@@ -47,7 +47,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
     title,
     date
   ) => (
-    <Typography>
+    <>
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
           {avatar ? (
@@ -142,7 +142,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           </Typography>
         </Grid>
       </Grid>
-    </Typography>
+    </>
   );
 
   return (
