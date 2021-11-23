@@ -188,7 +188,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next PM Due:
-                                            {getFormattedDateString(selection.pmDueDate, MomentFormats.ShortMonthDateYearAlt)}
+                                            {getFormattedDateString(selection.pmDueDate, MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         {(selection.calDueDate !== "N/A") &&
@@ -206,7 +206,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next Cal Due:
-                                            {getFormattedDateString(selection.calDueDate, MomentFormats.ShortMonthDateYearAlt)}
+                                            {getFormattedDateString(selection.calDueDate, MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         <IconButton

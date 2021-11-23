@@ -102,8 +102,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           {option.document.docId}
         </Grid>
         <Grid item xs={9} style={{ textAlign: "right", color: Colors.red }}>
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.ShortMonthDateYearAlt)}</span>}
-          {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.ShortMonthDateYearAlt)}</span>}
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)}</span>}
+          {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
     };
