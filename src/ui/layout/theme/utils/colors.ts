@@ -25,6 +25,7 @@ enum Colors {
   navy = "#011FBB",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
+  aqua_blue = "#20D5E0",
   light_gray_blue = "#CBD5E0",
   // red
   red = "#c40000",

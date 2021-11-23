@@ -20,6 +20,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
+import NavigationProfileContainer from "./NavigationProfile.container";
 
 type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
 
@@ -97,6 +98,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             )
         }
       </Box>
+      <NavigationProfileContainer />
       <Box paddingBottom="20px">
         <BottomLogo />
       </Box>
