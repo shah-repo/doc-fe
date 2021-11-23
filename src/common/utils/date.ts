@@ -16,6 +16,7 @@ export const getFormattedDateString = (date: DateTypes, format = "") => moment(d
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",
   MonthDateYearAlt =  "MMMM D, YYYY",
+  ShortMonthDateYearAlt =  "MMM D, YYYY",
   DateTime = "MMMM D, YYYY hh:mm A",
   DateTimeAlt = "D MMM YYYY hh:mm a",
   DateTimeComplete = "M/D/YYYY hh:mm A",

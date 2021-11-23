@@ -21,6 +21,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     getLot,
     getProcedureLocale,
     getProcedureValues,
+    isDateOverdue,
     loading,
     dialogState,
     multiplier = 1,
@@ -92,6 +93,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
 
     // MARK: @helpers
+    isDateOverdue = (date?: string) => {
+      if (!date) {
+        return;
+      }
+      return Date.parse(date) < Date.parse(new Date().toLocaleString());
+    };
+
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
@@ -101,6 +109,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             ...ref?.metadata,
             refId: ref?.id,
             overrideDocId: ref?.toDocRev?.document.docId,
+            pmDueDate: ref.toDocRev?.precalc.pm_due_date,
+            calDueDate: ref.toDocRev?.precalc.cali_due_date,
           });
         }
         return selected;
@@ -210,6 +220,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       getLot,
       getProcedureLocale,
       getProcedureValues,
+      isDateOverdue,
       mpiProcedureState,
       isPreview,
       dialogState,

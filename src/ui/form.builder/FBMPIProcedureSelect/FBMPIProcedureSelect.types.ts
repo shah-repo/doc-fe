@@ -8,6 +8,8 @@ export type FBMPIProcedureSelectProps =
 & {
   type: FBProcedureItemType;
   unitDisabled?: boolean;
+  isOptionDisabled?: (option: any) => any;
+  renderOptionWithDate?: (option: any) => any;
 };
 
 export interface FBMPIProcedureSelectValue {
@@ -22,4 +24,6 @@ export interface FBMPIProcedureSelectValue {
   quantity?: number;
   unit?: string;
   lotPart?: string;
+  pmDueDate?: string;
+  calDueDate?: string;
 }
