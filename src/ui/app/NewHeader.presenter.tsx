@@ -65,8 +65,6 @@ const Header: React.FunctionComponent<Props> = ({
         <Grid
           item={true}
           className={classes.wrapContainer}
-          justify="flex-start"
-          alignItems="center"
         >
           <Box alignItems="center">
             {canToggleCustomLabels && (

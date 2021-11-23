@@ -280,10 +280,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem) => {
+          {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -323,7 +323,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -350,7 +350,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
