@@ -14,15 +14,13 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
     trainingSelectors.getLoadTrainingListAsyncInfo
   );
   return (
-    <>
-      <AsyncGate
-        asyncAction={loadTrainingList}
-        asyncState={loadTrainingListAsyncInfo}
-        startActionOnMount={true}
-      >
-        <TrainingsLineItemPresenter />
-      </AsyncGate>
-    </>
+    <AsyncGate
+      asyncAction={loadTrainingList}
+      asyncState={loadTrainingListAsyncInfo}
+      startActionOnMount={true}
+    >
+      <TrainingsLineItemPresenter />
+    </AsyncGate>
   );
 };
 

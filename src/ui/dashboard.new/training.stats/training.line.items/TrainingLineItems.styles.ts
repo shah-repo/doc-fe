@@ -17,7 +17,7 @@ export const styles = makeStyles((theme: Theme) =>
       padding: "0px 5px",
       overflow: "auto",
       minHeight: "125px",
-      maxHeight: "calc(100vh - 500px)",
+      maxHeight: "calc(100vh - 526px)",
     },
     allTab: {
       position: "absolute",

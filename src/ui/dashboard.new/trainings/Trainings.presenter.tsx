@@ -1,4 +1,4 @@
-import { Grid, List, ListItemText, Typography } from "@material-ui/core";
+import { Divider, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -27,24 +27,27 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
         switch (pendingAction.type) {
           case ActionTypes.TRAINING_STATUS_OWNER:
             return (
-              <NewTraining
-                key={index}
-                id={pendingAction.id}
-                docId={pendingAction.docId}
-                docRevId={pendingAction.docRevId}
-                type={pendingAction.type}
-                docRevName={pendingAction.docRevName}
-                docRevVersion={pendingAction.docRevVersion}
-                docDocumentId={pendingAction.docDocumentId}
-                trainingStatus={pendingAction.trainingStatus}
-                timestamp={getFormattedDateString(
-                  pendingAction.timestamp,
-                  MomentFormats.BriefDateTime
-                )}
-                pendingTrainees={pendingAction.pendingTrainees}
-                hoverItemId={hoverItemId}
-                onMouseHoverItem={onMouseHoverItem}
-              />
+              <>
+                <NewTraining
+                  key={index}
+                  id={pendingAction.id}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction.docRevVersion}
+                  docDocumentId={pendingAction.docDocumentId}
+                  trainingStatus={pendingAction.trainingStatus}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  pendingTrainees={pendingAction.pendingTrainees}
+                  hoverItemId={hoverItemId}
+                  onMouseHoverItem={onMouseHoverItem}
+                />
+                <Divider />
+              </>
             );
           default:
             return <Text key={index} translation="common.undefined" />;
@@ -68,12 +71,10 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
   );
 
   return (
-    <Grid container={true} spacing={5} className={classes.grid}>
-      <Grid item={true} md={12} sm={12}>
-        {trainingItems.length > 0 && renderPendingActions()}
-        {renderNoPendingActions}
-      </Grid>
-    </Grid>
+    <>
+      {trainingItems.length > 0 && renderPendingActions()}
+      {renderNoPendingActions}
+    </>
   );
 };
 

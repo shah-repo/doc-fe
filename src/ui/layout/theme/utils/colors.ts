@@ -17,6 +17,7 @@ enum Colors {
   medium_light_shade_gray = "A2A2A2",
   mirage="#121B21",
   bright_grey = "#32424E",
+  lightest_grey = "rgba(0, 0, 0, 0.12)",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",

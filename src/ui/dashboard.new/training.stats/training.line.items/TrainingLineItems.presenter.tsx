@@ -1,4 +1,4 @@
-import { Box, Grid, List, Tab } from "@material-ui/core";
+import { Box, Divider, Grid, List, Tab } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Nullable } from "../../../../state/ducks/common/types";
@@ -32,16 +32,19 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   const renderItems = () => (
     <List className={classes.listRoot}>
       {panelData.map((data, index) => (
-        <TrainingItem
-          key={index}
-          avatar={data.user.avatar}
-          initialColor={data.user.initialColor}
-          name={data.user.name.split(" ")[0]}
-          status={data.status}
-          documentId={data.docId}
-          title={data.docTitle}
-          date={data.dueOn}
-        />
+        <>
+          <TrainingItem
+            key={index}
+            avatar={data.user.avatar}
+            initialColor={data.user.initialColor}
+            name={data.user.name.split(" ")[0]}
+            status={data.status}
+            documentId={data.docId}
+            title={data.docTitle}
+            date={data.dueOn}
+          />
+          <Divider />
+        </>
       ))}
     </List>
   );
@@ -55,11 +58,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      <Grid container={true} spacing={5}>
-        <Grid item={true} sm={12}>
-          {renderItems()}
-        </Grid>
-      </Grid>
+      {renderItems()}
     </Box>
   );
 };

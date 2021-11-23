@@ -10,7 +10,7 @@ export default (theme: Theme) =>
       "top": 90,
       "bottom": 0,
       "right": 50,
-      "borderRadius": "12px 12px 0 0",
+      "borderRadius": 12,
       "backgroundColor": Colors.white,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {

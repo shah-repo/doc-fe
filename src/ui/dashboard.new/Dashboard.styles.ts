@@ -8,7 +8,7 @@ export const styles = makeStyles((theme: Theme) =>
       flex: 1,
       overflowX: "hidden",
       overflowY: "auto",
-      maxHeight: "calc(100vh - 90px)",
+      height: "calc(100vh - 120px)",
     },
     item: {
       flexGrow: 1,
@@ -18,7 +18,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     trainingStats: {
       flexGrow: 1,
-      paddingTop: "80px",
+      paddingTop: "65px",
       display: "flex",
       flexDirection: "column",
       minHeight: "0",

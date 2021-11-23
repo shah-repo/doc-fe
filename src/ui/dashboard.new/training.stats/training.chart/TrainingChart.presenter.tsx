@@ -168,14 +168,22 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     }, [tabValue, dueInSeven, overdue, totalCount]);
 
     return (
-      <Box className={classes.chartContainer}>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          <Text translation="training.stats.title" />
-        </Typography>
+      <Box
+        className={classes.chartContainer}
+        border={1}
+        borderRadius={12}
+        borderColor={Colors.lightest_grey}
+        padding={2}
+      >
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            <Text translation="training.stats.title" />
+          </Typography>
+        </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
           <div id="training-chart" className={classes.chartScroll}></div>
         </Box>
