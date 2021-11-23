@@ -1107,6 +1107,7 @@
   "assigned.users.count": "Assigned to {count} users.",
   "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
   "training.email.title": "Email Confirmation",
+  "training.users.count": "{status} for {count} users.",
   "training.email.success.message": "EMAIL SENT TO ALL",
   "training.modal.title": "Training Status",
   "my.feed.tab.title": "My Feed",
