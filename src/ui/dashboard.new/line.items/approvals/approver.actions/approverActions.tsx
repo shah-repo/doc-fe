@@ -172,18 +172,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.REJECTED !== status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {status}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"

@@ -209,18 +209,18 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== approvalStatusChanged &&
                   STATUS_TYPES_LABEL.REJECTED !== approvalStatusChanged && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {approvalStatusChanged}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {approvalStatusChanged}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"

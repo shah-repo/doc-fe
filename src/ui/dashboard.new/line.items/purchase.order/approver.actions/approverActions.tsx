@@ -48,11 +48,11 @@ interface Props {
   status: string;
   timestamp: string;
   purchaseOrderAttachments?:
-    | {
-        name: string;
-        type: string;
-        id: string;
-      }[];
+  | {
+    name: string;
+    type: string;
+    id: string;
+  }[];
   purchaseOrdeLineItemCount?: number;
   purchaseOrderDescription?: string;
   purchaseOrderCurrency?: string;
@@ -163,10 +163,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED &&
         open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
-        ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
-        )}
+            <CollapseIcon className={classes.icon} onClick={handleClick} />
+          ) : (
+            <ExpandIcon className={classes.icon} onClick={handleClick} />
+          )}
         <ListItemAvatar>
           {approverAvatar ? (
             <Avatar
@@ -259,18 +259,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )}
                 {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.REJECTED !== status && (
-                    <Grid item={true}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyStatus} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {status}
-                      </Typography>
-                    </Grid>
-                  )}
+                  <Grid item={true}>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyStatus} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {status}
+                    </Typography>
+                  </Grid>
+                )}
                 {/* <Grid item={true}>
                   <Typography
                     component="span"
@@ -388,9 +388,9 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         href={
                           poItem.rtext
                             ? documentVersionPath(
-                                purchaseOrderSupplierDocRevId || "",
-                                purchaseOrderSupplierDocId
-                              )
+                              purchaseOrderSupplierDocRevId || "",
+                              purchaseOrderSupplierDocId
+                            )
                             : ""
                         }
                         color="inherit"
