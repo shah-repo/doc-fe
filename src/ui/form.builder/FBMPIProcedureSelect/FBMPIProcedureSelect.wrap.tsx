@@ -85,7 +85,6 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
-      console.log(pmDate, calDate, option.document.documentType.equipmentEnforceProd);
 
       return Boolean(isLHRProductionBuild &&
       option.document.documentType.equipmentEnforceProd &&
@@ -101,8 +100,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         <Grid item xs={3} >
           {option.document.docId}
         </Grid>
-        <Grid item xs={9} style={{ textAlign: "right", color: Colors.red }}>
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)}</span>}
+        <Grid item xs={9} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
           {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
