@@ -1,27 +1,23 @@
-/* eslint-disable react/react-in-jsx-scope */
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
-import Text from "../../components/Text";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  outline: {
-    overflow: "auto",
-    minHeight: "calc(100vh - 145px)",
-    maxHeight: "calc(100vh - 145px)",
-  },
-}));
+import { useSelector } from "react-redux";
+import {
+  dashboardMyFeedsActions,
+  dashboardMyFeedsSelectors,
+} from "../../../state/ducks/dashboard.new/my.feeds";
+import useActionCreator from "../../hooks/useActionCreator";
+import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const loadMyFeeds = useActionCreator(dashboardMyFeedsActions.loadMyFeedsList);
+  const loadMyFeedsListAsyncState = useSelector(
+    dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo
+  );
+  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
   return (
-    <Card className={classes.outline}>
-      <CardContent>
-        <Text translation={"dashboard.my.feed.container"} />
-        {/* <MyFeedsPresenter /> */}
-      </CardContent>
-    </Card>);
+    <MyFeedsLineItemPresenter
+      {...{ loadMyFeeds, loadMyFeedsListAsyncState, feedItems }}
+    />
+  );
 };
 
 export default MyFeedsLineItemsContainer;

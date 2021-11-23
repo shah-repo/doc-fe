@@ -9,13 +9,13 @@ const LogoContainer: React.FunctionComponent = () => {
 
   const whiteLabeling = useSelector(companySelectors.getWhiteLabeling);
   const showEnvironment = theme === ThemeEnv.DEV_THEME || theme === ThemeEnv.DEMO_THEME;
-  const navigationLogo = showEnvironment ? "/logo_enlil_dark.svg" : "/logo_enlil.svg";
+  const navigationLogo = "/logo_enlil.svg";
 
   if (whiteLabeling.logo) {
     return (
       <img
         src={whiteLabeling.logo}
-        style={{ maxWidth: "100%" }}
+        style={{ maxWidth: "100%", paddingRight: 24, paddingLeft: 24, marginTop: 20 }}
         alt="Company logo"
       />
     );

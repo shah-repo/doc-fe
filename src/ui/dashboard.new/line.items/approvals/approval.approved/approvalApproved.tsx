@@ -1,0 +1,362 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import {
+  Box,
+  Collapse,
+  Grid,
+  IconButton,
+  Link,
+  List,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
+import React from "react";
+import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
+import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
+import { ReactComponent as CloseIcon } from "../../../../../assets/images/close.svg";
+import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
+import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
+import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import Text from "../../../../components/Text";
+import useAsync from "../../../../hooks/useAsync";
+import useDialog from "../../../../hooks/useDialog";
+import Colors from "../../../../layout/theme/utils/colors";
+import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
+import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
+import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
+import { styles } from "./approvalApproved.styles";
+
+interface Props {
+  id: string;
+  type: string;
+  title: string;
+  arId: string;
+  arChangeRequestId: string;
+  arStatus: string;
+  timestamp: string;
+  docRevs: {
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
+  hoverItemId: string;
+  onMouseHoverItem: (id: string) => void;
+}
+const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
+  id,
+  arId,
+  arChangeRequestId,
+  arStatus,
+  title,
+  timestamp,
+  docRevs,
+  hoverItemId,
+  onMouseHoverItem,
+}) => {
+  const classes = styles();
+  const [closeHover, setCloseHover] = React.useState(false);
+  // const [pinHover, setPinHover] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const [closed, setClosed] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const transitionDialog = useDialog();
+  const hoverItem = hoverItemId === id;
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  // const handlePinClick = () => {
+  //   setPinned(!pinned);
+  // };
+  const handleCloseClick = () => {
+    openClosedDialog();
+    setClosed(!closed);
+  };
+  const openClosedDialog = () => {
+    async.reset();
+    transitionDialog.open();
+  };
+  const onMouseLeaveActionIcons = () => {
+    setCloseHover(false);
+    // setPinHover(false);
+  };
+  /* const onMouseHoverPinIcon = () => {
+    setCloseHover(false);
+    // setPinHover(true);
+  };*/
+  const onMouseHoverCloseIcon = () => {
+    // setPinHover(false);
+    setCloseHover(true);
+  };
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
+  };
+  const onMouseHoverViewIcon = (id: string) => {
+    setViewHoverItem(id);
+  };
+  const onMouseLeaveViewIcon = () => {
+    setViewHoverItem("");
+  };
+  const async = useAsync<ChangeRequestTransitionResponse>({
+    onSuccess: () => {
+      transitionDialog.close();
+    },
+    onError: (error) => {
+      transitionDialog.close();
+    },
+  });
+
+  return (
+    <>
+      <StyledListItem
+        button
+        onMouseEnter={onMouseHoverListItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        className={classes.listItem}
+      >
+        {open ? (
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
+        ) : (
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
+        )}
+        <ListItemIcon>
+          <PendingReviewIcon />
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true}>
+                  <Link
+                    href={changeRequestEditPath(arChangeRequestId)}
+                    color="inherit"
+                    className={classes.link}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {arId}
+                    </Typography>
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <Link
+                    href={changeRequestEditPath(arChangeRequestId)}
+                    color="inherit"
+                    className={classes.link}
+                  >
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyBold} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {title}
+                    </Typography>
+                  </Link>
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={`${classes.typography} ${classes.margin5}`}
+                    color="textPrimary"
+                    noWrap
+                  >
+                    <Text translation="common.is" />
+                  </Typography>
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyStatus}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {!hoverItem && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<ApprovedIcon />}
+                        label={STATUS_TYPES_LABEL[arStatus]}
+                      />
+                    )}
+                    {hoverItem && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={<ApprovedWhiteIcon />}
+                        label={STATUS_TYPES_LABEL[arStatus]}
+                      />
+                    )}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true} md={12} sm={12}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                  >
+                    {timestamp}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </>
+          }
+        />
+        {!open && hoverItem && (
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
+            <span>
+              {!closeHover && (
+                <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
+              )}
+              {closeHover && (
+                <StyleTooltip title="Close" placement="top" arrow>
+                  <CloseSolidIcon
+                    onClick={handleCloseClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+            {/* <span className={classes.actionIcon}>
+              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {pinHover && (
+                <StyleTooltip title="Pin item" placement="top" arrow>
+                  <PinSolidIcon
+                    onClick={handlePinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+            </span> */}
+          </Box>
+        )}
+      </StyledListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List dense disablePadding className={classes.collapsedList}>
+          {docRevs.map((prItem, index) => (
+            <StyledListItem button className={classes.nested} key={index}>
+              <IconButton aria-label="listIcon">
+                <PendingReviewItemIcon />
+              </IconButton>
+              <ListItemText
+                id={prItem.docId}
+                primary={
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                  >
+                    {prItem.name}
+                  </Typography>
+                }
+              />
+              <Box component="div">
+                {viewHoverItem !== prItem.docId && (
+                  <ViewIcon
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
+                  />
+                )}
+                {viewHoverItem === prItem.docId && (
+                  <StyleTooltip
+                    classes={{ tooltip: classes.customTooltipWidth }}
+                    title={
+                      <>
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.description.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.descriptionOfChange}
+                        </Typography>
+                        <br />
+                        <br />
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.justification.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.justificationOfChange}
+                        </Typography>
+                      </>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
+                  </StyleTooltip>
+                )}
+              </Box>
+            </StyledListItem>
+          ))}
+        </List>
+      </Collapse>
+      <ApproveDialogueContainer
+        transition="closed"
+        changeRequestId={arChangeRequestId}
+        arId={arId}
+        title={title}
+        transitionDialog={transitionDialog}
+        label="transition.action.reject"
+      />
+    </>
+  );
+};
+
+export default approvalApprovedPresenter;
