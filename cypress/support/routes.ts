@@ -92,6 +92,9 @@ export enum CyRoutes {
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
   StartMpi = "StartMpi",
+  ApprovalMatrix = "ApprovalMatrix",
+  GetTrainingRecord = "GetTrainingRecord",
+  PostCompleteTraining = "PostCompleteTraining",
 }
 
 export const routes: ICyRoutes =   {
@@ -165,6 +168,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/lhr/start_mpi",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  ApprovalMatrix: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/approval_matrix",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
@@ -519,8 +532,8 @@ export const routes: ICyRoutes =   {
       url: `/api/v1/auth/login`,
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
-      requestTimeout: 20 * 1000,
+      responseTimeout: 50 * 1000,
+      requestTimeout: 50 * 1000,
     },
   },
   GetDocumentTypes: {
@@ -758,6 +771,25 @@ export const routes: ICyRoutes =   {
     callConfig: {
       responseTimeout: 35 * 1000,
       requestTimeout: 30 * 1000,
+    },
+  },
+  GetTrainingRecord: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/training_record*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  PostCompleteTraining: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/training_record/*/complete",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
     },
   },
 };

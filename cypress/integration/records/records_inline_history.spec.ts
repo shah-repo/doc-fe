@@ -186,7 +186,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Enter description 'History Test Record description'", () => {
-        cy.drEnterDocumentDescription({ description: "History Test Record description" });
+        cy.drEnterDocumentDescriptionWithWait({ description: "History Test Record description" });
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
@@ -216,7 +216,6 @@ context("Record inline history Flow", () => {
 
       it("Save record", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-
       });
     });
 
@@ -229,6 +228,9 @@ context("Record inline history Flow", () => {
           CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Change textfield and approve again", () => {
@@ -239,7 +241,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
-          cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
+          cy.drEnterDocumentDescriptionWithWait({ description: "History Test Inline Record description" });
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -258,6 +260,9 @@ context("Record inline history Flow", () => {
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
@@ -318,14 +323,15 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
             CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
-          //
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Navigate to released document", () => {

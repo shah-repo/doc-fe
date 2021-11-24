@@ -1,4 +1,4 @@
-import { omit } from "lodash";
+import { first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -80,7 +80,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     }, []);
 
     if (isReceivable) {
-      const receivedName = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
+      const receivedName = first(workspaceState?.getItemsByType("poreceive"))?.name || "";
       const receivedItems = workspaceState?.getFieldByName(receivedName)?.receivedItems || [];
       items = items?.map( (item) => {
         const id = item.partNumber || item.id;

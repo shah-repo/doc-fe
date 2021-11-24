@@ -24,6 +24,7 @@ export const DEFAULT_ACTIVE_EMPLOYEES: GetEmployeeResponse[] = [{
     id: "",
     email: "",
     name: "",
+    initialColor: "",
   },
 }];
 

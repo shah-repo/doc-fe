@@ -72,7 +72,7 @@ Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
 });
 
 Cypress.Commands.add("authVisitLogin", () => {
-  cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
 });
 
 Cypress.Commands.add("authSubmitLogin", () => {
@@ -161,7 +161,10 @@ Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId:
         cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
           cy.visit(CONFIG.FE_URL, { timeout: 50000 });
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         addTestContext("user", loginResponse.email);
+        cy.log(loginResponse.email);
       });
     });
 });

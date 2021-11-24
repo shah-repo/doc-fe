@@ -15,6 +15,19 @@ let adminEmployee;
 let group;
 
 context("Create company via API and create Suppliers document", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+
   it("[API] Creates company", (done: any) => {
     SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
     cy.authApiLogin({
@@ -162,8 +175,16 @@ context("Create company via API and create Suppliers document", () => {
     cy.drClickCreateSupplierWithApiCall();
   });
 
-  it("Approve and release document", () => {
-    cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+  it("Add approver to approvers list", () => {
+    cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+  });
+
+  it("Submit for approval", () => {
+    cy.pmSubmitForApproval();
+  });
+
+  it("Approve supplier document", () => {
+    cy.ebApprove();
   });
 
   it("Navigate to supplier list", () => {

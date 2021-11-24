@@ -33,11 +33,11 @@ import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
-import CompleteTraining from "./complete.training";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
-import TrainingControl from "./training.control";
+import CompleteTraining from "./training/complete.training";
+import TrainingControl from "./training/training.control";
 
 interface OwnProps {
   canShowCreateVersionButton?: boolean;
@@ -68,6 +68,7 @@ const Presenter: React.FunctionComponent<Props> = ({
     children,
     childrenParts,
     parentParts,
+    displayRevision,
   },
   canChangeOwnerShip,
   canShowCreateVersionButton,
@@ -81,21 +82,26 @@ const Presenter: React.FunctionComponent<Props> = ({
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
+  const docDetails: Partial<DocumentRevision> = {
+    docId: document.docId,
+    name,
+    displayRevision,
+  };
+
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
   const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(docTypeId);
   const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(docTypeId);
   const { isVisible: isCRLinkVisible } = useCRLink(docTypeId);
+
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
-    [DocumentRevisionStatus.Released,
-      DocumentRevisionStatus.Approved],
+    [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
     status);
   const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
   const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
-
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
@@ -103,14 +109,14 @@ const Presenter: React.FunctionComponent<Props> = ({
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
       dataProp={trainingRecords}
-      classes={classes}
       documentRevisionId={id}
+      docDetails={docDetails}
     />
   );
 
   const renderSelfTaughtTraining = shouldRenderTrainingButton && (
     <CompleteTraining
-      {...{ trainingRecords, id, document }}
+      {...{ trainingRecords, id, document, docDetails }}
     />
   );
   const containsRedline = (): boolean => {
