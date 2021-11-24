@@ -51,10 +51,6 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
-  // pink
-  deep_pink= "#F20083",
-  // modal
-  modal_cancel_color = "#080B11",
 }
 
 export default Colors;

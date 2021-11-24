@@ -15,6 +15,7 @@ import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -75,12 +76,21 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         onMouseEnter={onMouseHoverListItem}
       >
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${approverInitialColor}` }}
-            className={classes.avatar}
-            alt={approverName}
-            src={approverAvatar ? approverAvatar : "."}
-          />
+          {approverAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+              alt={approverName}
+              src={approverAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(approverName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -115,7 +125,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedNormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<RejectIcon />}
+                          icon={<RejectIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -123,7 +133,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedHoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<RejectSolidIcon />}
+                          icon={<RejectSolidIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -143,7 +153,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <NormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<ApprovedIcon />}
+                          icon={<ApprovedIcon data-cy="transition-approve" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -151,7 +161,9 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <HoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<ApprovedWhiteIcon />}
+                          icon={
+                            <ApprovedWhiteIcon data-cy="transition-approve" />
+                          }
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}

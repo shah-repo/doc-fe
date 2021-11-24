@@ -48,7 +48,7 @@ export default (theme: Theme) =>
       display: "flex",
       alignItems: "center",
       textAlign: "right",
-      color: Colors.modal_cancel_color,
+      color: Colors.almost_black,
       flex: "none",
       order: 0,
       flexGrow: 0,

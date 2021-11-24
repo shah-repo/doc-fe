@@ -17,6 +17,7 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useAsync from "../../../../hooks/useAsync";
@@ -121,12 +122,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
-            className={classes.avatar}
-            alt={docRevOwnerName}
-            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-          />
+          {docRevOwnerAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+              alt={docRevOwnerName}
+              src={docRevOwnerAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(docRevOwnerName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -161,7 +171,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -178,7 +192,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docRevName
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -224,11 +242,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+                <RejectIcon
+                  data-cy="transition-reject"
+                  onMouseEnter={onMouseHoverRejectIcon}
+                />
               )}
               {rejectHover && (
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
+                    data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -237,11 +259,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+                <ApproveIcon
+                  data-cy="transition-approve"
+                  onMouseEnter={onMouseHoverApproveIcon}
+                />
               )}
               {approveHover && (
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
+                    data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
