@@ -6,15 +6,18 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../common/utils/date";
+import { dashboardMyFeedsActions } from "../../../state/ducks/dashboard.new/my.feeds";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES,
+  LINE_ITEMS_STATUS_TYPES
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -52,6 +55,17 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeaveItem = () => {
     setHoverItemId("");
+  };
+  const pinnedOrUnPinnedAsync = useAsync();
+  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
+  );
+  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
+  );
+  const pinLineItem = (id: string) => {
+    pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
+  };
+  const unPinLineItem = (pinnedItemId: string) => {
+    pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
 
   const renderPendingActions = () => (
@@ -213,6 +227,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
+                    pins={pendingAction.pins}
                     docRevId={pendingAction.docRevId}
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
@@ -248,6 +263,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     }
                     purchaseSupplierName={pendingAction.purchaseSupplierName}
                     onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
                     hoverItemId={hoverItemId}
                   />
                 );
@@ -259,6 +276,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
                   type={pendingAction.type}
+                  pins={pendingAction.pins}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime
@@ -286,6 +304,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   }
                   purchaseSupplierName={pendingAction.purchaseSupplierName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
                   hoverItemId={hoverItemId}
                 />
               );

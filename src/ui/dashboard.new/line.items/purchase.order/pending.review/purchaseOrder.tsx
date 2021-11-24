@@ -67,11 +67,14 @@ interface Props {
   }[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
+  pins: any;
   purchaseOrderCurrency: string;
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -92,7 +95,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderAttachments,
   docRevPendingApprovals,
   docRevApprovedApprovals,
+  pins,
   onMouseHoverItem,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
 
@@ -131,15 +137,19 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
+
   const handleClick = () => {
     setOpen(!open);
   };
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -345,18 +355,27 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-            {pinHover && (
+            {  !pinHover && <StyleTooltip title="Pin item" onMouseEnter={onMouseHoverPinIcon} placement="top" arrow>
+              <PinIcon />
+            </StyleTooltip>}
+            {  pinHover && (
               <StyleTooltip title="Pin item" placement="top" arrow>
                 <PinSolidIcon
-                  onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  onClick={handlePinClick}
                 />
               </StyleTooltip>
             )}
           </div>
+        )}
+        {pinned && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

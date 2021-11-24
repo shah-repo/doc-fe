@@ -5,7 +5,7 @@ import {
   List,
   ListItemIcon,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -37,6 +37,7 @@ interface Props {
   docId: string;
   docRevId?: string;
   type: string;
+  pins: any;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
@@ -54,6 +55,8 @@ interface Props {
   purchaseSupplierName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -72,7 +75,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderDescription,
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
+  pins,
   onMouseHoverItem,
+  unPinLineItem,
+  pinLineItem,
 }) => {
   const classes = styles();
 
@@ -111,14 +117,18 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins.length > 0;
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -267,7 +277,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -279,6 +289,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
+        )}
+        {pinned && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
