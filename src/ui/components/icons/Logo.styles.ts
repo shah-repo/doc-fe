@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,19 +15,27 @@ const styles = makeStyles((theme: Theme) =>
     },
     envCnt: {
       background: "0% 0% no-repeat padding-box",
-      borderRadius: 15,
       backgroundColor: theme.palette.secondary.contrastText,
-      width: "fit-content",
-      margin: "10px auto",
+      width: "100%",
+      marginBottom: 20,
     },
     evnTxt: {
-      textAlign: "left",
-      fontSize: 12,
-      fontWeight: "bold",
+      textAlign: "center",
+      fontSize: 10,
+      fontWeight: 600,
       letterSpacing: 0,
-      color: theme.palette.secondary.main,
-      margin: "10px 20px",
-      lineHeight: "28px",
+      fontFamily: "Sora",
+    },
+    evnTxtDev: {
+      background: Colors.light_slate_blue,
+    },
+    evnTxtDemo: {
+      background: Colors.cerulean,
+    },
+    logo: {
+      marginTop: 20,
+      paddingLeft: 24,
+      paddingRight: 24,
     },
   }),
 );

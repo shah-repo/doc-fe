@@ -1,30 +1,43 @@
-/* eslint-disable react/react-in-jsx-scope */
-// import React from 'react'
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
 import React from "react";
-import Text from "../../components/Text";
+import { useSelector } from "react-redux";
+import {
+  trainingStatsActions,
+  trainingStatsSelectors,
+} from "../../../state/ducks/dashboard.new/training.stats";
+import AsyncGate from "../../components/AsyncGate";
+import useActionCreator from "../../hooks/useActionCreator";
+import TrainingChart from "./training.chart/TrainingChart.container";
+import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
+import { styles } from "./TrainingStats.styles";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  outline: {
-    // border: "1px solid grey",
-    overflow: "auto",
-    minHeight: "calc(100vh - 145px)",
-    maxHeight: "calc(100vh - 145px)",
-  },
-}));
+const TrainingStatsContainer: React.FunctionComponent = () => {
+  const classes = styles();
 
-const TrainingStatsLineItemsContainer: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const loadTrainingStatsList = useActionCreator(
+    trainingStatsActions.loadTrainingStatsList
+  );
+
+  const loadTrainingStatsListAsyncInfo = useSelector(
+    trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
+  );
+
+  const [tabValue, setTabValue] = React.useState(0);
+  const handleChildTabChange = (val: number) => {
+    setTabValue(val);
+  };
   return (
-    <Card className={classes.outline}>
-      <CardContent>
-        <Text translation={"dashboard.training.stats.container"} />
-        {/* <TrainingChart /> */}
-        {/* <TrainingLineItems /> */}
-      </CardContent>
-    </Card>);
+    <Box className={classes.outline}>
+      <AsyncGate
+        asyncAction={loadTrainingStatsList}
+        asyncState={loadTrainingStatsListAsyncInfo}
+        startActionOnMount={true}
+      >
+        <TrainingChart tabValue={tabValue} />
+        <TrainingLineItems infoChangeTab={handleChildTabChange} />
+      </AsyncGate>
+    </Box>
+  );
 };
 
-export default TrainingStatsLineItemsContainer;
+export default TrainingStatsContainer;
