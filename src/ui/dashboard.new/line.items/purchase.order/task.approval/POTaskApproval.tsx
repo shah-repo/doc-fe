@@ -13,8 +13,8 @@ import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-// import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-// import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
@@ -83,11 +83,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -125,9 +125,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
   const handleApproveClick = () => {
     openApproveDialog();
     setApproved(!approved);
@@ -139,20 +139,20 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
     setRejectHover(false);
-    // setPinHover(false);
+    setPinHover(false);
   };
-  // const onMouseHoverPinIcon = () => {
-  //   setApproveHover(false);
-  //   setRejectHover(false);
-  //   setPinHover(true);
-  // };
+  const onMouseHoverPinIcon = () => {
+    setApproveHover(false);
+    setRejectHover(false);
+    setPinHover(true);
+  };
   const onMouseHoverApproveIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setRejectHover(false);
     setApproveHover(true);
   };
   const onMouseHoverRejectIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setApproveHover(false);
     setRejectHover(true);
   };
@@ -245,7 +245,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -262,7 +262,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -332,7 +332,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {/* <span className={classes.actionIcon}>
+            <span className={classes.actionIcon}>
               {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
@@ -342,7 +342,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-            </span> */}
+            </span>
           </Box>
         )}
       </StyledListItem>
@@ -365,10 +365,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
+                        href={poItem.rtext ? documentVersionPath(
                           purchaseOrderSupplierDocRevId || "",
                           purchaseOrderSupplierDocId || ""
-                        )}
+                        ) : ""}
                         color="inherit"
                       >
                         <Typography

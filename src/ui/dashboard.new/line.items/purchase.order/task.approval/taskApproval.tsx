@@ -11,8 +11,8 @@ import {
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
-// import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
-// import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
@@ -56,17 +56,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
   const handleApproveClick = () => {
     openApproveDialog();
     setApproved(!approved);
@@ -78,20 +78,20 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
     setRejectHover(false);
-    // setPinHover(false);
+    setPinHover(false);
   };
-  // const onMouseHoverPinIcon = () => {
-  //   setApproveHover(false);
-  //   setRejectHover(false);
-  //   setPinHover(true);
-  // };
+  const onMouseHoverPinIcon = () => {
+    setApproveHover(false);
+    setRejectHover(false);
+    setPinHover(true);
+  };
   const onMouseHoverApproveIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setRejectHover(false);
     setApproveHover(true);
   };
   const onMouseHoverRejectIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setApproveHover(false);
     setRejectHover(true);
   };
@@ -161,7 +161,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -178,7 +178,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -248,7 +248,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {/* <span className={classes.actionIcon}>
+            <span className={classes.actionIcon}>
               {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
@@ -258,7 +258,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-            </span> */}
+            </span>
           </Box>
         )}
       </StyledListItem>

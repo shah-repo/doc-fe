@@ -9,10 +9,13 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as EQIcon } from "../../../../assets/images/EQ.svg";
+import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../assets/images/pin_solid.svg";
 import { ActionTypes } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../components/Text";
 import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { StyledListItem } from "../common/StyledListItem";
+import { StyleTooltip } from "../common/StyleTooltip";
 import { styles } from "./calibrationItem.styles";
 
 interface Props {
@@ -41,18 +44,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
   const onMouseLeaveActionIcons = () => {
-    // setPinHover(false);
+    setPinHover(false);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
   };
 
   return (
@@ -153,7 +159,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             className={classes.actionIcons}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            {/* <span className={classes.actionIcon}>
+            <span className={classes.actionIcon}>
               {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
@@ -163,7 +169,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-            </span> */}
+            </span>
           </Box>
         )}
       </StyledListItem>

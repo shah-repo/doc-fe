@@ -9,6 +9,8 @@ import {
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
@@ -20,6 +22,7 @@ import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyl
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -52,18 +55,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const hoverItem = hoverItemId === id;
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -253,7 +256,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* { hoverItem && (
+        { hoverItem && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -265,7 +268,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
       </StyledListItem>
     </>
   );

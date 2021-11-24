@@ -14,6 +14,8 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
@@ -33,6 +35,7 @@ import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyl
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -123,23 +126,23 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -272,7 +275,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 </Grid> */}
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -302,7 +305,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -340,7 +343,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* {!open && hoverItem && (
+        {!open && hoverItem && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -352,7 +355,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
@@ -373,10 +376,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
+                        href={ poItem.rtext ? documentVersionPath(
                           purchaseOrderSupplierDocRevId || "",
                           purchaseOrderSupplierDocId
-                        )}
+                        ) : ""}
                         color="inherit"
                       >
                         <Typography

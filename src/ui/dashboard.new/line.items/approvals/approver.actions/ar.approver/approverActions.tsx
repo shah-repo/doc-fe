@@ -16,6 +16,8 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/im
 import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
@@ -71,21 +73,21 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const handleClick = () => {
     setOpen(!open);
   };
@@ -290,7 +292,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* { hoverItem && (
+        { hoverItem && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -302,7 +304,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

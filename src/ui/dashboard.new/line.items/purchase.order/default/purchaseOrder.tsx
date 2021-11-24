@@ -13,6 +13,8 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
@@ -26,6 +28,7 @@ import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
@@ -106,23 +109,23 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   ];
 
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -157,7 +160,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -174,7 +177,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     color="inherit"
                     className={classes.link}
                   >
@@ -264,7 +267,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* {!open && hoverItem && (
+        {!open && hoverItem && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -276,7 +279,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
@@ -297,10 +300,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
+                        href={poItem.rtext ? documentVersionPath(
                           purchaseOrderSupplierDocRevId || "",
                           purchaseOrderSupplierDocId
-                        )}
+                        ) : "#"}
                         color="inherit"
                       >
                         <Typography

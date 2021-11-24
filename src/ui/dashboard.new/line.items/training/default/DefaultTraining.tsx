@@ -1,7 +1,6 @@
 import {
-  Grid,
-  Link,
-  ListItemIcon,
+  Box, Grid,
+  Link, ListItemIcon,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -10,6 +9,8 @@ import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/app
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
@@ -21,6 +22,7 @@ import {
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { HoverStyleChip } from "./DefaultHoverStyleChip";
 import { NormalStyleChip } from "./DefaultNormalStyleChip";
 import { styles } from "./DefaultTraining.styles";
@@ -54,18 +56,18 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-  // const [pinned, setPinned] = React.useState(false);
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
+  const handlePinClick = () => {
+    setPinned(!pinned);
+  };
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
@@ -267,7 +269,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           </>
         }
       />
-      {/* {hoverItem && (
+      {hoverItem && (
         <Box component="div" className={classes.actionIcons}>
           {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
           {pinHover && (
@@ -279,7 +281,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
             </StyleTooltip>
           )}
         </Box>
-      )} */}
+      )}
     </StyledListItem>
   );
 };
