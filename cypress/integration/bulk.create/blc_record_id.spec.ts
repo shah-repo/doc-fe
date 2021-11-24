@@ -775,33 +775,33 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
       });
 
-      // context("Test spreadsheet templates", () => {
-      //   context("Test spreadsheet template with taken public number for id", () => {
-      //     it("Upload template file", () => {
-      //       cy.atchUploadTemplateForBLC({ fileName: "recordIDPublicTakenID.xlsx" });
-      //     });
+      context("Test spreadsheet templates", () => {
+        context("Test spreadsheet template with taken public number for id", () => {
+          it("Upload template file", () => {
+            cy.atchUploadTemplateForBLC({ fileName: "recordIDPublicTakenID.xlsx" });
+          });
 
-      //     it("Click save document", () => {
-      //       cy.drClickCreateDocumentWithApiCallForForms();
-      //     });
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
 
-      //     it("Submit for approval", () => {
-      //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      //     });
+          it("Submit for approval", () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          });
 
-      //     it("Verify error message", () => {
-      //       cy.checkToastMessageIsEqual({
-      //         message: "These docIds: TPUP-00002, TPUP-00004 already exists in your Enlil environment.",
-      //       });
-      //       cy.closeAllAlertMessages();
-      //     });
+          it("Verify error message", () => {
+            cy.checkToastMessageIsEqual({
+              message: "These docIds: TPUP-00002, TPUP-00004 already exists in your Enlil environment.",
+            });
+            cy.closeAllAlertMessages();
+          });
 
-      //     it("Remove file", () => {
-      //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-      //         .find("button").arrowClick({ force: true });
-      //     });
-      //   });
-      // });
+          it("Remove file", () => {
+            cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+              .find("button").arrowClick({ force: true });
+          });
+        });
+      });
 
       context("Send BLC2 document in review", () => {
         it("Upload template file", () => {
