@@ -19,6 +19,9 @@ let testPublicType;
 let formDocumentType;
 let createdDocumentForBulkCreation;
 let testDocumentTypeDocument;
+let blcForm;
+let blc1;
+let blc2;
 const currentDate = moment().tz("America/Los_Angeles").format("x");
 const excelTemplateSaveName = currentDate + "excelTemplate.xlsx";
 
@@ -232,6 +235,11 @@ context("Bulk create public, private and reserved record-ids", () => {
             retrain: false,
             revisionChangeType: RevisionChangeType.NextRevision,
             revisionStage: 1,
+            formDocument: { id: createdDocumentForBulkCreation.id },
+            formInput: {
+              "fb-approvals-approvals-built-in": [],
+              "blc-text-field-kv6ef2ii": "private",
+            },
           },
           employeeId: adminEmployee.id as unknown as string,
           sessionId: loginResponse.sessionId as unknown as string,
@@ -276,6 +284,11 @@ context("Bulk create public, private and reserved record-ids", () => {
             retrain: false,
             revisionChangeType: RevisionChangeType.NextRevision,
             revisionStage: 1,
+            formDocument: { id: createdDocumentForBulkCreation.id },
+            formInput: {
+              "fb-approvals-approvals-built-in": [],
+              "blc-text-field-kv6ef2ii": "private",
+            },
           },
           employeeId: adminEmployee.id as unknown as string,
           sessionId: loginResponse.sessionId as unknown as string,
@@ -294,7 +307,6 @@ context("Bulk create public, private and reserved record-ids", () => {
           });
         });
       });
-
 
       it("[API]Create Public type record", () => {
         cy.drCreateDocumentRevision({
@@ -321,6 +333,11 @@ context("Bulk create public, private and reserved record-ids", () => {
             retrain: false,
             revisionChangeType: RevisionChangeType.NextRevision,
             revisionStage: 1,
+            formDocument: { id: createdDocumentForBulkCreation.id },
+            formInput: {
+              "fb-approvals-approvals-built-in": [],
+              "blc-text-field-kv6ef2ii": "public",
+            },
           },
           employeeId: adminEmployee.id as unknown as string,
           sessionId: loginResponse.sessionId as unknown as string,
@@ -365,6 +382,11 @@ context("Bulk create public, private and reserved record-ids", () => {
             retrain: false,
             revisionChangeType: RevisionChangeType.NextRevision,
             revisionStage: 1,
+            formDocument: { id: createdDocumentForBulkCreation.id },
+            formInput: {
+              "fb-approvals-approvals-built-in": [],
+              "blc-text-field-kv6ef2ii": "public",
+            },
           },
           employeeId: adminEmployee.id as unknown as string,
           sessionId: loginResponse.sessionId as unknown as string,
@@ -428,6 +450,9 @@ context("Bulk create public, private and reserved record-ids", () => {
 
       it("Approve and release Bulk create form", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.url().then((url: any) => {
+          blcForm = url;
+        });
       });
     });
   });
@@ -443,7 +468,7 @@ context("Bulk create public, private and reserved record-ids", () => {
 
     context("Fill Bulk creation document atributes", () => {
       it("Enter title 'Bulk Creation document'", () => {
-        cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
+        cy.drEnterDocumentTitle({ name: "Bulk Creation document BLC1" });
       });
 
       it("Enter description 'Bulk Creation document description'", () => {
@@ -487,7 +512,6 @@ context("Bulk create public, private and reserved record-ids", () => {
 
       it("Verify file size", () => {
         cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 11800, 11900);
-        cy.pause();
       });
 
       it("Verify popup message", () => {
@@ -499,40 +523,196 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
     });
 
-    context("Upload template with empty", () => {
+    // context("Test spreadsheet templates", () => {
+    //   context("Test spreadsheet template with empty record id column", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordEmptyIdColumn.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "rows => 0 => Document Id must be defined.; rows => 1 => Document Id " +
+    //         "must be defined.; rows => 2 => Document Id must be defined.; rows => 3 => Document " +
+    //         "Id must be defined.; rows => 4 => Document Id must be defined.; rows => 5 => Document Id must be defined.",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with missing some record id cell", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordSomeIdsMissing.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "rows => 2 => Document Id must be defined.; rows => 3 => Document Id must be defined.",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with record id duplicate of record in system", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordDuplicatedIdSystem.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "These docIds: TPP-00001, TPP-00003 already exists in your Enlil environment.",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with record id duplicate of another in template", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordDuplicatedIdSpreadsheet.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "There are duplicated docIds in sheet: TPP-00004, TPP-00007",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with record id incorrect number format", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordIdLessThan5Numbers.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "TPP-0009 doesn't have correct number of digits (5).; TPP-02 doesn't " +
+    //         "have correct number of digits (5).",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with record id prefix from different record type", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordIdOtherTypePrefix.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "TPUP-00008 doesn't start with document type acronym (TPP-).",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+
+    //   context("Test spreadsheet template with not existing record id prefix", () => {
+    //     it("Upload template file", () => {
+    //       cy.atchUploadTemplateForBLC({ fileName: "recordIdIncorrectPrefix.xlsx" });
+    //     });
+
+    //     it("Click save document", () => {
+    //       cy.drClickCreateDocumentWithApiCallForForms();
+    //     });
+
+    //     it("Submit for approval", () => {
+    //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    //     });
+
+    //     it("Verify error message", () => {
+    //       cy.checkToastMessageIsEqual({
+    //         message: "BLC-00008 doesn't start with document type acronym (TPP-).",
+    //       });
+    //       cy.closeAllAlertMessages();
+    //     });
+
+    //     it("Remove file", () => {
+    //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+    //         .find("button").arrowClick({ force: true });
+    //     });
+    //   });
+    // });
+
+    context("Send bulk document BLC1 in review", () => {
       it("Upload template file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "privateBulkExistDocId.xlsx" });
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-
-      it("Submit for approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-
-      it("Verify error message", () => {
-        cy.checkToastMessageIsEqual({
-          message: "These docIds: TPP-00002 already exists in your Enlil environment.",
-        });
-        cy.closeAllAlertMessages();
-      });
-
-      it("Remove file", () => {
-        cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-          .find("button").arrowClick({ force: true });
-      });
-    });
-
-    context("Create bulk documents wih no specified id-s", () => {
-      it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
-      });
-
-      it("Upload template file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "privateBulkNoExistDocId.xlsx" });
+        cy.atchUploadTemplateForBLC({ fileName: "recordIDBLC1.xlsx" });
       });
 
       it("Click save document", () => {
@@ -541,10 +721,147 @@ context("Bulk create public, private and reserved record-ids", () => {
 
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
+        cy.url().then((url: any) => {
+          blc1 = url;
+        });
+      });
+    });
+
+    context("Create bulk records BLC2", () => {
+      it(`Navigate to BLC form`, () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+          cy.visit(blcForm);
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Approve record", () => {
-        cy.ebApprove();
+      it("Click create new from form button", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      context("Fill Bulk creation document atributes", () => {
+        it("Enter title 'Bulk Creation records public'", () => {
+          cy.drEnterDocumentTitle({ name: "Bulk Creation records public BLC2" });
+        });
+
+        it("Enter description 'Bulk Creation public records'", () => {
+          cy.drEnterDocumentDescription({ description: "Bulk Creation public records" });
+        });
+
+        it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+            cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+            cy.unClick();
+          });
+        });
+
+        it("Select form to be used for bulk creation", () => {
+          cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
+        });
+
+        it("Select document type to be used for bulk creation", () => {
+          cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("Test Public Pool").arrowClick();
+        });
+
+        it("Select 'yes' to have Document id column", () => {
+          cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        });
+
+        it("Add approval", () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        });
+      });
+
+      // context("Test spreadsheet templates", () => {
+      //   context("Test spreadsheet template with taken public number for id", () => {
+      //     it("Upload template file", () => {
+      //       cy.atchUploadTemplateForBLC({ fileName: "recordIDPublicTakenID.xlsx" });
+      //     });
+
+      //     it("Click save document", () => {
+      //       cy.drClickCreateDocumentWithApiCallForForms();
+      //     });
+
+      //     it("Submit for approval", () => {
+      //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      //     });
+
+      //     it("Verify error message", () => {
+      //       cy.checkToastMessageIsEqual({
+      //         message: "These docIds: TPUP-00002, TPUP-00004 already exists in your Enlil environment.",
+      //       });
+      //       cy.closeAllAlertMessages();
+      //     });
+
+      //     it("Remove file", () => {
+      //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+      //         .find("button").arrowClick({ force: true });
+      //     });
+      //   });
+      // });
+
+      context("Send BLC2 document in review", () => {
+        it("Upload template file", () => {
+          cy.atchUploadTemplateForBLC({ fileName: "recordIDBLC2.xlsx" });
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Submit for approval", () => {
+          cy.pmSubmitForApproval();
+          cy.url().then((url: any) => {
+            blc2 = url;
+          });
+        });
+      });
+    });
+
+    context("Create record in UI and verify system does not assign reserved id", () => {
+      it("Navigate to records", () => {
+        cy.navigToRecords();
+      });
+
+      it("Click on 'Create a record' button", () => {
+        cy.ptClickCreateNewPart();
+      });
+
+      it("Clicks on 'Test Public Pool' type", () => {
+        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Public Pool" });
+      });
+    });
+
+    context("Complete and release bulk create documents", () => {
+      context("Finish BLC1", () => {
+        it(`Navigate to BLC1`, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+            cy.visit(blc1);
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Approve BLC1", () => {
+          cy.ebApprove();
+        });
+      });
+
+      context("Finish BLC2", () => {
+        it(`Navigate to BLC2`, () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+            cy.visit(blc2);
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Approve BLC2", () => {
+          cy.ebApprove();
+        });
       });
     });
 
@@ -553,143 +870,16 @@ context("Bulk create public, private and reserved record-ids", () => {
         cy.navigToDashboard();
         cy.navigToDocumentList();
         cy.dlClearFilters();
-        cy.dlVerifyDocCounter({ docCounterNumber: 9 });
+        cy.dlVerifyDocCounter({ docCounterNumber: 17 });
       });
 
       it("Filter docs by type", () => {
+        cy.pause();
         cy.dlFilterByType({ type: "TPP" });
       });
 
       it("Verify doc-ids are correct for created doc", () => {
         const documetsWhichShouldBeOnList: string[] = ["TPP-00001", "TPP-00002", "TPP-00003", "TPP-00004"];
-
-        cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
-          expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
-        });
-      });
-    });
-  });
-
-  context("Test public pool document type", () => {
-    it("Filter by doc-id", () => {
-      cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "FM-00004" });
-    });
-
-    it("Select first doc", () => {
-      cy.dlSelectFirstDocument();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
-    it("Click create new from form button", () => {
-      cy.drCreateNewDocumentFromForm();
-    });
-
-    context("Fill Bulk creation document atributes", () => {
-      it("Enter title 'Bulk Creation document'", () => {
-        cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
-      });
-
-      it("Enter description 'Bulk Creation document description'", () => {
-        cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
-      });
-
-      it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
-      });
-
-      it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Document for bulk creation").arrowClick();
-      });
-
-      it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Test Public Pool").arrowClick();
-      });
-
-      it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
-      });
-
-      it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-    });
-
-    context("Upload template with existing doc-ids", () => {
-      it("Upload template file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "publicBulkExistDocId.xlsx" });
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-
-      it("Submit for approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-
-      it("Verify error message", () => {
-        cy.checkToastMessageIsEqual({
-          message: "These docIds: TPUP-00001, TPUP-00003 already exists in your Enlil environment.",
-        });
-        cy.closeAllAlertMessages();
-      });
-
-      it("Remove file", () => {
-        cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-          .find("button").arrowClick({ force: true });
-      });
-    });
-
-    context("Create bulk documents wih no specified id-s", () => {
-      it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
-      });
-
-      it("Upload template file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "publicBulkNoExistDocId.xlsx" });
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve record", () => {
-        cy.ebApprove();
-      });
-    });
-
-    context("Verify created docs", () => {
-      it("Navigate to document list and verify count", { retries: 2 }, () => {
-        cy.navigToDashboard();
-        cy.navigToDocumentList();
-        cy.dlClearFilters();
-        cy.dlVerifyDocCounter({ docCounterNumber: 11 });
-      });
-
-      it("Filter docs by type", () => {
-        cy.dlFilterByType({ type: "TPUP" });
-      });
-
-      it("Verify doc-ids are correct for created doc", () => {
-        const documetsWhichShouldBeOnList: string[] = ["TPUP-00001", "TPUP-00003", "TPUP-00005", "TPUP-00006"];
 
         cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
