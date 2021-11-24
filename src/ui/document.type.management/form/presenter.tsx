@@ -95,6 +95,11 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
             label="common.default.training"
             checkboxProps={{ disabled }}
           />
+          <CheckboxField
+            name="equipmentEnforceProd"
+            label="common.equipmentEnforceProd"
+            checkboxProps={{ disabled }}
+          />
         </Grid>
         <InputField
           name="startingNumber"
