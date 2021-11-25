@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  dashboardMyFeedsActions
+  dashboardMyFeedsActions,
 } from "../../../state/ducks/dashboard.new/my.feeds";
 import {
   trainingActions,
-  trainingSelectors
+  trainingSelectors,
 } from "../../../state/ducks/dashboard.new/training";
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";

@@ -3,7 +3,7 @@ import {
   Link,
   ListItemIcon,
   ListItemText,
-  Modal, Typography
+  Modal, Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import moment from "moment";

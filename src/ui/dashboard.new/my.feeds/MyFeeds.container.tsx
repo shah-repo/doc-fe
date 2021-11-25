@@ -40,7 +40,10 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
 
   return (
     <MyFeedsLineItemPresenter
-      {...{ loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem, pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem }}
+      {...{
+        loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
+        pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem,
+      }}
     />
   );
 };
