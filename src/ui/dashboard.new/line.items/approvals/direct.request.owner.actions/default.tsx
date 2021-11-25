@@ -31,9 +31,9 @@ interface Props {
   timestamp: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
   ({
@@ -46,20 +46,20 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
     timestamp,
     hoverItemId,
     onMouseHoverItem,
-    pins,
+    pinned,
     pinLineItem,
     unPinLineItem,
   }) => {
     const classes = styles();
 
     const [pinHover, setPinHover] = React.useState(false);
-    const pinned = pins && pins.length > 0;
+
     const hoverItem = hoverItemId === id;
     const handlePinClick = () => {
       pinLineItem(id);
     };
     const handleUnPinClick = () => {
-      unPinLineItem(pins[0].pinnedItemId);
+      unPinLineItem(id);
     };
     const onMouseHoverPinIcon = () => {
       setPinHover(true);

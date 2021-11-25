@@ -40,9 +40,9 @@ interface Props {
   approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -59,17 +59,17 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
-  pins,
+  pinned,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

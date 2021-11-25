@@ -57,9 +57,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -71,14 +71,13 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   docRevs,
   hoverItemId,
   onMouseHoverItem,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
   const classes = styles();
   const [closeHover, setCloseHover] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
-  const pinned = pins && pins.length > 0;
   const [closed, setClosed] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
@@ -92,7 +91,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const handleCloseClick = () => {
     openClosedDialog();
@@ -289,7 +288,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        {pinned && !open && !hoverItem && (
+        {!open && pinned && !hoverItem && (
           <StyleTooltip title="Un Pin item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}

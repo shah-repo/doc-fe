@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   getFormattedDateString,
-  MomentFormats,
+  MomentFormats
 } from "../../../common/utils/date";
 import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
@@ -13,7 +13,7 @@ import { styles } from "./Trainings.styles";
 
 interface Props {
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 
 const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
@@ -55,7 +55,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                 onMouseHoverItem={onMouseHoverItem}
                 pinLineItem={pinLineItem}
                 unPinLineItem={unPinLineItem}
-                pins={pendingAction.pins}
+                pinned={pendingAction.pinned}
               />
             );
           default:

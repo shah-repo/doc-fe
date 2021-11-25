@@ -37,9 +37,9 @@ interface Props {
   docRevApprovedApprovals: any[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -53,14 +53,14 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   docRevPendingApprovals,
   docRevApprovedApprovals,
   onMouseHoverItem,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
   const classes = styles();
 
   const [pinHover, setPinHover] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
@@ -68,7 +68,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

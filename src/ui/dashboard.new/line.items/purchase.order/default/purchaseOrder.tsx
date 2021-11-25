@@ -37,7 +37,7 @@ interface Props {
   docId: string;
   docRevId?: string;
   type: string;
-  pins: any;
+  pinned: boolean;
   docRevName: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
@@ -56,7 +56,7 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -75,7 +75,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderDescription,
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
-  pins,
+  pinned,
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
@@ -117,7 +117,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
@@ -127,7 +127,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

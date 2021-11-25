@@ -32,7 +32,7 @@ const unPinnedLineItem = (
   handlers: Handlers,
 ): ApiAction =>
   apiActionWithCallbacks({
-    url: `/pinned_items/${id}`,
+    url: `/pinned_items/dashboard_feed/${id}`,
     method: "delete",
     handlers,
   });

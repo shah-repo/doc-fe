@@ -66,9 +66,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -81,7 +81,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   approvedApprovers,
   hoverItemId,
   onMouseHoverItem,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
@@ -91,7 +91,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
@@ -101,7 +100,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
@@ -319,7 +318,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {pinned && !open && <StyleTooltip title="Un Pin item" placement="top" arrow>
+        {!open && pinned && <StyleTooltip title="Un Pin item" placement="top" arrow>
           <PinSolidIcon
             onClick={handleUnPinClick}
           />

@@ -67,14 +67,14 @@ interface Props {
   }[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
-  pins: any;
+  pinned: boolean;
   purchaseOrderCurrency: string;
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -95,7 +95,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderAttachments,
   docRevPendingApprovals,
   docRevApprovedApprovals,
-  pins,
+  pinned,
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
@@ -137,7 +137,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
@@ -149,7 +149,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);

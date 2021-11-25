@@ -58,9 +58,9 @@ interface Props {
   approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -75,13 +75,13 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   hoverItemId,
   onMouseHoverItem,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
 
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
@@ -90,7 +90,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -313,7 +313,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !pinned && !open && (
+        { hoverItem && !!open && pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -326,7 +326,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {pinned && !open && (
+        {!open && pinned && (
           <Box component="div" className={classes.actionIcons}>
             <StyleTooltip title="Un Pin item" placement="top" arrow>
               <PinSolidIcon

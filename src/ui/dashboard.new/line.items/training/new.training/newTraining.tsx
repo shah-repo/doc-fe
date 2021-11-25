@@ -41,9 +41,9 @@ interface Props {
   pendingTrainees: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -58,13 +58,13 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pendingTrainees,
   onMouseHoverItem,
   hoverItemId,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
-  const pinned = pins && pins.length > 0;
+
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -78,7 +78,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);

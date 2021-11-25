@@ -8,7 +8,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
@@ -63,9 +63,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pins: any;
+  pinned: boolean;
   pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -88,7 +88,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderAttachments,
   hoverItemId,
   onMouseHoverItem,
-  pins,
+  pinned,
   pinLineItem,
   unPinLineItem,
 }) => {
@@ -97,7 +97,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const pinned = pins && pins.length > 0;
+
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -139,7 +139,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     pinLineItem(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(pins[0].pinnedItemId);
+    unPinLineItem(id);
   };
   const handleApproveClick = () => {
     openApproveDialog();
@@ -392,7 +392,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        { pinned && !open && !hoverItem &&
+        { !open && !hoverItem && pinned &&
           <StyleTooltip title="Un Pin item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
