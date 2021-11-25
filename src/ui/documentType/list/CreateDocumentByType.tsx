@@ -260,6 +260,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               return { [column.key]: get(e, "document.docId") || "" };
             case "changeRequest":
               return { [column.key]: get(e, "changeRequest.crId") || "" };
+            case "status":
+              return { [column.key]: get(e, "displayStatus") || "" };
+            case "precalc.revision":
+              return { [column.key]: get(e, "displayRevision") || "" };
             default:
               if (moment(columnValue, moment.ISO_8601, true).isValid()) {
                 return {
