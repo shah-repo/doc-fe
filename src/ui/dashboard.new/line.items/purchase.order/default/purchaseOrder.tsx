@@ -5,7 +5,7 @@ import {
   List,
   ListItemIcon,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -118,7 +118,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   // const [pinned, setPinned] = React.useState(false);
-  const pinned = pins.length > 0;
+  const pinned = pins && pins.length > 0;
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
@@ -290,7 +290,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {pinned && (
+        {!open && pinned && (
           <StyleTooltip title="Un Pin item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}

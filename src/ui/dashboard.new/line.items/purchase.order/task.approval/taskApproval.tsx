@@ -260,9 +260,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            <span className={classes.actionIcon}>
-              { !pinned && !pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-              { !pinned && pinHover && (
+            { !pinned && <span className={classes.actionIcon}>
+              { !pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              { pinHover && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
@@ -270,16 +270,25 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+            </span>}
+            {pinned && <span className={classes.actionIcon}>
+              <StyleTooltip title="Un Pin item" placement="top" arrow>
+                <PinSolidIcon
+                  onClick={handleUnPinClick}
+                  onMouseLeave={onMouseLeaveActionIcons}
+                />
+              </StyleTooltip>
+            </span>}
+          </Box>
+        )}
+        { pinned && !hoverItem &&
                 <StyleTooltip title="Un Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handleUnPinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
-              )}
-            </span>
-          </Box>
-        )}
+        }
       </StyledListItem>
       <ApproveDialogueContainer
         transition="reject"

@@ -163,7 +163,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {hoverItem && !pinned && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -180,14 +180,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {pinned && (
-              <StyleTooltip title="Un Pin item" placement="top" arrow>
-                <PinSolidIcon
-                  onClick={handleUnPinClick}
-                />
-              </StyleTooltip>
-            )}
           </Box>
+        )}
+        {pinned && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow >
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
       </StyledListItem>
     </>

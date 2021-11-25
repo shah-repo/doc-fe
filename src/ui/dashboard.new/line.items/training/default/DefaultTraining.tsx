@@ -294,13 +294,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         </Box>
       )}
       {pinned && (
-        <Box component="div" className={classes.actionIcons}>
-          <StyleTooltip title="Un Pin item" placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
-          </StyleTooltip>
-        </Box>
+        <StyleTooltip title="Un Pin item" placement="top" arrow>
+          <PinSolidIcon
+            onClick={handleUnPinClick}
+          />
+        </StyleTooltip>
       )}
     </StyledListItem>
   );

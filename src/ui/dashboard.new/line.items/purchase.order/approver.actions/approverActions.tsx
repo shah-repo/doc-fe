@@ -366,16 +366,13 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {pinned && (
-          <div className={classes.actionIcons}>
-            <StyleTooltip title="Un Pin item" placement="top" arrow>
-              <PinSolidIcon
-                onClick={handleUnPinClick}
-              />
-            </StyleTooltip>
-          </div>
+        {pinned && !open && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
-
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
