@@ -12,7 +12,7 @@ export const styles = makeStyles((theme: Theme) =>
       padding: "0px 5px",
       overflow: "auto",
       minHeight: "125px",
-      maxHeight: "calc(100vh - 526px)",
+      maxHeight: "calc(100vh - 421px)",
     },
     lineItemContent: {
       height: "100px",

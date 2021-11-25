@@ -66,7 +66,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       },
       itemGap: -20,
       left: "center",
-      top: "50%",
+      top: "55%",
     };
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
@@ -163,7 +163,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         <Box display="flex" alignItems="center" justifyContent="center">
           <div id="training-chart" className={classes.chartScroll}></div>
         </Box>
-        <Box display="flex" alignItems="center" justifyContent="center">
+        <Box display="flex" alignItems="center" justifyContent="center" marginTop={2}>
           <StyledTabs
             value={value}
             onChange={handleChange}

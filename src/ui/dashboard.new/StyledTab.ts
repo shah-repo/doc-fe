@@ -17,7 +17,7 @@ const styles = () => ({
   },
   selected: {
     opacity: 1,
-    color: Colors.navy,
+    color: Colors.black,
     fontWeight: 600,
   },
 });

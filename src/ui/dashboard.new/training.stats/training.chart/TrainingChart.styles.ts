@@ -6,6 +6,7 @@ export const styles = makeStyles(() =>
     chartContainer: {
       overflow: "auto",
       maxHeight: "calc(100vh - 300px)",
+      background: Colors.catskill_white,
     },
     title: {
       fontFamily: "Sora",
@@ -17,7 +18,7 @@ export const styles = makeStyles(() =>
     chartScroll: {
       position: "relative",
       width: "350px",
-      height: "180px",
+      height: "130px",
     },
     tab: {
       minWidth: 66,

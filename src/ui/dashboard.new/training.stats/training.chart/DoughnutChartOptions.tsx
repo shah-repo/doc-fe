@@ -18,11 +18,11 @@ const DoughnutChartOptions = {
   },
   series: {
     type: "gauge",
-    center: ["50%", "80%"],
+    center: ["50%", "100%"],
     startAngle: 180,
     endAngle: 0,
     max: 0,
-    radius: "140%",
+    radius: "190%",
     anchor: {
       show: false,
     },
@@ -37,11 +37,11 @@ const DoughnutChartOptions = {
     },
     progress: {
       show: true,
-      width: 28,
+      width: 35,
     },
     axisLine: {
       lineStyle: {
-        width: 28,
+        width: 35,
       },
     },
     axisLabel: {
@@ -50,7 +50,7 @@ const DoughnutChartOptions = {
     data: [
       {
         value: 0,
-        name: "Good",
+        name: "",
         itemStyle: {
           color: Colors.latest_red_varient,
         },
