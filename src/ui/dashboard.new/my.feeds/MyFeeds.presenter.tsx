@@ -66,6 +66,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR:
               return (
                 <CalibrationItem
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   type={pendingAction.type}
@@ -88,6 +89,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
               return (
                 <POTaskApproval
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   approvalId={pendingAction.approvalId}
@@ -132,6 +134,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
               return (
                 <NONPOTaskApproval
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   approvalId={pendingAction.approvalId}
@@ -156,6 +159,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED:
               return (
                 <POApproverActions
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   docId={pendingAction.docId}
@@ -201,6 +205,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
               return (
                 <NonPOApproverActions
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   docId={pendingAction.docId}
@@ -228,6 +233,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               ) {
                 return (
                   <PurchaseOrderPendingReview
+                    key={index}
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
@@ -275,6 +281,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               }
               return (
                 <PurchaseOrder
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   docId={pendingAction.docId}
@@ -317,6 +324,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               if (pendingAction.docRevStatus === "IN_REVIEW") {
                 return (
                   <DirectApprovalActionPRItem
+                    key={index}
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
@@ -344,6 +352,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               }
               return (
                 <DirectApprovalActionItem
+                  key={index}
                   id={pendingAction.id}
                   docDocumentId={pendingAction.docDocumentId}
                   docId={pendingAction.docId}
@@ -393,6 +402,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
               return (
                 <ARTaskApproval
+                  key={index}
                   id={pendingAction.id}
                   docRevs={pendingAction.docRevs}
                   arChangeRequestId={pendingAction.arChangeRequestId}
@@ -416,6 +426,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             case ActionTypes.APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
               return (
                 <ARApproverActions
+                  key={index}
                   id={pendingAction.id}
                   arChangeRequestId={pendingAction.arChangeRequestId}
                   type={pendingAction.type}
@@ -442,6 +453,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               if (pendingAction.arStatus === "CLOSED") {
                 return (
                   <ApprovalClosed
+                    key={index}
                     id={pendingAction.id}
                     arChangeRequestId={pendingAction.arChangeRequestId}
                     type={pendingAction.type}
@@ -464,6 +476,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               if (pendingAction.arStatus === "APPROVED") {
                 return (
                   <ApprovalApproved
+                    key={index}
                     id={pendingAction.id}
                     arChangeRequestId={pendingAction.arChangeRequestId}
                     type={pendingAction.type}
@@ -486,6 +499,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               if (pendingAction.arStatus === "IN_REVIEW") {
                 return (
                   <PendingReview
+                    key={index}
                     id={pendingAction.id}
                     type={pendingAction.type}
                     arId={pendingAction.arId}
@@ -509,6 +523,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             default:
               return (
                 <DefaultLineItem
+                  key={index}
                   type={pendingAction.type}
                   status={pendingAction.arStatus || pendingAction.docRevStatus}
                   onMouseHoverItem={onMouseHoverItem}

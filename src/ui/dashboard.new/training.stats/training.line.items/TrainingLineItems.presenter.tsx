@@ -14,7 +14,7 @@ interface TabPanelProps {
   value: number;
   panelData: {
     docTitle: string;
-    user: { avatar: Nullable<string>; name: string };
+    user: { avatar: Nullable<string>; name: string; initialColor: string };
     docId: string;
     status: string;
     dueOn: string;
@@ -35,6 +35,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         <TrainingItem
           key={index}
           avatar={data.user.avatar}
+          initialColor={data.user.initialColor}
           name={data.user.name.split(" ")[0]}
           status={data.status}
           documentId={data.docId}
@@ -130,7 +131,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
                 <Grid item={true} sm={12}>
                   <span className={classes.overdueTab}></span>
                   <span className={classes.tabHeader}>
-                    <Text translation="common.overdue.caps" />
+                    <Text translation="common.overdue" />
                   </span>
                 </Grid>
               </Grid>
@@ -145,7 +146,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           <Text translation="common.duein7days" />
         </TabPanel>
         <TabPanel value={value} index={2} panelData={overdueItems}>
-          <Text translation="common.overdue.caps" />
+          <Text translation="common.overdue" />
         </TabPanel>
       </Box>
     );

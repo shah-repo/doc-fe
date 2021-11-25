@@ -25,6 +25,7 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
@@ -168,12 +169,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
-            className={classes.avatar}
-            alt={docRevOwnerName}
-            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-          />
+          {docRevOwnerAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+              alt={docRevOwnerName}
+              src={docRevOwnerAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(docRevOwnerName || "")}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -271,11 +281,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+                <RejectIcon
+                  data-cy="transition-reject"
+                  onMouseEnter={onMouseHoverRejectIcon}
+                />
               )}
               {rejectHover && (
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
+                    data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -284,11 +298,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+                <ApproveIcon
+                  data-cy="transition-approve"
+                  onMouseEnter={onMouseHoverApproveIcon}
+                />
               )}
               {approveHover && (
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
+                    data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />

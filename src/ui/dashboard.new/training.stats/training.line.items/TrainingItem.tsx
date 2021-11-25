@@ -12,12 +12,14 @@ import {
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { TrainingStatusTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
+import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
   avatar: Nullable<string>;
   name: string;
+  initialColor: string;
   documentId: string;
   title: string;
   status: string;
@@ -26,6 +28,8 @@ interface TrainingItemProps {
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   name,
+  avatar,
+  initialColor,
   status,
   date,
   documentId,
@@ -34,11 +38,33 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   const classes = styles();
   const isOverdue = status === TrainingStatusTypes.OVERDUE;
 
-  const titleRender = (name, status, documentId, title, date) => (
-    <Typography>
+  const titleRender = (
+    avatar,
+    name,
+    initialColor,
+    status,
+    documentId,
+    title,
+    date
+  ) => (
+    <>
       <Grid justify="space-between" container>
         <Grid item className={classes.avatarSection}>
-          <Avatar className={classes.avatar} alt={name} src="." />
+          {avatar ? (
+            <Avatar
+              style={{ backgroundColor: `${initialColor}` }}
+              className={classes.avatar}
+              alt={name}
+              src={avatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${initialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(name)}
+            </Avatar>
+          )}
           <Typography
             component="span"
             variant="body2"
@@ -56,7 +82,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
               className={classes.typographyOverdue}
               color="textPrimary"
             >
-              <Text translation="common.overdue.caps" />
+              <Text translation="common.overdue" />
             </Typography>
           )}
           {!isOverdue && (
@@ -116,14 +142,22 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
           </Typography>
         </Grid>
       </Grid>
-    </Typography>
+    </>
   );
 
   return (
     <ListItem>
       <ListItemText
         id={documentId}
-        primary={titleRender(name, status, documentId, title, date)}
+        primary={titleRender(
+          avatar,
+          name,
+          initialColor,
+          status,
+          documentId,
+          title,
+          date
+        )}
       />
     </ListItem>
   );

@@ -16,17 +16,16 @@ export default (theme: Theme) =>
     },
     toolbar: {
       backgroundColor: Colors.mirage,
-      marginTop: 20,
+      marginTop: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
     },
     toolbarTitle: {
       flex: 1,
       textAlign: "center",
     },
     headerLink: {
-      "textDecoration": "none",
-      "color": theme.palette.common.white,
-      "&:hover": {
-        color: theme.palette.secondary.light,
-      },
+      textDecoration: "none",
+      color: theme.palette.common.white,
     },
   });
