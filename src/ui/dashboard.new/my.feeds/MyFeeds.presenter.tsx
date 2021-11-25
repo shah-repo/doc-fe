@@ -8,7 +8,6 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../common/utils/date";
-import { dashboardMyFeedsActions } from "../../../state/ducks/dashboard.new/my.feeds";
 import {
   ActionTypes,
   LINE_ITEMS_STATUS_TYPES,
@@ -16,8 +15,6 @@ import {
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
-import useActionCreator from "../../hooks/useActionCreator";
-import useAsync from "../../hooks/useAsync";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -38,6 +35,11 @@ import { styles } from "./MyFeeds.styles";
 
 interface Props {
   loadMyFeeds: any;
+  hoverItemId: string;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
+  onMouseLeaveItem: (any) => void;
+  onMouseHoverItem: (id: string) => void;
   loadMyFeedsListAsyncState: AsyncState;
   // TO DO:: Needs to add type definitions
   feedItems: any[];
@@ -47,26 +49,13 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,
+  pinLineItem,
+  unPinLineItem,
+  hoverItemId,
+  onMouseLeaveItem,
+  onMouseHoverItem,
 }) => {
   const classes = styles();
-  const [hoverItemId, setHoverItemId] = React.useState("");
-  const onMouseHoverItem = (id) => {
-    setHoverItemId(id);
-  };
-  const onMouseLeaveItem = () => {
-    setHoverItemId("");
-  };
-  const pinnedOrUnPinnedAsync = useAsync();
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
-  );
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem
-  );
-  const pinLineItem = (id: string) => {
-    pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
-  };
-  const unPinLineItem = (pinnedItemId: string) => {
-    pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
-  };
 
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
