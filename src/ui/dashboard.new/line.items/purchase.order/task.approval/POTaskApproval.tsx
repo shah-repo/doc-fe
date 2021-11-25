@@ -368,7 +368,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           <StyleTooltip title="Un Pin item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
-              onMouseLeave={onMouseLeaveActionIcons}
             />
           </StyleTooltip>
         }

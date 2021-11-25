@@ -290,6 +290,14 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
+        {pinned && !open && !hoverItem && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+              onMouseLeave={onMouseLeaveActionIcons}
+            />
+          </StyleTooltip>
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

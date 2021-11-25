@@ -263,7 +263,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {hoverItem && !open && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -309,11 +309,19 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <StyleTooltip title="Un Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handleUnPinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
             </span>
           </Box>
+        )}
+        {pinned && !open && !hoverItem && (
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

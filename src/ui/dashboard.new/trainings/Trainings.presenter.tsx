@@ -11,7 +11,15 @@ import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
 import { styles } from "./Trainings.styles";
 
-const TrainingsLineItemPresenter: React.FunctionComponent = () => {
+interface Props {
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
+}
+
+const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
+  pinLineItem,
+  unPinLineItem,
+}) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
@@ -21,6 +29,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
     setHoverItemId("");
   };
   const trainingItems = useSelector(trainingSelectors.trainingList);
+
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
@@ -44,6 +53,9 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
                 pendingTrainees={pendingAction.pendingTrainees}
                 hoverItemId={hoverItemId}
                 onMouseHoverItem={onMouseHoverItem}
+                pinLineItem={pinLineItem}
+                unPinLineItem={unPinLineItem}
+                pins={pendingAction.pins}
               />
             );
           default:

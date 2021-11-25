@@ -1,10 +1,9 @@
 import {
-  Grid,
+  Box, Grid,
   Link,
   ListItemIcon,
   ListItemText,
-  Modal,
-  Typography,
+  Modal, Typography
 } from "@material-ui/core";
 import { size } from "lodash";
 import moment from "moment";
@@ -12,6 +11,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
@@ -40,6 +41,9 @@ interface Props {
   pendingTrainees: any;
   hoverItemId: string;
   onMouseHoverItem: (arId: string | undefined) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -54,22 +58,28 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pendingTrainees,
   onMouseHoverItem,
   hoverItemId,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
-  // const [pinned, setPinned] = React.useState(false);
-  // const [pinHover, setPinHover] = React.useState(false);
+  const pinned = pins && pins.length > 0;
+  const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
+  };
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
@@ -289,7 +299,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* {hoverItem && (
+        {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -301,7 +311,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               </StyledTooltip>
             )}
           </Box>
-        )} */}
+        )}
+        {pinned && (
+          <StyledTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyledTooltip>
+        )}
       </StyledListItem>
       <Modal
         open={emailModelopen}

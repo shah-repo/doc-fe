@@ -8,7 +8,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
@@ -302,7 +302,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !pinned && (
+        { hoverItem && !pinned && !open && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -315,7 +315,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {pinned && !open && (
           <Box component="div" className={classes.actionIcons}>
             <StyleTooltip title="Un Pin item" placement="top" arrow>
               <PinSolidIcon

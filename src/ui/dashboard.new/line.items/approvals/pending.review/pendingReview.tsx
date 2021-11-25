@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -320,16 +320,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
-          <Box component="div" className={classes.actionIcons}>
-            <StyleTooltip title="Un Pin item" placement="top" arrow>
-              <PinSolidIcon
-                onClick={handleUnPinClick}
-              />
-            </StyleTooltip>
-          </Box>
-        )}
-
+        {pinned && !open && <StyleTooltip title="Un Pin item" placement="top" arrow>
+          <PinSolidIcon
+            onClick={handleUnPinClick}
+          />
+        </StyleTooltip>
+        }
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

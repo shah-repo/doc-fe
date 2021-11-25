@@ -2,7 +2,7 @@ import {
   Box, Grid,
   Link,
   ListItemIcon,
-  ListItemText, Typography,
+  ListItemText, Typography
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -218,15 +218,12 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
               )}
             </Box>
           )}
-          {pinned && (
-            <Box component="div"  className={classes.actionIcons}>
-              <StyleTooltip title="Un Pin item" placement="top" arrow>
-                <PinSolidIcon
-                  onClick={handleUnPinClick}
-                />
-              </StyleTooltip>
-            </Box>
-          )}
+          {pinned && <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
+          }
 
         </StyledListItem>
       </>
