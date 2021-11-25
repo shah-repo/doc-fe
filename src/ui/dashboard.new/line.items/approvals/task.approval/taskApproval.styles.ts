@@ -59,9 +59,9 @@ export const styles = makeStyles(() =>
       fontWeight: 400,
     },
     avatar: {
-      width: "35px",
-      height: "35px",
-      fontSize: "14px",
+      width: "30px",
+      height: "30px",
+      fontSize: "12px",
       color: Colors.white,
       fontFamily: "Sora",
       fontWeight: 600,

@@ -134,7 +134,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
-          <PendingReviewIcon />
+          <PendingReviewIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText
           primary={

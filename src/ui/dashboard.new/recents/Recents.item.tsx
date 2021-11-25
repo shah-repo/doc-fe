@@ -34,17 +34,17 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   const getIcon = (docTypeGroup: RecentDocTypeGroups) => {
     switch (docTypeGroup) {
       case RecentDocTypeGroups.CHANGE_REQUEST:
-        return <ApprovalIcon />;
+        return <ApprovalIcon height={30} width={30} />;
       case RecentDocTypeGroups.PO:
-        return <POIcon />;
+        return <POIcon height={30} width={30} />;
       case RecentDocTypeGroups.PI:
-        return <MPIIcon />;
+        return <MPIIcon height={30} width={30} />;
       case RecentDocTypeGroups.FORM:
-        return <FMIcon />;
+        return <FMIcon height={30} width={30} />;
       case RecentDocTypeGroups.SUPPLIER:
-        return <SOPIcon />;
+        return <SOPIcon height={30} width={30} />;
       default:
-        return <SOPIcon />;
+        return <SOPIcon height={30} width={30} />;
     }
   };
   return (

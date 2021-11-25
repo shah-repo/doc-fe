@@ -67,7 +67,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
           onMouseEnter={onMouseHoverListItem}
         >
           <ListItemIcon>
-            <PendingReviewIcon />
+            <PendingReviewIcon height={30} width={30} />
           </ListItemIcon>
           <ListItemText
             primary={

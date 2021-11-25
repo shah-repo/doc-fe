@@ -149,7 +149,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
-          <POIcon />
+          <POIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText
           primary={

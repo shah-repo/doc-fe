@@ -13,9 +13,9 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
