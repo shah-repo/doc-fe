@@ -51,7 +51,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const hoverItem = hoverItemId === id;
 

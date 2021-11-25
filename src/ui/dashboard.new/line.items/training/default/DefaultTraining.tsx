@@ -62,7 +62,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
 }) => {
   const classes = styles();
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;

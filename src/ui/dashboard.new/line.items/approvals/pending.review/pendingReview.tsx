@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -91,7 +91,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 

@@ -8,7 +8,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
@@ -21,11 +21,11 @@ import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
-import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
+import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
@@ -81,7 +81,6 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
 
   const [open, setOpen] = React.useState(false);

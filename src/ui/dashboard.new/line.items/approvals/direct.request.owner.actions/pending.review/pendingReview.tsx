@@ -60,7 +60,6 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
 
   const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;

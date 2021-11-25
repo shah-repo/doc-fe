@@ -25,8 +25,8 @@ import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.sv
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
@@ -83,7 +83,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);

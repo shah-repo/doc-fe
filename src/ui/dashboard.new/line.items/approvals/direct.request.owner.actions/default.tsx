@@ -2,7 +2,7 @@ import {
   Box, Grid,
   Link,
   ListItemIcon,
-  ListItemText, Typography
+  ListItemText, Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -53,7 +53,6 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
     const classes = styles();
 
     const [pinHover, setPinHover] = React.useState(false);
-    // const [pinned, setPinned] = React.useState(false);
     const pinned = pins && pins.length > 0;
     const hoverItem = hoverItemId === id;
     const handlePinClick = () => {

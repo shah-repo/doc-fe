@@ -78,7 +78,6 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   const [closeHover, setCloseHover] = React.useState(false);
   const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [closed, setClosed] = React.useState(false);
   const [open, setOpen] = React.useState(false);

@@ -97,7 +97,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);

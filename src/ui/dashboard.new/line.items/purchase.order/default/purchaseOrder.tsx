@@ -117,7 +117,6 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;

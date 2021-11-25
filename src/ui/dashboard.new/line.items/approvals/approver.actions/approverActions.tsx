@@ -4,7 +4,7 @@ import {
   Link,
   ListItemAvatar,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
@@ -15,9 +15,9 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -63,7 +63,6 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const pinned = pins && pins.length > 0;
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
