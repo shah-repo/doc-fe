@@ -55,4 +55,6 @@ export const COMPANY_MINE_URL = "/company/mine";
 
 export const PAGE_DETAILS_MANAGEMENT_URL = "/page_details_management";
 
+export const SQS_MESSAGES_URL = "/sqs_messages";
+
 export const COMPANY_EMAIL = "enlil-feedback@shifamed.com";

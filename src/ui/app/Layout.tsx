@@ -6,7 +6,7 @@ import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
-import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
+import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, SQS_MESSAGES_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardLayout from "../dashboard.new/Dashboard.layout";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
@@ -18,6 +18,7 @@ import GroupManagementListContainer from "../group.management/list/container";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
+import SQSMessagesContainer from "../sqs.messages/sqsMessages.container";
 import TrainingListContainer from "../training/list/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
@@ -108,6 +109,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
       <Route
         path={PAGE_DETAILS_MANAGEMENT_URL}
         component={PageDetailsManagementContainer}
+      />
+      <Route
+        path={SQS_MESSAGES_URL}
+        component={SQSMessagesContainer}
       />
       <Redirect to={{ pathname: HOME_URL }} />
     </Switch>

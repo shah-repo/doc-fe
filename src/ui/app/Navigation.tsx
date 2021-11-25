@@ -41,8 +41,22 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   });
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
-
-  const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+  // eslint-disable-next-line no-console
+  console.log("useSelector(companySelectors.getNavigationItems :::", useSelector(companySelectors.getNavigationItems));
+  const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
+  // TODO:: REMOVE THIS once Navigation item coming from backend
+  const index = navigationSelectorItems.findIndex((x) => x.path === "/sqs_messages");
+  if (index === -1) {
+    navigationSelectorItems.push({
+      icon: "/navigation_icons/document-menu.svg",
+      label: "SQS Messages",
+      path: "/sqs_messages",
+      restrictedToUsersWithTags: [GroupTag.DASHBOARD_ADMIN],
+      type: "LINK",
+    });
+  }
+  // const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+  const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
       if (itemAllowedForUser(item, userTags)) {
         if (item.type === "MENU") {
@@ -52,6 +66,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       }
       return acc;
     }, []);
+
 
   const [isLoading, setIsLoading] = useState(true);
 
