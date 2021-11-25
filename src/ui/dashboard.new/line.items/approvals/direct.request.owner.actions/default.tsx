@@ -208,7 +208,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
             <Box component="div" className={classes.actionIcons}>
               {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && (
-                <StyleTooltip title="Pin item" placement="top" arrow>
+                <StyleTooltip title="Pin this item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeavePinIcon}
@@ -217,7 +217,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
               )}
             </Box>
           )}
-          {pinned && <StyleTooltip title="Un Pin item" placement="top" arrow>
+          {pinned && <StyleTooltip title="Unpin this item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />

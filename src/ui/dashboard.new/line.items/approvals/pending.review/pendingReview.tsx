@@ -309,7 +309,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
+              <StyleTooltip title="Pin this item" placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -318,7 +318,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!open && pinned && <StyleTooltip title="Un Pin item" placement="top" arrow>
+        {!open && pinned && <StyleTooltip title="Unpin this item" placement="top" arrow>
           <PinSolidIcon
             onClick={handleUnPinClick}
           />

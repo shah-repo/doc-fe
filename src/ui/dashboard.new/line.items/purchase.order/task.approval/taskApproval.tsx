@@ -288,7 +288,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             { !pinned && <span className={classes.actionIcon}>
               { !pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               { pinHover && (
-                <StyleTooltip title="Pin item" placement="top" arrow>
+                <StyleTooltip title="Pin this item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -297,7 +297,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
             </span>}
             {pinned && <span className={classes.actionIcon}>
-              <StyleTooltip title="Un Pin item" placement="top" arrow>
+              <StyleTooltip title="Unpin this item" placement="top" arrow>
                 <PinSolidIcon
                   onClick={handleUnPinClick}
                   onMouseLeave={onMouseLeaveActionIcons}
@@ -307,7 +307,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         { !hoverItem && pinned &&
-                <StyleTooltip title="Un Pin item" placement="top" arrow>
+                <StyleTooltip title="Unpin this item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}

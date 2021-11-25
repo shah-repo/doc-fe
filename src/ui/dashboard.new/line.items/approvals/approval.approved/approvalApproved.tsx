@@ -271,7 +271,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && !pinned && (
-                <StyleTooltip title="Pin item" placement="top" arrow>
+                <StyleTooltip title="Pin this item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -279,7 +279,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
               {pinned && (
-                <StyleTooltip title="Un Pin item" placement="top" arrow>
+                <StyleTooltip title="Unpin this item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                   />
@@ -289,7 +289,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {!open && pinned && !hoverItem && (
-          <StyleTooltip title="Un Pin item" placement="top" arrow>
+          <StyleTooltip title="Unpin this item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
               onMouseLeave={onMouseLeaveActionIcons}

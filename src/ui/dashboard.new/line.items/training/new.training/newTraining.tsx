@@ -299,7 +299,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyledTooltip title="Pin item" placement="top" arrow>
+              <StyledTooltip title="Pin this item" placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -309,7 +309,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyledTooltip title="Un Pin item" placement="top" arrow>
+          <StyledTooltip title="Unpin this item" placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />
