@@ -528,6 +528,7 @@ context("Equipment maintenance test", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+      cy.wait(5000);
     });
 
     it("Enter title 'Preventative maintenance document'", () => {
@@ -565,7 +566,7 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Add an Approval'", () => {
+    it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
@@ -630,6 +631,7 @@ context("Equipment maintenance test", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+      cy.wait(5000);
     });
 
     it("Enter title 'Calibration document'", () => {
@@ -774,7 +776,7 @@ context("Equipment maintenance test", () => {
           .and("contain", "RELEASED");
       });
 
-      it("Check calibration status is in complience for next 5 days", () => {
+      it("Check calibration status is in complience for next 5 days", { retries: 3 }, () => {
         SystemRequirement("REQ-2900", "REQ-2910");
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(5, "days")

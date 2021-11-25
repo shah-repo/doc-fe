@@ -809,7 +809,10 @@ context("Training user groups test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -817,11 +820,17 @@ context("Training user groups test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -870,7 +879,9 @@ context("Training user groups test", () => {
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.get("[class*='Layout-content']").should("not.contain", `TRAINING: ${releasedFormId} - Rev 1 released form`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy='dashboard.noPendingActions']").should("exist");
     });
 
     it("Logout user", () => {

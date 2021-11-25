@@ -455,7 +455,10 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.wait(1500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
         () => {
@@ -501,7 +504,10 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.wait(1500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
         () => {
@@ -542,6 +548,7 @@ context("E-signature test", () => {
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
       it("Navigate to approval request list", () => {
+        cy.wait(3000);
         cy.navigToApprovalRequestList();
       });
 
@@ -601,7 +608,7 @@ context("E-signature test", () => {
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
-        cy.get("#root").contains("Approve").arrowClick();
+        cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
           () => {
@@ -690,7 +697,7 @@ context("E-signature test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("WIP").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
         cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-
+        cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
       });
 
       it("Release EB and check if correct new name is shown", () => {
