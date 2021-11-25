@@ -10,7 +10,7 @@ import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
-  const [hoverItemId, setHoverItemId] = React.useState(""); ``;
+  const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id: string) => {
     setHoverItemId(id);
   };
