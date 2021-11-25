@@ -4,7 +4,6 @@ const DoughnutChartOptions = {
   title: {
     text: "",
     subtext: "",
-    padding: [-10, 0, 0, 0],
     textStyle: {
       color: Colors.black,
       fontSize: 59,
@@ -17,49 +16,67 @@ const DoughnutChartOptions = {
     left: "center",
     top: "center",
   },
-  tooltip: {
-    trigger: "item",
-  },
-  colorBy: "data",
   series: {
-    type: "pie",
-    radius: ["68%", "93%"],
-    avoidLabelOverlap: false,
-    legend: {
+    type: "gauge",
+    center: ["50%", "80%"],
+    startAngle: 180,
+    endAngle: 0,
+    max: 0,
+    radius: "140%",
+    anchor: {
       show: false,
     },
-    tooltip: {
+    axisTick: {
       show: false,
     },
-    itemStyle: {
-      borderColor: Colors.white,
-      borderWidth: 2,
-    },
-    label: {
+    splitLine: {
       show: false,
-      position: "center",
     },
-    emphasis: {
-      label: {
-        show: false,
+    pointer: {
+      show: false,
+    },
+    progress: {
+      show: true,
+      width: 28,
+    },
+    axisLine: {
+      lineStyle: {
+        width: 28,
       },
+    },
+    axisLabel: {
+      show: false,
     },
     data: [
       {
         value: 0,
-        name: "",
+        name: "Good",
         itemStyle: {
-          color: Colors.latest_yellow_varient,
+          color: Colors.latest_red_varient,
+        },
+        detail: {
+          show: false,
+        },
+        title: {
+          show: false,
         },
       },
       {
         value: 0,
-        name: "",
         itemStyle: {
-          color: Colors.latest_red_varient,
+          color: Colors.latest_yellow_varient,
+        },
+        detail: {
+          show: false,
+        },
+        title: {
+          show: false,
         },
       },
     ],
+    title: {
+      fontSize: 14,
+    },
   },
 };
 

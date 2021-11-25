@@ -79,10 +79,10 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
         <TabPanel value={props.tabValue} index={0} panelData={all}>
           <Text translation="training.stats.all" />
         </TabPanel>
-        <TabPanel value={props.tabValue} index={1} panelData={dueInSevenItems}>
+        <TabPanel value={props.tabValue} index={2} panelData={dueInSevenItems}>
           <Text translation="common.duein7days" />
         </TabPanel>
-        <TabPanel value={props.tabValue} index={2} panelData={overdueItems}>
+        <TabPanel value={props.tabValue} index={1} panelData={overdueItems}>
           <Text translation="common.overdue" />
         </TabPanel>
       </Box>

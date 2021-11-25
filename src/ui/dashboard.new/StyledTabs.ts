@@ -7,7 +7,7 @@ const styles = () => ({
     "display": "flex",
     "justifyContent": "center",
     "backgroundColor": Colors.navy,
-    "height": 4,
+    "height": 3,
     "& > span": {
       width: "100%",
       backgroundColor: Colors.white,
