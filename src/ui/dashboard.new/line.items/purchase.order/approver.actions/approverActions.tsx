@@ -66,6 +66,9 @@ interface Props {
   approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -90,6 +93,9 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
 
@@ -128,14 +134,18 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -343,7 +353,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -356,6 +366,16 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
+        {pinned && (
+          <div className={classes.actionIcons}>
+            <StyleTooltip title="Un Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+              />
+            </StyleTooltip>
+          </div>
+        )}
+
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>

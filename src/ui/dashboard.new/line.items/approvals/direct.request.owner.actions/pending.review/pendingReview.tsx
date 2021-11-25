@@ -37,6 +37,9 @@ interface Props {
   docRevApprovedApprovals: any[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -50,16 +53,23 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   docRevPendingApprovals,
   docRevApprovedApprovals,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
 
   const [pinHover, setPinHover] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -250,7 +260,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && (
+        { hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -262,6 +272,14 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
+        )}
+        {pinned && (
+          <div className={classes.actionIcons}>
+            <StyleTooltip title="Un Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+              />
+            </StyleTooltip></div>
         )}
       </StyledListItem>
       <Modal

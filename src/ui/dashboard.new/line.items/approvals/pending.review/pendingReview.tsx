@@ -8,7 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -66,6 +66,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -78,6 +81,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   approvedApprovers,
   hoverItemId,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
   // id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
@@ -85,14 +91,18 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const [emailModelopen, setEmailModelopen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const handleViewClick = (id: string) => {
     // setViewItem(id);
@@ -297,7 +307,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -310,6 +320,16 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
+        {pinned && (
+          <Box component="div" className={classes.actionIcons}>
+            <StyleTooltip title="Un Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+              />
+            </StyleTooltip>
+          </Box>
+        )}
+
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

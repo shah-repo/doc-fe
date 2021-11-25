@@ -6,12 +6,12 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {
   getFormattedDateString,
-  MomentFormats
+  MomentFormats,
 } from "../../../common/utils/date";
 import { dashboardMyFeedsActions } from "../../../state/ducks/dashboard.new/my.feeds";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES
+  LINE_ITEMS_STATUS_TYPES,
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
@@ -90,6 +90,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevName={pendingAction.docRevName}
                   equipmentInterval={pendingAction.equipmentInterval}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -131,6 +134,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -152,6 +158,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -194,6 +203,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   }
                   purchaseSupplierName={pendingAction.purchaseSupplierName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -215,6 +227,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   status={pendingAction.approvalStatusChanged}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -227,7 +242,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
-                    pins={pendingAction.pins}
                     docRevId={pendingAction.docRevId}
                     type={pendingAction.type}
                     timestamp={getFormattedDateString(
@@ -265,6 +279,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    pins={pendingAction.pins}
                     hoverItemId={hoverItemId}
                   />
                 );
@@ -331,6 +346,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pendingAction.docRevApprovedApprovals
                     }
                     onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pins={pendingAction.pins}
                     hoverItemId={hoverItemId}
                   />
                 );
@@ -349,6 +367,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   status={pendingAction.docRevStatus}
                   docRevName={pendingAction.docRevName}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -374,6 +395,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   )}
                   hoverItemId={hoverItemId}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                 />
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
@@ -394,6 +418,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevOwnerInitialColor={pendingAction.ownerInitialColor}
                   title={pendingAction.arTitle}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -415,6 +442,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     MomentFormats.BriefDateTime
                   )}
                   onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pins={pendingAction.pins}
                   hoverItemId={hoverItemId}
                 />
               );
@@ -435,6 +465,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       MomentFormats.BriefDateTime
                     )}
                     onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pins={pendingAction.pins}
                     hoverItemId={hoverItemId}
                   />
                 );
@@ -454,6 +487,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       MomentFormats.BriefDateTime
                     )}
                     onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pins={pendingAction.pins}
                     hoverItemId={hoverItemId}
                   />
                 );
@@ -474,6 +510,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     pendingApprovers={pendingAction.pendingApprovers}
                     approvedApprovers={pendingAction.approvedApprovers}
                     onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pins={pendingAction.pins}
                     hoverItemId={hoverItemId}
                   />
                 );

@@ -50,6 +50,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -61,18 +64,26 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   docRevs,
   hoverItemId,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
+
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const hoverItem = hoverItemId === id;
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
+  };
   const handleClick = () => {
     setOpen(!open);
-  };
-  const handlePinClick = () => {
-    setPinned(!pinned);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -209,7 +220,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -220,6 +231,15 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 />
               </StyleTooltip>
             )}
+          </Box>
+        )}
+        {pinned && (
+          <Box component="div" className={classes.actionIcons}>
+            <StyleTooltip title="Un Pin item" placement="top" arrow>
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+              />
+            </StyleTooltip>
           </Box>
         )}
       </StyledListItem>

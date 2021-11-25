@@ -40,6 +40,9 @@ interface Props {
   dueOn: Nullable<string>;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -54,9 +57,13 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docId,
   hoverItemId,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const onMouseHoverPinIcon = () => {
@@ -66,8 +73,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     setPinHover(false);
   };
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
   };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
+  };
+
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };
@@ -269,7 +280,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           </>
         }
       />
-      {hoverItem && (
+      {hoverItem && !pinned && (
         <Box component="div" className={classes.actionIcons}>
           {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
           {pinHover && (
@@ -280,6 +291,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               />
             </StyleTooltip>
           )}
+        </Box>
+      )}
+      {pinned && (
+        <Box component="div" className={classes.actionIcons}>
+          <StyleTooltip title="Un Pin item" placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         </Box>
       )}
     </StyledListItem>

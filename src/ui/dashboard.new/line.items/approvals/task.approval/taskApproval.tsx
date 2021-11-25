@@ -56,6 +56,9 @@ interface Props {
   title?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pins: any;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (pinnedItemId: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -69,6 +72,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   docRevOwnerInitialColor,
   hoverItemId,
   onMouseHoverItem,
+  pins,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -76,13 +82,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  const [pinned, setPinned] = React.useState(false);
+  // const [pinned, setPinned] = React.useState(false);
+  const pinned = pins && pins.length > 0;
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
 
   const handlePinClick = () => {
-    setPinned(!pinned);
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(pins[0].pinnedItemId);
   };
   const handleClick = () => {
     setOpen(!open);
@@ -286,12 +296,19 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-              {pinHover && (
+              {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {pinHover && !pinned && (
                 <StyleTooltip title="Pin item" placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+              {pinned && (
+                <StyleTooltip title="Un Pin item" placement="top" arrow>
+                  <PinSolidIcon
+                    onClick={handleUnPinClick}
                   />
                 </StyleTooltip>
               )}
