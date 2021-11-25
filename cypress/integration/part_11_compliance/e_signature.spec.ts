@@ -455,7 +455,6 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.wait(1500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
@@ -504,7 +503,6 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.wait(1500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();

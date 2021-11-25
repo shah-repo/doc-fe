@@ -757,7 +757,6 @@ context("Equipment maintenance test", () => {
       it("Verify equipment is shown", () => {
         SystemRequirement("REQ-2850");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-        cy.pause();
       });
     });
 

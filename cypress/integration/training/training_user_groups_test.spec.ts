@@ -874,13 +874,13 @@ context("Training user groups test", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='dashboard.noPendingActions']").should("exist");
     });
 
