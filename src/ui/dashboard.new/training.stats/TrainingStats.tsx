@@ -33,8 +33,8 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
         asyncState={loadTrainingStatsListAsyncInfo}
         startActionOnMount={true}
       >
-        <TrainingChart tabValue={tabValue} />
-        <TrainingLineItems infoChangeTab={handleChildTabChange} />
+        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+        <TrainingLineItems tabValue={tabValue} />
       </AsyncGate>
     </Box>
   );

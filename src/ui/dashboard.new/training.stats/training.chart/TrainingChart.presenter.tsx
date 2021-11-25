@@ -1,9 +1,10 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box, Grid, Tab, Typography } from "@material-ui/core";
 import * as echarts from "echarts";
 import React, { useCallback, useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import { StyledTabs } from "../../StyledTabs";
 import DoughnutChartOptions from "./DoughnutChartOptions";
 import { styles } from "./TrainingChart.styles";
 
@@ -11,10 +12,11 @@ interface TrainingChartPresenterProps {
   overdue: number;
   dueInSeven: number;
   tabValue: number;
+  infoChangeTab: (newValue: number) => void;
 }
 
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
-  ({ overdue, dueInSeven, tabValue }) => {
+  ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
     const totalCount = overdue + dueInSeven;
     const data = [
       {
@@ -167,6 +169,18 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       };
     }, [tabValue, dueInSeven, overdue, totalCount]);
 
+    const [value, setValue] = React.useState(0);
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+      setValue(newValue);
+      infoChangeTab(newValue);
+    };
+    function tabCustomClasses(index: any) {
+      return {
+        "id": `full-width-tab-${index}`,
+        "aria-controls": `full-width-tabpanel-${index}`,
+      };
+    }
+
     return (
       <Box
         className={classes.chartContainer}
@@ -186,6 +200,56 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
           <div id="training-chart" className={classes.chartScroll}></div>
+        </Box>
+        <Box>
+          <StyledTabs
+            value={value}
+            onChange={handleChange}
+            aria-label="full width tabs example"
+          >
+            <Tab
+              classes={{ root: classes.tab }}
+              label={
+                <Grid container={true} justify="center" alignItems="center">
+                  <Grid item={true} sm={12}>
+                    <span className={classes.allTab}></span>
+                    <span className={classes.tabHeader}>
+                      <Text translation="training.stats.all" />
+                    </span>
+                  </Grid>
+                </Grid>
+              }
+              {...tabCustomClasses(0)}
+            />
+            <Tab
+              classes={{ root: classes.tab }}
+              label={
+                <Grid container={true} justify="center" alignItems="center">
+                  <Grid item={true} sm={12}>
+                    <span className={classes.dueInSevenTab}></span>
+                    <span className={classes.tabHeader}>
+                      <Text translation="common.duein7days" />
+                    </span>
+                  </Grid>
+                </Grid>
+              }
+              {...tabCustomClasses(1)}
+            />
+            <Tab
+              classes={{ root: classes.tab }}
+              label={
+                <Grid container={true} justify="center" alignItems="center">
+                  <Grid item={true} sm={12}>
+                    <span className={classes.overdueTab}></span>
+                    <span className={classes.tabHeader}>
+                      <Text translation="common.overdue" />
+                    </span>
+                  </Grid>
+                </Grid>
+              }
+              {...tabCustomClasses(2)}
+            />
+          </StyledTabs>
         </Box>
       </Box>
     );

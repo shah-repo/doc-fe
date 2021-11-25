@@ -5,10 +5,12 @@ import TrainingChartPresenter from "./TrainingChart.presenter";
 
 interface TrainingChartProps {
   tabValue: number;
+  infoChangeTab: (newValue: number) => void;
 }
 
 const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
   tabValue,
+  infoChangeTab,
 }) => {
   const overdueTrainingData = useSelector(
     trainingStatsSelectors.overdueTrainingData
@@ -19,6 +21,7 @@ const TrainingChart: React.FunctionComponent<TrainingChartProps> = ({
       tabValue={tabValue}
       overdue={overdueTrainingData?.length || 0}
       dueInSeven={dueTrainingData?.length || 0}
+      infoChangeTab={infoChangeTab}
     />
   );
 };

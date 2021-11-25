@@ -1,10 +1,9 @@
-import { Box, Divider, Grid, List, Tab } from "@material-ui/core";
+import { Box, Divider, List } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
-import { StyledTabs } from "./StyledTabs";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -63,15 +62,8 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   );
 };
 
-function tabCustomClasses(index: any) {
-  return {
-    "id": `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
-  };
-}
-
 interface TrainingLineItemsProps {
-  infoChangeTab: (newValue: number) => void;
+  tabValue: number;
 }
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
@@ -81,70 +73,16 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
     );
     const dueInSevenItems = useSelector(trainingStatsSelectors.dueTrainingData);
     const all = overdueItems.concat(dueInSevenItems);
-    const [value, setValue] = React.useState(0);
     const classes = styles();
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-      setValue(newValue);
-      props.infoChangeTab(newValue);
-    };
-
     return (
       <Box component="div" className={classes.root}>
-        <StyledTabs
-          value={value}
-          onChange={handleChange}
-          aria-label="full width tabs example"
-        >
-          <Tab
-            classes={{ root: classes.tab }}
-            label={
-              <Grid container={true} justify="center" alignItems="center">
-                <Grid item={true} sm={12}>
-                  <span className={classes.allTab}></span>
-                  <span className={classes.tabHeader}>
-                    <Text translation="training.stats.all" />
-                  </span>
-                </Grid>
-              </Grid>
-            }
-            {...tabCustomClasses(0)}
-          />
-          <Tab
-            classes={{ root: classes.tab }}
-            label={
-              <Grid container={true} justify="center" alignItems="center">
-                <Grid item={true} sm={12}>
-                  <span className={classes.dueInSevenTab}></span>
-                  <span className={classes.tabHeader}>
-                    <Text translation="common.duein7days" />
-                  </span>
-                </Grid>
-              </Grid>
-            }
-            {...tabCustomClasses(1)}
-          />
-          <Tab
-            classes={{ root: classes.tab }}
-            label={
-              <Grid container={true} justify="center" alignItems="center">
-                <Grid item={true} sm={12}>
-                  <span className={classes.overdueTab}></span>
-                  <span className={classes.tabHeader}>
-                    <Text translation="common.overdue" />
-                  </span>
-                </Grid>
-              </Grid>
-            }
-            {...tabCustomClasses(2)}
-          />
-        </StyledTabs>
-        <TabPanel value={value} index={0} panelData={all}>
+        <TabPanel value={props.tabValue} index={0} panelData={all}>
           <Text translation="training.stats.all" />
         </TabPanel>
-        <TabPanel value={value} index={1} panelData={dueInSevenItems}>
+        <TabPanel value={props.tabValue} index={1} panelData={dueInSevenItems}>
           <Text translation="common.duein7days" />
         </TabPanel>
-        <TabPanel value={value} index={2} panelData={overdueItems}>
+        <TabPanel value={props.tabValue} index={2} panelData={overdueItems}>
           <Text translation="common.overdue" />
         </TabPanel>
       </Box>
