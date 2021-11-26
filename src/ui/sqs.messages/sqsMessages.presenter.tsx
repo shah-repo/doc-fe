@@ -1,10 +1,13 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
+import { MomentFormats } from "../../common/utils/date";
 import Text from "../components/Text";
 import DateForm from "./forms/date.form/date.form";
 import EmptyForm from "./forms/empty.form/empty.form";
 import PasswordExpirationEmailSpecificForm from "./forms/password.expiration.email.specific/password.expiration.email.specific.form";
 import PasswordExpirationForm from "./forms/password.expiration.form/password.expiration.form";
+import TimeTravelForm from "./forms/time.travel.form/time.travel.form";
 import UUIDBasedForm from "./forms/uuid.form/uuid.form";
 import { styles } from "./sqsMessages.styles";
 import { SQS_TYPES } from "./types";
@@ -78,6 +81,21 @@ const RecentsPresenter: React.FunctionComponent = () => {
     // eslint-disable-next-line no-console
     console.log("Payload :::", payload);
   };
+  const handleTimeTravelFormSubmit = (date: string) => {
+    const payload = {
+      taskType: type,
+      timeTravel: {
+        Year: moment(date, MomentFormats.DefaultDateTimeFormatter).year(),
+        month: moment(date, MomentFormats.DefaultDateTimeFormatter).month(),
+        day: moment(date, MomentFormats.DefaultDateTimeFormatter).days(),
+        hour: moment(date, MomentFormats.DefaultDateTimeFormatter).hours(),
+        minute: moment(date, MomentFormats.DefaultDateTimeFormatter).minutes(),
+        second: moment(date, MomentFormats.DefaultDateTimeFormatter).seconds(),
+      },
+    };
+    // eslint-disable-next-line no-console
+    console.log("Payload :::", payload);
+  };
   return (
     <Box m={4} className={classes.root}>
       <FormControl style={{ minWidth: 200 }}>
@@ -126,6 +144,13 @@ const RecentsPresenter: React.FunctionComponent = () => {
           SQS_TYPES.SUPPLIER_IMPORT,
         ].includes(SQS_TYPES[type]) && (
         <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
+      )}
+      {type &&
+        [
+          SQS_TYPES.TIME_TRAVEL_COMPANY,
+          SQS_TYPES.TIME_TRAVEL_USER,
+        ].includes(SQS_TYPES[type]) && (
+        <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
       )}
     </Box>
   );

@@ -1137,5 +1137,6 @@
   "sqs.messages.last.email.sent": "Last Password Email Sent Date & Time",
   "sqs.messages.password.update": "Password Update Date & Time",
   "sqs.messages.docRevId": "Document Revision ID",
-  "sqs.messages.formId": "Form ID"
+  "sqs.messages.formId": "Form ID",
+  "sqs.messages.time.travel": "Time Travel Date"
 }
