@@ -16,6 +16,7 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
@@ -281,7 +282,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin this item" placement="top" arrow>
+              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -291,7 +292,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {pinned && (
-          <StyleTooltip title="Unpin this item" placement="top" arrow>
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />

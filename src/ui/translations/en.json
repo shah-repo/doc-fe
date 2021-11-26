@@ -392,6 +392,8 @@
   "common.duein7days": "DUE IN 7 DAYS",
   "common.your": "your",
   "common.to": "to",
+  "common.pin": "Pin this item",
+  "common.unpin": "Unpin this item",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

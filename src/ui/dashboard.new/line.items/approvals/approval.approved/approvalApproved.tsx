@@ -37,7 +37,6 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
 
-
 interface Props {
   id: string;
   type: string;
@@ -269,9 +268,19 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
               {pinHover && !pinned && (
-                <StyleTooltip title="Pin this item" placement="top" arrow>
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.pin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -279,17 +288,31 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
               {pinned && (
-                <StyleTooltip title="Unpin this item" placement="top" arrow>
-                  <PinSolidIcon
-                    onClick={handleUnPinClick}
-                  />
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.unpin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon onClick={handleUnPinClick} />
                 </StyleTooltip>
               )}
             </span>
           </Box>
         )}
         {!open && pinned && !hoverItem && (
-          <StyleTooltip title="Unpin this item" placement="top" arrow>
+          <StyleTooltip
+            title={
+              <Typography>
+                <Text translation="common.unpin" />
+              </Typography>
+            }
+            placement="top"
+            arrow
+          >
             <PinSolidIcon
               onClick={handleUnPinClick}
               onMouseLeave={onMouseLeaveActionIcons}

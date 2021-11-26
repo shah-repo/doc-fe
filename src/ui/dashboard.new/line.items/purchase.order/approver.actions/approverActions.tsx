@@ -27,6 +27,7 @@ import {
 } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -368,7 +369,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin this item" placement="top" arrow>
+              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -378,7 +379,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {!open && pinned && (
-          <StyleTooltip title="Unpin this item" placement="top" arrow>
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />

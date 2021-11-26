@@ -357,11 +357,30 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         />
         {!open && hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {  !pinHover && <StyleTooltip title="Pin this item" onMouseEnter={onMouseHoverPinIcon} placement="top" arrow>
-              <PinIcon />
-            </StyleTooltip>}
-            {  pinHover && (
-              <StyleTooltip title="Pin this item" placement="top" arrow>
+            {!pinHover && (
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                onMouseEnter={onMouseHoverPinIcon}
+                placement="top"
+                arrow
+              >
+                <PinIcon />
+              </StyleTooltip>
+            )}
+            {pinHover && (
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onMouseLeave={onMouseLeavePinIcon}
                   onClick={handlePinClick}
@@ -370,11 +389,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {(!open || !hoverItem) && pinned &&  (
-          <StyleTooltip title="Unpin this item" placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+        {(!open || !hoverItem) && pinned && (
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>
@@ -383,7 +400,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -423,7 +445,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -450,7 +477,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography

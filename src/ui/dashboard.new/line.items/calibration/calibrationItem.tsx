@@ -179,7 +179,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
               {pinHover && !pinned && (
-                <StyleTooltip title="Pin this item" placement="top" arrow>
+                <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -190,7 +190,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip title="Unpin this item" placement="top" arrow >
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow >
             <PinSolidIcon
               onClick={handleUnPinClick}
             />

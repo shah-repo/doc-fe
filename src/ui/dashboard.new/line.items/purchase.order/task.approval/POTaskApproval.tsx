@@ -371,9 +371,19 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover &&  !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
               {pinHover && !pinned && (
-                <StyleTooltip title="Pin this item" placement="top" arrow>
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.pin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -381,31 +391,49 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
               {pinned && (
-                <StyleTooltip title="Unpin this item" placement="top" arrow>
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.unpin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
-
             </span>
           </Box>
         )}
-        { !open && !hoverItem && pinned &&
-          <StyleTooltip title="Unpin this item" placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+        {!open && !hoverItem && pinned && (
+          <StyleTooltip
+            title={
+              <Typography>
+                <Text translation="common.unpin" />
+              </Typography>
+            }
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
-        }
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -445,7 +473,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem  key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -472,7 +505,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem  key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
