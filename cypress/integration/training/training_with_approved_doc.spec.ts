@@ -693,7 +693,8 @@ context("Training notifications for documents with approved and released revisio
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
