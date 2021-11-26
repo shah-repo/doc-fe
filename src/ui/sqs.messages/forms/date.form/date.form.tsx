@@ -29,7 +29,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   //   setSelectedDate(getUtcFormattedString(defaultDate));
   // };
   return (
-    <Box mt={4} className={classes.root}>
+    <Box mt={2} className={classes.root}>
       <Box display="flex" justifyContent="flex-start">
         <TextField
           id="datetime-local"
@@ -42,7 +42,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
           }}
         />
       </Box>
-      <Box display="flex" justifyContent="flex-end" mt={6}>
+      <Box display="flex" justifyContent="flex-end" mt={1}>
         <Button
           type="submit"
           variant="contained"
@@ -51,7 +51,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             handleDateFormSubmit(selectedDate);
           }}
         >
-          <Text translation={"common.save"} />
+          <Text translation={"common.submit"} />
         </Button>
         {/* <Button variant="contained" onClick={reset}>
           <Text translation={"common.reset"} />

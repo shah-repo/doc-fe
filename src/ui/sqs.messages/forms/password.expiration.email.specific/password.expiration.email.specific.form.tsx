@@ -68,7 +68,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             handlePasswordExpirationEmailSpecificFormSubmit({ ...{ processedAtTimestamp, userEmails } });
           }}
         >
-          <Text translation={"common.save"} />
+          <Text translation={"common.submit"} />
         </Button>
         {/* <Button variant="contained" onClick={reset}>
           <Text translation={"common.reset"} />

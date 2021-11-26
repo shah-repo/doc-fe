@@ -11,8 +11,8 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   return (
-    <Box mt={4} className={classes.root}>
-      <Box display="flex" justifyContent="flex-end" mt={6}>
+    <Box className={classes.root}>
+      <Box display="flex" justifyContent="flex-end">
         <Button
           onClick={handleEmptyFormSubmit}
           variant="contained"
