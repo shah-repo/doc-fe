@@ -634,7 +634,7 @@ context("Training notifications for documents with approved and released revisio
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
@@ -652,7 +652,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it("Click training notification and check doc with Released status", () => {
@@ -667,8 +667,7 @@ context("Training notifications for documents with approved and released revisio
 
   context("Open assigned Training", () => {
     it("Goto Dashboard", () => {
-      cy.wait(3000);
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it("Click on the Training notification", () => {
@@ -683,7 +682,7 @@ context("Training notifications for documents with approved and released revisio
       cy.contains("Complete training").should("be.visible");
     });
 
-    it(`complete training for ${USERS[1]}`, () => {
+    it(`complete training for ${USERS[1].name}`, () => {
       cy.trCompleteTraining();
     });
   });
