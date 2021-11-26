@@ -3,6 +3,7 @@ import React from "react";
 import Text from "../components/Text";
 import DateForm from "./forms/date.form/date.form";
 import EmptyForm from "./forms/empty.form/empty.form";
+import PasswordExpirationEmailSpecificForm from "./forms/password.expiration.email.specific/password.expiration.email.specific.form";
 import PasswordExpirationForm from "./forms/password.expiration.form/password.expiration.form";
 import { styles } from "./sqsMessages.styles";
 import { SQS_TYPES } from "./types";
@@ -56,6 +57,15 @@ const RecentsPresenter: React.FunctionComponent = () => {
     // eslint-disable-next-line no-console
     console.log("Payload :::", payload);
   };
+  const handlePasswordExpirationEmailSpecificFormSubmit = (data: any) => {
+    const payload = {
+      taskType: type,
+      processedAtTimestamp: data?.processedAtTimestamp,
+      userEmails: data?.userEmails ? data.userEmails.split(",") : [],
+    };
+    // eslint-disable-next-line no-console
+    console.log("Payload :::", payload);
+  };
   return (
     <Box m={4} className={classes.root}>
       <FormControl style={{ minWidth: 200 }}>
@@ -94,6 +104,9 @@ const RecentsPresenter: React.FunctionComponent = () => {
       )}
       {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
         <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
+      )}
+      {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
+        <PasswordExpirationEmailSpecificForm {...{ handlePasswordExpirationEmailSpecificFormSubmit }} />
       )}
     </Box>
   );
