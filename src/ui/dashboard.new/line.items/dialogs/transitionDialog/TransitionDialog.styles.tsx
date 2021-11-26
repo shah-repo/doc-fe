@@ -16,7 +16,7 @@ export default () =>
       lineHeight: "18px",
       display: "flex",
       alignItems: "center",
-      color: Colors.modal_cancel_color,
+      color: Colors.almost_black,
     },
     closemodel: {
       left: "20.55%",

@@ -12,7 +12,7 @@ type Props = RouteComponentProps;
 const HeaderContainer: React.FunctionComponent<Props> = ({
   location,
 }) => {
-  const isNewDashboard = location.pathname === "/dashboard";
+  const isNewDashboard = location.pathname === "/";
   const name = useSelector(authSelectors.currentUserName);
   const canToggleCustomLabels = useGetHasTag(GroupTag.LABEL_TOOLTIPS);
   const dispatch = useDispatch();

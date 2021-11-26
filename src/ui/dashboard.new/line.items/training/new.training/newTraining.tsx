@@ -237,15 +237,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <Typography color="inherit">
                         <Text
-                          translation="assigned.users.count"
-                          values={{ count: size(pendingTrainees) }}
-                        />
-                        <br />
-                        <Text
-                          translation="approved.and.pending.count"
+                          translation="training.users.count"
                           values={{
-                            approved: 0,
-                            pending: pendingTrainees.length,
+                            count: size(pendingTrainees), status: trainingStatus === TrainingStatus.OVERDUE
+                              ? TrainingStatus.OVERDUE
+                              : TrainingStatus.DUE_IN_7_DAYS,
                           }}
                         />
                       </Typography>

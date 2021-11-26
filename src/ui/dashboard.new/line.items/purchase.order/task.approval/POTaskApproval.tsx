@@ -1,8 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Avatar,
-  Box, Collapse, Grid,
-  Link, List,
+  Box,
+  Collapse,
+  Grid,
+  Link,
+  List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -18,6 +21,7 @@ import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expan
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
@@ -205,12 +209,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
-            className={classes.avatar}
-            alt={docRevOwnerName}
-            src={docRevOwnerAvatar ? docRevOwnerAvatar : "."}
-          />
+          {docRevOwnerAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+              alt={docRevOwnerName}
+              src={docRevOwnerAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${docRevOwnerInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(docRevOwnerName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -245,7 +258,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -262,7 +279,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
+                    href={
+                      docRevName
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -308,11 +329,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           >
             <span>
               {!rejectHover && (
-                <RejectIcon onMouseEnter={onMouseHoverRejectIcon} />
+                <RejectIcon
+                  data-cy="transition-reject"
+                  onMouseEnter={onMouseHoverRejectIcon}
+                />
               )}
               {rejectHover && (
                 <StyleTooltip title="Reject" placement="top" arrow>
                   <RejectSolidIcon
+                    data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -321,11 +346,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
             <span className={classes.actionIcon}>
               {!approveHover && (
-                <ApproveIcon onMouseEnter={onMouseHoverApproveIcon} />
+                <ApproveIcon
+                  data-cy="transition-approve"
+                  onMouseEnter={onMouseHoverApproveIcon}
+                />
               )}
               {approveHover && (
                 <StyleTooltip title="Approve" placement="top" arrow>
                   <ApproveSolidIcon
+                    data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -348,10 +377,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem) => {
+          {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -365,10 +394,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
-                          purchaseOrderSupplierDocRevId || "",
-                          purchaseOrderSupplierDocId || ""
-                        )}
+                        href={
+                          poItem.rtext
+                            ? documentVersionPath(
+                              purchaseOrderSupplierDocRevId || "",
+                              purchaseOrderSupplierDocId || ""
+                            )
+                            : "#"
+                        }
                         color="inherit"
                       >
                         <Typography
@@ -387,7 +420,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem  key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -414,7 +447,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem  key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography

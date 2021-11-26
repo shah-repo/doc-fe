@@ -28,6 +28,7 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -167,12 +168,21 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             <ExpandIcon className={classes.icon} onClick={handleClick} />
           )}
         <ListItemAvatar>
-          <Avatar
-            style={{ backgroundColor: `${approverInitialColor}` }}
-            className={classes.avatar}
-            alt={approverName}
-            src={approverAvatar ? approverAvatar : "."}
-          />
+          {approverAvatar ? (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+              alt={approverName}
+              src={approverAvatar}
+            />
+          ) : (
+            <Avatar
+              style={{ backgroundColor: `${approverInitialColor}` }}
+              className={classes.avatar}
+            >
+              {getInitalsFromName(approverName)}
+            </Avatar>
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -202,7 +212,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedNormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<RejectIcon />}
+                          icon={<RejectIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -210,7 +220,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <RejectedHoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<RejectSolidIcon />}
+                          icon={<RejectSolidIcon data-cy="transition-reject" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -230,7 +240,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <NormalStyleChip
                           size="small"
                           color="primary"
-                          icon={<ApprovedIcon />}
+                          icon={<ApprovedIcon data-cy="transition-approve" />}
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -238,7 +248,9 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         <HoverStyleChip
                           color="primary"
                           size="small"
-                          icon={<ApprovedWhiteIcon />}
+                          icon={
+                            <ApprovedWhiteIcon data-cy="transition-approve" />
+                          }
                           label={STATUS_TYPES_LABEL[status]}
                         />
                       )}
@@ -356,10 +368,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem) => {
+          {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -373,10 +385,14 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     </Grid>
                     <Grid item md={9} sm={6}>
                       <Link
-                        href={documentVersionPath(
-                          purchaseOrderSupplierDocRevId || "",
-                          purchaseOrderSupplierDocId
-                        )}
+                        href={
+                          poItem.rtext
+                            ? documentVersionPath(
+                              purchaseOrderSupplierDocRevId || "",
+                              purchaseOrderSupplierDocId
+                            )
+                            : ""
+                        }
                         color="inherit"
                       >
                         <Typography
@@ -395,7 +411,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -422,7 +438,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem button className={classes.nested} disableRipple>
+                <StyledListItem key={index} button className={classes.nested} disableRipple>
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography

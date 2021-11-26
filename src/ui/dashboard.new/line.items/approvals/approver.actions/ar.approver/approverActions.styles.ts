@@ -9,6 +9,11 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "35px",
       height: "35px",
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.white,
+      fontFamily: "Sora",
+      textTransform: "uppercase",
     },
     icon: {
       width: "15px",

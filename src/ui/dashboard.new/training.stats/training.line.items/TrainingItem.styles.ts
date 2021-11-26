@@ -18,6 +18,7 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       lineHeight: "15px",
       color: Colors.latest_red_varient,
+      textTransform: "uppercase",
     },
     name: {
       fontFamily: "Sora",
@@ -55,6 +56,11 @@ export const styles = makeStyles(() =>
     avatar: {
       width: "30px",
       height: "30px",
+      fontSize: "12px",
+      fontWeight: 600,
+      color: Colors.white,
+      fontFamily: "Sora",
+      textTransform: "uppercase",
     },
     avatarSection: {
       display: "flex",

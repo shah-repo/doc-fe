@@ -9,13 +9,13 @@ const trainingStats = (state: ApplicationState) =>
 const overdueTrainingData = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStats.filter((item) => {
     // taking only required data of user
-    pick(item.user, ["name", "avatar"]);
+    pick(item.user, ["name", "avatar", "initialColor"]);
     return item.status === TrainingStatusTypes.OVERDUE;
   });
 const dueTrainingData = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStats.filter((item) => {
     // taking only required data of user
-    pick(item.user, ["name", "avatar"]);
+    pick(item.user, ["name", "avatar", "initialColor"]);
     return item.status === TrainingStatusTypes.DUE;
   });
 
