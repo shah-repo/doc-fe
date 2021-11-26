@@ -97,11 +97,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
-
   const PoItems: any = [
     {
       id: "id1",
@@ -134,7 +132,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
-
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -203,7 +200,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     downloadAsync.start(downloadAction, attachment, downloadAsync);
   };
-
   return (
     <>
       <StyledListItem

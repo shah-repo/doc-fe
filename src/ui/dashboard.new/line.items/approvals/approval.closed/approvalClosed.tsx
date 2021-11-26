@@ -73,7 +73,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);

@@ -62,7 +62,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
 }) => {
   const classes = styles();
-
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const onMouseHoverPinIcon = () => {
@@ -77,7 +76,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const handleUnPinClick = () => {
     unPinLineItem(id);
   };
-
   const onMouseHoverItemListItem = () => {
     onMouseHoverItem(id);
   };

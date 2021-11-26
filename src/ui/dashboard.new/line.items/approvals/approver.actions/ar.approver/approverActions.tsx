@@ -81,8 +81,6 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-
-
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;

@@ -64,7 +64,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
-
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const hoverItem = hoverItemId === id;
@@ -93,7 +92,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const pendingTraineesNames = pendingTrainees
     .map((trainee) => trainee.userName)
     .join(",");
-
   const setTrainingSearchCriteria = () => {
     const searchCriteria: TableSearchQueryType = {
       isCompleted: false,
@@ -117,7 +115,6 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       )
     );
   };
-
   return (
     <>
       <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>

@@ -56,7 +56,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
 }) => {
   const classes = styles();
-
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {feedItems
@@ -541,7 +540,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
       />
     </Typography>
   );
-
   return (
     <Grid container={true} spacing={5} className={classes.grid}>
       <Grid item={true} md={12} sm={12}>

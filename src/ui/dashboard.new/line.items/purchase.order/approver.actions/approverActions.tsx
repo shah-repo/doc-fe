@@ -100,7 +100,6 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
 }) => {
   const classes = styles();
-
   const PoItems: any = [
     {
       id: "id1",
@@ -133,10 +132,8 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
-
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {

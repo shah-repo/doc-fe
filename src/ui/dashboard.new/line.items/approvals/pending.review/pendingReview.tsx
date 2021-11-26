@@ -86,13 +86,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
 }) => {
   const classes = styles();
-  // id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
-
   const handleClick = () => {
     setOpen(!open);
   };
@@ -102,11 +99,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   const handleUnPinClick = () => {
     unPinLineItem(id);
   };
-  const handleViewClick = (id: string) => {
-    // setViewItem(id);
-  };
   const hoverItem = hoverItemId === id;
-
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -408,10 +401,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.docId)}
-                      onMouseLeave={onMouseLeaveViewIcon}
-                    />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
                   </StyleTooltip>
                 )}
               </Box>

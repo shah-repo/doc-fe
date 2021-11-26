@@ -51,9 +51,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-
   const hoverItem = hoverItemId === id;
-
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -69,7 +67,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
   };
-
   return (
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>

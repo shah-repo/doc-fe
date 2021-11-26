@@ -37,7 +37,6 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const unPinLineItem = (pinnedItemId: string) => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
-
   return (
     <MyFeedsLineItemPresenter
       {...{

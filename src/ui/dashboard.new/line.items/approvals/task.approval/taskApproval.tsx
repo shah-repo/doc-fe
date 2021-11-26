@@ -83,11 +83,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
-
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -144,7 +142,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
-
   const openApproveDialog = () => {
     async.reset();
     transitionDialog.open();
@@ -153,7 +150,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog1.open();
   };
-
   return (
     <>
       <StyledListItem

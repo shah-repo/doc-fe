@@ -64,7 +64,6 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
-
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);
