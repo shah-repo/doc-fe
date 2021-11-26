@@ -693,6 +693,7 @@ context("Training notifications for documents with approved and released revisio
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.wait(3000);
     });
   });
 
@@ -702,7 +703,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Goto Dashboard", () => {
-      cy.wait(3000).navigToDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
