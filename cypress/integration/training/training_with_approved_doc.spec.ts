@@ -589,13 +589,13 @@ context("Training notifications for documents with approved and released revisio
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
@@ -725,7 +725,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).arrowClick();
+      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).arrowClick({ force: true });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });
 
