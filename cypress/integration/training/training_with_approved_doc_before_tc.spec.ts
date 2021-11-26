@@ -602,9 +602,11 @@ context("Training notifications for documents with approved and released revisio
       cy.get("#training-details-section").should("have.text", "Trainees Details");
     });
 
-    it("Select Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      // cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+    it("Select User to train", () => {
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -613,13 +615,13 @@ context("Training notifications for documents with approved and released revisio
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
