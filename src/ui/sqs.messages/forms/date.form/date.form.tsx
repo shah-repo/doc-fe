@@ -25,6 +25,9 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   const handleDateChange = (event: any) => {
     setSelectedDate(getUtcFormattedString(event?.target?.value));
   };
+  // const reset = () => {
+  //   setSelectedDate(getUtcFormattedString(defaultDate));
+  // };
   return (
     <Box mt={4} className={classes.root}>
       <Box display="flex" justifyContent="flex-start">
@@ -50,9 +53,9 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation={"common.save"} />
         </Button>
-        <Button variant="contained">
+        {/* <Button variant="contained" onClick={reset}>
           <Text translation={"common.reset"} />
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );

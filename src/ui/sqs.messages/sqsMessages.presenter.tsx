@@ -3,6 +3,7 @@ import React from "react";
 import Text from "../components/Text";
 import DateForm from "./forms/date.form/date.form";
 import EmptyForm from "./forms/empty.form/empty.form";
+import PasswordExpirationForm from "./forms/password.expiration.form/password.expiration.form";
 import { styles } from "./sqsMessages.styles";
 import { SQS_TYPES } from "./types";
 
@@ -35,9 +36,22 @@ const RecentsPresenter: React.FunctionComponent = () => {
     console.log("Payload :::", payload);
   };
   const handleDateFormSubmit = (selectedDate: string) => {
-    const payload = {
+    const payload = type === SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS ? {
+      taskType: type,
+      currentDate: selectedDate,
+    } : {
       taskType: type,
       timestamp: selectedDate,
+    };
+    // eslint-disable-next-line no-console
+    console.log("Payload :::", payload);
+  };
+  const handlePasswordExpirationFormSubmit = (data: any) => {
+    const payload = {
+      taskType: type,
+      passwordUpdatedAt: data?.passwordUpdatedAt,
+      passwordLastEmailSentAt: data?.passwordLastEmailSentAt,
+      userEmails: data?.userEmails ? data.userEmails.split(",") : [],
     };
     // eslint-disable-next-line no-console
     console.log("Payload :::", payload);
@@ -77,6 +91,9 @@ const RecentsPresenter: React.FunctionComponent = () => {
           SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS,
         ].includes(SQS_TYPES[type]) && (
         <DateForm {...{ handleDateFormSubmit }} />
+      )}
+      {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
+        <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
       )}
     </Box>
   );

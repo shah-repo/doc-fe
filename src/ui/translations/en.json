@@ -1132,5 +1132,8 @@
   "training.stats.title": "TRAININGS OUTSTANDING",
   "training.stats.totalOutstanding": "Total Outstanding",
   "sqs.messages.type": "Type",
-  "sqs.messages.timestamp": "Date & Time"
+  "sqs.messages.timestamp": "Date & Time",
+  "sqs.messages.user.emails": "User Emails",
+  "sqs.messages.last.email.sent": "Last Password Email Sent Date & Time",
+  "sqs.messages.password.update": "Password Update Date & Time"
 }
