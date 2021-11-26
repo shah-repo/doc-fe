@@ -1130,5 +1130,7 @@
   "pending.approval": "pending approvals from",
   "training.stats.all": "ALL",
   "training.stats.title": "TRAININGS OUTSTANDING",
-  "training.stats.totalOutstanding": "Total Outstanding"
+  "training.stats.totalOutstanding": "Total Outstanding",
+  "sqs.messages.type": "Type",
+  "sqs.messages.timestamp": "Date & Time"
 }
