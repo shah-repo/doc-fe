@@ -123,8 +123,6 @@ const RecentsPresenter: React.FunctionComponent = () => {
   };
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     const updatedPayload = JSON.parse(payload);
-    // eslint-disable-next-line no-console
-    console.log("updatedPayload :::", updatedPayload);
     async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);
   };
   return (

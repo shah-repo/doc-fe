@@ -154,6 +154,6 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     type: "LINK",
     path: SQS_MESSAGES_URL,
     icon: "/navigation_icons/receipt_list.svg",
-    restrictedToUsersWithTags: [GroupTag.DASHBOARD_ADMIN],
+    restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
   },
 ];

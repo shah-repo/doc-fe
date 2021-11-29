@@ -51,7 +51,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       icon: "/navigation_icons/document-menu.svg",
       label: "SQS Messages",
       path: "/sqs_messages",
-      restrictedToUsersWithTags: [GroupTag.DASHBOARD_ADMIN],
+      restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
       type: "LINK",
     });
   }
