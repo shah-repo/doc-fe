@@ -20,7 +20,6 @@ let formDocumentType;
 let createdDocumentForBulkCreation;
 const date = moment().tz("America/Los_Angeles").format("x");
 const excelTemplateSaveName = date + "excelTemplate.xlsx";
-const currentDate = moment().tz("America/Los_Angeles").format("l");
 
 context("Test fb fields validation in BLC", () => {
   before(() => {
@@ -182,7 +181,7 @@ context("Test fb fields validation in BLC", () => {
                       deleteInFormDisabled: false,
                       validationMode: "default",
                       validationAttribute: "Date picker - required if another x",
-                      rules: "required|required_if:text-field-no-validation-kwg97lhs,required if x",
+                      rules: "required_if:text-field-no-validation-kwg97lhs,required if x",
                       applicableOn: [
                         "ON_STATE_TO_IN_REVIEW",
                       ],
@@ -459,7 +458,6 @@ context("Test fb fields validation in BLC", () => {
         "Please open downloaded Excel Template and populate data. Then Upload to Import Data",
         });
         cy.closeAllAlertMessages();
-        cy.pause();
       });
     });
 
@@ -479,8 +477,7 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify error message", () => {
           cy.checkToastMessageIsEqual({
-            message: "Sheet Row 3: The Text editor - required is a required field.; Sheet Row 3: " +
-            "The Date picker - required if another x is a required field.; " +
+            message: "Sheet Row 3: The Text editor - required is a required field.; " +
             "Sheet Row 3: The Radio button group - hidden is a required field.",
           });
           cy.closeAllAlertMessages();
@@ -507,12 +504,12 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify error message", () => {
           cy.checkToastMessageIsEqual({
-            message: "Sheet Row 3: The Date picker - required if another x is a required " +
-            "field.,The Date picker - required if another x field is required when Text field " +
-            "- no validation is required if x.; Sheet Row 3: The Radio button group - hidden is a " +
-            "required field.; Sheet Row 3: The Select - hidden if another x field is required when Text field " +
-            "- no validation is required if x.; Sheet Row 3: The Checkbox group - disabled if another " +
-            "x field is required when Text field - no validation is required if x.",
+            message: "Sheet Row 3: The Date picker - required if another x field is " +
+            "required when Text field - no validation is required if x.; Sheet Row 3: " +
+            "The Radio button group - hidden is a required field.; Sheet Row 3: The Select - " +
+            "hidden if another x field is required when Text field - no validation is required " +
+            "if x.; Sheet Row 3: The Checkbox group - disabled if another x field " +
+            "is required when Text field - no validation is required if x.",
           });
           cy.closeAllAlertMessages();
         });
@@ -538,9 +535,8 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify error message", () => {
           cy.checkToastMessageIsEqual({
-            message: "Sheet Row 3: The Text editor - required is a required field.; Sheet Row 3: " +
-            "The Date picker - required if another x is a required field.; Sheet Row 3: " +
-            "The Radio button group - hidden is a required field.",
+            message: "Sheet Row 3: The Text editor - required is a required field.; " +
+            "Sheet Row 3: The Radio button group - hidden is a required field.",
           });
           cy.closeAllAlertMessages();
         });
@@ -553,7 +549,7 @@ context("Test fb fields validation in BLC", () => {
 
       context("Upload template with empty disabled field if another x", () => {
         it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordDisabledEmptyFBField.xlsx" });
+          cy.atchUploadTemplateForBLC({ fileName: "recordDisabledEmptyIfFBField.xlsx" });
         });
 
         it("Click save document", () => {
@@ -566,35 +562,13 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify error message", () => {
           cy.checkToastMessageIsEqual({
-            message: "In row: 3, select item BLC select field contains value not provided in item options.",
-          });
-          cy.pause();
-          cy.closeAllAlertMessages();
-        });
-
-        it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-            .find("button").arrowClick({ force: true });
-        });
-      });
-
-      context("Upload template with more than one owner assigned to some records ", () => {
-        it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMoreOwners.xlsx" });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Submit for approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        it("Verify error message", () => {
-          cy.checkToastMessageIsEqual({
-            message: "Row: 4 - Owner with email enlil.testmail+cy2@gmail.com," +
-            " enlil.testmail+cy3@gmail.com not found in company.",
+            message: "Sheet Row 3: The Text editor - required is a required field.; " +
+            "Sheet Row 3: The Date picker - required if another x field is required " +
+            "when Text field - no validation is required if x.; Sheet Row 3: " +
+            "The Radio button group - hidden is a required field.; Sheet Row 3: " +
+            "The Select - hidden if another x field is required when Text field - " +
+            "no validation is required if x.; Sheet Row 3: The Checkbox group - " +
+            "disabled if another x field is required when Text field - no validation is required if x.",
           });
           cy.closeAllAlertMessages();
         });
@@ -602,175 +576,26 @@ context("Test fb fields validation in BLC", () => {
         it("Remove file", () => {
           cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
             .find("button").arrowClick({ force: true });
-        });
-      });
-
-      context("Upload template with no existing owners", () => {
-        it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateNonExistantOwners.xlsx" });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Submit for approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        it("Verify error message", () => {
-          cy.checkToastMessageIsEqual({
-            message: "Row: 4 - Owner with email enlil.testmail+cyy2@gmail.com not found in company.;" +
-            " Row: 5 - Owner with email enlil.testmail+cy22@gmail.com not found in company.",
-          });
-          cy.closeAllAlertMessages();
-        });
-
-        it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-            .find("button").arrowClick({ force: true });
-        });
-      });
-
-      context("Test multiple document types form", () => {
-        it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMultipleTypes.xlsx" });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Submit for approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        it("Verify error message", () => {
-          cy.checkToastMessageIsEqual({
-            message: "ADT-00001 doesn't start with document type acronym (TDT-).; " +
-            "ADT-00002 doesn't start with document type acronym (TDT-).; ADT-00003 " +
-            "doesn't start with document type acronym (TDT-).",
-          });
-          cy.closeAllAlertMessages();
-        });
-
-        it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-            .find("button").arrowClick({ force: true });
-        });
-      });
-
-      context("Test date formats", () => {
-        it("Upload template file", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateReleaseDate.xlsx" });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Submit for approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        it("Verify error message", () => {
-          cy.checkToastMessageIsEqual({
-            message: "Record TDT-00001 with state Voided does not have defined data in column " +
-            "Release/Voided Date.; Record TDT-00002 with state Voided does not have defined data " +
-            "in column Release/Voided Date.; Record TDT-00003 with state Voided does not have defined " +
-            "data in column Release/Voided Date.; Record TDT-00004 with state Voided does not have " +
-            "defined data in column Release/Voided Date.; Record TDT-00009 with state Released does " +
-            "not have defined data in column Release/Voided Date.; Record TDT-00010 with state " +
-            "Released does not have defined data in column Release/Voided Date.; Record TDT-00011 " +
-            "with state Released does not have defined data in column Release/Voided Date.; " +
-            "Record TDT-00012 with state Released does not have defined data in column Release/Voided " +
-            "Date.; Record TDT-00013 with state Released does not have defined data in column " +
-            "Release/Voided Date.; Record TDT-00014 with state Released does not have defined " +
-            "data in column Release/Voided Date.",
-          });
-          cy.closeAllAlertMessages();
-        });
-
-        it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-            .find("button").arrowClick({ force: true });
-        });
-      });
-
-      // context("Test future date formats on Voided/Released", () => {
-      //   it("Upload template file", () => {
-      //     cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateFutureDate.xlsx" });
-      //   });
-
-      //   it("Click save document", () => {
-      //     cy.drClickCreateDocumentWithApiCallForForms();
-      //   });
-
-      //   it("Submit for approval", () => {
-      //     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      //   });
-
-      //   it("Verify error message", () => {
-      //     cy.checkToastMessageIsEqual({
-      //       message: "Row: 4 - Owner with email enlil.testmail+cyy2@gmail.com not found in company.;" +
-      //       " Row: 5 - Owner with email enlil.testmail+cy22@gmail.com not found in company.",
-      //     });
-      //     cy.closeAllAlertMessages();
-      //   });
-
-      //   it("Remove file", () => {
-      //     cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-      //       .find("button").arrowClick({ force: true });
-      //   });
-      // });
-
-      context("Upload two correct templates and check for error", () => {
-        it("Upload template file one", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
-        });
-
-        it("Upload template file two", () => {
-          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateTwo.xlsx" });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Submit for approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-
-        it("Verify error message", () => {
-          cy.checkToastMessageIsEqual({
-            message: "Only one attachment excel is allowed.",
-          });
-          cy.closeAllAlertMessages();
-        });
-
-        it("Remove file", () => {
-          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").trigger("mouseover", { force: true });
-          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").arrowClick({ force: true });
-        });
-
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
     });
+  });
 
-    context("Create bulk records", () => {
-      it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
+  context("Upload template with valid data in spreadsheet", () => {
+    it("Upload template file with valid fb validation data", () => {
+      cy.atchUploadTemplateForBLC({ fileName: "recordFBFieldsValid.xlsx" });
+    });
 
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
+    it("Save bulk document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
 
-      it("Approve record", () => {
-        cy.ebApprove();
-      });
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
     });
   });
 
@@ -778,95 +603,288 @@ context("Test fb fields validation in BLC", () => {
     it("Navigate to records list and verify number of records", { retries: 2 }, () => {
       cy.navigToDashboard();
       cy.navigToRecords();
-      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 9 });
     });
 
-    it("Filter by type and verify only 'Test Document Type' records are created", () => {
-      cy.dlFilterByDocId({ docId: "TDT-" });
-      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+    context("Verify WIP records", () => {
+      context("Verify WIP record 1", () => {
+        it("Filter record one", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00004" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitleWIP({ title: "Record title 1" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescriptionWIP({ description: "Record description 1" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("input[name^=\"text-field-no-validation\"]").should("have.attr", "value", "test");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[data-cy^=\"text-editor-required\"]").parent().find("p")
+            .should("not.exist");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("have.attr", "disabled");
+        });
+      });
+
+      context("Verify WIP record 2", () => {
+        it("Navigate to records list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record one", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00005" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitleWIP({ title: "Record title 2" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescriptionWIP({ description: "Record description 2" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("input[name^=\"text-field-no-validation\"]").should("have.attr", "value", "required if x");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+            .should("have.text", "test");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("not.have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("not.have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("not.have.attr", "disabled");
+        });
+      });
+
+      context("Verify WIP record 3", () => {
+        it("Navigate to records list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record one", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00006" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitleWIP({ title: "Record title 3" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescriptionWIP({ description: "Record description 3" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("input[name^=\"text-field-no-validation\"]").should("have.attr", "value");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[data-cy^=\"text-editor-required\"]").parent().find("p")
+            .should("not.exist");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("not.have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("have.attr", "checked");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("not.have.attr", "disabled");
+        });
+      });
+
+      context("Verify WIP record 4", () => {
+        it("Navigate to records list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record one", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00007" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitleWIP({ title: "Record title 4" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescriptionWIP({ description: "Record description 4" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("input[name^=\"text-field-no-validation\"]").should("have.attr", "value", "required if x");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+            .should("have.text", "test");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value", "11/25/2021");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("have.attr", "checked");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("not.have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("not.have.attr", "disabled");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"select-hidden-if-another\"]").should("have.attr", "value", "option1");
+        });
+      });
+
+      context("Verify WIP record 7", () => {
+        it("Navigate to records list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record one", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00010" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitleWIP({ title: "Record title 7" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescriptionWIP({ description: "Record description 7" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("input[name^=\"text-field-no-validation\"]").should("have.attr", "value");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+            .should("be.empty");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("have.attr", "disabled");
+        });
+      });
     });
 
-    it("Filter by record-id", () => {
-      cy.dlClearFilters();
-      cy.dlFilterByDocId({ docId: "TDT-00006" });
-    });
-
-    context("Verify voided record one data", () => {
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Void" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "Void" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[1].name });
-      });
-    });
-
-    context("Verify record two data", () => {
-      it("Navigate to record list", () => {
-        cy.navigToRecords();
-      });
-
-      it("Filter record two", () => {
-        cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00007" });
-      });
-
-      it("Select first record", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      it("Verify title", () => {
-        cy.recVerifyTitle({ title: "Second bulk document" });
-      });
-
-      it("Verify description", () => {
-        cy.recVerifyDescription({ description: "description for second bulk document" });
-      });
-
-      it("Verify owner", () => {
-        cy.drVerifyDocumentOWner({ owner: USERS[2].name });
-      });
-
-      it("Verify text field value", () => {
-        cy.get("[name^=\"blc-text-field\"]").should("have.text", "second bulk document");
-      });
-
-      it("Verify text editor value", () => {
-        cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
-          .should("have.text", "second bulk document");
-      });
-
-      it("Verify Date picker value", () => {
-        cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
-      });
-
-      it("Verify radio button group", () => {
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
-      });
-
-      it("Verify Select field", () => {
-        cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
-      });
-
-      it("Verify Checkbox group", () => {
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
-        cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
-      });
-    });
-
-    context("Verify future dates for WIP records", () => {
-      context("Verify record three data", () => {
+    context("Verify released records", () => {
+      context("Verify released record 5", () => {
         it("Navigate to record list", () => {
           cy.navigToRecords();
         });
@@ -881,58 +899,113 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Third bulk document" });
+          cy.recVerifyTitle({ title: "Record title 5" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescription({ description: "description for third bulk document" });
+          cy.recVerifyDescription({ description: "Record description 5" });
         });
 
         it("Verify owner", () => {
-          cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
         });
 
-        it("Verify updated date", () => {
-          cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-            .should("contain.text", `Updated: ${currentDate}`);
-        });
-
-        it("Verify text field value", () => {
-          cy.get("[name^=\"blc-text-field\"]").should("have.text", "third bulk document");
+        it("Verify text field text", () => {
+          cy.get("div[name^=\"text-field-no-validation\"]").should("have.text", "required if x");
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
-            .should("have.text", "third bulk document");
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+            .should("have.text", "test");
         });
 
-        it("Verify Date picker value", () => {
-          cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value", "11/25/2021");
         });
 
         it("Verify radio button group", () => {
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "disabled");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "checked");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "disabled");
         });
 
-        it("Verify Select field", () => {
-          cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
+        it("Verify select field", () => {
+          cy.get("input[name^=\"select-hidden-if-another-x\"]").should("have.attr", "value", "option2");
         });
 
-        it("Verify Checkbox group", () => {
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("have.attr", "checked");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("have.attr", "disabled");
         });
       });
 
-      context("Verify record four data", () => {
+      context("Verify released record 8", () => {
         it("Navigate to record list", () => {
           cy.navigToRecords();
         });
 
         it("Filter record two", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00011" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitle({ title: "Record title 8" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescription({ description: "Record description 8" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify text field text", () => {
+          cy.get("div[name^=\"text-field-no-validation\"]").should("have.attr", "disabled");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+            .should("have.text", "test");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("have.attr", "value");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "checked");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "disabled");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "disabled");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("have.attr", "disabled");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("have.attr", "disabled");
+        });
+      });
+    });
+
+    context("Verify voided records", () => {
+      context("Verify voided record 6", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter by record-id", () => {
           cy.dlClearFilters();
           cy.dlFilterByDocId({ docId: "TDT-00009" });
         });
@@ -942,49 +1015,108 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Fourth bulk document" });
+          cy.recVerifyTitle({ title: "Void" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescription({ description: "description for fourth bulk document" });
+          cy.recVerifyDescription({ description: "Void" });
         });
 
         it("Verify owner", () => {
-          cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
         });
 
-        it("Verify updated date", () => {
+        it("Verify released date", () => {
           cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
-            .should("contain.text", `Updated: ${currentDate}`);
+            .should("contain.text", "Voided Date: 11/25/2021");
         });
 
-        it("Verify text field value", () => {
-          cy.get("[name^=\"blc-text-field\"]").should("have.text", "fourth bulk document");
+        it("Verify text field text", () => {
+          cy.get("div[name^=\"text-field-no-validation\"]").should("not.exist");
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
-            .should("have.text", "fourth bulk document");
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+            .should("not.exist");
         });
 
-        it("Verify Date picker value", () => {
-          cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("not.exist");
         });
 
         it("Verify radio button group", () => {
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
-          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
         });
 
-        it("Verify Select field", () => {
-          cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("not.exist");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("not.exist");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("not.exist");
+        });
+      });
+
+      context("Verify voided record 9", () => {
+        it("Navigate to records", () => {
+          cy.navigToRecords();
         });
 
-        it("Verify Checkbox group", () => {
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
-          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
+        it("Filter by record-id", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00012" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitle({ title: "Void" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescription({ description: "Void" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Verify released date", () => {
+          cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+            .should("contain.text", "Voided Date: 11/25/2021");
+        });
+
+        it("Verify text field text", () => {
+          cy.get("div[name^=\"text-field-no-validation\"]").should("not.exist");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+            .should("not.exist");
+        });
+
+        it("Verify date picker", () => {
+          cy.get("input[name^=\"date-picker-required-if-another\"]").should("not.exist");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("not.exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("not.exist");
+        });
+
+        it("Verify checkbox group", () => {
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
+            .should("not.exist");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
+            .should("not.exist");
+          cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
+            .should("not.exist");
         });
       });
     });
