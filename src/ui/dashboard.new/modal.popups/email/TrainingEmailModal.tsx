@@ -68,7 +68,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   };
 
   const intl = useIntl();
-  const sendEmail = useActionCreator(emailAllActions.sendEmail);
+  const sendDueTrainingEmail = useActionCreator(emailAllActions.sendDueTrainingEmail);
 
   const async = useAsync({
     onSuccess: () => {
@@ -80,7 +80,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   });
 
   const handleSendEmail = () => {
-    async.start(sendEmail, id, async);
+    async.start(sendDueTrainingEmail, id, async);
   };
 
   const apiAlertModelbody = (

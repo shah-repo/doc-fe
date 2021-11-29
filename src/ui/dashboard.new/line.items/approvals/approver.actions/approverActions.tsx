@@ -9,11 +9,14 @@ import {
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject_status_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
+import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
@@ -21,6 +24,7 @@ import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyl
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -37,6 +41,9 @@ interface Props {
   approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -51,20 +58,25 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   hoverItemId,
   onMouseHoverItem,
+  unPinLineItem,
+  pinLineItem,
+  pinned,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -265,11 +277,11 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* { hoverItem && (
+        { hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
+              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -277,7 +289,14 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
+        {pinned && (
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
+        )}
       </StyledListItem>
     </>
   );

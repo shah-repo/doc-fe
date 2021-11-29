@@ -9,10 +9,13 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as EQIcon } from "../../../../assets/images/EQ.svg";
+import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../assets/images/pin_solid.svg";
 import { ActionTypes } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../components/Text";
 import { documentVersionPath } from "../../../document.revision/utils/paths";
 import { StyledListItem } from "../common/StyledListItem";
+import { StyleTooltip } from "../common/StyleTooltip";
 import { styles } from "./calibrationItem.styles";
 
 interface Props {
@@ -27,6 +30,9 @@ interface Props {
   timestamp?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -39,22 +45,28 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   hoverItemId,
   equipmentInterval,
   onMouseHoverItem,
+  pinned,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
-
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
   const onMouseLeaveActionIcons = () => {
-    // setPinHover(false);
+    setPinHover(false);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
-
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
   return (
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
@@ -155,24 +167,31 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {hoverItem && !pinned && (
           <Box
             component="div"
             className={classes.actionIcons}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            {/* <span className={classes.actionIcon}>
-              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-              {pinHover && (
-                <StyleTooltip title="Pin item" placement="top" arrow>
+            <span className={classes.actionIcon}>
+              {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {pinHover && !pinned && (
+                <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
-            </span> */}
+            </span>
           </Box>
+        )}
+        {pinned && (
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow >
+            <PinSolidIcon
+              onClick={handleUnPinClick}
+            />
+          </StyleTooltip>
         )}
       </StyledListItem>
     </>

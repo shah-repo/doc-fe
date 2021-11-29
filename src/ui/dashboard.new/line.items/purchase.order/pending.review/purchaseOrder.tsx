@@ -15,6 +15,8 @@ import { ReactComponent as CollapseIcon } from "../../../../../assets/images/col
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status_white.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
@@ -65,11 +67,14 @@ interface Props {
   }[];
   purchaseOrdeLineItemCount: number;
   purchaseOrderDescription: string;
+  pinned: boolean;
   purchaseOrderCurrency: string;
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -90,10 +95,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrderAttachments,
   docRevPendingApprovals,
   docRevApprovedApprovals,
+  pinned,
   onMouseHoverItem,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-
   const PoItems: any = [
     {
       id: "id1",
@@ -126,25 +133,26 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
-
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
     setOpen(!open);
   };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
@@ -343,26 +351,57 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {!pinHover && (
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                onMouseEnter={onMouseHoverPinIcon}
+                placement="top"
+                arrow
+              >
+                <PinIcon />
+              </StyleTooltip>
+            )}
             {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
-                  onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  onClick={handlePinClick}
                 />
               </StyleTooltip>
             )}
           </div>
-        )} */}
+        )}
+        {(!open || !hoverItem) && pinned && (
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+            <PinSolidIcon onClick={handleUnPinClick} />
+          </StyleTooltip>
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -402,7 +441,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -429,7 +473,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
