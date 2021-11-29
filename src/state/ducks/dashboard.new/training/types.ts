@@ -15,6 +15,7 @@ export interface Training {
   id: string;
   type: string;
   timestamp: string;
+  pinned: boolean;
   pendingTrainees?: User[] | undefined;
 }
 export interface TrainingListAction {

@@ -22,6 +22,9 @@ export const styles = makeStyles(() =>
       top: "0px",
       background: Colors.sky_blue,
     },
+    actionIcon: {
+      paddingLeft: "10px",
+    },
     link: {
       color: Colors.black,
     },

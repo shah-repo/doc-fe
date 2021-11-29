@@ -1,14 +1,15 @@
 import {
-  Grid,
+  Box, Grid,
   Link,
   ListItemIcon,
-  ListItemText,
-  Typography,
+  ListItemText, Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
@@ -16,6 +17,7 @@ import Colors from "../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./default.styles";
 
 interface Props {
@@ -29,6 +31,9 @@ interface Props {
   timestamp: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
   ({
@@ -41,21 +46,25 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
     timestamp,
     hoverItemId,
     onMouseHoverItem,
+    pinned,
+    pinLineItem,
+    unPinLineItem,
   }) => {
     const classes = styles();
-
-    // const [pinHover, setPinHover] = React.useState(false);
-    // const [pinned, setPinned] = React.useState(false);
+    const [pinHover, setPinHover] = React.useState(false);
     const hoverItem = hoverItemId === id;
-    // const handlePinClick = () => {
-    //   setPinned(!pinned);
-    // };
-    // const onMouseHoverPinIcon = () => {
-    //   setPinHover(true);
-    // };
-    // const onMouseLeavePinIcon = () => {
-    //   setPinHover(false);
-    // };
+    const handlePinClick = () => {
+      pinLineItem(id);
+    };
+    const handleUnPinClick = () => {
+      unPinLineItem(id);
+    };
+    const onMouseHoverPinIcon = () => {
+      setPinHover(true);
+    };
+    const onMouseLeavePinIcon = () => {
+      setPinHover(false);
+    };
     const onMouseHoverListItem = () => {
       onMouseHoverItem(id);
     };
@@ -193,19 +202,40 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
               </>
             }
           />
-          {/* { hoverItem && (
-          <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-            {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
-                />
-              </StyleTooltip>
-            )}
-          </div>
-        )} */}
+          {hoverItem && !pinned && (
+            <Box component="div" className={classes.actionIcons}>
+              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {pinHover && (
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.pin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handlePinClick}
+                    onMouseLeave={onMouseLeavePinIcon}
+                  />
+                </StyleTooltip>
+              )}
+            </Box>
+          )}
+          {pinned && (
+            <StyleTooltip
+              title={
+                <Typography>
+                  <Text translation="common.unpin" />
+                </Typography>
+              }
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          )}
         </StyledListItem>
       </>
     );
