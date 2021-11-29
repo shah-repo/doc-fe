@@ -394,6 +394,7 @@
   "common.to": "to",
   "common.pin": "Pin this item",
   "common.unpin": "Unpin this item",
+  "common.sqs.task.failed": "Failed to execute task",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",

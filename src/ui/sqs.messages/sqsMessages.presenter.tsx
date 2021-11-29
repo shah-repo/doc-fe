@@ -1,8 +1,18 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
+import { useIntl } from "react-intl";
+import { SQSMessageActions } from "../../../src/state/ducks/sqs.messages";
 import { MomentFormats } from "../../common/utils/date";
+import {
+  EffectiveDateFormValues, PasswordFormValues,
+} from "../change.request/form/types";
+import { toastError } from "../components/notifications";
 import Text from "../components/Text";
+import useActionCreator from "../hooks/useActionCreator";
+import useAsync from "../hooks/useAsync";
+import useDialog from "../hooks/useDialog";
+import PasswordDialogueContainer from "./dialogs/PasswordDialogue";
 import DateForm from "./forms/date.form/date.form";
 import EmptyForm from "./forms/empty.form/empty.form";
 import PasswordExpirationEmailSpecificForm from "./forms/password.expiration.email.specific/password.expiration.email.specific.form";
@@ -30,59 +40,75 @@ const RecentsPresenter: React.FunctionComponent = () => {
     { value: "UPDATE_BILLS", text: "UPDATE_BILLS" },
   ];
   const [type, setType] = React.useState("");
+  const [payload, setPayload] = React.useState("");
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setType(event.target.value as string);
   };
+  const intl = useIntl();
+  const executeAsyncTask = useActionCreator(SQSMessageActions.executeAsyncTask);
+  const transitionDialog = useDialog();
+  const async = useAsync({
+    onSuccess: () => {
+      closeApproveDialog();
+      setType("");
+    },
+    onError: () => {
+      closeApproveDialog();
+      toastError(intl.formatMessage({ id: "common.sqs.task.failed" }));
+    },
+  });
+  const openApproveDialog = () => {
+    transitionDialog.open();
+  };
+  const closeApproveDialog = () => {
+    transitionDialog.close();
+  };
   const handleEmptyFormSubmit = () => {
-    const payload = {
+    setPayload(JSON.stringify({
+      password: "",
       taskType: type,
-    };
-    // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    }));
+    openApproveDialog();
   };
   const handleDateFormSubmit = (selectedDate: string) => {
-    const payload = type === SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS ? {
+    setPayload(JSON.stringify(type === SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS ? {
       taskType: type,
       currentDate: selectedDate,
     } : {
       taskType: type,
       timestamp: selectedDate,
-    };
-    // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    }));
+    openApproveDialog();
   };
   const handlePasswordExpirationFormSubmit = (data: any) => {
-    const payload = {
+    setPayload(JSON.stringify({
       taskType: type,
       passwordUpdatedAt: data?.passwordUpdatedAt,
       passwordLastEmailSentAt: data?.passwordLastEmailSentAt,
       userEmails: data?.userEmails ? data.userEmails.split(",") : [],
-    };
-    // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    }));
+    openApproveDialog();
   };
   const handlePasswordExpirationEmailSpecificFormSubmit = (data: any) => {
-    const payload = {
+    setPayload(JSON.stringify({
       taskType: type,
       processedAtTimestamp: data?.processedAtTimestamp,
       userEmails: data?.userEmails ? data.userEmails.split(",") : [],
-    };
-    // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    }));
+    openApproveDialog();
   };
   const handleuuidFormSubmit = (uuid: string) => {
-    const payload = type === SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE ? {
+    setPayload(JSON.stringify( type === SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE ? {
       taskType: type,
       docRevId: uuid,
     } : {
       taskType: type,
       formId: uuid,
-    };
-    // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    }));
+    openApproveDialog();
   };
   const handleTimeTravelFormSubmit = (date: string) => {
-    const payload = {
+    setPayload(JSON.stringify({
       taskType: type,
       timeTravel: {
         Year: moment(date, MomentFormats.DefaultDateTimeFormatter).year(),
@@ -92,9 +118,14 @@ const RecentsPresenter: React.FunctionComponent = () => {
         minute: moment(date, MomentFormats.DefaultDateTimeFormatter).minutes(),
         second: moment(date, MomentFormats.DefaultDateTimeFormatter).seconds(),
       },
-    };
+    }));
+    openApproveDialog();
+  };
+  const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
+    const updatedPayload = JSON.parse(payload);
     // eslint-disable-next-line no-console
-    console.log("Payload :::", payload);
+    console.log("updatedPayload :::", updatedPayload);
+    async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);
   };
   return (
     <Box m={4} className={classes.root}>
@@ -152,6 +183,13 @@ const RecentsPresenter: React.FunctionComponent = () => {
         ].includes(SQS_TYPES[type]) && (
         <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
       )}
+      <PasswordDialogueContainer
+        transition="approve"
+        asyncState={async.asyncState}
+        onSubmit={onSubmit}
+        transitionDialog={transitionDialog}
+        label=""
+      />
     </Box>
   );
 };
