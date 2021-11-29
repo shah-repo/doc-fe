@@ -883,7 +883,10 @@ context("Autosave on blur", () => {
     });
 
     it("Check Checkbox field and check for autosave", () => {
-      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option1");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option1");
+        cy.unClick();
+      });
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           res.setDelay(100);

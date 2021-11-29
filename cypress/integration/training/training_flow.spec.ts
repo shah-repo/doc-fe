@@ -843,7 +843,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -855,11 +858,17 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -967,7 +976,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -975,11 +987,17 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -1130,7 +1148,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -1138,11 +1159,17 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -1200,6 +1227,7 @@ context("Training Flow test", () => {
       cy.get("#docRevTitle").clear().arrowType("released form");
       cy.get("#userName").clear().arrowType(USERS[1].name);
       cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.get("#trId").clear().arrowType(forceTrainingRecordId);
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");

@@ -261,7 +261,7 @@ context("Parts from EB flow test", () => {
         cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
       });
 
-      it("Add an Approval'", () => {
+      it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 

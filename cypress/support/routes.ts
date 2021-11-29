@@ -86,6 +86,7 @@ export enum CyRoutes {
   PostFieldLocks = "PostFieldLocks",
   ExpireFieldLocks = "ExpireFieldLocks",
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
+  HistoryMaintenance = "HistoryMaintenance",
   PostReceivable = "PostReceivable",
   PostLHRs = "PostLHRs",
   GetNotes = "GetNotes",
@@ -224,6 +225,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/available_maintenance_forms",
+    },
+    callConfig: {
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  HistoryMaintenance: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/history_maintenance/*",
     },
     callConfig: {
       responseTimeout: 40 * 1000,
