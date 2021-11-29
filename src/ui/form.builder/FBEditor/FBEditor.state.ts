@@ -22,6 +22,7 @@ import FBEditorSelectDocument from "../FBEditorSelectDocument/FBEditorSelectDocu
 import FBEditorTextEditor from "../FBEditorTextEditor/FBEditorTextEditor";
 import FBEditorTextField from "../FBEditorTextField/FBEditorTextField";
 import FBEditorTextFieldWithRange from "../FBEditorTextFieldWithRange/FBEditorTextFieldWithRange";
+import FBEditorZIPUpload from "../FBEditorZIPUpload/FBEditorZIPUpload";
 
 class FBEditorState {
 
@@ -100,6 +101,7 @@ class FBEditorState {
     radio: FBEditorCheckControl,
     radiogroup: FBEditorOptionGroup,
     fileupload: FBEditorLabel,
+    zipattachment: FBEditorZIPUpload,
     blanktplform: FBEditorLabel,
     paragraph: FBEditorParagraph,
     quantity: FBEditorLabel,

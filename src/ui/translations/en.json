@@ -615,6 +615,8 @@
   "form.builder.hyperlink": "Hyperlink",
   "form.builder.fileupload": "File Upload",
   "form.builder.blanktplform": "Blank Template Form",
+  "form.builder.zipattachment": "ZIP File Upload",
+  "form.builder.unzip.files": "Unzip files",
   "form.builder.groups": "Groups",
   "form.builder.validator": "Verified",
   "form.builder.additions": "Additions",
