@@ -3,14 +3,15 @@ import { apiActionWithCallbacks } from "../../factories";
 import { ApiAction, Handlers } from "../../types";
 import { PasswordType } from "./types";
 
-const executeAsyncTask = (payload: PasswordType, handlers: Handlers): ApiAction =>
-  apiActionWithCallbacks({
+const executeAsyncTask = (payload: PasswordType, handlers: Handlers): ApiAction => {
+  const { password, ...restPayload } = payload;
+  return apiActionWithCallbacks({
     url: `/async_tasks`,
     method: "post",
-    password: payload?.password,
-    data: payload,
+    password,
+    data: restPayload,
     handlers,
-  });
+  }); };
 
 export default {
   executeAsyncTask,
