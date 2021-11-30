@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
@@ -7,7 +8,7 @@ export const styles = makeStyles(() =>
       height: "calc(100vh - 130px)",
     },
     error: {
-      color: "red",
+      color: Colors.red,
     },
     grid: {
       marginTop: "4px",
