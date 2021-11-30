@@ -394,6 +394,7 @@
   "common.to": "to",
   "common.pin": "Pin this item",
   "common.unpin": "Unpin this item",
+  "common.sqs.task.failed": "Failed to execute task",
   "output.info": "Form Info",
   "dashboard.assigned.training": "A training is assigned to you. Due by {dueDate}",
   "dashboard.assigned.task": "A task is assigned to you",
@@ -1134,5 +1135,19 @@
   "pending.approval": "pending approvals from",
   "training.stats.all": "ALL",
   "training.stats.title": "TRAININGS OUTSTANDING",
-  "training.stats.totalOutstanding": "Total Outstanding"
+  "training.stats.totalOutstanding": "Total Outstanding",
+  "async.tasks.type": "Type",
+  "async.tasks.timestamp": "Date & Time",
+  "async.tasks.user.emails": "User Emails",
+  "async.tasks.last.email.sent": "Last Password Email Sent Date & Time",
+  "async.tasks.password.update": "Password Update Date & Time",
+  "async.tasks.docRevId": "Document Revision ID",
+  "async.tasks.formId": "Form ID",
+  "async.tasks.year": "Year",
+  "async.tasks.month": "Month",
+  "async.tasks.day": "Day",
+  "async.tasks.hour": "Hour",
+  "async.tasks.minute": "Minute",
+  "async.tasks.second": "Second",
+  "async.task.timetravel.error": "One field should be greater than 0"
 }
