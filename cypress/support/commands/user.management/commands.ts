@@ -10,6 +10,7 @@ declare global {
     interface Chainable<Subject> {
       usrNavigateToUserManagement(): Chainable;
       usrClickAddEmployee(): Chainable;
+      usrGetInitials(params: {fullName: string}): Chainable;
       usrEnterEmail(params: {email: string}): Chainable;
       usrEnterName(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
@@ -37,6 +38,18 @@ Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
   cy.get("#AddEmployeeFormPresenter-commonName").arrowType(params.name);
+});
+
+Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
+  function getInitials(fullName) {
+    const nameArr = fullName.split("");
+    const initials = nameArr.filter(function(char) {
+      return /[A-Z]/.test(char);
+    });
+    return initials.join("").substring(0, 2);
+  }
+
+  cy.get("[data-cy=header-userInitials]").should("have.text", getInitials(params.fullName));
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
