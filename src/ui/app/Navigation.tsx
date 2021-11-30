@@ -45,12 +45,12 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   console.log("useSelector(companySelectors.getNavigationItems :::", useSelector(companySelectors.getNavigationItems));
   const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
   // TODO:: REMOVE THIS once Navigation item coming from backend
-  const index = navigationSelectorItems.findIndex((x) => x.path === "/sqs_messages");
+  const index = navigationSelectorItems.findIndex((x) => x.path === "/async_tasks");
   if (index === -1) {
     navigationSelectorItems.push({
       icon: "/navigation_icons/document-menu.svg",
-      label: "SQS Messages",
-      path: "/sqs_messages",
+      label: "Async Tasks",
+      path: "/async_tasks",
       restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
       type: "LINK",
     });

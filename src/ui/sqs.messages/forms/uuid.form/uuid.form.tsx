@@ -30,8 +30,8 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
             <Text
               translation={
                 type === SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE
-                  ? "sqs.messages.docRevId"
-                  : "sqs.messages.formId"
+                  ? "async.tasks.docRevId"
+                  : "async.tasks.formId"
               }
             />
           }

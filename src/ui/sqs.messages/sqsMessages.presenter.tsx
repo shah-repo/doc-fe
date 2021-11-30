@@ -1,9 +1,7 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
 import { SQSMessageActions } from "../../../src/state/ducks/sqs.messages";
-import { MomentFormats } from "../../common/utils/date";
 import {
   EffectiveDateFormValues, PasswordFormValues,
 } from "../change.request/form/types";
@@ -20,11 +18,12 @@ import PasswordExpirationForm from "./forms/password.expiration.form/password.ex
 import TimeTravelForm from "./forms/time.travel.form/time.travel.form";
 import UUIDBasedForm from "./forms/uuid.form/uuid.form";
 import { styles } from "./sqsMessages.styles";
-import { SQS_TYPES } from "./types";
+import { SQS_TYPES, TimeTravelProps } from "./types";
 
 const RecentsPresenter: React.FunctionComponent = () => {
   const classes = styles();
   const dropDownOptions = [
+    { value: "TIME_TRAVEL_USER_SESSION", text: "TIME_TRAVEL_USER_SESSION" },
     { value: "TIME_TRAVEL_USER", text: "TIME_TRAVEL_USER" },
     { value: "TIME_TRAVEL_COMPANY", text: "TIME_TRAVEL_COMPANY" },
     { value: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE", text: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE" },
@@ -46,6 +45,7 @@ const RecentsPresenter: React.FunctionComponent = () => {
   };
   const intl = useIntl();
   const executeAsyncTask = useActionCreator(SQSMessageActions.executeAsyncTask);
+  const executeSessionTimeTravelAsyncTask = useActionCreator(SQSMessageActions.executeSessionTimeTravelAsyncTask);
   const transitionDialog = useDialog();
   const async = useAsync({
     onSuccess: () => {
@@ -71,7 +71,7 @@ const RecentsPresenter: React.FunctionComponent = () => {
     openApproveDialog();
   };
   const handleDateFormSubmit = (selectedDate: string) => {
-    setPayload(JSON.stringify(type === SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS ? {
+    setPayload(JSON.stringify( [SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS].includes(SQS_TYPES[type]) ? {
       taskType: type,
       currentDate: selectedDate,
     } : {
@@ -98,7 +98,7 @@ const RecentsPresenter: React.FunctionComponent = () => {
     openApproveDialog();
   };
   const handleuuidFormSubmit = (uuid: string) => {
-    setPayload(JSON.stringify( type === SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE ? {
+    setPayload(JSON.stringify( [SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE].includes(SQS_TYPES[type]) ? {
       taskType: type,
       docRevId: uuid,
     } : {
@@ -107,29 +107,34 @@ const RecentsPresenter: React.FunctionComponent = () => {
     }));
     openApproveDialog();
   };
-  const handleTimeTravelFormSubmit = (date: string) => {
-    setPayload(JSON.stringify({
-      taskType: type,
-      timeTravel: {
-        Year: moment(date, MomentFormats.DefaultDateTimeFormatter).year(),
-        month: moment(date, MomentFormats.DefaultDateTimeFormatter).month(),
-        day: moment(date, MomentFormats.DefaultDateTimeFormatter).days(),
-        hour: moment(date, MomentFormats.DefaultDateTimeFormatter).hours(),
-        minute: moment(date, MomentFormats.DefaultDateTimeFormatter).minutes(),
-        second: moment(date, MomentFormats.DefaultDateTimeFormatter).seconds(),
-      },
-    }));
+  const handleTimeTravelFormSubmit = (values: TimeTravelProps) => {
+    if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
+      setPayload(JSON.stringify(values));
+    } else {
+      setPayload(JSON.stringify({
+        taskType: type,
+        timeTravel: values,
+      }));
+    }
     openApproveDialog();
   };
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {
     const updatedPayload = JSON.parse(payload);
-    async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);
+    if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
+      async.start(
+        executeSessionTimeTravelAsyncTask,
+        { ...updatedPayload, ...values },
+        async
+      );
+    } else {
+      async.start(executeAsyncTask, { ...updatedPayload, ...values }, async);
+    }
   };
   return (
     <Box m={4} className={classes.root}>
       <FormControl style={{ minWidth: 200 }}>
         <InputLabel id="sqs-messages-type-select-outlined-label">
-          <Text translation="sqs.messages.type" />
+          <Text translation="async.tasks.type" />
         </InputLabel>
         <Select
           labelId="sqs-messages-type-select-outlined-label"
@@ -178,6 +183,7 @@ const RecentsPresenter: React.FunctionComponent = () => {
         [
           SQS_TYPES.TIME_TRAVEL_COMPANY,
           SQS_TYPES.TIME_TRAVEL_USER,
+          SQS_TYPES.TIME_TRAVEL_USER_SESSION,
         ].includes(SQS_TYPES[type]) && (
         <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
       )}

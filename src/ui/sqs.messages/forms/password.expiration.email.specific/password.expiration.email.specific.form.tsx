@@ -37,7 +37,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
           <TextField
             fullWidth
             id="datetime-local"
-            label={<Text translation="sqs.messages.password.update" />}
+            label={<Text translation="async.tasks.password.update" />}
             type="datetime-local"
             defaultValue={defaultDate}
             onChange={handlePasswordUpdatedDateChange}
@@ -50,7 +50,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
           <TextField
             id="filled-textarea"
             fullWidth
-            label={<Text translation="sqs.messages.user.emails" />}
+            label={<Text translation="async.tasks.user.emails" />}
             multiline
             onChange={handleUserEmailsChange}
             value={userEmails}

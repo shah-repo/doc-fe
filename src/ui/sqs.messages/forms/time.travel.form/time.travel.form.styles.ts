@@ -6,8 +6,11 @@ export const styles = makeStyles(() =>
       overflow: "auto",
       height: "calc(100vh - 130px)",
     },
-    mt8: {
-      marginTop: "8px",
+    error: {
+      color: "red",
+    },
+    grid: {
+      marginTop: "4px",
     },
   })
 );

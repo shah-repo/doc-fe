@@ -33,7 +33,7 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
       <Box display="flex" justifyContent="flex-start">
         <TextField
           id="datetime-local"
-          label={<Text translation="sqs.messages.timestamp" />}
+          label={<Text translation="async.tasks.timestamp" />}
           type="datetime-local"
           defaultValue={defaultDate}
           onChange={handleDateChange}
