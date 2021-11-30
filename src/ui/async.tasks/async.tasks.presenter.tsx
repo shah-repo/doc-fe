@@ -3,7 +3,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { AsyncTaskActions } from "../../state/ducks/async.tasks";
 import {
-  EffectiveDateFormValues, PasswordFormValues
+  EffectiveDateFormValues, PasswordFormValues,
 } from "../change.request/form/types";
 import { toastError } from "../components/notifications";
 import Text from "../components/Text";
@@ -142,7 +142,7 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
           value={type}
           onChange={handleChange}
         >
-          {dropDownOptions.map((data, index) => (
+          {dropDownOptions.sort((a, b) => (a.text > b.text) ? 1 : ((b.text > a.text) ? -1 : 0)).map((data, index) => (
             <MenuItem key={data.value} value={data.text}>
               {data.text}
             </MenuItem>
