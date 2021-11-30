@@ -1,15 +1,16 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
-import { SQSMessageActions } from "../../../src/state/ducks/sqs.messages";
+import { AsyncTaskActions } from "../../state/ducks/async.tasks";
 import {
-  EffectiveDateFormValues, PasswordFormValues,
+  EffectiveDateFormValues, PasswordFormValues
 } from "../change.request/form/types";
 import { toastError } from "../components/notifications";
 import Text from "../components/Text";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
+import { styles } from "./async.tasks.styles";
 import PasswordDialogueContainer from "./dialogs/PasswordDialogue";
 import DateForm from "./forms/date.form/date.form";
 import EmptyForm from "./forms/empty.form/empty.form";
@@ -17,10 +18,9 @@ import PasswordExpirationEmailSpecificForm from "./forms/password.expiration.ema
 import PasswordExpirationForm from "./forms/password.expiration.form/password.expiration.form";
 import TimeTravelForm from "./forms/time.travel.form/time.travel.form";
 import UUIDBasedForm from "./forms/uuid.form/uuid.form";
-import { styles } from "./sqsMessages.styles";
 import { SQS_TYPES, TimeTravelProps } from "./types";
 
-const RecentsPresenter: React.FunctionComponent = () => {
+const AsyncTasksPresenter: React.FunctionComponent = () => {
   const classes = styles();
   const dropDownOptions = [
     { value: "TIME_TRAVEL_USER_SESSION", text: "TIME_TRAVEL_USER_SESSION" },
@@ -44,8 +44,8 @@ const RecentsPresenter: React.FunctionComponent = () => {
     setType(event.target.value as string);
   };
   const intl = useIntl();
-  const executeAsyncTask = useActionCreator(SQSMessageActions.executeAsyncTask);
-  const executeSessionTimeTravelAsyncTask = useActionCreator(SQSMessageActions.executeSessionTimeTravelAsyncTask);
+  const executeAsyncTask = useActionCreator(AsyncTaskActions.executeAsyncTask);
+  const executeSessionTimeTravelAsyncTask = useActionCreator(AsyncTaskActions.executeSessionTimeTravelAsyncTask);
   const transitionDialog = useDialog();
   const async = useAsync({
     onSuccess: () => {
@@ -197,4 +197,4 @@ const RecentsPresenter: React.FunctionComponent = () => {
     </Box>
   );
 };
-export default RecentsPresenter;
+export default AsyncTasksPresenter;

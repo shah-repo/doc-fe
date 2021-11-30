@@ -2,6 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import AsyncTasksContainer from "../async.tasks/async.tasks.container";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
@@ -18,7 +19,6 @@ import GroupManagementListContainer from "../group.management/list/container";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
-import SQSMessagesContainer from "../sqs.messages/sqsMessages.container";
 import TrainingListContainer from "../training/list/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/list/container";
@@ -112,7 +112,7 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
       />
       <Route
         path={ASYNC_TASKS_URL}
-        component={SQSMessagesContainer}
+        component={AsyncTasksContainer}
       />
       <Redirect to={{ pathname: HOME_URL }} />
     </Switch>
