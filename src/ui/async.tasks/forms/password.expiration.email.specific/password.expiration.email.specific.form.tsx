@@ -12,9 +12,9 @@ const PasswordExpirationEmailSpecificAsyncTaskPresenter: React.FunctionComponent
   handlePasswordExpirationEmailSpecificFormSubmit,
 }) => {
   const classes = styles();
-  const defaultDate = moment().format(MomentFormats.DefaultDateTimeFormatter);
+  const defaultDate = moment().format(MomentFormats.AsyncTasksDefaultDateTimeFormatter);
   const getUtcFormattedString = (date: string) =>
-    moment(date, MomentFormats.DefaultDateTimeFormatter).toISOString();
+    moment(date, MomentFormats.AsyncTasksDefaultDateTimeFormatter).toISOString();
   const [processedAtTimestamp, setProcessedAtTimestamp] = React.useState(
     getUtcFormattedString(defaultDate)
   );

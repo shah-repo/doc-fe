@@ -1,8 +1,5 @@
 import { Box, Button, TextField } from "@material-ui/core";
 import React from "react";
-// import {
-//   TIME_ZONE,
-// } from "../../../../common/utils/date";
 import Text from "../../../components/Text";
 import { SQS_TYPES } from "../../types";
 import { styles } from "./uuid.form.styles";
@@ -11,7 +8,7 @@ interface Props {
   handleuuidFormSubmit: (id: string) => void;
   type: string;
 }
-const RecentsPresenter: React.FunctionComponent<Props> = ({
+const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleuuidFormSubmit,
   type,
 }) => {
@@ -56,4 +53,4 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 };
-export default RecentsPresenter;
+export default UUIDAsyncTaskPresenter;
