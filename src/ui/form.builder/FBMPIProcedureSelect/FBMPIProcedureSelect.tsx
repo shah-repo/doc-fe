@@ -6,6 +6,8 @@ import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/docume
 import { withFBMPIProcedureSelect } from "./FBMPIProcedureSelect.wrap";
 
 const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> = ({
+  isOptionDisabled,
+  renderOptionWithDate,
   mpiProcedureSelectState,
   formState,
   children,
@@ -49,6 +51,8 @@ const FBMPIProcedureSelect: React.FunctionComponent<FBMPIProcedureSelectProps> =
           optionValueKey="id"
           optionLabelKey="document.docId"
           optionValueType="id"
+          renderOption={(option) => renderOptionWithDate?.(option)}
+          getOptionDisabled={(option) => isOptionDisabled?.(option)}
         />
       )}
     {children}

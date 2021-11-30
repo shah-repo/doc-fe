@@ -34,6 +34,7 @@ interface TransitionDialogProps {
   buttonProps?: ButtonProps;
   transition: Transition;
   label: string;
+  hideLabel?: boolean;
   transitionDialog: DialogHandler;
   effectiveDateDialog?: DialogHandler;
 }
@@ -48,6 +49,8 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   asyncState,
   transition,
   transitionDialog,
+  hideLabel,
+  label,
   effectiveDateDialog,
 }) => {
   const renderPasswordForm = (props: FormikProps<any>) => (
@@ -113,7 +116,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 id="simple-modal-title"
                 className={classes.modeltitle}
               >
-                <Text
+                {!hideLabel && <Text
                   translation={
                     transition === TransitionTypes.TRANSITION_CLOSED
                       ? "transition.action.close.title"
@@ -121,7 +124,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                         ? "transition.action.reject.title"
                         : "transition.action.approve.title"
                   }
-                />
+                />}
               </Typography>
             </Grid>
             <Grid item>
