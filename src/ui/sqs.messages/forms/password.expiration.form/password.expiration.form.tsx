@@ -12,7 +12,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   handlePasswordExpirationFormSubmit,
 }) => {
   const classes = styles();
-  // const defaultDate = moment().tz(TIME_ZONE).format("YYYY-MM-DDTHH:mm");
   const defaultDate = moment().format(MomentFormats.DefaultDateTimeFormatter);
   const getUtcFormattedString = (date: string) =>
     moment(date, MomentFormats.DefaultDateTimeFormatter).toISOString();
@@ -32,12 +31,8 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   const handleUserEmailsChange = (event: any) => {
     setUserEmails(event?.target?.value);
   };
-  // const reset = () => {
-  //   setPasswordUpdatedAt(getUtcFormattedString(defaultDate));
-  // };
   return (
     <Box mt={2} className={classes.root}>
-      {/* <Box display="flex"> */}
       <Grid container={true} spacing={0}>
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
@@ -77,7 +72,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
           />
         </Grid>
       </Grid>
-      {/* </Box> */}
       <Box mt={1} display="flex" justifyContent="flex-end">
         <Button
           type="submit"
@@ -89,9 +83,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         >
           <Text translation={"common.submit"} />
         </Button>
-        {/* <Button variant="contained" onClick={reset}>
-          <Text translation={"common.reset"} />
-        </Button> */}
       </Box>
     </Box>
   );

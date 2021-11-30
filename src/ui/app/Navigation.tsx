@@ -41,8 +41,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   });
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
-  // eslint-disable-next-line no-console
-  console.log("useSelector(companySelectors.getNavigationItems :::", useSelector(companySelectors.getNavigationItems));
   const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
   // TODO:: REMOVE THIS once Navigation item coming from backend
   const index = navigationSelectorItems.findIndex((x) => x.path === "/async_tasks");
@@ -66,10 +64,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       }
       return acc;
     }, []);
-
-
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     async.start(getCompanyMine, currentEmployeeId, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps

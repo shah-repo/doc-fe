@@ -19,7 +19,6 @@ interface Props {
   onSubmit: (values: PasswordFormValues | EffectiveDateFormValues ) => void;
   onSuccess?: () => void;
 }
-
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   arId,
   title,

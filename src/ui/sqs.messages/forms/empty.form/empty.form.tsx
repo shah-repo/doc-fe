@@ -6,7 +6,7 @@ import { styles } from "./empty.form.styles";
 interface Props {
   handleEmptyFormSubmit: () => void;
 }
-const RecentsPresenter: React.FunctionComponent<Props> = ({
+const EmptyAsyncTaskPresenter: React.FunctionComponent<Props> = ({
   handleEmptyFormSubmit,
 }) => {
   const classes = styles();
@@ -24,4 +24,4 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
 };
-export default RecentsPresenter;
+export default EmptyAsyncTaskPresenter;
