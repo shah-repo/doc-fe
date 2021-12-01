@@ -34,7 +34,7 @@ const UserAvatar: React.FunctionComponent<Props> = ({
     <Box>
       {avatar ?
         <img src={avatar} className={classes.avatar} alt="UserProfile" /> :
-        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.avatar}>
+        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.avatar} data-cy="header-userInitials">
           {getInitalsFromName(name)}
         </Avatar>
       }
