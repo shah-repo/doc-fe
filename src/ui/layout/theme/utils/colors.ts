@@ -3,7 +3,6 @@ enum Colors {
   // white
   white = "#FFF",
   background_white = "#F5F8FF",
-  catskill_white = "#F0F4FD",
   // black
   black = "#000",
   almost_black = "#080B11",

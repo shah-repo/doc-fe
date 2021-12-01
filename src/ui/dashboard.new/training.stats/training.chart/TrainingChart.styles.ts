@@ -6,7 +6,6 @@ export const styles = makeStyles(() =>
     chartContainer: {
       overflow: "auto",
       maxHeight: "calc(100vh - 300px)",
-      background: Colors.catskill_white,
     },
     title: {
       fontFamily: "Sora",

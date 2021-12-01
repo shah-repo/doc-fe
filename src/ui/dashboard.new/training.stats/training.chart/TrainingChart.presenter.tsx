@@ -33,7 +33,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         },
       },
       {
-        value: totalCount,
+        value: dueInSeven === 0 ? dueInSeven : totalCount,
         name: TrainingStatusChartLabelTypes.DUE,
         itemStyle: {
           color: Colors.latest_yellow_varient,
@@ -146,9 +146,6 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     return (
       <Box
         className={classes.chartContainer}
-        border={1}
-        borderRadius={12}
-        borderColor={Colors.lightest_grey}
         padding={2}
       >
         <Box display="flex" alignItems="center" justifyContent="center">
