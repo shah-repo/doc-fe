@@ -44,16 +44,14 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
     const docRevSmartRef = document?.smartReferencesTo;
-    const docSmartRef = document?.document.smartReferencesTo;
 
     const smartReferencesTo = useMemo(() =>
       uniqBy(concat(
-        docSmartRef,
         docRevSmartRef
       ), "id").filter((ref) =>
       ref?.active &&
       ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
-    [docRevSmartRef, docSmartRef, version]);
+    [docRevSmartRef, version]);
 
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
@@ -82,7 +80,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
           if (!data) { return; }
           const refs = uniqBy(concat(
             data.smartReferencesTo,
-            data.document.smartReferencesTo
           ), "id");
           setFilteredParts(refs);
         }

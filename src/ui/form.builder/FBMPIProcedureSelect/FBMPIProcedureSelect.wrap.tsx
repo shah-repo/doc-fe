@@ -40,7 +40,6 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           if (!data) { return; }
           const refs = uniqBy(concat(
             data.smartReferencesTo,
-            data.document.smartReferencesTo
           ), "id");
           const partsSelected = refs.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
