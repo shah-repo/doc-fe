@@ -2,7 +2,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { FB } from "..";
-import { getStartOfDayDateString, TIME_ZONE } from "../../../common/utils/date";
+import { TIME_ZONE } from "../../../common/utils/date";
 import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
 
@@ -40,7 +40,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     useEffect(() => {
       const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate;
       if (isUnderDefault) {
-        const nowDate = getStartOfDayDateString(moment(new Date()).tz(TIME_ZONE).toISOString());
+        const nowDate =  moment(new Date()).startOf("day").tz(TIME_ZONE).toISOString();
         datePickerState?.setValue(nowDate);
         save(nowDate);
       }
