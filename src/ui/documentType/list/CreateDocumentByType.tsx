@@ -23,6 +23,8 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -260,6 +262,20 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               return { [column.key]: get(e, "document.docId") || "" };
             case "changeRequest":
               return { [column.key]: get(e, "changeRequest.crId") || "" };
+            case "status":
+              return { [column.key]: get(e, "displayStatus") || "" };
+            case "precalc.revision": {
+              const versionNumber = generateRevisionNumber(
+                e?.revision,
+                e?.revisionStage,
+                e?.subRevision,
+                e?.revisionChangeType,
+                undefined,
+                checkIsDocumentRecord(e?.document?.documentType?.groupOptions)
+              );
+              return { [column.key]: versionNumber || "" };
+            }
+
             default:
               if (moment(columnValue, moment.ISO_8601, true).isValid()) {
                 return {
