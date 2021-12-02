@@ -11,7 +11,7 @@ const DashboardLayout: React.FunctionComponent = () => {
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   return (
-    <Box boxShadow={10} borderRadius={10} className={classes.box} padding={1}>
+    <Box borderRadius={12} className={classes.box} padding={1}>
       <Grid
         container={true}
         className={classes.root}
