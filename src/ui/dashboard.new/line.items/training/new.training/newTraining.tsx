@@ -132,11 +132,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     noWrap
                   >
                     <Text
-                      translation={
-                        trainingStatus === TrainingStatus.OVERDUE
-                          ? "your.training"
-                          : "your.training.on"
-                      }
+                      translation="training.on"
                     />
                   </Typography>
                 </Grid>
