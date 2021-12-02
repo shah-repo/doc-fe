@@ -212,6 +212,11 @@ class FBFormState extends FBSchemaState {
 
     let rules = final ? this.finalValidationRulse : this.getRules();
     let values = omitBy(this.validationValues, (v) => (isString(v) && isEmpty(v)) || (isArray(v) && isEmpty(v)));
+    map(values, (v, k) => {
+      if (isNumber(v) && v === 0) {
+        values[k] = `${v}`;
+      }
+    });
 
     // *TODO: unify validators format
     let validator: any;
