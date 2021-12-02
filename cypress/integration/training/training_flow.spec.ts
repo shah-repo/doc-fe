@@ -1236,5 +1236,38 @@ context("Training Flow test", () => {
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", forceTrainingRecordId);
     });
+
+    it("Check if export button exist", () => {
+      cy.get("[data-cy=\"document.revision.export.list\"]").should("exist");
+    });
+
+    it("Check if assign date filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-createdAtAfter]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Last 7 days");
+      cy.get("li[data-value]>span").contains("Last 14 days");
+      cy.get("li[data-value]>span").contains("Last 30 days").arrowClick();
+    });
+
+    it("Check if due date filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-dueOnBefore]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Due in 7 days");
+      cy.get("li[data-value]>span").contains("Overdue").arrowClick();
+    });
+
+    it("Check if completed on filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-completedAtAfter]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Last 7 days");
+      cy.get("li[data-value]>span").contains("Last 14 days");
+      cy.get("li[data-value]>span").contains("Last 30 days");
+      cy.get("li[data-value]>span").contains("Pending").arrowClick();
+    });
+
+    it("Clear filter", () => {
+      cy.unClick();
+      cy.trClearFilters();
+    });
   });
 });

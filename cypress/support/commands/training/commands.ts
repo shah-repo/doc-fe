@@ -12,6 +12,7 @@ declare global {
     interface Chainable<Subject> {
       trVerifyElementByColumnName(params: { name: string; el: string }): Chainable<Subject>;
       trApproveAR(): Chainable<Subject>;
+      trClearFilters(): Chainable<Subject>;
       trRejectAR(): Chainable<Subject>;
       trCompleteTraining(): Chainable<Subject>;
       trApproveTraining(): Chainable<Subject>;
@@ -21,6 +22,13 @@ declare global {
 
 Cypress.Commands.add("trVerifyElementByColumnName", (params: { name: string; el: string }) => {
   cy.get(`#${params.el}`).parent().parent().parent().parent().should("contain.text", params.name);
+});
+
+Cypress.Commands.add("trClearFilters", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
+    cy.get("button[data-cy=clearFilter]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trApproveAR", () => {
