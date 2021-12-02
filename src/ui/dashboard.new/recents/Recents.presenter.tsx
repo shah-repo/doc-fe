@@ -1,13 +1,12 @@
-import { Grid, List } from "@material-ui/core";
+import { Divider, List } from "@material-ui/core";
 import React from "react";
+import { ActionCreator } from "redux";
 import { getHumanizedFormat } from "../../../common/utils/date";
 import {
   RecentItems,
   RecentTypes,
 } from "../../../state/ducks/dashboard.new/recents/types";
-import { ActionCreator } from "redux";
-import { ApiAction } from "../../../state/types";
-import { AsyncState } from "../../../state/types";
+import { ApiAction, AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import RecentsItem from "./Recents.item";
@@ -31,29 +30,35 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         switch (data.itemType) {
           case RecentTypes.DOCUMENT:
             return (
-              <RecentsItem
-                key={index}
-                itemId={data.itemId}
-                docId={data.docId}
-                itemType={data.itemType}
-                docTypeGroup={data.docTypeGroup}
-                docRevId={data.docRevId}
-                docTitle={data.docTitle}
-                accessedAt={getHumanizedFormat(data.accessedAt)}
-              />
+              <>
+                <RecentsItem
+                  key={index}
+                  itemId={data.itemId}
+                  docId={data.docId}
+                  itemType={data.itemType}
+                  docTypeGroup={data.docTypeGroup}
+                  docRevId={data.docRevId}
+                  docTitle={data.docTitle}
+                  accessedAt={getHumanizedFormat(data.accessedAt)}
+                />
+                <Divider />
+              </>
             );
           case RecentTypes.CHANGE_REQUEST:
             return (
-              <RecentsItem
-                key={index}
-                itemId={data.itemId}
-                docId={data.docId}
-                itemType={data.itemType}
-                docTypeGroup={data.docTypeGroup}
-                docRevId={data.docRevId}
-                docTitle={data.docTitle}
-                accessedAt={getHumanizedFormat(data.accessedAt)}
-              />
+              <>
+                <RecentsItem
+                  key={index}
+                  itemId={data.itemId}
+                  docId={data.docId}
+                  itemType={data.itemType}
+                  docTypeGroup={data.docTypeGroup}
+                  docRevId={data.docRevId}
+                  docTitle={data.docTitle}
+                  accessedAt={getHumanizedFormat(data.accessedAt)}
+                />
+                <Divider />
+              </>
             );
           default:
             return <Text key={index} translation="common.undefined" />;
@@ -63,17 +68,13 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   );
 
   return (
-    <Grid container={true} spacing={5} className={classes.grid}>
-      <Grid item={true} sm={12}>
-        <AsyncGate
-          asyncAction={loadRecents}
-          asyncState={loadRecentsListAsyncState}
-          startActionOnMount={true}
-        >
-          {renderItems()}
-        </AsyncGate>
-      </Grid>
-    </Grid>
+    <AsyncGate
+      asyncAction={loadRecents}
+      asyncState={loadRecentsListAsyncState}
+      startActionOnMount={true}
+    >
+      {renderItems()}
+    </AsyncGate>
   );
 };
 export default RecentsPresenter;

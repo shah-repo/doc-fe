@@ -4,8 +4,7 @@ export const styles = makeStyles(() =>
   createStyles({
     root: {
       overflow: "auto",
-      minHeight: "calc(100vh - 185px)",
-      maxHeight: "calc(100vh - 185px)",
+      height: "calc(100vh - 195px)",
     },
     grid: {
       marginTop: 5,

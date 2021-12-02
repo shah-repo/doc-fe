@@ -34,15 +34,13 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
   return (
-    <>
-      <AsyncGate
-        asyncAction={loadTrainingList}
-        asyncState={loadTrainingListAsyncInfo}
-        startActionOnMount={true}
-      >
-        <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem }}/>
-      </AsyncGate>
-    </>
+    <AsyncGate
+      asyncAction={loadTrainingList}
+      asyncState={loadTrainingListAsyncInfo}
+      startActionOnMount={true}
+    >
+      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem }}/>
+    </AsyncGate>
   );
 };
 

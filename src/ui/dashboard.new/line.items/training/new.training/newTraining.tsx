@@ -119,7 +119,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     <>
       <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
         <ListItemIcon className={classes.listItemIcon}>
-          <TrainingIcon />
+          <TrainingIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText
           primary={

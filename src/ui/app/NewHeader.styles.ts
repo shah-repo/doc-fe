@@ -9,7 +9,7 @@ export default (theme: Theme) =>
       background:
         "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
       fontSize: "1rem",
-      height: "20%",
+      height: "155px",
       zIndex: 0,
       color: Colors.white,
     },

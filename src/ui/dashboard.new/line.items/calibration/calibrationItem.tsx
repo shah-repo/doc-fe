@@ -71,7 +71,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
         <ListItemIcon>
-          <EQIcon />
+          <EQIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText
           primary={
