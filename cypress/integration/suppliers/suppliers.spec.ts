@@ -181,9 +181,11 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
-    it("Create supplier from created Form document", () => {
+    it("Click create new to create supplier", () => {
       SystemRequirement("REQ-2330");
-      cy.supCreateNew();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.supCreateNew();
+      });
     });
 
     it("Enter 'Supplier Address/Phone'", () => {
@@ -226,6 +228,8 @@ context("Create company via API and create Suppliers document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
           cy.visit(supplierDocument);
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve supplier document", () => {
@@ -248,6 +252,8 @@ context("Create company via API and create Suppliers document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
           cy.visit(supplierDocument);
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve supplier document", () => {
@@ -270,6 +276,8 @@ context("Create company via API and create Suppliers document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
           cy.visit(supplierDocument);
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve supplier document", () => {
@@ -281,7 +289,7 @@ context("Create company via API and create Suppliers document", () => {
 
     context("Verify approval data", () => {
       it(`Verify approval data for ${USERS[1].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[1].name}`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[1].name}]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[1].name,);
           expect(elementText).to.include(USERS[1].email);
@@ -292,7 +300,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it(`Verify approval data for ${USERS[2].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[2].name}`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[2].name}]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[2].name,);
           expect(elementText).to.include(USERS[2].email);
@@ -303,7 +311,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it(`Verify approval data for ${USERS[3].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[3].name}`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[3].name}]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[3].name,);
           expect(elementText).to.include(USERS[3].email);
@@ -322,6 +330,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Filter supplier Title/Name", () => {
       cy.filterSupplierTitle({ name: "Test" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check for filtered values", () => {
@@ -393,6 +402,79 @@ context("Create company via API and create Suppliers document", () => {
     it("Check if forms are suggested on creating new supplier", () => {
       SystemRequirement("REQ-2350");
       cy.supCheckForSuggestedForms("New Supplier Form", "New Supplier Form 2");
+    });
+  });
+
+  context("Verify life cycle of supplier document", () => {
+    it("Navigate to created supplier", () => {
+      cy.unClick();
+      cy.get("[data-cy=\"suggestFormCancelBtn\"]").arrowClick();
+      cy.dlFilterByDocId({ docId: "SUP-00001" });
+      cy.dlSelectFirstDocument();
+    });
+
+    context("Verify next revision update of supplier document", () => {
+      it("Press button update record", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Update supplier address", () => {
+        cy.drEnterDocumentDescription({ description: "Updated Supplier address" });
+      });
+
+      it("Leave Update for Type of Change and save", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve supplier document", () => {
+        cy.ebApprove();
+      });
+
+      it("Verify revision after update is equal to 2", () => {
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+      });
+    });
+
+    context("Verify correction revision update of supplier document", () => {
+      it("Press button update record", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Update supplier address", () => {
+        cy.drEnterDocumentDescription({ description: "Updated for second time, Supplier address" });
+      });
+
+      it("Select correction upgrade type 2.1", () => {
+        cy.drChooseTypeOfRevisionChangeOption({ option: "Correction" });
+      });
+
+      it("Leave Update for Type of Change and save", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve supplier document", () => {
+        cy.ebApprove();
+      });
+
+      it("Verify revision after update is equal to 2", () => {
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Current" });
+      });
     });
   });
 });
