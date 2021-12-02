@@ -1,6 +1,6 @@
 import { Box, Button } from "@material-ui/core";
 import { Form, FormikProps } from "formik";
-import { Dictionary, isEmpty } from "lodash";
+import { Dictionary, isEmpty, isObject } from "lodash";
 import moment from "moment";
 import * as React from "react";
 import * as generateUuid from "uuid/v4";
@@ -12,6 +12,7 @@ import Approvers from "../../../../change.request/form/approvers";
 import { TemplateOption } from "../../../../change.request/form/types";
 import AutocompleteField from "../../../../components/forms/fields/Autocomplete/Autocomplete";
 import DatePickerField from "../../../../components/forms/fields/DatePickerField";
+import InputField from "../../../../components/forms/fields/Input";
 import { required, validator } from "../../../../components/forms/fields/validators";
 import FormMessage from "../../../../components/forms/FormMessage";
 import FormProgress from "../../../../components/forms/FormProgress";
@@ -21,7 +22,6 @@ import { FBFormState, FBSchemaProps } from "../../../../form.builder";
 import Colors from "../../../../layout/theme/utils/colors";
 import { ApproveAndReleaseFormValues } from "../../types";
 import { styles } from "./ApproveAndRelease.styles";
-import InputField from "../../../../components/forms/fields/Input";
 
 interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   asyncState: AsyncState;
@@ -90,6 +90,9 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     const formState = new FBFormState({});
     const rules = (schema as FBSchemaProps[]).reduce((acc, item) => {
       if (item.rules) {
+        if (isObject(item.rules)) {
+          return item.rules;
+        }
         acc[item.name || ""] = item.rules;
       }
       return acc;
