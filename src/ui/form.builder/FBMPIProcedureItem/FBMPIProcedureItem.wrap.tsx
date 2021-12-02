@@ -80,7 +80,10 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          setFilteredParts(smartRef);
+          const refs = isDocPIInstance ?
+            data.smartReferencesTo :
+            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
+          setFilteredParts(refs);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
