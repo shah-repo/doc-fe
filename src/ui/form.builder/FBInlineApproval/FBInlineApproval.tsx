@@ -6,6 +6,7 @@ import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInl
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
+import FBInlinePendingApprovalSocket from "./FBInlinePendingApproval.socket";
 
 const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   onApproveClick,
@@ -132,6 +133,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
 }) => (
   <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
     <FBDialog />
+    <FBInlinePendingApprovalSocket {...{ name }} />
     <FBInlineApprovalSocket {...{ name }} />
     <FBInput {...props} {...{ name, rules }} type="inlineapproval">
       <FBInlineApprovalChild {...props} {...{ name }}/>
