@@ -133,7 +133,7 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
 }) => (
   <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
     <FBDialog />
-    <FBInlinePendingApprovalSocket {...{ name }} />
+    <FBInlinePendingApprovalSocket/>
     <FBInlineApprovalSocket {...{ name }} />
     <FBInput {...props} {...{ name, rules }} type="inlineapproval">
       <FBInlineApprovalChild {...props} {...{ name }}/>
