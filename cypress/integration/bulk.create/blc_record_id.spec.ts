@@ -738,6 +738,10 @@ context("Bulk create public, private and reserved record-ids", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Click create new from form button", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
           cy.drCreateNewDocumentFromForm();
