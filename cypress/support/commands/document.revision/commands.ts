@@ -33,6 +33,7 @@ declare global {
       drCheckIfDocumentIdIsGenerated(): Chainable<Subject>;
       drCheckIfDocumentIdMatches(params: { docId: string }): Chainable<Subject>;
       drFilterDocListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      drFilterDocListByDocIdAndStatus(params: { docId: string; status: string }): Chainable<Subject>;
       drChangeOwner(params: { employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
       drClickReviseDocument(): Chainable<Subject>;
@@ -433,6 +434,21 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
     cy.get("#name").arrowType(params.title).wait(500);
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
+    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.dlSelectFirstDocument();
+});
+
+Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
+  cy.dlClearFilters();
+  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
+    cy.get("#docId").arrowType(params.docId).wait(500);
   });
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
