@@ -234,8 +234,8 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Approve supplier document", () => {
         cy.ebApprove();
-        dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY HH:mm A");
-        dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY HH:mm A");
+        dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -258,8 +258,8 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Approve supplier document", () => {
         cy.ebApprove();
-        dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY HH:mm A");
-        dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY HH:mm A");
+        dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY hh:mm A");
       });
     });
 
@@ -282,14 +282,14 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Approve supplier document", () => {
         cy.ebApprove();
-        dateOfApproval1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY HH:mm A");
-        dateOfApproval1MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY HH:mm A");
+        dateOfApproval1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+        dateOfApproval1MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute").format("MMMM D, YYYY hh:mm A");
       });
     });
 
     context("Verify approval data", () => {
       it(`Verify approval data for ${USERS[1].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[1].name}]`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[1].name}"]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[1].name,);
           expect(elementText).to.include(USERS[1].email);
@@ -300,7 +300,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it(`Verify approval data for ${USERS[2].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[2].name}]`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[2].name}"]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[2].name,);
           expect(elementText).to.include(USERS[2].email);
@@ -311,7 +311,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it(`Verify approval data for ${USERS[3].name}`, () => {
-        cy.get(`[data-cy="approved-${USERS[3].name}]`).then(($el) => {
+        cy.get(`[data-cy="approved-${USERS[3].name}"]`).then(($el) => {
           const elementText = $el.text();
           expect(elementText).to.include(USERS[3].name,);
           expect(elementText).to.include(USERS[3].email);
