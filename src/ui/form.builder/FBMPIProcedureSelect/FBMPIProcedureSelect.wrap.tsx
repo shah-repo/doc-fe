@@ -4,6 +4,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
@@ -22,7 +23,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     const dispatch = useDispatch();
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
-    const { id } = workspaceState || {};
+    const { id, document } = workspaceState || {};
+    const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
 
     React.useEffect(() => {
       dialogState?.setActions(
@@ -38,11 +40,10 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = uniqBy(concat(
-            data.smartReferencesTo,
-            data.document.smartReferencesTo
-          ), "id");
-          const partsSelected = refs.reduce((selected, ref) => {
+          const refs = isDocPIInstance ?
+            data.smartReferencesTo :
+            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
+          const partsSelected = refs?.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
                 && ref.active
                 && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {

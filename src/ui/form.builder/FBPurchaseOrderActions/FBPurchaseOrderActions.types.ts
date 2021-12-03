@@ -1,9 +1,9 @@
 import { ButtonProps } from "@material-ui/core";
-import { FBCurrency } from "..";
+import { FBProviderProps } from "..";
 
-export interface FBPurchaseOrderActionsProps {
+export type FBPurchaseOrderActionsProps =
+& Pick<FBProviderProps, "purchaseOrderState">
+& {
   onAddClick?: ButtonProps["onClick"];
   onCancelClick?: ButtonProps["onClick"];
-  totalPrice?: number;
-  currency?: FBCurrency;
-}
+};
