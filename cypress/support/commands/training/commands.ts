@@ -11,7 +11,9 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       trVerifyElementByColumnName(params: { name: string; el: string }): Chainable<Subject>;
+      trFilterDocListByNameAndSelect(params: { title: string }): Chainable<Subject>;
       trApproveAR(): Chainable<Subject>;
+      trClearFilters(): Chainable<Subject>;
       trRejectAR(): Chainable<Subject>;
       trCompleteTraining(): Chainable<Subject>;
       trApproveTraining(): Chainable<Subject>;
@@ -21,6 +23,23 @@ declare global {
 
 Cypress.Commands.add("trVerifyElementByColumnName", (params: { name: string; el: string }) => {
   cy.get(`#${params.el}`).parent().parent().parent().parent().should("contain.text", params.name);
+});
+
+Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string }) => {
+  cy.trClearFilters();
+  cy.listLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
+    cy.get("#docRevTitle").arrowType(params.title).wait(500);
+  });
+  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("trClearFilters", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
+    cy.get("button[data-cy=clearFilter]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trApproveAR", () => {
