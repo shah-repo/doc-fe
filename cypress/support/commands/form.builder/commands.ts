@@ -100,7 +100,7 @@ Cypress.Commands.add("fbAddNewField", () => {
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
-    cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+    cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
   });
 });
 
