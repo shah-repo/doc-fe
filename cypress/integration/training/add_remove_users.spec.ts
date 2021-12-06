@@ -867,6 +867,26 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
+    it("Select training record", () => {
+      cy.trSelectFirstDocument();
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("[role='dialog']").should("contain.text", "I completed training on");
+    });
+
+    it("Check if 'Rev 1' revision is displayed", () => {
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+      });
+    });
+
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get("[role='dialog']>button").arrowClick();
+    });
+
     it(`Training record for ${USERS[3].name} should not be present`, () => {
       cy.get("#userName").clear().arrowType(USERS[3].name).wait(1000);
       cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
@@ -883,6 +903,26 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
+    it("Select training record", () => {
+      cy.trSelectFirstDocument();
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("[role='dialog']").should("contain.text", "I completed training on");
+    });
+
+    it("Check if 'Rev 1' revision is displayed", () => {
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+      });
+    });
+
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get("[role='dialog']>button").arrowClick();
+    });
+
     it(`Training record for ${USERS[4].name} should be present`, () => {
       cy.get("#userName").clear().arrowType(USERS[4].name).wait(1000);
       cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
@@ -892,6 +932,26 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
+    it("Select training record", () => {
+      cy.trSelectFirstDocument();
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("[role='dialog']").should("contain.text", "I completed training on");
+    });
+
+    it("Check if 'Rev 1' revision is displayed", () => {
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+      });
+    });
+
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get("[role='dialog']>button").arrowClick();
+    });
+
     it(`Training record for ${USERS[7].name} should be present`, () => {
       cy.get("#userName").clear().arrowType(USERS[7].name).wait(1000);
       cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
@@ -899,6 +959,26 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[7].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+    });
+
+    it("Select training record", () => {
+      cy.trSelectFirstDocument();
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("[role='dialog']").should("contain.text", "I completed training on");
+    });
+
+    it("Check if 'Rev 1' revision is displayed", () => {
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+      });
+    });
+
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.get("button>span").should("contain.text", "Send To Email");
+      cy.get("[role='dialog']>button").arrowClick();
     });
   });
 
