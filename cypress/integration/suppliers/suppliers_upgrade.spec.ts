@@ -388,6 +388,54 @@ context("Test upgradability of old supplier form and record", () => {
         });
       });
     });
+
+    context("Verify that the system enables the user to upgrade RELEASED supplier with latest version of form", () => {
+      context("Revise and upgrade supplier document", () => {
+        it("Navigate to supplier list", () => {
+          cy.navigToSuppliers();
+        });
+
+        it("Select old supplier document in RELEASED from supplier list", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocTitle({ docTitle: "Old released supplier document" });
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Click update record", () => {
+          cy.drClickReviseDocument();
+        });
+
+        it("Click save", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Press Click Here on banner for form upgrade to latest version", () => {
+          cy.drClickUpgradeForm();
+        });
+
+        it("Verify approvals block is present", () => {
+          cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
+        });
+      });
+
+      context("Release upgraded supplier document", () => {
+        it("Add approver to approvers list", () => {
+          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+        });
+
+        it("Submit for approval", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve supplier document", () => {
+          cy.ebApprove();
+        });
+
+        it("Verify revision is revision 1 - current", () => {
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Current" });
+        });
+      });
+    });
   });
 });
 
