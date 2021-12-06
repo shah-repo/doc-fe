@@ -10,14 +10,14 @@ const FBInlinePendingApprovalSocket: React.FunctionComponent<{}> = () => {
 
   const subscribe = () => {
     iotService.subscribeToTopic(
-      `+/record/${id}/refresh`,
+      `+/document_revisions/${id}/inline_section/updated`,
       reload
     );
   };
 
   const unsubscribe = () => {
     iotService.unsubscribeFromTopic(
-      `+/record/${id}/refresh`,
+      `+/document_revisions/${id}/inline_section/updated`,
     );
   };
 
