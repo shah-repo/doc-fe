@@ -875,11 +875,15 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']").should("contain.text", "I completed training on");
     });
 
-    it("Check if 'Rev 1' revision is displayed", () => {
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
       cy.get("[role='dialog']").then(($el) => {
         const text = $el.text();
-        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
       });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
@@ -911,11 +915,15 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']").should("contain.text", "I completed training on");
     });
 
-    it("Check if 'Rev 1' revision is displayed", () => {
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
       cy.get("[role='dialog']").then(($el) => {
         const text = $el.text();
-        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
       });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[2].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
@@ -940,11 +948,15 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']").should("contain.text", "I completed training on");
     });
 
-    it("Check if 'Rev 1' revision is displayed", () => {
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
       cy.get("[role='dialog']").then(($el) => {
         const text = $el.text();
-        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
       });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[4].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
@@ -969,11 +981,15 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[role='dialog']").should("contain.text", "I completed training on");
     });
 
-    it("Check if 'Rev 1' revision is displayed", () => {
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
       cy.get("[role='dialog']").then(($el) => {
         const text = $el.text();
-        expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  1");
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
       });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[7].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
