@@ -17,12 +17,19 @@ declare global {
       trRejectAR(): Chainable<Subject>;
       trCompleteTraining(): Chainable<Subject>;
       trApproveTraining(): Chainable<Subject>;
+      trSelectFirstDocument(): Chainable<Subject>;
     }
   }
 }
 
 Cypress.Commands.add("trVerifyElementByColumnName", (params: { name: string; el: string }) => {
   cy.get(`#${params.el}`).parent().parent().parent().parent().should("contain.text", params.name);
+});
+
+Cypress.Commands.add("trSelectFirstDocument", () => {
+  cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>div>div").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string }) => {

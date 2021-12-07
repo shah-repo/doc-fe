@@ -672,6 +672,14 @@ context("Self training test", () => {
     it("Check if 'Send To Email' button is displayed", () => {
       cy.get("button>span").should("contain.text", "Send To Email");
     });
+
+    it("Check if 'Send To Email' button is working", () => {
+      cy.get("button>span").contains("Send To Email").arrowClick();
+      const currentDate = new Date();
+      cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
+      cy.imapVerifyLastEmailContains(
+        { userEmail: USERS[1].email, content: "Your documents are attached.", date: currentDate });
+    });
   });
 
   context("Navigate to released document and revise it", () => {
@@ -715,6 +723,13 @@ context("Self training test", () => {
       cy.navigToTrainingRecords();
     });
 
+    it("Check if next available TRN ID added", () => {
+      cy.get("#trId").clear().arrowType("TRN-00002");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
+        .should("contain", "TRN-00002");
+      cy.trClearFilters();
+    });
+
     it("Select training record", () => {
       cy.trFilterDocListByNameAndSelect({ title: "released form" });
     });
@@ -723,7 +738,7 @@ context("Self training test", () => {
       cy.get("[role='dialog']").should("contain.text", "I completed training on");
     });
 
-    it("Check if 'Rev 1' revision is displayed", () => {
+    it("Check if 'Rev 2' revision is displayed", () => {
       cy.get("[role='dialog']").then(($el) => {
         const text = $el.text();
         expect(text.replace(/\u00a0/g, " ")).to.contain("Rev  2");
