@@ -469,6 +469,8 @@ Cypress.Commands.add("drClickUpgradeForm", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.UpgradeToReleasedForm, () => {
     cy.get("[id=\"UpgradeToLatest-proceed\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drChangeOwnerByAdmin", (params: { employee: string }) => {
