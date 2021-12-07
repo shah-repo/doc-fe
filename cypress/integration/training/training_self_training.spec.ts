@@ -723,6 +723,13 @@ context("Self training test", () => {
       cy.navigToTrainingRecords();
     });
 
+    it("Check if next available TRN ID added", () => {
+      cy.get("#trId").clear().arrowType("TRN-00002");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
+        .should("contain", "TRN-00002");
+      cy.trClearFilters();
+    });
+
     it("Select training record", () => {
       cy.trFilterDocListByNameAndSelect({ title: "released form" });
     });
