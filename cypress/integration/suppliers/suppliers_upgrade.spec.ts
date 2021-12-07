@@ -319,7 +319,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Add approvals field to form", () => {
         it("Click add new field", () => {
-          cy.fbAddNewFieldWhenHidden();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
         });
 
         it("Select approvals from given fields", () => {
