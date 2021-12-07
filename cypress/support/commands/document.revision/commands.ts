@@ -265,7 +265,7 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
   cy.unClick();
 });
 
-Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params: { approverName: string; toastifyExists: boolean }) => {
+Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?: { approverName?: string; toastifyExists?: boolean }) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
@@ -749,7 +749,7 @@ Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean})
   cy.get(`[data-cy="PreviewControlsContainer-access"]`).should((params.isVisible ? "" : "not.") + "exist");
 });
 
-Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params: { toastifyExists: boolean }) => {
+Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params?: { toastifyExists: boolean }) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
