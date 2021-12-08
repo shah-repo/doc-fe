@@ -862,8 +862,8 @@ context("Training by Groups", () => {
   context("Verify updation of training data", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#docId").clear().arrowType("TC-00001");
-      cy.get("#owner").clear().arrowType(USERS[2].name);
+      cy.get("#docId").clear().arrowType("TC-00001").wait(1000);
+      cy.get("#owner").clear().arrowType(USERS[2].name).wait(1000);
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TC-00001");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
@@ -903,8 +903,8 @@ context("Training by Groups", () => {
   context("Verify updation of training data after released training", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#docId").clear().arrowType("TC-00001");
-      cy.get("#owner").clear().arrowType(USERS[2].name);
+      cy.get("#docId").clear().arrowType("TC-00001").wait(1000);
+      cy.get("#owner").clear().arrowType(USERS[2].name).wait(1000);
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TC-00001");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
