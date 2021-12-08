@@ -6,7 +6,7 @@ export function initializeDataDog() {
     applicationId: Config.DatadogApplicationId,
     clientToken: Config.DatadogClientToken,
     datacenter: Datacenter.US,
-    sampleRate: 100,
+    sampleRate: Config.DatadogSampleRate,
     trackInteractions: true,
   };
   datadogRum.init(dataDogConf);
