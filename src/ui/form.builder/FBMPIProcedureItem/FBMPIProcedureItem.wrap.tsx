@@ -69,7 +69,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     redlineActive = useSelector(companySelectors.getRedlineActive);
 
     useEffect(() => {
-      if (!mpiProcedureState) { return; }
+      if (!mpiProcedureState || !smartReferencesTo) { return; }
       setFilteredParts(smartReferencesTo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
