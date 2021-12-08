@@ -1204,7 +1204,7 @@ context("LHR flow", () => {
 
     });
 
-    it("Add an Approval'", () => {
+    it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
     });

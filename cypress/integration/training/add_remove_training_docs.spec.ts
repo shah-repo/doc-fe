@@ -894,8 +894,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick({ force: true });
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 

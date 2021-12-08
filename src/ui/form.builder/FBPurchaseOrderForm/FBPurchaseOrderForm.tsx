@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
+import { Observer } from "mobx-react";
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBPurchaseOrderFormProps, FBQuantityField, FBRadioGroup, FBTextField } from "..";
-import { FormContext } from "../../components/forms/FormContext";
+import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBForm, FBPurchaseOrderFormProps, FBQuantityField, FBRadioGroup, FBTextField } from "..";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
 const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = ({
@@ -9,17 +9,15 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
   handleTotal,
   getOptionDisabled,
   getOptionLabel,
-  handleTypeChange,
   handlePartDescription,
-  type,
-  hasPartNumber,
+  purchaseOrderState,
+  formState,
   children,
 }) => (
-  <FormContext.Provider value={{ submitOnChange: false }}>
+  <FBForm {...{ formState }} >
     <FBRadioGroup
       name="type"
       defaultValue="product"
-      onChange={handleTypeChange}
       options={[
         {
           text: "Product",
@@ -31,44 +29,48 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         },
       ]}
     />
-    {
-      type === "product" &&
-      <>
-        <FBAutocompleteAsync
-          label="form.builder.field.part.number"
-          name="partNumber"
-          optionId="11"
-          onChange={handlePartTitle}
-          rules="required_without:supplierPartNumber"
-          {...{ getOptionDisabled, getOptionLabel }}
-        />
-        <FBTextField
-          label="form.builder.field.supplier.part.number"
-          name="supplierPartNumber"
-          rules="required_without:partNumber"
-        />
-        <FBTextField
-          label="form.builder.field.part.description"
-          name="partNumberTitle"
-          onChange={handlePartDescription}
-          disabled={hasPartNumber}
-          withState
-        />
-      </>
-    }
-    {
-      type === "service" &&
-      <>
-        <FBTextField
-          label="form.builder.field.service.id"
-          name="serviceId"
-        />
-        <FBTextField
-          label="form.builder.field.description"
-          name="description"
-        />
-      </>
-    }
+    <Observer>
+      {() => (
+        <>
+          {formState?.newValues.get("type") === "product" && (
+            <>
+              <FBAutocompleteAsync
+                label="form.builder.field.part.number"
+                name="partNumber"
+                optionId="11"
+                onChange={handlePartTitle}
+                rules="required_without:supplierPartNumber"
+                {...{ getOptionDisabled, getOptionLabel }}
+              />
+              <FBTextField
+                label="form.builder.field.supplier.part.number"
+                name="supplierPartNumber"
+                rules="required_without:partNumber"
+              />
+              <FBTextField
+                label="form.builder.field.part.description"
+                name="partNumberTitle"
+                onChange={handlePartDescription}
+                disabled={purchaseOrderState?.hasPartNumber}
+                withState
+              />
+            </>
+          )}
+          {formState?.newValues.get("type") === "service" && (
+            <>
+              <FBTextField
+                label="form.builder.field.service.id"
+                name="serviceId"
+              />
+              <FBTextField
+                label="form.builder.field.description"
+                name="description"
+              />
+            </>
+          )}
+        </>
+      )}
+    </Observer>
     <Box display="flex" justifyContent="space-between">
       <Box width="100%" marginRight="10px">
         <FBQuantityField
@@ -79,13 +81,19 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         />
       </Box>
       <Box width="100%" marginLeft="10px">
-        <FBAutocomplete
-          label="form.builder.field.units"
-          name="units"
-          options={type === "service" ? FBData.unitsOptions : FBData.productUnitsOptions}
-          optionValueKey="value"
-          optionLabelKey="text"
-        />
+        <Observer>
+          {() => (
+            <FBAutocomplete
+              label="form.builder.field.units"
+              name="units"
+              options={
+                formState?.newValues.get("type") === "service" ? FBData.unitsOptions : FBData.productUnitsOptions
+              }
+              optionValueKey="value"
+              optionLabelKey="text"
+            />
+          )}
+        </Observer>
       </Box>
     </Box>
     <FBAutocompleteAsync
@@ -110,18 +118,23 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
         name="tax"
         gutter={false}
       />
-      {
-        type === "product" &&
-        <FBCheckbox
-          label="form.builder.field.capital.equipment"
-          name="capitalEquipment"
-          gutter={false}
-        />
-      }
+      <Observer>
+        {() => (
+          <>
+            {formState?.newValues.get("type") !== "service" && (
+              <FBCheckbox
+                label="form.builder.field.capital.equipment"
+                name="capitalEquipment"
+                gutter={false}
+              />
+            )}
+          </>
+        )}
+      </Observer>
     </Box>
 
     {children}
-  </ FormContext.Provider>
+  </ FBForm>
 );
 
 export default withFBPurchaseOrderForm(FBPurchaseOrderForm);

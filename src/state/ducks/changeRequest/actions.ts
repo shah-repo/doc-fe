@@ -126,6 +126,16 @@ ApiAction => apiActionWithCallbacks({
   handlers,
 });
 
+const exportAR = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/export/change_request/${id}/email`,
+    method: "post",
+    handlers,
+  });
+
 export default {
   changeRequestsList,
   changeRequestSet,
@@ -140,4 +150,5 @@ export default {
   auditSet,
   loadAudit,
   closeTask,
+  exportAR,
 };

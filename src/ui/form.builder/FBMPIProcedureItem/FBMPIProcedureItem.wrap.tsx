@@ -5,6 +5,7 @@ import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -44,17 +45,16 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     isDocumentMPI = checkIsDocumentMPI(documentType?.groupOptions);
+    const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const docRevSmartRef = document?.smartReferencesTo;
     const docSmartRef = document?.document.smartReferencesTo;
+    const smartRef = isDocPIInstance ? docRevSmartRef : uniqBy(concat(docSmartRef, docRevSmartRef), "id");
 
     const smartReferencesTo = useMemo(() =>
-      uniqBy(concat(
-        docSmartRef,
-        docRevSmartRef
-      ), "id").filter((ref) =>
+      smartRef?.filter((ref) =>
       ref?.active &&
       ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
-    [docRevSmartRef, docSmartRef, version]);
+    [smartRef, version]);
 
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
@@ -81,10 +81,9 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = uniqBy(concat(
-            data.smartReferencesTo,
-            data.document.smartReferencesTo
-          ), "id");
+          const refs = isDocPIInstance ?
+            data.smartReferencesTo :
+            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
           setFilteredParts(refs);
         }
       );

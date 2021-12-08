@@ -37,20 +37,15 @@ context("Sign up user flow", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[2].email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
-      });
-    });
   });
 
-  context("Login company admin", () => {
+  context("Login company admin and check initials", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+    });
+
+    it("Check initials for first user", () => {
+      cy.get("[data-cy=header-userInitials]").should("have.text", "GR");
     });
   });
 
@@ -126,6 +121,46 @@ context("Sign up user flow", () => {
       cy.navigListExistsCheck(
         NavigationItems.DASHBOARD,
         NavigationItems.DOCUMENT_CONTROL);
+    });
+
+    it("Check initials of new user are correct", () => {
+      cy.usrGetInitials({ fullName: nameOfUserToSignUp });
+    });
+  });
+
+  context("Upload photo inside user profile", () => {
+    it("Click on User menu button", () => {
+      cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
+    });
+
+    it("Click on 'My Profile'", () => {
+      cy.contains("My profile").arrowClick();
+    });
+
+
+    it("Click on 'Edit'", () => {
+      cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
+    });
+
+    it("Upload avatar 'image.jpg'", () => {
+      cy.fixture("image.jpg").then((fileContent) => {
+        cy.get("[id^=\"AvatarUploadContainer-avatar\"]").attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "image.jpg",
+          mimeType: "*",
+          filePath: `fixtures/image.jpg`,
+        });
+      });
+    });
+
+    it("Click 'Update profile' and close dialog", () => {
+      cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+      cy.get("#DialogContent-close").arrowClick();
+    });
+
+    it("Check avatar picture is present", () => {
+      // if alt class exists then picture is uploaded
+      cy.get("[alt=UserProfile]").should("exist");
     });
   });
 });

@@ -395,6 +395,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Maintenance record form' for preventative maintenance required", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
       cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
     });
@@ -414,6 +415,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Maintenance record form' for calibration required", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
       cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
     });
@@ -502,7 +504,7 @@ context("Equipment maintenance test", () => {
 
         it("Select 'Equipment maintenance document'", () => {
           SystemRequirement("REQ-2870");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
             cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
           });
           cy.progressBarShouldNotExist();
@@ -518,7 +520,9 @@ context("Equipment maintenance test", () => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+          CyRoutes.GetAvailableApprovers,
+          CyRoutes.GetAutocompleteOptions], () => {
           cy.visit(newPMUrl);
         });
         cy.progressBarShouldNotExist();
@@ -543,6 +547,7 @@ context("Equipment maintenance test", () => {
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
@@ -565,7 +570,7 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
 
-    it("Add an Approval'", () => {
+    it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
     });
 
@@ -592,7 +597,8 @@ context("Equipment maintenance test", () => {
     it("Select 'Equipment maintenance document'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
         CyRoutes.DocPreview,
-        CyRoutes.AvailableMaintenanceForms], () => {
+        CyRoutes.AvailableMaintenanceForms,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -622,7 +628,9 @@ context("Equipment maintenance test", () => {
         const docIdFromUrl = url.split("/").pop();
         // eslint-disable-next-line max-len
         const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+          CyRoutes.GetAvailableApprovers,
+          CyRoutes.GetAutocompleteOptions], () => {
           cy.visit(newPMUrl);
         });
       });
@@ -645,6 +653,7 @@ context("Equipment maintenance test", () => {
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
@@ -758,14 +767,15 @@ context("Equipment maintenance test", () => {
           CyRoutes.EmployeesGet,
           CyRoutes.DocRevPreview,
           CyRoutes.AvailableMaintenanceForms,
-          CyRoutes.AvailableMaintenanceForms], () => {
+          CyRoutes.AvailableMaintenanceForms,
+          CyRoutes.HistoryMaintenance], () => {
           cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Check Calibration document existance", () => {
+      it("Check Calibration document existance", { retries: 3 }, () => {
         SystemRequirement("REQ-2900");
         cy.get("[data-cy=\"maintenanceHistory\"]")
           .eq(1)

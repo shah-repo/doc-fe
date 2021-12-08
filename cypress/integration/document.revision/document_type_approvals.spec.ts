@@ -249,8 +249,16 @@ context("Check DAM enforcement rules for document types", () => {
             outputDocumentTypes: [{
               id: SupplierDocumentType[0].id,
             }],
-            schema: [{
-            }],
+            schema: [
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kvjba97m",
+                uniqueSchemaItem: true,
+                index: 0,
+              },
+            ],
           },
 
         },
@@ -612,9 +620,17 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
-      it("Check approvals enfocment", () => {
-        SystemRequirement("REQ-0520");
-        cy.drCheckApprovalsEnforcment();
+      it("Add approver to approvals", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+      });
+
+      it("Submit for approvals and check enfocment", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+        cy.closeAllAlertMessages();
       });
     });
   });
