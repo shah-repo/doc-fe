@@ -79,7 +79,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         {(approval: FBInlineApprovalBody, index) => {
           const isApproved = isDocumentRevisionApproved(approval.status);
           return (
-            <Box>
+            <Box
+              data-cy={isApproved ? "approved-" + approval.approverName :
+                "not-approved-" + approval.approver?.user.name}>
               <Box
                 key={`fb-ia-info-${approval.id}-${index}`}
                 pb={currentUser === approval.approver?.user.id ? 0 : 0.6}
