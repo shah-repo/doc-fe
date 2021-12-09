@@ -50,6 +50,8 @@ import {
 } from "../../components/table/types";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
+import AddEmployeeContainer from "../add.employee/container";
+import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps } from "./types";
 
@@ -64,6 +66,10 @@ export function KendoPanel<T extends any>({
   onSelect,
   customDataSet,
   normalizrSchema,
+  hasDropboxPermission,
+  dropboxAsync,
+  enableDropboxAction,
+  isCompanyDropboxEnabled,
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -407,13 +413,22 @@ export function KendoPanel<T extends any>({
         // onColumnReorder={columnReorder}
       >
         <GridToolbar>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} justify="space-between" alignItems="center">
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
               <DocumentInfo numberOfRecords={tableData.length} />
             </Grid>
-
-            <Grid item>
+            <Grid
+              item
+              alignItems="center"
+              style={{ display: "flex" }}
+            >
+              <EnableDropboxButton
+                shouldDisplayButton={hasDropboxPermission}
+                {...{ dropboxAsync, enableDropboxAction }}
+                disabled={Boolean(isCompanyDropboxEnabled)}
+              />
+              <AddEmployeeContainer />
               <FormControl variant="outlined">
                 <IconButton
                   aria-label="more"

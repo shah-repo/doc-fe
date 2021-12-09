@@ -27,9 +27,10 @@ export interface TablePanelProps<T> {
   rootCustomStyle?: any;
   normalizrSchema?: schema.Entity | schema.Entity[];
   currentUserEmail?: any;
-  // editGroupsDialog: any;
-  // selectedGroup: LoadCompanyGroup;
-  // canCreateGroups: boolean;
+  hasDropboxPermission: boolean;
+  dropboxAsync?: any;
+  enableDropboxAction?: any;
+  isCompanyDropboxEnabled?: boolean;
 }
 
 export interface TableSelectionProps<T> {

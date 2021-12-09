@@ -9,18 +9,14 @@ import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { toastError } from "../../components/notifications";
-import ClearFilters from "../../components/table/ClearFilters";
-import { DocumentInfo } from "../../components/table/DocumentInfo";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
-import AddEmployeeContainer from "../add.employee/container";
-import AddSlackButtonContainer from "../AddSlackButton/AddSlackButton.container";
-import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { DropboxResponse } from "../profile/dialog/DialogContent";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import gridConfiguration from "./kendogrid.column.definition";
+import KendoGridStyles from "./kendogrid.styles";
 import { KendoPanel } from "./KendoPanel";
 
 interface Props {
@@ -40,6 +36,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   groupOptions,
   handleResendEmail,
 }) => {
+  const classes = KendoGridStyles();
   const intl = useIntl();
   const [showUserProfile, setUserProfile] = useState(false);
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
@@ -158,12 +155,12 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   // ];
 
   return (
-    <Grid container={true}>
-      <Grid item={true} xs={6}>
+    <Grid container className={classes.cRoot}>
+      {/* <Grid item={true} xs={6}>
         <ClearFilters {...{ clearFilter }}/>
         <DocumentInfo numberOfRecords={tableData.length} />
-      </Grid>
-      <Grid
+      </Grid> */}
+      {/* <Grid
         item={true}
         xs={6}
         style={{ textAlign: "right", marginBottom: "16px" }}
@@ -174,9 +171,9 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
             justifyContent: "flex-end",
             alignItems: "center",
           }}
-        >
-          {/* Company dropbox button */}
-          <EnableDropboxButton
+        >*/}
+      {/* Company dropbox button */}
+      {/* <EnableDropboxButton
             shouldDisplayButton={hasDropboxPermission}
             {...{ dropboxAsync, enableDropboxAction }}
             disabled={Boolean(isCompanyDropboxEnabled)}
@@ -184,13 +181,17 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
           <AddSlackButtonContainer />
           <AddEmployeeContainer />
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid item={true}>
         <KendoPanel<GetEmployeeResponse>
           columns={gridConfiguration}
           queryUrl={EMPLOYEES_URL}
           cellMeasure={true}
           tableName={tableName}
+          hasDropboxPermission={hasDropboxPermission}
+          dropboxAsync={dropboxAsync}
+          enableDropboxAction={enableDropboxAction}
+          isCompanyDropboxEnabled={isCompanyDropboxEnabled}
           onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem)}
         />
       </Grid>
