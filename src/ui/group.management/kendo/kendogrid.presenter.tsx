@@ -9,6 +9,7 @@ import {
 import AddGroup from "../add.group/Group";
 import GroupsDisplay from "../display.groups/GroupsDisplay";
 import gridConfiguration from "./kendogrid.column.definition";
+import KendoGridStyles from "./kendogrid.styles";
 import { KendoPanel } from "./KendoPanel";
 
 interface Props {
@@ -33,34 +34,36 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
   editGroupsDialog,
   selectedGroup,
   canCreateGroups,
-}) => (
-  <Grid container={true}>
-    <Grid item={true}>
-      <KendoPanel<LoadCompanyGroup>
-        columns={gridConfiguration}
-        queryUrl={GROUPS_URL}
-        cellMeasure={true}
-        tableName={tableName}
-        onSelect={({ dataItem }) =>
-          () =>
-            handlePermission(dataItem)}
-        editGroupsDialog={editGroupsDialog}
+}) => {
+  const classes = KendoGridStyles();
+  return (
+    <Grid container={true} className={classes.cRoot}>
+      <Grid item={true}>
+        <KendoPanel<LoadCompanyGroup>
+          columns={gridConfiguration}
+          queryUrl={GROUPS_URL}
+          cellMeasure={true}
+          tableName={tableName}
+          onSelect={({ dataItem }) =>
+            () =>
+              handlePermission(dataItem)}
+          editGroupsDialog={editGroupsDialog}
+          selectedGroup={selectedGroup}
+          canCreateGroups={canCreateGroups}
+        />
+      </Grid>
+      <GroupsDisplay
+        closeDialog={previewGroupsDialog.close}
+        isOpen={previewGroupsDialog.isOpen}
         selectedGroup={selectedGroup}
-        canCreateGroups={canCreateGroups}
+      />
+      <AddGroup
+        isOpen={editGroupsDialog.isOpen}
+        closeDialog={editGroupsDialog.close}
+        selectedGroup={selectedGroup}
+        title={"group.management.edit.group"}
       />
     </Grid>
-    <GroupsDisplay
-      closeDialog={previewGroupsDialog.close}
-      isOpen={previewGroupsDialog.isOpen}
-      selectedGroup={selectedGroup}
-    />
-    <AddGroup
-      isOpen={editGroupsDialog.isOpen}
-      closeDialog={editGroupsDialog.close}
-      selectedGroup={selectedGroup}
-      title={"group.management.edit.group"}
-    />
-  </Grid>
-);
+  ); };
 
 export default GroupManagementKendoPresenter;

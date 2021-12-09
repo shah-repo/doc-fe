@@ -86,9 +86,15 @@ export function KendoPanel<T extends any>({
     ? JSON.parse(tableCriteria.columnConfig)
     : [];
 
-  const edit = () => {
+  const edit = (dataItem: LoadCompanyGroup) => {
     // eslint-disable-next-line no-console
-    console.log("Update");
+    console.log("EDIT");
+    enableInlineEdit(dataItem);
+  };
+  const update = (dataItem: LoadCompanyGroup) => {
+    // eslint-disable-next-line no-console
+    console.log("UPDATE", dataItem);
+    enableInlineEdit(dataItem);
   };
   gridConfiguration.columns.forEach((column) => {
     const foundObj = initialColumnsConfig.find(
@@ -105,7 +111,7 @@ export function KendoPanel<T extends any>({
           {...props}
           discard={discardEditMode}
           cancel={discardEditMode}
-          update={enableInlineEdit}
+          update={update}
           edit={edit}
         />
       );
@@ -412,7 +418,7 @@ export function KendoPanel<T extends any>({
     console.log("tableData ::", tableData);
     const index = tableData.findIndex((data) => data.id === dataItem.id);
     if (tableData[index]) {
-      tableData[index].inEdit = true;
+      tableData[index].inEdit = dataItem.inEdit;
     }
     const newDataState = processWithGroups(tableData, dataState);
     setResultState(newDataState);
@@ -447,21 +453,17 @@ export function KendoPanel<T extends any>({
         onExpandChange={onExpandChange}
         expandField="expanded"
         // onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
-        onRowClick={onSelect && (({ dataItem }) => enableInlineEdit( dataItem ))}
         // onColumnResize={columnResize}
         // onColumnReorder={columnReorder}
       >
         <GridToolbar>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} justify="space-between" alignItems="center">
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
               <DocumentInfo numberOfRecords={tableData.length} />
             </Grid>
-
-            <Grid item style={{ textAlign: "right", marginBottom: "16px" }}>
+            <Grid item style={{ display: "flex" }}>
               {canCreateGroups && <AddGroupContainer />}
-            </Grid>
-            <Grid item>
               <FormControl variant="outlined">
                 <IconButton
                   aria-label="more"
