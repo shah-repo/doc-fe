@@ -862,6 +862,7 @@ context("Training by Groups", () => {
   context("Verify updation of training data", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
+      cy.reload();
       cy.get("#owner").clear().arrowType(USERS[2].name).wait(2000);
       cy.get("#docId").clear().arrowType("TC-00001").wait(2000);
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
@@ -884,6 +885,7 @@ context("Training by Groups", () => {
     });
 
     it("Select Approver", () => {
+      cy.contains("Approvals").eq(0).arrowClick();
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
