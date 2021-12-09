@@ -43,6 +43,8 @@ export interface TablePanelStateProps {
   scrollToIndex: number;
   sortDirection?: SortDirectionType;
   forceUpdate: boolean;
+  columnConfig?: string;
+  kendoConfig?: string;
 }
 
 export type TableDataProps<T> = T[];

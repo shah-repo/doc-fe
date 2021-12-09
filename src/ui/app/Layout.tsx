@@ -15,7 +15,7 @@ import DocumentRevisionListContainer from "../document.revision/list/container";
 import { DocumentTypeManagementContainer } from "../document.type.management/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
-import GroupManagementListContainer from "../group.management/list/container";
+import GroupManagementListContainer from "../group.management/kendo/kendogrid.container";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
