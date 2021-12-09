@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-
 export { };
 
 declare global {
@@ -26,6 +25,8 @@ Cypress.Commands.add("supEnterSuppAddressPhone", (params: {address: string}) => 
 
 Cypress.Commands.add("supCreateNew", () => {
   cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: string}) => {

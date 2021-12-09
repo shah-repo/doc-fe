@@ -20,7 +20,9 @@ declare global {
       recFilterByRev(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
       recVerifyTitle(params: {title: string }): Chainable<Subject>;
+      recVerifyTitleWIP(params: {title: string }): Chainable<Subject>;
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
+      recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
     }
   }
@@ -154,11 +156,19 @@ Cypress.Commands.add("recCheckRevisionStage", (params: {stage: string}) => {
 });
 
 Cypress.Commands.add("recVerifyTitle", (params: {title: string}) => {
-  cy.get(" h5[id^=\"SummaryBaseProps\"]").should("have.text", params.title);
+  cy.get("h5[id^=\"SummaryBaseProps\"]").should("have.text", params.title);
+});
+
+Cypress.Commands.add("recVerifyTitleWIP", (params: {title: string}) => {
+  cy.get("[id=\"Title-field\"] input").should("have.attr", "value", params.title);
 });
 
 Cypress.Commands.add("recVerifyDescription", (params: {description: string}) => {
   cy.get("[data-cy=\"BaseWithhtml-editor\"] span>span").should("have.text", params.description);
+});
+
+Cypress.Commands.add("recVerifyDescriptionWIP", (params: {description: string}) => {
+  cy.get("[data-cy^=\"RichTextEditor.description\"] span[data-text]").should("have.text", params.description);
 });
 
 Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {

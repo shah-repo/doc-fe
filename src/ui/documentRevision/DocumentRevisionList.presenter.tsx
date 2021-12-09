@@ -109,7 +109,8 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         className={classes.linkTitle}
         activeClassName={classes.activeLinkTitle}
       >
-        <div>
+        <div
+          data-cy={"revision"}>
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}

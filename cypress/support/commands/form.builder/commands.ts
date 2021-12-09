@@ -19,6 +19,7 @@ declare global {
       fbSelectApprovalMatrix(): Chainable<Subject>;
       fbSelectTextField(): Chainable<Subject>;
       fbAddNewFieldWhenHidden(): Chainable<Subject>;
+      fbAddNewFieldWhenHiddenLastPlace(): Chainable<Subject>;
       fbCheckboxGroupField(): Chainable<Subject>;
       fbRadioBtnGroupField(): Chainable<Subject>;
       fbGroupName(params: { name: string }): Chainable<Subject>;
@@ -101,6 +102,12 @@ Cypress.Commands.add("fbAddNewField", () => {
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
     cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+  });
+});
+
+Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+    cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
   });
 });
 

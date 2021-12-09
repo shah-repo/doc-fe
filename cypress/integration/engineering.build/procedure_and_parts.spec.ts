@@ -536,7 +536,7 @@ context("Procedure and parts flow test", () => {
 
     });
 
-    it("Add an Approval'", () => {
+    it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
     });
@@ -749,7 +749,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
       });
@@ -1003,7 +1003,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
       });
