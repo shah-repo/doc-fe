@@ -19,6 +19,7 @@ enum Colors {
   mirage="#121B21",
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
+  grey_cloud = "#B4B4B4",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -49,10 +50,13 @@ enum Colors {
   green = "#16bd23",
   pale_green = "#f0f7d2",
   latest_green_varient = "#0DB78D",
+  olivine = "#9EB774",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
+  // orange
+  basket_ball_orange = "#F88961"
 }
 
 export default Colors;
