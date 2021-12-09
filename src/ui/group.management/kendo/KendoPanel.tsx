@@ -378,6 +378,7 @@ export function KendoPanel<T extends any>({
   //   );
   // };
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const editField = "inEdit";
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -385,11 +386,25 @@ export function KendoPanel<T extends any>({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const enableInlineEdit = (dataItem: LoadCompanyGroup) => {
+    dataItem.inEdit = !dataItem.inEdit;
+    // eslint-disable-next-line no-console
+    console.log("tableData ::", tableData);
+    const index = tableData.findIndex((data) => data.id === dataItem.id);
+    if (tableData[index]) {
+      tableData[index].inEdit = true;
+    }
+    const newDataState = processWithGroups(tableData, dataState);
+    setResultState(newDataState);
+  };
+
   const tableRenderer = () => (
     <>
       <KendoGrid
         className={`${classes.kGrid} ${classes.kGridFont}`}
         data={result}
+        editField={editField}
         total={resultState.total > 0 ? resultState.total : tableData.length}
         pageable={gridConfiguration.pagerSettings}
         sortable={true}
@@ -401,7 +416,8 @@ export function KendoPanel<T extends any>({
         {...dataState}
         onExpandChange={onExpandChange}
         expandField="expanded"
-        onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
+        // onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
+        onRowClick={onSelect && (({ dataItem }) => enableInlineEdit( dataItem ))}
         // onColumnResize={columnResize}
         // onColumnReorder={columnReorder}
       >
