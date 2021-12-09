@@ -36,9 +36,9 @@ const KendoGridStyles = makeStyles((theme) => ({
       },
     },
   },
-  loading: {
-    marginTop: "350px",
-  },
+  // loading: {
+  //   marginTop: "350px",
+  // },
   kGridFont: {
     fontFamily: "Sora",
     fontStyle: "normal",
