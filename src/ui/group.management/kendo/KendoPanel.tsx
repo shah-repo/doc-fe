@@ -15,8 +15,7 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid,
-  GridColumn,
+  Grid as KendoGrid, GridCellProps, GridColumn,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
@@ -50,6 +49,7 @@ import {
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
+import { CommandCell } from "./cell_template/commandCell";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps } from "./types";
 
@@ -85,6 +85,11 @@ export function KendoPanel<T extends any>({
   const initialColumnsConfig = tableCriteria.columnConfig
     ? JSON.parse(tableCriteria.columnConfig)
     : [];
+
+  const edit = () => {
+    // eslint-disable-next-line no-console
+    console.log("Update");
+  };
   gridConfiguration.columns.forEach((column) => {
     const foundObj = initialColumnsConfig.find(
       (initialColumn) => initialColumn.field === column.field
@@ -92,6 +97,19 @@ export function KendoPanel<T extends any>({
     // further update all column fields here
     if (foundObj) {
       column.show = foundObj.show;
+    }
+    if (!column.field && !column.title) {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <CommandCell
+          {...props}
+          discard={discardEditMode}
+          cancel={discardEditMode}
+          update={enableInlineEdit}
+          edit={edit}
+        />
+      );
+
     }
   });
   const initialKendoConfig: State = kendoConfigFromState
@@ -330,6 +348,7 @@ export function KendoPanel<T extends any>({
       title={column.title}
       cell={column.cell}
       filter={column.filter}
+      filterable={column.filterable}
       groupable={column.groupable}
     />
   );
@@ -394,6 +413,17 @@ export function KendoPanel<T extends any>({
     const index = tableData.findIndex((data) => data.id === dataItem.id);
     if (tableData[index]) {
       tableData[index].inEdit = true;
+    }
+    const newDataState = processWithGroups(tableData, dataState);
+    setResultState(newDataState);
+  };
+
+  const discardEditMode = (dataItem: LoadCompanyGroup) => {
+    // eslint-disable-next-line no-console
+    console.log("tableData ::", tableData);
+    const index = tableData.findIndex((data) => data.id === dataItem.id);
+    if (tableData[index]) {
+      tableData[index].inEdit = false;
     }
     const newDataState = processWithGroups(tableData, dataState);
     setResultState(newDataState);

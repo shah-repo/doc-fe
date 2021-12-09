@@ -1,4 +1,5 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
 import { GroupCell } from "./cell_template/groupCell";
 import { ParentsCell } from "./cell_template/parentsCell";
@@ -51,6 +52,13 @@ const columns = [
     show: true,
     filter: "boolean",
     cell: GroupCell,
+  },
+  {
+    field: "",
+    title: "",
+    show: true,
+    filterable: false,
+    cell: CommandCell,
   },
 ];
 
