@@ -21,7 +21,7 @@ import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
 import TrainingListContainer from "../training/list/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
-import UserManagementListContainer from "../user.management/list/container";
+import UserManagementListContainer from "../user.management/kendo/kendogrid.container";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
 import styles from "./Layout.styles";
