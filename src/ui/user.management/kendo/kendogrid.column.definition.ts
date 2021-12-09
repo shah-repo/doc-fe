@@ -38,7 +38,7 @@ const columns = [
     field: "user.confirmed",
     title: "SIGNED UP",
     show: true,
-    // filter: "boolean",
+    filterable: false,
     cell: SignedCell,
   },
 ];

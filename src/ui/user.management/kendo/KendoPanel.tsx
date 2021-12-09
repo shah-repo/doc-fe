@@ -339,6 +339,7 @@ export function KendoPanel<T extends any>({
       filter={column.filter}
       groupable={column.groupable}
       filterCell={column.filterCell}
+      filterable={column.filterable}
     />
   );
   const [coldef, setColdef] = React.useState(gridConfiguration.columns);
