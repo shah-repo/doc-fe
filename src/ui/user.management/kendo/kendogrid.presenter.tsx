@@ -7,7 +7,6 @@ import { Permission } from "../../../state/ducks/auth/types";
 import { companyActions, companySelectors } from "../../../state/ducks/company";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
-import { SelectOption } from "../../components/forms/fields/Select";
 import { toastError } from "../../components/notifications";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -24,7 +23,7 @@ interface Props {
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
-  groupOptions: SelectOption[];
+  // groupOptions: SelectOption[];
   handleResendEmail: (employee: GetEmployeeResponse) => void;
 }
 
@@ -33,9 +32,11 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
   tableData,
   clearFilter,
-  groupOptions,
+  // groupOptions,
   handleResendEmail,
 }) => {
+  // console.log("groupOptions", groupOptions.map((label) => label.text));
+
   const classes = KendoGridStyles();
   const intl = useIntl();
   const [showUserProfile, setUserProfile] = useState(false);

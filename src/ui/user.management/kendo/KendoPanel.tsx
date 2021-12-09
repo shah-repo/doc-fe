@@ -116,7 +116,7 @@ export function KendoPanel<T extends any>({
     dataState.filter = {
       logic: "and",
       filters: state
-        ? [{ field: "isOfficial", operator: "eq", value: "" }]
+        ? [{ field: "groups", operator: "eq", value: "" }]
         : [],
     };
     // setDefaultDDItem("Select Type");
@@ -142,7 +142,7 @@ export function KendoPanel<T extends any>({
   ): void => {
     const kendoConfigObject = JSON.parse(kendoConfig);
     const stateFilerObject = find(kendoConfigObject.filter?.filters, {
-      field: "isOfficial",
+      field: "groups",
     });
     if (stateFilerObject) {
       dispatch(
@@ -338,6 +338,7 @@ export function KendoPanel<T extends any>({
       cell={column.cell}
       filter={column.filter}
       groupable={column.groupable}
+      filterCell={column.filterCell}
     />
   );
   const [coldef, setColdef] = React.useState(gridConfiguration.columns);

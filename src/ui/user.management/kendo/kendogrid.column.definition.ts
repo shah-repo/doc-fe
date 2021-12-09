@@ -1,5 +1,6 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { ActiveCell } from "./cell_template/activeCell";
+import { GroupDropdown } from "./cell_template/groupDropdown";
 import { GroupsCell } from "./cell_template/groupsCell";
 import { SignedCell } from "./cell_template/signedCell";
 
@@ -22,11 +23,10 @@ const columns = [
     field: "groups",
     title: "GROUPS",
     show: true,
-    filter: "text",
     groupable: false,
+    filterCell: GroupDropdown,
     cell: GroupsCell,
   },
-
   {
     field: "active",
     title: "ACTIVE",

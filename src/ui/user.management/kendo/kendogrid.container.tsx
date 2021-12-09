@@ -7,7 +7,6 @@ import { getTableCriteria, getTableData } from "../../../common/utils/selectors"
 import { authActions } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { toastInfo } from "../../components/notifications";
 import { HOME_URL } from "../../constants/urls";
@@ -23,7 +22,7 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
   const intl = useIntl();
 
   const TABLE_NAME = "userManagement";
-  const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+  // const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
@@ -82,7 +81,7 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
       tableCriteria={tableCriteria}
       tableData={tableData}
       clearFilter={clearFilter}
-      groupOptions={groupOptions}
+      // groupOptions={groupOptions}
       handleResendEmail={handleResendEmail}
     />
   );
