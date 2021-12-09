@@ -174,3 +174,8 @@ td[role="gridcell"] {
   border-color: var(--white);
   border-style: solid;
 }
+
+.k-grouping-header .k-group-indicator {
+  border-radius: 15px;
+  border-color: var(--medium-grey);
+}
