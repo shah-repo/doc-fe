@@ -1571,6 +1571,24 @@ context("Create company with golden tenant", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
 
+    it("Error message on upload Users List with incorrect email in JSON", () => {
+      cy.atchUploadUserListJSONForNCO({ fileName: "incorrect_users.csv", queue: 0 });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.checkToastMessageContains({ message: "email must be an email" });
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
+    });
+
+    it("Error message on upload Users List file other than json or csv", () => {
+      cy.atchUploadUserListJSONForNCO({ fileName: "test.docx", queue: 0 });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
+    });
+
     it("Upload Users List JSON", () => {
       SystemRequirement("REQ-3550");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
