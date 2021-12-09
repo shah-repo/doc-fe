@@ -24,7 +24,7 @@ interface Props {
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
   // groupOptions: SelectOption[];
-  handleResendEmail: (employee: GetEmployeeResponse) => void;
+  // handleResendEmail: (employee: GetEmployeeResponse) => void;
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
@@ -33,7 +33,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   tableData,
   clearFilter,
   // groupOptions,
-  handleResendEmail,
+  // handleResendEmail,
 }) => {
   // console.log("groupOptions", groupOptions.map((label) => label.text));
 
