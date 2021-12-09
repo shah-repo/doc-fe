@@ -91,6 +91,21 @@ export function KendoPanel<T extends any>({
     console.log("EDIT");
     enableInlineEdit(dataItem);
   };
+  const addGroup = () => {
+    // eslint-disable-next-line no-console
+    console.log("ADD GROUP");
+    // eslint-disable-next-line no-console
+    console.log("tableData ::", tableData);
+    const index = tableData.findIndex((data) => data.name === "GANESH");
+    if (index === -1) {
+      const newDate = tableData[0];
+      newDate.name = "GANESH";
+      newDate.inEdit = true;
+      tableData.unshift(newDate);
+      const newDataState = processWithGroups(tableData, dataState);
+      setResultState(newDataState);
+    }
+  };
   const update = (dataItem: LoadCompanyGroup) => {
     // eslint-disable-next-line no-console
     console.log("UPDATE", dataItem);
@@ -463,7 +478,7 @@ export function KendoPanel<T extends any>({
               <DocumentInfo numberOfRecords={tableData.length} />
             </Grid>
             <Grid item style={{ display: "flex" }}>
-              {canCreateGroups && <AddGroupContainer />}
+              {canCreateGroups && <AddGroupContainer addGroup={addGroup}/>}
               <FormControl variant="outlined">
                 <IconButton
                   aria-label="more"
