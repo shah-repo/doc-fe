@@ -95,17 +95,16 @@ export function KendoPanel<T extends any>({
   const addGroup = () => {
     // eslint-disable-next-line no-console
     console.log("ADD GROUP");
-    // eslint-disable-next-line no-console
-    console.log("tableData ::", tableData);
-    const index = tableData.findIndex((data) => data.name === "GANESH");
-    if (index === -1) {
-      const newDate = tableData[0];
-      newDate.name = "GANESH";
-      newDate.inEdit = true;
-      tableData.unshift(newDate);
-      const newDataState = processWithGroups(tableData, dataState);
-      setResultState(newDataState);
-    }
+    // Modify Here to change sample or editable data
+    const sampleData = {
+      id: tableData[0].id + Math.random() * 10000,
+      name: "",
+      employees: [],
+      isOfficial: false,
+      inEdit: true,
+    };
+    tableData.unshift(sampleData);
+    setResultState(processWithGroups(tableData, dataState));
   };
   const update = (dataItem: LoadCompanyGroup) => {
     // eslint-disable-next-line no-console

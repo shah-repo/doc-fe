@@ -2,6 +2,7 @@ import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/Gr
 import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
 import { GroupCell } from "./cell_template/groupCell";
+import { NameCell } from "./cell_template/nameCell";
 
 const columns = [
   {
@@ -10,6 +11,7 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
+    cell: NameCell,
   },
   {
     field: "employees",
