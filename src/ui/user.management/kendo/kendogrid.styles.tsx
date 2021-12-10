@@ -51,6 +51,9 @@ const KendoGridStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     fontSize: "14px",
   },
+  groupCell: {
+    whiteSpace: "pre-wrap",
+  },
 }));
 
 export default KendoGridStyles;
