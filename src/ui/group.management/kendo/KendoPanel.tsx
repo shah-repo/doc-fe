@@ -86,10 +86,11 @@ export function KendoPanel<T extends any>({
     ? JSON.parse(tableCriteria.columnConfig)
     : [];
 
-  const edit = (dataItem: LoadCompanyGroup) => {
+  const edit = (dataItem: any) => {
     // eslint-disable-next-line no-console
-    console.log("EDIT");
-    enableInlineEdit(dataItem);
+    console.log("EDIT ROW");
+    // enableInlineEdit(dataItem);
+    onSelect && onSelect({ dataItem })();
   };
   const addGroup = () => {
     // eslint-disable-next-line no-console
@@ -467,7 +468,7 @@ export function KendoPanel<T extends any>({
         {...dataState}
         onExpandChange={onExpandChange}
         expandField="expanded"
-        // onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
+        onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
         // onColumnResize={columnResize}
         // onColumnReorder={columnReorder}
       >

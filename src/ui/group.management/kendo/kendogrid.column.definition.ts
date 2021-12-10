@@ -2,9 +2,6 @@ import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/Gr
 import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
 import { GroupCell } from "./cell_template/groupCell";
-import { ParentsCell } from "./cell_template/parentsCell";
-import { PermissionsCell } from "./cell_template/permissionsCell";
-import { TagsCell } from "./cell_template/tagsCell";
 
 const columns = [
   {
@@ -21,30 +18,6 @@ const columns = [
     filter: "text",
     groupable: false,
     cell: EmployeesCell,
-  },
-  {
-    field: "permissions",
-    title: "Permissions",
-    show: true,
-    filter: "text",
-    groupable: false,
-    cell: PermissionsCell,
-  },
-  {
-    field: "tags",
-    title: "Tags",
-    show: true,
-    filter: "text",
-    groupable: false,
-    cell: TagsCell,
-  },
-  {
-    field: "parents",
-    title: "Parent Groups",
-    show: true,
-    filter: "text",
-    groupable: false,
-    cell: ParentsCell,
   },
   {
     field: "isOfficial",

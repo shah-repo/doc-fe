@@ -29,12 +29,12 @@ export const CommandCell = (props) => {
       >
         <Text translation="common.edit" />
       </button>
-      <button
+      {/* <button
         className="k-button k-grid-remove-command"
         onClick={() => props.discard(dataItem)}
       >
         <Text translation="common.discard" />
-      </button>
+      </button> */}
     </td>
   );
 };
