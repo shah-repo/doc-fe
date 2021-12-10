@@ -12,7 +12,7 @@ export const CommandCell = (props) => {
         onClick={() => props.update(dataItem)}
         // onClick={() => (isNewItem ? props.add(dataItem) : props.update(dataItem))}
       >
-        <Text translation="common.update" />
+        <Text translation="common.add" />
       </button>
       <button
         className="k-button k-grid-remove-command"
