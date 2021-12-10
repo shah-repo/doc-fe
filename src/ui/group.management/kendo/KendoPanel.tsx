@@ -125,12 +125,11 @@ export function KendoPanel<T extends any>({
         <CommandCell
           {...props}
           discard={discardEditMode}
-          cancel={discardEditMode}
+          cancel={cancel}
           update={update}
           edit={edit}
         />
       );
-
     }
   });
   const initialKendoConfig: State = kendoConfigFromState
@@ -446,6 +445,11 @@ export function KendoPanel<T extends any>({
     if (tableData[index]) {
       tableData[index].inEdit = false;
     }
+    const newDataState = processWithGroups(tableData, dataState);
+    setResultState(newDataState);
+  };
+  const cancel = (dataItem: LoadCompanyGroup) => {
+    tableData.splice(0, 1);
     const newDataState = processWithGroups(tableData, dataState);
     setResultState(newDataState);
   };
