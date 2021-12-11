@@ -37,7 +37,8 @@ import {
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
+import { userManagementActions } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -47,9 +48,13 @@ import {
   TableStyleProps,
 } from "../../components/table/types";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
+import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
 import { CommandCell } from "./cell_template/commandCell";
+import { EmployeesCell } from "./cell_template/employeesCell";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps } from "./types";
 
@@ -130,6 +135,15 @@ export function KendoPanel<T extends any>({
         />
       );
     }
+    if (column.field === "employees" ) {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <EmployeesCell
+          {...props}
+          employees={activeEmployees}
+        />
+      );
+    }
   });
   const initialKendoConfig: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
@@ -206,9 +220,24 @@ export function KendoPanel<T extends any>({
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(tableData, initialKendoConfig)
   );
+  // EMPLOYEES
+  const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
+    DEFAULT_ACTIVE_EMPLOYEES,
+  );
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      setActiveEmployees(data);
+    },
+  });
   // const [defaultDDItem, setDefaultDDItem] = React.useState("Select Type");
   useEffect(() => {
     if (didMount) {
+      asyncGetActiveEmployees.start(
+        getEmployeeAction,
+        { active: true },
+        asyncGetActiveEmployees,
+      );
       if (isEmpty(tableCriteria.queryDict)) {
         if (fireAPI) {
           queryApi();
