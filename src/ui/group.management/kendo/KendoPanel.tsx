@@ -97,7 +97,6 @@ export function KendoPanel<T extends any>({
     console.log("ADD GROUP");
     // Modify Here to change sample or editable data
     const sampleData = {
-      id: tableData[0].id + Math.random() * 10000,
       name: "",
       employees: [],
       isOfficial: false,
