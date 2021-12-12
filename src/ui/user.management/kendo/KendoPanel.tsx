@@ -17,6 +17,7 @@ import {
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
+  GridCellProps,
   GridColumn,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
@@ -52,6 +53,7 @@ import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
+import { CommandCell } from "./cell_template/commandCell";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps } from "./types";
 
@@ -100,7 +102,19 @@ export function KendoPanel<T extends any>({
     if (foundObj) {
       column.show = foundObj.show;
     }
+    if (!column.field && !column.title) {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <CommandCell
+          {...props}
+          edit={edit}
+        />
+      );
+    }
   });
+  const edit = (dataItem: any) => {
+    onSelect && onSelect({ dataItem })();
+  };
   const initialKendoConfig: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : {
@@ -410,7 +424,7 @@ export function KendoPanel<T extends any>({
         {...dataState}
         onExpandChange={onExpandChange}
         expandField="expanded"
-        onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
+        // onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
         // onColumnResize={columnResize}
         // onColumnReorder={columnReorder}
       >
