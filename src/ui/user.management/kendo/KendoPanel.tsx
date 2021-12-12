@@ -104,7 +104,7 @@ export function KendoPanel<T extends any>({
     if (!column.field && !column.title) {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
-        <CommandCell {...props} edit={edit} add={add} editField={editField} />
+        <CommandCell {...props} edit={edit} add={add} cancel={cancel} editField={editField} />
       );
     }
   });
@@ -115,6 +115,12 @@ export function KendoPanel<T extends any>({
   const add = (dataItem: UserManage) => {
     dataItem.inEdit = true;
     console.log("Added Item", dataItem);
+  };
+
+  const cancel = (dataItem: UserManage) => {
+    tableData.splice(0, 1);
+    const newDataState = processWithGroups(tableData, dataState);
+    setResultState(newDataState);
   };
 
   const initialKendoConfig: State = kendoConfigFromState
@@ -446,13 +452,6 @@ export function KendoPanel<T extends any>({
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
               <DocumentInfo numberOfRecords={tableData.length} />
-              <button
-                title="Add new"
-                className="k-button k-primary"
-                onClick={addNew}
-              >
-                Add new
-              </button>
             </Grid>
             <Grid item style={{ display: "flex" }}>
               <EnableDropboxButton
@@ -460,7 +459,7 @@ export function KendoPanel<T extends any>({
                 {...{ dropboxAsync, enableDropboxAction }}
                 disabled={Boolean(isCompanyDropboxEnabled)}
               />
-              <AddEmployeeContainer />
+              <AddEmployeeContainer  addGroup={addNew} />
               <FormControl variant="outlined">
                 <IconButton
                   aria-label="more"
