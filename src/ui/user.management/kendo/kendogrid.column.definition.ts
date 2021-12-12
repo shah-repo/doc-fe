@@ -1,24 +1,28 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { ActiveCell } from "./cell_template/activeCell";
 import { CommandCell } from "./cell_template/commandCell";
+import { EmailCell } from "./cell_template/emailCell";
 import { GroupDropdown } from "./cell_template/groupDropdown";
 import { GroupsCell } from "./cell_template/groupsCell";
+import { NameCell } from "./cell_template/nameCell";
 import { SignedCell } from "./cell_template/signedCell";
 
 const columns = [
   {
-    field: "user.name",
+    field: "user",
     title: "NAME",
     show: true,
     filter: "text",
     groupable: false,
+    cell: NameCell,
   },
   {
-    field: "user.email",
+    field: "user",
     title: "EMAIL",
     show: true,
     filter: "text",
     groupable: false,
+    cell: EmailCell,
   },
   {
     field: "groups",
@@ -36,7 +40,7 @@ const columns = [
     cell: ActiveCell,
   },
   {
-    field: "user.confirmed",
+    field: "user",
     title: "SIGNED UP",
     show: true,
     filterable: false,

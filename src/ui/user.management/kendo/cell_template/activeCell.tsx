@@ -11,7 +11,7 @@ export const ActiveCell = (props) => {
       aria-selected="false"
       data-grid-col-index={props.columnIndex}
     >
-      <span>{active ? "Active" : "Inactive"}</span>
+      {!props.dataItem.inEdit && <span>{active ? "Active" : "Inactive"}</span>}
     </td>
   );
 };

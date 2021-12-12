@@ -37,3 +37,13 @@ export interface TableSelectionProps<T> {
   dataItem: T;
   actionType?: TableColumnActionType;
 }
+
+export interface UserManage {
+  id: number;
+  name?: string;
+  email?: string;
+  groups?: string[];
+  active?: boolean | string;
+  confirmed?: boolean | string;
+  inEdit?: boolean | string;
+}

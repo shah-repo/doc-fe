@@ -55,7 +55,7 @@ import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell_template/commandCell";
 import KendoGridStyles from "./kendogrid.styles";
-import { TablePanelProps } from "./types";
+import { TablePanelProps, UserManage } from "./types";
 
 type Props<T> = TablePanelProps<T>;
 
@@ -73,6 +73,7 @@ export function KendoPanel<T extends any>({
   enableDropboxAction,
   isCompanyDropboxEnabled,
 }: Props<T>) {
+  const editField = "inEdit";
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const styleProps: TableStyleProps = {
@@ -82,8 +83,6 @@ export function KendoPanel<T extends any>({
   const tableCriteria = useSelector(getTableCriteria(tableName));
   const tableData = useSelector(getTableData(tableName));
   const kendoConfigColumn = tableCriteria.columnConfig;
-
-  console.log("tableData", tableData);
   const gridConfiguration = columns ? columns : kendoConfigColumn;
   const processWithGroups = (data: any[], dataState: State) => {
     const newDataState = process(data, dataState);
@@ -105,16 +104,19 @@ export function KendoPanel<T extends any>({
     if (!column.field && !column.title) {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
-        <CommandCell
-          {...props}
-          edit={edit}
-        />
+        <CommandCell {...props} edit={edit} add={add} editField={editField} />
       );
     }
   });
   const edit = (dataItem: any) => {
     onSelect && onSelect({ dataItem })();
   };
+
+  const add = (dataItem: UserManage) => {
+    dataItem.inEdit = true;
+    console.log("Added Item", dataItem);
+  };
+
   const initialKendoConfig: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : {
@@ -129,9 +131,7 @@ export function KendoPanel<T extends any>({
   const setSearchStatus = (state?: LoadCompanyGroup) => {
     dataState.filter = {
       logic: "and",
-      filters: state
-        ? [{ field: "groups", operator: "eq", value: "" }]
-        : [],
+      filters: state ? [{ field: "groups", operator: "eq", value: "" }] : [],
     };
     // setDefaultDDItem("Select Type");
     setDataState(dataState);
@@ -408,6 +408,14 @@ export function KendoPanel<T extends any>({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const addNew = () => {
+    const newDataItem: UserManage = {
+      inEdit: true,
+      id: new Date().getMilliseconds(),
+    };
+    tableData.unshift(newDataItem);
+    setResultState(processWithGroups(tableData, dataState));
+  };
   const tableRenderer = () => (
     <>
       <KendoGrid
@@ -429,16 +437,24 @@ export function KendoPanel<T extends any>({
         // onColumnReorder={columnReorder}
       >
         <GridToolbar>
-          <Grid container spacing={1} justify="space-between" alignItems="center">
+          <Grid
+            container
+            spacing={1}
+            justify="space-between"
+            alignItems="center"
+          >
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
               <DocumentInfo numberOfRecords={tableData.length} />
+              <button
+                title="Add new"
+                className="k-button k-primary"
+                onClick={addNew}
+              >
+                Add new
+              </button>
             </Grid>
-            <Grid
-              item
-              alignItems="center"
-              style={{ display: "flex" }}
-            >
+            <Grid item style={{ display: "flex" }}>
               <EnableDropboxButton
                 shouldDisplayButton={hasDropboxPermission}
                 {...{ dropboxAsync, enableDropboxAction }}

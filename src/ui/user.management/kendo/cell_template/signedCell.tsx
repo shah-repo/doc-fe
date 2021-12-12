@@ -7,7 +7,6 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 
 export const SignedCell = (props) => {
-  const signed = props.dataItem.user.confirmed;
   const intl = useIntl();
   const getResendSignupEmailAction = useActionCreator(
     authActions.resendSignupEmail
@@ -59,16 +58,18 @@ export const SignedCell = (props) => {
       aria-selected="false"
       data-grid-col-index={props.columnIndex}
     >
-      <span>
-        {signed ? (
-          "Signed up"
-        ) : (
-          <button
-            className="k-button k-primary"
-            onClick={() => handleResendEmail(props.dataItem)}
-          >{`Resend signup email`}</button>
-        )}
-      </span>
+      {!props.dataItem.inEdit && (
+        <span>
+          {props.dataItem.user.confirmed ? (
+            "Signed up"
+          ) : (
+            <button
+              className="k-button k-primary"
+              onClick={() => handleResendEmail(props.dataItem)}
+            >{`Resend signup email`}</button>
+          )}
+        </span>
+      )}
     </td>
   );
 };
