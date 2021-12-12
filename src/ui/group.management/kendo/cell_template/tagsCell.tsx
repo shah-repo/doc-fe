@@ -11,7 +11,7 @@ export const TagsCell = (props) => {
       aria-selected="false"
       data-grid-col-index={props.columnIndex}
     >
-      {props.dataItem.inEdit ? <span>{"Type Here"}</span> : <span>{tags}</span>}
+      {props.dataItem.inEdit && props.isOfficial ? <span>{"Type Here"}</span> : <span>{tags}</span>}
     </td>
   );
 };

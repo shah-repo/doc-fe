@@ -11,7 +11,7 @@ export const ParentsCell = (props) => {
       aria-selected="false"
       data-grid-col-index={props.columnIndex}
     >
-      {props.dataItem.inEdit ? (
+      {props.dataItem.inEdit  && props.isOfficial ? (
         <span>{"Type Here"}</span>
       ) : (
         <span>{parents}</span>

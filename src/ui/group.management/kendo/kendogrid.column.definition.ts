@@ -33,7 +33,7 @@ const columns = [
   },
   {
     field: "permissions",
-    title: "Permissions",
+    title: "PERMISSIONS",
     show: true,
     filter: "text",
     groupable: false,
@@ -41,7 +41,7 @@ const columns = [
   },
   {
     field: "tags",
-    title: "Tags",
+    title: "TAGS",
     show: true,
     filter: "text",
     groupable: false,
@@ -49,7 +49,7 @@ const columns = [
   },
   {
     field: "parents",
-    title: "Parent Groups",
+    title: "PARENT GROUPS",
     show: true,
     filter: "text",
     groupable: false,

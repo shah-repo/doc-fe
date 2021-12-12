@@ -61,6 +61,10 @@ import AddGroupContainer from "../add.group/AddGroup.container";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
 import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
+import { GroupCell } from "./cell_template/groupCell";
+import { ParentsCell } from "./cell_template/parentsCell";
+import { PermissionsCell } from "./cell_template/permissionsCell";
+import { TagsCell } from "./cell_template/tagsCell";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps } from "./types";
 
@@ -83,6 +87,7 @@ export function KendoPanel<T extends any>({
     isSelectable: onSelect !== undefined,
   };
   const classes = KendoGridStyles(styleProps);
+  const [Official, setOfficial] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
   const tableData = useSelector(getTableData(tableName));
   const kendoConfigColumn = tableCriteria.columnConfig;
@@ -140,7 +145,7 @@ export function KendoPanel<T extends any>({
       defaultForNewUsers: false,
       name: dataItem.name,
       employees: dataItem.employees,
-      isOfficial: dataItem.isOfficial,
+      isOfficial: Official,
       parents: dataItem.parents,
       permissions: dataItem.permissions,
       tags: dataItem.tags,
@@ -173,6 +178,31 @@ export function KendoPanel<T extends any>({
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <EmployeesCell {...props} employees={activeEmployees} />
+      );
+    }
+
+    if (column.field === "isOfficial") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />
+      );
+    }
+    if (column.field === "permissions") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <PermissionsCell {...props} isOfficial={Official} />
+      );
+    }
+    if (column.field === "parents") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <ParentsCell {...props} isOfficial={Official} />
+      );
+    }
+    if (column.field === "tags") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <TagsCell {...props} isOfficial={Official} />
       );
     }
   });
