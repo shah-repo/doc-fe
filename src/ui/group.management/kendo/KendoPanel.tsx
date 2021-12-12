@@ -15,7 +15,9 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid, GridCellProps, GridColumn,
+  Grid as KendoGrid,
+  GridCellProps,
+  GridColumn,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
@@ -36,9 +38,13 @@ import {
 } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
+import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions } from "../../../state/ducks/userManagement";
-import { GetEmployeeResponse, LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
+import {
+  GetEmployeeResponse,
+  LoadCompanyGroup,
+} from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -104,16 +110,44 @@ export function KendoPanel<T extends any>({
     const sampleData = {
       name: "",
       employees: [],
-      isOfficial: false,
+      parents: [],
+      permissions: [],
+      tags: [],
+      isOfficial: Boolean(),
       inEdit: true,
     };
     tableData.unshift(sampleData);
     setResultState(processWithGroups(tableData, dataState));
   };
-  const update = (dataItem: LoadCompanyGroup) => {
+  // const createGroupAsync = useAsync({
+  //   onSuccess: (response) => {
+  //     console.log("add one Group");
+  //   },
+  // });
+  // const handleCreate = (values: GroupRequestBody) => {
+  //   dispatch(
+  //     groupManagementActions.createGroup(
+  //       toRequestBody(values, [], []),
+  //       createGroupAsync
+  //     )
+  //   );
+  // };
+
+  const update = (dataItem: GroupRequestBody) => {
     // eslint-disable-next-line no-console
     console.log("UPDATE", dataItem);
-    enableInlineEdit(dataItem);
+    const payload = {
+      defaultForNewUsers: false,
+      name: dataItem.name,
+      employees: dataItem.employees,
+      isOfficial: dataItem.isOfficial,
+      parents: dataItem.parents,
+      permissions: dataItem.permissions,
+      tags: dataItem.tags,
+    };
+    console.log("payload", payload);
+    // handleCreate(payload);
+    // enableInlineEdit(dataItem);
   };
   gridConfiguration.columns.forEach((column) => {
     const foundObj = initialColumnsConfig.find(
@@ -135,13 +169,10 @@ export function KendoPanel<T extends any>({
         />
       );
     }
-    if (column.field === "employees" ) {
+    if (column.field === "employees") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
-        <EmployeesCell
-          {...props}
-          employees={activeEmployees}
-        />
+        <EmployeesCell {...props} employees={activeEmployees} />
       );
     }
   });
@@ -222,7 +253,7 @@ export function KendoPanel<T extends any>({
   );
   // EMPLOYEES
   const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
-    DEFAULT_ACTIVE_EMPLOYEES,
+    DEFAULT_ACTIVE_EMPLOYEES
   );
   const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
   const asyncGetActiveEmployees = useAsync<GetEmployeeResponse[]>({
@@ -236,7 +267,7 @@ export function KendoPanel<T extends any>({
       asyncGetActiveEmployees.start(
         getEmployeeAction,
         { active: true },
-        asyncGetActiveEmployees,
+        asyncGetActiveEmployees
       );
       if (isEmpty(tableCriteria.queryDict)) {
         if (fireAPI) {
@@ -454,17 +485,17 @@ export function KendoPanel<T extends any>({
     setAnchorEl(null);
   };
 
-  const enableInlineEdit = (dataItem: LoadCompanyGroup) => {
-    dataItem.inEdit = !dataItem.inEdit;
-    // eslint-disable-next-line no-console
-    console.log("tableData ::", tableData);
-    const index = tableData.findIndex((data) => data.id === dataItem.id);
-    if (tableData[index]) {
-      tableData[index].inEdit = dataItem.inEdit;
-    }
-    const newDataState = processWithGroups(tableData, dataState);
-    setResultState(newDataState);
-  };
+  // const enableInlineEdit = (dataItem: GroupRequestBody) => {
+  //   dataItem.inEdit = !dataItem.inEdit;
+  //   // eslint-disable-next-line no-console
+  //   console.log("tableData ::", tableData);
+  //   const index = tableData.findIndex((data) => data.id === dataItem.id);
+  //   if (tableData[index]) {
+  //     tableData[index].inEdit = dataItem.inEdit;
+  //   }
+  //   const newDataState = processWithGroups(tableData, dataState);
+  //   setResultState(newDataState);
+  // };
 
   const discardEditMode = (dataItem: LoadCompanyGroup) => {
     // eslint-disable-next-line no-console
@@ -504,13 +535,18 @@ export function KendoPanel<T extends any>({
         // onColumnReorder={columnReorder}
       >
         <GridToolbar>
-          <Grid container spacing={1} justify="space-between" alignItems="center">
+          <Grid
+            container
+            spacing={1}
+            justify="space-between"
+            alignItems="center"
+          >
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
               <DocumentInfo numberOfRecords={tableData.length} />
             </Grid>
             <Grid item style={{ display: "flex" }}>
-              {canCreateGroups && <AddGroupContainer addGroup={addGroup}/>}
+              {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
               <FormControl variant="outlined">
                 <IconButton
                   aria-label="more"
