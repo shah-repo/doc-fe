@@ -38,12 +38,12 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
       const approvalMatrixValues = [...formValue.approvalMatrix || []];
       const approvalMatrix = approvalMatrixValues.map((e) => {
-        const categoryTrim = e.docType.category?.trim();
+        const categoryTrim = e.docType?.category?.trim();
         return {
           ...e,
           docType: {
             ...e.docType,
-            acronym: e.docType.acronym.toUpperCase(),
+            acronym: e.docType?.acronym?.toUpperCase(),
             category: categoryTrim ?? "",
           },
         };
