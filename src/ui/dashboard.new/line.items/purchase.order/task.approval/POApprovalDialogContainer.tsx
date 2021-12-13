@@ -1,12 +1,13 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransition } from "../../../../../state/ducks/changeRequest/types";
+import { toastError } from "../../../../components/notifications";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import ApproveDialog from "../../dialogs/transitionDialog/ApproveOrRejectDialog";
+import PoRejectDialog from "../../dialogs/transitionDialog/PoRejectDialog";
 import { PasswordFormValues } from "../../dialogs/transitionDialog/types";
-import { approvalsActions } from "../../../../../state/ducks/approvals";
-import { toastError } from "../../../../components/notifications";
-import ApproveOrRejectDialog from "../../dialogs/transitionDialog/ApproveOrRejectDialog";
 
 interface Props {
   approvalId: string;
@@ -15,6 +16,7 @@ interface Props {
   label: string;
   transitionDialog: any;
   onSuccess?: () => void;
+  type?: string;
 }
 
 const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
@@ -22,6 +24,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   transition,
   buttonProps,
   label,
+  type,
   transitionDialog,
   onSuccess,
 }) => {
@@ -37,18 +40,28 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const onSubmit = (props: PasswordFormValues) => {
     async.start(applyTransition, approvalId, transition, async, props.password);
   };
-
+  const onReject = () => {
+    async.start(applyTransition, approvalId, transition, async, null);
+  };
   return (
-    <ApproveOrRejectDialog
-      onSubmit={onSubmit}
-      asyncState={async.asyncState}
-      buttonProps={buttonProps}
-      transition={transition}
-      label={label}
-      {...{
-        transitionDialog,
-      }}
-    />
+    <>
+      { type && <PoRejectDialog
+        dialog={transitionDialog}
+        message="dashboard.po.reject.alert"
+        onSubmit={onReject}
+        cancelAction={transitionDialog.close}
+      />}
+      { !type && <ApproveDialog
+        onSubmit={onSubmit}
+        asyncState={async.asyncState}
+        buttonProps={buttonProps}
+        transition={transition}
+        label={label}
+        {...{
+          transitionDialog,
+        }}
+      />}
+    </>
   );
 };
 
