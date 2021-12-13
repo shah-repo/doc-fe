@@ -6,7 +6,7 @@ export function initializeDataDog() {
     applicationId: Config.DatadogApplicationId,
     clientToken: Config.DatadogClientToken,
     service: "doc-fe",
-    sampleRate: 100,
+    sampleRate: Config.DatadogSampleRate,
     trackInteractions: true,
     useCrossSiteSessionCookie: true,
     allowedTracingOrigins: [Config.PublicUrl],
