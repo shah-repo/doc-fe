@@ -115,7 +115,39 @@ export function KendoPanel<T extends any>({
   const add = (dataItem: UserManage) => {
     dataItem.inEdit = true;
     console.log("Added Item", dataItem);
+    const payload = {
+      user: {
+        id: dataItem.id,
+        name: dataItem.name,
+        email: dataItem.email,
+      },
+      groups: dataItem.groups,
+    };
+    console.log("payload", payload);
+    // handleCreate(payload); //Error
   };
+  // const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
+
+  // const async = useAsync({
+  //   onSuccess: () => {
+  //     dispatch(
+  //       tableSearchActions.setSearchCriteria(
+  //         {
+  //           ...tableCriteria,
+  //           queryDict: {
+  //             active: true,
+  //           },
+  //         },
+  //         tableName,
+  //       ),
+  //     );
+  //   },
+  // });
+
+  // const handleCreate = (values: AddEmployeeFormValues) => {
+  //   async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
+  // };
+
 
   const cancel = (dataItem: UserManage) => {
     tableData.splice(0, 1);
