@@ -38,6 +38,7 @@ import {
 } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
+import { groupManagementActions } from "../../../state/ducks/groupManagement";
 import { GroupRequestBody } from "../../../state/ducks/groupManagement/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions } from "../../../state/ducks/userManagement";
@@ -124,19 +125,14 @@ export function KendoPanel<T extends any>({
     tableData.unshift(sampleData);
     setResultState(processWithGroups(tableData, dataState));
   };
-  // const createGroupAsync = useAsync({
-  //   onSuccess: (response) => {
-  //     console.log("add one Group");
-  //   },
-  // });
-  // const handleCreate = (values: GroupRequestBody) => {
-  //   dispatch(
-  //     groupManagementActions.createGroup(
-  //       toRequestBody(values, [], []),
-  //       createGroupAsync
-  //     )
-  //   );
-  // };
+  const createGroupAsync = useAsync({
+    onSuccess: (response) => {
+      console.log("add one Group");
+    },
+  });
+  const handleCreate = (values: GroupRequestBody) => {
+    dispatch(groupManagementActions.createGroup(values, createGroupAsync));
+  };
 
   const update = (dataItem: GroupRequestBody) => {
     // eslint-disable-next-line no-console
@@ -151,7 +147,7 @@ export function KendoPanel<T extends any>({
       tags: dataItem.tags,
     };
     console.log("payload", payload);
-    // handleCreate(payload);
+    handleCreate(payload);
     // enableInlineEdit(dataItem);
   };
   gridConfiguration.columns.forEach((column) => {
