@@ -10,7 +10,9 @@ export const ParentsCell = (props) => {
     (group) => group.value !== props.dataItem.id
   );
   const updateParentField = (event: any) => {
-    props.dataItem.parents = event?.target?.value.map((e) => e.value);
+    props.dataItem.parents = event?.target?.value.map((item) => ({
+      id: item?.value || "",
+    }));
   };
 
   return (
