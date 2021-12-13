@@ -1,4 +1,5 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { BooleanFilterCell } from "./cell_template/booleanFilterCell";
 import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
 import { GroupCell } from "./cell_template/groupCell";
@@ -29,6 +30,7 @@ const columns = [
     title: "GROUP TYPE",
     show: true,
     filter: "boolean",
+    filterCell: BooleanFilterCell,
     cell: GroupCell,
   },
   {
@@ -78,7 +80,14 @@ const pagerSettings: GridPagerSettings = {
   previousNext: true,
 };
 
+const booleanFilterCellOptions = [{
+  text: "Official",
+  value: true,
+}, {
+  text: "Unofficial",
+  value: false,
+}];
 const initialDataState: PageState = { skip: 0, take: 25 };
-const gridConfiguration = { columns, pagerSettings, initialDataState };
+const gridConfiguration = { columns, pagerSettings, initialDataState, booleanFilterCellOptions };
 
 export default gridConfiguration;
