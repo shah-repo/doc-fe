@@ -50,7 +50,10 @@ export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSche
   });
 
   return map(fieldsFilteredByType, (field) => {
-    const label = find(sourceSchema, (x) => x.name === field.name)?.label;
+    const label = field.type === "paragraph" ?
+      "Paragraph" :
+      find(sourceSchema, (x) => x.name === field.name)?.label;
+
     return {
       label,
       value: field.name,

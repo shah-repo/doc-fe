@@ -8,7 +8,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLogin;
 
 context.skip("Autosave on add and edit FB fields", () => {
   context("[API]Prepare company", () => {
@@ -36,6 +36,7 @@ context.skip("Autosave on add and edit FB fields", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLogin = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -44,25 +45,16 @@ context.skip("Autosave on add and edit FB fields", () => {
     it("[API]Login admin with autosave tigger shown", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLogin.id });
     });
   });
 
@@ -117,7 +109,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "fb-equipment" });
-      cy.get("input[value=\"preventativeMaintenance\"]").click();
+      cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -173,8 +165,8 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
       cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
-      cy.get("[data-cy=\"editorConfig.approvers\"]").type(`${USERS[1].email }{downarrow}{enter}`);
-      cy.get("[data-cy=\"editorConfig.groups\"]").type("Everyone{downarrow}{enter}");
+      cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
+      cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -218,9 +210,9 @@ context.skip("Autosave on add and edit FB fields", () => {
 
     it("Add Instructions 'MPI'", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).click();
+      cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
-      cy.get("[data-cy=\"instructionsDocument\"]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=\"instructionsDocument\"]").arrowType("AR Form{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });
@@ -230,7 +222,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-      cy.get("[data-cy=\"options\"]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });

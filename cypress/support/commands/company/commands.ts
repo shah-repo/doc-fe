@@ -3,6 +3,7 @@ import faker from "faker";
 import { Company } from "../../../../src/state/ducks/company/types";
 import { addTestContext } from "../../../utils/context/addTestContext";
 import { HEX2RGB } from "../../../utils/context/converers";
+import { ICreateCompanyBootstrap } from "../../commands";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -12,49 +13,6 @@ const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 export { };
 // We need this interfaces for Company Bootstrap, do not remove
-interface IUser {
-  email: string;
-  name: string;
-}
-//
-interface IfieldsConfig{
-  [key: string]: {
-    visible: boolean;
-    required?: boolean;
-    label?: string;};
-}
-
-interface IdocumentTypeDto {
-  documentTypeName: string;
-  documentTypeAcronym: string;
-  isQms?: boolean;
-  group: string;
-  privateNumberPool?: boolean;
-  startingNumber?: number;
-  needsSignature?: boolean;
-  category?: string;
-  schema?: any;
-  fieldsConfig?: IfieldsConfig;
-  canRedLine?: boolean;
-}
-
-export interface ICreateCompanyBootstrap {
-  name: string;
-  companyAcronym: string;
-  companyAdminEmail: string;
-  importerEmail: string;
-  slackIntegrationEnabled: boolean;
-  helloSignIntegrationEnabled: boolean;
-  helloSignTestMode: boolean;
-  numOfRevStages: number;
-  numOfDocDigits: number;
-  users: IUser[];
-  documentTypes: IdocumentTypeDto[];
-  whiteLabeling?: any;
-  addresses?: string[];
-  remoteValidatorBundleName: string;
-  acctCodes?: string[];
-}
 
 declare global {
   namespace Cypress {
@@ -72,10 +30,6 @@ declare global {
         employeeId: string;
         sessionId: string;
         payload: any;}): Chainable<Subject>;
-      cmpAdminUpdateCompany(params: {
-        companyId: string;
-        sessionId: string;
-        payload: Partial<Company>;}): Chainable<Subject>;
       cmpSelectCompany(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpCompanyDoesntExist(params: { name: string; multiple: boolean }): Chainable<Subject>;
       cmpSelectCompanyAlreadyLoggedIn(params: { name: string; multiple: boolean }): Chainable<Subject>;
@@ -101,7 +55,6 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
   specFilePath: string;
 }) => {
   const { payload, sessionId, specFilePath } = params;
-
   const companyNumber = (Math.abs(CRC32.str(specFilePath)) + Math.round(Math.random() * 100000)) % 100000;
   const companyName = `${capitalize(faker.commerce.color())} ${faker.company.companyName()} ${companyNumber}`;
   const acronym = companyName.match(/[A-Z]/g)?.join("");
@@ -167,18 +120,13 @@ Cypress.Commands.add("cmpCreateCompany", (params: {
       },
     },
   };
-  const body: ICreateCompanyBootstrap = {
-    ...bodyDefaults,
-    ...payload,
-  };
-  cy.request({
-    method: "POST",
-    url: `${CONFIG.BE_URL}/api/v1/company/bootstrap`,
-    body,
-    headers: {
-      Authorization: `bearer_admin ${sessionId}`,
-    },
-  }).then((response) => response.body);
+
+  cy.createCompany({
+    payload: {
+      ...bodyDefaults,
+      ...payload,
+    }, sessionId,
+  });
 });
 
 Cypress.Commands.add("cmpUpdateCompany", (
@@ -221,22 +169,6 @@ Cypress.Commands.add("cmpTurnOnAutosave", () => {
   cy.get("[name=\"toggleAutosave\"]").check();
 });
 
-Cypress.Commands.add("cmpAdminUpdateCompany", (
-  params: {
-    companyId: string;
-    sessionId: string;
-    payload: Partial<Company>;
-  }) => {
-  cy.request({
-    method: "PATCH",
-    url: `${CONFIG.BE_URL}/api/v1/company/${params.companyId}`,
-    body: params.payload,
-    headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
-    },
-  }).then((response) => response.body);
-});
-
 Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: boolean }) => {
   if (params.multiple) {
     cy.wrapWithWaitOnApiCalls([
@@ -244,11 +176,18 @@ Cypress.Commands.add("cmpSelectCompany", (params: { name: string; multiple: bool
       CyRoutes.SessionDetails,
       CyRoutes.IOTCredentials,
     ], () => {
-      cy.get("#root").contains(params.name).click();
+      cy.get("#root").contains(params.name).arrowClick();
     });
-    cy.wait(1500);
     addTestContext("companyName", params.name);
   }
+  cy.get("body").then(($body) => {
+    const scheduledForDeleteAlertText = "This company tenant is scheduled to be deleted. If there are" +
+    " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com";
+    const scheduledForDeleteAlert = $body.find("div.Toastify__toast--success>div>div");
+    if (scheduledForDeleteAlert && scheduledForDeleteAlert.text() === scheduledForDeleteAlertText) {
+      cy.get("button.Toastify__close-button--success").arrowClick();
+    }
+  });
 });
 
 Cypress.Commands.add("cmpCompanyDoesntExist", (params: { name: string; multiple: boolean }) => {
@@ -263,9 +202,9 @@ Cypress.Commands.add("cmpSelectCompanyAlreadyLoggedIn", (params: { name: string;
       CyRoutes.IOTCredentials,
       CyRoutes.CompanyMine,
     ], () => {
-      cy.get("#root").contains(params.name).click();
+      cy.get("#root").contains(params.name).arrowClick();
     });
-    cy.wait(500);
+
     addTestContext("companyName", params.name);
   }
 });
@@ -277,10 +216,11 @@ Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSo
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"document.revision.create\"]").click();
+    cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
-  cy.wait(3000);
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
@@ -288,7 +228,11 @@ Cypress.Commands.add("cmpVerifyNoPendingActions", () => {
 });
 
 Cypress.Commands.add("cmpClickCreateApprovalRequest", () => {
-  cy.get("[data-cy=\"change.request.create\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+    cy.get("[data-cy=\"change.request.create\"]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 

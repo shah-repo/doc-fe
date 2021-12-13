@@ -102,8 +102,9 @@ Cypress.Commands.add("dlVerifyEffectiveDateIsPresentOnFirstDocument", () => {
 
 Cypress.Commands.add("dlClearFilters", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("button[data-cy=clearFilter]").click();
+    cy.get("button[data-cy=clearFilter]").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType }) => {
@@ -112,8 +113,9 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=docId]").type(params.docId).wait(500);
+    cy.get("input[name=docId]").arrowType(params.docId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
@@ -126,8 +128,9 @@ Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=displayRevision]").type(params.revision);
+    cy.get("input[name=displayRevision]").arrowType(params.revision).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
@@ -140,8 +143,9 @@ Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
 
 Cypress.Commands.add("dlFilterByDocTitle", (params: {docTitle: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#name").type(params.docTitle);
+    cy.get("#name").arrowType(params.docTitle).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) => {
@@ -154,9 +158,10 @@ Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) =
 
 Cypress.Commands.add("dlFilterByType", (params: {type: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#mui-component-select-documentTypeId").click().wait(500);
-    cy.get("ul[role=listbox]>li").contains(params.type).click().wait(500);
+    cy.get("#mui-component-select-documentTypeId").arrowClick();
+    cy.get("ul[role=listbox]>li").contains(params.type).arrowClick().wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
@@ -169,8 +174,9 @@ Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=owner]").type(params.owner).wait(500);
+    cy.get("input[name=owner]").arrowType(params.owner).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
@@ -183,8 +189,9 @@ Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=crId]").type(params.arId).wait(500);
+    cy.get("input[name=crId]").arrowType(params.arId).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
@@ -196,10 +203,11 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-displayStatus\"]").click().wait(500);
+  cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDisplayStatus, () => {
-    cy.get("ul[role=listbox]>li").contains(params.status).click();
+    cy.get("ul[role=listbox]>li").contains(params.status).arrowClick().wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {
@@ -212,9 +220,10 @@ Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {
 
 Cypress.Commands.add("dlFilterByEffectiveDate", (params: {effectiveDate: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#mui-component-select-effectiveDate").click().wait(500);
-    cy.get("ul[role=listbox]>li").contains(params.effectiveDate).click().wait(500);
+    cy.get("#mui-component-select-effectiveDate").arrowClick();
+    cy.get("ul[role=listbox]>li").contains(params.effectiveDate).arrowClick().wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByEffectiveDate", (params: {effectiveDate: string }) => {
@@ -248,6 +257,8 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
-    cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div").click();
+    cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });

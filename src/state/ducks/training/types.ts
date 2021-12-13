@@ -20,6 +20,8 @@ export interface TrainingRecord {
   isRefreshed: boolean;
   isValid: boolean;
   trainingPlan?: TrainingPlan;
+  documentRevision: Partial<DocumentRevision>;
+  trId: string;
 }
 
 export interface TrainingListData {
@@ -28,6 +30,7 @@ export interface TrainingListData {
   createdAt: Date;
   dueOn: Date;
   completedAt: Date;
+  trId: string;
 }
 
 export interface TrainingRecordQuery {
@@ -36,11 +39,29 @@ export interface TrainingRecordQuery {
   docId: string;
   docRevTitle: string;
   userName: string;
-  createdAtAfter: Date;
-  dueOn: Date;
-  completedAtAfter: Date;
+  createdAtAfter?: Date;
+  dueOn?: Date;
+  completedAtAfter?: Date;
   tcId: string;
+  dueOnBefore?: Date;
+  trId: string;
+  documentRevision?: DocumentRevision;
+  trainingPlan?: TrainingPlan;
+  completedAt?: Date;
+  id: string;
 }
+
+export const DEFAULT_TRAINING_RECORD_QUERY: TrainingRecordQuery = {
+  isValid: true,
+  revision: 1,
+  docId: "",
+  docRevTitle: "",
+  userName: "",
+  tcId: "",
+  trId: "",
+  id: "",
+};
+
 
 interface TrainingPlan {
   id: string;

@@ -25,6 +25,7 @@ import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
+import "./commands/company.replica/commands";
 import "./commands/company/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
@@ -41,6 +42,7 @@ import "./commands/receivable/commands";
 import "./commands/records/commands";
 import "./commands/status/commands";
 import "./commands/suppliers/commands";
+import "./commands/training/commands";
 import "./commands/user.management/commands";
 import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:

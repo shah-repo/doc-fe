@@ -1,33 +1,44 @@
-import { Box } from "@material-ui/core";
+import { Avatar, Box } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
 import { Nullable } from "../../../../state/ducks/common/types";
 import AvatarUploadContainer from "../../common/avatar.field/container";
 import styles from "./avatar.styles";
 
 interface OwnProps {
-  src: string;
+  avatar: Nullable<string>;
   showEditUser: boolean;
   previewAvatar: string;
   setPreviewAvatar: (value: string) => void;
   setFile: (value: Nullable<File>) => void;
+  userInitials: string;
 }
 
 type Props = OwnProps;
 
 const AvatarPresenter: React.FunctionComponent<Props> = ({
-  src,
+  avatar,
   showEditUser,
   previewAvatar,
   setPreviewAvatar,
   setFile,
+  userInitials,
 }) => {
   const classes = styles();
+  const bgColor = useSelector(authSelectors.getAvatarInitialColor);
 
   const avatarRenderer = () => (
     <Box zIndex="modal" position="absolute" alignSelf="baseline">
-      <img src={previewAvatar || src} className={classes.image} alt="Profile" />
+      {avatar ?
+        <img src={previewAvatar || avatar } className={classes.image} alt="Profile" /> :
+        <Avatar style={{ backgroundColor: `${ bgColor }` }} className={classes.image} data-cy="header-userInitials">
+          {userInitials}
+        </Avatar>
+      }
     </Box>
   );
+
   return (
     <Box display="flex" justifyContent="center" mt={-16}>
       <Box

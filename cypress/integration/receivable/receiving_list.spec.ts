@@ -13,7 +13,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let purchaseOrderDocumentType;
@@ -76,10 +75,8 @@ context("Receivable list test", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -369,15 +366,8 @@ context("Receivable list test", () => {
 
   context("Login user", () => {
     context("Login user when he doesn't have privileges", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
@@ -407,15 +397,8 @@ context("Receivable list test", () => {
     });
 
     context("Login user when he does have privileges", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
     });
 
@@ -476,9 +459,7 @@ context("Receivable list test", () => {
     });
 
     it("Add approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {

@@ -127,18 +127,19 @@ Cypress.Commands.add("grpDeleteGroup", (params: {
 
 Cypress.Commands.add("grpNavigateToGroupManagement", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GroupsGet], () => {
-    cy.get("[data-cy=\"navigation.groupManagement\"]").click();
+    cy.get("[data-cy=\"navigation.groupManagement\"]").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {
-  cy.get("#Group-addTags").type(params.tag);
-  cy.get("#Group-addTags>div>div>div[id^=react-select]").contains(params.tag).click();
+  cy.get("#Group-addTags").arrowType(params.tag);
+  cy.get("#Group-addTags>div>div>div[id^=react-select]").contains(params.tag).arrowClick();
 });
 
 Cypress.Commands.add("grpAddPermission", (params: {permission: string}) => {
-  cy.get("#Group-permissions").type(params.permission);
-  cy.get("#Group-permissions>div>div>div[id^=react-select]").contains(params.permission).click();
+  cy.get("#Group-permissions").arrowType(params.permission);
+  cy.get("#Group-permissions>div>div>div[id^=react-select]").contains(params.permission).arrowClick();
 });
 
 Cypress.Commands.add("grpVerifyGroupNameIsPresentOnFirstGroup", () => {
@@ -166,7 +167,7 @@ Cypress.Commands.add("grpSetNameFilter", (params: {name: string}) => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.GroupsGet,
     () => {
-      cy.get("#groupName").type(params.name);
+      cy.get("#groupName").arrowType(params.name);
     });
 });
 
@@ -174,7 +175,7 @@ Cypress.Commands.add("grpSetMembersFilter", (params: {member: string}) => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.GroupsGet,
     () => {
-      cy.get("#userName").type(params.member);
+      cy.get("#userName").arrowType(params.member);
     });
 });
 
@@ -182,8 +183,8 @@ Cypress.Commands.add("grpSetTypeFilter", (params: {type: string}) => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.GroupsGet,
     () => {
-      cy.get("#mui-component-select-isOfficial").click();
-      cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
+      cy.get("#mui-component-select-isOfficial").arrowClick();
+      cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).arrowClick();
     });
 });
 
@@ -191,7 +192,7 @@ Cypress.Commands.add("grpClearFilter", (params: { name: string }) => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.GroupsGetClearFilter,
     () => {
-      cy.get("#clearFilter").click();
+      cy.get("#clearFilter").arrowClick();
     });
 });
 
@@ -250,101 +251,103 @@ Cypress.Commands.add("grpCheckIfTypeFilterIsSet", (params: { isOfficial: boolean
 });
 
 Cypress.Commands.add("grpNavigateToDashboard", () => {
-  cy.get("[data-cy=\"navigation.dashboard\"]").click();
+  cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
 });
 
 Cypress.Commands.add("grpCheckIfGroupTypeExists", (params: { type: string }) => {
-  cy.get("#mui-component-select-isOfficial").click();
+  cy.get("#mui-component-select-isOfficial").arrowClick();
   cy.get("#menu-isOfficial>div>ul>li>span").should("contain.text", params.type);
-  cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).click();
+  cy.get("#menu-isOfficial>div>ul>li>span").contains(params.type).arrowClick();
 });
-Cypress.Commands.add("grpClickAddGroup", () => cy.get("button[data-cy=\"Group-openDialog\"]").click());
+Cypress.Commands.add("grpClickAddGroup", () => cy.get("button[data-cy=\"Group-openDialog\"]").arrowClick());
 
 Cypress.Commands.add("grpSelectOfficial", () => {
-  cy.get("#Group-officialOption").click();
+  cy.get("#Group-officialOption").arrowClick();
 });
 
 Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
-  cy.get(`[data-cy="Group-groupName"]`).type(params.name);
+  cy.get(`[data-cy="Group-groupName"]`).arrowType(params.name);
 });
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
-  cy.get("#Group-members").type(params.name);
-  cy.get("#Group-members>div>div>div[id^=react-select]").contains(params.name).click();
+  cy.get("#Group-members").arrowType(params.name);
+  cy.get("#Group-members>div>div>div[id^=react-select]").contains(params.name).arrowClick();
 });
 
 Cypress.Commands.add("grpRemoveUser", (params: { name: string }) => {
-  cy.xpath(`//div[@id="Group-members"]//div[text()="${params.name}"]/../div[2]`).click();
+  cy.xpath(`//div[@id="Group-members"]//div[text()="${params.name}"]/../div[2]`).arrowClick();
 });
 
 Cypress.Commands.add("grpSaveGroup", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GroupsPost, CyRoutes.GroupsGet], () => {
-    cy.get("#Group-createGroup").click();
+    cy.get("#Group-createGroup").arrowClick();
   });
-  cy.get("#DialogContent-close").click();
+  cy.get("#DialogContent-close").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
-    cy.get("#Group-createGroup").click();
+    cy.get("#Group-createGroup").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
-    cy.get("#clearFilter").click();
+    cy.get("#clearFilter").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
-    cy.get("#groupName").type(params.name);
+    cy.get("#groupName").arrowType(params.name).wait(500);
   });
-  cy.wait(1000);
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+  cy.listLoadingElementShouldNotExist();
+  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).arrowClick();
   cy.grpCloseDialog();
 });
 
 Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
-    cy.get("#clearFilter").click();
-    cy.wait(1000);
+    cy.get("#clearFilter").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsGet, () => {
-    cy.get("#groupName").type(params.name);
-    cy.wait(1000);
+    cy.get("#groupName").arrowType(params.name).wait(500);
   });
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupGet, () => {
-    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).click();
+    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.name).arrowClick();
   });
 });
 
 Cypress.Commands.add("grpCloseDialog", () => {
-  cy.get("#DialogContent-close").click();
+  cy.get("#DialogContent-close").arrowClick();
 });
 
 Cypress.Commands.add("grpSelectUnofficial", () => {
-  cy.get("#Group-unofficialOption").click();
+  cy.get("#Group-unofficialOption").arrowClick();
 });
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {
-    cy.get(`#Group-members`).click();
-    cy.wait(1000);
-    cy.get("div[id^=react-select]").contains(name).click();
+    cy.get(`#Group-members`).arrowClick();
+    cy.wait(500);
+    cy.get("div[id^=react-select]").contains(name).arrowClick();
+    cy.get("h4").contains("Members").click();
   });
 });
 
 Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
   groups.forEach((name) => {
-    cy.get(`#Group-addParentGroups`).type(`${name}{enter}`);
+    cy.get(`#Group-addParentGroups`).arrowType(`${name}{enter}`);
   });
 });
 
-Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").click());
+Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").arrowClick());
 
 Cypress.Commands.add("grpAddGroup", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
-    cy.get("[data-cy=\"Group-createGroup\"]").click();
+    cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
 });

@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let docId;
 let loginResponse;
-let multipleCompanies;
 let createdCompany;
 let secondEmployee;
 let clinicalProtocolType;
@@ -86,10 +85,8 @@ context("Validators tests", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -139,11 +136,9 @@ context("Validators tests", () => {
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -172,15 +167,8 @@ context("Validators tests", () => {
   });
 
   context("Log in user, select company and open 'Create Document'", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
 
     context("Open 'Create Document'", () => {
@@ -209,7 +197,7 @@ context("Validators tests", () => {
 
     it("Fill in document type as Clinical Protocol", () => {
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
-      cy.get("h6").contains("Document Type").click();
+      cy.get("h6").contains("Document Type").arrowClick();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -238,16 +226,6 @@ context("Validators tests", () => {
   context("Tries to submit empty form", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
-    });
-
-    it("Shows error 'required’ below title field", () => {
-      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
-    it("Shows error 'required’ below description field", () => {
-      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
     });
 
     it("Shows error 'required’ below 'document type' field", () => {
@@ -289,8 +267,8 @@ context("Validators tests", () => {
 
   context("Adds Output Document Type and revision Stage", () => {
     it("Fill in output document type as Clinical Protocol", () => {
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").click();
-      cy.get("[data-cy=\"field-outputDocumentTypes\"]").type("Clinical Protocol{enter}");
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
+      cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowType("Clinical Protocol{enter}");
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -323,7 +301,7 @@ context("Validators tests", () => {
 
     it(`Make 'Order' field required`, () => {
       SystemRequirement("FB-0220");
-      cy.get("[data-cy=\"fb-control-required\"]").click();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
     });
 
     it("Add Checkbox Group", () => {
@@ -359,12 +337,12 @@ context("Validators tests", () => {
 
     it("Mark as 'Required If In'", () => {
       SystemRequirement("FB-0240");
-      cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").click();
+      cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").arrowClick();
     });
 
     it(`Select 'Order' field`, () => {
       SystemRequirement("FB-0240");
-      cy.get("[data-cy=\"validators.required_if_in.name\"]").type(`Order{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_if_in.name\"]").arrowType(`Order{downarrow}{enter}`);
     });
 
     it(`Check required if 'First' 'Second'`, () => {
@@ -387,7 +365,7 @@ context("Validators tests", () => {
     });
 
     it(`Give label to 'Text Field' as '${requiredFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredFieldLabel);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredFieldLabel);
     });
 
     it("Open validations", () => {
@@ -395,7 +373,7 @@ context("Validators tests", () => {
     });
 
     it(`Make '${requiredFieldLabel}' field required`, () => {
-      cy.get("[data-cy=\"fb-control-required\"]").click();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
     });
 
     it("Add text field", () => {
@@ -418,7 +396,7 @@ context("Validators tests", () => {
     });
 
     it(`Give label to 'Text Field' as '${requiredIfFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredIfFieldLabel);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredIfFieldLabel);
     });
 
     it("Open validations", () => {
@@ -427,16 +405,16 @@ context("Validators tests", () => {
 
     it("Mark as 'Required If'", () => {
       SystemRequirement("FB-0230");
-      cy.get("[data-cy=\"fb-control-required_if:anotherfield,value\"]").click();
+      cy.get("[data-cy=\"fb-control-required_if:anotherfield,value\"]").arrowClick();
     });
 
     it(`Select '${requiredFieldLabel}' field`, () => {
       SystemRequirement("FB-0230");
-      cy.get("[data-cy=\"validators.required_if.name\"]").type(`${requiredFieldLabel}{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_if.name\"]").arrowType(`${requiredFieldLabel}{downarrow}{enter}`);
     });
 
     it(`Type value as '${requiredIfFieldValue}'`, () => {
-      cy.get("[data-cy=\"validators.required_if.value\"]").type(requiredIfFieldValue);
+      cy.get("[data-cy=\"validators.required_if.value\"]").arrowType(requiredIfFieldValue);
     });
 
     it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' 
@@ -448,7 +426,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
   context("Add 'Required With' validation on 'Text Field'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
     });
 
     it("Create 'Text Field'", () => {
@@ -456,7 +434,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it(`Give label to 'Text Field' as '${requiredWithFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredWithFieldLabel);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredWithFieldLabel);
     });
 
     it("Open validations", () => {
@@ -465,11 +443,11 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
     it("Mark as 'Required With'", () => {
       SystemRequirement("FB-0250");
-      cy.get("[data-cy=\"fb-control-required_with:foo,bar,...\"]").click();
+      cy.get("[data-cy=\"fb-control-required_with:foo,bar,...\"]").arrowClick();
     });
 
     it(`Select 'Required doctypes' field`, () => {
-      cy.get("[data-cy=\"validators.required_with.name\"]").type(`Required doctypes{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_with.name\"]").arrowType(`Required doctypes{downarrow}{enter}`);
     });
 
     it(`Make '${requiredWithFieldLabel}' field required, if 'Required doctypes' 
@@ -481,7 +459,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
   context("Add 'Required Without' validation on 'Text Field'", () => {
     it("Open add field dialogue", () => {
-      cy.get("button[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
     });
 
     it("Create 'Text Field'", () => {
@@ -489,7 +467,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it(`Give label to 'Text Field' as '${requiredWithoutFieldLabel}'`, () => {
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").type(requiredWithoutFieldLabel);
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredWithoutFieldLabel);
     });
 
     it("Open validations", () => {
@@ -498,13 +476,13 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
 
     it("Mark as 'Required Without'", () => {
       SystemRequirement("FB-0260");
-      cy.get("[data-cy=\"fb-control-required_without:foo,bar,...\"]").click();
+      cy.get("[data-cy=\"fb-control-required_without:foo,bar,...\"]").arrowClick();
     });
 
     it(`Select '${requiredWithFieldLabel}' field`, () => {
       SystemRequirement("FB-0260");
-      cy.get("[data-cy=\"validators.required_without.name\"]").click();
-      cy.get("ul[role=listbox]>li").contains(requiredWithFieldLabel).click();
+      cy.get("[data-cy=\"validators.required_without.name\"]").arrowClick();
+      cy.get("ul[role=listbox]>li").contains(requiredWithFieldLabel).arrowClick();
     });
 
     it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
@@ -516,7 +494,7 @@ field is empty: Add text field`, () => {
 
   context("Add 'Required Document Status' validation on 'Autocomplete'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
     });
 
     it("Create 'Autocomplete'", () => {
@@ -524,11 +502,11 @@ field is empty: Add text field`, () => {
     });
 
     it(`Give label to 'Autocomplete' as '${requiredDocStatusFieldLabel}'`, () => {
-      cy.get("[data-cy=\"label\"]").type(requiredDocStatusFieldLabel);
+      cy.get("[data-cy=\"label\"]").arrowType(requiredDocStatusFieldLabel);
     });
 
     it("Select 'Document revision' as options", () => {
-      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
     });
 
     it("Open validations", () => {
@@ -537,12 +515,12 @@ field is empty: Add text field`, () => {
 
     it("Mark as 'Required Document Status'", () => {
       SystemRequirement("FB-0270");
-      cy.get("[data-cy=\"fb-control-required_document_status:value\"]").click();
+      cy.get("[data-cy=\"fb-control-required_document_status:value\"]").arrowClick();
     });
 
     it("Select Released status", () => {
       SystemRequirement("FB-0270");
-      cy.get("[data-cy=\"validators.required_document_status.name\"]").type("Draft{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_status.name\"]").arrowType("Draft{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
@@ -553,7 +531,7 @@ field is empty: Add text field`, () => {
 
   context("Add 'Required Document Type' validation on 'Autocomplete'", () => {
     it("Open add field dialogue", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().click({ force: true });
+      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
     });
 
     it("Create 'Autocomplete'", () => {
@@ -561,11 +539,11 @@ field is empty: Add text field`, () => {
     });
 
     it(`Give label to 'Autocomplete' as '${requiredDocTypeFieldLabel}'`, () => {
-      cy.get("[data-cy=\"label\"]").type(requiredDocTypeFieldLabel);
+      cy.get("[data-cy=\"label\"]").arrowType(requiredDocTypeFieldLabel);
     });
 
     it("Select 'Document revision' as options", () => {
-      cy.get("[data-cy=\"optionId\"]").type("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
     });
 
     it("Open validations", () => {
@@ -574,12 +552,12 @@ field is empty: Add text field`, () => {
 
     it("Mark as 'Required Document Type'", () => {
       SystemRequirement("FB-0280");
-      cy.get("[data-cy=\"fb-control-required_document_type:value\"]").click();
+      cy.get("[data-cy=\"fb-control-required_document_type:value\"]").arrowClick();
     });
 
     it("Select Clinical Protocol", () => {
       SystemRequirement("FB-0280");
-      cy.get("[data-cy=\"validators.required_document_type.name\"]").type("Clinical Protocol{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_type.name\"]").arrowType("Clinical Protocol{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
@@ -609,7 +587,7 @@ field is empty: Add text field`, () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]", { timeout: 50 * 1000 }).click();
+      cy.drCreateNewDocumentFromForm();
     });
   });
 
@@ -617,22 +595,11 @@ field is empty: Add text field`, () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
-
-    it("Shows error 'required’ below title field", () => {
-      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
-    it("Shows error 'required’ below description field", () => {
-      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
   });
 
   context("Fills in Title and Description", () => {
     it("Type a title", () => {
-      cy.get("#Title-field", { timeout: 10000 }).type("Doc Title{enter}");
+      cy.get("#Title-field").arrowType("Doc Title{enter}");
     });
 
     it("Type a description", () => {
@@ -644,7 +611,7 @@ field is empty: Add text field`, () => {
     it("saving the document", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
     });
   });
@@ -667,7 +634,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Cancel release of document", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]", { timeout: 20 * 1000 }).click();
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]", { timeout: 20 * 1000 }).arrowClick();
     });
   });
 
@@ -710,8 +677,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.get(`[data-cy^="required-doctypes"]`).click();
-      cy.get("ul[role=listbox]>li").contains("Equipment").click();
+      cy.get(`[data-cy^="required-doctypes"]`).arrowClick();
+      cy.get("ul[role=listbox]>li").contains("Equipment").arrowClick();
     });
   });
 
@@ -721,12 +688,12 @@ field is empty: Add text field`, () => {
     });
 
     it(`Type '${requiredIfFieldValue}' in '${requiredFieldLabel}' field`, () => {
-      cy.get(`[data-cy^='${requiredFieldSelector}']`).type(requiredIfFieldValue);
+      cy.get(`[data-cy^='${requiredFieldSelector}']`).arrowType(requiredIfFieldValue);
       cy.unClick();
     });
 
     it("Should show error for 'required if' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -737,7 +704,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required' custom text field", () => {
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).type("added");
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).arrowType("added");
     });
   });
 
@@ -748,8 +715,8 @@ field is empty: Add text field`, () => {
     });
 
     it(`Remove type from ${requiredIfInFieldLabel}`, () => {
-      cy.get("div[name^=\"required-doctypes\"]").click();
-      cy.get("div[name^=\"required-doctypes\"] svg").first().click();
+      cy.get("div[name^=\"required-doctypes\"]").arrowClick();
+      cy.get("div[name^=\"required-doctypes\"] svg").first().arrowClick();
     });
 
     it(`${requiredWithFieldLabel} field should not show error when 'Required types' don't value`, () => {
@@ -759,12 +726,12 @@ field is empty: Add text field`, () => {
 
     it("Select 'Required doctypes", () => {
       SystemRequirement("FB-0250");
-      cy.wait(3000);
-      cy.get(`[data-cy^="required-doctypes-"]`).type("Equipment{downarrow}{enter}");
+
+      cy.get(`[data-cy^="required-doctypes-"]`).arrowType("Equipment{downarrow}{enter}");
     });
 
     it("Should show error for 'required with' field", () => {
-      cy.wait(1000);
+
       cy.get(`[data-cy^='${requiredWithFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -775,7 +742,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Fill in 'required with' custom text field", () => {
-      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).arrowType("California");
       cy.unClick();
     });
 
@@ -801,14 +768,14 @@ field is empty: Add text field`, () => {
     });
 
     it(`Fill in '${requiredWithFieldLabel}' field only`, () => {
-      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).type("California");
+      cy.get(`[data-cy^='${requiredWithFieldSelector}']`).arrowType("California");
     });
   });
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type("AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType("AR Form{downarrow}{enter}");
       });
     });
 
@@ -824,7 +791,7 @@ field is empty: Add text field`, () => {
     it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).type(`${documentRevisionName}{downarrow}{enter}`);
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType(`${documentRevisionName}{downarrow}{enter}`);
       });
     });
   });
@@ -832,23 +799,20 @@ field is empty: Add text field`, () => {
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type("AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType("AR Form{downarrow}{enter}").wait(500);
+        cy.unClick();
       });
     });
 
     it("Should show error for 'Incorrect document type' field", () => {
-      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
-        const errorBlock = elem.offsetParent().siblings("p");
-
-        cy.wrap(errorBlock)
-          .should("have.text", `Incorrect document type.`);
-      });
+      cy.get(`[name^='${requiredDocTypeFieldSelector}']`).parent().siblings("p")
+        .should("have.text", `Incorrect document type.`);
     });
 
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).type(`${csDocTitle}{downarrow}{enter}`);
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType(`${csDocTitle}{downarrow}{enter}`);
       });
     });
   });

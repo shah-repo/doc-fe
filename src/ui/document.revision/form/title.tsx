@@ -18,7 +18,7 @@ const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
   ...props
 }) => {
-  const { isVisible, label, tooltipConfig, validation: validators } = useTitle(documentTypeId);
+  const { isVisible, label, tooltipConfig } = useTitle(documentTypeId);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const options = useMemo(
     () =>
@@ -38,7 +38,6 @@ const Title: React.FunctionComponent<Props> = ({
     <CustomLabelTooltip {...{ tooltipConfig }}>
       <CreatableField
         name="name"
-        validate={validators}
         creatableProps={{ id: "Title-field" }}
         isDisabled={props.disabled}
         {...{ options, label }}

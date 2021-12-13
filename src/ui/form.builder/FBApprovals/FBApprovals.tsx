@@ -47,7 +47,8 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         withState
         gutter={false}
         multiple={true}
-        {...{ disabled, renderOption, loading, autosave }}
+        autosave={false}
+        {...{ disabled, renderOption, loading }}
       />
       <Box display="flex" flexWrap="wrap" my={2}>
         <FBMapWrapper<Record<string, FBRequiredApprover>> collection={groups}>
@@ -78,7 +79,9 @@ const FBApprovals: React.FunctionComponent<FBApprovalsProps> = ({
         {(approval: FBInlineApprovalBody, index) => {
           const isApproved = isDocumentRevisionApproved(approval.status);
           return (
-            <Box>
+            <Box
+              data-cy={isApproved ? "approved-" + approval.approverName :
+                "not-approved-" + approval.approver?.user.name}>
               <Box
                 key={`fb-ia-info-${approval.id}-${index}`}
                 pb={currentUser === approval.approver?.user.id ? 0 : 0.6}

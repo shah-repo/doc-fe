@@ -7,7 +7,9 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
+let employeeLoginThird;
+let employeeLoginFourth;
 
 context("Document Operators Access Test", () => {
   before(() => {
@@ -69,6 +71,9 @@ context("Document Operators Access Test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeLoginThird = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          employeeLoginFourth = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
           done();
         });
       });
@@ -77,25 +82,16 @@ context("Document Operators Access Test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -199,7 +195,7 @@ context("Document Operators Access Test", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-      cy.wait(3000);
+
     });
 
     it("'Approve and Release' the document", () => {
@@ -210,11 +206,7 @@ context("Document Operators Access Test", () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev,
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Turn off autosave", () => {
@@ -230,7 +222,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Choose an existing part from the list of available parts", () => {
-      cy.get("[data-cy=\"childrenParts\"]").type("Test Part{downarrow}{enter}");
+      cy.get("[data-cy=\"childrenParts\"]").arrowType("Test Part{downarrow}{enter}");
     });
 
     it("Click on 'Add a field'", () => {
@@ -276,7 +268,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").click();
+      cy.get("[data-cy='permission-icon']").arrowClick();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
@@ -293,15 +285,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
   });
 
@@ -311,7 +296,9 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
@@ -338,7 +325,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").type("Test First Field");
+      cy.get("[name^='text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -351,15 +338,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
 
@@ -384,7 +364,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").type("Test First Field");
+      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
     });
 
     it("clicks on 'Save' button", () => {
@@ -397,15 +377,8 @@ context("Document Operators Access Test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -434,15 +407,19 @@ context("Document Operators Access Test", () => {
 
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.unClick();
+    });
+
+    it("Confirm password", { retries: 3 }, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
@@ -452,15 +429,8 @@ context("Document Operators Access Test", () => {
   });
 
   context(`Approve form as '${USERS[3].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[3].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
 
     it("Navigates to document list", () => {
@@ -474,10 +444,10 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 
@@ -487,15 +457,8 @@ context("Document Operators Access Test", () => {
   });
 
   context(`Approve form as '${USERS[4].name}'`, () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[4].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
 
     it("Navigates to document list", () => {
@@ -509,10 +472,10 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
-      cy.get("input[name=\"password\"]").type("Tester1!");
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
 

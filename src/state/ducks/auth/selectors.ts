@@ -58,6 +58,9 @@ const getDaysUntilPasswordExpires = (state: ApplicationState): number =>
 const getPasswordSoonToExpire = (state: ApplicationState): boolean =>
   state.auth.user.passwordSoonToExpire;
 
+const getAvatarInitialColor = (state: ApplicationState): string =>
+  state.auth.user.initialColor;
+
 const makeGetHasTag = () => createSelector(
   (state: ApplicationState) => state.auth.groups.tags,
   (state: ApplicationState, selectedTag: GroupTag) => selectedTag,
@@ -74,6 +77,9 @@ const employees = (state: ApplicationState) => state.auth.user.employees;
 
 const hasMultipleCompanies = (state: ApplicationState): boolean => (
   ((state.auth.user.employees).filter((employee) => employee.active)).length > 1
+);
+const getIsScheduledForDeletion = (state: ApplicationState): boolean => (
+  state.auth.user.employee.company.scheduledForDeletion || false
 );
 
 const getCurrentUserGroups = createSelector(
@@ -128,4 +134,6 @@ export default {
   isDropboxEnabled,
   getDaysUntilPasswordExpires,
   getPasswordSoonToExpire,
+  getIsScheduledForDeletion,
+  getAvatarInitialColor,
 };

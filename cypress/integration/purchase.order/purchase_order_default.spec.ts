@@ -14,7 +14,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let adminEmployee;
 let supplierDocumentType;
 let secondEmployee;
 let group;
@@ -241,6 +241,7 @@ context("PO test with default enlil form", () => {
         }, sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
         createdCompany = response;
+        adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
         secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
         supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
         formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -255,10 +256,8 @@ context("PO test with default enlil form", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -366,15 +365,8 @@ context("PO test with default enlil form", () => {
 
   context("Create Purchase order on default form", () => {
     context("Log user to company", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Turn off autosave", () => {
@@ -405,7 +397,7 @@ context("PO test with default enlil form", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
           });
-          cy.wait(500);
+
           cy.get("div[data-cy=\"owner-0\"]").should("have.text", USERS[1].name);
           cy.get("time[data-cy=\"time-0\"]")
             .should("have.text", (poCreationDate1 || poCreationDate2));
@@ -417,54 +409,54 @@ context("PO test with default enlil form", () => {
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
           SystemRequirement("REQ-1300");
-          cy.get("[data-cy^=requestor]").click();
-          cy.get("ul[role=listbox]>li").contains(USERS[1].name).click();
+          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains(USERS[1].name).arrowClick();
         });
 
         it(`Select 'Quality' for Department`, () => {
-          cy.get("div[id*=department]").click();
-          cy.get("ul[role=listbox]>li").contains("Quality").click();
+          cy.get("div[id*=department]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("Quality").arrowClick();
         });
 
         it("Select 'SUP-00003' Supplier ", () => {
-          cy.get("[data-cy=\"po-supplier-built-in\"]").type("SUP-00003{downarrow}{enter}");
+          cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00003{downarrow}{enter}");
         });
 
         it("Select 'Customer Company' for Ship To", () => {
-          cy.get("[name^=\"ship-to\"]").eq(0).click();
+          cy.get("[name^=\"ship-to\"]").eq(0).arrowClick();
         });
 
         it("Select 'Address 2' for Company Ship To Address", () => {
           SystemRequirement("REQ-1300", "REQ-1250");
-          cy.get("input[data-cy^=company-ship-to-address]").click();
-          cy.get("ul[role=listbox]>li").contains("Address 2").click();
+          cy.get("input[data-cy^=company-ship-to-address]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("Address 2").arrowClick();
         });
 
         it("Select 'FedEx 449260805' for Shipping Information", () => {
           SystemRequirement("REQ-1250");
-          cy.get("div[id*=select-shipping]").click();
-          cy.get("ul[role=listbox]>li").contains("FedEx 449260805").click();
+          cy.get("div[id*=select-shipping]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("FedEx 449260805").arrowClick();
         });
 
         it("Select 'Credit Card' for Terms", () => {
-          cy.get("div[id*=terms]").click();
-          cy.get("ul[role=listbox]>li").contains("Credit Card").click();
+          cy.get("div[id*=terms]").arrowClick();
+          cy.get("ul[role=listbox]>li").contains("Credit Card").arrowClick();
         });
 
         it("Enter '1' for Quotation Number", () => {
-          cy.get("input[name^=quotation-number]").type("1");
+          cy.get("input[name^=quotation-number]").arrowType("1");
         });
 
         it("Select Order Date", () => {
-          cy.get("input[name^=ordered]").parent().find("button").click();
-          cy.wait(500);
-          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().click();
+          cy.get("input[name^=ordered]").parent().find("button").arrowClick();
+
+          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
       });
 
       context("Add purchase order item", () => {
         it("Click on 'Add item' button to add item without Part Number", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").last().click();
+          cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
         });
 
         it("Enter Quantity Ordered", () => {
@@ -490,9 +482,9 @@ context("PO test with default enlil form", () => {
         });
 
         it("Add Required Date", () => {
-          cy.get("input[name^=date]").parent().find("button").click();
-          cy.wait(500);
-          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().click();
+          cy.get("input[name^=date]").parent().find("button").arrowClick();
+
+          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
 
         it("Check Tax box", () => {
@@ -506,45 +498,44 @@ context("PO test with default enlil form", () => {
 
       context("Finish PO", () => {
         it("Enter 'Nothing to comment' inside PO dialog box", () => {
-          cy.get("div[style=\"width: 100%; height: 100%;\"]").click();
-          cy.get("div[contenteditable=true]").eq(1).type("Nothing to comment");
-          cy.get("[data-cy=Comments]").click();
-          cy.wait(300);
+          cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
+          cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
+          cy.get("[data-cy=Comments]").arrowClick();
           cy.unClick();
         });
 
         it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
-          cy.get("[name^=contact-email]").type("contact.us@gmail.com");
+          cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
         });
 
         it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").click();
+          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).click();
+            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
           });
         });
 
         it("Save PO document", () => {
           cy.wrapWithWaitOnApiCalls(
             [CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
             });
           cy.checkToastMessage({ exists: false });
-          cy.wait(2000);
+
         });
 
         it("Click 'Submit for Approval' button", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
         });
 
         it("Click 'Approve' button", () => {
-          cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-          cy.get("input[name=\"password\"]").type("Tester1!");
+          cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
             CyRoutes.EmployeesGet], () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
         });
       });

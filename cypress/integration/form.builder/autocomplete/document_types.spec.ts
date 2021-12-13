@@ -7,7 +7,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let developersGroup;
 let adminSessionId;
 let adminEmployee;
@@ -48,10 +47,8 @@ context("Autocomplete 'Document types' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -60,7 +57,6 @@ context("Autocomplete 'Document types' test", () => {
       it("[API]Login admin tester", (done: any) => {
         cy.authApiLogin({
           email: USERS[1].email,
-          password: "Tester1!",
         }).then((response) => {
           adminLoginResponse = response;
           adminSessionId = adminLoginResponse.sessionId;
@@ -93,15 +89,8 @@ context("Autocomplete 'Document types' test", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -149,7 +138,7 @@ context("Autocomplete 'Document types' test", () => {
           });
 
           it("Select 'Document typess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Document types{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Document types{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -174,7 +163,7 @@ context("Autocomplete 'Document types' test", () => {
             },
           }).then((response) => {
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const docTypes = response.body;

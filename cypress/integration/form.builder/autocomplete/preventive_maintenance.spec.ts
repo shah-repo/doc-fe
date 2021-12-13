@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const maintenanceTitle = `Maintenance ${moment().format("X")}`;
 
@@ -55,25 +54,16 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -162,7 +152,7 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
           });
 
           it("Select 'Maintenance' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Preventative Maintenance Forms{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Preventative Maintenance Forms{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -186,9 +176,9 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               cy.get(".MuiAutocomplete-popper ul li")

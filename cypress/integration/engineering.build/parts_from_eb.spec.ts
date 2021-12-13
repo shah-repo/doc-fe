@@ -12,7 +12,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginFirst;
 let secondEmployee;
 let group;
 let initialArDocument;
@@ -57,6 +57,7 @@ context("Parts from EB flow test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -69,10 +70,8 @@ context("Parts from EB flow test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -144,15 +143,8 @@ context("Parts from EB flow test", () => {
   });
 
   context("Login user", () => {
-    it("Log user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -269,7 +261,7 @@ context("Parts from EB flow test", () => {
         cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
       });
 
-      it("Add an Approval'", () => {
+      it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
@@ -287,13 +279,13 @@ context("Parts from EB flow test", () => {
 
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").type(EXISTING_PART_NAME + "{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").arrowType(EXISTING_PART_NAME + "{downarrow}{enter}");
         });
       });
 
       it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
 
@@ -361,7 +353,7 @@ context("Parts from EB flow test", () => {
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[data-cy=\"form.builder.create.new.part\"]").click();
+          cy.get("[data-cy=\"form.builder.create.new.part\"]").arrowClick();
         });
       });
 
@@ -383,7 +375,7 @@ context("Parts from EB flow test", () => {
         it("Create the part", () => {
           SystemRequirement("REQ-2950");
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"common.confirm\"]").click();
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
         });
       });
@@ -393,14 +385,14 @@ context("Parts from EB flow test", () => {
       it("Save EB", () => {
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           });
-        cy.wait(500);
+
       });
 
       it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
 
@@ -447,7 +439,7 @@ context("Parts from EB flow test", () => {
 
       it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
 
@@ -458,9 +450,9 @@ context("Parts from EB flow test", () => {
 
     context("Verify that EB cannot be released unless 1st revision of part is released", () => {
       it("Try approving the EB", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
-        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
 
       it("Check for a toast error", () => {
@@ -541,3 +533,4 @@ context("Parts from EB flow test", () => {
 });
 
 export { };
+

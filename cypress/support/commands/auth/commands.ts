@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { addTestContext } from "../../../utils/context/addTestContext";
+import { IUser } from "../../commands";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -10,8 +11,8 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      authApiLogin(params: { email: string; password: string }): Chainable<Subject>;
-      authLogin(params: { email: string; password: string }): Chainable<Subject>;
+      authApiLogin(params: { email: string; password?: string }): Chainable<Subject>;
+      authLogin(params: { email: string; password?: string }): Chainable<Subject>;
       authApiLogout(): Chainable<Subject>;
       authLogout(): Chainable<Subject>;
       authVisitLogin(): Chainable<Subject>;
@@ -21,18 +22,22 @@ declare global {
       authEnterEmail(params: {value: string}): Chainable<Subject>;
       authEnterPassword(params: {value: string}): Chainable<Subject>;
       authSubmitLoginError(params: {show: boolean; message?: string}): Chainable<Subject>;
-      authEnterSignUpPassword(params: {password: string}): Chainable<Subject>;
-      authEnterSignUpConfirmPassword(params: {password: string}): Chainable<Subject>;
+      authEnterSignUpPassword(params?: {password?: string}): Chainable<Subject>;
+      authEnterSignUpConfirmPassword(params?: {password?: string}): Chainable<Subject>;
       authClickSignIn(): Chainable<Subject>;
+      authLoginToDashboard(params: { USER: IUser; employeeId: string }): Chainable<Subject>;
     }
   }
 }
 
-Cypress.Commands.add("authApiLogin", (params: { email: string; password: string }) => {
+Cypress.Commands.add("authApiLogin", (params: { email: string; password?: string }) => {
   cy.request({
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/auth/login`,
-    body: params,
+    body: {
+      email: params.email,
+      password: params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+    },
   }).then((response) => response.body);
 });
 
@@ -43,36 +48,35 @@ Cypress.Commands.add("authApiLogout", () => {
   }).then((response) => response.body);
 });
 
-Cypress.Commands.add("authLogin", (params: { email: string; password: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PreventIdleLogout, () => {
-    cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
-  });
-  cy.wait(500);
+Cypress.Commands.add("authLogin", (params: { email: string; password?: string }) => {
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
       cy.log(params.email);
-      cy.get("[data-cy=\"LoginFormPresenter-email\"]").type(params.email);
-      cy.get("[data-cy=\"LoginFormPresenter-password\"]").type(params.password).wait(300);
-      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-password\"]")
+        .arrowType(params.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD)
+      ;
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
   addTestContext("user", params.email);
 });
 
 Cypress.Commands.add("authEnterEmail", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-email\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
-  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().type(params.value);
+  cy.get("[data-cy=\"LoginFormPresenter-password\"]").clear().arrowType(params.value);
 });
 
 Cypress.Commands.add("authVisitLogin", () => {
-  cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
 });
 
 Cypress.Commands.add("authSubmitLogin", () => {
-  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").click();
+  cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
 });
 
 Cypress.Commands.add("authRequiredValidation", (params: {selector: string; show: boolean}) => {
@@ -102,24 +106,65 @@ Cypress.Commands.add("authSubmitLoginError", (params: {show: boolean; message: s
 });
 
 Cypress.Commands.add("authLogout", () => {
-  cy.get("[data-cy=\"UserMenuButton\"]").click();
+  cy.get("[data-cy=\"UserMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCall(CyRoutes.DeleteLogout, () => {
-    cy.get("[data-cy=\"header.logout\"]").click();
+    cy.get("[data-cy=\"header.logout\"]").arrowClick();
   });
 });
 
-Cypress.Commands.add("authEnterSignUpPassword", (params: {password: string}) => {
-  cy.get("[name=\"password\"]").type(params.password);
+Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
+  cy.get("[name=\"password\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
-Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password: string}) => {
-  cy.get("[name=\"confirmPass\"]").type(params.password);
+Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {
+  cy.get("[name=\"confirmPass\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.unClick();
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.Login, () => {
-      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").click();
+      cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+    });
+});
+
+Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {
+  let loginResponse;
+  cy.authApiLogin({ email: params.USER.email })
+    .then((response) => {
+      loginResponse = response;
+      cy.request({
+        method: "GET",
+        url: `${CONFIG.BE_URL}/api/v1/auth/credentials/iot`,
+        headers: {
+          Authorization: `bearer ${params.employeeId}:${loginResponse.sessionId}`,
+        },
+        timeout: 30000,
+      }).then((response) => {
+        const user = {
+          email: loginResponse.email,
+          name: loginResponse.name,
+          id: loginResponse.id,
+          employeeId: params.employeeId,
+          sessionId: loginResponse.sessionId,
+          iotCredentials: response.body,
+          employee: { active: true },
+          employees: [],
+        };
+        const auth =
+        {
+          user: JSON.stringify(user),
+          _persist: JSON.stringify({ version: 2, rehydrated: true }),
+        };
+        cy.setLocalStorage("persist:auth", JSON.stringify(auth));
+        cy.saveLocalStorage();
+        cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+          cy.visit(CONFIG.FE_URL, { timeout: 50000 });
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        addTestContext("user", loginResponse.email);
+        cy.log(loginResponse.email);
+      });
     });
 });

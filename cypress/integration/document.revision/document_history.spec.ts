@@ -8,7 +8,8 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let employeeLoginOwner;
+let employeeLoginShared;
 const owner = USERS[2].name;
 const sharedUser = USERS[1];
 const sharedUserTwo = USERS[3];
@@ -114,6 +115,8 @@ context("Check Document History", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          employeeLoginOwner = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          employeeLoginShared = createdCompany.employees.find((employee) => employee.user.email === sharedUser.email);
           done();
         });
       });
@@ -122,25 +125,16 @@ context("Check Document History", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[2].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginOwner.id });
     });
   });
 
@@ -211,25 +205,24 @@ context("Check Document History", () => {
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
-        cy.get("[data-cy=field-description]>label").click();
+        cy.get("[data-cy=field-description]>label").arrowClick();
         // auto-save
-        cy.wait(1000);
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("edit the description", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentDescription({ description: formDescription.newValue });
-        cy.unClick();
-        cy.wait(500);
-        cy.unClick();
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Remove reference for document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drRemoveReferences(0);
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
@@ -240,6 +233,7 @@ context("Check Document History", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
+      cy.progressBarShouldNotExist();
     });
 
     it("Upload test.docx", () => {
@@ -259,15 +253,8 @@ context("Check Document History", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: sharedUser.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: sharedUser, employeeId: employeeLoginShared.id });
     });
   });
 
@@ -281,7 +268,7 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.get("#root").contains(formTitle.newValue).click();
+      cy.get("#root").contains(formTitle.newValue).arrowClick();
     });
   });
 
@@ -311,15 +298,8 @@ context("Check Document History", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[2].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLoginOwner.id });
     });
   });
 
@@ -334,7 +314,7 @@ context("Check Document History", () => {
 
     it(`select '${formTitle.newValue}'`, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.get("#root").contains(formTitle.newValue).click();
+        cy.get("#root").contains(formTitle.newValue).arrowClick();
       });
     });
   });

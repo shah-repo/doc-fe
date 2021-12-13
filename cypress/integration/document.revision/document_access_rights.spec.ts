@@ -12,7 +12,9 @@ Cypress.Screenshot.defaults({
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
+let employeeLoginAdmin;
+let employeeLoginFirst;
+let employeeLoginSecond;
 
 const groupOne = "Group One";
 
@@ -48,6 +50,9 @@ context("Document Access Rights", () => {
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
           company = response;
+          employeeLoginAdmin = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          employeeLoginFirst = company.employees.find((employee) => employee.user.email === FIRST_USER.email);
+          employeeLoginSecond = company.employees.find((employee) => employee.user.email === SECOND_USER.email);
           done();
         });
       });
@@ -56,25 +61,16 @@ context("Document Access Rights", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
 
     it("Open Group Management", () => {
@@ -182,7 +178,7 @@ context("Document Access Rights", () => {
     });
 
     it(`Remove default Everyone from group`, () => {
-      cy.get(`[data-cy="field-securityGroups"]`).type(`{backspace}`);
+      cy.get(`[data-cy="field-securityGroups"]`).arrowType(`{backspace}`);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -226,7 +222,7 @@ context("Document Access Rights", () => {
     });
 
     it(`Remove default Everyone from group`, () => {
-      cy.get(`[data-cy="field-securityGroups"]`).type(`{backspace}`);
+      cy.get(`[data-cy="field-securityGroups"]`).arrowType(`{backspace}`);
     });
 
     it(`Select one group: '${groupOne}'`, () => {
@@ -254,15 +250,8 @@ context("Document Access Rights", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: FIRST_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -314,16 +303,8 @@ context("Document Access Rights", () => {
       cy.authLogout();
     });
 
-    it("Logs user in", () => {
-      SystemRequirement("REQ-3990", "REQ-3930");
-      cy.authLogin({
-        email: SECOND_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: SECOND_USER, employeeId: employeeLoginSecond.id });
     });
   });
 

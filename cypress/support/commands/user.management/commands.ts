@@ -10,93 +10,78 @@ declare global {
     interface Chainable<Subject> {
       usrNavigateToUserManagement(): Chainable;
       usrClickAddEmployee(): Chainable;
+      usrGetInitials(params: {fullName: string}): Chainable;
       usrEnterEmail(params: {email: string}): Chainable;
       usrEnterName(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
-      usrAdminPatchEmployee(params: {sessionId: string;
-        employeeId: string;
-        companyId: string;
-        payload: any;}): Chainable;
-      usrAdminGetUsers(params: {sessionId: string}): Chainable;
-      usrAdminPatchUser(params: {sessionId: string; userId: string; payload: any}): Chainable;
+      authLoginWithInvalidPassword(params: { email: string; password: string }): Chainable<Subject>;
     }
   }
 }
 
-Cypress.Commands.add("usrAdminPatchEmployee", (params: {
-  sessionId: string;
-  employeeId: string;
-  companyId: string;
-  payload: any;}) => {
-  cy.request({
-    method: "PATCH",
-    url: `${CONFIG.BE_URL}/api/v1/employees/admin_update/${params.employeeId}/company/${params.companyId}`,
-    body: params.payload,
-    headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
-    },
-  }).then((response) => response.body);
-});
-
-Cypress.Commands.add("usrAdminGetUsers", (params: {sessionId: string}) => {
-  cy.request({
-    method: "GET",
-    url: `${CONFIG.BE_URL}/api/v1/users`,
-    headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
-    },
-  }).then((response) => response.body);
-});
-
-Cypress.Commands.add("usrAdminPatchUser", (params: {
-  sessionId: string;
-  userId: string;
-  payload: any;}) => {
-  cy.request({
-    method: "PATCH",
-    url: `${CONFIG.BE_URL}/api/v1/users/${params.userId}`,
-    body: params.payload,
-    headers: {
-      Authorization: `bearer_admin ${params.sessionId}`,
-    },
-  }).then((response) => response.body);
-});
-
 Cypress.Commands.add("usrNavigateToUserManagement", () => {
-  cy.get("[data-cy=\"navigation.userManagement\"]").click();
+  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
+    cy.get("[data-cy=\"navigation.userManagement\"]").arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {
-  cy.get("#AddEmployeePresenter-openDialog").click();
+  cy.get("#AddEmployeePresenter-openDialog").arrowClick();
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonEmail").type(params.email);
+  cy.get("#AddEmployeeFormPresenter-commonEmail").arrowType(params.email);
 });
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonName").type(params.name);
+  cy.get("#AddEmployeeFormPresenter-commonName").arrowType(params.name);
+});
+
+Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
+  function getInitials(fullName) {
+    const nameArr = fullName.split("");
+    const initials = nameArr.filter(function(char) {
+      return /[A-Z]/.test(char);
+    });
+    return initials.join("").substring(0, 2);
+  }
+
+  cy.get("[data-cy=header-userInitials]").should("have.text", getInitials(params.fullName));
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGetActive], () => {
-    cy.get("#AddEmployeeFormPresenter-submitForm").click();
+    cy.get("#AddEmployeeFormPresenter-submitForm").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {
-  cy.get("#AddEmployeeDialogPresenter-closeDialog").click();
+  cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
 });
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#clearFilter").click();
+    cy.get("#clearFilter").arrowClick();
   });
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#email").type(params.email);
+    cy.get("#email").arrowType(params.email);
   });
   cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
+});
+
+Cypress.Commands.add("authLoginWithInvalidPassword", (params: { email: string; password: string }) => {
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.Login, () => {
+      cy.log(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(params.email);
+      cy.get("[data-cy=\"LoginFormPresenter-password\"]")
+        .arrowType(params.password)
+      ;
+      cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
+    });
 });

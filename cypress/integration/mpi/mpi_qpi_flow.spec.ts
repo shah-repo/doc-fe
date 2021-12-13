@@ -10,7 +10,7 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
+let secondEmployee;
 let adminEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
@@ -176,6 +176,7 @@ context("Mpi/Qpi flow", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
@@ -187,10 +188,8 @@ context("Mpi/Qpi flow", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -300,15 +299,8 @@ context("Mpi/Qpi flow", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -350,32 +342,90 @@ context("Mpi/Qpi flow", () => {
           cy.drClickCreateDocumentWithApiCall();
         });
 
+        it("Turn on autosave", () => {
+          cy.cmpTurnOnAutosave();
+        });
+
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
           cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
         });
 
-        context("Fill step #1", () => {
-          it("Fill step #1 description", () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+        context("Fill step #1 and check autosave", () => {
+          it("Add attachment and check autosave", () => {
+            cy.contains("Step #1").parentsUntil("li")
+              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+              cy.elUploadAttachment({
+                fileName: "image.jpg",
+                el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+              });
+            });
           });
 
-          it("Add 'Material one' to step #1", () => {
+          it("While autosaving, fill step #1 description and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+            cy.wait("@response");
+          });
+
+          it("Delete attachment and check autosave", () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get(`[id="fb-mediaalbum-upload-mpi-procedure-built-in.attachments"]`).parent()
+                .find("button").eq(3).click({ force: true });
+            });
+          });
+
+          it("Add 'Material one' to step #1 and check autosave", () => {
             cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
           });
 
-          it("Add 'Equipment one' to step #1", () => {
+          it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
             cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+            cy.wait("@response");
+          });
+
+          it("While autosaving, delete Material and check for autosave", () => {
+            cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
+              req.reply((res) => {
+                res.setDelay(100);
+                res.setThrottle(1);
+              });
+            }).as("response");
+            cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
+              .find("button").last().click();
+            cy.wait("@response");
+          });
+        });
+
+        context("Refresh page and check data should exist", () => {
+          it("Refresh the page", () => {
+            cy.reload();
+          });
+
+          it("Step description should be exist", () => {
+            cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
+              .should("have.text", "Description of step one");
+          });
+
+          it("Equipment should be exist", () => {
+            cy.get("[data-cy=\"form.builder.mpi.procedure.equipment.title\"]")
+              .should("have.text", "ET-00003 - Equipment one");
           });
         });
 
         context("Release MPI and verify state", () => {
-          it("Click save document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
-            });
-          });
-
           it("Approve and release MPI document", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
               cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -470,29 +520,22 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
     context("Approve document in review", () => {
       it(`approve document`, () => {
-        cy.wait(1000);
-        cy.get("#root").contains("Approve").click();
+
+        cy.get("#root").contains("Approve").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
-            cy.get(`[data-cy="passwordConfirm"]`).click();
+            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
       });
     });
@@ -502,15 +545,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to MPI Document list", () => {
@@ -604,27 +640,20 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-        cy.wait(1000);
-        cy.get("#root").contains("Reject").click();
+
+        cy.get("#root").contains("Reject").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
-        cy.get(`[data-cy="passwordConfirm"]`).click();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
     });
 
@@ -633,15 +662,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to MPI Document list", () => {
@@ -810,29 +832,22 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
     context("Approve document in review", () => {
       it(`approve document`, () => {
-        cy.wait(1000);
-        cy.get("#root").contains("Approve").click();
+
+        cy.get("#root").contains("Approve").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
           () => {
-            cy.get(`[data-cy="passwordConfirm"]`).click();
+            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
       });
     });
@@ -842,15 +857,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to QPI Document list", () => {
@@ -944,27 +952,20 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[2].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
       });
     });
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-        cy.wait(1000);
-        cy.get("#root").contains("Reject").click();
+
+        cy.get("#root").contains("Reject").arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).type("Tester1!");
-        cy.get(`[data-cy="passwordConfirm"]`).click();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
     });
 
@@ -973,15 +974,8 @@ context("Mpi/Qpi flow", () => {
         cy.authLogout();
       });
 
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-      });
-
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
 
       it("Navigate to QPI Document list", () => {
@@ -999,3 +993,4 @@ context("Mpi/Qpi flow", () => {
 });
 
 export { };
+

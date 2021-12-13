@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const lotsTitle = `Lots ${moment().format("X")}`;
 
@@ -49,25 +48,16 @@ context("Autocomplete 'Lots' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -123,10 +113,10 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Select 'Component Specification Lot' from the dropdown", () => {
-        cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").click();
-        cy.wait(500);
+        cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
-          cy.get("div[id^=react-select]").contains("Component Specification Lot").click();
+          cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
         });
       });
 
@@ -139,11 +129,11 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Enter quantity received", () => {
-        cy.get("[name=\"lot_quantity\"]").type("12");
+        cy.get("[name=\"lot_quantity\"]").arrowType("12");
       });
 
       it("Enter Usable Quantity", () => {
-        cy.get("[name=\"lot_usable_quantity\"]").type("12");
+        cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
       });
 
       it("Check 100% override", () => {
@@ -152,13 +142,11 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Create 'Preventative maintenance document'", () => {
         cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-        cy.wait(5000);
+
       });
 
-      it("Add an Approval'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        });
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for approval", () => {
@@ -166,19 +154,15 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Approve record", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).click();
-        cy.get("input[name=\"password\"]").type("Tester1!");
+        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-          cy.get("[data-cy=\"common.confirm\"]").click();
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
       });
 
-      it("Logs user in & Selects company", () => {
-        cy.authLogin({
-          email: USERS[1].email,
-          password: "Tester1!",
-        });
-        cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      it("Login user to dashboard", () => {
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
       });
     });
 
@@ -225,7 +209,7 @@ context("Autocomplete 'Lots' test", () => {
           });
 
           it("Select 'Lots' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Lots{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Lots{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -249,9 +233,9 @@ context("Autocomplete 'Lots' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const lots = response.body;

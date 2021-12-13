@@ -1,4 +1,3 @@
-import { FieldValidator } from "formik";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import RichTextEditor from "../../../components/forms/fields/RichTextEditor";
@@ -17,7 +16,7 @@ const Description: React.FunctionComponent<Props> = ({
   isDisabled = false,
 }) => {
   const intl = useIntl();
-  const { isVisible, label, tooltipConfig, validation: validators } = useDescription(documentTypeId, isQms);
+  const { isVisible, label, tooltipConfig } = useDescription(documentTypeId, isQms);
   const placeholder: string = isQms ?
     "" :
     intl.formatMessage({ id: "document.revision.no.qms.message" });
@@ -31,7 +30,6 @@ const Description: React.FunctionComponent<Props> = ({
       <RichTextEditor
         name="description"
         label={label}
-        validate={validators as FieldValidator}
         editorProps={{ placeholder, readOnly: isDisabled }}
       />
     </CustomLabelTooltip>

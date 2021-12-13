@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let company;
 let adminEmployeeLoginResponse;
-let multipleCompanies = false;
 let adminEmployee;
 let group;
 let initialArDocument;
@@ -75,10 +74,8 @@ context("Check DAM enforcement rules for document types", () => {
     it("[API]Login admin", (done: any) => {
       cy.authApiLogin({
         email: ADMIN_USER.email,
-        password: "Tester1!",
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = adminEmployeeLoginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
@@ -252,8 +249,16 @@ context("Check DAM enforcement rules for document types", () => {
             outputDocumentTypes: [{
               id: SupplierDocumentType[0].id,
             }],
-            schema: [{
-            }],
+            schema: [
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kvjba97m",
+                uniqueSchemaItem: true,
+                index: 0,
+              },
+            ],
           },
 
         },
@@ -279,15 +284,8 @@ context("Check DAM enforcement rules for document types", () => {
   });
 
   context("Log in admin, select company and open group management", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: ADMIN_USER.email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: company.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
     });
   });
 
@@ -378,7 +376,7 @@ context("Check DAM enforcement rules for document types", () => {
     it("Check all checkboxes for 'Approvals Numeric'", () => {
       cy.get("div:nth-child(2) > div> table > tbody > tr > td:nth-child(1)")
         .each(($el) => {
-          cy.wrap($el).click();
+          cy.wrap($el).arrowClick();
         });
     });
 
@@ -477,7 +475,7 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Fill document name", () => {
         cy.drEnterDocumentTitle({ name: "Form approvals" });
-        cy.get("[data-cy=field-name]").click();
+        cy.get("[data-cy=field-name]").arrowClick();
       });
 
       it("Fill document description", () => {
@@ -582,7 +580,7 @@ context("Check DAM enforcement rules for document types", () => {
       it("Add approver to approvals", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.poAddApproverOnApproverList({ approver: USERS[1].email });
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").click();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
       });
 
@@ -591,7 +589,7 @@ context("Check DAM enforcement rules for document types", () => {
       // });
 
       it("Submit for approvals and check enfocment", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
         cy.closeAllAlertMessages();
       });
@@ -622,9 +620,17 @@ context("Check DAM enforcement rules for document types", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
-      it("Check approvals enfocment", () => {
-        SystemRequirement("REQ-0520");
-        cy.drCheckApprovalsEnforcment();
+      it("Add approver to approvals", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+      });
+
+      it("Submit for approvals and check enfocment", () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.checkToastMessageContains({ message: "at least one approver from group Role One has to be selected" });
+        cy.closeAllAlertMessages();
       });
     });
   });

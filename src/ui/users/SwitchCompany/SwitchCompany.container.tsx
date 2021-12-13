@@ -1,5 +1,6 @@
 import { orderBy } from "lodash";
-import * as React from "react";
+import React from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { ReactComponent as CompanyAvatar } from "../../../assets/images/company_avatar.svg";
@@ -8,8 +9,8 @@ import { authActions, authSelectors } from "../../../state/ducks/auth";
 import { companyActions } from "../../../state/ducks/company";
 import { Employee, WhiteLabelingEnv } from "../../../state/ducks/company/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { toastInfo } from "../../components/notifications";
-import { HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
+import { toastInfo, toastSuccess } from "../../components/notifications";
+import { COMPANY_EMAIL, HOME_URL, RESET_PASSWORD_URL } from "../../constants/urls";
 import { ThemeEnv } from "../../layout/theme/utils/types";
 import { LoginContainerProps } from "../Login.container";
 import SwitchCompanyPresenter from "./SwitchCompany.presenter";
@@ -20,6 +21,7 @@ type Props = LoginContainerProps;
 const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
   employees,
 }) => {
+  const intl = useIntl();
   const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -33,14 +35,22 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
     dispatch(authActions.clearNonAuthData());
     dispatch(tableSearchActions.clearAllTables());
     history.push(HOME_URL);
+
     passwordSoonToExpire && toastInfo(
       <div>
         Your password will expire in {daysUntilPasswordExpires} days.&nbsp;
         <Link to={RESET_PASSWORD_URL}>Reset it now.</Link>
       </div>,
       { autoClose: 10000 });
-  };
 
+    employee.company.scheduledForDeletion &&
+    toastSuccess(
+      <div>
+        {intl.formatMessage({ id: "toast.notification.deletion" })}
+        <a href={`mailto:${COMPANY_EMAIL}`}>{COMPANY_EMAIL}</a>
+      </div>,
+      { autoClose: 15000 });
+  };
   const companies = orderBy(employees, ["company.name"], ["asc"])
     .filter((employee) => employee.active)
     .map(
@@ -71,7 +81,6 @@ const SwitchCompanyContainer: React.FunctionComponent<Props> = ({
         );
       },
     );
-
   return (
     <SwitchCompanyPresenter
       // eslint-disable-next-line react/no-children-prop

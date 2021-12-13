@@ -14,6 +14,7 @@ let sessionId;
 let multipleCompanies;
 let companyId: string;
 let emailsFromInbox: IMAPEmail[];
+let employeeLogin;
 
 const approvalRequestFormName = "Approval request form template";
 const approvalRequestDocumentTitle = "Approval request from newly created form";
@@ -46,6 +47,7 @@ context("Approval request form scenario", () => {
         }).then((response) => {
           createdCompany = response;
           companyId = createdCompany.id;
+          employeeLogin = createdCompany.employees.find((employee) => employee.user.email === USERS[21].email);
           done();
         });
       });
@@ -54,7 +56,6 @@ context("Approval request form scenario", () => {
     it("[API]Tester Login to get companies", (done: any) => {
       cy.authApiLogin({
         email: USERS[21].email,
-        password: "Tester1!",
       }).then((response: any) => {
         multipleCompanies = response.employees.length > 1 ? true : false;
         done();
@@ -62,16 +63,9 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Log in user and select company", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[21].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+  context("Log in user to dashboard", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[21], employeeId: employeeLogin.id });
     });
   });
 
@@ -160,7 +154,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Click Create a Approval Request button", () => {
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -249,10 +243,13 @@ context("Approval request form scenario", () => {
     });
 
     context("Verify dashboard notification are not shown", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -267,10 +264,13 @@ context("Approval request form scenario", () => {
     });
 
     context("Send AR to review again", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[21].email,
-          password: "Tester1!",
         });
       });
 
@@ -299,7 +299,7 @@ context("Approval request form scenario", () => {
 
     it("Click Create a Approval Request button", () => {
       SystemRequirement("REQ-0860");
-      cy.cmpClickCreateApprovalRequest();
+      cy.arClickCreateAnAR();
     });
 
     it("Choose newly AR Form template", () => {
@@ -311,7 +311,7 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0860");
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
-      cy.get("[data-cy=\"form.builder.cancel\"]").click().wait(1000);
+      cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
     });
   });
 
@@ -324,7 +324,6 @@ context("Approval request form scenario", () => {
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -344,16 +343,19 @@ context("Approval request form scenario", () => {
 
       it("Reject AR from dashboard", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-          cy.poRejectAR({ password: "Tester1!" });
+          cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         });
       });
     });
 
     context("Verify dashboard notification are not shown", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
-          password: "Tester1!",
         });
       });
 
@@ -369,10 +371,13 @@ context("Approval request form scenario", () => {
   });
 
   context("Send to review again and approve", () => {
+    it("Log out", () => {
+      cy.authLogout();
+    });
+
     it("Logs user in", () => {
       cy.authLogin({
         email: USERS[21].email,
-        password: "Tester1!",
       });
     });
 
@@ -396,10 +401,13 @@ context("Approval request form scenario", () => {
 
   context("Approve AR and verify email notifications are received", () => {
     context("Approve AR with first approver", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[20].email,
-          password: "Tester1!",
         });
       });
 
@@ -414,10 +422,13 @@ context("Approval request form scenario", () => {
     });
 
     context("Approve AR with second approver", () => {
+      it("Log out", () => {
+        cy.authLogout();
+      });
+
       it("Logs user in", () => {
         cy.authLogin({
           email: USERS[22].email,
-          password: "Tester1!",
         });
       });
 
@@ -447,7 +458,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Open history drawer", () => {
-      cy.get("[data-cy=\"timeline-icon\"]").click();
+      cy.get("[data-cy=\"timeline-icon\"]").arrowClick();
     });
 
     it("Capture Audit date", () => {
@@ -482,7 +493,7 @@ context("Approval request form scenario", () => {
         include_body: true,
         after: dateAfterEmailShouldArrive,
       };
-      cy.wait(20000);
+      cy.wait(30000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;

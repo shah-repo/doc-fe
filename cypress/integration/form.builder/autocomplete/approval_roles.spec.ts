@@ -10,7 +10,6 @@ import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let multipleCompanies;
 let secondEmployee;
 const arTitle = `ApprovalRole${moment().format("X")}`;
 
@@ -55,25 +54,16 @@ context("Autocomplete 'Approval Roles' test", () => {
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
-        password: "Tester1!",
       }).then((response) => {
         loginResponse = response;
-        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: "Tester1!",
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -133,19 +123,19 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click on 'Add Another Role' button", () => {
-        cy.get("button[data-cy=\"form.builder.add.another.role\"]").click();
+        cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
       });
 
       it("Enter Approval Role " + arTitle, () => {
-        cy.get("[data-cy=\"name\"]").type(arTitle);
+        cy.get("[data-cy=\"name\"]").arrowType(arTitle);
       });
 
       it("Click on 'Add' button", () => {
-        cy.get("button[data-cy=\"common.add\"]").click();
+        cy.get("button[data-cy=\"common.add\"]").arrowClick();
       });
 
       it("Click on 'Create Document' button", () => {
-        cy.get("[id=\"DocumentRevisionForm-submit\"]").wait(3000).click();
+        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Click 'Add Approver' & 'confirm' button", () => {
@@ -153,9 +143,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Reload company", () => {
-        cy.fbClickButton({ el: "UserMenuButton" });
-        cy.get("#switchCompanyButton").click();
-        cy.cmpSelectCompanyAlreadyLoggedIn({ name: createdCompany.name, multiple: multipleCompanies });
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
       });
     });
 
@@ -202,7 +190,7 @@ context("Autocomplete 'Approval Roles' test", () => {
           });
 
           it("Select 'Approval Roles' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").type("Approval Roles{downarrow}{enter}");
+            cy.get("[data-cy=\"optionId\"]").arrowType("Approval Roles{downarrow}{enter}");
           });
 
           it("Click 'Add' button", () => {
@@ -226,9 +214,9 @@ context("Autocomplete 'Approval Roles' test", () => {
               Authorization: `bearer ${secondEmployee.id}:${loginResponse.sessionId}`,
             },
           }).then((response) => {
-            cy.wait(3000);
+
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-              .find("[data-cy^=\"test-label-\"]").click();
+              .find("[data-cy^=\"test-label-\"]").arrowClick();
 
             if (response.body.length > 0 ) {
               const roles = response.body;
