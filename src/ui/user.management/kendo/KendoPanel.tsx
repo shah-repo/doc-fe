@@ -40,6 +40,7 @@ import {
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { userManagementActions } from "../../../state/ducks/userManagement";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -50,6 +51,8 @@ import {
   TableStyleProps,
 } from "../../components/table/types";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
@@ -124,29 +127,29 @@ export function KendoPanel<T extends any>({
       groups: dataItem.groups,
     };
     console.log("payload", payload);
-    // handleCreate(payload); //Error
+    handleCreate(payload);
   };
-  // const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
+  const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
-  // const async = useAsync({
-  //   onSuccess: () => {
-  //     dispatch(
-  //       tableSearchActions.setSearchCriteria(
-  //         {
-  //           ...tableCriteria,
-  //           queryDict: {
-  //             active: true,
-  //           },
-  //         },
-  //         tableName,
-  //       ),
-  //     );
-  //   },
-  // });
+  const async = useAsync({
+    onSuccess: () => {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              active: true,
+            },
+          },
+          tableName,
+        ),
+      );
+    },
+  });
 
-  // const handleCreate = (values: AddEmployeeFormValues) => {
-  //   async.start(addEmployeeAction, transformToAddEmployeeRequest(values), async);
-  // };
+  const handleCreate = (values) => {
+    async.start(addEmployeeAction, values, async);
+  };
 
 
   const cancel = (dataItem: UserManage) => {
