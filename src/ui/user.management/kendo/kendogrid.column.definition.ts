@@ -1,5 +1,6 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { ActiveCell } from "./cell_template/activeCell";
+import { BooleanFilterCell } from "./cell_template/booleanFilterCell";
 import { CommandCell } from "./cell_template/commandCell";
 import { EmailCell } from "./cell_template/emailCell";
 import { GroupDropdown } from "./cell_template/groupDropdown";
@@ -37,6 +38,7 @@ const columns = [
     title: "ACTIVE",
     show: true,
     filter: "boolean",
+    filterCell: BooleanFilterCell,
     cell: ActiveCell,
   },
   {
@@ -68,7 +70,15 @@ const pagerSettings: GridPagerSettings = {
   previousNext: true,
 };
 
+const booleanFilterCellOptions = [{
+  text: "Active",
+  value: true,
+}, {
+  text: "InActive",
+  value: false,
+}];
+
 const initialDataState: PageState = { skip: 0, take: 25 };
-const gridConfiguration = { columns, pagerSettings, initialDataState };
+const gridConfiguration = { columns, pagerSettings, initialDataState, booleanFilterCellOptions };
 
 export default gridConfiguration;
