@@ -127,7 +127,7 @@ export function KendoPanel<T extends any>({
   };
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
-      console.log("add one Group");
+      queryApi();
     },
   });
   const handleCreate = (values: GroupRequestBody) => {
@@ -146,7 +146,7 @@ export function KendoPanel<T extends any>({
       permissions: dataItem.permissions,
       tags: dataItem.tags,
     };
-    console.log("payload", payload);
+    // console.log("payload", payload);
     handleCreate(payload);
     // enableInlineEdit(dataItem);
   };
