@@ -19,6 +19,7 @@ const getDropDownDataSource = (field: string) => {
     text: o.label,
     value: o.value,
   }));
+  const statusOptions = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
   switch (field) {
     case "defaultRevStage":
       return revisionStageOptions;
@@ -26,6 +27,8 @@ const getDropDownDataSource = (field: string) => {
       return getDSByType(GroupTag);
     case "group":
       return getDSByType(DOC_TYPE_GROUP);
+    case "active":
+      return statusOptions;
     default:
       return [];
   }

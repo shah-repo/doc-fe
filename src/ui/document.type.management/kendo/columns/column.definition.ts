@@ -2,14 +2,21 @@ import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/Gr
 import { DocumentTypeManagementProps } from "../../../components/table/types";
 import { CheckboxCell } from "../cell.formatter/checkbox";
 import { CellFormatter } from "../cell.formatter/grid.cell";
+import { SchemaCell } from "../cell.formatter/schema.cell";
 import { BooleanFilterCell, DropdownFilterCellTemplate } from "../column.filter.formatter/filter.formatter";
 import { ColumnMenu } from "../columns/column.menu";
 
 const columns: DocumentTypeManagementProps[] = [{
+  field: "id",
+  title: "ID",
+  show: false,
+},
+{
   field: "active",
   title: "Status",
   cell: CellFormatter, // Filter Not Working
   filter: "text",
+  filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
   width: "175px",
@@ -113,6 +120,13 @@ const columns: DocumentTypeManagementProps[] = [{
   title: "Category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
   columnMenu: ColumnMenu,
+  width: "75px",
+}, {
+  field: "schema",
+  title: "Schema",
+  cell: SchemaCell,
+  show: true,
+  filterable: false,
   width: "75px",
 }];
 

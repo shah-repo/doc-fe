@@ -1,29 +1,35 @@
+
 import { GridCellProps } from "@progress/kendo-react-grid";
 import {
   Checkbox,
   CheckboxChangeEvent,
 } from "@progress/kendo-react-inputs";
-import React from "react";
+import { result, set } from "lodash";
+import React, { useEffect } from "react";
 
 export const CheckboxCell = (props: GridCellProps) => {
-  if (props.rowType === "groupHeader") {
-    return null;
-  }
+  const editMode = props.dataItem.inEdit;
+  const field = props.field || "";
+  const [dataValue, setValue] = React.useState<boolean | null | undefined>(false);
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    setValue(result(props.dataItem, field));
+  });
+
   const handleChange = (e: CheckboxChangeEvent) => {
     if (props.onChange) {
+      setValue(e.value);
+      // for parent component
       props.onChange({
-        dataIndex: 0,
-        dataItem: props.dataItem,
-        field: props.field,
+        dataIndex: props.dataIndex,
+        dataItem: set(props.dataItem, field, e.value), // checkbox does not update so setting it
         syntheticEvent: e.syntheticEvent,
+        field: props.field,
         value: e.target.value,
       });
     }
   };
-
-  const { dataItem } = props;
-  const field = props.field || "";
-  const dataValue = dataItem[field] || false;
 
   return (
     <td colSpan={props.colSpan}
@@ -36,7 +42,7 @@ export const CheckboxCell = (props: GridCellProps) => {
       <Checkbox
         value={dataValue}
         onChange={handleChange}
-        disabled={dataItem.inEdit ? false : true}/>
+        disabled={editMode ? false : true}/>
     </td>
   );
 };

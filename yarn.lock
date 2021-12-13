@@ -2410,6 +2410,14 @@
     "@progress/kendo-react-popup" "4.13.0"
     prop-types "^15.6.0"
 
+"@progress/kendo-react-dialogs@^4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-dialogs/-/kendo-react-dialogs-4.13.0.tgz#d03222929073c9545eab1118457168d4d3685dbf"
+  integrity sha512-9G31+x0XON8SjrJN+ZaTEV/jH+/A+jpSM97cknw6n0woU/OULSKt6efS+fyumxEUFZmqXYCi/DSOcdrxexOykg==
+  dependencies:
+    "@progress/kendo-react-common" "4.13.0"
+    prop-types "^15.6.0"
+
 "@progress/kendo-react-dropdowns@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@progress/kendo-react-dropdowns/-/kendo-react-dropdowns-4.13.0.tgz#8cb444fad7e15e6ff5152325f6e7fbf23a9ce1f9"
@@ -2418,6 +2426,14 @@
     "@progress/kendo-react-common" "4.13.0"
     "@progress/kendo-react-labels" "4.13.0"
     "@progress/kendo-react-popup" "4.13.0"
+    prop-types "^15.6.0"
+
+"@progress/kendo-react-form@^4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-form/-/kendo-react-form-4.13.0.tgz#e2a2e7826be0f30562f309090361ae55595e4e1b"
+  integrity sha512-mfPO3jbXOaqr5POYvwfqkIWNtWeWyJV83r5WSBewcJbhmMOPasN7rib9Z3cEfrvzsnyV/F696eJ012TxpdGTGw==
+  dependencies:
+    "@progress/kendo-react-common" "4.13.0"
     prop-types "^15.6.0"
 
 "@progress/kendo-react-grid@^4.13.0":

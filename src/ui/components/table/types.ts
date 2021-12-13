@@ -64,4 +64,5 @@ export interface DocumentTypeManagementProps {
   columnMenu?: any;
   width?: string;
   locked?: boolean;
+  filterable?: boolean;
 }
