@@ -6,7 +6,7 @@ import { DialogHandler } from "../../../../hooks/useDialog";
 import { Translation } from "../../../../translations/types";
 import styles from "./TransitionDialog.styles";
 
-interface TransitionDialogProps {
+interface PoRejectDialogProps {
   onSubmit: () => void;
   cancelAction?: () => void;
   message: Translation;
@@ -25,9 +25,9 @@ interface TransitionDialogProps {
  */
 
 
-type Props = TransitionDialogProps & WithStyles<typeof styles>;
+type Props = PoRejectDialogProps & WithStyles<typeof styles>;
 
-const AlertDialog: React.FunctionComponent<Props> = ({
+const PoRejectDialog: React.FunctionComponent<Props> = ({
   classes,
   dialog,
   message,
@@ -43,7 +43,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
           open={dialog.isOpen}
           onClose={dialog.close}
           maxWidth="sm"
-          PaperProps={{ id: "alertDialog" }}
+          PaperProps={{ id: "PoRejectDialog" }}
         >
           <DialogContent>
             <Box textAlign="center" marginBottom="20px" whiteSpace="pre-line">
@@ -67,7 +67,7 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               variant="contained"
               className={classes.cancelButton}
               onClick={cancelAction}
-              id="AlertDialog-cancelButton"
+              id="PoRejectDialog-cancelButton"
             >
               <Text translation={cancelLabel} />
             </Button>
@@ -75,8 +75,8 @@ const AlertDialog: React.FunctionComponent<Props> = ({
               type="submit"
               variant="contained"
               className={classes.submitButton}
-              id="AlertDialog-continueButton"
-              data-cy="AlertDialog-continueButton"
+              id="PoRejectDialog-continueButton"
+              data-cy="PoRejectDialog-continueButton"
               onClick={onSubmit}
             >
               <Text translation={confirmLabel} />
@@ -87,4 +87,4 @@ const AlertDialog: React.FunctionComponent<Props> = ({
   </>
 );
 
-export default withStyles(styles)(AlertDialog);
+export default withStyles(styles)(PoRejectDialog);
