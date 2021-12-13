@@ -1,6 +1,5 @@
-import { Dictionary, filter, isEmpty, isUndefined, reduce, size, template, toNumber, union } from "lodash";
+import { Dictionary, filter, isEmpty, isNumber, isUndefined, reduce, size, template, toNumber, union } from "lodash";
 import { action, observable, set } from "mobx";
-import { isNumber } from "lodash";
 import moment from "moment";
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -12,6 +11,7 @@ import { FBCurrency, FBPurchaseOrderValue } from "./FBPurchaseOrder.types";
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
+  @observable public hasPartNumber = false;
   @observable value: FBPurchaseOrderValue = {
     tax: "0.00",
     taxRate: TAX_RATE,
@@ -72,6 +72,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const items = (initialValues?.items || []).map((item, index) => ({ ...item, index }));
     set(this, "value", { ...initialValues, items });
   }
+
+  @action public sePartNumber = (partNumber?: string) => {
+    set(this, "hasPartNumber", (!isUndefined(partNumber) && !isEmpty(partNumber)));
+  };
 
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87

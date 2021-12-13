@@ -30,12 +30,6 @@ export const COMMON_INITIAL_VALUES = {
   deleteInFormDisabled: false,
   validationMode: "default",
   validationAttribute: "",
-  sampleItemsIndicator: {
-    enabled: false,
-    id: "",
-    sampleSection: false,
-    serialNumber: 0,
-  },
   rules: "",
   applicableOn: [],
   applicableValidationSchema: true,

@@ -26,11 +26,8 @@ const ExportListDialog: React.FunctionComponent<Props> = ({
   const [fileName, saveFileName] = useState("");
 
   const options = {
-    fieldSeparator: ",",
-    quoteStrings: "\"",
-    decimalSeparator: ".",
     showLabels: true,
-    headers: headers?.map((e) => e.label ),
+    headers: headers?.map((e) => e.label),
     filename: fileName === "" ? customFileName : fileName,
     useTextFile: false,
     useBom: true,

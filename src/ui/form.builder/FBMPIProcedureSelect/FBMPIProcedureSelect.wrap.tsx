@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import Colors from "../../layout/theme/utils/colors";
 
@@ -27,7 +28,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     const dispatch = useDispatch();
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
-    const { id } = workspaceState || {};
+    const { id, document } = workspaceState || {};
+    const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
 
     React.useEffect(() => {
@@ -44,11 +46,10 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         () => mpiProcedureSelectState?.useOverrideApi.data,
         (data?: DocumentRevision) => {
           if (!data) { return; }
-          const refs = uniqBy(concat(
-            data.smartReferencesTo,
-            data.document.smartReferencesTo
-          ), "id");
-          const partsSelected = refs.reduce((selected, ref) => {
+          const refs = isDocPIInstance ?
+            data.smartReferencesTo :
+            uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
+          const partsSelected = refs?.reduce((selected, ref) => {
             if (ref?.metadata?.fieldId === name
                 && ref.active
                 && (ref.type === SmartReferenceType.EquipmentReplacement || ref.type === SmartReferenceType.LotUsage)) {

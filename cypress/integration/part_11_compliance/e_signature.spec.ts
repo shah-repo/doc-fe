@@ -418,6 +418,8 @@ context("E-signature test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to EB document", () => {
@@ -439,7 +441,11 @@ context("E-signature test", () => {
 
   context("Login in first user and approve AR and EB", () => {
     it("Login in first user to dashboard", () => {
-      cy.authLogin({ email: emailOfFirstUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfFirstUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR and EB", () => {
@@ -449,7 +455,9 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
         () => {
@@ -481,7 +489,11 @@ context("E-signature test", () => {
 
   context("Login in second user and approve AR and EB", () => {
     it("Login in second user to dashboard", () => {
-      cy.authLogin({ email: emailOfSecondUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfSecondUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR and EB", () => {
@@ -491,7 +503,9 @@ context("E-signature test", () => {
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
         () => {
@@ -523,11 +537,16 @@ context("E-signature test", () => {
 
   context("Login in third user and approve AR and EB", () => {
     it("Login in third user to dashboard", () => {
-      cy.authLogin({ email: emailOfThirdUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfThirdUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
       it("Navigate to approval request list", () => {
+        cy.wait(3000);
         cy.navigToApprovalRequestList();
       });
 
@@ -587,7 +606,7 @@ context("E-signature test", () => {
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
-        cy.get("#root").contains("Approve").arrowClick();
+        cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
           () => {
@@ -676,7 +695,7 @@ context("E-signature test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("WIP").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
         cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-
+        cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
       });
 
       it("Release EB and check if correct new name is shown", () => {

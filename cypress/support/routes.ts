@@ -86,12 +86,14 @@ export enum CyRoutes {
   PostFieldLocks = "PostFieldLocks",
   ExpireFieldLocks = "ExpireFieldLocks",
   AvailableMaintenanceForms = "AvailableMaintenanceForms",
+  HistoryMaintenance = "HistoryMaintenance",
   PostReceivable = "PostReceivable",
   PostLHRs = "PostLHRs",
   GetNotes = "GetNotes",
   PostNotes = "PostNotes",
   GetReceivableQuantity = "GetReceivableQuantity",
   StartMpi = "StartMpi",
+  ApprovalMatrix = "ApprovalMatrix",
   GetTrainingRecord = "GetTrainingRecord",
   PostCompleteTraining = "PostCompleteTraining",
 }
@@ -173,6 +175,16 @@ export const routes: ICyRoutes =   {
       requestTimeout: 30 * 1000,
     },
   },
+  ApprovalMatrix: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_type/approval_matrix",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
   GetReceivableQuantity: {
     requestConfig: {
       method: "GET",
@@ -213,6 +225,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/documents/available_maintenance_forms",
+    },
+    callConfig: {
+      responseTimeout: 40 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  HistoryMaintenance: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/document_revisions/history_maintenance/*",
     },
     callConfig: {
       responseTimeout: 40 * 1000,
