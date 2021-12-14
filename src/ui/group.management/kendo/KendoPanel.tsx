@@ -28,6 +28,7 @@ import { find, isEmpty, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
@@ -113,9 +114,12 @@ export function KendoPanel<T extends any>({
     // enableInlineEdit(dataItem);
     onSelect && onSelect({ dataItem })();
   };
+  const intl = useIntl();
   const addGroup = () => {
-    // eslint-disable-next-line no-console
-    console.log("ADD GROUP");
+    if (initialKendoConfig?.filter?.filters?.length || initialKendoConfig?.sort?.length) {
+      toastError(intl.formatMessage({ id: "group.management.filters.error" }));
+      return;
+    }
     // Modify Here to change sample or editable data
     const sampleData = {
       name: "",
