@@ -88,6 +88,7 @@ td[role="gridcell"] {
   border-style: none;
 }
 
+.k-grid tr.k-alt .k-grid-content-sticky,
 .k-grid tr.k-alt {
   background: var(--white);
 }
@@ -97,7 +98,8 @@ td[role="gridcell"] {
   color: var(--font_gray);
 }
 
-.k-grid tbody tr:hover {
+.k-grid tbody tr:hover td.k-grid-content-sticky,
+  .k-grid tbody tr:hover td {
   background-color: var(--soft-peach);
 }
 
@@ -180,15 +182,7 @@ td[role="gridcell"] {
   border-color: var(--medium-grey);
 }
 
-.k-grid-header th.k-grid-header-sticky {
-  background-color: inherit;
-}
-
-.k-master-row.k-alt .k-grid-content-sticky,
-.k-master-row .k-grid-content-sticky {
-  background-color: inherit;
-}
-
-.k-master-row .k-grid-content-sticky {
-  border-color: rgba(0, 0, 0, 0.08);
+.k-grid-header th.k-grid-header-sticky,
+.k-grid-header .k-header.k-grid-header-sticky {
+  background-color: var(--water);
 }
