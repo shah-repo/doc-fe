@@ -25,7 +25,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, set } from "lodash";
+import { find, isEmpty } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -41,7 +41,7 @@ import {
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { userManagementActions } from "../../../state/ducks/userManagement";
+import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -70,7 +70,7 @@ export function KendoPanel<T extends any>({
   queryUrl,
   tableName,
   onSelect,
-  customDataSet,
+  data,
   normalizrSchema,
   hasDropboxPermission,
   dropboxAsync,
@@ -155,17 +155,12 @@ export function KendoPanel<T extends any>({
       skip: 0,
       take: 25,
       group: [],
-      // filter: {
-      // logic: "and",
-      // filters: [{ field: "isOfficial", operator: "eq", value: "(All)" }],
-      // },
     };
   const setSearchStatus = (state?: LoadCompanyGroup) => {
     dataState.filter = {
       logic: "and",
       filters: state ? [{ field: "groups", operator: "eq", value: "" }] : [],
     };
-    // setDefaultDDItem("Select Type");
     setDataState(dataState);
     setResultState({
       data: [],
@@ -195,9 +190,6 @@ export function KendoPanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            queryDict: {
-              state: stateFilerObject.value,
-            },
           },
           tableName
         )
@@ -222,7 +214,6 @@ export function KendoPanel<T extends any>({
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(tableData, initialKendoConfig)
   );
-  // const [defaultDDItem, setDefaultDDItem] = React.useState("Select Type");
   useEffect(() => {
     if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
@@ -234,28 +225,14 @@ export function KendoPanel<T extends any>({
       }
     }
   }, [tableCriteria.kendoConfig, didMount, tableCriteria.forceUpdate]);
-  const formatParams = () => {
-    const params: any = {};
-    if (!tableCriteria.queryDict) {
-      return;
-    }
-    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
-      if (key.startsWith("dynamicParams")) {
-        set(params, key, value);
-      } else {
-        params[key] = value;
-      }
-    });
-    params.dynamicParams = JSON.stringify(params.dynamicParams);
-    return params;
-  };
+
   const queryApi = () => {
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
       method: "get",
       url: queryUrl,
-      params: formatParams(),
+      params: {},
       paramsSerializer: (params) => qs.stringify(params),
       headers: {},
       cancelToken: call.token,
@@ -291,18 +268,20 @@ export function KendoPanel<T extends any>({
         return resp;
       })
       .then(({ data }) => {
-        if (customDataSet) {
-          data = customDataSet(data);
-          const newDataState = processWithGroups(data, initialKendoConfig);
-          setDataState(initialKendoConfig);
-          setResultState(newDataState);
-          if (data.length === 0) {
-            setNoDataMessage(
-              <Typography>
-                <Text translation="table.no.results.found"></Text>
-              </Typography>
-            );
-          }
+        data = data.map((el) => ({
+          ...el,
+          groupsOrg: el.groups,
+          groups: el.groups.map((e) => e.name).join(", "),
+        }));
+        const newDataState = processWithGroups(data, initialKendoConfig);
+        setDataState(initialKendoConfig);
+        setResultState(newDataState);
+        if (data.length === 0) {
+          setNoDataMessage(
+            <Typography>
+              <Text translation="table.no.results.found"></Text>
+            </Typography>
+          );
         }
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
@@ -432,6 +411,8 @@ export function KendoPanel<T extends any>({
   //     )
   //   );
   // };
+
+  const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -444,6 +425,8 @@ export function KendoPanel<T extends any>({
     const newDataItem: UserManage = {
       inEdit: true,
       id: generateUuid(),
+      active: true,
+      groups: defaultGroups.map((el) => ({ id: el.value })) as [],
     };
     tableData.unshift(newDataItem);
     setResultState(processWithGroups(tableData, dataState));
@@ -464,9 +447,6 @@ export function KendoPanel<T extends any>({
         {...dataState}
         onExpandChange={onExpandChange}
         expandField="expanded"
-        // onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
-        // onColumnResize={columnResize}
-        // onColumnReorder={columnReorder}
       >
         <GridToolbar>
           <Grid

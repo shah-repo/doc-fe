@@ -7,7 +7,6 @@ import KendoGridStyles from "../kendogrid.styles";
 
 export const GroupsCell = (props) => {
   const classes = KendoGridStyles();
-  const groups = props.dataItem[props.field]?.map((emp) => emp.name).join(", ");
   const updateGroupField = (event: any) => {
     props.dataItem.groups = event?.target?.value.map((item) => ({
       id: item?.value || "",
@@ -41,7 +40,7 @@ export const GroupsCell = (props) => {
           gutterBottom
           className={`${classes.groupCell} ${classes.kGridFont}`}
         >
-          {groups}
+          {props.dataItem.groups}
         </Typography>
       )}
     </td>

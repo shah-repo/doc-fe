@@ -17,7 +17,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
     hasValue = hasValue(event.target.value);
     props.onChange({
       value: hasValue ? event.target.value : "",
-      operator: hasValue ? "eq" : "",
+      operator: hasValue ? "contains" : "",
       syntheticEvent: event.syntheticEvent,
     });
   };

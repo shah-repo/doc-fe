@@ -16,46 +16,22 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
   // const intl = useIntl();
 
   const TABLE_NAME = "userManagement";
-  // const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const tableData = useSelector(getTableData(TABLE_NAME));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
-
-  // const getResendSignupEmailAction = useActionCreator(authActions.resendSignupEmail);
-  // const getSendPasswordResetEmailAction = useActionCreator(authActions.sendPasswordResetEmail);
-
-  // const asyncSignUpEmail = useAsync({
-  //   onSuccess: () => {
-  //     toastInfo(intl.formatMessage({
-  //       id: "user.management.signup.email.sent",
-  //     }));
-  //   },
-  // });
-
-  // const asyncResetPasswordEmail = useAsync({
-  //   onSuccess: () => {
-  //     toastInfo(intl.formatMessage({
-  //       id: "user.management.reset.password.email.sent",
-  //     }));
-  //   },
-  // });
-
-  // const handleResendEmail = ( employee: GetEmployeeResponse ) => {
-  //   const { user, id } = employee || {};
-
-  //   user?.locked ?
-  //     asyncResetPasswordEmail.start(getSendPasswordResetEmailAction, id, asyncResetPasswordEmail) :
-  //     asyncSignUpEmail.start(getResendSignupEmailAction, user?.email, asyncSignUpEmail);
-  // };
 
   if (isEmpty(tableCriteria.queryDict) && !didMount) {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          queryDict: {
-            // active: true,
-          },
+          queryDict: {},
+          kendoConfig: JSON.stringify({
+            filter: {
+              logic: "and",
+              filters: [{ field: "active", operator: "eq", value: true }],
+            },
+          }),
         },
         TABLE_NAME,
       ),
@@ -75,8 +51,6 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
       tableCriteria={tableCriteria}
       tableData={tableData}
       clearFilter={clearFilter}
-      // groupOptions={groupOptions}
-      // handleResendEmail={handleResendEmail}
     />
   );
 };

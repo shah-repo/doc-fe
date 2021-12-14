@@ -54,12 +54,15 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
         textField="text"
         dataItemKey="value"
         onChange={onChange}
-        value={state.value}
+        defaultItem={props.defaultItem}
+        defaultValue={state.value}
+        value={props.data.find((dd) => dd.value === props.value) || state.value}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title="Clear"
         onClick={onClearButtonClick}
+        disabled={(props.value === "" || props.value === null)}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>

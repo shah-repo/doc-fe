@@ -23,20 +23,12 @@ interface Props {
   tableCriteria: TablePanelStateProps;
   tableData: TableDataProps<any>;
   clearFilter?: () => void;
-  // groupOptions: SelectOption[];
-  // handleResendEmail: (employee: GetEmployeeResponse) => void;
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   tableName,
-  tableCriteria,
   tableData,
-  clearFilter,
-  // groupOptions,
-  // handleResendEmail,
 }) => {
-  // console.log("groupOptions", groupOptions.map((label) => label.text));
-
   const classes = KendoGridStyles();
   const intl = useIntl();
   const [showUserProfile, setUserProfile] = useState(false);
@@ -62,131 +54,13 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
     openUserProfile();
   };
 
-  // const handleGroups = (groups: Group[]) => groups.map((group) => group.name).join(", ");
-  // const handleEmail = (user: User) => {
-  //   if (user.locked) {
-  //     return intl.formatMessage({
-  //       id: "reset.password",
-  //     });
-  //   }
-  //   if (!user.confirmed) {
-  //     return intl.formatMessage({
-  //       id: "user.management.resend.signup.email",
-  //     });
-  //   }
-  //   return  intl.formatMessage({
-  //     id: "user.management.signed.up",
-  //   });
-  // };
-  // const handleEmailCellType = (user: User) => {
-  //   if (user.locked || !user.confirmed) {
-  //     return "LINK";
-  //   }
-  //   return "BASE";
-  // };
-
-  // const columns: TableColumnProps<GetEmployeeResponse>[] = [
-  //   {
-  //     key: "name" as keyof GetEmployeeResponse,
-  //     id: "UserManagementListPresenter-name",
-  //     dataKey: "user.name",
-  //     label: "common.name",
-  //     columnOptions: {
-  //       cellDataGetter: ({ rowData }) => rowData.user.name,
-  //     },
-  //     searchOptions: {
-  //       defaultValue: tableCriteria.queryDict.name,
-  //     },
-  //   },
-  //   {
-  //     key: "email" as keyof GetEmployeeResponse,
-  //     id: "UserManagementListPresenter-email",
-  //     label: "common.email",
-  //     dataKey: "user.email",
-  //     columnOptions: {
-  //       cellDataGetter: ({ rowData }) => rowData.user.email,
-  //     },
-  //     searchOptions: {
-  //       defaultValue: tableCriteria.queryDict.email,
-  //     },
-  //   },
-  //   {
-  //     key: "groupId" as keyof GetEmployeeResponse,
-  //     id: "UserManagementListPresenter-groupId",
-  //     dataKey: "groups",
-  //     label: "common.groups",
-  //     columnOptions: {
-  //       cellDataGetter: ({ rowData }) => handleGroups(rowData.groups),
-  //     },
-  //     searchOptions: {
-  //       searchType: "select",
-  //       selectOptions: groupOptions,
-  //       defaultValue: tableCriteria.queryDict.groupId,
-  //     },
-  //   },
-  //   {
-  //     key: "active",
-  //     id: "UserManagementListPresenter-active",
-  //     label: "common.active",
-  //     searchOptions: {
-  //       searchType: "select",
-  //       selectOptions: [
-  //         { text: "Inactive", value: "false" },
-  //         { text: "Active", value: "true" },
-  //       ],
-  //       defaultValue: tableCriteria.queryDict.active,
-  //     },
-  //     columnOptions: {
-  //       cellDataGetter: ({ rowData }) => rowData.active ? "Active" : "Inactive",
-  //       width: 50,
-  //     },
-  //   },
-  //   {
-  //     key: "confirmed" as keyof GetEmployeeResponse,
-  //     label: "user.management.signed.up",
-  //     dataKey: "user.confirmed",
-  //     omitSearch: true,
-  //     onSelect: ({ rowData }) => () => {  handleResendEmail(rowData); },
-  //     cellType: (rowData) => handleEmailCellType(rowData.user),
-  //     columnOptions: {
-  //       cellDataGetter: ({ rowData }) => handleEmail(rowData.user),
-  //       width: 50,
-  //     },
-  //   },
-  // ];
-
   return (
     <Grid container className={classes.cRoot}>
-      {/* <Grid item={true} xs={6}>
-        <ClearFilters {...{ clearFilter }}/>
-        <DocumentInfo numberOfRecords={tableData.length} />
-      </Grid> */}
-      {/* <Grid
-        item={true}
-        xs={6}
-        style={{ textAlign: "right", marginBottom: "16px" }}
-      >
-        <Grid
-          container
-          style={{
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >*/}
-      {/* Company dropbox button */}
-      {/* <EnableDropboxButton
-            shouldDisplayButton={hasDropboxPermission}
-            {...{ dropboxAsync, enableDropboxAction }}
-            disabled={Boolean(isCompanyDropboxEnabled)}
-          />
-          <AddSlackButtonContainer />
-          <AddEmployeeContainer />
-        </Grid>
-      </Grid> */}
       <Grid item={true}>
         <KendoPanel<GetEmployeeResponse>
           columns={gridConfiguration}
           queryUrl={EMPLOYEES_URL}
+          data={tableData}
           cellMeasure={true}
           tableName={tableName}
           hasDropboxPermission={hasDropboxPermission}

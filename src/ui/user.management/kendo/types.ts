@@ -46,4 +46,5 @@ export interface UserManage {
   active?: boolean | string;
   confirmed?: boolean | string;
   inEdit?: boolean | string;
+  groupsOrg?: string[];
 }

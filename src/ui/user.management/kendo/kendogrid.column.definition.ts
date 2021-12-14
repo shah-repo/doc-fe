@@ -10,7 +10,7 @@ import { SignedCell } from "./cell_template/signedCell";
 
 const columns = [
   {
-    field: "user",
+    field: "user.name",
     title: "NAME",
     show: true,
     filter: "text",
@@ -18,7 +18,7 @@ const columns = [
     cell: NameCell,
   },
   {
-    field: "user",
+    field: "user.email",
     title: "EMAIL",
     show: true,
     filter: "text",
