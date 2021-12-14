@@ -634,7 +634,7 @@ export function KendoPanel<T extends any>({
                     ></ListItemText>
                   </MenuItem>
                   {gridConfiguration.columns.map((item: any) =>
-                    ["", "isOfficial"].includes(item.field) ? null : (
+                    ["", "name"].includes(item.field) ? null : (
                       <MenuItem key={item.title} value={item.field}>
                         <ListItemText id={item.field} primary={item.title} />
                         <Box flexGrow={1} mr={5}></Box>
