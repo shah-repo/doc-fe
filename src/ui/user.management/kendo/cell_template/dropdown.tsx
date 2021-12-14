@@ -56,7 +56,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
         onChange={onChange}
         defaultItem={props.defaultItem}
         defaultValue={state.value}
-        value={props.data.find((dd) => dd.value === props.value) || state.value}
+        value={props.data.find((dd) => dd.value === props.value) || props.defaultItem}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
