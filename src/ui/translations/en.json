@@ -1148,5 +1148,6 @@
   "async.tasks.hour": "Hour",
   "async.tasks.minute": "Minute",
   "async.tasks.second": "Second",
-  "async.task.timetravel.error": "One field should be greater than 0"
+  "async.task.timetravel.error": "One field should be greater than 0",
+  "kendo.groupPanelEmpty": "Drag & drop column header to group"
 }
