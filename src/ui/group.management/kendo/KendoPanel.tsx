@@ -295,6 +295,10 @@ export function KendoPanel<T extends any>({
         { active: true },
         asyncGetActiveEmployees
       );
+    }
+  }, [ didMount]);
+  useEffect(() => {
+    if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
         if (fireAPI) {
           queryApi();
