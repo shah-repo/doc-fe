@@ -1,6 +1,6 @@
 import {
   DropDownList,
-  DropDownListChangeEvent,
+  DropDownListChangeEvent
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import React from "react";
@@ -54,12 +54,15 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
         textField="text"
         dataItemKey="value"
         onChange={onChange}
-        value={state.value}
+        defaultValue={state.value}
+        defaultItem={props.defaultItem}
+        value={props.data.find((dd) => dd.value === props.value) || state.value}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title="Clear"
         onClick={onClearButtonClick}
+        disabled={(props.value === "" || props.value === null)}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>

@@ -250,9 +250,7 @@ export function KendoPanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            queryDict: {
-              state: stateFilerObject.value,
-            },
+            queryDict: {},
           },
           tableName
         )
