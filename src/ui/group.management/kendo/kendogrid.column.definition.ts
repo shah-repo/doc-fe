@@ -18,7 +18,7 @@ const columns = [
     cell: NameCell,
   },
   {
-    field: "employees",
+    field: "memberNames",
     title: "MEMBERS",
     show: true,
     filter: "text",

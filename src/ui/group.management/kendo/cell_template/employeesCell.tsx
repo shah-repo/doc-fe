@@ -3,15 +3,15 @@ import React from "react";
 import { toMembersOptions } from "../../utils/transform";
 
 export const EmployeesCell = (props) => {
-  const employees = props.dataItem[props.field]?.map((emp) => emp.user.name);
+  const employees = props.dataItem[props.field];
   const updateMembersField = (event: any) => {
     props.dataItem.employees = event?.target?.value.map((item) => ({
       id: item?.value || "",
     }));
   };
-  const result = Object.keys(toMembersOptions(props.employees)).map(
+  const result = props.dataItem.inEdit ? Object.keys(toMembersOptions(props.employees)).map(
     (key) => (Number(key), toMembersOptions(props.employees)[key])
-  );
+  ) : [];
 
   return (
     <td

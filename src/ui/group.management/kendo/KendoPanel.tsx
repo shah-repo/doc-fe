@@ -170,7 +170,7 @@ export function KendoPanel<T extends any>({
         />
       );
     }
-    if (column.field === "employees") {
+    if (column.field === "memberNames") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <EmployeesCell {...props} employees={activeEmployees} />
@@ -358,22 +358,26 @@ export function KendoPanel<T extends any>({
           const { entities, result } = resp.data;
           resp.data = denormalize(result, normalizrSchema, entities);
         }
+        resp.data = resp.data.map((el) => ({
+          ...el,
+          memberNames: el.employees.map((e) => e.user.name).join(", ") || "",
+        }));
         return resp;
       })
       .then(({ data }) => {
-        if (customDataSet) {
-          data = customDataSet(data);
-          const newDataState = processWithGroups(data, initialKendoConfig);
-          setDataState(initialKendoConfig);
-          setResultState(newDataState);
-          if (data.length === 0) {
-            setNoDataMessage(
-              <Typography>
-                <Text translation="table.no.results.found"></Text>
-              </Typography>
-            );
-          }
+        // if (customDataSet) {
+        // data = customDataSet(data);
+        const newDataState = processWithGroups(data, initialKendoConfig);
+        setDataState(initialKendoConfig);
+        setResultState(newDataState);
+        if (data.length === 0) {
+          setNoDataMessage(
+            <Typography>
+              <Text translation="table.no.results.found"></Text>
+            </Typography>
+          );
         }
+        // }
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
