@@ -15,7 +15,7 @@ import GroupContentContainer from "./GroupContent.container";
 
 interface Props {
   isOpen: boolean;
-  closeDialog: () => void;
+  closeDialog: (flag?: boolean) => void;
   selectedGroup?: LoadCompanyGroup;
   title: any;
   isCreateMode?: boolean;

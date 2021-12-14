@@ -48,6 +48,7 @@ import {
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import {
@@ -63,6 +64,7 @@ import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
 import { CommandCell } from "./cell_template/commandCell";
 import { EmployeesCell } from "./cell_template/employeesCell";
 import { GroupCell } from "./cell_template/groupCell";
+import { NameCell } from "./cell_template/nameCell";
 import { ParentsCell } from "./cell_template/parentsCell";
 import { PermissionsCell } from "./cell_template/permissionsCell";
 import { TagsCell } from "./cell_template/tagsCell";
@@ -79,6 +81,8 @@ export function KendoPanel<T extends any>({
   tableName,
   onSelect,
   customDataSet,
+  refreshTable,
+  editGroupsDialog,
   normalizrSchema,
   canCreateGroups,
 }: Props<T>) {
@@ -129,6 +133,9 @@ export function KendoPanel<T extends any>({
     onSuccess: (response) => {
       queryApi();
     },
+    onError: (error) => {
+      toastError(error as string);
+    },
   });
   const handleCreate = (values: GroupRequestBody) => {
     dispatch(groupManagementActions.createGroup(values, createGroupAsync));
@@ -146,9 +153,7 @@ export function KendoPanel<T extends any>({
       permissions: dataItem.permissions,
       tags: dataItem.tags,
     };
-    // console.log("payload", payload);
     handleCreate(payload);
-    // enableInlineEdit(dataItem);
   };
   gridConfiguration.columns.forEach((column) => {
     const foundObj = initialColumnsConfig.find(
@@ -175,6 +180,10 @@ export function KendoPanel<T extends any>({
       column.cell = (props: GridCellProps) => (
         <EmployeesCell {...props} employees={activeEmployees} />
       );
+    }
+    if (column.field === "name") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => <NameCell {...props} />;
     }
 
     if (column.field === "isOfficial") {
@@ -294,7 +303,12 @@ export function KendoPanel<T extends any>({
         asyncGetActiveEmployees
       );
     }
-  }, [ didMount]);
+  }, [didMount]);
+  useEffect(() => {
+    if (didMount && refreshTable) {
+      queryApi();
+    }
+  }, [refreshTable]);
   useEffect(() => {
     if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
@@ -566,7 +580,7 @@ export function KendoPanel<T extends any>({
         {...dataState}
         onExpandChange={onExpandChange}
         expandField="expanded"
-        onRowClick={onSelect && (({ dataItem }) => onSelect({ dataItem })())}
+        // onRowClick={onSelect && (({ dataItem }) => !dataItem.inEdit && onSelect({ dataItem })())}
         // onColumnResize={columnResize}
         // onColumnReorder={columnReorder}
       >
@@ -616,7 +630,7 @@ export function KendoPanel<T extends any>({
                     ></ListItemText>
                   </MenuItem>
                   {gridConfiguration.columns.map((item: any) =>
-                    item.field !== "crId" ? (
+                    ["", "isOfficial"].includes(item.field) ? null : (
                       <MenuItem key={item.title} value={item.field}>
                         <ListItemText id={item.field} primary={item.title} />
                         <Box flexGrow={1} mr={5}></Box>
@@ -634,7 +648,7 @@ export function KendoPanel<T extends any>({
                           />
                         )}
                       </MenuItem>
-                    ) : null
+                    )
                   )}
                 </Menu>
               </FormControl>{" "}

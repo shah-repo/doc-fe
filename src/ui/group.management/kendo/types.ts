@@ -31,6 +31,7 @@ export interface TablePanelProps<T> {
   editGroupsDialog: any;
   selectedGroup: LoadCompanyGroup;
   canCreateGroups: boolean;
+  refreshTable?: boolean;
 }
 
 export interface TableSelectionProps<T> {

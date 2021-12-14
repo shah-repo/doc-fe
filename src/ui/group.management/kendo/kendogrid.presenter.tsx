@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import {
@@ -36,6 +36,13 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
   canCreateGroups,
 }) => {
   const classes = KendoGridStyles();
+  const [refreshTable, setRefreshTable] = useState(false);
+  const closeDialog = (flag: boolean | undefined) => {
+    if (flag) {
+      setRefreshTable(true);
+    }
+    editGroupsDialog.close();
+  };
   return (
     <Grid container={true} className={classes.cRoot}>
       <Grid item={true}>
@@ -47,6 +54,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
           onSelect={({ dataItem }) =>
             () =>
               handlePermission(dataItem)}
+          refreshTable={refreshTable}
           editGroupsDialog={editGroupsDialog}
           selectedGroup={selectedGroup}
           canCreateGroups={canCreateGroups}
@@ -59,7 +67,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
       />
       <AddGroup
         isOpen={editGroupsDialog.isOpen}
-        closeDialog={editGroupsDialog.close}
+        closeDialog={closeDialog}
         selectedGroup={selectedGroup}
         title={"group.management.edit.group"}
       />

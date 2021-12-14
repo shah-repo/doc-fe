@@ -10,6 +10,14 @@ import { TagsCell } from "./cell_template/tagsCell";
 
 const columns = [
   {
+    field: "isOfficial",
+    title: "GROUP TYPE",
+    show: true,
+    filter: "boolean",
+    filterCell: BooleanFilterCell,
+    cell: GroupCell,
+  },
+  {
     field: "name",
     title: "NAME",
     show: true,
@@ -24,14 +32,6 @@ const columns = [
     filter: "text",
     groupable: false,
     cell: EmployeesCell,
-  },
-  {
-    field: "isOfficial",
-    title: "GROUP TYPE",
-    show: true,
-    filter: "boolean",
-    filterCell: BooleanFilterCell,
-    cell: GroupCell,
   },
   {
     field: "formattedPermissions",
@@ -62,6 +62,7 @@ const columns = [
     field: "",
     title: "",
     show: true,
+    groupable: false,
     filterable: false,
     cell: CommandCell,
   },

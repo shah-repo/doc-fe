@@ -2,8 +2,9 @@ import { TextField } from "@material-ui/core";
 import React from "react";
 
 export const NameCell = (props) => {
-
+  const [name, setName] = React.useState("");
   const updateNameField = (event: any) => {
+    setName(event?.target?.value);
     props.dataItem.name = event?.target?.value;
   };
   return (
@@ -32,9 +33,8 @@ export const NameCell = (props) => {
             id="input-with-icon-textfield"
             variant="outlined"
             margin="dense"
+            value={name}
             onChange={updateNameField}
-            value={props.dataItem.updatedName}
-            defaultValue={props.dataItem.name}
           />
         </td>
       )}
