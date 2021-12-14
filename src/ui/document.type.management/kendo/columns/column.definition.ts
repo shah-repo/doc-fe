@@ -3,7 +3,7 @@ import { DocumentTypeManagementProps } from "../../../components/table/types";
 import { CheckboxCell } from "../cell.formatter/checkbox";
 import { CellFormatter } from "../cell.formatter/grid.cell";
 import { SchemaCell } from "../cell.formatter/schema.cell";
-import { BooleanFilterCell, DropdownFilterCellTemplate } from "../column.filter.formatter/filter.formatter";
+import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "../column.filter.formatter/filter.formatter";
 import { ColumnMenu } from "../columns/column.menu";
 
 const columns: DocumentTypeManagementProps[] = [{
@@ -14,14 +14,15 @@ const columns: DocumentTypeManagementProps[] = [{
 {
   field: "active",
   title: "Status",
-  cell: CellFormatter, // Filter Not Working
+  cell: CellFormatter,
   filter: "text",
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
   width: "150px",
   locked: true,
-}, {
+},
+{
   field: "documentTypeName",
   title: "Document Type",
   show: true,
@@ -96,6 +97,7 @@ const columns: DocumentTypeManagementProps[] = [{
 {
   field: "defaultRevStage",
   title: "Revision Stage",
+  cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
@@ -103,6 +105,7 @@ const columns: DocumentTypeManagementProps[] = [{
 }, {
   field: "hiddenForCreationForUsersWithoutTags",
   title: "Users without Tags", // TODO: Check if multiSelect
+  // cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate, // Not working
   show: true,
   columnMenu: ColumnMenu,
@@ -111,6 +114,7 @@ const columns: DocumentTypeManagementProps[] = [{
 {
   field: "group",
   title: "Group",
+  cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,

@@ -119,7 +119,8 @@ export function KendoGrid({
     const fields = ["id", "group", "documentTypeName", "documentTypeAcronym", "privateNumberPool", "canRedLine", "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd", "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
     const pickItem = pick(item, fields);
     // dataT[index] = pickItem;
-    return pickItem;
+    console.log(pickItem);
+    return item;
   };
 
   // Services

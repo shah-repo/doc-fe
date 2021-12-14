@@ -1,3 +1,6 @@
+// import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
+import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
+import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -53,3 +56,37 @@ export const DropdownFilterCellTemplate = (props: any) => {
   );
 };
 
+// MOVE IN ANOTHER FILE
+export const EditDropdownCellFormatter = (props) => {
+  const localizedData = getDropDownDataSource(props.field);
+  const isEdit = get(props.dataItem, "inEdit");
+  const handleChange = (e) => {
+    if (props.onChange) {
+      props.onChange({
+        dataIndex: 0,
+        dataItem: props.dataItem,
+        field: props.field,
+        syntheticEvent: e.syntheticEvent,
+        value: e.target.value.value,
+      });
+    }
+  };
+
+  const { dataItem } = props;
+  const field = props.field || "";
+  const dataValue = dataItem[field] === null ? "" : dataItem[field];
+  return (
+    <td>
+      {isEdit ? (
+        <DropDownList
+          onChange={handleChange}
+          value={localizedData.find((c) => c.value === dataValue)}
+          data={localizedData}
+          textField="text"
+        />
+      ) : (
+        dataValue.toString()
+      )}
+    </td>
+  );
+};
