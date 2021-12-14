@@ -183,19 +183,19 @@ export function KendoPanel<T extends any>({
         <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />
       );
     }
-    if (column.field === "permissions") {
+    if (column.field === "formattedPermissions") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <PermissionsCell {...props} isOfficial={Official} />
       );
     }
-    if (column.field === "parents") {
+    if (column.field === "parentName") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <ParentsCell {...props} isOfficial={Official} />
       );
     }
-    if (column.field === "tags") {
+    if (column.field === "formattedTags") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <TagsCell {...props} isOfficial={Official} />
@@ -361,6 +361,9 @@ export function KendoPanel<T extends any>({
         resp.data = resp.data.map((el) => ({
           ...el,
           memberNames: el.employees.map((e) => e.user.name).join(", ") || "",
+          parentName: el.parents.map((e) => e.name).join(", ") || "",
+          formattedTags: el?.tags?.join(", ") || "",
+          formattedPermissions: el?.permissions?.join(", ") || "",
         }));
         return resp;
       })

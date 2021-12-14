@@ -8,7 +8,7 @@ export const PermissionsCell = (props) => {
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
-  const permissions = props.dataItem[props.field]?.map((perm) => perm);
+  const permissions = props.dataItem[props.field];
   const updatePermissionField = (event: any) => {
     props.dataItem.permissions = event?.target?.value.map((e) => e.value);
   };

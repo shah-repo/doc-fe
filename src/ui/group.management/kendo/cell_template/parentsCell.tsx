@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 
 export const ParentsCell = (props) => {
-  const parents = props.dataItem[props.field]?.map((parent) => parent.name);
+  const parents = props.dataItem[props.field];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const availableGroups = allGroups.filter(
     (group) => group.value !== props.dataItem.id

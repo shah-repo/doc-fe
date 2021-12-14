@@ -34,7 +34,7 @@ const columns = [
     cell: GroupCell,
   },
   {
-    field: "permissions",
+    field: "formattedPermissions",
     title: "PERMISSIONS",
     show: true,
     filter: "text",
@@ -42,7 +42,7 @@ const columns = [
     cell: PermissionsCell,
   },
   {
-    field: "tags",
+    field: "formattedTags",
     title: "TAGS",
     show: true,
     filter: "text",
@@ -50,7 +50,7 @@ const columns = [
     cell: TagsCell,
   },
   {
-    field: "parents",
+    field: "parentName",
     title: "PARENT GROUPS",
     show: true,
     filter: "text",
