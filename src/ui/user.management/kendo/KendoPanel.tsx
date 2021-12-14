@@ -454,6 +454,7 @@ export function KendoPanel<T extends any>({
   const tableRenderer = () => (
     <>
       <KendoGrid
+        key={tableName}
         className={`${classes.kGrid} ${classes.kGridFont}`}
         data={result}
         total={resultState.total > 0 ? resultState.total : tableData.length}
@@ -519,7 +520,7 @@ export function KendoPanel<T extends any>({
                     ></ListItemText>
                   </MenuItem>
                   {gridConfiguration.columns.map((item: any) =>
-                    item.field !== "user" && item.field !== "" ? (
+                    item.field !== "user" && item.field !== "" && item.field !== "user.name" ? (
                       <MenuItem key={item.title} value={item.field}>
                         <ListItemText id={item.field} primary={item.title} />
                         <Box flexGrow={1} mr={5}></Box>
