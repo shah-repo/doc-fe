@@ -38,12 +38,12 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
       const formValue: Partial<FBApprovalMatrixFieldData> = formState?.getFieldValue(name);
       const approvalMatrixValues = [...formValue.approvalMatrix || []];
       const approvalMatrix = approvalMatrixValues.map((e) => {
-        const categoryTrim = e.docType?.category?.trim();
+        const categoryTrim = e.docType.category?.trim();
         return {
           ...e,
           docType: {
             ...e.docType,
-            acronym: e.docType?.acronym?.toUpperCase(),
+            acronym: e.docType.acronym?.toUpperCase(),
             category: categoryTrim ?? "",
           },
         };
@@ -97,6 +97,15 @@ export const withFBApprovalMatrix = <T extends FBApprovalMatrixProps>(
 
     useObserver(() => {
       approvalMatrixFieldState && (mode = approvalMatrixFieldState.mode);
+      // Used for disabling save while DAM is in add mode
+      // to prevent saving an empty row in the table
+      if (approvalMatrixFieldState?.mode === "add") {
+        workspaceState?.setDisabledAction(true);
+      }
+      else {
+        workspaceState?.setDisabledAction(false);
+      }
+
       if (dialogState?.open) {
         dialogState.setContent(modeContent());
       }

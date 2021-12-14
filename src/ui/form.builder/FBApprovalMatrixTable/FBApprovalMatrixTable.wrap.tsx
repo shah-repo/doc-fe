@@ -44,7 +44,7 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       if (!approvalData) {
         return;
       }
-      approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (row) => row.docType?.name?.toLowerCase());
+      approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (row) => row.docType.name?.toLowerCase());
     });
 
     return Component({

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
 import { isEqual, isUndefined, keys, omit } from "lodash";
+import { Observer } from "mobx-react-lite";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
@@ -41,6 +42,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // of create button until correct doc id is generated
   const { isCreateDocumentDisabled } = props;
   const { workspaceState, formState } = FB.useStores();
+
   const {
     documentRevision,
     values,
@@ -190,17 +192,23 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      <SubmitButton
-        asyncState={asyncState}
-        label={isDisabled ?
-          "common.save" :
-          "navigation.createDocument"
-        }
-        onClick={onFormClick}
-        id="DocumentRevisionForm-submit"
-        data-cy={"DocumentRevisionForm-submit"}
-        disabled={isCreateDocumentDisabled}
-      />
+      <Observer>
+        {() => (
+          <>
+            {<SubmitButton
+              asyncState={asyncState}
+              label={isDisabled ?
+                "common.save" :
+                "navigation.createDocument"
+              }
+              onClick={onFormClick}
+              id="DocumentRevisionForm-submit"
+              data-cy={"DocumentRevisionForm-submit"}
+              disabled={isCreateDocumentDisabled || workspaceState?.disabledAction}
+            />}
+          </>
+        )}
+      </Observer>
       {
         !redlineActive &&
       <span>
