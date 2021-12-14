@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 // import Collapse from "@material-ui/core/Collapse";
 // import IconButton from "@material-ui/core/IconButton";
 // import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -13,11 +13,8 @@ import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import Config from "../../../config";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-// import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
-import Text from "../../components/Text";
 import { HOME_URL } from "../../constants/urls";
 import useDialog from "../../hooks/useDialog";
 import useGetHasTag from "../../hooks/useGetHasTag";
@@ -88,7 +85,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   // console.log("documentTypes:::", documentTypes);
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
 
-  const disabled = Config.docTypeManagementEditDisabled;
+  // const disabled = Config.docTypeManagementEditDisabled;
 
   if (!canManageDocumentType) {
     return <Redirect to={HOME_URL} />;
@@ -96,19 +93,20 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
 
   return (
     <Grid container={true}>
-      <Grid item={true}>
-        <Box display="flex" justifyContent="flex-end">
-          <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
-            <Text translation={"common.add.document.type"} />
-          </Button>
-          <Button onClick={exportDAMDialog.open} variant="outlined">
-            <Text translation={"common.export.dam.details"} />
-          </Button>
-        </Box>
-      </Grid>
-      <Grid item={true}>
-        <KendoGrid tableData= {documentTypes}/>
-      </Grid>
+      {/* //   <Grid item={true}>
+    //     <Box display="flex" justifyContent="flex-end">
+    //       <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
+    //         <Text translation={"common.add.document.type"} />
+    //       </Button>
+    //       <Button onClick={exportDAMDialog.open} variant="outlined">
+    //         <Text translation={"common.export.dam.details"} />
+    //       </Button>
+    //     </Box>
+    //   </Grid> */}
+      {/* <Grid item={true}>
+        <KendoGrid tableData= {documentTypes} />
+      </Grid> */}
+      <KendoGrid tableData= {documentTypes} />
       {/* <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
           <Text translation={"common.add.document.type"} />

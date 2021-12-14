@@ -1,0 +1,16 @@
+export const rowObj = {
+  documentTypeName: "",
+  documentTypeAcronym: "",
+  privateNumberPool: false,
+  canRedLine: false,
+  isQms: false,
+  needsSignature: false,
+  defaultTraining: false,
+  startingNumber: 1,
+  hiddenForCreationForUsersWithoutTags: null,
+  group: "",
+  category: null,
+  schema: null,
+  fieldsConfig: null,
+  defaultRevStage: null,
+};

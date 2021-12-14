@@ -19,14 +19,14 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
-  width: "175px",
+  width: "150px",
   locked: true,
 }, {
   field: "documentTypeName",
   title: "Document Type",
   show: true,
   columnMenu: ColumnMenu,
-  width: "175px",
+  width: "165px",
   locked: true,
 },
 {
@@ -34,7 +34,7 @@ const columns: DocumentTypeManagementProps[] = [{
   title: "Acronym",
   show: true,
   columnMenu: ColumnMenu,
-  width: "175px",
+  width: "125px",
   locked: true,
 },
 {
@@ -45,7 +45,7 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: BooleanFilterCell,
   show: true,
   columnMenu: ColumnMenu,
-  width: "175px",
+  width: "200px",
 },
 {
   field: "canRedLine",
@@ -55,7 +55,7 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: BooleanFilterCell,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "110px",
 },
 {
   field: "isQms",
@@ -65,7 +65,7 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: BooleanFilterCell,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "85px",
 },
 {
   field: "needsSignature",
@@ -75,7 +75,7 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: BooleanFilterCell,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "185px",
 },
 {
   field: "defaultTraining",
@@ -85,13 +85,13 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: BooleanFilterCell,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "125px",
 }, {
   field: "startingNumber",
   title: "Starting Number",
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "185px",
 },
 {
   field: "defaultRevStage",
@@ -99,14 +99,14 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "165px",
 }, {
   field: "hiddenForCreationForUsersWithoutTags",
   title: "Users without Tags", // TODO: Check if multiSelect
   filterCell: DropdownFilterCellTemplate, // Not working
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "200px",
 },
 {
   field: "group",
@@ -114,20 +114,20 @@ const columns: DocumentTypeManagementProps[] = [{
   filterCell: DropdownFilterCellTemplate,
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "125px",
 }, {
   field: "category",
   title: "Category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
   columnMenu: ColumnMenu,
-  width: "75px",
+  width: "125px",
 }, {
   field: "schema",
   title: "Schema",
   cell: SchemaCell,
   show: true,
   filterable: false,
-  width: "75px",
+  width: "95px",
 }];
 
 interface PageState {

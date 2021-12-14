@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { Box, FormControl, Grid, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Box, Button, FormControl, Grid, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setGroupIds,
@@ -8,18 +8,27 @@ import {
 import {
   Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep } from "lodash";
+import { cloneDeep, each, pick, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
+import Config from "../../../config";
+import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { toastError } from "../../components/notifications";
 // import ClearFilters from "../../components/table/ClearFilters";
 import { DocumentTypeManagementProps } from "../../components/table/types";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
+import { toDocumentTypeBody } from "../transform";
 import { CommandCell } from "./cell.formatter/command.cell";
+import { rowObj } from "./cell.formatter/row.oject";
 import gridConfiguration from "./columns/column.definition";
 import GridStyles from "./grid.styles";
+// import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+
 
 export function KendoGrid({
   tableData,
@@ -30,6 +39,8 @@ export function KendoGrid({
   const initialDataState = gridConfiguration.initialDataState;
   const columns = gridConfiguration.columns;
   const editField = "inEdit";
+  // const [editID, setEditID] = React.useState(null);
+  const [gridEditID, setGridEditID] = React.useState("");
   const processWithGroups = (data: any[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
@@ -40,6 +51,19 @@ export function KendoGrid({
   const [resultState, setResultState] = React.useState<DataResult>(
     processWithGroups(tableData, initialDataState)
   );
+
+  // Update
+  const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
+  // Add New
+  const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
+  // TODO: CHECK WHEN TO DISABLE FIELD
+  const disabled = Config.docTypeManagementEditDisabled;
+
+  const async = useAsync({
+    onError: (error) => {
+      toastError(error as string);
+    },
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -79,40 +103,35 @@ export function KendoGrid({
         columnMenu={col.columnMenu}
         filterable={col.filterable}
         width={col.width}
-        locked={col.locked}>
+        locked={col.locked}
+      >
       </GridColumn>;
     }
   });
-  // Services
-  const data = [...tableData];
 
-  const generateId = (data) =>
-    data.reduce((acc, current) => Math.max(acc, current.id), 0) + 1;
-
-  const insertItem = (item) => {
-    item.id = generateId(data);
-    item.inEdit = false;
-    data.unshift(item);
-    return data;
-  };
-  const getItems = () => data;
+  // Services : for command Cell
+  // TODO: Move in separate File
+  const dataT: any = [...tableData];
+  const getItems = () => dataT;
   const updateItem = (item) => {
-    const index = data.findIndex((record) => record.id === item.id);
-    data[index] = item;
-    return data;
+    // const index = dataT.findIndex((record) => record.id === item.id);
+    const fields = ["id", "group", "documentTypeName", "documentTypeAcronym", "privateNumberPool", "canRedLine", "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd", "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
+    const pickItem = pick(item, fields);
+    // dataT[index] = pickItem;
+    return pickItem;
   };
-  // const deleteItem = (item) => {
-  //   const index = data.findIndex((record) => record.id === item.id);
-  //   data.splice(index, 1);
-  //   return data;
-  // };
+  const deleteItem = (item) => {
+    const index = dataT.findIndex((record) => record.id === item.id);
+    dataT.splice(index, 1);
+    return dataT;
+  };
   // Services
   const commandCell = (props) => (
     <CommandCell
       {...props}
       edit={enterEdit}
       remove={remove}
-      add={add}
+      add={addNewRow}
       discard={discard}
       update={update}
       cancel={cancel}
@@ -120,60 +139,78 @@ export function KendoGrid({
     />
   );
   const enterEdit = (dataItem) => {
-    // console.log("Enter Edit", dataItem);
-    const newData: any = tableData.map((item: any) => item.id === dataItem.id ? {
-      ...item,
-      inEdit: true,
-    } : item);
-    setResultState(newData);
-    // console.log("In edit click", newData);
-    // setProductData(newData);
+    each(tableData, (item: any) => {
+      item.inEdit = item.id === dataItem.id;
+    });
+    setGridEditID("inEdit");
+    setResultState(tableData);
   };
+
   const remove = (dataItem) => {
     console.log("Remove", dataItem);
-  //   const index = tableData.findIndex((record) => record.id === item.id);
-  //   tableData.splice(index, 1);
-  //   return tableData;
-    // const newData = deleteItem(dataItem);
-    // setResultState(newData);
-  };
-  const add = (dataItem) => {
-    console.log("Add");
-    const newData: any  = insertItem(dataItem);
+    const newData: any = deleteItem(dataItem);
     setResultState(newData);
   };
+
   const discard = () => {
     console.log("Discard");
     const newData: any = [...tableData];
     newData.splice(0, 1);
     setResultState(newData);
   };
+
   const cancel = (dataItem) => {
     console.log("Cancel");
     const originalItem = getItems().find(
       (p) => p.id === dataItem.id
     );
-    const newData = tableData.map((item) =>
+    const newData: any = dataT.map((item) =>
       item.id === originalItem.id ? originalItem : item
     );
     setResultState(newData);
   };
+
   const update = (dataItem) => {
-    console.log("update");
     dataItem.inEdit = false;
     const newData: any = updateItem(dataItem);
-    setResultState(newData);
+    const id = newData.id;
+    delete newData.id;
+    onFieldConfig(newData, id);
+  };
+  // On field config: inline edit
+  const onFieldConfig = (values, id) => {
+    async.start(
+      updateDocumentTypeAction,
+      id,
+      toDocumentTypeBody(values),
+      async,
+    );
   };
 
-  // const itemChange = (event) => {
-  //   const field = event.field || "";
-  //   const newData = tableData.map((item) =>
-  //     item.id === event.dataItem.id
-  //       ? { ...item, inEdit: true, [field]: event.value }
-  //       : item
-  //   );
-  //   setResultState(newData);
-  // };
+  // Add New row object
+  const addNewRowObject = () => {
+    const newDataItem: any = rowObj;
+    newDataItem.inEdit = true;
+    const newDataT: any = [newDataItem, ...dataT];
+    setResultState(newDataT);
+    setGridEditID("inEdit");
+  };
+
+  // Api Call on Add New Row
+  const addNewRow = (values: any) => {
+    delete values.inEdit;
+    console.log(disabled);
+    async.start(
+      addDocumentTypeAction,
+      toDocumentTypeBody(values),
+      async,
+    );
+  };
+
+  const itemChange = (e) => {
+    dataT.unshift(set(e.dataItem, e.field, e.value));
+    setResultState(dataT);
+  };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -204,100 +241,118 @@ export function KendoGrid({
   //   setDataState(event.dataState);
   //   setResultState(newDataState);
   // };
+
+
   return (
-    <>
+    <Grid>
       {isLoading && loadingPanel}
-      <KendoGlobalization>
-        <Kgrid className={classes.kGrid}
-          data={resultState}
-          sortable={true}
-          filterable={true}
-          reorderable={true}
-          pageable={gridConfiguration.pagerSettings}
-          resizable={true}
-          groupable={true}
-          total={resultState.total}
-          onDataStateChange={onDataStateChange}
-          {...dataState}
-          // onExpandChange={onExpandChange}
-          expandField="expanded"
-          editField={editField}
-          // onItemChange={itemChange}
-          dataItemKey={"id"}
-          // onRowClick={onRowClick}
-        >
-          <GridToolbar>
-            <Grid container spacing={1}>
-              {/* <Grid item={true} xs style={{ textAlign: "left" }}>
+      {/* <Button onClick={addNewRowObject}>Add New</Button> */}
+      <Grid item={true}>
+        <Box display="flex" justifyContent="flex-end">
+          {/* onClick={exportDAMDialog.open}  */}
+          <Button variant="outlined">
+            <Text translation={"common.export.dam.details"} />
+          </Button>
+          {/* onClick={dialog.open}  {...{ disabled }} */}
+          <Button variant="outlined" onClick={addNewRowObject}>
+            <Text translation={"common.add.document.type"} />
+          </Button>
+        </Box>
+      </Grid>
+      <Grid item={true}>
+        <KendoGlobalization>
+          <Kgrid className={classes.kGrid}
+            data={resultState}
+            sortable={true}
+            filterable={true}
+            reorderable={true}
+            pageable={gridConfiguration.pagerSettings}
+            resizable={true}
+            groupable={true}
+            total={resultState.total}
+            onDataStateChange={onDataStateChange}
+            {...dataState}
+            // onExpandChange={onExpandChange}
+            expandField="expanded"
+            editField={gridEditID}
+            onItemChange={itemChange}
+          // dataItemKey={"id"}
+          >
+            <GridToolbar>
+              <Grid container spacing={1}>
+                {/* <Grid item={true} xs style={{ textAlign: "left" }}>
               <ClearFilters {...{ clearFilter }} />
             </Grid> */}
-              <Grid item={true} xs style={{ textAlign: "right" }}>
-                <FormControl variant="outlined">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <ViewGridIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.columnsCus}
-                              color="textPrimary"
-                            >
+                <Grid item={true} xs style={{ textAlign: "right" }}>
+                  <FormControl variant="outlined">
+                    <IconButton
+                      aria-label="more"
+                      aria-controls="long-menu"
+                      aria-haspopup="true"
+                      onClick={handleClick}
+                    >
+                      <ViewGridIcon />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem>
+                        <ListItemText
+                          primary={
+                            <>
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                className={classes.columnsCus}
+                                color="textPrimary"
+                              >
                             Columns
-                            </Typography>
-                          </>
-                        }
-                      ></ListItemText>
-                    </MenuItem>
-                    {columns.map((item: any) =>
-                      item.field !== "docID" ? (
-                        <MenuItem key={item.title} value={item.field}>
-                          <ListItemText id={item.field} primary={item.title} />
-                          <Box flexGrow={1} mr={5}></Box>
-                          {item.show ? (
-                            <SolidIcon
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          ) : (
-                            <ViewChecked
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          )}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Menu>
-                </FormControl>{" "}
+                              </Typography>
+                            </>
+                          }
+                        ></ListItemText>
+                      </MenuItem>
+                      {columns.map((item: any) =>
+                        item.field !== "docID" ? (
+                          <MenuItem key={item.title} value={item.field}>
+                            <ListItemText id={item.field} primary={item.title} />
+                            <Box flexGrow={1} mr={5}></Box>
+                            {item.show ? (
+                              <SolidIcon
+                                onClick={() => {
+                                  onChange(item);
+                                }}
+                              />
+                            ) : (
+                              <ViewChecked
+                                onClick={() => {
+                                  onChange(item);
+                                }}
+                              />
+                            )}
+                          </MenuItem>
+                        ) : null
+                      )}
+                    </Menu>
+                  </FormControl>{" "}
+                </Grid>
               </Grid>
-            </Grid>
-          </GridToolbar>
-          {renderColumns()}
-          {/* width="240px" locked={true} */}
-          <GridColumn cell={commandCell} title="Actions" width="240px"/>
-          <GridNoRecords>
-            {noDataMessage}
-          </GridNoRecords>
-        </Kgrid>
-      </KendoGlobalization>
-    </>
+            </GridToolbar>
+            {/* locked={true} */}
+            <GridColumn cell={commandCell} title="Actions" width="200px" />
+            {renderColumns()}
+            <GridNoRecords>
+              {noDataMessage}
+            </GridNoRecords>
+          </Kgrid>
+        </KendoGlobalization>
+      </Grid>
+    </Grid>
   );
 }
+
+
