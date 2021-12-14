@@ -1,5 +1,5 @@
 
-import { differenceBy, filter, map } from "lodash";
+import { differenceBy, filter, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -123,7 +123,11 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     useEffect(() => reaction(
       () => workspaceState?.schema,
       () => {
+        const schemaDiff = differenceBy(workspaceState?.schema, schema || [], "name");
         const canAddFBFields = workspaceState?.mode === "design" || workspaceState?.mode === "formDesign";
+        if (isEmpty(schemaDiff)) {
+          return;
+        }
         if (!canAddFBFields) { return; }
         workspaceState?.saveDocRev();
       },
