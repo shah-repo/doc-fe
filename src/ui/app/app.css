@@ -186,3 +186,7 @@ td[role="gridcell"] {
 .k-grid-header .k-header.k-grid-header-sticky {
   background-color: var(--water);
 }
+
+.k-master-row .k-grid-content-sticky {
+  border-color: rgba(0, 0, 0, 0.08);
+}
