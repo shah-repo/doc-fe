@@ -60,7 +60,7 @@ export const SignedCell = (props) => {
     >
       {!props.dataItem.inEdit && (
         <span>
-          {props.dataItem.user.confirmed ? (
+          {props.dataItem?.user?.confirmed ? (
             "Signed up"
           ) : (
             <button

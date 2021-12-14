@@ -14,7 +14,7 @@ const columns = [
     title: "NAME",
     show: true,
     filter: "text",
-    groupable: false,
+    groupable: true,
     cell: NameCell,
   },
   {
@@ -22,7 +22,7 @@ const columns = [
     title: "EMAIL",
     show: true,
     filter: "text",
-    groupable: false,
+    groupable: true,
     cell: EmailCell,
   },
   {

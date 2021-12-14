@@ -39,7 +39,7 @@ export interface TableSelectionProps<T> {
 }
 
 export interface UserManage {
-  id: string;
+  id?: string;
   name?: string;
   email?: string;
   groups?: string[];

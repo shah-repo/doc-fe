@@ -21,7 +21,7 @@ export const NameCell = (props) => {
           onChange={updateNameField}
         />
       ) : (
-        <span>{props.dataItem.user.name}</span>
+        <span>{props.dataItem.user ? props.dataItem.user.name : props.dataItem.items[0]?.user?.name}</span>
       )}
     </td>
   );

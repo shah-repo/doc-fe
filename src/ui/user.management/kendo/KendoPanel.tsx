@@ -30,7 +30,6 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as generateUuid from "uuid/v4";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
@@ -424,7 +423,6 @@ export function KendoPanel<T extends any>({
   const addNew = () => {
     const newDataItem: UserManage = {
       inEdit: true,
-      id: generateUuid(),
       active: true,
       groups: defaultGroups.map((el) => ({ id: el.value })) as [],
     };
