@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
 import { isEqual, isUndefined, keys, omit } from "lodash";
-import { Observer } from "mobx-react-lite";
+import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
