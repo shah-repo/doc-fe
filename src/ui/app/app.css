@@ -179,3 +179,16 @@ td[role="gridcell"] {
   border-radius: 15px;
   border-color: var(--medium-grey);
 }
+
+.k-grid-header th.k-grid-header-sticky {
+  background-color: inherit;
+}
+
+.k-master-row.k-alt .k-grid-content-sticky,
+.k-master-row .k-grid-content-sticky {
+  background-color: inherit;
+}
+
+.k-master-row .k-grid-content-sticky {
+  border-color: rgba(0, 0, 0, 0.08);
+}
