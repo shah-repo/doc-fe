@@ -30,6 +30,7 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as generateUuid from "uuid/v4";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
@@ -44,6 +45,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import DocumentInfo from "../../components/table/DocumentInfo";
 import {
@@ -57,6 +59,8 @@ import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell_template/commandCell";
+import { EmailCell } from "./cell_template/emailCell";
+import { NameCell } from "./cell_template/nameCell";
 import KendoGridStyles from "./kendogrid.styles";
 import { TablePanelProps, UserManage } from "./types";
 
@@ -110,6 +114,20 @@ export function KendoPanel<T extends any>({
         <CommandCell {...props} edit={edit} add={add} cancel={cancel} editField={editField} />
       );
     }
+
+    if (column.field === "user.name") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <NameCell {...props} />
+      );
+    }
+
+    if (column.field === "user.email") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <EmailCell {...props} />
+      );
+    }
   });
   const edit = (dataItem: any) => {
     onSelect && onSelect({ dataItem })();
@@ -134,6 +152,9 @@ export function KendoPanel<T extends any>({
   const async = useAsync({
     onSuccess: () => {
       queryApi();
+    },
+    onError: (error) => {
+      toastError(error as string);
     },
   });
 
@@ -422,6 +443,7 @@ export function KendoPanel<T extends any>({
   };
   const addNew = () => {
     const newDataItem: UserManage = {
+      id: generateUuid(),
       inEdit: true,
       active: true,
       groups: defaultGroups.map((el) => ({ id: el.value })) as [],
