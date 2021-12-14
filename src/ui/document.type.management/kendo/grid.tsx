@@ -10,6 +10,7 @@ import {
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, pick, set } from "lodash";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
@@ -58,7 +59,7 @@ export function KendoGrid({
   const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
   // TODO: CHECK WHEN TO DISABLE FIELD
   const disabled = Config.docTypeManagementEditDisabled;
-
+  const dispatch = useDispatch();
   const async = useAsync({
     onError: (error) => {
       toastError(error as string);
@@ -120,17 +121,13 @@ export function KendoGrid({
     // dataT[index] = pickItem;
     return pickItem;
   };
-  const deleteItem = (item) => {
-    const index = dataT.findIndex((record) => record.id === item.id);
-    dataT.splice(index, 1);
-    return dataT;
-  };
+
   // Services
   const commandCell = (props) => (
     <CommandCell
       {...props}
       edit={enterEdit}
-      remove={remove}
+      remove={deleteDocumnet}
       add={addNewRow}
       discard={discard}
       update={update}
@@ -146,11 +143,6 @@ export function KendoGrid({
     setResultState(tableData);
   };
 
-  const remove = (dataItem) => {
-    console.log("Remove", dataItem);
-    const newData: any = deleteItem(dataItem);
-    setResultState(newData);
-  };
 
   const discard = () => {
     console.log("Discard");
@@ -169,7 +161,7 @@ export function KendoGrid({
     );
     setResultState(newData);
   };
-
+  // On field config: inline edit
   const update = (dataItem) => {
     dataItem.inEdit = false;
     const newData: any = updateItem(dataItem);
@@ -177,7 +169,7 @@ export function KendoGrid({
     delete newData.id;
     onFieldConfig(newData, id);
   };
-  // On field config: inline edit
+  // On field config: inline edit- Update api call
   const onFieldConfig = (values, id) => {
     async.start(
       updateDocumentTypeAction,
@@ -205,6 +197,11 @@ export function KendoGrid({
       toDocumentTypeBody(values),
       async,
     );
+  };
+
+  // Delete document
+  const deleteDocumnet = (dataItem) => {
+    dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
   };
 
   const itemChange = (e) => {
