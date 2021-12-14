@@ -23,6 +23,8 @@ let createdPartDocument;
 let createdPOFormDocument;
 let receivingName;
 let receivePageDetailsId;
+let receivingDocumentType;
+let oldReceivingForm;
 
 const receivingReleasedDate = moment().tz("America/Los_Angeles").format("L");
 const PART_DOCUMENT_TYPE_NAME = "Part";
@@ -445,6 +447,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
+          receivingDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
@@ -836,6 +839,84 @@ context("Create receivable test with PO, Lot and Supplier", () => {
         }).then(() => done() );
       });
     });
+
+    it("[API]Create old receiving form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Old receiving Form document</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Old Receiving Form document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: receivingDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "receiving-ku6t73ty",
+                type: "poreceive",
+                index: 0,
+                label: "Select PO",
+                rules: "",
+                hidden: false,
+                deleted: false,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: false,
+                outputDisabled: false,
+                validationMode: "default",
+                editorProperties: [],
+                validationAttribute: "Select PO",
+                deleteInFormDisabled: false,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "fb-approvals-ku6t6gzw",
+                type: "approvals",
+                index: 1,
+                label: "form.builder.approvals",
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        oldReceivingForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: oldReceivingForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done() );
+      });
+    });
   });
 
   context("Login and create PO", () => {
@@ -1126,6 +1207,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 valuePath: "precalc.po-docId-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
+                  "formInput.receiving-ku6t73ty",
                 ],
                 showOnAndroid: true,
               },
@@ -1144,6 +1226,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 valuePath: "precalc.po-suppliers-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
+                  "formInput.receiving-ku6t73ty",
                 ],
                 showOnAndroid: true,
               },
@@ -1155,6 +1238,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 valuePath: "precalc.part_number_rev",
                 sourcePath: [
                   `formInput.${receivingName}`,
+                  "formInput.receiving-ku6t73ty",
                 ],
                 showOnAndroid: true,
               },
@@ -1166,6 +1250,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 valuePath: "precalc.po-status-in-receiving",
                 sourcePath: [
                   `formInput.${receivingName}`,
+                  "formInput.receiving-ku6t73ty",
                 ],
                 showOnAndroid: true,
               },
@@ -1277,4 +1362,40 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.get("div[aria-colindex=\"8\"]").should("have.text", "Open");
     });
   });
+
+  context("Verify old receiving form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Create new record button click", () => {
+      cy.recCreateRecordFromLandingPage();
+    });
+
+    it("Select 'Receivable' form", () => {
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
+    });
+
+    it("Search for API PO document and select it", () => {
+      cy.get("input[data-cy^=\"porec-rece\"]").arrowType("New Purchase Order{downarrow}{enter}");
+    });
+
+    it("Verify requester is present on receivable", () => {
+      cy.get("input[data-cy^=\"requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it("Verify supplier is present on receivable", () => {
+      cy.get("input[data-cy^=\"po-supplier-built-in\"]")
+        .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
+    });
+
+    it("Verify PO table is present on receivable", () => {
+      cy.get("div[name=\"po-items-built-in\"]>table").should("exist");
+    });
+
+    it("Save receivable", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
 });
+
