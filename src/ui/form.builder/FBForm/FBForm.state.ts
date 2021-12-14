@@ -1,5 +1,5 @@
 import { flatten, unflatten } from "flat";
-import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, values } from "lodash";
+import { cloneDeep, Dictionary, get as lodashGet, isArray, isBoolean, isEmpty, isNumber, isString, isUndefined, join, map, omit, omitBy, set as lodashSet, slice, toNumber, values } from "lodash";
 import { action, computed, get, observable, set } from "mobx";
 import { FBFormConstructor, FBInputState, FBLockBody, FBLockValue, FBValidationRelatedRules, FBWorkspaceMode, FBWorkspaceState } from "..";
 import FBSchemaState from "../FBSchema/FBSchema.state";
@@ -210,23 +210,25 @@ class FBFormState extends FBSchemaState {
       return;
     }
 
-    const rules = final ? this.finalValidationRulse : this.getRules();
-    const values = omitBy(this.validationValues, (v) => (isString(v) && isEmpty(v)) || (isArray(v) && isEmpty(v)));
+    let rules = final ? this.finalValidationRulse : this.getRules();
+    let values = omitBy(this.validationValues, (v) => (isString(v) && isEmpty(v)) || (isArray(v) && isEmpty(v)));
 
     // *TODO: unify validators format
     let validator: any;
     try {
       validator = new this.Validator(values, rules);
     } catch {
-      validator = new this.Validator(flatten(this.getValues()), flatten(this.getRules()));
+      rules = flatten(this.getRules());
+      values = flatten(this.getValues());
     }
     if (!validator) {
       return;
     }
+    this.validatorRules = validator.rules;
+    validator = new this.Validator(values, this.parseRules(rules, values));
     this.registerValidator(validator);
     validator.setAttributeNames(this.validationAttributeNames);
     this.errors.clear();
-    this.validatorRules = validator.rules;
     validator.checkAsync(
       // passes
       () => callback && callback(true),
@@ -237,19 +239,56 @@ class FBFormState extends FBSchemaState {
       });
   };
 
+  private parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
+    const parsedRules = {};
+    map(rules, (value, key) => {
+      const rulesArray = value?.split("|");
+      const valuesArray: any = [];
+      map(rulesArray, (val) => {
+        const splitVal = val.split(":");
+        if (splitVal.length === 1) {
+          parsedRules[key] = val;
+        } else {
+          const finalValue = splitVal[1].split(",");
+          if (finalValue.length === 1) {
+            valuesArray.push({
+              [splitVal[0]]: finalValue[0],
+            });
+          } else if (splitVal.length === 2) {
+            let fromValue: any = values[finalValue[0]];
+            fromValue = isNumber(fromValue) ? toNumber(finalValue[1]) : finalValue[1];
+            valuesArray.push({
+              [splitVal[0]]: [finalValue[0], fromValue],
+            });
+          } else { // array value (required_if_in validator)
+            // const ruleName = splitVal[1].split(",")[0];
+            const splitArray = splitVal[1].split(",");
+            const splitValue = val.split(",");
+            const finalValue = slice(splitValue, 1, splitValue.length).join(",");
+            valuesArray.push({
+              [splitVal[0]]: [splitArray[0], finalValue],
+            });
+          }
+          parsedRules[key] = valuesArray;
+        }
+      });
+    });
+    return parsedRules;
+  };
+
   // *NOTE: remove this after it is set in be script
   public registerValidator = (validator: any) => {
     this.Validator.registerAsyncImplicit(
       "required_if_in",
-      function(val: string[], req: any, attribute: string, passes) {
-        const reqs = req.split(",");
-        const reqName = reqs.shift() || "";
+      function(val: string[], req: string[], attribute: string, passes) {
+        const reqs = req?.[1];
+        const reqName = req?.[0] || "";
         let inputValue = lodashGet(validator.input, reqName);
         // Radio group support
         !isArray(inputValue) && (inputValue = [inputValue]);
         const diff = inputValue && inputValue.filter((inputVal) => {
           try {
-            return values(JSON.parse(reqs.join(","))).includes(inputVal);
+            return values(JSON.parse(reqs)).includes(inputVal);
           }
           catch {
             return reqs.includes(inputVal);

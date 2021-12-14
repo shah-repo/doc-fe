@@ -1,4 +1,4 @@
-import { first, omit } from "lodash";
+import { cloneDeep, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -53,8 +53,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     useObserver(() => {
-      calculation = omit(purchaseOrderState?.value, "items");
-      items = purchaseOrderState?.value.items;
+      const value = cloneDeep(purchaseOrderState?.value);
+      calculation = omit(value, "items");
+      items = cloneDeep(value?.items);
       if (props.mode === "preview") {
         items?.map((item) => {
           const lots = smartReferencesFrom?.filter((ref) => item.id === ref.metadata?.fieldId);

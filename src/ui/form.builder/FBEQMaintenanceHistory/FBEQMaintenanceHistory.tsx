@@ -18,7 +18,7 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
   <Box mb={5} fontWeight="fontWeightBold">
     <Box display="flex" alignItems="center" mb={1}>
       <FBText
-        locale={"form.builder.maintenance.history"}
+        locale={"document.revision.history"}
       />
       <ArrowDropDownIcon />
     </Box>
