@@ -15,6 +15,7 @@ export const SchemaCell = (props) => {
     return null;
   }
   const formattedValue = get(props.dataItem, props.field);
+  const isEdit = get(props.dataItem, "inEdit");
   return (
     <>
       <td colSpan={props.colSpan}
@@ -31,6 +32,7 @@ export const SchemaCell = (props) => {
           cancelEdit={handleCancelEdit}
           // onSubmit={handleSubmit}
           item={formattedValue}
+          isEdit= {isEdit}
         />
       )}
     </>

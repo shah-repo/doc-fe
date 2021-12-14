@@ -9,7 +9,11 @@ export const SchemaForm = (props) =>
       maximizeButton={() => null}>
       <form className="k-form" >
         <label className="k-form-field">
-          <TextArea rows={15} value={JSON.stringify(props.item, undefined, 4)}  placeholder="Schema"/>
+          {
+            props.isEdit ? <TextArea rows={15} defaultValue={JSON.stringify(props.item, undefined, 4)}  placeholder="Schema"/> :
+              <TextArea rows={15} value={JSON.stringify(props.item, undefined, 4)}  placeholder="Schema"/>
+          }
+          {/* <TextArea rows={15} defaultValue={JSON.stringify(props.item, undefined, 4)}  placeholder="Schema"/> */}
         </label>
         <div className="k-form-field">
           <button type="button" className="k-button" onClick={props.cancelEdit}
@@ -22,6 +26,7 @@ export const SchemaForm = (props) =>
             style={{
               float: "right",
             }}
+            disabled={!props.isEdit}
           >
               Add
           </button>
