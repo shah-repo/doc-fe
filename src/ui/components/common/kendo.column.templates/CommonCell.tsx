@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import moment from "moment";
 import React from "react";
-import { toValidateIfDate } from "../../../documentType/list/helpers";
+import { toValidateIfDate } from "./helper";
 
 export const CommonCell = (props) => {
   const value = get(props.dataItem, props.field);
