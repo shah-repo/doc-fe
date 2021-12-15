@@ -5,7 +5,14 @@ export const CommandCell = (props) => {
   const inEdit = dataItem[props.editField];
   const isNewItem = dataItem.id === undefined;
   return inEdit ? (
-    <td className="k-command-cell">
+    // className="k-command-cell"
+    <td  colSpan={props.colSpan}
+      style= {props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}>
       <button
         className="k-button k-grid-save-command"
         onClick={() =>
@@ -24,7 +31,13 @@ export const CommandCell = (props) => {
       </button>
     </td>
   ) : (
-    <td className="k-command-cell">
+    <td colSpan={props.colSpan}
+      style= {props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}>
       <button
         className="k-primary k-button k-grid-edit-command"
         onClick={() => props.edit(dataItem)}

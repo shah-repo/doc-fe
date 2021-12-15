@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { Box, Button, FormControl, Grid, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setGroupIds,
@@ -8,12 +8,12 @@ import {
 import {
   Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, each, pick, set } from "lodash";
+import { cloneDeep, each, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
+// import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
+// import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
+// import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -114,14 +114,14 @@ export function KendoGrid({
   // TODO: Move in separate File
   const dataT: any = [...tableData];
   const getItems = () => dataT;
-  const updateItem = (item) => {
+  const updateItem = (item) =>
     // const index = dataT.findIndex((record) => record.id === item.id);
-    const fields = ["id", "group", "documentTypeName", "documentTypeAcronym", "privateNumberPool", "canRedLine", "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd", "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
-    const pickItem = pick(item, fields);
-    // dataT[index] = pickItem;
-    console.log(pickItem);
-    return item;
-  };
+    // const fields = ["id", "group", "documentTypeName", "documentTypeAcronym", "privateNumberPool", "canRedLine", "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd", "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
+    // const pickItem = pick(item, fields);
+    // // dataT[index] = pickItem;
+    // console.log(pickItem);
+    item
+  ;
 
   // Services
   const commandCell = (props) => (
@@ -210,26 +210,26 @@ export function KendoGrid({
     setResultState(dataT);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  // const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const [coldef, setColdef] = React.useState(columns);
-  const onChange = (item: any) => {
-    const newState = [...coldef];
-    newState.map((c) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColdef(newState);
+  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+  // const [coldef, setColdef] = React.useState(columns);
+  // const onChange = (item: any) => {
+  //   const newState = [...coldef];
+  //   newState.map((c) => {
+  //     if (c.field === item.field) {
+  //       c.show = !c.show;
+  //     }
+  //   });
+  //   setColdef(newState);
 
-  };
+  // };
   // const clearFilter = (event) => {
   //   dataState.filter = {
   //     logic: "and",
@@ -281,7 +281,7 @@ export function KendoGrid({
                 {/* <Grid item={true} xs style={{ textAlign: "left" }}>
               <ClearFilters {...{ clearFilter }} />
             </Grid> */}
-                <Grid item={true} xs style={{ textAlign: "right" }}>
+                {/* <Grid item={true} xs style={{ textAlign: "right" }}>
                   <FormControl variant="outlined">
                     <IconButton
                       aria-label="more"
@@ -337,11 +337,11 @@ export function KendoGrid({
                       )}
                     </Menu>
                   </FormControl>{" "}
-                </Grid>
+                </Grid> */}
               </Grid>
             </GridToolbar>
             {/* locked={true} */}
-            <GridColumn cell={commandCell} title="Actions" width="200px" />
+            <GridColumn cell={commandCell} title="Actions" width="200px" locked={true}/>
             {renderColumns()}
             <GridNoRecords>
               {noDataMessage}
