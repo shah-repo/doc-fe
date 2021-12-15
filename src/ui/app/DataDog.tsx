@@ -1,25 +1,15 @@
 import { datadogRum } from "@datadog/browser-rum";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { ApplicationState } from "../../state/reducers";
-
-function deleteCookie(name) {
-  document.cookie = name + "=" +
-      ";domain=" + window.location.hostname +
-      ";path=/" +
-      ";expires=" + new Date().toUTCString();
-}
-
-const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
-const companyNameSelector = (state: ApplicationState) => state.company.companyMine.name;
-const employeeIdSelector = (state: ApplicationState) => state.auth.user.employeeId;
-const userNameSelector = (state: ApplicationState) => state.auth.user.name;
+import { deleteCookie } from "../../common/utils/helpers";
+import { authSelectors } from "../../state/ducks/auth";
+import { companySelectors } from "../../state/ducks/company";
 
 export const DataDog: React.FunctionComponent<any> = () => {
-  const companyId = useSelector(companyIdSelector);
-  const companyName = useSelector(companyNameSelector);
-  const employeeId = useSelector(employeeIdSelector);
-  const userName = useSelector(userNameSelector);
+  const companyId = useSelector(companySelectors.companyIdSelector);
+  const companyName = useSelector(companySelectors.companyNameSelector);
+  const employeeId = useSelector(authSelectors.currentEmployeeId);
+  const userName = useSelector(authSelectors.currentUserName);
 
   useEffect(() => {
     if (
