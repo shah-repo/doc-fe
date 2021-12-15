@@ -96,6 +96,7 @@ export enum CyRoutes {
   ApprovalMatrix = "ApprovalMatrix",
   GetTrainingRecord = "GetTrainingRecord",
   PostCompleteTraining = "PostCompleteTraining",
+  PatchUsersMe = "PatchUsersMe",
 }
 
 export const routes: ICyRoutes =   {
@@ -103,6 +104,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/employees*",
+    },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 40 * 1000,
+    },
+  },
+  PatchUsersMe: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/users/me*",
     },
     callConfig: {
       responseTimeout: 50 * 1000,
@@ -443,7 +454,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/change_requests/*/reject",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
   ReleaseDocRev: {
@@ -603,8 +614,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/documents/*",
     },
     callConfig: {
-      requestTimeout: 30 * 1000,
-      responseTimeout: 40 * 1000,
+      requestTimeout: 60 * 1000,
+      responseTimeout: 60 * 1000,
     },
   },
   DocRevPreview: {
@@ -709,7 +720,8 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/approvals/*/approve",
     },
     callConfig: {
-      responseTimeout: 20 * 1000,
+      responseTimeout: 45 * 1000,
+      requestTimeout: 40 * 1000,
     },
   },
   PostApprovals: {
@@ -800,7 +812,7 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/training_record/*/complete",
     },
     callConfig: {
-      responseTimeout: 15 * 1000,
+      responseTimeout: 30 * 1000,
     },
   },
 };

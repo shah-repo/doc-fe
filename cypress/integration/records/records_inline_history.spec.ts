@@ -237,10 +237,17 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
+          cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
           cy.drEnterDocumentDescriptionWithWait({ description: "History Test Inline Record description" });
         });
 
