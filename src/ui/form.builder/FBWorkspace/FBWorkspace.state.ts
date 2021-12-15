@@ -197,11 +197,17 @@ class FBWorkspaceState extends FBSchemaState {
         break;
       case "form":
       case "formDesign":
-        body = {
-          formInput: omit(values,
-            Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
-          ...mode === "formDesign" && this.isOutputSchema && { schema },
-        };
+        if (values) {
+          body = {
+            formInput: omit(values,
+              Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        } else {
+          body = {
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        }
         break;
       default:
         return;
