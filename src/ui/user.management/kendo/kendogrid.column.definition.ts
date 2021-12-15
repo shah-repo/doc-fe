@@ -10,6 +10,20 @@ import { SignedCell } from "./cell_template/signedCell";
 
 const columns = [
   {
+    field: "",
+    title: "",
+    show: true,
+    filterable: false,
+    cell: CommandCell,
+  },
+  {
+    field: "user",
+    title: "SIGNED UP",
+    show: true,
+    filterable: false,
+    cell: SignedCell,
+  },
+  {
     field: "user.name",
     title: "NAME",
     show: true,
@@ -40,20 +54,6 @@ const columns = [
     filter: "boolean",
     filterCell: BooleanFilterCell,
     cell: ActiveCell,
-  },
-  {
-    field: "user",
-    title: "SIGNED UP",
-    show: true,
-    filterable: false,
-    cell: SignedCell,
-  },
-  {
-    field: "",
-    title: "",
-    show: true,
-    filterable: false,
-    cell: CommandCell,
   },
 ];
 

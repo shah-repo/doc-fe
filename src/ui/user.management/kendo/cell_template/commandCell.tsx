@@ -1,3 +1,7 @@
+import { IconButton } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
 
 export const CommandCell = (props) => {
@@ -6,7 +10,17 @@ export const CommandCell = (props) => {
 
   return inEdit ? (
     <td className="k-command-cell">
-      <button
+      <IconButton
+        aria-label="update"
+        onClick={() => props.add(dataItem)}
+      ><AddCircleOutlineIcon color="primary" fontSize="default" />
+      </IconButton>
+      <IconButton
+        aria-label="cancel"
+        onClick={() => props.cancel(dataItem)}
+      ><CancelOutlinedIcon color="primary" fontSize="default" />
+      </IconButton>
+      {/* <button
         className="k-button k-grid-save-command"
         onClick={() => props.add(dataItem)}
       >
@@ -17,16 +31,15 @@ export const CommandCell = (props) => {
         onClick={() => props.cancel(dataItem)}
       >
         Cancel
-      </button>
+      </button> */}
     </td>
   ) : (
     <td className="k-command-cell">
-      <button
-        className="k-primary k-button k-grid-edit-command"
+      <IconButton
+        aria-label="edit"
         onClick={() => props.edit(dataItem)}
-      >
-        Edit
-      </button>
+      ><EditIcon color="primary" fontSize="default" />
+      </IconButton>
     </td>
   );
 };
