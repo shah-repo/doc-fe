@@ -28,7 +28,6 @@ import { find, isEmpty, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
@@ -114,11 +113,9 @@ export function KendoPanel<T extends any>({
     // enableInlineEdit(dataItem);
     onSelect && onSelect({ dataItem })();
   };
-  const intl = useIntl();
   const addGroup = () => {
     if (initialKendoConfig?.filter?.filters?.length || initialKendoConfig?.sort?.length) {
-      toastError(intl.formatMessage({ id: "group.management.filters.error" }));
-      return;
+      clearFilter();
     }
     // Modify Here to change sample or editable data
     const sampleData = {
@@ -380,10 +377,10 @@ export function KendoPanel<T extends any>({
         }
         resp.data = resp.data.map((el) => ({
           ...el,
-          memberNames: el.employees.map((e) => e.user.name).join(", ") || "",
-          parentName: el.parents.map((e) => e.name).join(", ") || "",
-          formattedTags: el?.tags?.join(", ") || "",
-          formattedPermissions: el?.permissions?.join(", ") || "",
+          memberNames: el.employees.map((e) => e.user.name).sort().join(", ") || "",
+          parentName: el.parents.map((e) => e.name).sort().join(", ") || "",
+          formattedTags: el?.tags?.sort().join(", ") || "",
+          formattedPermissions: el?.permissions?.sort().join(", ") || "",
         }));
         return resp;
       })

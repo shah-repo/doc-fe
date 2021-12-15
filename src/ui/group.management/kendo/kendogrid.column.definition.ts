@@ -10,6 +10,14 @@ import { TagsCell } from "./cell_template/tagsCell";
 
 const columns = [
   {
+    field: "",
+    title: "",
+    show: true,
+    groupable: false,
+    filterable: false,
+    cell: CommandCell,
+  },
+  {
     field: "isOfficial",
     title: "GROUP TYPE",
     show: true,
@@ -56,15 +64,6 @@ const columns = [
     filter: "text",
     groupable: false,
     cell: ParentsCell,
-  },
-
-  {
-    field: "",
-    title: "",
-    show: true,
-    groupable: false,
-    filterable: false,
-    cell: CommandCell,
   },
 ];
 

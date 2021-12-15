@@ -1,5 +1,8 @@
+import { IconButton } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
-import Text from "../../../components/Text";
 
 export const CommandCell = (props) => {
   const { dataItem } = props;
@@ -7,34 +10,24 @@ export const CommandCell = (props) => {
 
   return inEdit ? (
     <td className="k-command-cell">
-      <button
-        className="k-primary k-button k-grid-edit-command"
+      <IconButton
+        aria-label="add"
         onClick={() => props.update(dataItem)}
-        // onClick={() => (isNewItem ? props.add(dataItem) : props.update(dataItem))}
-      >
-        <Text translation="common.add" />
-      </button>
-      <button
-        className="k-button k-grid-remove-command"
+      ><AddCircleOutlineIcon color="primary" fontSize="default" />
+      </IconButton>
+      <IconButton
+        aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
-      >
-        <Text translation="common.cancel" />
-      </button>
+      ><CancelOutlinedIcon color="primary" fontSize="default" />
+      </IconButton>
     </td>
   ) : (
     <td className="k-command-cell">
-      <button
-        className="k-primary k-button k-grid-edit-command"
+      <IconButton
+        aria-label="edit"
         onClick={() => props.edit(dataItem)}
-      >
-        <Text translation="common.edit" />
-      </button>
-      {/* <button
-        className="k-button k-grid-remove-command"
-        onClick={() => props.discard(dataItem)}
-      >
-        <Text translation="common.discard" />
-      </button> */}
+      ><EditIcon color="primary" fontSize="default" />
+      </IconButton>
     </td>
   );
 };

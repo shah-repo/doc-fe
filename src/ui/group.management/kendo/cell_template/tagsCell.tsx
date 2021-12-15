@@ -1,7 +1,10 @@
+import { Typography } from "@material-ui/core";
 import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
+import Text from "../../../components/Text";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 
 export const TagsCell = (props) => {
   const tags = props.dataItem[props.field];
@@ -30,7 +33,9 @@ export const TagsCell = (props) => {
           onChange={updateTagField}
         />
       ) : (
-        <span>{tags}</span>
+        <StyleTooltip title={<Typography><Text translation={tags} /></Typography>} placement="top-start" arrow>
+          <span>{tags}</span>
+        </StyleTooltip>
       )}
     </td>
   );
