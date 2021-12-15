@@ -1,10 +1,9 @@
 import { makeStyles } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { Link } from "react-router-dom";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const Status = (props: GridCellProps) => {
+export const Status = (props) => {
   const styles = makeStyles(() => ({
     statusApproved: {
       display: "flex",
@@ -110,7 +109,7 @@ export const Status = (props: GridCellProps) => {
     },
   }));
   const classes = styles();
-  const status = props.dataItem.state;
+  const status = props.dataItem[props.field];
   if (status === "DRAFT") {
     return (
       <td
@@ -191,5 +190,15 @@ export const Status = (props: GridCellProps) => {
       </td>
     );
   }
-  return null;
+  return (
+    <td
+      colSpan={props.colSpan}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      data-grid-col-index={props.columnIndex}
+    >
+      <span className={classes.statusVoided}>{status}</span>
+    </td>
+  );
 };
