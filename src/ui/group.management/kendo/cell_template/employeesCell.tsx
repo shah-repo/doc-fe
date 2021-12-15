@@ -2,8 +2,7 @@ import { Typography } from "@material-ui/core";
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
-import Text from "../../../components/Text";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import { toMembersOptions } from "../../utils/transform";
 
 export const EmployeesCell = (props) => {
@@ -11,7 +10,7 @@ export const EmployeesCell = (props) => {
   const [result, setResult] = React.useState([]);
   const [data, setData] = React.useState(Object.keys(toMembersOptions(props.employees)).map(
     (key) => (Number(key), toMembersOptions(props.employees)[key])
-  ));
+  ).sort((a, b) => (a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd()) ? 1 : -1));
 
   const updateMembersField = (event: any) => {
     props.dataItem.employees = event?.target?.value.map((item) => ({
@@ -26,7 +25,7 @@ export const EmployeesCell = (props) => {
       (key) => (Number(key), toMembersOptions(props.employees)[key])
     )).slice();
     const newData = filterBy(allData, filter);
-    setData(newData);
+    setData(newData.sort((a, b) => (a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd()) ? 1 : -1));
   };
 
   return (
@@ -48,9 +47,12 @@ export const EmployeesCell = (props) => {
           textField="label"
         />
       ) : (
-        <StyleTooltip title={<Typography><Text translation={employees} /></Typography>} placement="left-start" arrow>
+        <StyledTooltip interactive={true}
+          title={
+            <Typography><div style={{ whiteSpace: "pre-line" }}>{employees?.replace(/,/g, ",\n")}</div></Typography>
+          } placement="left-start" arrow>
           <span>{employees}</span>
-        </StyleTooltip>
+        </StyledTooltip>
       )}
     </td>
   );

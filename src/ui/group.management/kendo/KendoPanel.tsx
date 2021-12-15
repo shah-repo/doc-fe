@@ -377,8 +377,8 @@ export function KendoPanel<T extends any>({
         }
         resp.data = resp.data.map((el) => ({
           ...el,
-          memberNames: el.employees.map((e) => e.user.name).sort().join(", ") || "",
-          parentName: el.parents.map((e) => e.name).sort().join(", ") || "",
+          memberNames: el.employees.map((e) => e.user.name.trimLeft().trimEnd()).sort().join(", ") || "",
+          parentName: el.parents.map((e) => e.name.trimLeft().trimEnd()).sort().join(", ") || "",
           formattedTags: el?.tags?.sort().join(", ") || "",
           formattedPermissions: el?.permissions?.sort().join(", ") || "",
         }));
@@ -480,6 +480,8 @@ export function KendoPanel<T extends any>({
       filterable={column.filterable}
       filterCell={column.filterCell}
       groupable={column.groupable}
+      locked={column.locked}
+      width={index === 0 && tableData.length && tableData[index as number].inEdit ? "150px" : column.width}
     />
   );
   const [coldef, setColdef] = React.useState(gridConfiguration.columns);

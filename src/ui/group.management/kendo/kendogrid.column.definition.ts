@@ -16,6 +16,8 @@ const columns = [
     groupable: false,
     filterable: false,
     cell: CommandCell,
+    locked: true,
+    width: "80px",
   },
   {
     field: "isOfficial",

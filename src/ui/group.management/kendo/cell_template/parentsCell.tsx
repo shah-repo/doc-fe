@@ -3,8 +3,7 @@ import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Text from "../../../components/Text";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 
 export const ParentsCell = (props) => {
   const parents = props.dataItem[props.field];
@@ -35,9 +34,12 @@ export const ParentsCell = (props) => {
           textField="label"
         />
       ) : (
-        <StyleTooltip title={<Typography><Text translation={parents} /></Typography>} placement="top-start" arrow>
+        <StyledTooltip interactive={true}
+          title={
+            <Typography><div style={{ whiteSpace: "pre-line" }}>{parents?.replace(/,/g, ",\n")}</div></Typography>
+          } placement="left-start" arrow>
           <span>{parents}</span>
-        </StyleTooltip>
+        </StyledTooltip>
       )}
     </td>
   );

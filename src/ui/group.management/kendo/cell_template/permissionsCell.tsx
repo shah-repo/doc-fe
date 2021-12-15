@@ -3,8 +3,7 @@ import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import Text from "../../../components/Text";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import { toOptions } from "../../utils/transform";
 
 export const PermissionsCell = (props) => {
@@ -33,9 +32,12 @@ export const PermissionsCell = (props) => {
           textField="label"
         />
       ) : (
-        <StyleTooltip title={<Typography><Text translation={permissions} /></Typography>} placement="top-start" arrow>
+        <StyledTooltip interactive={true}
+          title={
+            <Typography><div style={{ whiteSpace: "pre-line" }}>{permissions?.replace(/,/g, ",\n")}</div></Typography>
+          } placement="left-start" arrow>
           <span>{permissions}</span>
-        </StyleTooltip>
+        </StyledTooltip>
       )}
     </td>
   );
