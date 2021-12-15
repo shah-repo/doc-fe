@@ -34,3 +34,10 @@ export const convertHtmlEntities = (html: string) => ( html.replace(translateRe,
 
 export const theme = Config.Theme;
 export const logo = "/logo_enlil_dark.svg";
+
+export function deleteCookie(name) {
+  document.cookie = name + "=" +
+      ";domain=" + window.location.hostname +
+      ";path=/" +
+      ";expires=" + new Date().toUTCString();
+}
