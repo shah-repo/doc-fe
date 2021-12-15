@@ -3,4 +3,5 @@ export enum KendoCellTemplates {
   STATUS="Status",
   DATE_COMPLETED="DateCompleted",
   DATE_INFO="DateInfo",
+  COMMON_CELL="CommonCell"
 }

@@ -1,3 +1,4 @@
+import { CommonCell } from "./CommonCell";
 import { DateCompleted } from "./DateCompleted";
 import { DateInfo } from "./DateInfo";
 import { Status } from "./Status";
@@ -8,6 +9,7 @@ const cellTemplateMapping = {
   Status,
   DateCompleted,
   DateInfo,
+  CommonCell,
 };
 
 export const getCellTemplate = (templateName: string) => {
