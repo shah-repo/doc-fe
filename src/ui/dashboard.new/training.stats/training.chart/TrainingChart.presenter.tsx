@@ -182,7 +182,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               label={
                 <Box alignItems="center">
                   <span className={classes.overdueTab}></span>
-                  <span className={classes.tabHeader}>
+                  < span className={`${classes.tabHeader} ${classes.legend}`}>
                     <Text translation="common.overdue" />
                   </span>
                 </Box>
@@ -194,7 +194,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
               label={
                 <Box alignItems="center">
                   <span className={classes.dueInSevenTab}></span>
-                  <span className={classes.tabHeader}>
+                  <span className={`${classes.tabHeader} ${classes.legend}`}>
                     <Text translation="common.duein7days" />
                   </span>
                 </Box>

@@ -557,6 +557,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <ApproveDialogueContainer
         transition="reject"
+        type="reject"
         approvalId={approvalId}
         transitionDialog={transitionDialog1}
         label="transition.action.reject"
