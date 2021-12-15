@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords, GridToolbar,
+  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, set } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -116,7 +116,10 @@ export function KendoGrid({
   const getItems = () => dataT;
   const updateItem = (item) =>
     // const index = dataT.findIndex((record) => record.id === item.id);
-    // const fields = ["id", "group", "documentTypeName", "documentTypeAcronym", "privateNumberPool", "canRedLine", "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd", "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
+    // const fields = ["id", "group", "documentTypeName",
+    // "documentTypeAcronym", "privateNumberPool", "canRedLine",
+    // "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd",
+    // "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
     // const pickItem = pick(item, fields);
     // // dataT[index] = pickItem;
     // console.log(pickItem);
@@ -184,9 +187,10 @@ export function KendoGrid({
   const addNewRowObject = () => {
     const newDataItem: any = rowObj;
     newDataItem.inEdit = true;
-    const newDataT: any = [newDataItem, ...dataT];
-    setResultState(newDataT);
+    tableData.unshift(newDataItem);
+    // setResultState(tableData);
     setGridEditID("inEdit");
+    setResultState(processWithGroups(tableData, dataState));
   };
 
   // Api Call on Add New Row
@@ -230,32 +234,38 @@ export function KendoGrid({
   //   setColdef(newState);
 
   // };
-  // const clearFilter = (event) => {
-  //   dataState.filter = {
-  //     logic: "and",
-  //     filters: [],
-  //   };
-  //   const newDataState = processWithGroups(tableData, event.dataState);
-  //   setDataState(event.dataState);
-  //   setResultState(newDataState);
-  // };
+
+  const clearFilter = () => {
+    // TODO: Reset dropdown values
+    console.log(dataState);
+    dataState.filter = {
+      logic: "and",
+      filters: [],
+    };
+    const newDataState = processWithGroups(tableData, dataState);
+    setDataState(dataState);
+    setResultState(newDataState);
+  };
 
 
   return (
     <Grid>
       {isLoading && loadingPanel}
-      {/* <Button onClick={addNewRowObject}>Add New</Button> */}
-      <Grid item={true}>
-        <Box display="flex" justifyContent="flex-end">
-          {/* onClick={exportDAMDialog.open}  */}
-          <Button variant="outlined">
+      <Grid container spacing={1}>
+        <Grid item={true} xs={6}  style={{ textAlign: "left" }}>
+          <Button variant="outlined" className={classes.clearButton} onClick={clearFilter}>
+            <Text translation={"common.clear.filters"} />
+          </Button>
+        </Grid>
+        <Grid item={true} xs={6}  style={{ textAlign: "right" }}>
+          <Button variant="outlined" className={classes.exportBtn}>
             <Text translation={"common.export.dam.details"} />
           </Button>
           {/* onClick={dialog.open}  {...{ disabled }} */}
-          <Button variant="outlined" onClick={addNewRowObject}>
+          <Button variant="outlined" onClick={addNewRowObject} className={classes.addBtn}>
             <Text translation={"common.add.document.type"} />
           </Button>
-        </Box>
+        </Grid>
       </Grid>
       <Grid item={true}>
         <KendoGlobalization>
@@ -276,72 +286,7 @@ export function KendoGrid({
             onItemChange={itemChange}
           // dataItemKey={"id"}
           >
-            <GridToolbar>
-              <Grid container spacing={1}>
-                {/* <Grid item={true} xs style={{ textAlign: "left" }}>
-              <ClearFilters {...{ clearFilter }} />
-            </Grid> */}
-                {/* <Grid item={true} xs style={{ textAlign: "right" }}>
-                  <FormControl variant="outlined">
-                    <IconButton
-                      aria-label="more"
-                      aria-controls="long-menu"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <ViewGridIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem>
-                        <ListItemText
-                          primary={
-                            <>
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.columnsCus}
-                                color="textPrimary"
-                              >
-                            Columns
-                              </Typography>
-                            </>
-                          }
-                        ></ListItemText>
-                      </MenuItem>
-                      {columns.map((item: any) =>
-                        item.field !== "docID" ? (
-                          <MenuItem key={item.title} value={item.field}>
-                            <ListItemText id={item.field} primary={item.title} />
-                            <Box flexGrow={1} mr={5}></Box>
-                            {item.show ? (
-                              <SolidIcon
-                                onClick={() => {
-                                  onChange(item);
-                                }}
-                              />
-                            ) : (
-                              <ViewChecked
-                                onClick={() => {
-                                  onChange(item);
-                                }}
-                              />
-                            )}
-                          </MenuItem>
-                        ) : null
-                      )}
-                    </Menu>
-                  </FormControl>{" "}
-                </Grid> */}
-              </Grid>
-            </GridToolbar>
-            {/* locked={true} */}
-            <GridColumn cell={commandCell} title="Actions" width="200px" locked={true}/>
+            <GridColumn cell={commandCell} title="Actions" width="120px" filterable={false} locked={true}/>
             {renderColumns()}
             <GridNoRecords>
               {noDataMessage}

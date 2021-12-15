@@ -28,7 +28,7 @@ const GridStyles = makeStyles((theme) => ({
     backgroundColor: Colors.white,
   },
   addBtn: {
-    "margin": "0px",
+    "marginRight": "10px",
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.navy,
@@ -40,6 +40,21 @@ const GridStyles = makeStyles((theme) => ({
     "&:hover": {
       background: Colors.navy,
     },
+  },
+  clearButton: {
+    marginLeft: "5px",
+    boxShadow: "none",
+    borderRadius: 100,
+    marginRight: 15,
+    textTransform: "none",
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "Sora",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.navy,
+    border: `1px solid ${Colors.navy}`,
+    backgroundColor: Colors.white,
   },
 }
 ));
