@@ -1,11 +1,10 @@
 import { Avatar, Box, makeStyles } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
-import { isEmpty } from "lodash";
+import { get } from "lodash";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 import { getInitalsFromName } from "../../icons/avatar/helpers";
 
-export const UserAvatar = (props: GridCellProps) => {
+export const UserAvatar = (props) => {
   const styles = makeStyles(() => ({
     icon: {
       width: "25px",
@@ -31,12 +30,13 @@ export const UserAvatar = (props: GridCellProps) => {
     },
   }));
   const classes = styles();
-  const owner = !isEmpty(props.dataItem.owner)
-    ? props.dataItem.owner.user.name
-    : "";
-  const avatar = !isEmpty(props.dataItem.owner)
-    ? props.dataItem.owner.user.avatar
-    : "";
+
+  const userName = get(props.dataItem, props.field);
+  const userDetails = userName ? get(props.dataItem, props.field.replace(".name", "")) : undefined;
+  const owner = userDetails ? userDetails.name : "";
+  const avatar = userDetails ? userDetails.avatar : "";
+
+
   if (owner) {
     return (
       <td
