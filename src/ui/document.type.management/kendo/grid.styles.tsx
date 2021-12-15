@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 const GridStyles = makeStyles((theme) => ({
   root: {
@@ -11,10 +12,34 @@ const GridStyles = makeStyles((theme) => ({
     height: "calc(100vh - 125px)",
     margin: "5px",
   },
-  columnsCus: {
+  exportBtn: {
+    margin: "0px",
+    boxShadow: "none",
+    borderRadius: 100,
+    marginRight: 15,
+    textTransform: "none",
+    paddingRight: 20,
+    paddingLeft: 20,
     fontFamily: "Sora",
-    fontWeight: "bold",
-    fontSize: "14px",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.navy,
+    border: `1px solid ${Colors.navy}`,
+    backgroundColor: Colors.white,
+  },
+  addBtn: {
+    "margin": "0px",
+    "boxShadow": "none",
+    "borderRadius": 100,
+    "background": Colors.navy,
+    "color": Colors.white,
+    "fontFamily": "Sora",
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "textTransform": "none",
+    "&:hover": {
+      background: Colors.navy,
+    },
   },
 }
 ));

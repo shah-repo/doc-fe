@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../../layout/theme/utils/colors";
 
 const GridCellStyles = makeStyles((theme) => ({
   topButton: {
@@ -18,6 +19,36 @@ const GridCellStyles = makeStyles((theme) => ({
   },
   value: {
     margin: "5px",
+  },
+  schemaCancelBtn: {
+    margin: "0px",
+    boxShadow: "none",
+    borderRadius: 200,
+    marginRight: 15,
+    textTransform: "uppercase",
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "Sora",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.navy,
+    border: `1px solid ${Colors.gray}`,
+    backgroundColor: Colors.white,
+  },
+  schemaAddBtn: {
+    "fontWeight": 600,
+    "margin": "0px",
+    "boxShadow": "none",
+    "borderRadius": 200,
+    "background": Colors.navy,
+    "color": Colors.white,
+    "fontFamily": "Sora",
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "textTransform": "uppercase",
+    "&:hover": {
+      background: Colors.navy,
+    },
   },
 }
 ));
