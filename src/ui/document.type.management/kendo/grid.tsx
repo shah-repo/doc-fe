@@ -22,6 +22,8 @@ import { DocumentTypeManagementProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
+import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
 import { CommandCell } from "./cell.formatter/command.cell";
 import { rowObj } from "./cell.formatter/row.oject";
@@ -40,6 +42,7 @@ export function KendoGrid({
   const editField = "inEdit";
   // const [editID, setEditID] = React.useState(null);
   const [gridEditID, setGridEditID] = React.useState("");
+  const exportDAMDialog = useDialog();
   const processWithGroups = (data: any[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
@@ -255,66 +258,69 @@ export function KendoGrid({
 
 
   return (
-    <Grid>
-      {isLoading && loadingPanel}
-      <Grid container spacing={1}>
-        <Grid item={true} xs={6} style={{ textAlign: "left" }}>
-          <Button
-            variant="outlined"
-            className={classes.clearButton}
-            onClick={clearFilter}
-          >
-            <Text translation={"common.clear.filters"} />
-          </Button>
+    <>
+      <Grid>
+        {isLoading && loadingPanel}
+        <Grid container spacing={1}>
+          <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+            <Button
+              variant="outlined"
+              className={classes.clearButton}
+              onClick={clearFilter}
+            >
+              <Text translation={"common.clear.filters"} />
+            </Button>
+          </Grid>
+          <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+            <Button onClick={exportDAMDialog.open} variant="outlined" className={classes.exportBtn}>
+              <Text translation={"common.export.dam.details"} />
+            </Button>
+            {/* onClick={dialog.open}  {...{ disabled }} */}
+            <Button
+              variant="outlined"
+              onClick={addNewRowObject}
+              className={classes.addBtn}
+            >
+              <Text translation={"common.add.document.type"} />
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-          <Button variant="outlined" className={classes.exportBtn}>
-            <Text translation={"common.export.dam.details"} />
-          </Button>
-          {/* onClick={dialog.open}  {...{ disabled }} */}
-          <Button
-            variant="outlined"
-            onClick={addNewRowObject}
-            className={classes.addBtn}
-          >
-            <Text translation={"common.add.document.type"} />
-          </Button>
+        <Grid item={true}>
+          <KendoGlobalization>
+            <Kgrid
+              className={classes.kGrid}
+              data={resultState}
+              sortable={true}
+              filterable={true}
+              reorderable={true}
+              pageable={gridConfiguration.pagerSettings}
+              resizable={true}
+              groupable={true}
+              total={resultState.total}
+              onDataStateChange={onDataStateChange}
+              {...dataState}
+              // onExpandChange={onExpandChange}
+              expandField="expanded"
+              editField={gridEditID}
+              onItemChange={itemChange}
+            >
+              {renderColumns()}
+              <GridColumn
+                cell={commandCell}
+                title=""
+                width="90px"
+                filterable={false}
+                locked={true}
+                reorderable={false}
+                resizable={false}
+              />
+              <GridNoRecords>{noDataMessage}</GridNoRecords>
+            </Kgrid>
+          </KendoGlobalization>
         </Grid>
       </Grid>
-      <Grid item={true}>
-        <KendoGlobalization>
-          <Kgrid
-            className={classes.kGrid}
-            data={resultState}
-            sortable={true}
-            filterable={true}
-            reorderable={true}
-            pageable={gridConfiguration.pagerSettings}
-            resizable={true}
-            groupable={true}
-            total={resultState.total}
-            onDataStateChange={onDataStateChange}
-            {...dataState}
-            // onExpandChange={onExpandChange}
-            expandField="expanded"
-            editField={gridEditID}
-            onItemChange={itemChange}
-          >
-            {renderColumns()}
-            <GridColumn
-              cell={commandCell}
-              title=""
-              width="90px"
-              filterable={false}
-              locked={true}
-              reorderable={false}
-              resizable={false}
-            />
-            <GridNoRecords>{noDataMessage}</GridNoRecords>
-          </Kgrid>
-        </KendoGlobalization>
-      </Grid>
-    </Grid>
+      <ExportDAMDetails dialog={exportDAMDialog} />
+    </>
   );
 }
 
