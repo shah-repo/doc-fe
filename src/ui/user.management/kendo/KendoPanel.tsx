@@ -419,7 +419,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGrid
         key={tableName}
-        className={`${classes.kGrid} ${classes.kGridFont}`}
+        className={classes.kGrid}
         data={result}
         total={resultState.total > 0 ? resultState.total : tableData.length}
         pageable={gridConfiguration.pagerSettings}
