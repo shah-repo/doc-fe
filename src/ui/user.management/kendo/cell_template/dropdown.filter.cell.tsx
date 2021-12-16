@@ -33,7 +33,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   return (
     <div className="k-filtercell">
       <DropDownList
-        data={props.data}
+        data={props.data.filter((el) => el).sort()}
         onChange={onChange}
         value={props.value || props.defaultItem}
         defaultItem={props.defaultItem}

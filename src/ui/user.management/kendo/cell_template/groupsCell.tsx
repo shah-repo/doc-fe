@@ -14,8 +14,8 @@ export const GroupsCell = (props) => {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    setData(groupOptions as any);
-    setResult(defaultGroups as any);
+    setData(groupOptions.filter((el) => el.label).sort((a, b) => a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd() ? 1 : -1) as any);
+    setResult(defaultGroups.filter((el) => el.label).sort((a, b) => a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd() ? 1 : -1) as any);
   }, [groupOptions, defaultGroups]);
 
   const updateGroupField = (event: any) => {
@@ -27,7 +27,7 @@ export const GroupsCell = (props) => {
 
   const filterChange = (event: any) => {
     const filter = event.filter;
-    const allData = groupOptions.slice();
+    const allData = groupOptions.filter((el) => el.label).sort((a, b) => a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd() ? 1 : -1).slice();
     const newData = filterBy(allData, filter);
     setData(newData as any);
   };
@@ -50,7 +50,7 @@ export const GroupsCell = (props) => {
           onFilterChange={filterChange}
           dataItemKey="value"
           textField="label"
-          defaultValue={defaultGroups}
+          defaultValue={defaultGroups.sort((a, b) => a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd() ? 1 : -1)}
         />
       ) : (
         <Tooltip data={props?.dataItem?.groups} />
