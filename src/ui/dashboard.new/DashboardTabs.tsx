@@ -9,7 +9,6 @@ import { ReactComponent as TrainingIcon } from "../../assets/images/training_tab
 import { ReactComponent as TrainingSelectedIcon } from "../../assets/images/training_tab_selected.svg";
 import { GroupTag } from "../../state/ducks/auth/types";
 import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
-import { trainingSelectors } from "../../state/ducks/dashboard.new/training";
 import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
 import { styles } from "./DashboardTabs.styles";
@@ -30,7 +29,6 @@ const DashboardTabs: React.FunctionComponent = () => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  const trainingItems = useSelector(trainingSelectors.trainingList);
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
@@ -86,13 +84,6 @@ const DashboardTabs: React.FunctionComponent = () => {
                   }
                 >
                   <Text translation={"common.trainings"} />
-                </Typography>
-                <Typography
-                  component="span"
-                  variant="inherit"
-                  className={classes.tabItemCount}
-                >
-                      ({trainingItems.length || 0})
                 </Typography>
               </Box>
             }

@@ -19,10 +19,10 @@ const ExportTrainingRecordToEmail: React.FunctionComponent<Props> = ({
 
   const async = useAsync({
     onSuccess: () => {
-      toastSuccess(intl.formatMessage({ id: "common.email.sent" }));
+      toastSuccess(intl.formatMessage({ id: "common.send.to.email.success" }));
     },
     onError: () => {
-      toastError(intl.formatMessage({ id: "common.falied.email" }));
+      toastError(intl.formatMessage({ id: "common.send.to.email.error"  }));
     },
   });
 

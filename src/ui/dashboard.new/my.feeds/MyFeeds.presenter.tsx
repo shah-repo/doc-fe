@@ -442,9 +442,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       MomentFormats.BriefDateTime
                     )}
                     arId={pendingAction.arId}
-                    docRevOwnerName={pendingAction.onwerName}
-                    docRevOwnerAvatar={pendingAction.ownerAvatar}
-                    docRevOwnerInitialColor={pendingAction.ownerInitialColor}
+                    docRevOwnerName={pendingAction.arOwnerName}
+                    docRevOwnerAvatar={pendingAction.arOwnerAvatar}
+                    docRevOwnerInitialColor={pendingAction.arOwnerInitialColor}
                     title={pendingAction.arTitle}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
