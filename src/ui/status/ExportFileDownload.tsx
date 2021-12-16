@@ -5,6 +5,8 @@ import moment from "moment";
 import queryString from "query-string";
 import React, { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Text from "../components/Text";
+import { Translation } from "../translations/types";
 import { downloadURI, logo, useDebouncedEffect } from "./../../common/utils/helpers";
 import { styles } from "./ExportFileDownload.styles";
 
@@ -15,6 +17,14 @@ enum States {
   DOWNLOAD_STARTED,
   ERROR
 }
+
+const StateMessages: {[Key in States]: Translation} = {
+  [States.PREPARING]: "exportFileDownload.preparing",
+  [States.EXPIRED]: "exportFileDownload.expired",
+  [States.DOWNLOADING]: "exportFileDownload.downloading",
+  [States.DOWNLOAD_STARTED]: "exportFileDownload.downloaded",
+  [States.ERROR]: "exportFileDownload.error",
+};
 
 const ExportFileDownload: React.FunctionComponent = () => {
   const classes = styles();
@@ -27,6 +37,14 @@ const ExportFileDownload: React.FunctionComponent = () => {
       setStatus(States.ERROR);
       return;
     }
+
+    /*
+      - decode signed s3 link from param "url"
+      - extract timestamp of creation ("X-Amz-Date") and validity duration in seconds ("X-Amz-Expires")
+      - download s3 link if not expired
+
+      https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
+    */
 
     const urlDecoded = Base64.atob(urlEncoded);
     const urlParams = new URLSearchParams(urlDecoded.split("?").slice(1).join("?"));
@@ -54,6 +72,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
     }, 2 * 1000);
   }, [urlEncoded], 2 * 1000);
 
+  console.log(StateMessages[status]);
   return <div className={classes.root}>
     <Paper className={classes.paper}>
       <img
@@ -63,13 +82,7 @@ const ExportFileDownload: React.FunctionComponent = () => {
       />
       <Box display="flex" textAlign="center" mb={5} data-cy="ExportFileDownload-info">
         <Typography variant="h5"className={classes.info}>
-          <div>
-            {status === States.PREPARING && "Your request is being processed ..."}
-            {status === States.EXPIRED && "Link expired!"}
-            {status === States.DOWNLOADING && "Your download will start in a few seconds..."}
-            {status === States.DOWNLOAD_STARTED && "Your download started."}
-            {status === States.ERROR && "There was an error processing your request."}
-          </div>
+          <Text translation={StateMessages[status]}/>
         </Typography>
       </Box>
     </Paper>
