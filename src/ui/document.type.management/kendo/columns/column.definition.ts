@@ -105,7 +105,7 @@ const columns: DocumentTypeManagementProps[] = [{
 }, {
   field: "hiddenForCreationForUsersWithoutTags",
   title: "Users without Tags", // TODO: Check if multiSelect
-  // cell: EditDropdownCellFormatter,
+  cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate, // Not working
   show: true,
   columnMenu: ColumnMenu,

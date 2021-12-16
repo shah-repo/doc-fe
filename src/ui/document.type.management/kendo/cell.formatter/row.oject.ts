@@ -7,7 +7,7 @@ export const rowObj = {
   needsSignature: false,
   defaultTraining: false,
   startingNumber: 1,
-  hiddenForCreationForUsersWithoutTags: null,
+  hiddenForCreationForUsersWithoutTags: [],
   group: "",
   category: null,
   schema: null,

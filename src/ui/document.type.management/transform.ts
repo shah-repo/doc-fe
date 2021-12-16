@@ -36,13 +36,13 @@ export const parseJSON = (value) => {
   return JSON.parse(value);
 };
 
-// TODO: check where is exactly required
+// TODO:
 export const toDocumentTypeBody = (values) => ({
   ...values,
   defaultRevStage: isNull(values.defaultRevStage) ? null : values.defaultRevStage,
   group: values.group,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
-  schema: parseJSON(values.schema),
+  schema: typeof values.schema == "string" ? parseJSON(values.schema) : values.schema,
   fieldsConfig: parseJSON(values.fieldsConfig),
 });
 

@@ -1,7 +1,13 @@
 import { get } from "lodash";
 import React from "react";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
+// import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
+// import { toastError } from "../../../components/notifications";
+// import useActionCreator from "../../../hooks/useActionCreator";
+// import useAsync from "../../../hooks/useAsync";
+import { parseJSON } from "../../transform";
 import { SchemaForm } from "./schema.form";
+
 
 export const SchemaCell = (props) => {
   const [openForm, setOpenForm] = React.useState(false);
@@ -11,6 +17,20 @@ export const SchemaCell = (props) => {
   const handleCancelEdit = () => {
     setOpenForm(false);
   };
+
+  const onAddClick = (event) => {
+    if (props.onChange) {
+      props.onChange({
+        dataIndex: 0,
+        dataItem: props.dataItem,
+        field: props.field,
+        // syntheticEvent: event.syntheticEvent,
+        value: parseJSON(event.schema),
+      });
+      setOpenForm(false);
+    }
+  };
+
   if (props.rowType === "groupHeader") {
     return null;
   }
@@ -26,10 +46,12 @@ export const SchemaCell = (props) => {
         className={props.className}
         data-grid-col-index={props.columnIndex}><SchemaIcon onClick={() => {
           openSchemaWindow();
-        }}/></td>
+        }}
+        /></td>
       {openForm && (
         <SchemaForm
           cancelEdit={handleCancelEdit}
+          addClick={onAddClick}
           // onSubmit={handleSubmit}
           item={formattedValue}
           isEdit= {isEdit}

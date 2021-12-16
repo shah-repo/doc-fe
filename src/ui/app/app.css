@@ -225,5 +225,6 @@ td[role="gridcell"] {
 } */
 
 .schemaForm .k-actions {
-  background: #F9F9F9
+  background: #F9F9F9;
+  margin-top: "15px";
 }

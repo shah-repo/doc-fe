@@ -8,7 +8,7 @@ import {
 import {
   Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, each, set } from "lodash";
+import { cloneDeep, each } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
@@ -187,10 +187,10 @@ export function KendoGrid({
   const addNewRowObject = () => {
     const newDataItem: any = rowObj;
     newDataItem.inEdit = true;
-    tableData.unshift(newDataItem);
-    // setResultState(tableData);
+    const newDataArr: any = [newDataItem, ...dataT];
+    setResultState(newDataArr);
     setGridEditID("inEdit");
-    setResultState(processWithGroups(tableData, dataState));
+    setDataState(dataState);
   };
 
   // Api Call on Add New Row
@@ -209,10 +209,10 @@ export function KendoGrid({
     dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
   };
 
-  const itemChange = (e) => {
-    dataT.unshift(set(e.dataItem, e.field, e.value));
-    setResultState(dataT);
-  };
+  // const itemChange = (e) => {
+  //   dataT.unshift(set(e.dataItem, e.field, e.value));
+  //   setResultState(dataT);
+  // };
 
   // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   // const open = Boolean(anchorEl);
@@ -283,7 +283,7 @@ export function KendoGrid({
             // onExpandChange={onExpandChange}
             expandField="expanded"
             editField={gridEditID}
-            onItemChange={itemChange}
+            // onItemChange={itemChange}
           // dataItemKey={"id"}
           >
             <GridColumn cell={commandCell} title="Actions" width="120px" filterable={false} locked={true}/>

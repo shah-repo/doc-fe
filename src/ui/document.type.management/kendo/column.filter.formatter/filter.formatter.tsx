@@ -1,4 +1,3 @@
-// import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { get } from "lodash";
 import React from "react";
