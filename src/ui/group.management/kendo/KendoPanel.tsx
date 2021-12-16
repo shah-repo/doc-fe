@@ -531,7 +531,7 @@ export function KendoPanel<T extends any>({
   const tableRenderer = () => (
     <>
       <KendoGrid
-        className={`${classes.kGrid} ${classes.kGridFont}`}
+        className={classes.kGrid}
         data={result}
         editField={editField}
         total={resultState.total > 0 ? resultState.total : tableData.length}
