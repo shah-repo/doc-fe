@@ -375,6 +375,7 @@ export function KendoPanel<T extends any>({
       groupable={column.groupable}
       filterCell={column.filterCell}
       filterable={column.filterable}
+      width={column.width}
     />
   );
 

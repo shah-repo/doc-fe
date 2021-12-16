@@ -14,7 +14,9 @@ const columns = [
     title: "",
     show: true,
     filterable: false,
+    groupable: false,
     cell: CommandCell,
+    width: "80px",
   },
   {
     field: "user",
