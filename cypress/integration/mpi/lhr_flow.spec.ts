@@ -1174,10 +1174,6 @@ context("LHR flow", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
     });
 
-    it("Select 'Part document' in references", () => {
-      cy.drSelectReferences( "Material one" );
-    });
-
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -1186,9 +1182,9 @@ context("LHR flow", () => {
       cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
     });
 
-    it("Select 'Part document' for Part lot", () => {
-      cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+    it("Select 'Material one' for Part lot", () => {
+      cy.get("[data-cy=\"lot_part\"]").arrowType("Material one");
+      cy.get("ul[role=listbox]>li").contains("Material one").arrowClick();
     });
 
     it("Check 100% override", () => {

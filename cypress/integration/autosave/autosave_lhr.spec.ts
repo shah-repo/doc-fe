@@ -528,14 +528,14 @@ context("Autosave LHR", () => {
     it("While autosaving, select 'Production' build type", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
       cy.unClick();
       cy.get("[value=\"Production\"]").check();
-      cy.wait("@response", { responseTimeout: 30 * 1000 });
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("Change build type to 'R&D'", () => {
@@ -546,8 +546,8 @@ context("Autosave LHR", () => {
     it("While autosaving, add 'Due Date'", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -557,7 +557,7 @@ context("Autosave LHR", () => {
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
-      cy.wait("@response", { responseTimeout: 30 * 1000 });
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
   });
 
@@ -618,13 +618,13 @@ context("Autosave LHR", () => {
       it("While autosaving, enter 'Accepted quntity' for LHRs #1", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
         cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("6");
         cy.unClick();
-        cy.wait("@response", { timeout: 30 * 1000 });
+        cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
       });
 
       it("Change value in 'Accepted quntity' fields", () => {
@@ -636,13 +636,13 @@ context("Autosave LHR", () => {
       it("While autosaving, enter 'Rejected quntity' for LHRs #1", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
         cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
         cy.unClick();
-        cy.wait("@response");
+        cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
       });
     });
 
