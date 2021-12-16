@@ -30,7 +30,7 @@ const receivingReleasedDate = moment().tz("America/Los_Angeles").format("L");
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 
-context("Create receivable test with PO, Lot and Supplier", () => {
+context("Receivable test with Page Details", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
