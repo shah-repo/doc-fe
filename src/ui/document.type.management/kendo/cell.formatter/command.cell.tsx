@@ -1,6 +1,7 @@
 import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
@@ -72,11 +73,14 @@ export const CommandCell = (props) => {
     Cancel: {
       color: Colors.latest_yellow_varient,
     },
+    Remove: {
+      color: Colors.latest_red_varient,
+    },
   }));
   const classes = styles();
   const { dataItem } = props;
   const inEdit = dataItem.inEdit;
-
+  const isNewItem = dataItem.id === undefined;
   return inEdit ? (
     <td
       colSpan={props.colSpan}
@@ -92,7 +96,7 @@ export const CommandCell = (props) => {
         disableRipple
         style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="add"
-        onClick={() => props.add(dataItem)}
+        onClick={() => isNewItem ? props.add(dataItem) : props.update(dataItem)}
       >
         <AddCircleOutlineIcon
           className={classes.ButtonColor}
@@ -136,7 +140,7 @@ export const CommandCell = (props) => {
         aria-label="cancel"
         onClick={() => props.remove(dataItem)}
       >
-        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+        <DeleteIcon className={classes.Remove} fontSize="small" />
       </IconButton>
     </td>
   );

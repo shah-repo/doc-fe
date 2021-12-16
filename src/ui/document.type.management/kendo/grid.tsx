@@ -8,7 +8,7 @@ import {
 import {
   Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, each } from "lodash";
+import { cloneDeep, each, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
@@ -18,7 +18,6 @@ import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
-// import ClearFilters from "../../components/table/ClearFilters";
 import { DocumentTypeManagementProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -28,7 +27,6 @@ import { CommandCell } from "./cell.formatter/command.cell";
 import { rowObj } from "./cell.formatter/row.oject";
 import gridConfiguration from "./columns/column.definition";
 import GridStyles from "./grid.styles";
-// import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 
 
 export function KendoGrid({
@@ -69,13 +67,14 @@ export function KendoGrid({
   useEffect(() => {
     setIsLoading(true);
     setResultState(tableData);
+    setDataState(dataState);
     if (!tableData.length ) {
       setNoDataMessage(<Typography><Text translation="table.no.results.found"></Text></Typography>);
     }
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
-  }, [tableData]);
+  }, [dataState, tableData]);
 
   const onDataStateChange = ((
     event: GridDataStateChangeEvent) => {
@@ -114,17 +113,6 @@ export function KendoGrid({
   // TODO: Move in separate File
   const dataT: any = [...tableData];
   const getItems = () => dataT;
-  const updateItem = (item) =>
-    // const index = dataT.findIndex((record) => record.id === item.id);
-    // const fields = ["id", "group", "documentTypeName",
-    // "documentTypeAcronym", "privateNumberPool", "canRedLine",
-    // "isQms", "needsSignature", "defaultTraining", "equipmentEnforceProd",
-    // "startingNumber", "hiddenForCreationForUsersWithoutTags", "schema", "category", "fieldsConfig"];
-    // const pickItem = pick(item, fields);
-    // // dataT[index] = pickItem;
-    // console.log(pickItem);
-    item
-  ;
 
   // Services
   const commandCell = (props) => (
@@ -133,7 +121,6 @@ export function KendoGrid({
       edit={enterEdit}
       remove={deleteDocumnet}
       add={addNewRow}
-      discard={discard}
       update={update}
       cancel={cancel}
       editField={editField}
@@ -147,31 +134,43 @@ export function KendoGrid({
     setResultState(tableData);
   };
 
-
-  const discard = () => {
-    console.log("Discard");
-    const newData: any = [...tableData];
-    newData.splice(0, 1);
-    setResultState(newData);
-  };
-
   const cancel = (dataItem) => {
-    console.log("Cancel");
     const originalItem = getItems().find(
       (p) => p.id === dataItem.id
     );
-    const newData: any = dataT.map((item) =>
-      item.id === originalItem.id ? originalItem : item
+    const newData: any = dataT.map((item) => {
+      if (item.id === originalItem.id) {
+        originalItem.inEdit = false;
+        return originalItem;
+      } else {
+        return item;
+      }
+    }
     );
     setResultState(newData);
+    setDataState(dataState);
   };
   // On field config: inline edit
   const update = (dataItem) => {
     dataItem.inEdit = false;
-    const newData: any = updateItem(dataItem);
-    const id = newData.id;
-    delete newData.id;
-    onFieldConfig(newData, id);
+    // const newData: any = cloneDeep(dataItem);
+    const  newData = {
+      documentTypeName: dataItem.documentTypeName,
+      documentTypeAcronym: dataItem.documentTypeAcronym,
+      privateNumberPool: dataItem.privateNumberPool,
+      canRedLine: dataItem.canRedLine,
+      isQms: dataItem.isQms,
+      needsSignature: dataItem.needsSignature,
+      defaultTraining: dataItem.defaultTraining,
+      startingNumber: dataItem.startingNumber,
+      hiddenForCreationForUsersWithoutTags: dataItem.hiddenForCreationForUsersWithoutTags,
+      group: dataItem.group,
+      category: dataItem.category,
+      schema: dataItem.schema,
+      fieldsConfig: dataItem.fieldsConfig,
+      defaultRevStage: dataItem.defaultRevStage,
+    };
+    onFieldConfig(newData, dataItem.id);
   };
   // On field config: inline edit- Update api call
   const onFieldConfig = (values, id) => {
@@ -209,10 +208,17 @@ export function KendoGrid({
     dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
   };
 
-  // const itemChange = (e) => {
-  //   dataT.unshift(set(e.dataItem, e.field, e.value));
-  //   setResultState(dataT);
-  // };
+  const itemChange = (e) => {
+    const newData: any = dataT.map((item) => {
+      if (item.id === e.dataItem.id) {
+        item = set(e.dataItem, e.field, e.value);
+      }
+      return item;
+    }
+    );
+    setResultState(newData);
+    setDataState(dataState);
+  };
 
   // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   // const open = Boolean(anchorEl);
@@ -292,8 +298,7 @@ export function KendoGrid({
             // onExpandChange={onExpandChange}
             expandField="expanded"
             editField={gridEditID}
-            // onItemChange={itemChange}
-            // dataItemKey={"id"}
+            onItemChange={itemChange}
           >
             {renderColumns()}
             <GridColumn
