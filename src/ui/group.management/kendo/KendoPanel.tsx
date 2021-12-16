@@ -50,7 +50,6 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import DocumentInfo from "../../components/table/DocumentInfo";
 import {
   TablePanelStateProps,
   TableStyleProps,
@@ -596,7 +595,6 @@ export function KendoPanel<T extends any>({
           >
             <Grid item>
               <ClearFilters {...{ clearFilter }} />
-              <DocumentInfo numberOfRecords={tableData.length} />
             </Grid>
             <Grid item style={{ display: "flex" }}>
               {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
