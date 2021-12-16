@@ -43,7 +43,7 @@ export const toDocumentTypeBody = (values) => ({
   group: values.group,
   hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
   schema: typeof values.schema == "string" ? parseJSON(values.schema) : values.schema,
-  fieldsConfig: parseJSON(values.fieldsConfig),
+  fieldsConfig: typeof values.fieldsConfig === "string" ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });
 
 export const toDocumentTypeIntialValues = (documentType) => ({

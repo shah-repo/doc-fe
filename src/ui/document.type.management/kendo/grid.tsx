@@ -129,6 +129,7 @@ export function KendoGrid({
       editField={editField}
     />
   );
+  // On edit click- all cells in edit mode
   const enterEdit = (dataItem) => {
     each(tableData, (item: any) => {
       item.inEdit = item.id === dataItem.id;
@@ -136,7 +137,7 @@ export function KendoGrid({
     setGridEditID("inEdit");
     setResultState(tableData);
   };
-
+  // On cancel- come out of edit mode
   const cancel = (dataItem) => {
     const originalItem = getItems().find(
       (p) => p.id === dataItem.id
@@ -156,7 +157,6 @@ export function KendoGrid({
   // On field config: inline edit
   const update = (dataItem) => {
     dataItem.inEdit = false;
-    // const newData: any = cloneDeep(dataItem);
     const  newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
@@ -211,6 +211,7 @@ export function KendoGrid({
     dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
   };
 
+  // While editing setting the new values to the dataItem
   const itemChange = (e) => {
     const newData: any = dataT.map((item) => {
       if (item.id === e.dataItem.id) {
@@ -244,6 +245,7 @@ export function KendoGrid({
 
   // };
 
+  // CLear All Grid Filters
   const clearFilter = () => {
     // TODO: Reset dropdown values
     console.log(dataState);

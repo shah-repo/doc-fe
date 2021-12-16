@@ -1,4 +1,3 @@
-// import { Button } from "@material-ui/core";
 import { Window, WindowActionsBar } from "@progress/kendo-react-dialogs";
 import { Field, FieldWrapper, Form, FormElement } from "@progress/kendo-react-form";
 import { TextArea } from "@progress/kendo-react-inputs";
@@ -29,51 +28,28 @@ const FormTextArea = (fieldRenderProps) => {
   return <FieldWrapper>
     <div className={"k-form-field-wrap"}>
       <TextArea defaultValue={defaultV} valid={valid} type={type} id={id} disabled={disabled} rows={17} ariaDescribedBy={`${hindId} ${errorId}`} {...others} />
-      {/* {
-        isEdit ? <TextArea defaultValue= {defaultV} value= {defaultV}  valid={valid} type={type} id={id} disabled={disabled} rows={17} ariaDescribedBy={`${hindId} ${errorId}`} {...others} /> :
-          <TextArea value= {defaultV} valid={valid} type={type} id={id} disabled={disabled} rows={17} ariaDescribedBy={`${hindId} ${errorId}`} {...others} />
-      } */}
-
     </div>
   </FieldWrapper>;
 };
 
-export const SchemaForm = (props) => {
+export const GridTextAreaPopUp = (props) => {
   const classes = GridCellStyles();
-
+  const fieldName = props.title.toLowerCase();
   return (
-    <Window title={"Schema"} onClose={props.cancelEdit} className="schemaForm"
+    <Window title={props.title} onClose={props.cancelEdit} className="gridTextAreaForm"
       initialHeight={505}
       initialWidth={524}
       minimizeButton={() => null}
       maximizeButton={() => null}>
-      {/* <div>
-        {
-          props.isEdit ? <TextArea rows={18}
-            defaultValue={props.item ? JSON.stringify(props.item, undefined, 4) : ""}
-          /> :
-            <TextArea rows={18} value={props.item ? JSON.stringify(props.item, undefined, 4) : ""} />
-        }
-      </div> */}
       <Form onSubmit={props.addClick} render={(formRenderProps) => <FormElement >
         <fieldset className={"k-form-fieldset"}>
-          <Field id={"schema"} name={"schema"} label={"Schema"} component={FormTextArea} validator={textAreaValidator} defaultV={props.item ? JSON.stringify(props.item, undefined, 4) : ""} isEdit={props.isEdit} />
-          {/* <div className="k-form-buttons">
-            <Button onClick={formRenderProps.onFormReset}>
-                  Clear
-            </Button>
-          </div> */}
+          <Field id={fieldName} name={fieldName} label={props.title} component={FormTextArea} validator={textAreaValidator} defaultV={props.item ? JSON.stringify(props.item, undefined, 4) : ""} isEdit={props.isEdit} />
           <WindowActionsBar layout={"end"}>
             <button type="button"
               className={`${"k-button"} ${classes.schemaCancelBtn}`}
               onClick={props.cancelEdit}>
               Cancel
             </button>
-            {/* <Button type={"submit"} disabled={!formRenderProps.allowSubmit && !props.isEdit}
-              className= {`${"k-button"} ${classes.schemaAddBtn}`}
-            >
-                  Submit
-            </Button> */}
             <button
               type="submit"
               className= {`${"k-button"} ${classes.schemaAddBtn}`}

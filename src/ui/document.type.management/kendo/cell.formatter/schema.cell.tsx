@@ -1,12 +1,8 @@
 import { get } from "lodash";
 import React from "react";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
-// import { documentTypeActions } from "../../../../state/ducks/documentRevisions/documentType";
-// import { toastError } from "../../../components/notifications";
-// import useActionCreator from "../../../hooks/useActionCreator";
-// import useAsync from "../../../hooks/useAsync";
 import { parseJSON } from "../../transform";
-import { SchemaForm } from "./schema.form";
+import { GridTextAreaPopUp } from "./grid.textarea.pop.up";
 
 
 export const SchemaCell = (props) => {
@@ -49,7 +45,8 @@ export const SchemaCell = (props) => {
         }}
         /></td>
       {openForm && (
-        <SchemaForm
+        <GridTextAreaPopUp
+          title={"Schema"}
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}
           // onSubmit={handleSubmit}

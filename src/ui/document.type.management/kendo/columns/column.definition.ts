@@ -1,6 +1,7 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { DocumentTypeManagementProps } from "../../../components/table/types";
 import { CheckboxCell } from "../cell.formatter/checkbox";
+import { FieldsConfigCell } from "../cell.formatter/fields.config.cell";
 import { CellFormatter } from "../cell.formatter/grid.cell";
 import { SchemaCell } from "../cell.formatter/schema.cell";
 import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "../column.filter.formatter/filter.formatter";
@@ -129,6 +130,13 @@ const columns: DocumentTypeManagementProps[] = [{
   field: "schema",
   title: "Schema",
   cell: SchemaCell,
+  show: true,
+  filterable: false,
+  width: "95px",
+}, {
+  field: "fieldsConfig", // TODO: Update svg, check with Shiv
+  title: "Field Config",
+  cell: FieldsConfigCell,
   show: true,
   filterable: false,
   width: "95px",
