@@ -718,8 +718,8 @@ context("PO test", () => {
       it("While autosaving, select requestor", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
 
@@ -744,8 +744,8 @@ context("PO test", () => {
       it("While autosaving, select order date", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
 

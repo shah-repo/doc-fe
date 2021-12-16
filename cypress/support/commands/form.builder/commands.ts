@@ -283,6 +283,8 @@ Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.contains(params.label).parent().trigger("mouseover");
 });
 

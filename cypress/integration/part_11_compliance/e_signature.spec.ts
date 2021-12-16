@@ -459,10 +459,11 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of first approver", () => {
@@ -507,10 +508,11 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of second approver", () => {
@@ -606,12 +608,14 @@ context("E-signature test", () => {
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
+        cy.progressBarShouldNotExist();
         cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -704,9 +708,10 @@ context("E-signature test", () => {
         });
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });
     });

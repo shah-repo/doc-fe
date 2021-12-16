@@ -13,6 +13,7 @@ declare global {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
+      drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
@@ -220,6 +221,14 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
   cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+});
+
+Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+    cy.unClick();
+  });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
