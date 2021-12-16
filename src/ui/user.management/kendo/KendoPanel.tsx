@@ -35,6 +35,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
@@ -417,59 +418,61 @@ export function KendoPanel<T extends any>({
   };
   const tableRenderer = () => (
     <>
-      <KendoGrid
-        key={tableName}
-        className={classes.kGrid}
-        data={result}
-        total={resultState.total > 0 ? resultState.total : tableData.length}
-        pageable={gridConfiguration.pagerSettings}
-        sortable={true}
-        filterable={true}
-        reorderable={true}
-        resizable={true}
-        groupable={true}
-        onDataStateChange={onDataStateChange}
-        {...dataState}
-        onExpandChange={onExpandChange}
-        expandField="expanded"
-      >
-        <GridToolbar>
-          <Grid
-            container
-            spacing={1}
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item>
-              <ClearFilters {...{ clearFilter }} />
+      <KendoGlobalization>
+        <KendoGrid
+          key={tableName}
+          className={classes.kGrid}
+          data={result}
+          total={resultState.total > 0 ? resultState.total : tableData.length}
+          pageable={gridConfiguration.pagerSettings}
+          sortable={true}
+          filterable={true}
+          reorderable={true}
+          resizable={true}
+          groupable={true}
+          onDataStateChange={onDataStateChange}
+          {...dataState}
+          onExpandChange={onExpandChange}
+          expandField="expanded"
+        >
+          <GridToolbar>
+            <Grid
+              container
+              spacing={1}
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <ClearFilters {...{ clearFilter }} />
+              </Grid>
+              <Grid item style={{ display: "flex" }}>
+                <EnableDropboxButton
+                  shouldDisplayButton={hasDropboxPermission}
+                  {...{ dropboxAsync, enableDropboxAction }}
+                  disabled={Boolean(isCompanyDropboxEnabled)}
+                />
+                <AddEmployeeContainer  addGroup={addNew} />
+              </Grid>
             </Grid>
-            <Grid item style={{ display: "flex" }}>
-              <EnableDropboxButton
-                shouldDisplayButton={hasDropboxPermission}
-                {...{ dropboxAsync, enableDropboxAction }}
-                disabled={Boolean(isCompanyDropboxEnabled)}
-              />
-              <AddEmployeeContainer  addGroup={addNew} />
-            </Grid>
-          </Grid>
-        </GridToolbar>
-        {gridConfiguration.columns.map((column, idx) => {
-          if (column.show === true) {
-            return columnRenderer(column, idx);
-          } else {
-            return (
-              <>
-                <KendoGrid data={[]}>
-                  <GridNoRecords>There is no data available</GridNoRecords>
-                  <GridColumn field="id" />
-                  <GridColumn field="name" />
-                </KendoGrid>
-              </>
-            );
-          }
-        })}
-        <GridNoRecords>{noDataMessage}</GridNoRecords>
-      </KendoGrid>
+          </GridToolbar>
+          {gridConfiguration.columns.map((column, idx) => {
+            if (column.show === true) {
+              return columnRenderer(column, idx);
+            } else {
+              return (
+                <>
+                  <KendoGrid data={[]}>
+                    <GridNoRecords>There is no data available</GridNoRecords>
+                    <GridColumn field="id" />
+                    <GridColumn field="name" />
+                  </KendoGrid>
+                </>
+              );
+            }
+          })}
+          <GridNoRecords>{noDataMessage}</GridNoRecords>
+        </KendoGrid>
+      </KendoGlobalization>
       {isLoading && loadingPanel}
     </>
   );
