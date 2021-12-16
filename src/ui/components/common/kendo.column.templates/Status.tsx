@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
+import { toUpper } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import Colors from "../../../layout/theme/utils/colors";
 
 export const Status = (props) => {
@@ -22,200 +22,65 @@ export const Status = (props) => {
       justifyContent: "center",
       color: Colors.white,
     },
-    statusApproved: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    APPROVED: {
       width: "83px",
       background: Colors.latest_green_varient,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
     },
-    statusDraft: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    RELEASED: {
+      width: "83px",
+      background: Colors.latest_green_varient,
+    },
+    DRAFT: {
       width: "59px",
       background: Colors.font_gray,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
     },
-    statusReview: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    INREVIEW: {
       width: "85px",
       background: Colors.latest_blue_varient,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
     },
-    statusImplementation: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    IMPLEMENTATION: {
       width: "128px",
       background: Colors.latest_yellow_varient,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
     },
-    statusClosed: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    PENDINGCHANGE: {
+      width: "128px",
+      background: Colors.latest_yellow_varient,
+    },
+    CLOSED: {
       width: "70px",
       background: Colors.olivine,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
     },
-    statusVoided: {
-      // display: "flex",
-      // flexDirection: "row",
-      // padding: "0px !important",
+    VOIDED: {
       width: "70px",
       background: Colors.basket_ball_orange,
-      // borderRadius: "10px",
-      // margin: "auto",
-      // fontFamily: "Sora",
-      // fontStyle: "normal",
-      // fontWeight: "normal",
-      // fontSize: "12px",
-      // lineHeight: "22px",
-      // alignItems: "center",
-      // justifyContent: "center",
-      // color: Colors.white,
+    },
+    OBSOLETE: {
+      width: "83px",
+      background: Colors.latest_yellow_varient,
+    },
+    SUPERSEDED: {
+      width: "100px",
+      background: Colors.basket_ball_orange,
     },
   }));
   const classes = styles();
   const status = props.dataItem[props.field];
-  if (status === "DRAFT") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <Link to="">
-          <span className={`${classes.chip} ${classes.statusDraft}`}>{status}</span>
-        </Link>
-      </td>
-    );
-  }
-  if (status === "IN_REVIEW") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <span className={`${classes.chip} ${classes.statusReview}`}>{status}</span>
-      </td>
-    );
-  }
-  if (status === "IMPLEMENTATION") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <span className={`${classes.chip} ${classes.statusImplementation}`}>{status}</span>
-      </td>
-    );
-  }
-  if (status === "APPROVED") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <span className={`${classes.chip} ${classes.statusApproved}`}>{status}</span>
-      </td>
-    );
-  }
-  if (status === "CLOSED") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <span className={`${classes.chip} ${classes.statusClosed}`}>{status}</span>
-      </td>
-    );
-  }
-  if (status === "VOIDED") {
-    return (
-      <td
-        colSpan={props.colSpan}
-        role="gridcell"
-        aria-colindex={props.ariaColumnIndex}
-        aria-selected="false"
-        data-grid-col-index={props.columnIndex}
-      >
-        <span className={`${classes.chip} ${classes.statusVoided}`}>{status}</span>
-      </td>
-    );
-  }
+
   return (
     <td
       colSpan={props.colSpan}
+      style={props.style}
       role="gridcell"
       aria-colindex={props.ariaColumnIndex}
       aria-selected="false"
+      className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <span className={`${classes.chip} ${classes.statusVoided}`}>{status}</span>
+      <span
+        className={`${classes.chip} ${classes[toUpper(status?.replaceAll(/[^a-z]/gi, ""))]}`}
+      >
+        {status}
+      </span>
     </td>
   );
 };

@@ -13,9 +13,7 @@ const cellTemplateMapping = {
 };
 
 export const getCellTemplate = (templateName: string) => {
-  console.log("getCellTemplate :: templateName = ", templateName);
   const template = cellTemplateMapping[templateName];
-  console.log("getCellTemplate :: template = ", template);
   if (template) {
     return template;
   }
