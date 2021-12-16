@@ -471,7 +471,7 @@ export function KendoPanel<T extends any>({
       filterCell={column.filterCell}
       groupable={column.groupable}
       locked={column.locked}
-      width={index === 0 && tableData.length && tableData[index as number].inEdit ? "150px" : column.width}
+      width={column.width}
     />
   );
   // const columnResize = (event) => {
