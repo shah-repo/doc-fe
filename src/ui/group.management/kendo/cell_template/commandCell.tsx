@@ -1,10 +1,20 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const CommandCell = (props) => {
+  const styles = makeStyles(() => ({
+    ButtonColor: {
+      color: Colors.navy,
+    },
+    Cancel: {
+      color: Colors.latest_yellow_varient,
+    },
+  }));
+  const classes = styles();
   const { dataItem } = props;
   const inEdit = dataItem.inEdit;
 
@@ -13,14 +23,16 @@ export const CommandCell = (props) => {
       <IconButton
         disableRipple={true}
         aria-label="add"
+        size="small"
         onClick={() => props.update(dataItem)}
-      ><AddCircleOutlineIcon color="primary" fontSize="large" />
+      ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
       <IconButton
         disableRipple={true}
         aria-label="cancel"
+        size="small"
         onClick={() => props.cancel(dataItem)}
-      ><CancelOutlinedIcon color="primary" fontSize="large" />
+      ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
     </td>
   ) : (
@@ -28,8 +40,9 @@ export const CommandCell = (props) => {
       <IconButton
         disableRipple={true}
         aria-label="edit"
+        size="small"
         onClick={() => props.edit(dataItem)}
-      ><EditIcon color="primary" fontSize="large" />
+      ><EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
     </td>
   );
