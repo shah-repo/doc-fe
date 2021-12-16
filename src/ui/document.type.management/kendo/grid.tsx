@@ -30,7 +30,6 @@ import { rowObj } from "./cell.formatter/row.oject";
 import gridConfiguration from "./columns/column.definition";
 import GridStyles from "./grid.styles";
 
-
 export function KendoGrid({
   tableData,
 }) {
@@ -67,7 +66,8 @@ export function KendoGrid({
       // On success Reload
     },
     onError: (error) => {
-      // On fail reset
+      // On fail reset grid to original state
+      cancel();
       toastError(error as string);
     },
   });
@@ -196,7 +196,7 @@ export function KendoGrid({
 
   // Add New row object
   const addNewRowObject = () => {
-    const newDataItem: any = rowObj;
+    const newDataItem: any = cloneDeep(rowObj);
     newDataItem.inEdit = true;
     const newDataArr: any = [newDataItem, ...actualData];
     setResultState(newDataArr);
