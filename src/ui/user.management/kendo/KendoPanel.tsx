@@ -1,14 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
-  FormControl,
-  Grid,
-  IconButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Typography,
+  Box, Grid, Typography,
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
@@ -31,9 +24,6 @@ import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as generateUuid from "uuid/v4";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import {
   getTableCriteria,
   getTableData,
@@ -386,25 +376,7 @@ export function KendoPanel<T extends any>({
       filterable={column.filterable}
     />
   );
-  const [coldef, setColdef] = React.useState(gridConfiguration.columns);
-  const onChange = (item: any) => {
-    const newState = [...coldef];
-    newState.map((c, i) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColdef(newState);
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          columnConfig: JSON.stringify(newState),
-        },
-        tableName
-      )
-    );
-  };
+
   // const columnResize = (event) => {
   //   // eslint-disable-next-line no-console
   //   console.log(event.columns);
@@ -432,14 +404,7 @@ export function KendoPanel<T extends any>({
   // };
 
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const addNew = () => {
     const newDataItem: UserManage = {
       id: generateUuid(),
@@ -485,61 +450,6 @@ export function KendoPanel<T extends any>({
                 disabled={Boolean(isCompanyDropboxEnabled)}
               />
               <AddEmployeeContainer  addGroup={addNew} />
-              <FormControl variant="outlined">
-                <IconButton
-                  aria-label="more"
-                  aria-controls="long-menu"
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <ViewGridIcon />
-                </IconButton>
-                <Menu
-                  id="long-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem>
-                    <ListItemText
-                      primary={
-                        <>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            className={classes.columnsCus}
-                            color="textPrimary"
-                          >
-                            Columns
-                          </Typography>
-                        </>
-                      }
-                    ></ListItemText>
-                  </MenuItem>
-                  {gridConfiguration.columns.map((item: any) =>
-                    item.field !== "user" && item.field !== "" && item.field !== "user.name" ? (
-                      <MenuItem key={item.title} value={item.field}>
-                        <ListItemText id={item.field} primary={item.title} />
-                        <Box flexGrow={1} mr={5}></Box>
-                        {item.show ? (
-                          <ViewChecked
-                            onClick={() => {
-                              onChange(item);
-                            }}
-                          />
-                        ) : (
-                          <SolidIcon
-                            onClick={() => {
-                              onChange(item);
-                            }}
-                          />
-                        )}
-                      </MenuItem>
-                    ) : null
-                  )}
-                </Menu>
-              </FormControl>{" "}
             </Grid>
           </Grid>
         </GridToolbar>
