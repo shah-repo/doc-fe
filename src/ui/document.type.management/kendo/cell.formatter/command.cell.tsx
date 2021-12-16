@@ -1,8 +1,9 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const CommandCell1 = (props) => {
   const { dataItem } = props;
@@ -64,24 +65,39 @@ export const CommandCell1 = (props) => {
 // import * as React from "react";
 
 export const CommandCell = (props) => {
+  const styles = makeStyles(() => ({
+    ButtonColor: {
+      color: Colors.navy,
+    },
+    Cancel: {
+      color: Colors.latest_yellow_varient,
+    },
+  }));
+  const classes = styles();
   const { dataItem } = props;
   const inEdit = dataItem.inEdit;
 
   return inEdit ? (
-    <td colSpan={props.colSpan}
-      style= {props.style}
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
       role="gridcell"
       aria-colindex={props.ariaColumnIndex}
       aria-selected="false"
       className={props.className}
-      data-grid-col-index={props.columnIndex}>
+      data-grid-col-index={props.columnIndex}
+    >
       <IconButton
         disableFocusRipple
         disableRipple
         style={{ backgroundColor: "transparent" }}
         aria-label="add"
         onClick={() => props.add(dataItem)}
-      ><AddCircleOutlineIcon color="primary" fontSize="small" />
+      >
+        <AddCircleOutlineIcon
+          className={classes.ButtonColor}
+          fontSize="small"
+        />
       </IconButton>
       <IconButton
         disableFocusRipple
@@ -89,24 +105,28 @@ export const CommandCell = (props) => {
         style={{ backgroundColor: "transparent" }}
         aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
-      ><CancelOutlinedIcon color="primary" fontSize="small" />
+      >
+        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
     </td>
   ) : (
-    <td colSpan={props.colSpan}
-      style= {props.style}
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
       role="gridcell"
       aria-colindex={props.ariaColumnIndex}
       aria-selected="false"
       className={props.className}
-      data-grid-col-index={props.columnIndex}>
+      data-grid-col-index={props.columnIndex}
+    >
       <IconButton
         disableFocusRipple
         disableRipple
         style={{ backgroundColor: "transparent" }}
         aria-label="edit"
         onClick={() => props.edit(dataItem)}
-      ><EditIcon color="primary" fontSize="small" />
+      >
+        <EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
       {/* TODO: check and put Remove */}
       <IconButton
@@ -115,7 +135,8 @@ export const CommandCell = (props) => {
         style={{ backgroundColor: "transparent" }}
         aria-label="cancel"
         onClick={() => props.remove(dataItem)}
-      ><CancelOutlinedIcon color="primary" fontSize="small" />
+      >
+        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
     </td>
   );
