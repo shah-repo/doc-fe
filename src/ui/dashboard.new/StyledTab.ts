@@ -14,6 +14,10 @@ const styles = () => ({
     "display": "flex",
     "alignItems": "center",
     "letterSpacing": "0.25px",
+    "padding-right": 0,
+    "padding-left": 0,
+    "margin-right": 12,
+    "margin-left": 12,
   },
   selected: {
     opacity: 1,

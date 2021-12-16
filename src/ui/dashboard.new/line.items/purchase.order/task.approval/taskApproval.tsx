@@ -15,11 +15,14 @@ import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg"
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
+import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
+import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
+import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -68,7 +71,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
-  const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);
@@ -81,8 +83,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     setApproved(!approved);
   };
   const handleRejectClick = () => {
-    openRejectDialog();
-    setRejected(!rejected);
+    onReject();
   };
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
@@ -108,7 +109,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     onMouseHoverItem(id);
   };
   const transitionDialog = useDialog();
-  const transitionDialog1 = useDialog();
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       transitionDialog.close();
@@ -121,10 +121,20 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog.open();
   };
-  const openRejectDialog = () => {
-    async.reset();
-    transitionDialog1.open();
+
+  const rejectDialogAsync = useAsync({
+    onSuccess: () => {
+      window.location.reload();
+    },
+    onError: (error) => {
+      toastError(error as string);
+    },
+  });
+  const applyTransition = useActionCreator(approvalsActions.applyTransition);
+  const onReject = () => {
+    rejectDialogAsync.start(applyTransition, approvalId, "reject", rejectDialogAsync, null);
   };
+
   return (
     <>
       <StyledListItem button onMouseEnter={onMouseHoverListItem}>
@@ -339,12 +349,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </StyleTooltip>
         )}
       </StyledListItem>
-      <ApproveDialogueContainer
-        transition="reject"
-        approvalId={approvalId}
-        transitionDialog={transitionDialog1}
-        label="transition.action.reject"
-      />
       <ApproveDialogueContainer
         transition="approve"
         approvalId={approvalId}
