@@ -90,7 +90,7 @@ export const CommandCell = (props) => {
       <IconButton
         disableFocusRipple
         disableRipple
-        style={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="add"
         onClick={() => props.add(dataItem)}
       >
@@ -102,7 +102,7 @@ export const CommandCell = (props) => {
       <IconButton
         disableFocusRipple
         disableRipple
-        style={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
       >
@@ -122,7 +122,7 @@ export const CommandCell = (props) => {
       <IconButton
         disableFocusRipple
         disableRipple
-        style={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="edit"
         onClick={() => props.edit(dataItem)}
       >
@@ -132,7 +132,7 @@ export const CommandCell = (props) => {
       <IconButton
         disableFocusRipple
         disableRipple
-        style={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="cancel"
         onClick={() => props.remove(dataItem)}
       >

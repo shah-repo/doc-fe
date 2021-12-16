@@ -252,24 +252,33 @@ export function KendoGrid({
     <Grid>
       {isLoading && loadingPanel}
       <Grid container spacing={1}>
-        <Grid item={true} xs={6}  style={{ textAlign: "left" }}>
-          <Button variant="outlined" className={classes.clearButton} onClick={clearFilter}>
+        <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+          <Button
+            variant="outlined"
+            className={classes.clearButton}
+            onClick={clearFilter}
+          >
             <Text translation={"common.clear.filters"} />
           </Button>
         </Grid>
-        <Grid item={true} xs={6}  style={{ textAlign: "right" }}>
+        <Grid item={true} xs={6} style={{ textAlign: "right" }}>
           <Button variant="outlined" className={classes.exportBtn}>
             <Text translation={"common.export.dam.details"} />
           </Button>
           {/* onClick={dialog.open}  {...{ disabled }} */}
-          <Button variant="outlined" onClick={addNewRowObject} className={classes.addBtn}>
+          <Button
+            variant="outlined"
+            onClick={addNewRowObject}
+            className={classes.addBtn}
+          >
             <Text translation={"common.add.document.type"} />
           </Button>
         </Grid>
       </Grid>
       <Grid item={true}>
         <KendoGlobalization>
-          <Kgrid className={classes.kGrid}
+          <Kgrid
+            className={classes.kGrid}
             data={resultState}
             sortable={true}
             filterable={true}
@@ -284,13 +293,19 @@ export function KendoGrid({
             expandField="expanded"
             editField={gridEditID}
             // onItemChange={itemChange}
-          // dataItemKey={"id"}
+            // dataItemKey={"id"}
           >
-            <GridColumn cell={commandCell} title="Actions" width="120px" filterable={false} locked={true}/>
             {renderColumns()}
-            <GridNoRecords>
-              {noDataMessage}
-            </GridNoRecords>
+            <GridColumn
+              cell={commandCell}
+              title=""
+              width="90px"
+              filterable={false}
+              locked={true}
+              reorderable={false}
+              resizable={false}
+            />
+            <GridNoRecords>{noDataMessage}</GridNoRecords>
           </Kgrid>
         </KendoGlobalization>
       </Grid>
