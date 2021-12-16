@@ -183,7 +183,7 @@ class FBWorkspaceState extends FBSchemaState {
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
-    if ((mode === "form" || mode === "formDesign") && !values) { return; }
+    if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
     if (!id) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
@@ -197,11 +197,17 @@ class FBWorkspaceState extends FBSchemaState {
         break;
       case "form":
       case "formDesign":
-        body = {
-          formInput: omit(values,
-            Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
-          ...mode === "formDesign" && this.isOutputSchema && { schema },
-        };
+        if (values) {
+          body = {
+            formInput: omit(values,
+              Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        } else {
+          body = {
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        }
         break;
       default:
         return;
