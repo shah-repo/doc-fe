@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import { sortBy } from "lodash";
 // import Collapse from "@material-ui/core/Collapse";
 // import IconButton from "@material-ui/core/IconButton";
 // import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -106,7 +107,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
       {/* <Grid item={true}>
         <KendoGrid tableData= {documentTypes} />
       </Grid> */}
-      <KendoGrid tableData= {documentTypes} />
+      <KendoGrid tableData= {sortBy(documentTypes, "documentTypeName")} />
       {/* <Box display="flex" justifyContent="flex-end">
         <Button onClick={dialog.open} variant="outlined" {...{ disabled }}>
           <Text translation={"common.add.document.type"} />

@@ -7,7 +7,7 @@ import { GridTextAreaPopUp } from "./grid.textarea.pop.up";
 
 export const FieldsConfigCell = (props) => {
   const [openForm, setOpenForm] = React.useState(false);
-  const openSchemaWindow = () => {
+  const openPopUpWindow = () => {
     setOpenForm(true);
   };
   const handleCancelEdit = () => {
@@ -21,7 +21,7 @@ export const FieldsConfigCell = (props) => {
         dataItem: props.dataItem,
         field: props.field,
         // syntheticEvent: event.syntheticEvent,
-        value: parseJSON(event.schema),
+        value: parseJSON(event.fieldsConfig),
       });
       setOpenForm(false);
     }
@@ -41,7 +41,7 @@ export const FieldsConfigCell = (props) => {
         aria-selected="false"
         className={props.className}
         data-grid-col-index={props.columnIndex}><FieldConfigIcon onClick={() => {
-          openSchemaWindow();
+          openPopUpWindow();
         }}
         /></td>
       {openForm && (
@@ -52,6 +52,7 @@ export const FieldsConfigCell = (props) => {
           // onSubmit={handleSubmit}
           item={formattedValue}
           isEdit= {isEdit}
+          fieldName={props.field}
         />
       )}
     </>

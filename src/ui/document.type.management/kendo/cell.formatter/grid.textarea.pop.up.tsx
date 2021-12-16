@@ -25,18 +25,23 @@ const FormTextArea = (fieldRenderProps) => {
   const showHint = !showValidationMessage && hint;
   const hindId = showHint ? `${id}_hint` : "";
   const errorId = showValidationMessage ? `${id}_error` : "";
+
   return <FieldWrapper>
     <div className={"k-form-field-wrap"}>
-      <TextArea defaultValue={defaultV} valid={valid} type={type} id={id} disabled={disabled} rows={17} ariaDescribedBy={`${hindId} ${errorId}`} {...others} />
+      <TextArea defaultValue={defaultV} valid={valid}
+        type={type} id={id} disabled={disabled}
+        rows={17} ariaDescribedBy={`${hindId} ${errorId}`}
+        {...others} />
     </div>
   </FieldWrapper>;
 };
 
 export const GridTextAreaPopUp = (props) => {
   const classes = GridCellStyles();
-  const fieldName = props.title.toLowerCase();
+  const fieldName = props.fieldName;
   return (
-    <Window title={props.title} onClose={props.cancelEdit} className="gridTextAreaForm"
+    <Window title={props.title} onClose={props.cancelEdit}
+      className="gridTextAreaForm"
       initialHeight={505}
       initialWidth={524}
       minimizeButton={() => null}
