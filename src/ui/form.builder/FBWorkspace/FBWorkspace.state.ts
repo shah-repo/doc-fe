@@ -28,6 +28,7 @@ class FBWorkspaceState extends FBSchemaState {
   public formInput?: Record<string, any>;
 
   @observable public isDirty = false;
+  @observable public disabledAction = false;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -165,6 +166,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setDirty = (isDirty: boolean) => {
     set(this, "isDirty", isDirty);
+  };
+
+  @action public setDisabledAction = (disabledAction: boolean) => {
+    set(this, "disabledAction", disabledAction);
   };
 
   @action public setFormInputSync = (name: string, value: any) => {

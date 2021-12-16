@@ -21,5 +21,7 @@ export REACT_APP_THEME="DEV_THEME"
 export NODE_ENV="production"
 export REACT_APP_DATADOG_APPLICATION_ID="fake"
 export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
+export REACT_APP_DATADOG_ENABLED="false"
+export REACT_APP_DATADOG_SAMPLE_RATE="0"
 
 yarn start

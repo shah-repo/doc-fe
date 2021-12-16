@@ -20,9 +20,13 @@ export const styles = makeStyles(() =>
       height: "130px",
     },
     tab: {
-      minWidth: 66,
+      minWidth: 26,
       fontSize: "10px",
       minHeight: 30,
+      marginLeft: 6,
+      marginRight: 6,
+      paddingLeft: 0,
+      paddingRight: 0,
     },
     overdueTab: {
       position: "absolute",
@@ -48,7 +52,9 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       fontSize: "14px",
       lineHeight: "10px",
-      marginLeft: "3px",
+    },
+    legend: {
+      marginLeft: "13px",
     },
   })
 );
