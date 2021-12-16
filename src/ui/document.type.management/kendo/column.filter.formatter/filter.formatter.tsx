@@ -82,6 +82,7 @@ export const EditDropdownCellFormatter = (props) => {
           value={localizedData.find((c) => c.value === dataValue)}
           data={localizedData}
           textField="text"
+          dataItemKey="value"
         />
       ) : (
         dataValue.toString()

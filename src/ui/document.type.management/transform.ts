@@ -1,6 +1,5 @@
 import { isNull } from "lodash";
 import { IntlShape } from "react-intl";
-import { toArray } from "../group.management/utils/transform";
 
 export const enumToOptions = (values): any => {
   if (values === null) {
@@ -41,7 +40,7 @@ export const toDocumentTypeBody = (values) => ({
   ...values,
   defaultRevStage: isNull(values.defaultRevStage) ? null : values.defaultRevStage,
   group: values.group,
-  hiddenForCreationForUsersWithoutTags: toArray(values.hiddenForCreationForUsersWithoutTags),
+  hiddenForCreationForUsersWithoutTags: values.hiddenForCreationForUsersWithoutTags,
   schema: typeof values.schema == "string" ? parseJSON(values.schema) : values.schema,
   fieldsConfig: typeof values.fieldsConfig === "string" ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });

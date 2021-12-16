@@ -13,4 +13,5 @@ export const rowObj = {
   schema: null,
   fieldsConfig: null,
   defaultRevStage: null,
+  active: false,
 };
