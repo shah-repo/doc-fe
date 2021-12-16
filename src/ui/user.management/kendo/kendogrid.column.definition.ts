@@ -19,11 +19,11 @@ const columns = [
     width: "80px",
   },
   {
-    field: "user",
+    field: "status",
     title: "SIGNED UP",
     show: true,
     filterable: false,
-    groupable: false,
+    groupable: true,
     cell: SignedCell,
   },
   {

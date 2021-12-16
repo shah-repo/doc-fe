@@ -283,6 +283,7 @@ export function KendoPanel<T extends any>({
           ...el,
           groupsOrg: el.groups,
           groups: el.groups.map((e) => e.name).join(", "),
+          status: el.user.confirmed ? "Active" : "Inactive",
         }));
         const newDataState = processWithGroups(data, initialKendoConfig);
         setDataState(initialKendoConfig);
