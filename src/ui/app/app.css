@@ -33,7 +33,7 @@ body {
 }
 
 .k-link.k-state-selected {
-  background-color:var(--zeron) !important;
+  background-color: var(--zeron) !important;
   color: var(--navy) !important;
   font-weight: 600;
   font-size: 14px;
@@ -52,15 +52,19 @@ body {
   font-family: var(--font-family);
   font-size: 12px;
 }
+
 .k-pager-numbers .k-link {
   color: var(--almost_black);
 }
+
 .k-grid-header .k-link .k-icon {
   color: var(--navy);
 }
+
 td[role="gridcell"] {
   white-space: nowrap;
 }
+
 .k-pager-numbers .k-link:hover {
   color: var(--navy);
   background-color: var(--soft-peach);
@@ -93,13 +97,13 @@ td[role="gridcell"] {
   background: var(--white);
 }
 
-.k-grouping-header .k-indicator-container{
+.k-grouping-header .k-indicator-container {
   font-size: 12px;
   color: var(--font_gray);
 }
 
 .k-grid tbody tr:hover td.k-grid-content-sticky,
-  .k-grid tbody tr:hover td {
+.k-grid tbody tr:hover td {
   background-color: var(--soft-peach);
 }
 
@@ -167,7 +171,7 @@ td[role="gridcell"] {
 }
 
 .k-grid .k-grid-table tbody th,
-  .k-grid .k-grid-table tbody td {
+.k-grid .k-grid-table tbody td {
   border-width: 0 0 1px 0;
 }
 
@@ -189,4 +193,16 @@ td[role="gridcell"] {
 
 .k-master-row .k-grid-content-sticky {
   border-color: rgba(0, 0, 0, 0.08);
+}
+
+.k-grid-header th.k-grid-header-sticky,
+.k-grid-header td.k-grid-header-sticky,
+.k-grid-header .k-grid-header-sticky.k-sorted {
+  background-color: var(--water);
+}
+
+.k-checkbox:checked,
+.k-checkbox.k-checked {
+  background-color: var(--navy);
+  border-color: var(--navy);
 }
