@@ -17,12 +17,6 @@ const KendoGridStyles = makeStyles(() => ({
   loading: {
     top: 0,
   },
-  tooltipHeight: {
-    maxHeight: "calc(100vh - 30px)",
-    overflow: "auto",
-    fontFamily: "Sora",
-    whiteSpace: "pre-line",
-  },
 }));
 
 export default KendoGridStyles;
