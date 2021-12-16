@@ -4,8 +4,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import KendoGridStyles from "../kendogrid.styles";
 
 export const TagsCell = (props) => {
+  const classes = KendoGridStyles();
   const tags = props.dataItem[props.field];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const availableGroups = allGroups.filter(
@@ -34,8 +36,12 @@ export const TagsCell = (props) => {
       ) : (
         <StyledTooltip interactive={true}
           title={
-            <Typography><div style={{ whiteSpace: "pre-line" }}>{tags?.replace(/,/g, ",\n")}</div></Typography>
-          } placement="left-start" arrow>
+            <Typography>
+              <div className={`${classes.tooltipHeight}`}>
+                {tags?.replace(/,/g, ",\n")}
+              </div>
+            </Typography>
+          } placement="left" arrow>
           <span>{tags}</span>
         </StyledTooltip>
       )}

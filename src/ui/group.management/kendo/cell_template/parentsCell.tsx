@@ -4,8 +4,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import KendoGridStyles from "../kendogrid.styles";
 
 export const ParentsCell = (props) => {
+  const classes = KendoGridStyles();
   const parents = props.dataItem[props.field];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const availableGroups = allGroups.filter(
@@ -36,8 +38,12 @@ export const ParentsCell = (props) => {
       ) : (
         <StyledTooltip interactive={true}
           title={
-            <Typography><div style={{ whiteSpace: "pre-line" }}>{parents?.replace(/,/g, ",\n")}</div></Typography>
-          } placement="left-start" arrow>
+            <Typography>
+              <div className={`${classes.tooltipHeight}`}>
+                {parents?.replace(/,/g, ",\n")}
+              </div>
+            </Typography>
+          } placement="left" arrow>
           <span>{parents}</span>
         </StyledTooltip>
       )}

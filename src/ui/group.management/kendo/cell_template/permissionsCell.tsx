@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import { toOptions } from "../../utils/transform";
+import KendoGridStyles from "../kendogrid.styles";
 
 export const PermissionsCell = (props) => {
+  const classes = KendoGridStyles();
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
@@ -34,8 +36,12 @@ export const PermissionsCell = (props) => {
       ) : (
         <StyledTooltip interactive={true}
           title={
-            <Typography><div style={{ whiteSpace: "pre-line" }}>{permissions?.replace(/,/g, ",\n")}</div></Typography>
-          } placement="left-start" arrow>
+            <Typography>
+              <div className={`${classes.tooltipHeight}`}>
+                {permissions?.replace(/,/g, ",\n")}
+              </div>
+            </Typography>
+          } placement="left" arrow>
           <span>{permissions}</span>
         </StyledTooltip>
       )}

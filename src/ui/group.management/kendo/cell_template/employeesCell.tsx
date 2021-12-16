@@ -4,8 +4,10 @@ import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import { toMembersOptions } from "../../utils/transform";
+import KendoGridStyles from "../kendogrid.styles";
 
 export const EmployeesCell = (props) => {
+  const classes = KendoGridStyles();
   const employees = props.dataItem[props.field];
   const [result, setResult] = React.useState([]);
   const [data, setData] = React.useState(Object.keys(toMembersOptions(props.employees)).map(
@@ -49,8 +51,12 @@ export const EmployeesCell = (props) => {
       ) : (
         <StyledTooltip interactive={true}
           title={
-            <Typography><div style={{ whiteSpace: "pre-line" }}>{employees?.replace(/,/g, ",\n")}</div></Typography>
-          } placement="left-start" arrow>
+            <Typography>
+              <div className={`${classes.tooltipHeight}`}>
+                {employees?.replace(/,/g, ",\n")}
+              </div>
+            </Typography>
+          } placement="left" arrow>
           <span>{employees}</span>
         </StyledTooltip>
       )}
