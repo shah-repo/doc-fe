@@ -724,7 +724,7 @@ context("PO test", () => {
         }).as("response");
 
         cy.get("[data-cy^=\"requestor-\"]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-        cy.wait("@response", { responseTimeout: 30 * 1000 });
+        cy.wait("@response", { responseTimeout: 60 * 1000 });
       });
     });
 
@@ -751,7 +751,7 @@ context("PO test", () => {
 
         cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
         cy.get(".MuiPickersDay-daySelected").arrowClick();
-        cy.wait("@response", { responseTimeout: 30 * 1000 });
+        cy.wait("@response", { responseTimeout: 60 * 1000 });
       });
     });
 

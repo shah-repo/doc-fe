@@ -237,10 +237,17 @@ context("Record inline history Flow", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
           cy.unClick();
-          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
+          cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
           cy.drEnterDocumentDescriptionWithWait({ description: "History Test Inline Record description" });
         });
 
@@ -266,8 +273,14 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.fbUnSelectCheckboxValue( "Red" );
+            cy.progressBarShouldNotExist();
+          });
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbUnSelectCheckboxValue( "Red", "Green" );
+            cy.fbUnSelectCheckboxValue( "Green" );
             cy.unClick();
           });
         });
@@ -294,8 +307,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Save record", () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          cy.wait(4000);
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Count number of elements in approval history", () => {
