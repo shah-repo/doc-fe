@@ -23,12 +23,14 @@ export const CommandCell = (props) => {
       <IconButton
         disableRipple={true}
         aria-label="update"
+        size="small"
         onClick={() => props.add(dataItem)}
       ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
       <IconButton
         disableRipple={true}
         aria-label="cancel"
+        size="small"
         onClick={() => props.cancel(dataItem)}
       ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
@@ -38,6 +40,7 @@ export const CommandCell = (props) => {
       <IconButton
         disableRipple={true}
         aria-label="edit"
+        size="small"
         onClick={() => props.edit(dataItem)}
       ><EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>

@@ -376,7 +376,7 @@ export function KendoPanel<T extends any>({
       groupable={column.groupable}
       filterCell={column.filterCell}
       filterable={column.filterable}
-      width={index === 0 && tableData[index] && tableData[index].inEdit ? "115px" : column.width}
+      width={column.width}
     />
   );
 
