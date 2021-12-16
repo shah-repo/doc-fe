@@ -77,7 +77,7 @@ export const Status = (props) => {
       data-grid-col-index={props.columnIndex}
     >
       <span
-        className={`${classes.chip} ${classes[toUpper(status.replaceAll(/[^a-z]/gi, ""))]}`}
+        className={`${classes.chip} ${classes[toUpper(status?.replaceAll(/[^a-z]/gi, ""))]}`}
       >
         {status}
       </span>

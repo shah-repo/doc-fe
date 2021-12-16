@@ -236,6 +236,7 @@ td[role="gridcell"] {
   margin-top: "15px";
 }
 
+.k-grid-header .k-grid-filter:hover,
 .k-grid-header th.k-grid-header-sticky,
 .k-grid-header td.k-grid-header-sticky,
 .k-grid-header .k-grid-header-sticky.k-sorted {
