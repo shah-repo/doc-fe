@@ -1,10 +1,20 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
+import Colors from "../../../layout/theme/utils/colors";
 
 export const CommandCell = (props) => {
+  const styles = makeStyles(() => ({
+    ButtonColor: {
+      color: Colors.navy,
+    },
+    Cancel: {
+      color: Colors.latest_yellow_varient,
+    },
+  }));
+  const classes = styles();
   const { dataItem } = props;
   const inEdit = dataItem[props.editField];
 
@@ -13,12 +23,12 @@ export const CommandCell = (props) => {
       <IconButton
         aria-label="update"
         onClick={() => props.add(dataItem)}
-      ><AddCircleOutlineIcon color="primary" fontSize="default" />
+      ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
       <IconButton
         aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
-      ><CancelOutlinedIcon color="primary" fontSize="default" />
+      ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
       {/* <button
         className="k-button k-grid-save-command"
@@ -38,7 +48,7 @@ export const CommandCell = (props) => {
       <IconButton
         aria-label="edit"
         onClick={() => props.edit(dataItem)}
-      ><EditIcon color="primary" fontSize="default" />
+      ><EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
     </td>
   );
