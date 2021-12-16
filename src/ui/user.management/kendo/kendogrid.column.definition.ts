@@ -23,6 +23,7 @@ const columns = [
     title: "SIGNED UP",
     show: true,
     filterable: false,
+    groupable: false,
     cell: SignedCell,
   },
   {
@@ -45,7 +46,7 @@ const columns = [
     field: "groups",
     title: "GROUPS",
     show: true,
-    groupable: false,
+    groupable: true,
     filterCell: GroupDropdown,
     cell: GroupsCell,
   },

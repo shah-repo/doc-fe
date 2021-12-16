@@ -1,11 +1,9 @@
-import { Typography } from "@material-ui/core";
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Text from "../../../components/Text";
-import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 import KendoGridStyles from "../kendogrid.styles";
 
 export const GroupsCell = (props) => {
@@ -55,9 +53,7 @@ export const GroupsCell = (props) => {
           defaultValue={defaultGroups}
         />
       ) : (
-        <StyleTooltip title={<Typography><Text translation={props.dataItem.groups} /></Typography>} placement="top-start" arrow>
-          <Typography noWrap>{props.dataItem.groups}</Typography>
-        </StyleTooltip>
+        <Tooltip data={props?.dataItem?.groups} />
       )}
     </td>
   );

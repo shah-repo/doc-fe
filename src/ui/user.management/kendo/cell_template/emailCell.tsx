@@ -22,7 +22,7 @@ export const EmailCell = (props) => {
           onChange={updateEmailField}
         />
       ) : (
-        <span>{props.dataItem.user ? props.dataItem.user.email : props.dataItem.items[0].user.email}</span>
+        <span>{props?.dataItem?.user ? props?.dataItem?.user?.email : props?.dataItem?.items[0]?.user?.email}</span>
       )}
     </td>
   );

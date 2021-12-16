@@ -21,31 +21,22 @@ export const CommandCell = (props) => {
   return inEdit ? (
     <td className="k-command-cell">
       <IconButton
+        disableRipple={true}
         aria-label="update"
         onClick={() => props.add(dataItem)}
       ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
       <IconButton
+        disableRipple={true}
         aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
       ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
-      {/* <button
-        className="k-button k-grid-save-command"
-        onClick={() => props.add(dataItem)}
-      >
-        Update
-      </button>
-      <button
-        className="k-button k-grid-cancel-command"
-        onClick={() => props.cancel(dataItem)}
-      >
-        Cancel
-      </button> */}
     </td>
   ) : (
     <td className="k-command-cell">
       <IconButton
+        disableRipple={true}
         aria-label="edit"
         onClick={() => props.edit(dataItem)}
       ><EditIcon className={classes.ButtonColor} fontSize="small" />

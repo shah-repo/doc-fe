@@ -171,6 +171,7 @@ export function KendoPanel<T extends any>({
       logic: "and",
       filters: state ? [{ field: "groups", operator: "eq", value: "" }] : [],
     };
+    dataState.group = [];
     setDataState(dataState);
     setResultState({
       data: [],
@@ -375,7 +376,7 @@ export function KendoPanel<T extends any>({
       groupable={column.groupable}
       filterCell={column.filterCell}
       filterable={column.filterable}
-      width={column.width}
+      width={index === 0 && tableData[index] && tableData[index].inEdit ? "115px" : column.width}
     />
   );
 
