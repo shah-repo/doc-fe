@@ -1,3 +1,4 @@
+import Link from "@material-ui/core/Link";
 import React from "react";
 import { useIntl } from "react-intl";
 import { authActions } from "../../../../state/ducks/auth";
@@ -63,10 +64,13 @@ export const SignedCell = (props) => {
           {props.dataItem?.user?.confirmed ? (
             "Signed up"
           ) : (
-            <button
-              className="k-button k-primary"
+            <Link
+              component="button"
+              variant="body2"
               onClick={() => handleResendEmail(props.dataItem)}
-            >{`Resend signup email`}</button>
+            >
+              Resend signup email
+            </Link>
           )}
         </span>
       )}
