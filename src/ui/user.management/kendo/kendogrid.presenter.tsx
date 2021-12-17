@@ -21,13 +21,14 @@ import { KendoPanel } from "./KendoPanel";
 interface Props {
   tableName: string;
   tableCriteria: TablePanelStateProps;
-  tableData: TableDataProps<any>;
+  data: TableDataProps<any>;
   clearFilter?: () => void;
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   tableName,
-  tableData,
+  data,
+  tableCriteria,
 }) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
@@ -60,7 +61,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
         <KendoPanel<GetEmployeeResponse>
           columns={gridConfiguration}
           queryUrl={EMPLOYEES_URL}
-          data={tableData}
+          data={data}
           cellMeasure={true}
           tableName={tableName}
           hasDropboxPermission={hasDropboxPermission}
@@ -68,6 +69,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
           enableDropboxAction={enableDropboxAction}
           isCompanyDropboxEnabled={isCompanyDropboxEnabled}
           onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem)}
+          tableCriteria={tableCriteria}
         />
       </Grid>
       <UserProfileAdminContainer

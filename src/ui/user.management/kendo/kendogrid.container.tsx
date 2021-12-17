@@ -13,11 +13,10 @@ import KendoPresenter from "./kendogrid.presenter";
 const UserManagementKendoContainer: React.FunctionComponent = () => {
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  // const intl = useIntl();
 
   const TABLE_NAME = "userManagement";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-  const tableData = useSelector(getTableData(TABLE_NAME));
+  const data = useSelector(getTableData(TABLE_NAME));
   const canManageUsers = useGetHasTag(GroupTag.USER_MANAGEMENT);
 
   if (isEmpty(tableCriteria.queryDict) && !didMount) {
@@ -43,7 +42,7 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
     <KendoPresenter
       tableName={TABLE_NAME}
       tableCriteria={tableCriteria}
-      tableData={tableData}
+      data={data}
       clearFilter={clearFilter}
     />
   );

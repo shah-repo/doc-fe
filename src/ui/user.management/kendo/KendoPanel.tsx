@@ -24,10 +24,6 @@ import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as generateUuid from "uuid/v4";
-import {
-  getTableCriteria,
-  getTableData,
-} from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
@@ -68,6 +64,7 @@ export function KendoPanel<T extends any>({
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
+  tableCriteria,
 }: Props<T>) {
   const editField = "inEdit";
   const didMount = useDidMount();
@@ -76,8 +73,6 @@ export function KendoPanel<T extends any>({
     isSelectable: onSelect !== undefined,
   };
   const classes = KendoGridStyles(styleProps);
-  const tableCriteria = useSelector(getTableCriteria(tableName));
-  const tableData = useSelector(getTableData(tableName));
   const kendoConfigColumn = tableCriteria.columnConfig;
   const gridConfiguration = columns ? columns : kendoConfigColumn;
   const processWithGroups = (data: any[], dataState: State) => {
@@ -153,8 +148,8 @@ export function KendoPanel<T extends any>({
 
 
   const cancel = (dataItem: UserManage) => {
-    tableData.splice(0, 1);
-    const newDataState = processWithGroups(tableData, dataState);
+    data.splice(0, 1);
+    const newDataState = processWithGroups(data, dataState);
     setResultState(newDataState);
   };
 
@@ -176,7 +171,7 @@ export function KendoPanel<T extends any>({
     };
     dataState.group = [];
     setDataState(dataState);
-    const newDataState = processWithGroups(tableData, dataState);
+    const newDataState = processWithGroups(data, dataState);
     setResultState(newDataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     dispatch(
@@ -209,7 +204,7 @@ export function KendoPanel<T extends any>({
   const [dataState, setDataState] = useState<State>(initialKendoConfig); // Kendo Grid Data State
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(tableData, initialKendoConfig)
+    processWithGroups(data, initialKendoConfig)
   );
   useEffect(() => {
     if (didMount) {
@@ -327,18 +322,18 @@ export function KendoPanel<T extends any>({
     </div>
   );
   const result = setExpandedState({
-    data: processWithGroups(tableData, initialKendoConfig).data,
+    data: processWithGroups(data, initialKendoConfig).data,
     collapsedIds: collapsedState,
   });
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(tableData, event.dataState);
+      const newDataState = processWithGroups(data, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState));
     },
-    [tableData]
+    [data]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
@@ -402,8 +397,8 @@ export function KendoPanel<T extends any>({
       active: true,
       groups: defaultGroups.map((el) => ({ id: el.value })) as [],
     };
-    tableData.unshift(newDataItem);
-    setResultState(processWithGroups(tableData, dataState));
+    data.unshift(newDataItem);
+    setResultState(processWithGroups(data, dataState));
   };
   const tableRenderer = () => (
     <>
@@ -412,7 +407,7 @@ export function KendoPanel<T extends any>({
           key={tableName}
           className={classes.kGrid}
           data={result}
-          total={resultState.total > 0 ? resultState.total : tableData.length}
+          total={resultState.total > 0 ? resultState.total : data.length}
           pageable={gridConfiguration.pagerSettings}
           sortable={true}
           filterable={true}

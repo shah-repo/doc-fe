@@ -31,6 +31,7 @@ export interface TablePanelProps<T> {
   dropboxAsync?: any;
   enableDropboxAction?: any;
   isCompanyDropboxEnabled?: boolean;
+  tableCriteria?: any;
 }
 
 export interface TableSelectionProps<T> {
