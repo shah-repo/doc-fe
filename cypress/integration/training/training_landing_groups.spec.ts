@@ -738,20 +738,21 @@ context("Groups on Training Curriculum landing page", () => {
     it("'test training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("test training title");
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
+        .should("contain.text", "test training title");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
+        .should("contain.text", "Developers");
     });
   });
 
   context("Add approver and release training", () => {
     it("Select the filtered record", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).arrowClick();
+      cy.dlSelectFirstDocument();
     });
 
     it("Select Approver", () => {
@@ -875,30 +876,29 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
-    it("'One-Time training title' should be present with 'Developers' group", () => {
+    it("'One-Time training title' should be present with 'Developers' group", { retries: 2 }, () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("One-Time training title");
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "One-Time training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
+        .should("contain.text", "One-Time training title");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
+        .should("contain.text", "Developers");
     });
   });
 
   context("Add approver and release training", () => {
     it("Select the filtered record", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).arrowClick();
+      cy.dlSelectFirstDocument();
     });
 
     it("Select Approver", () => {
