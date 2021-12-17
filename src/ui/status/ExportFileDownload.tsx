@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import { Box, Paper, Typography } from "@material-ui/core";
-import Base64 from "Base64";
 import moment from "moment";
 import queryString from "query-string";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Text from "../components/Text";
 import { Translation } from "../translations/types";
 import { downloadURI, logo, useDebouncedEffect } from "./../../common/utils/helpers";
+import apiClient from "./../../state/apiClient";
 import { styles } from "./ExportFileDownload.styles";
 
 enum States {
@@ -29,25 +29,44 @@ const StateMessages: {[Key in States]: Translation} = {
 const ExportFileDownload: React.FunctionComponent = () => {
   const classes = styles();
   const [status, setStatus] = useState<States>(States.PREPARING);
+  const [s3Url, setS3Url] = useState<string | null>(null);
   const location = useLocation();
-  const urlEncoded = useMemo(() => queryString.parse(location.search).url as string, [location.search]);
+  const downloadUrlUUID = useMemo(() => queryString.parse(location.search).fileId as string, [location.search]);
+
+  useEffect(() => {
+    /*
+      - get presigned url from server using id provided in url
+    */
+    apiClient
+      .request({
+        method: "GET",
+        url: `short_url/${downloadUrlUUID}`,
+        headers: {},
+      })
+      .then((resp) => {
+        setS3Url(resp.data.url);
+      })
+      .catch((exception) => {
+        if (exception?.response?.status === 410) {
+          setStatus(States.EXPIRED);
+        } else {
+          setStatus(States.ERROR);
+        }
+      });
+  }, [downloadUrlUUID]);
 
   useDebouncedEffect(() => {
-    if (!urlEncoded) {
-      setStatus(States.ERROR);
-      return;
-    }
-
     /*
-      - decode signed s3 link from param "url"
       - extract timestamp of creation ("X-Amz-Date") and validity duration in seconds ("X-Amz-Expires")
       - download s3 link if not expired
 
       https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
     */
+    if (s3Url === null) {
+      return;
+    }
 
-    const urlDecoded = Base64.atob(urlEncoded);
-    const urlParams = new URLSearchParams(urlDecoded.split("?").slice(1).join("?"));
+    const urlParams = new URLSearchParams(s3Url.split("?").slice(1).join("?"));
     const date = urlParams.get("X-Amz-Date")?.replace(
       /^(.{4})(.{2})(.{2})T(.{2})(.{2})(.{2})Z$/,
       (match, year, month, day, hour, minute, second) => `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`
@@ -67,12 +86,11 @@ const ExportFileDownload: React.FunctionComponent = () => {
     setStatus(States.DOWNLOADING);
 
     setTimeout(() => {
-      downloadURI(urlDecoded, "file");
+      downloadURI(s3Url, "file");
       setTimeout(() => setStatus(States.DOWNLOAD_STARTED), 1 * 1000);
     }, 2 * 1000);
-  }, [urlEncoded], 2 * 1000);
+  }, [s3Url], 1 * 1000);
 
-  console.log(StateMessages[status]);
   return <div className={classes.root}>
     <Paper className={classes.paper}>
       <img
