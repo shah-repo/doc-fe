@@ -1576,6 +1576,7 @@ context("Create company with golden tenant", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "email must be an email" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
     });
@@ -1585,6 +1586,7 @@ context("Create company with golden tenant", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
     });
@@ -1621,6 +1623,7 @@ context("Create company with golden tenant", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
       cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_dam.json\"]").arrowClick({ force: true });
     });
