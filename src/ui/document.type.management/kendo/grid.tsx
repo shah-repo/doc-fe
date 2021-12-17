@@ -164,7 +164,6 @@ export function KendoGrid({
   };
   // On field config: inline edit
   const update = (dataItem) => {
-    dataItem.inEdit = false;
     const  newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
@@ -174,7 +173,7 @@ export function KendoGrid({
       needsSignature: dataItem.needsSignature,
       defaultTraining: dataItem.defaultTraining,
       startingNumber: dataItem.startingNumber,
-      hiddenForCreationForUsersWithoutTags: [dataItem.hiddenForCreationForUsersWithoutTags],
+      hiddenForCreationForUsersWithoutTags: dataItem.hiddenForCreationForUsersWithoutTags,
       group: dataItem.group,
       category: dataItem.category,
       schema: dataItem.schema,
@@ -182,7 +181,14 @@ export function KendoGrid({
       defaultRevStage: dataItem.defaultRevStage,
       active: dataItem.active,
     };
-    onFieldConfig(newData, dataItem.id);
+    const emptyFields: string[] = gridCellValidation(newData);
+    if (!isEmpty(emptyFields)) {
+      toastError(`${emptyFields.join(",")} is missing.`);
+      return;
+    } else {
+      dataItem.inEdit = false;
+      onFieldConfig(newData, dataItem.id);
+    }
   };
   // On field config: inline edit- Update api call
   const onFieldConfig = (values, id) => {
@@ -204,17 +210,37 @@ export function KendoGrid({
     setDataState(dataState);
   };
 
+  // TODO: FIND BETTER SOLUTION
+  const gridCellValidation = (dataItem) => {
+    const emptyFields: string[] = [];
+    if (isEmpty(dataItem.documentTypeName)) {
+      emptyFields.push("Document Type");
+    }
+    if (isEmpty(dataItem.documentTypeAcronym)) {
+      emptyFields.push("Document Acronym");
+    }
+    if (isEmpty(dataItem.group)) {
+      emptyFields.push("Group");
+    }
+    return emptyFields;
+  };
+
   // Api Call on Add New Row
   const addNewRow = (values: any) => {
-    delete values.inEdit;
     console.log(disabled);
-    set(values, "hiddenForCreationForUsersWithoutTags", [values.hiddenForCreationForUsersWithoutTags]);
-    // console.log(async, addDocumentTypeAction, values);
-    async.start(
-      addDocumentTypeAction,
-      toDocumentTypeBody(values),
-      async,
-    );
+    const emptyFields: string[] = gridCellValidation(values);
+    if (!isEmpty(emptyFields)) {
+      toastError(`${emptyFields.join(",")} is missing.`);
+      return;
+    } else {
+      delete values.inEdit;
+      async.start(
+        addDocumentTypeAction,
+        toDocumentTypeBody(values),
+        async,
+      );
+    }
+
   };
 
   // Delete document
