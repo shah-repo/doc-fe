@@ -1576,6 +1576,7 @@ context("Create company with golden tenant", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "email must be an email" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
     });
@@ -1585,6 +1586,7 @@ context("Create company with golden tenant", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
     });
@@ -1621,6 +1623,7 @@ context("Create company with golden tenant", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
       cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
       cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
+      cy.closeAllAlertMessages();
       cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
       cy.get("[data-cy=\"remove-incorrect_dam.json\"]").arrowClick({ force: true });
     });
@@ -1740,7 +1743,7 @@ context("Create company with golden tenant", () => {
 
     it("Check DAM assigned approval roles", () => {
       const roles = [];
-      cy.get("[class*=\"makeStyles-tableStatus-\"] tbody tr td").each(($el) => {
+      cy.get("table:eq(1) tbody tr:eq(9) td").each(($el) => {
         roles.push($el.text());
       });
       cy.wrap(roles).should("have.length", 12);
@@ -1761,7 +1764,7 @@ context("Create company with golden tenant", () => {
 
     it("Check DAM approval roles", () => {
       const roles = [];
-      cy.get("[class*=\"makeStyles-tableStatus-\"] thead tr:eq(1) th").each(($el) => {
+      cy.get("table:eq(1) thead tr:eq(1) th").each(($el) => {
         roles.push($el.text());
       });
       cy.wrap(roles).should("have.length", 12);
@@ -1779,7 +1782,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Make a change in DAM", () => {
-      cy.get("[class*=\"makeStyles-tableInfo-\"] tbody tr:eq(0) td:eq(3) svg").arrowClick();
+      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3) svg").arrowClick();
     });
 
     it("Click exit DAM", () => {
@@ -1794,7 +1797,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("change should be saved", () => {
-      cy.get("[class*=\"makeStyles-tableInfo-\"] tbody tr:eq(0) td:eq(3)").should("have.text", "Yes");
+      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3)").should("have.text", "Yes");
     });
   });
 
