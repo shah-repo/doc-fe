@@ -478,7 +478,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameFirstApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -527,7 +529,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameSecondApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -593,7 +597,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
     });
@@ -673,7 +679,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApproverSecondTime);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -686,7 +694,11 @@ context("E-signature test", () => {
       });
 
       it("Check user names and emails of approvers on old revision are not changed", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApprover);
