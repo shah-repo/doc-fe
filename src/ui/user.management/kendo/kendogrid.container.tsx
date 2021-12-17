@@ -26,15 +26,6 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
         {
           ...tableCriteria,
           queryDict: {},
-          kendoConfig: JSON.stringify({
-            filter: {
-              logic: "and",
-              filters: [{ field: "active", operator: "eq", value: true }],
-            },
-            sort: [],
-            take: 25,
-            skip: 0,
-          }),
         },
         TABLE_NAME,
       ),

@@ -50,8 +50,8 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   const { name, avatar, email } = realUser.user;
 
   const employeeGroups: OptionType[] = groupsOrg?.map((group: any) => ({
-    value: group.id,
-    label: group.name,
+    value: group?.id,
+    label: group?.name,
   }));
 
   const async = useAsync({

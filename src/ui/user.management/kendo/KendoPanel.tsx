@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -39,7 +39,6 @@ import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
-  TablePanelStateProps,
   TableStyleProps,
 } from "../../components/table/types";
 import Text from "../../components/Text";
@@ -162,6 +161,10 @@ export function KendoPanel<T extends any>({
   const initialKendoConfig: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : {
+      filter: {
+        logic: "and",
+        filters: [{ field: "active", operator: "eq", value: true }],
+      },
       skip: 0,
       take: 25,
       group: [],
@@ -169,14 +172,12 @@ export function KendoPanel<T extends any>({
   const setSearchStatus = (state?: LoadCompanyGroup) => {
     dataState.filter = {
       logic: "and",
-      filters: state ? [{ field: "groups", operator: "eq", value: "" }] : [],
+      filters: [{ field: "active", operator: "eq", value: true }],
     };
     dataState.group = [];
     setDataState(dataState);
-    setResultState({
-      data: [],
-      total: 0,
-    });
+    const newDataState = processWithGroups(tableData, dataState);
+    setResultState(newDataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -190,32 +191,17 @@ export function KendoPanel<T extends any>({
   };
   const setKendoFilterStatus = (
     kendoConfig: string,
-    tableCriteria: Partial<TablePanelStateProps>
   ): void => {
-    const kendoConfigObject = JSON.parse(kendoConfig);
-    const stateFilerObject = find(kendoConfigObject.filter?.filters, {
-      field: "groups",
-    });
-    if (stateFilerObject) {
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-          },
-          tableName
-        )
-      );
-    } else {
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-            queryDict: {},
-          },
-          tableName
-        )
-      );
-    }
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          kendoConfig,
+          queryDict: {},
+        },
+        tableName
+      )
+    );
   };
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -283,7 +269,7 @@ export function KendoPanel<T extends any>({
           ...el,
           groupsOrg: el.groups,
           groups: el.groups.map((e) => e.name.trimLeft().trimEnd()).sort().join(", "),
-          status: el.user.confirmed ? "Active" : "Inactive",
+          status: el.user.confirmed ? "Signed up" : "Resend signup email",
         }));
         const newDataState = processWithGroups(data, initialKendoConfig);
         setDataState(initialKendoConfig);
@@ -350,7 +336,7 @@ export function KendoPanel<T extends any>({
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
-      setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
+      setKendoFilterStatus(JSON.stringify(event.dataState));
     },
     [tableData]
   );

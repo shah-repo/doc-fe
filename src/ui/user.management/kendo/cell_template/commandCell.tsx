@@ -2,10 +2,19 @@ import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
+import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 
-export const CommandCell = (props) => {
+interface CommandCellProps  {
+  dataItem: GridFilterCellProps;
+  editField: string;
+  add: (dataItem) => void;
+  cancel: (dataItem) => void;
+  edit: (dataItem) => void;
+}
+
+export const CommandCell = (props: CommandCellProps) => {
   const styles = makeStyles(() => ({
     ButtonColor: {
       color: Colors.navy,
