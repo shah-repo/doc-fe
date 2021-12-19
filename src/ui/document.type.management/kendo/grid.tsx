@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import { Button, Grid, Typography } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { process, State } from "@progress/kendo-data-query";
 import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
@@ -37,7 +37,7 @@ export function KendoGrid({
   const actualData = cloneDeep(tableData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
-  const initialDataState = gridConfiguration.initialDataState;
+  // const initialDataState = gridConfiguration.initialDataState;
   const columns = gridConfiguration.columns;
   const editField = "inEdit";
   // const [editID, setEditID] = React.useState(null);
@@ -49,10 +49,10 @@ export function KendoGrid({
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  const [dataState, setDataState] = React.useState<State>(initialDataState);
-  const [resultState, setResultState] = React.useState<DataResult>(
-    processWithGroups(actualData, initialDataState)
-  );
+  // const [dataState, setDataState] = React.useState<State>(initialDataState);
+  // const [resultState, setResultState] = React.useState<DataResult>(
+  //   processWithGroups(actualData, initialDataState)
+  // );
 
   // Update
   const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
@@ -71,16 +71,38 @@ export function KendoGrid({
       toastError(error as string);
     },
   });
+  // For Pagination
+  const createDataState = (dataState) => ({
+    result: processWithGroups(tableData, dataState),
+    dataState,
+  });
 
+  const initialState = createDataState({
+    take: 25,
+    skip: 0,
+    group: [],
+    sort: [{
+      field: "documentTypeName",
+    }],
+  });
+
+  const [resultState, setResultState] = React.useState(initialState.result);
+  const [dataState, setDataState] = React.useState(initialState.dataState);
   useEffect(() => {
     setIsLoading(true);
-    setResultState(tableData);
+    // setResultState(tableData);
+    // setResultState(initialState.result);
+    const newDataState = processWithGroups(actualData, dataState);
+    setDataState(dataState);
+    setResultState(newDataState);
+
     if (!tableData.length ) {
       setNoDataMessage(<Typography><Text translation="table.no.results.found"></Text></Typography>);
     }
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableData]);
 
   const onDataStateChange = ((
@@ -143,7 +165,9 @@ export function KendoGrid({
       }
     });
     setGridEditID("inEdit");
-    setResultState(actualData);
+    const newDataState = processWithGroups(actualData, dataState);
+    setDataState(dataState);
+    setResultState(newDataState);
   };
   // On cancel- come out of edit mode
   const cancel = () => {
@@ -159,8 +183,11 @@ export function KendoGrid({
     //   }
     // }
     // );
-    setResultState(tableData);
+    // setResultState(tableData);
+    // setDataState(dataState);
+    const newDataState = processWithGroups(tableData, dataState);
     setDataState(dataState);
+    setResultState(newDataState);
   };
   // On field config: inline edit
   const update = (dataItem) => {
@@ -205,9 +232,14 @@ export function KendoGrid({
     const newDataItem: any = cloneDeep(rowObj);
     newDataItem.inEdit = true;
     const newDataArr: any = [newDataItem, ...actualData];
-    setResultState(newDataArr);
     setGridEditID("inEdit");
+    const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
+    setResultState(newDataState);
+
+    // setResultState(newDataArr);
+
+    // setDataState(dataState);
   };
 
   // TODO: FIND BETTER SOLUTION
@@ -271,7 +303,10 @@ export function KendoGrid({
       // newData = actualData.unshift(set(e.dataItem, e.field, e.value));
       // setResultState(actualData);
     }
-    setResultState(newData);
+    const newDataState = processWithGroups(newData, dataState);
+    setDataState(dataState);
+    setResultState(newDataState);
+    // setResultState(newData);
     // setDataState(dataState);
   };
 
