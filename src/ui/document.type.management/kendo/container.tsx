@@ -23,7 +23,7 @@ import useGetHasTag from "../../hooks/useGetHasTag";
 import AddDocumentTypeFormContainer from "../add.document.type/container";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 // import DocumentTypeFormContainer from "../form/container";
-import { KendoGrid } from "./grid";
+import { KendoGrid } from "./KendoPanel";
 
 // const styles = makeStyles((theme: Theme) =>
 //   createStyles({

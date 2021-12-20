@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-const GridStyles = makeStyles((theme) => ({
+const KendoGridStyles = makeStyles((theme) => ({
   root: {
     textAlign: "right",
     marginLeft: "5px",
@@ -58,4 +58,4 @@ const GridStyles = makeStyles((theme) => ({
   },
 }
 ));
-export default GridStyles;
+export default KendoGridStyles;

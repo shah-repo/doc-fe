@@ -1,10 +1,10 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import { process, State } from "@progress/kendo-data-query";
 import {
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords,
+  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -20,15 +20,15 @@ import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
-import { CommandCell } from "./cell.formatter/command.cell";
-import { rowObj } from "./cell.formatter/row.oject";
+import { CommandCell } from "./column.templates/CommandCell";
+import { rowObj } from "./column.templates/row.oject";
 import gridConfiguration from "./columns/column.definition";
-import GridStyles from "./grid.styles";
+import KendoGridStyles from "./styles";
 
 export function KendoGrid({
   tableData,
 }) {
-  const classes = GridStyles();
+  const classes = KendoGridStyles();
   const actualData = cloneDeep(tableData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);

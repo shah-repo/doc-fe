@@ -4,7 +4,7 @@ import { Field, FieldWrapper, Form, FormElement } from "@progress/kendo-react-fo
 import { TextArea } from "@progress/kendo-react-inputs";
 import PropTypes from "prop-types";
 import React from "react";
-import GridCellStyles from "./grid.cell.styles";
+import GridCellStyles from "./CellStyles";
 
 const FormTextArea = (fieldRenderProps) => {
   const {
@@ -68,7 +68,7 @@ CustomDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
 };
-export const GridTextAreaPopUp = (props) => {
+export const TextareaDialog = (props) => {
   const classes = GridCellStyles();
   const fieldName = props.fieldName;
 

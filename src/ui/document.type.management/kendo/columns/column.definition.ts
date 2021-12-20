@@ -1,11 +1,10 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { DocumentTypeManagementProps } from "../../../components/table/types";
-import { CheckboxCell } from "../cell.formatter/checkbox";
-import { FieldsConfigCell } from "../cell.formatter/fields.config.cell";
-import { CellFormatter } from "../cell.formatter/grid.cell";
-import { SchemaCell } from "../cell.formatter/schema.cell";
-import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "../column.filter.formatter/filter.formatter";
-import { ColumnMenu } from "../columns/column.menu";
+import { CheckboxCell } from "../column.templates/Checkbox";
+import { Dropdown } from "../column.templates/Dropdown";
+import { FieldsConfig } from "../column.templates/FieldsConfig";
+import { Schema } from "../column.templates/Schema";
+import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "../FilterTemplate/CommonCellDropdownFilterTemplate";
 
 const columns: DocumentTypeManagementProps[] = [{
   field: "id",
@@ -15,11 +14,10 @@ const columns: DocumentTypeManagementProps[] = [{
 {
   field: "active",
   title: "Status",
-  cell: CellFormatter,
+  cell: Dropdown,
   filter: "text",
   filterCell: DropdownFilterCellTemplate,
   show: true,
-  columnMenu: ColumnMenu,
   width: "150px",
   locked: true,
 },
@@ -27,7 +25,6 @@ const columns: DocumentTypeManagementProps[] = [{
   field: "documentTypeName",
   title: "Document Type",
   show: true,
-  columnMenu: ColumnMenu,
   width: "165px",
   locked: true,
 },
@@ -35,7 +32,6 @@ const columns: DocumentTypeManagementProps[] = [{
   field: "documentTypeAcronym",
   title: "Acronym",
   show: true,
-  columnMenu: ColumnMenu,
   width: "125px",
   locked: false,
 },
@@ -46,7 +42,6 @@ const columns: DocumentTypeManagementProps[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  columnMenu: ColumnMenu,
   width: "200px",
 },
 {
@@ -56,7 +51,6 @@ const columns: DocumentTypeManagementProps[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  columnMenu: ColumnMenu,
   width: "110px",
 },
 {
@@ -66,7 +60,6 @@ const columns: DocumentTypeManagementProps[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  columnMenu: ColumnMenu,
   width: "85px",
 },
 {
@@ -76,7 +69,6 @@ const columns: DocumentTypeManagementProps[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  columnMenu: ColumnMenu,
   width: "185px",
 },
 {
@@ -86,13 +78,11 @@ const columns: DocumentTypeManagementProps[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  columnMenu: ColumnMenu,
   width: "125px",
 }, {
   field: "startingNumber",
   title: "Starting Number",
   show: true,
-  columnMenu: ColumnMenu,
   width: "185px",
 },
 {
@@ -101,7 +91,6 @@ const columns: DocumentTypeManagementProps[] = [{
   cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate,
   show: true,
-  columnMenu: ColumnMenu,
   width: "165px",
 }, {
   field: "hiddenForCreationForUsersWithoutTags",
@@ -109,7 +98,6 @@ const columns: DocumentTypeManagementProps[] = [{
   cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate, // Not working
   show: true,
-  columnMenu: ColumnMenu,
   width: "200px",
 },
 {
@@ -118,25 +106,23 @@ const columns: DocumentTypeManagementProps[] = [{
   cell: EditDropdownCellFormatter,
   filterCell: DropdownFilterCellTemplate,
   show: true,
-  columnMenu: ColumnMenu,
   width: "125px",
 }, {
   field: "category",
   title: "Category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
-  columnMenu: ColumnMenu,
   width: "125px",
 }, {
   field: "schema",
   title: "Schema",
-  cell: SchemaCell,
+  cell: Schema,
   show: true,
   filterable: false,
   width: "95px",
 }, {
   field: "fieldsConfig", // TODO: Update svg, check with Shiv
   title: "Field Config",
-  cell: FieldsConfigCell,
+  cell: FieldsConfig,
   show: true,
   filterable: false,
   width: "95px",

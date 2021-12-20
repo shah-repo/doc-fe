@@ -1,38 +1,16 @@
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { get } from "lodash";
 import React from "react";
-import GridCellStyles from "./grid.cell.styles";
+import CellStyles from "./CellStyles";
 
-export const CellFormatter1 = (props) => {
-  if (props.rowType === "groupHeader") {
-    return null;
-  }
-  const classes = GridCellStyles();
-  const formattedValue = get(props.dataItem, props.field) ? "Active" : "Inactive";
-  return (
-    <td colSpan={props.colSpan}
-      style= {props.style}
-      role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}>
-
-      <div className={classes.topButton}>
-        <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
-        <p className={classes.value}>{formattedValue}</p>
-      </div>
-    </td>
-  );
-};
-export const CellFormatter = (props) => {
+export const Dropdown = (props) => {
   const localizedData = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
   const isEdit = get(props.dataItem, "inEdit");
   const formattedValue = get(props.dataItem, props.field) ? "Active" : "Inactive";
   if (props.rowType === "groupHeader") {
     return null;
   }
-  const classes = GridCellStyles();
+  const classes = CellStyles();
   const handleChange = (e) => {
     if (props.onChange) {
       props.onChange({

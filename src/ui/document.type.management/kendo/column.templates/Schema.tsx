@@ -2,10 +2,10 @@ import { get } from "lodash";
 import React from "react";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
 import { parseJSON } from "../../transform";
-import { GridTextAreaPopUp } from "./grid.textarea.pop.up";
+import { TextareaDialog } from "./TextareaDialog";
 
 
-export const SchemaCell = (props) => {
+export const Schema = (props) => {
   const [openForm, setOpenForm] = React.useState(false);
   const openSchemaWindow = () => {
     setOpenForm(true);
@@ -45,7 +45,7 @@ export const SchemaCell = (props) => {
         }}
         /></td>
       {openForm && (
-        <GridTextAreaPopUp
+        <TextareaDialog
           title={"Schema"}
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}

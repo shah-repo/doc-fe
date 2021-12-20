@@ -2,10 +2,10 @@ import { get } from "lodash";
 import React from "react";
 import { ReactComponent as FieldConfigIcon } from "../../../../assets/images/grid_field_config.svg";
 import { parseJSON } from "../../transform";
-import { GridTextAreaPopUp } from "./grid.textarea.pop.up";
+import { TextareaDialog } from "./TextareaDialog";
 
 
-export const FieldsConfigCell = (props) => {
+export const FieldsConfig = (props) => {
   const [openForm, setOpenForm] = React.useState(false);
   const openPopUpWindow = () => {
     setOpenForm(true);
@@ -45,7 +45,7 @@ export const FieldsConfigCell = (props) => {
         }}
         /></td>
       {openForm && (
-        <GridTextAreaPopUp
+        <TextareaDialog
           title={"Field Config"}
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}

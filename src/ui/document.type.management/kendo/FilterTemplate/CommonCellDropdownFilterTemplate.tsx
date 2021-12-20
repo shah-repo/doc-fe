@@ -6,7 +6,7 @@ import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { enumToOptions, translatedOptions } from "../../transform";
 import gridConfiguration from "../columns/column.definition";
-import { DropdownFilterCell } from "./dropdown";
+import { DropdownFilterCell } from "./DropdownFilterTemplate";
 
 
 const getDSByType = (type) => enumToOptions(type).map((o) => ({

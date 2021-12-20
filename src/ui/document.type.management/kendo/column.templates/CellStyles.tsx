@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
 
-const GridCellStyles = makeStyles((theme) => ({
+const CellStyles = makeStyles((theme) => ({
   topButton: {
     display: "flex",
     alignItems: "center",
@@ -58,4 +58,4 @@ const GridCellStyles = makeStyles((theme) => ({
   },
 }
 ));
-export default GridCellStyles;
+export default CellStyles;
