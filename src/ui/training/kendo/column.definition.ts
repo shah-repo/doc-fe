@@ -1,0 +1,129 @@
+import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { KendoCellTemplates } from "../../components/common/kendo.column.templates/types";
+import { DocumentListColumnsInterface } from "./types";
+
+const columns: DocumentListColumnsInterface[] = [
+  {
+    field: "trId",
+    title: "TRN ID",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    showColumnMenu: true,
+    groupable: false,
+    orderIndex: 0,
+  },
+  {
+    field: "trainingPlan.document.docId",
+    title: "DOC ID",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    showColumnMenu: true,
+    groupable: false,
+    orderIndex: 1,
+  },
+  {
+    field: "documentRevision.revision",
+    title: "REVISION",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    showColumnMenu: true,
+    groupable: false,
+    orderIndex: 2,
+  },
+  {
+    field: "documentRevision.name",
+    title: "DOCUMENT TITLE",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "400px",
+    showColumnMenu: true,
+    groupable: false,
+    orderIndex: 3,
+  },
+  {
+    field: "trainingPlan.employee.user.name",
+    title: "TRAINEE",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    groupable: true,
+    cell: KendoCellTemplates.USER_AVATAR,
+    showColumnMenu: true,
+    orderIndex: 4,
+  },
+  {
+    field: "trainingPlan.createdAt",
+    title: "ASSIGNED DATE",
+    show: true,
+    locked: false,
+    width: "200px",
+    groupable: false,
+    showColumnMenu: true,
+    orderIndex: 5,
+    cell: KendoCellTemplates.DATE_INFO,
+  },
+  {
+    field: "dueOn",
+    title: "DUE DATE",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    groupable: true,
+    showColumnMenu: true,
+    orderIndex: 6,
+    cell: KendoCellTemplates.DATE_INFO,
+  },
+  {
+    field: "completedAt",
+    title: "COMPLETED ON",
+    show: true,
+    filter: "text",
+    locked: false,
+    width: "200px",
+    groupable: false,
+    showColumnMenu: true,
+    orderIndex: 7,
+    cell: KendoCellTemplates.DATE_COMPLETED,
+  },
+  {
+    field: "trainingPlan.curriculumDocIds",
+    title: "TC ID",
+    show: true,
+    locked: false,
+    width: "200px",
+    groupable: false,
+    showColumnMenu: true,
+    orderIndex: 8,
+    filter: "text",
+  },
+];
+
+// TODO: Get List Dynamic for now added static datasource
+interface PageState {
+  skip: number;
+  take: number;
+}
+const pagerSettings: GridPagerSettings = {
+  buttonCount: 5,
+  info: true,
+  type: "numeric",
+  pageSizes: [25, 50, 75, 100, 500, 1000],
+  previousNext: true,
+};
+const initialDataState: PageState = { skip: 0, take: 25 };
+const gridConfiguration = {
+  columns,
+  pagerSettings,
+  initialDataState,
+};
+
+export default gridConfiguration;
