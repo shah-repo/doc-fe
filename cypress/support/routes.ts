@@ -578,6 +578,10 @@ export const routes: ICyRoutes =   {
       method: "GET",
       url: "/api/v1/document_type/*",
     },
+    callConfig: {
+      responseTimeout: 50 * 1000,
+      requestTimeout: 50 * 1000,
+    },
   },
   ChangeRequestApprove: {
     requestConfig: {

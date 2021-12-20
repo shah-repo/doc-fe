@@ -182,7 +182,7 @@ context("Record inline history Flow", () => {
 
     context("Fill in document attributes", () => {
       it("Enter title 'History Test Record'", () => {
-        cy.drEnterDocumentTitle({ name: "History Test Record" });
+        cy.drEnterDocumentTitleWithWait({ name: "History Test Record" });
       });
 
       it("Enter description 'History Test Record description'", () => {
@@ -191,19 +191,35 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("First entry");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("First entry");
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
-        cy.fbSelectCheckboxValue( "Red", "Green" );
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.fbSelectCheckboxValue( "Red", "Green" );
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'One' value on radiobutton", () => {
-        cy.fbSelectRadioButtonValue({ value: "One" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.fbSelectRadioButtonValue({ value: "One" });
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'SelectOne' value on select field", () => {
-        cy.fbSelectFieldValue({ value: "SelectOne" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.fbSelectFieldValue({ value: "SelectOne" });
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Select approver for first inline", () => {
@@ -290,6 +306,7 @@ context("Record inline history Flow", () => {
             cy.fbSelectCheckboxValue( "Blue" );
             cy.unClick();
           });
+          cy.progressBarShouldNotExist();
         });
 
         it("Select 'Two' value on radiobutton", () => {
@@ -297,6 +314,7 @@ context("Record inline history Flow", () => {
             cy.fbSelectRadioButtonValue({ value: "Two" });
             cy.unClick();
           });
+          cy.progressBarShouldNotExist();
         });
 
         it("Select 'SelectTwo' value on select field", () => {
@@ -304,6 +322,7 @@ context("Record inline history Flow", () => {
             cy.fbSelectFieldValue({ value: "SelectTwo" });
             cy.unClick();
           });
+          cy.progressBarShouldNotExist();
         });
 
         it("Save record", () => {
