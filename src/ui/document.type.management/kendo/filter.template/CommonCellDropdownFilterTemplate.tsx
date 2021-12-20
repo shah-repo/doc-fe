@@ -1,5 +1,5 @@
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
-import { get } from "lodash";
+import { get, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -24,11 +24,11 @@ const getDropDownDataSource = (field: string) => {
   const statusOptions = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
   switch (field) {
     case "defaultRevStage":
-      return revisionStageOptions;
+      return orderBy(revisionStageOptions, "text");
     case "hiddenForCreationForUsersWithoutTags":
-      return getDSByType(GroupTag);
+      return orderBy(getDSByType(GroupTag), "text");
     case "group":
-      return getDSByType(DOC_TYPE_GROUP);
+      return orderBy(getDSByType(DOC_TYPE_GROUP), "text");
     case "active":
       return statusOptions;
     default:
