@@ -1,0 +1,119 @@
+import { makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
+
+const KendoGridStyles = makeStyles((theme) => ({
+  // marginBottom: "16px",
+  root: { height: "100%", padding: "0 5px 10px 5px" },
+
+  kGrid: {
+    height: "calc(100vh - 115px)",
+  },
+  // TODO: Check
+  loading: {
+    top: 0,
+  },
+  icon: {
+    width: "25px",
+    height: "25px",
+    marginRight: 4,
+    fontFamily: "Sora",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.white,
+    backgroundColor: Colors.grey_cloud,
+  },
+  avatar: {
+    display: "flex",
+    flexDirection: "row",
+    position: "relative",
+    margin: "auto",
+    fontFamily: "Sora",
+    fontStyle: "normal",
+    fontWeight: "normal",
+    lineHeight: "18px",
+    alignItems: "center",
+    color: Colors.almost_black,
+  },
+  filterBtn: {
+    color: Colors.navy,
+  },
+  exportListbutton: {
+    margin: "0px",
+    boxShadow: "none",
+    borderRadius: 100,
+    marginRight: 15,
+    textTransform: "none",
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "Sora",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.navy,
+    border: `1px solid ${Colors.navy}`,
+    backgroundColor: Colors.white,
+  },
+  createDocButton: {
+    "margin": "0px",
+    "boxShadow": "none",
+    "borderRadius": 100,
+    "background": Colors.navy,
+    "color": Colors.white,
+    "fontFamily": "Sora",
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "textTransform": "none",
+    "&:hover": {
+      background: Colors.navy,
+    },
+  },
+  chip: {
+    display: "flex",
+    flexDirection: "row",
+    width: "121px",
+    height: "22px",
+    borderRadius: "10px",
+    background: "grey",
+    fontFamily: "Sora",
+    fontStyle: "normal",
+    fontWeight: "normal",
+    fontSize: "12px",
+    lineHeight: "22px",
+    alignItems: "center",
+    justifyContent: "center",
+    color: Colors.white,
+
+  },
+  Released: {
+    background: Colors.latest_green_varient,
+  },
+  PendingChange: {
+    background: Colors.latest_yellow_varient,
+  },
+  Draft: {
+    background: Colors.font_gray,
+  },
+  InReview: {
+    background: Colors.latest_blue_varient,
+    color: Colors.white,
+  },
+  columnsCus: {
+    fontFamily: "Sora",
+    fontWeight: "bold",
+    fontSize: "14px",
+  },
+  iconSvg: {
+    fill: Colors.navy,
+    marginRight: 5,
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: 14,
+    color: Colors.almost_black,
+    textTransform: "uppercase",
+    fontFamily: "Sora",
+    marginTop: 10,
+    marginLeft: 5,
+  },
+}
+));
+export default KendoGridStyles;

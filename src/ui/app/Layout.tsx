@@ -11,7 +11,7 @@ import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CH
 import DashboardLayout from "../dashboard.new/Dashboard.layout";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
-import DocumentRevisionListContainer from "../document.revision/list/container";
+import DocumentRevisionListContainer from "../document.revision/kendo/container";
 import { DocumentTypeManagementContainer } from "../document.type.management/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/list/container";
