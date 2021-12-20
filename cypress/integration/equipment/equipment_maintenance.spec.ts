@@ -615,10 +615,12 @@ context("Equipment maintenance test", () => {
       cy.log(createdCompany.name);
       const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
         .add(10, "days")
-        .format("ddd MMMM D YYYY");
+        .format("ddd, MMMM D, YYYY");
       cy.get("[data-cy=\"maintenance.status\"]")
-        .eq(0)
-        .contains(`PM Done - Due Date: ${prevMaintenanceComplianceDate}`);
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+        });
     });
   });
 
@@ -788,10 +790,12 @@ context("Equipment maintenance test", () => {
         SystemRequirement("REQ-2900", "REQ-2910");
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(5, "days")
-          .format("ddd MMMM D YYYY");
+          .format("ddd, MMMM D, YYYY");
         cy.get("[data-cy=\"maintenance.status\"]")
-          .eq(1)
-          .contains(`CAL Done - Due Date: ${calibrationComplianceDate}`);
+          .eq(1).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          });
       });
 
       it("Verify status is 'Released'", () => {

@@ -13,6 +13,7 @@ declare global {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
+      drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
@@ -220,6 +221,14 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
   cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+});
+
+Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+    cy.unClick();
+  });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
@@ -523,6 +532,7 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 });
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").arrowType(`${params.username}{downarrow}{enter}`, { force: true });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
@@ -753,7 +763,8 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   names.forEach((name) => {
     cy.get(`[data-cy="field-approvals"]`).arrowType(`${name}{enter}`);
   });
@@ -777,6 +788,8 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
       cy.checkToastMessage({ exists: false });
     }
   }
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {

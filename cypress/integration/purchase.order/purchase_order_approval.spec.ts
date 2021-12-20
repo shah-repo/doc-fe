@@ -248,11 +248,7 @@ context("PO approval test", () => {
     });
 
     it("Click 'Save' document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
-
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {

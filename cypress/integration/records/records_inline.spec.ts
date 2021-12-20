@@ -237,9 +237,12 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
             cy.unClick();
+            cy.progressBarShouldNotExist();
           });
         });
 
@@ -288,9 +291,12 @@ context("Record inline Flow", () => {
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
             cy.unClick();
+            cy.progressBarShouldNotExist();
           });
         });
 
