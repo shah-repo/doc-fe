@@ -1573,11 +1573,21 @@ context("LHR flow", () => {
       context("Try to release LHRt without parameters expecting validation error", () => {
         it("Approve and release LHRt document", () => {
           SystemRequirement("REQ-3640");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+          cy.drApproveAndReleaseDialog();
+          cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.ReleaseDocRev,
+            () => {
+              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+            });
+        });
+
+        it("Verify error message", () => {
+          cy.checkToastMessageIsEqual({
+            message: "Parameters from MPI are not defined.",
           });
-          cy.checkToastMessageContains({ message: "Parameters from MPI are not defined" });
-          cy.get("[data-cy=ApproveAndRelease-cancelButton]").arrowClick();
+          cy.closeAllAlertMessages();
+          cy.drCloseApproveAndReleaseDialog();
         });
       });
 
@@ -1591,11 +1601,7 @@ context("LHR flow", () => {
           cy.get("[name=\"quantity\"]").arrowType("3");
           cy.get("[data-cy=\"unit\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Day(s)").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         });
 
         it("Add equipment parameter", () => {
@@ -1604,11 +1610,7 @@ context("LHR flow", () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Equipment three").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         });
       });
 

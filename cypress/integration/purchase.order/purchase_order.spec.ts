@@ -697,6 +697,7 @@ context("PO test", () => {
 
       it("Select Document Type 'Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get("[name=\"document.documentType.id\"]").arrowType("{downarrow}{enter}");
         });
       });
