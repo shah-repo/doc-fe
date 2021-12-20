@@ -6,20 +6,18 @@ import {
 import { cloneDeep, find } from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTableCriteria } from "../../../../common/utils/selectors";
-import { tableSearchActions } from "../../../../state/ducks/tableSearch";
-import { DocumentListColumnsInterface } from "./types";
+import { getTableCriteria } from "../../../../../common/utils/selectors";
+import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
+import { KendoColumnInterface } from "../types";
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
-  columns: DocumentListColumnsInterface[];
+  columns: KendoColumnInterface[];
   tableName: string;
 }
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const dispatch = useDispatch();
-  const [columns, setColumns] = useState<DocumentListColumnsInterface[]>(
-    props.columns
-  );
+  const [columns, setColumns] = useState<KendoColumnInterface[]>(props.columns);
   const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
   const onChange = (field: string | undefined) => {
     const newState = [...columns];
@@ -46,7 +44,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
     }
   };
   const columnDef = find(columns, { field: props.column.field });
-  const [columnLock, setColumnLock] = useState<DocumentListColumnsInterface[]>(
+  const [columnLock, setColumnLock] = useState<KendoColumnInterface[]>(
     props.columns
   );
   const handleColumnLockToggle = (field) => {

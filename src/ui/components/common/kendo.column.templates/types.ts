@@ -6,7 +6,7 @@ export enum KendoCellTemplates {
   COMMON_CELL="CommonCell"
 }
 
-export interface DocumentListColumnsInterface {
+export interface KendoColumnInterface {
   field: string;
   title: string;
   show: boolean;
