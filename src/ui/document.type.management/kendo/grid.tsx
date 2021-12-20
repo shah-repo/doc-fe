@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import { Button, Grid, Typography } from "@material-ui/core";
 import { process, State } from "@progress/kendo-data-query";
 import {
@@ -11,9 +9,6 @@ import {
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-// import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-// import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-// import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -37,10 +32,8 @@ export function KendoGrid({
   const actualData = cloneDeep(tableData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
-  // const initialDataState = gridConfiguration.initialDataState;
   const columns = gridConfiguration.columns;
   const editField = "inEdit";
-  // const [editID, setEditID] = React.useState(null);
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
   const processWithGroups = (data: any[], dataState: State) => {
@@ -49,10 +42,6 @@ export function KendoGrid({
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  // const [dataState, setDataState] = React.useState<State>(initialDataState);
-  // const [resultState, setResultState] = React.useState<DataResult>(
-  //   processWithGroups(actualData, initialDataState)
-  // );
 
   // Update
   const updateDocumentTypeAction = useActionCreator(documentTypeActions.updateDocumentType);
@@ -90,8 +79,6 @@ export function KendoGrid({
   const [dataState, setDataState] = React.useState(initialState.dataState);
   useEffect(() => {
     setIsLoading(true);
-    // setResultState(tableData);
-    // setResultState(initialState.result);
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -139,11 +126,6 @@ export function KendoGrid({
     }
   });
 
-  // Services : for command Cell
-  // TODO: Move in separate File
-  // const dataT: any = [...tableData];
-  // const getItems = () => actualData;
-
   // Services
   const commandCell = (props) => (
     <CommandCell
@@ -169,26 +151,14 @@ export function KendoGrid({
     setDataState(dataState);
     setResultState(newDataState);
   };
+
   // On cancel- come out of edit mode
   const cancel = () => {
-    // const originalItem = getItems().find(
-    //   (p) => p.id === dataItem.id
-    // );
-    // const newData: any = actualData.map((item) => {
-    //   if (item.id === originalItem.id) {
-    //     originalItem.inEdit = false;
-    //     return originalItem;
-    //   } else {
-    //     return item;
-    //   }
-    // }
-    // );
-    // setResultState(tableData);
-    // setDataState(dataState);
     const newDataState = processWithGroups(tableData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
   };
+
   // On field config: inline edit
   const update = (dataItem) => {
     const  newData = {
@@ -236,10 +206,6 @@ export function KendoGrid({
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
     setResultState(newDataState);
-
-    // setResultState(newDataArr);
-
-    // setDataState(dataState);
   };
 
   // TODO: FIND BETTER SOLUTION
@@ -259,7 +225,6 @@ export function KendoGrid({
 
   // Api Call on Add New Row
   const addNewRow = (values: any) => {
-    console.log(disabled);
     const emptyFields: string[] = gridCellValidation(values);
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(",")} is missing.`);
@@ -292,49 +257,20 @@ export function KendoGrid({
         return item;
       }
       );
-      // setResultState(actualData);
-      // setResultState(newData);
-
     } else {
       // For New Record
-      // const v =  e.dataItem[e.field] ?  e.dataItem[e.field] : e.value;
       const updatedDataItem = set(e.dataItem, e.field, e.value);
       newData = [updatedDataItem, ...actualData];
-      // newData = actualData.unshift(set(e.dataItem, e.field, e.value));
-      // setResultState(actualData);
     }
     const newDataState = processWithGroups(newData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
-    // setResultState(newData);
-    // setDataState(dataState);
   };
-
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  // const open = Boolean(anchorEl);
-
-  // const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
-  // const [coldef, setColdef] = React.useState(columns);
-  // const onChange = (item: any) => {
-  //   const newState = [...coldef];
-  //   newState.map((c) => {
-  //     if (c.field === item.field) {
-  //       c.show = !c.show;
-  //     }
-  //   });
-  //   setColdef(newState);
-
-  // };
 
   // CLear All Grid Filters
   const clearFilter = () => {
     // TODO: Reset dropdown values
-    console.log(dataState);
+    // console.log(dataState);
     dataState.filter = {
       logic: "and",
       filters: [],
@@ -343,7 +279,6 @@ export function KendoGrid({
     setDataState(dataState);
     setResultState(newDataState);
   };
-
 
   return (
     <>
