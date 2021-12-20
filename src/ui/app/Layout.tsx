@@ -14,7 +14,7 @@ import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/list/container";
 import { DocumentTypeManagementContainer } from "../document.type.management/list/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
-import DocumentTypeListContainer from "../documentType/list/container";
+import DocumentTypeListContainer from "../documentType/kendo/container";
 import GroupManagementListContainer from "../group.management/list/container";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";

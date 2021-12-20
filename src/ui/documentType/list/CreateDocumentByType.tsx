@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
@@ -7,7 +7,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { ReactComponent as ExportIcon } from "../../../assets/images/icon_export_data.svg";
+import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -301,21 +301,20 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   if (!isVisible) {
     return null;
   }
-
   return (
     <>
-      <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+      <Grid item xs ><Typography className={classes.title}>{categoryName}</Typography></Grid>
+      <Grid item={true} xs style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
           variant="outlined"
           color="primary"
           className={classes.exportListbutton}
-          style={{ marginRight: 5 }}
           id="ListPresenter-export-list"
           data-cy="document.revision.export.list"
           onClick={exportDialog.open}
         >
-          <Box marginRight={1}>
-            <ExportIcon className={classes.iconSvg} />
+          <Box display="flex">
+            <ExportIcon className={classes.iconSvg} height={14} width={14}/>
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>
@@ -326,9 +325,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
         />
         <CustomLabelTooltip {...{ tooltipConfig }}>
           <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
+            // variant="contained"
+            // color="primary"
+            className={classes.createButton}
             onClick={handleAddButtonClick}
             id="DocumentByTypeListPresenter-openDocRev"
           >
