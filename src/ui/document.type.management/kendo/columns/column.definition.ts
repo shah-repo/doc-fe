@@ -37,7 +37,7 @@ const columns: DocumentTypeManagementProps[] = [{
   show: true,
   columnMenu: ColumnMenu,
   width: "125px",
-  locked: true,
+  locked: false,
 },
 {
   field: "privateNumberPool",
