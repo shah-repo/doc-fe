@@ -29,8 +29,8 @@ import DocumentByTypeListPresenter from "../kendo/presenter";
 import { columnSearchConfiguration, getStaticColumns } from "../list/helpers";
 import { RouteParams } from "../utils/types";
 import GridColumns from "./column.definition";
-import { DateDropdownFilterCell } from "./column.filter.formatter/date.dropdown.filter.cell";
-import { DropdownFilterCell } from "./column.filter.formatter/dropdown.filter.cell";
+import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
+import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
 
 type Props = RouteComponentProps<RouteParams>;
 
