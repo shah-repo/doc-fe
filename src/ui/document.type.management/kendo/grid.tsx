@@ -318,7 +318,7 @@ export function KendoGrid({
               reorderable={true}
               pageable={gridConfiguration.pagerSettings}
               resizable={true}
-              groupable={true}
+              // groupable={true}
               total={resultState.total}
               onDataStateChange={onDataStateChange}
               {...dataState}
