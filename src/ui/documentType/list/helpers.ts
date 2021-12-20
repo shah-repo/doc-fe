@@ -1,4 +1,3 @@
-import moment from "moment";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -147,4 +146,4 @@ export const getStaticColumns = (
     },
   },
 ];
-export const toValidateIfDate = (value) => moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+
