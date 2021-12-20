@@ -9,7 +9,7 @@ import {
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Config from "../../../config";
+// import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
@@ -48,7 +48,7 @@ export function KendoGrid({
   // Add New
   const addDocumentTypeAction = useActionCreator(documentTypeActions.addDocumentType);
   // TODO: CHECK WHEN TO DISABLE FIELD
-  const disabled = Config.docTypeManagementEditDisabled;
+  // const disabled = Config.docTypeManagementEditDisabled;
   const dispatch = useDispatch();
   const async = useAsync({
     onSuccess: () => {
