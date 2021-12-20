@@ -62,7 +62,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      <ExportARToEmail id={changeRequest?.id || ""}/>
+      {changeRequest?.id && <ExportARToEmail id={changeRequest?.id}/>}
       <AssessmentFormControlsContainer changeRequest={changeRequest} />
     </Grid>
   );
