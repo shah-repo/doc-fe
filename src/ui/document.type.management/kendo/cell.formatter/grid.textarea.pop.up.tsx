@@ -1,10 +1,10 @@
-import { Window, WindowActionsBar } from "@progress/kendo-react-dialogs";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import { Field, FieldWrapper, Form, FormElement } from "@progress/kendo-react-form";
 import { TextArea } from "@progress/kendo-react-inputs";
+import PropTypes from "prop-types";
 import React from "react";
 import GridCellStyles from "./grid.cell.styles";
-
-const textAreaValidator = (value) => !value ? "Address is required" : "";
 
 const FormTextArea = (fieldRenderProps) => {
   const {
@@ -36,34 +36,76 @@ const FormTextArea = (fieldRenderProps) => {
   </FieldWrapper>;
 };
 
+const CustomDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+const CustomDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
+  const classes = GridCellStyles();
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          className={classes.closeButton}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
+
+CustomDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
 export const GridTextAreaPopUp = (props) => {
   const classes = GridCellStyles();
   const fieldName = props.fieldName;
+
   return (
-    <Window title={props.title} onClose={props.cancelEdit}
+    <CustomDialog
+      onClose={props.cancelEdit}
+      aria-labelledby="customized-dialog-title"
+      open={props.openForm}
+      fullWidth
+      maxWidth="sm"
       className="gridTextAreaForm"
-      initialHeight={505}
-      initialWidth={524}
-      minimizeButton={() => null}
-      maximizeButton={() => null}>
-      <Form onSubmit={props.addClick} render={(formRenderProps) => <FormElement >
+    >
+      <CustomDialogTitle onClose={props.cancelEdit}>
+        {props.title}
+      </CustomDialogTitle>
+      <Form onSubmit={props.addClick} render={() => <FormElement >
         <fieldset className={"k-form-fieldset"}>
-          <Field id={fieldName} name={fieldName} label={props.title} component={FormTextArea} validator={textAreaValidator} defaultV={props.item ? JSON.stringify(props.item, undefined, 4) : ""} isEdit={props.isEdit} />
-          <WindowActionsBar layout={"end"}>
-            <button type="button"
+          <DialogContent dividers>
+            <Field id={fieldName} name={fieldName} label={props.title}
+              component={FormTextArea}
+              defaultV={props.item ? JSON.stringify(props.item, undefined, 4) : ""}
+              isEdit={props.isEdit} />
+          </DialogContent>
+          <DialogActions>
+            <Button
               className={`${"k-button"} ${classes.schemaCancelBtn}`}
               onClick={props.cancelEdit}>
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               className= {`${"k-button"} ${classes.schemaAddBtn}`}
               disabled={!props.isEdit}
-            >Add</button>
-          </WindowActionsBar>
+            >Add</Button>
+          </DialogActions>
         </fieldset>
       </FormElement>} />
-    </Window>
+    </CustomDialog>
   );
-}
-;
+};

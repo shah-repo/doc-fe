@@ -53,6 +53,7 @@ export const FieldsConfigCell = (props) => {
           item={formattedValue}
           isEdit= {isEdit}
           fieldName={props.field}
+          openForm={openForm}
         />
       )}
     </>

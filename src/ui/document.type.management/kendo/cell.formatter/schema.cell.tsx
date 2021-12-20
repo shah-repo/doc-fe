@@ -52,6 +52,8 @@ export const SchemaCell = (props) => {
           // onSubmit={handleSubmit}
           item={formattedValue}
           isEdit= {isEdit}
+          fieldName={props.field}
+          openForm={openForm}
         />
       )}
     </>

@@ -50,6 +50,12 @@ const GridCellStyles = makeStyles((theme) => ({
       background: Colors.navy,
     },
   },
+  closeButton: {
+    position: "absolute",
+    right: 8,
+    top: 8,
+    color: theme.palette.grey[500],
+  },
 }
 ));
 export default GridCellStyles;

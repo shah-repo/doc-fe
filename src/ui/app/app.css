@@ -196,45 +196,11 @@ td[role="gridcell"] {
 }
 
 
-/* For pop up window - schema, fieldConfig in document Type management grid */
-.gridTextAreaForm .k-dialog-titlebar {
-  background-color: var(--white);
-  color: var(--almost_black);
-  height: 58px;
-}
-
+/* For pop up window - schema, fieldConfig in document Type management grid  start here*/
 .gridTextAreaForm .k-textarea>.k-input {
   resize: none;
 }
-
-.gridTextAreaForm .k-textarea {
-  width: 35em;
-}
-
-.gridTextAreaForm .k-window-title {
-  font-family: Sora;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 0px;
-  text-align: left;
-}
-/* Check colorname to move to colors.ts */
-/* TODO: Check if this color looks good */
-.gridTextAreaForm .k-button.k-flat {
-  /* background: #8C8C8C !important;   */
-  /* opacity: 0.1 !important;  */
-  border-radius: 6px !important;
-}
-/* .schemaForm .k-icon .k-i-close {
-  background: #8C8C8C !important;  
-} */
-
-.gridTextAreaForm .k-actions {
-  background: #F9F9F9;
-  margin-top: "15px";
-}
+/* For pop up window - schema, fieldConfig in document Type management grid ends here */
 
 .k-grid-header .k-grid-filter:hover,
 .k-grid-header th.k-grid-header-sticky,
