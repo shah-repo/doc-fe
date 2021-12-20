@@ -1,4 +1,4 @@
-export const rowObj = {
+export const NewRowObject = {
   documentTypeName: "",
   documentTypeAcronym: "",
   privateNumberPool: false,

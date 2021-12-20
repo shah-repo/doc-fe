@@ -1,10 +1,10 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import { process, State } from "@progress/kendo-data-query";
 import {
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords
+  Grid as Kgrid, GridColumn, GridDataStateChangeEvent, GridNoRecords,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -20,9 +20,9 @@ import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
+import gridConfiguration from "./column.definition";
 import { CommandCell } from "./column.templates/CommandCell";
-import { rowObj } from "./column.templates/row.oject";
-import gridConfiguration from "./columns/column.definition";
+import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
 
 export function KendoGrid({
@@ -199,7 +199,7 @@ export function KendoGrid({
 
   // Add New row object
   const addNewRowObject = () => {
-    const newDataItem: any = cloneDeep(rowObj);
+    const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     const newDataArr: any = [newDataItem, ...actualData];
     setGridEditID("inEdit");

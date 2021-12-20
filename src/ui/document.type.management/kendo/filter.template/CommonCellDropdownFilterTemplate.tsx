@@ -5,7 +5,7 @@ import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { enumToOptions, translatedOptions } from "../../transform";
-import gridConfiguration from "../columns/column.definition";
+import gridConfiguration from "../column.definition";
 import { DropdownFilterCell } from "./DropdownFilterTemplate";
 
 
