@@ -68,7 +68,6 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const { columnConfig, kendoConfig } = tableCriteria;
 
-
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -81,22 +80,28 @@ export function KendoPanel<T extends any>({
     );
   };
   const gridConfiguration = columns;
-  const initialGridConfiguration: {columns: any[]} = { ...gridConfiguration };
+  const initialGridConfiguration: { columns: any[] } = { ...gridConfiguration };
 
   // Check if the Column config available in State, if so prefer what is available in State
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
+  const [columnDefinitions, setColumnDefinitions] = React.useState(
+    gridConfiguration.columns
+  );
 
   const initialDataState: State = kendoConfig
     ? JSON.parse(kendoConfig)
     : {
-      skip: 0, take: 25, group: [],
+      skip: 0,
+      take: 25,
+      group: [],
       sort: [],
       filter: {
         logic: "and",
-        filters: [{ field: "displayStatus", operator: "eq", value: "Released" }],
+        filters: [
+          { field: "displayStatus", operator: "eq", value: "Released" },
+        ],
       },
     };
   const [defaultDDItem, setDefaultDDItem] = React.useState("Released");
@@ -108,10 +113,13 @@ export function KendoPanel<T extends any>({
           queryApi();
         } else {
           if (defaultDDItem === "Released") {
-            setSearchStatus(documentRevisionQueryStatus(),  "Released" as DocumentRevisionStatus);
+            setSearchStatus(
+              documentRevisionQueryStatus(),
+              "Released" as DocumentRevisionStatus
+            );
           }
         }
-      } else if  (fireAPI) {
+      } else if (fireAPI) {
         queryApi();
       }
     }
@@ -177,13 +185,19 @@ export function KendoPanel<T extends any>({
           data = customDataSet(data);
           // For Kendo Date picker
           each(data, (o) => {
-            o.effectiveDate = o.effectiveDate ? new Date(o.effectiveDate) : null;
+            o.effectiveDate = o.effectiveDate
+              ? new Date(o.effectiveDate)
+              : null;
           });
           const newDataState: any = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
           if (data.length === 0) {
-            setNoDataMessage(<Typography><Text translation="table.no.results.found"></Text></Typography>);
+            setNoDataMessage(
+              <Typography>
+                <Text translation="table.no.results.found"></Text>
+              </Typography>
+            );
           }
         }
         data = map(data, (record) =>
@@ -250,9 +264,14 @@ export function KendoPanel<T extends any>({
     data: resultState.data,
     collapsedIds: collapsedState,
   });
-  const setKendoFilterStatus = (kendoConfig: string, tableCriteria: Partial<TablePanelStateProps>): void => {
+  const setKendoFilterStatus = (
+    kendoConfig: string,
+    tableCriteria: Partial<TablePanelStateProps>
+  ): void => {
     const kendoConfigObject = JSON.parse(kendoConfig);
-    const statusFilterObj = find(kendoConfigObject.filter?.filters, { field: "displayStatus" });
+    const statusFilterObj = find(kendoConfigObject.filter?.filters, {
+      field: "displayStatus",
+    });
     if (statusFilterObj) {
       dispatch(
         tableSearchActions.setSearchCriteria(
@@ -270,14 +289,13 @@ export function KendoPanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            queryDict: { },
+            queryDict: {},
           },
           tableName
         )
       );
     }
   };
-
 
   const [fireAPI, setFireAPI] = useState(true);
   const onDataStateChange = useCallback(
@@ -339,11 +357,19 @@ export function KendoPanel<T extends any>({
       {...column}
       cell={getCellTemplate(column.cell)}
       filterCell={
-        filterCellMapping[column.field]  ? filterCellMapping[column.field] : undefined
+        filterCellMapping[column.field]
+          ? filterCellMapping[column.field]
+          : undefined
       }
       columnMenu={
         column.showColumnMenu
-          ? (props) => <ColumnMenu {...props} tableName={tableName} columns={columnDefinitions} />
+          ? (props) => (
+            <ColumnMenu
+              {...props}
+              tableName={tableName}
+              columns={columnDefinitions}
+            />
+          )
           : undefined
       }
     />
@@ -384,8 +410,8 @@ export function KendoPanel<T extends any>({
             "documentTypeWithoutCategory": true,
           },
         },
-        tableName,
-      ),
+        tableName
+      )
     );
   };
 
@@ -425,11 +451,14 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const sortedColumnDefinitions: any[] = orderBy([...columnDefinitions], [
-    { field: "locked", dir: "desc" },
-  ]);
+  const sortedColumnDefinitions: any[] = orderBy(
+    [...columnDefinitions],
+    [{ field: "locked", dir: "desc" }]
+  );
   sortedColumnDefinitions.forEach((data, index) => {
-    const stateFilerObject = initialGridConfiguration && find(initialGridConfiguration?.columns, { field: data.field });
+    const stateFilerObject =
+      initialGridConfiguration &&
+      find(initialGridConfiguration?.columns, { field: data.field });
     data.reorderable = !data.locked;
     data.sortable = !data.locked;
     data.orderIndex = data.locked ? 0 : data.orderIndex;
