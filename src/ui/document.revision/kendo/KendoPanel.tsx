@@ -62,12 +62,12 @@ export function KendoPanel<T extends any>({
   data,
 }: Props<T>) {
   const classes = KendoGridStyles();
-
   const didMount = useDidMount();
   const dispatch = useDispatch();
-
   const [isLoading, setIsLoading] = useState(false);
+  const [fireAPI, setFireAPI] = useState(true);
   const { columnConfig, kendoConfig } = tableCriteria;
+  const gridConfiguration = columns;
 
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
@@ -80,14 +80,11 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const gridConfiguration = columns;
   // Check if the Column config available in State, if so prefer what is available in State
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = React.useState(
-    gridConfiguration.columns
-  );
+  const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
 
   const initialDataState: State = kendoConfig
     ? JSON.parse(kendoConfig)
@@ -103,7 +100,11 @@ export function KendoPanel<T extends any>({
         ],
       },
     };
-  const [defaultDDItem, setDefaultDDItem] = React.useState("Released");
+  const [dataState, setDataState] = useState<State>(initialDataState);
+  const [collapsedState, setCollapsedState] = useState<string[]>([]);
+
+
+  const [defaultDDItem, setDefaultDDItem] = useState("Released");
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   useEffect(() => {
     if (didMount) {
@@ -122,7 +123,14 @@ export function KendoPanel<T extends any>({
         queryApi();
       }
     }
-  }, [tableCriteria.kendoConfig, didMount, tableCriteria.forceUpdate]);
+  }, [tableCriteria.kendoConfig, didMount]);
+
+  useEffect(() => {
+    if (tableCriteria.forceUpdate) {
+      queryApi();
+    }
+  }, [tableCriteria.forceUpdate]);
+
   const formatParams = () => {
     const params: any = {};
     if (!tableCriteria.queryDict) {
@@ -248,14 +256,12 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-
+  // Kendo Helper Methods
   const processWithGroups = (data: any[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  const [dataState, setDataState] = useState<State>(initialDataState);
-  const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(data, initialDataState)
   );
@@ -296,36 +302,7 @@ export function KendoPanel<T extends any>({
     }
   };
 
-  const [fireAPI, setFireAPI] = useState(true);
-  const onDataStateChange = useCallback(
-    (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, event.dataState);
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
-      setDataState(event.dataState);
-      setResultState(newDataState);
-      setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
-    },
-    [data]
-  );
-  const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
-      if (item.groupId) {
-        const newCollapsedIds = !event.value
-          ? [...collapsedState, item.groupId]
-          : collapsedState.filter((groupId) => groupId !== item.groupId);
-        setCollapsedState(newCollapsedIds);
-      }
-    },
-    [collapsedState]
-  );
-  const onStateChange = (setDefault) => {
-    if (setDefault) {
-      setDefaultDDItem("Select State");
-    }
-    setFireAPI(true);
-  };
-
+  // Column Menu Filters
   const StatusFilterTempalte = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
@@ -335,7 +312,6 @@ export function KendoPanel<T extends any>({
       onStateChange={onStateChange}
     />
   );
-
   const TypeFilterTemplate = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
@@ -349,40 +325,15 @@ export function KendoPanel<T extends any>({
     "document.documentType.documentTypeAcronym": TypeFilterTemplate,
   };
 
-  // Grid Columns
-  const columnRenderer = (column: any, index: React.Key | undefined) => (
-    <GridColumn
-      key={index}
-      {...column}
-      cell={getCellTemplate(column.cell)}
-      filterCell={
-        filterCellMapping[column.field]
-          ? filterCellMapping[column.field]
-          : undefined
-      }
-      columnMenu={
-        column.showColumnMenu
-          ? (props) => (
-            <ColumnMenu
-              {...props}
-              tableName={tableName}
-              columns={columnDefinitions}
-            />
-          )
-          : undefined
-      }
-    />
-  );
+  const clearFilter = () => setSearchStatus();
 
-  // On Grid Row click
-  const onRowClick = (rowData: { dataItem: DocumentRevision }) => {
-    if (canEditDocumentRevision(rowData.dataItem)) {
-      editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+  // Kendo Grid Actions Methods
+  const onStateChange = (setDefault) => {
+    if (setDefault) {
+      setDefaultDDItem("Select State");
     }
-    previewDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+    setFireAPI(true);
   };
-
-  // To Clear filter api call
   const setSearchStatus = (
     status?: DocumentRevisionStatus | DocumentRevisionStatus[],
     displayStatus?: DocumentRevisionStatus
@@ -410,7 +361,6 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
@@ -424,7 +374,6 @@ export function KendoPanel<T extends any>({
     }
     return false;
   };
-
   const onColumnReorder = (event: GridColumnReorderEvent) => {
     let dataColumns = [...columnDefinitions];
     dataColumns = map(dataColumns, (column) => {
@@ -435,7 +384,35 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-
+  const onRowClick = (rowData: { dataItem: DocumentRevision }) => {
+    if (canEditDocumentRevision(rowData.dataItem)) {
+      editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+    }
+    previewDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+  };
+  const onDataStateChange = useCallback(
+    (event: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(data, event.dataState);
+      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
+      setDataState(event.dataState);
+      setResultState(newDataState);
+      setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
+    },
+    [data]
+  );
+  const onExpandChange = useCallback(
+    (event: GridExpandChangeEvent) => {
+      const item = event.dataItem;
+      if (item.groupId) {
+        const newCollapsedIds = !event.value
+          ? [...collapsedState, item.groupId]
+          : collapsedState.filter((groupId) => groupId !== item.groupId);
+        setCollapsedState(newCollapsedIds);
+      }
+    },
+    [collapsedState]
+  );
+  // On Show / Hide Column From Main Menu
   const onColumnShowHide = (item: any) => {
     const dataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
@@ -448,7 +425,32 @@ export function KendoPanel<T extends any>({
   };
 
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
-  const clearFilter = () => setSearchStatus();
+
+  // Render Kendo Columns
+  const renderKendoColumns = (column: any, index: React.Key | undefined) => (
+    <GridColumn
+      key={index}
+      {...column}
+      cell={getCellTemplate(column.cell)}
+      filterCell={
+        filterCellMapping[column.field]
+          ? filterCellMapping[column.field]
+          : undefined
+      }
+      columnMenu={
+        column.showColumnMenu
+          ? (props) => (
+            <ColumnMenu
+              {...props}
+              tableName={tableName}
+              columns={columnDefinitions}
+            />
+          )
+          : undefined
+      }
+    />
+  );
+  // Render Kendo Columns
   const renderKendoGrid = () => (
     <>
       <KendoGlobalization>
@@ -486,7 +488,7 @@ export function KendoPanel<T extends any>({
           </GridToolbar>
           {sortedColumnDefinitions.map((column, idx) => {
             if (column.show) {
-              return columnRenderer(column, idx);
+              return renderKendoColumns(column, idx);
             }
             return null;
           })}
@@ -496,7 +498,6 @@ export function KendoPanel<T extends any>({
       {isLoading && <Loader />}
     </>
   );
-
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
