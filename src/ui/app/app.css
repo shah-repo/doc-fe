@@ -195,13 +195,6 @@ td[role="gridcell"] {
   border-color: rgba(0, 0, 0, 0.08);
 }
 
-
-/* For pop up window - schema, fieldConfig in document Type management grid  start here*/
-.gridTextAreaForm .k-textarea>.k-input {
-  resize: none;
-}
-/* For pop up window - schema, fieldConfig in document Type management grid ends here */
-
 .k-grid-header .k-grid-filter:hover,
 .k-grid-header th.k-grid-header-sticky,
 .k-grid-header td.k-grid-header-sticky,

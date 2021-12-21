@@ -5,6 +5,7 @@ import { TextArea } from "@progress/kendo-react-inputs";
 import PropTypes from "prop-types";
 import React from "react";
 import GridCellStyles from "./CellStyles";
+import "./KendoStyles.css";
 
 const FormTextArea = (fieldRenderProps) => {
   const {
