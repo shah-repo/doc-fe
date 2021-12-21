@@ -3,10 +3,11 @@ import React from "react";
 import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
+import { KendoColumn } from "./types";
 
 interface Props {
   columnDefinition: any;
-  onChange: (colum: any) => void;
+  onChange: (colum: KendoColumn ) => void;
   restrictedColumns: string[];
 }
 
