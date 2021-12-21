@@ -86,7 +86,7 @@ export function KendoGrid<T extends any>({
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const queryData = providedData;
   const classes = GridStyles();
-  const updateDataColumnsState = (dataColumns) => {
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -99,8 +99,9 @@ export function KendoGrid<T extends any>({
   };
 
   const copyDynamicColumns = cloneDeep(dynamicColumns);
-  const temp: any = [];
-  let configColumns: any = [];
+  // TODO: Not Sure
+  const temp: any[] = [];
+  let configColumns: KendoColumn[] = [];
   const list = [
     "field",
     "title",
@@ -131,15 +132,15 @@ export function KendoGrid<T extends any>({
   });
   if (columnConfig) {
     const savedconfig = JSON.parse(columnConfig);
-    savedconfig.forEach((o: KendoColumn, i) => {
+    savedconfig.forEach((o: KendoColumn, i: number) => {
       configColumns.push(merge(temp[i], omit(o, omitList)));
     });
   } else {
     // Put Initial column configuration in store
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
-  const initialGridConfigurationColumns = [...configColumns];
-  const gropableColumnFields = initialGridConfigurationColumns.map((column) => column.field);
+  const initialGridConfigurationColumns: KendoColumn[] = [...configColumns];
+  const gropableColumnFields = initialGridConfigurationColumns.map((column: KendoColumn) => column.field);
   const formatParams = () => {
     const params: any = {};
     if (!queryDict) {
@@ -203,7 +204,7 @@ export function KendoGrid<T extends any>({
           data = customDataSet(data);
         }
         // TODO: without this Date dropdown filter is not working
-        each(data, (o, i) => {
+        each(data, (o) => {
           each(dynamicColumns, (k) => {
             const toCheckIfDate = toValidateIfDate(get(o, k.field));
             if (toCheckIfDate) {
@@ -211,7 +212,7 @@ export function KendoGrid<T extends any>({
             }
           });
         });
-        const newDataState: any = processWithGroups(data, initialDataState);
+        const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
         setResultState(newDataState);
         setIsLoading(false);
@@ -348,7 +349,7 @@ export function KendoGrid<T extends any>({
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
-      dataColumns = map(dataColumns, (column) => {
+      dataColumns = map(dataColumns, (column: KendoColumn) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject?.width;
         return column;
@@ -361,7 +362,7 @@ export function KendoGrid<T extends any>({
 
   const onColumnReorder = (event: GridColumnReorderEvent) => {
     let dataColumns = [...columnDefinitions];
-    dataColumns = map(dataColumns, (column) => {
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
@@ -371,7 +372,7 @@ export function KendoGrid<T extends any>({
   };
 
   const getFilterCell = (fieldName: string) => {
-    const foundObj = configColumns?.filter((data) => data.field === fieldName);
+    const foundObj = configColumns?.filter((data: KendoColumn) => data.field === fieldName);
     return foundObj?.length ? foundObj[0].filterCell : undefined;
   };
 
@@ -424,14 +425,14 @@ export function KendoGrid<T extends any>({
       dataState.filter.filters.length
     ) {
       dataState.filter.filters = [];
-      const newDataState: any = processWithGroups(queryData, dataState);
+      const newDataState = processWithGroups(queryData, dataState);
       setDataState(dataState);
       setResultState(newDataState);
     }
   };
 
   const onColumnShowHide = (item: KendoColumn) => {
-    const updatedDataColumns = map([...columnDefinitions], (column) => {
+    const updatedDataColumns = map([...columnDefinitions], (column: KendoColumn) => {
       if (column.field === item.field) {
         column.show = !column.show;
       }
