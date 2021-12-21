@@ -1152,5 +1152,10 @@
   "async.tasks.minute": "Minute",
   "async.tasks.second": "Second",
   "async.task.timetravel.error": "One field should be greater than 0",
-  "kendo.groupPanelEmpty": "Drag & drop column header to group"
+  "kendo.groupPanelEmpty": "Drag & drop column header to group",
+  "exportFileDownload.preparing": "Your request is being processed ...",
+  "exportFileDownload.expired": "Link expired!",
+  "exportFileDownload.downloading": "Your download will start in a few seconds...",
+  "exportFileDownload.downloaded": "Your download started.",
+  "exportFileDownload.error": "There was an error processing your request."
 }

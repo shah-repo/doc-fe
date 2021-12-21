@@ -108,8 +108,8 @@ td[role="gridcell"] {
 }
 
 .k-grid .k-grid-container .k-grid-content table tbody tr td {
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .k-indicator-container {
@@ -167,7 +167,8 @@ td[role="gridcell"] {
 }
 
 .k-grid .k-grid-table tbody tr {
-  cursor: pointer
+  cursor: pointer;
+  height: 40px;
 }
 
 .k-grid .k-grid-table tbody th,
