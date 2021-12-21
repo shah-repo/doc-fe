@@ -2429,6 +2429,14 @@
     "@progress/kendo-react-popup" "4.13.0"
     prop-types "^15.6.0"
 
+"@progress/kendo-react-form@^4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@progress/kendo-react-form/-/kendo-react-form-4.13.0.tgz#e2a2e7826be0f30562f309090361ae55595e4e1b"
+  integrity sha512-mfPO3jbXOaqr5POYvwfqkIWNtWeWyJV83r5WSBewcJbhmMOPasN7rib9Z3cEfrvzsnyV/F696eJ012TxpdGTGw==
+  dependencies:
+    "@progress/kendo-react-common" "4.13.0"
+    prop-types "^15.6.0"
+
 "@progress/kendo-react-grid@^4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@progress/kendo-react-grid/-/kendo-react-grid-4.13.0.tgz#542936c1cf6bcbdc2a9437d2e9d1243cdb188b3f"
@@ -16367,6 +16375,11 @@ tslib@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+
+tslib@^1.7.0:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
 tslib@^1.8.1:
   version "1.9.3"
