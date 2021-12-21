@@ -864,11 +864,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Verify training status should be 'In Review'", () => {
