@@ -13,6 +13,7 @@ const FBEditorAction: React.FunctionComponent<FBEditorProps> = ({
       options={FBData.actionOptions}
       optionValueKey="name"
       optionLabelKey="description"
+      rules="required"
     />
     {children}
   </FBEditor>
