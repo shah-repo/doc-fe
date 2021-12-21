@@ -1,19 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog,
-  FormControl,
-  Grid,
-  IconButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Typography,
+  Dialog, Grid, Typography,
 } from "@material-ui/core";
 import {
-  DataResult,
-  orderBy,
-  process,
+  DataResult, process,
   State,
 } from "@progress/kendo-data-query";
 import {
@@ -37,9 +28,6 @@ import "moment-timezone";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
@@ -51,6 +39,8 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
+import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -81,12 +71,14 @@ export function KendoPanel<T extends any>({
   rootCustomStyle,
   normalizrSchema,
 }: Props<T>) {
-  const trainingDetailsDialog = useDialog();
-  const [training, setTraining] = useState<TrainingRecordQuery>(
-    DEFAULT_TRAINING_RECORD_QUERY
-  );
-  const didMount = useDidMount();
   const classes = KendoGridStyles();
+  const didMount = useDidMount();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [fireAPI, setFireAPI] = useState(true);
+  const { columnConfig, kendoConfig } = tableCriteria;
+  const gridConfiguration = columns;
+
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -98,24 +90,28 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const [noDataMessage, setNoDataMessage] = useState(<span />);
-
-  const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = columns;
-  const initialGridConfiguration: { columns: any[] } = { ...gridConfiguration };
   // Check if the Column config available in State, if so prefer what is available in State
-  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
-    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  if (columnConfig && JSON.parse(columnConfig).length) {
+    gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = React.useState(
-    gridConfiguration.columns
-  );
-  const defaultItem = {
-    text: "Select Item",
-    value: "",
-  };
+  const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
+
+  const initialKendoConfig: State = kendoConfig
+    ? JSON.parse(kendoConfig)
+    : {
+      skip: 0,
+      take: 25,
+      group: [],
+      sort: [{ field: "document.trId", dir: "asc" }],
+      // Initial filter descriptor
+      filter: {
+        logic: "and",
+        filters: [],
+      },
+    };
+  const [dataState, setDataState] = useState<State>(initialKendoConfig);
+  const [collapsedState, setCollapsedState] = useState<string[]>([]);
+  const [noDataMessage, setNoDataMessage] = useState(<span />);
 
   useEffect(() => {
     if (didMount) {
@@ -279,55 +275,22 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  // Check if the Kendo config is available in state, if not set the default config
-  const kendoConfigFromState = tableCriteria.kendoConfig;
-  const dropdownFilterState = tableCriteria.queryDict
-    ? tableCriteria.queryDict
-    : {};
 
-  const initialKendoConfig: State = kendoConfigFromState
-    ? JSON.parse(kendoConfigFromState)
-    : {
-      skip: 0,
-      take: 25,
-      group: [],
-      sort: [{ field: "document.trId", dir: "asc" }],
-      // Initial filter descriptor
-      filter: {
-        logic: "and",
-        filters: [],
-      },
-    };
-
-  const initialDropdownConfig =
-    dropdownFilterState["trainingPlan.createdAt"] || defaultItem;
-  const initialDueDateSelectedOption = dropdownFilterState.dueOn || defaultItem;
-  const initialCompletedOnSelectedOption =
-    dropdownFilterState.completedAt || defaultItem;
-
+  // Kendo Helper Methods
   const processWithGroups = (data: any[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-
-  const [defaultTrainingItem, setDefaultTrainingItem] = React.useState(
-    initialDropdownConfig
-  );
-
-  const [dueDateSelectedOption, setDueDateSelectedOption] = React.useState(
-    initialDueDateSelectedOption
-  );
-
-  const [completedOnSelectedOption, setCompletedOnSelectedOption] =
-    React.useState(initialCompletedOnSelectedOption);
-  const [dataState, setDataState] = useState<State>(initialKendoConfig);
-  const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(data, initialKendoConfig)
   );
 
+  const trainingDetailsDialog = useDialog();
+  const [training, setTraining] = useState<TrainingRecordQuery>(
+    DEFAULT_TRAINING_RECORD_QUERY
+  );
   const setKendoFilterStatus = (
     tableCriteria: Partial<TablePanelStateProps>
   ): void => {
@@ -341,51 +304,22 @@ export function KendoPanel<T extends any>({
     );
   };
 
-  const setKendoDropdownFilter = (dropdownConfig: any) => {
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          queryDict: {
-            ...tableCriteria.queryDict,
-            [dropdownConfig.field]: dropdownConfig,
-          },
-        },
-        tableName
-      )
-    );
+  // Kendo Grid Actions Methods
+  const onStateChange = (setDefault) => {
+    const updatedFilter = {
+      ...setDefault.selectedItem,
+      field: setDefault.parentField,
+    };
+    if (setDefault.parentField === "trainingPlan.createdAt") {
+      setDefaultTrainingItem(updatedFilter);
+    } else if (setDefault.parentField === "dueOn") {
+      setDueDateSelectedOption(updatedFilter);
+    } else if (setDefault.parentField === "completedAt") {
+      setCompletedOnSelectedOption(updatedFilter);
+    }
+    setKendoDropdownFilter(updatedFilter);
+    setFireAPI(true);
   };
-
-  const [fireAPI, setFireAPI] = useState(true);
-  const onDataStateChange = useCallback(
-    (event: any) => {
-      const newDataState = processWithGroups(data, event.dataState);
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
-      setDataState(event.dataState);
-      setResultState(newDataState);
-      setKendoFilterStatus(tableCriteria);
-    },
-    [data]
-  );
-  const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
-      if (item.groupId) {
-        const newCollapsedIds = !event.value
-          ? [...collapsedState, item.groupId]
-          : collapsedState.filter((groupId) => groupId !== item.groupId);
-        setCollapsedState(newCollapsedIds);
-      }
-    },
-    [collapsedState]
-  );
-
-  // On Grid Row click
-  const onRowClick = (rowData: any) => {
-    trainingDetailsDialog.open();
-    setTraining(rowData.dataItem);
-  };
-
   const setSearchStatus = (state?: any, isClearAll?: boolean) => {
     dataState.filter = {
       logic: "and",
@@ -409,21 +343,6 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-
-  // Clear Filter Button Click
-  const clearFilter = () => setSearchStatus(undefined, true);
-
-  const onChange = (item: any) => {
-    const dataColumns = [...columnDefinitions];
-    dataColumns.forEach((c) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-  };
-
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
@@ -437,7 +356,6 @@ export function KendoPanel<T extends any>({
     }
     return false;
   };
-
   const onColumnReorder = (event: GridColumnReorderEvent) => {
     let dataColumns = [...columnDefinitions];
     dataColumns = map(dataColumns, (column) => {
@@ -448,22 +366,92 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-
-  const onStateChange = (setDefault) => {
-    const updatedFilter = {
-      ...setDefault.selectedItem,
-      field: setDefault.parentField,
-    };
-    if (setDefault.parentField === "trainingPlan.createdAt") {
-      setDefaultTrainingItem(updatedFilter);
-    } else if (setDefault.parentField === "dueOn") {
-      setDueDateSelectedOption(updatedFilter);
-    } else if (setDefault.parentField === "completedAt") {
-      setCompletedOnSelectedOption(updatedFilter);
-    }
-    setKendoDropdownFilter(updatedFilter);
-    setFireAPI(true);
+  const onRowClick = (rowData: any) => {
+    trainingDetailsDialog.open();
+    setTraining(rowData.dataItem);
   };
+  const onDataStateChange = useCallback(
+    (event: any) => {
+      const newDataState = processWithGroups(data, event.dataState);
+      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
+      setDataState(event.dataState);
+      setResultState(newDataState);
+      setKendoFilterStatus(tableCriteria);
+    },
+    [data]
+  );
+  const onExpandChange = useCallback(
+    (event: GridExpandChangeEvent) => {
+      const item = event.dataItem;
+      if (item.groupId) {
+        const newCollapsedIds = !event.value
+          ? [...collapsedState, item.groupId]
+          : collapsedState.filter((groupId) => groupId !== item.groupId);
+        setCollapsedState(newCollapsedIds);
+      }
+    },
+    [collapsedState]
+  );
+
+  // On Show / Hide Column From Main Menu
+  const onColumnShowHide = (item: any) => {
+    const dataColumns = map([...columnDefinitions], (column) => {
+      if (column.field === item.field) {
+        column.show = !column.show;
+      }
+      return column;
+    });
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
+  const defaultItem = {
+    text: "Select Item",
+    value: "",
+  };
+
+  // Check if the Kendo config is available in state, if not set the default config
+  const dropdownFilterState = tableCriteria.queryDict
+    ? tableCriteria.queryDict
+    : {};
+
+  const initialDropdownConfig =
+    dropdownFilterState["trainingPlan.createdAt"] || defaultItem;
+  const initialDueDateSelectedOption = dropdownFilterState.dueOn || defaultItem;
+  const initialCompletedOnSelectedOption =
+    dropdownFilterState.completedAt || defaultItem;
+
+
+  const [defaultTrainingItem, setDefaultTrainingItem] = React.useState(
+    initialDropdownConfig
+  );
+
+  const [dueDateSelectedOption, setDueDateSelectedOption] = React.useState(
+    initialDueDateSelectedOption
+  );
+
+  const [completedOnSelectedOption, setCompletedOnSelectedOption] =
+    React.useState(initialCompletedOnSelectedOption);
+
+
+  const setKendoDropdownFilter = (dropdownConfig: any) => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            ...tableCriteria.queryDict,
+            [dropdownConfig.field]: dropdownConfig,
+          },
+        },
+        tableName
+      )
+    );
+  };
+
+  // Clear Filter Button Click
+  const clearFilter = () => setSearchStatus(undefined, true);
+
   const AssignedDateFilterTemplate: any = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
@@ -510,6 +498,8 @@ export function KendoPanel<T extends any>({
     }
   };
 
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
+  // Render Kendo Columns
   const columnRenderer = (column: any, index: React.Key | undefined) => (
     <GridColumn
       key={index}
@@ -537,28 +527,7 @@ export function KendoPanel<T extends any>({
       }
     />
   );
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const sortedColumnDefinitions: any[] = orderBy(
-    [...columnDefinitions],
-    [{ field: "locked", dir: "desc" }]
-  );
-  sortedColumnDefinitions.forEach((data) => {
-    const stateFilerObject =
-      initialGridConfiguration &&
-      find(initialGridConfiguration?.columns, { field: data.field });
-    data.reorderable = !data.locked;
-    data.sortable = !data.locked;
-    data.orderIndex = data.locked ? 0 : data.orderIndex;
-    data.groupable = data.locked ? !data.locked : stateFilerObject?.groupable;
-  });
+  // Render Kendo Columns
   const renderKendoGrid = () => (
     <>
       <KendoGlobalization>
@@ -586,61 +555,11 @@ export function KendoPanel<T extends any>({
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
               <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-                <FormControl variant="outlined">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <ViewGridIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.columnsCus}
-                              color="textPrimary"
-                            >
-                              Columns
-                            </Typography>
-                          </>
-                        }
-                      ></ListItemText>
-                    </MenuItem>
-                    {sortedColumnDefinitions.map((item: any) =>
-                      item.field !== "crId" ? (
-                        <MenuItem key={item.title} value={item.field}>
-                          <ListItemText id={item.field} primary={item.title} />
-                          <Box flexGrow={1} mr={5}></Box>
-                          {item.show ? (
-                            <SolidIcon
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          ) : (
-                            <ViewChecked
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          )}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Menu>
-                </FormControl>{" "}
+                <ColumnShowHideMenu
+                  restrictedColumns={["trId"]}
+                  columnDefinition={sortedColumnDefinitions}
+                  onChange={onColumnShowHide}
+                />
                 {trainingDetailsDialog.isOpen && (
                   <Dialog
                     open={trainingDetailsDialog.isOpen}
@@ -670,6 +589,7 @@ export function KendoPanel<T extends any>({
       {isLoading && <Loader />}
     </>
   );
+
 
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
