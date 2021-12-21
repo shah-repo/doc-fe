@@ -8,7 +8,7 @@ import {
   MenuItem,
   Typography,
 } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { DataResult, orderBy, process, State } from "@progress/kendo-data-query";
 import {
   // setExpandedState,
   setGroupIds,
@@ -86,8 +86,7 @@ export function KendoGrid<T extends any>({
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
-  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } =
-    tableCriteria;
+  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } = tableCriteria;
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const queryData = providedData;
   const classes = GridStyles();
@@ -125,8 +124,6 @@ export function KendoGrid<T extends any>({
     "title",
     "filter",
     "groupable",
-    "width",
-    "locked",
     "cell",
     "format",
     "showColumnMenu",
@@ -136,7 +133,6 @@ export function KendoGrid<T extends any>({
   copyDynamicColumns.forEach((o: any) => {
     temp.push(pick(o, list));
   });
-
   if (columnConfig) {
     const savedconfig = JSON.parse(columnConfig);
     savedconfig.forEach((o: any, i) => {
@@ -146,7 +142,7 @@ export function KendoGrid<T extends any>({
     // Put Initial column configuration in store
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
-
+  const initialGridConfigurationColumns = [ ...configColumns ];
   const formatParams = () => {
     const params: any = {};
     if (!queryDict) {
@@ -400,8 +396,21 @@ export function KendoGrid<T extends any>({
     return foundObj?.length ? foundObj[0].filterCell : undefined;
   };
 
+  const sortedColumnDefinitions: any[] = orderBy([...columnDefinitions], [
+    { field: "locked", dir: "desc" },
+  ]);
+  sortedColumnDefinitions.forEach((data, index) => {
+    const stateFilerObject =
+      initialGridConfigurationColumns &&
+      find(initialGridConfigurationColumns, { field: data.field });
+    data.reorderable = !data.locked;
+    data.sortable = !data.locked;
+    data.orderIndex = data.locked ? 0 : data.orderIndex;
+    data.groupable = data.locked ? !data.locked : stateFilerObject?.groupable;
+  });
+
   const renderColumns = () =>
-    columnDefinitions.map((column, index) => {
+    sortedColumnDefinitions.map((column, index) => {
       if (column.show) {
         return (
           <GridColumn
@@ -409,6 +418,8 @@ export function KendoGrid<T extends any>({
             field={column.field}
             width={column.width}
             locked={column.locked}
+            reorderable={column.reorderable}
+            sortable={column.sortable}
             title={
               column.title
                 ? column.title
