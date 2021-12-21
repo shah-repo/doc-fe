@@ -32,6 +32,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -236,13 +237,7 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  // Kendo Loader
-  const loadingPanel = (
-    isLoading && (<div className={`k-loading-mask ${classes.loading}`} >
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>)
-  );
+
   const processWithGroups = (data: any[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -548,7 +543,7 @@ export function KendoPanel<T extends any>({
           </GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader />}
     </>
   );
 
