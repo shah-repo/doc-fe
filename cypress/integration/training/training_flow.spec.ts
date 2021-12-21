@@ -1009,12 +1009,14 @@ context("Training Flow test", () => {
     it("'test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("test training title");
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "test training title");
     });
 
     it("'One-Time training title' should be present", () => {
       cy.get("#name").clear().arrowType("One-Time training title");
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title");
     });
@@ -1037,16 +1039,22 @@ context("Training Flow test", () => {
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
       cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
       cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#userName").clear().arrowType(USERS[2].name);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[2].name).and("contain", "Pending");
     });
@@ -1099,8 +1107,11 @@ context("Training Flow test", () => {
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
@@ -1182,6 +1193,7 @@ context("Training Flow test", () => {
 
     it("'One-Time training title1' should be present", () => {
       cy.get("#name").clear().arrowType("One-Time training title1");
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title1");
     });
@@ -1225,9 +1237,13 @@ context("Training Flow test", () => {
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#trId").clear().arrowType(forceTrainingRecordId);
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");

@@ -8,16 +8,16 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria } from "../../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
-import { KendoColumnInterface } from "../types";
+import { KendoColumn } from "../../kendo/types";
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
-  columns: KendoColumnInterface[];
+  columns: KendoColumn[];
   tableName: string;
 }
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const dispatch = useDispatch();
-  const [columns, setColumns] = useState<KendoColumnInterface[]>(props.columns);
+  const [columns, setColumns] = useState<KendoColumn[]>(props.columns);
   const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
   const onChange = (field: string | undefined) => {
     const newState = [...columns];
@@ -44,7 +44,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
     }
   };
   const columnDef = find(columns, { field: props.column.field });
-  const [columnLock, setColumnLock] = useState<KendoColumnInterface[]>(
+  const [columnLock, setColumnLock] = useState<KendoColumn[]>(
     props.columns
   );
   const handleColumnLockToggle = (field) => {

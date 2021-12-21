@@ -737,21 +737,19 @@ context("Procedure and parts flow test", () => {
       cy.drCreateNewDocumentFromForm();
     });
     context("Fill EB document attributes", () => {
-      it("Enters title 'Form document for procedure'", () => {
-        cy.drEnterDocumentTitle({ name: "EB document" });
+      it("Enters title 'EB document'", () => {
+        cy.drEnterDocumentTitleWithWait({ name: "EB document" });
       });
 
       it("Enters description 'EB description'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
         });
-
+        cy.progressBarShouldNotExist();
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
       it("Verify step can be added", () => {
@@ -759,6 +757,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
       });
 
@@ -766,6 +765,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         });
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
       });
 
@@ -777,6 +777,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.fbAddField();
         });
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"Textfield for eb test\"]").should("have.text", "Textfield for eb test");
       });
 
@@ -784,6 +785,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         });
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"Textfield for eb test\"]").should("not.exist");
       });
 
@@ -823,18 +825,21 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "video.mp4" });
         });
+        cy.progressBarShouldNotExist();
       });
 
       it("Upload attachment 'image.jpg'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "image.jpg" });
         });
+        cy.progressBarShouldNotExist();
       });
 
       it("Upload attachment 'test.docx'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAttachmentsAttached], () => {
           cy.pmUploadAttachment({ fileName: "test.docx" });
         });
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -848,6 +853,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         });
         cy.wait(10000);
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify description is copied", () => {
@@ -887,6 +893,7 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
         });
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
       });
     });
@@ -896,12 +903,14 @@ context("Procedure and parts flow test", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
           cy.get("[data-cy=\"childrenParts\"]").arrowType("Part for EB document{downarrow}{enter}");
         });
+        cy.progressBarShouldNotExist();
       });
 
       it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -1050,6 +1059,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -1069,6 +1080,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
@@ -1080,6 +1093,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
 
@@ -1185,6 +1200,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -1204,6 +1221,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
@@ -1215,6 +1234,8 @@ context("Procedure and parts flow test", () => {
             {
               cy.visit(CONFIG.FE_URL + link);
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
 
