@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import { map } from "lodash";
 import { default as React } from "react";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
@@ -16,15 +17,10 @@ const KendoGridList: React.FunctionComponent<any> = ({
   statuses,
 }) => {
   const classes = KendoGridStyles();
-  const headers = [
-    { label: `AR ID: ${tableCriteria.queryDict?.crId || ""}`, key: "crId" },
-    {
-      label: `AR TITLE: ${tableCriteria.queryDict?.title || ""}`,
-      key: "title",
-    },
-    { label: `OWNER: ${tableCriteria.queryDict?.owner || ""}`, key: "owner" },
-    { label: `STATUS: ${tableCriteria.queryDict?.state || ""}`, key: "state" },
-  ];
+  const headers = map(gridConfiguration.columns, (column) => ({
+    label: column.title,
+    key: column.field,
+  }));
   const customDataSet = (data: ChangeRequest[]) =>
     data.map((cr) => stripTagsFromObject(cr));
 

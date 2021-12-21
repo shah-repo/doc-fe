@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, FormControl, Grid, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
-import { DataResult, orderBy, process, State } from "@progress/kendo-data-query";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -21,9 +21,6 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
@@ -32,6 +29,9 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
+import { orderByLockedState } from "../../components/common/kendo/helpers";
+import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -59,11 +59,13 @@ export function KendoPanel<T extends any>({
   normalizrSchema,
   currentUserEmail,
 }: Props<T>) {
+  const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
-
-  const classes = KendoGridStyles();
   const [isLoading, setIsLoading] = useState(false);
+  const [fireAPI, setFireAPI] = useState(true);
+  const { columnConfig, kendoConfig } = tableCriteria;
+  const gridConfiguration = columns;
 
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
@@ -76,20 +78,14 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = columns;
-  const initialGridConfiguration: {columns: any[]} = { ...gridConfiguration };
-
   // Check if the Column config available in State, if so prefer what is available in State
-  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
-    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  if (columnConfig && JSON.parse(columnConfig).length) {
+    gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
+  const [columnDefinitions, setColumnDefinitions] = useState(gridConfiguration.columns);
 
-  const kendoConfigFromState = tableCriteria.kendoConfig;
-
-  const initialDataState: State = kendoConfigFromState
-    ? JSON.parse(kendoConfigFromState)
+  const initialDataState: State = kendoConfig
+    ? JSON.parse(kendoConfig)
     : {
       skip: 0, take: 25, group: [],
       sort: [{ field: "crId", dir: "asc" }],
@@ -99,6 +95,9 @@ export function KendoPanel<T extends any>({
         filters: [{ field: "state", operator: "eq", value: "IN_REVIEW" }],
       },
     };
+  const [dataState, setDataState] = useState<State>(initialDataState);
+  const [collapsedState, setCollapsedState] = useState<string[]>([]);
+
   const [defaultDDItem, setDefaultDDItem] = React.useState("IN_REVIEW");
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   useEffect(() => {
@@ -119,7 +118,14 @@ export function KendoPanel<T extends any>({
         queryApi();
       }
     }
-  }, [tableCriteria.kendoConfig, didMount, tableCriteria.forceUpdate]);
+  }, [tableCriteria.kendoConfig, didMount]);
+
+  useEffect(() => {
+    if (tableCriteria.forceUpdate) {
+      queryApi();
+    }
+  }, [tableCriteria.forceUpdate]);
+
   const formatParams = () => {
     const params: any = {};
     if (!tableCriteria.queryDict) {
@@ -237,20 +243,13 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  // Kendo Loader
-  const loadingPanel = (
-    isLoading && (<div className={`k-loading-mask ${classes.loading}`} >
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>)
-  );
+
+  // Kendo Helper Methods
   const processWithGroups = (data: any[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  const [dataState, setDataState] = useState<State>(initialDataState);
-  const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(data, initialDataState)
   );
@@ -286,37 +285,7 @@ export function KendoPanel<T extends any>({
     }
   };
 
-
-  const [fireAPI, setFireAPI] = useState(true);
-  const onDataStateChange = useCallback(
-    (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, event.dataState);
-
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
-      setDataState(event.dataState);
-      setResultState(newDataState);
-      setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
-    },
-    [data]
-  );
-  const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
-      if (item.groupId) {
-        const newCollapsedIds = !event.value
-          ? [...collapsedState, item.groupId]
-          : collapsedState.filter((groupId) => groupId !== item.groupId);
-        setCollapsedState(newCollapsedIds);
-      }
-    },
-    [collapsedState]
-  );
-  const onStateChange = (setDefault) => {
-    if (setDefault) {
-      setDefaultDDItem("Select State");
-    }
-    setFireAPI(true);
-  };
+  // Column Menu Filters
   const StatusFilterTemplate: any = (props: GridFilterCellProps) => (<DropdownFilterTemplate
     {...props}
     data={changeRequestStatusOption().map((col) => col.value)}
@@ -327,44 +296,16 @@ export function KendoPanel<T extends any>({
   const filterCellMapping = {
     state: StatusFilterTemplate,
   };
-  // Grid Columns
-  const columnRenderer = (column: any, index: React.Key | undefined) => (
-    <GridColumn
-      key={index}
-      width={column.width}
-      field={column.field}
-      locked={column.locked}
-      title={column.title}
-      cell={getCellTemplate(column.cell)}
-      filter={column.filter}
-      sortable={column.sortable}
-      format={column.format}
-      groupable={column.groupable}
-      orderIndex={column.orderIndex}
-      reorderable={column.reorderable}
-      filterCell={filterCellMapping[column.field]}
-      columnMenu={
-        column.showColumnMenu
-          ? (props) => <ColumnMenu {...props} tableName={tableName} columns={columnDefinitions} />
-          : undefined
-      }
-    />
-  );
 
-  // check if document is editable or readonly
-  const canEdit = (data: ChangeRequest) =>
-    canEditChangeRequest({ dataProp: data, currentUserEmail });
+  const clearFilter = () => setSearchStatus(undefined, true);
 
-  // On Grid Row click
-  const onRowClick = (props) => {
-    let urlPath = changeRequestPreviewPath(props.dataItem.id);
-    if (canEdit(props.dataItem)) {
-      urlPath = changeRequestEditPath(props.dataItem.id);
+  // Kendo Grid Actions Methods
+  const onStateChange = (setDefault) => {
+    if (setDefault) {
+      setDefaultDDItem("Select State");
     }
-    window.open(urlPath, "_self");
+    setFireAPI(true);
   };
-
-  // To Clear filter api call
   const setSearchStatus = (state?: ChangeRequestStatus, isClearAll?: boolean) => {
     dataState.filter = {
       logic: "and",
@@ -390,17 +331,6 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const onChange = (item: any) => {
-    const dataColumns = [...columnDefinitions];
-    dataColumns.map((c, i) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-  };
-
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
@@ -414,7 +344,6 @@ export function KendoPanel<T extends any>({
     }
     return false;
   };
-
   const onColumnReorder = (event: GridColumnReorderEvent) => {
     let dataColumns = [...columnDefinitions];
     dataColumns = map(dataColumns, (column) => {
@@ -425,26 +354,76 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  // check if document is editable or readonly
+  const canEdit = (data: ChangeRequest) =>
+    canEditChangeRequest({ dataProp: data, currentUserEmail });
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  // On Grid Row click
+  const onRowClick = (props) => {
+    let urlPath = changeRequestPreviewPath(props.dataItem.id);
+    if (canEdit(props.dataItem)) {
+      urlPath = changeRequestEditPath(props.dataItem.id);
+    }
+    window.open(urlPath, "_self");
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const onDataStateChange = useCallback(
+    (event: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(data, event.dataState);
+
+      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
+      setDataState(event.dataState);
+      setResultState(newDataState);
+      setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
+    },
+    [data]
+  );
+  const onExpandChange = useCallback(
+    (event: GridExpandChangeEvent) => {
+      const item = event.dataItem;
+      if (item.groupId) {
+        const newCollapsedIds = !event.value
+          ? [...collapsedState, item.groupId]
+          : collapsedState.filter((groupId) => groupId !== item.groupId);
+        setCollapsedState(newCollapsedIds);
+      }
+    },
+    [collapsedState]
+  );
+    // On Show / Hide Column From Main Menu
+  const onColumnShowHide = (item: any) => {
+    const dataColumns = map([...columnDefinitions], (column) => {
+      if (column.field === item.field) {
+        column.show = !column.show;
+      }
+      return column;
+    });
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
-  const sortedColumnDefinitions: any[] = orderBy([...columnDefinitions], [
-    { field: "locked", dir: "desc" },
-  ]);
-  sortedColumnDefinitions.forEach((data, index) => {
-    const stateFilerObject = initialGridConfiguration && find(initialGridConfiguration?.columns, { field: data.field });
-    data.reorderable = !data.locked;
-    data.sortable = !data.locked;
-    data.orderIndex = data.locked ? 0 : data.orderIndex;
-    data.groupable = data.locked ? !data.locked : stateFilerObject?.groupable;
-  });
-  const clearFilter = () => setSearchStatus(undefined, true);
+
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
+
+  // Render Kendo Columns
+  const renderKendoColumns = (column: any, index: React.Key | undefined) => (
+    <GridColumn
+      key={index}
+      {...column}
+      cell={getCellTemplate(column.cell)}
+      filterCell={filterCellMapping[column.field]}
+      columnMenu={
+        column.showColumnMenu
+          ? (props) => (
+            <ColumnMenu
+              {...props}
+              tableName={tableName}
+              columns={columnDefinitions}
+            />
+          )
+          : undefined
+      }
+    />
+  );
+  // Render Kendo Columns
   const renderKendoGrid = () => (
     <>
       <KendoGlobalization>
@@ -472,68 +451,17 @@ export function KendoPanel<T extends any>({
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
               <Grid item={true} xs={6}  style={{ textAlign: "right" }}>
-                <FormControl variant="outlined">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <ViewGridIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.columnsCus}
-                              color="textPrimary"
-                            >
-                            Columns
-                            </Typography>
-                          </>
-                        }
-                      ></ListItemText>
-                    </MenuItem>
-                    {sortedColumnDefinitions.map((item: any) =>
-                      item.field !== "crId" ? (
-                        <MenuItem key={item.title} value={item.field}>
-                          <ListItemText id={item.field} primary={item.title} />
-                          <Box flexGrow={1} mr={5}></Box>
-                          {item.show ? (
-                            <SolidIcon
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          ) : (
-                            <ViewChecked
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          )}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Menu>
-                </FormControl>{" "}
-                {/* </Grid> */}
+                <ColumnShowHideMenu
+                  restrictedColumns={["crId"]}
+                  columnDefinition={sortedColumnDefinitions}
+                  onChange={onColumnShowHide}
+                />
               </Grid>
             </Grid>
           </GridToolbar>
           {sortedColumnDefinitions.map((column, idx) => {
             if (column.show) {
-              return columnRenderer(column, idx);
+              return renderKendoColumns(column, idx);
             }
             return null;
           })}
@@ -542,7 +470,7 @@ export function KendoPanel<T extends any>({
           </GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader />}
     </>
   );
   return (
