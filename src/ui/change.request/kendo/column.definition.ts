@@ -1,4 +1,5 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { chain } from "lodash";
 import { KendoCellTemplates } from "../../components/common/kendo.column.templates/types";
 
 const columns = [
@@ -11,7 +12,7 @@ const columns = [
     width: "200px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 0,
+    orderIndex: 1,
   },
   {
     field: "title",
@@ -22,7 +23,7 @@ const columns = [
     width: "700px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 1,
+    orderIndex: 2,
   },
   {
     field: "owner.user.name",
@@ -34,7 +35,7 @@ const columns = [
     groupable: true,
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
-    orderIndex: 2,
+    orderIndex: 3,
   },
   {
     field: "state",
@@ -45,15 +46,9 @@ const columns = [
     groupable: true,
     cell: KendoCellTemplates.STATUS,
     showColumnMenu: true,
-    orderIndex: 3,
+    orderIndex: 4,
   },
 ];
-
-interface PageState {
-  skip: number;
-  take: number;
-}
-
 const pagerSettings: GridPagerSettings = {
   buttonCount: 5,
   info: true,
@@ -62,7 +57,10 @@ const pagerSettings: GridPagerSettings = {
   previousNext: true,
 };
 
-const initialDataState: PageState = { skip: 0, take: 25 };
-const gridConfiguration = { columns, pagerSettings, initialDataState };
+const gridConfiguration = {
+  columns,
+  pagerSettings,
+  groupableFields: chain(columns).filter({ groupable: true }).map("field").value(),
+};
 
 export default gridConfiguration;
