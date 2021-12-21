@@ -23,6 +23,8 @@ export interface KendoColumn {
   orderIndex?: number | undefined;
   columnMenu?: any;
   filterable?: boolean;
+  reorderable?: boolean | undefined;
+  sortable?: boolean | undefined;
 }
 
 

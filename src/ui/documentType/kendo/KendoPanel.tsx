@@ -16,6 +16,7 @@ import {
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
+  GridRowClickEvent,
   // GridFilterCellProps,
   GridToolbar,
 } from "@progress/kendo-react-grid";
@@ -47,6 +48,8 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import { KendoColumn } from "../../components/common/kendo/types";
+// import { KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import Text from "../../components/Text";
@@ -57,12 +60,11 @@ import {
 } from "../../document.revision/utils/paths";
 import useDidMount from "../../hooks/useDidMount";
 import GridStyles from "./styles";
-import { KendoPanelProps } from "./types";
 
-interface CreateExport {
-  dynamicColumns?: any;
-}
-type Props<T> = KendoPanelProps<T> & CreateExport;
+// interface CreateExport {
+//   dynamicColumns?: any;
+// }
+// type Props<T> = KendoPanelProps<T> & CreateExport;
 let call;
 
 export function KendoGrid<T extends any>({
@@ -73,7 +75,8 @@ export function KendoGrid<T extends any>({
   normalizrSchema,
   tableCriteria,
   customDataSet,
-}: Props<T>) {
+  // Props<T>
+}: any) {
   const dispatch = useDispatch();
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
@@ -123,12 +126,12 @@ export function KendoGrid<T extends any>({
     "columnMenu",
     "filterCell",
   ];
-  copyDynamicColumns.forEach((o: any) => {
+  copyDynamicColumns.forEach((o: KendoColumn) => {
     temp.push(pick(o, list));
   });
   if (columnConfig) {
     const savedconfig = JSON.parse(columnConfig);
-    savedconfig.forEach((o: any, i) => {
+    savedconfig.forEach((o: KendoColumn, i) => {
       configColumns.push(merge(temp[i], omit(o, omitList)));
     });
   } else {
@@ -304,7 +307,7 @@ export function KendoGrid<T extends any>({
   // check if document is editable or readonly
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   // On Grid Row click
-  const onRowClick = (rowData) => {
+  const onRowClick = (rowData: GridRowClickEvent) => {
     let urlPath = documentPreviewPath(
       rowData.dataItem.id,
       rowData.dataItem.document.id
@@ -375,7 +378,7 @@ export function KendoGrid<T extends any>({
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gropableColumnFields);
 
   const renderColumns = () =>
-    sortedColumnDefinitions.map((column, index) => {
+    sortedColumnDefinitions.map((column: KendoColumn, index: number) => {
       if (column.show) {
         return (
           <GridColumn
@@ -427,7 +430,7 @@ export function KendoGrid<T extends any>({
     }
   };
 
-  const onColumnShowHide = (item: any) => {
+  const onColumnShowHide = (item: KendoColumn) => {
     const updatedDataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
