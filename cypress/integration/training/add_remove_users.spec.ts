@@ -859,9 +859,9 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
@@ -892,16 +892,16 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[3].name} should not be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[3].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[3].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get("[data-cy=\"no.results.found\"]").should("have.text", "No results found");
     });
 
     it(`Training record for ${USERS[2].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
@@ -932,9 +932,9 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[4].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[4].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[4].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[4].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
@@ -965,9 +965,9 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[7].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[7].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[7].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
