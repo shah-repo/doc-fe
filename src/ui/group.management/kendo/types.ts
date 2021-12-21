@@ -1,7 +1,7 @@
 import { schema } from "normalizr";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { TableColumnActionType } from "../../components/table/column/types";
-import { TableSearchQueryType } from "../../components/table/types";
+import { TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import { Translation } from "../../translations/types";
 
 export type TableSelectionRenderer<T> = (
@@ -32,6 +32,7 @@ export interface TablePanelProps<T> {
   selectedGroup: LoadCompanyGroup;
   canCreateGroups: boolean;
   refreshTable?: boolean;
+  tableCriteria: TablePanelStateProps;
 }
 
 export interface TableSelectionProps<T> {

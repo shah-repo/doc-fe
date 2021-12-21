@@ -27,7 +27,6 @@ interface Props {
 const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
   tableName,
   tableData,
-  clearFilter,
   tableCriteria,
   handlePermission,
   previewGroupsDialog,
@@ -59,6 +58,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
           selectedGroup={selectedGroup}
           canCreateGroups={canCreateGroups}
           providedData={tableData}
+          tableCriteria={tableCriteria}
         />
       </Grid>
       <GroupsDisplay

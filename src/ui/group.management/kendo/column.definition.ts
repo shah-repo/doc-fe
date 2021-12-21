@@ -1,12 +1,4 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
-import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
-import { CommandCell } from "./cell.template/CommandCell";
-import { EmployeesCell } from "./cell.template/EmployeesCell";
-import { GroupCell } from "./cell.template/GroupCell";
-import { NameCell } from "./cell.template/NameCell";
-import { ParentsCell } from "./cell.template/ParentsCell";
-import { PermissionsCell } from "./cell.template/PermissionsCell";
-import { TagsCell } from "./cell.template/TagsCell";
 
 const columns = [
   {
@@ -15,7 +7,6 @@ const columns = [
     show: true,
     groupable: false,
     filterable: false,
-    cell: CommandCell,
     locked: true,
     width: "80px",
   },
@@ -24,8 +15,6 @@ const columns = [
     title: "GROUP TYPE",
     show: true,
     filter: "boolean",
-    filterCell: BooleanFilterCell,
-    cell: GroupCell,
   },
   {
     field: "name",
@@ -33,7 +22,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
-    cell: NameCell,
   },
   {
     field: "memberNames",
@@ -41,7 +29,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
-    cell: EmployeesCell,
   },
   {
     field: "formattedPermissions",
@@ -49,7 +36,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
-    cell: PermissionsCell,
   },
   {
     field: "formattedTags",
@@ -57,7 +43,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
-    cell: TagsCell,
   },
   {
     field: "parentName",
@@ -65,7 +50,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: false,
-    cell: ParentsCell,
   },
 ];
 

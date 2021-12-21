@@ -11,20 +11,18 @@ import {
   Grid as KendoGrid,
   GridCellProps,
   GridColumn,
+  GridColumnReorderEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, set } from "lodash";
+import { cloneDeep, find, isEmpty, map, set, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getTableCriteria,
-} from "../../../common/utils/selectors";
+import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
@@ -50,6 +48,7 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
+import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
 import { CommandCell } from "./cell.template/CommandCell";
 import { EmployeesCell } from "./cell.template/EmployeesCell";
 import { GroupCell } from "./cell.template/GroupCell";
@@ -69,12 +68,11 @@ export function KendoPanel<T extends any>({
   queryUrl,
   tableName,
   onSelect,
-  customDataSet,
   refreshTable,
-  editGroupsDialog,
   normalizrSchema,
   canCreateGroups,
   providedData,
+  tableCriteria,
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -83,10 +81,13 @@ export function KendoPanel<T extends any>({
   };
   const classes = KendoGridStyles(styleProps);
   const [Official, setOfficial] = useState(false);
-  const tableCriteria = useSelector(getTableCriteria(tableName));
   const tableData = providedData || [];
   const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = columns ? columns : kendoConfigColumn;
+  const gridConfiguration = cloneDeep(columns);
+  // Check if the Column config available in State, if so prefer what is available in State
+  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
+    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  }
   const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -182,6 +183,10 @@ export function KendoPanel<T extends any>({
       column.cell = (props: GridCellProps) => (
         <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />
       );
+      // eslint-disable-next-line react/display-name
+      column.filterCell = (props: GridCellProps) => (
+        <BooleanFilterCell {...props} />
+      );
     }
     if (column.field === "formattedPermissions") {
       // eslint-disable-next-line react/display-name
@@ -208,10 +213,6 @@ export function KendoPanel<T extends any>({
       skip: 0,
       take: 25,
       group: [],
-      // filter: {
-      // logic: "and",
-      // filters: [{ field: "isOfficial", operator: "eq", value: "(All)" }],
-      // },
     };
   const setSearchStatus = (state?: LoadCompanyGroup) => {
     dataState.filter = {
@@ -220,7 +221,7 @@ export function KendoPanel<T extends any>({
         ? [{ field: "isOfficial", operator: "eq", value: "" }]
         : [],
     };
-    // setDefaultDDItem("Select Type");
+    dataState.group = [];
     setDataState(dataState);
     setResultState({
       data: [],
@@ -231,6 +232,7 @@ export function KendoPanel<T extends any>({
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
+          columnConfig: JSON.stringify(columns.columns),
           queryDict: {},
         },
         tableName
@@ -285,7 +287,6 @@ export function KendoPanel<T extends any>({
       setActiveEmployees(data);
     },
   });
-  // const [defaultDDItem, setDefaultDDItem] = React.useState("Select Type");
   useEffect(() => {
     if (didMount) {
       asyncGetActiveEmployees.start(
@@ -375,8 +376,6 @@ export function KendoPanel<T extends any>({
         return resp;
       })
       .then(({ data }) => {
-        // if (customDataSet) {
-        // data = customDataSet(data);
         const newDataState = processWithGroups(data, initialKendoConfig);
         setDataState(initialKendoConfig);
         setResultState(newDataState);
@@ -474,31 +473,42 @@ export function KendoPanel<T extends any>({
       width={column.width}
     />
   );
-  // const columnResize = (event) => {
-  //   // eslint-disable-next-line no-console
-  //   console.log(event.columns);
-  //   dispatch(
-  //     tableSearchActions.setSearchCriteria(
-  //       {
-  //         ...tableCriteria,
-  //         columnConfig: JSON.stringify(event.columns),
-  //       },
-  //       tableName
-  //     )
-  //   );
-  // };
 
-  // const columnReorder = (event) => {
-  //   dispatch(
-  //     tableSearchActions.setSearchCriteria(
-  //       {
-  //         ...tableCriteria,
-  //         columnConfig: JSON.stringify(event.columns),
-  //       },
-  //       tableName
-  //     )
-  //   );
-  // };
+  const columnResize = (event) => {
+    let dataColumns = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
+
+  const columnReorder = (event: GridColumnReorderEvent) => {
+    let dataColumns = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.orderIndex = columnObject?.orderIndex;
+      return column;
+    });
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
   const editField = "inEdit";
 
   // const enableInlineEdit = (dataItem: GroupRequestBody) => {
@@ -536,7 +546,7 @@ export function KendoPanel<T extends any>({
           className={classes.kGrid}
           data={result}
           editField={editField}
-          total={resultState.total > 0 ? resultState.total : tableData.length}
+          total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
           sortable={true}
           filterable={true}
@@ -547,9 +557,9 @@ export function KendoPanel<T extends any>({
           {...dataState}
           onExpandChange={onExpandChange}
           expandField="expanded"
-        // onRowClick={onSelect && (({ dataItem }) => !dataItem.inEdit && onSelect({ dataItem })())}
-        // onColumnResize={columnResize}
-        // onColumnReorder={columnReorder}
+          // onRowClick={onSelect && (({ dataItem }) => !dataItem.inEdit && onSelect({ dataItem })())}
+          onColumnResize={columnResize}
+          onColumnReorder={columnReorder}
         >
           <GridToolbar>
             <Grid
@@ -566,7 +576,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {gridConfiguration.columns.map((column, idx) => {
+          {sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => {
             if (column.show === true) {
               return columnRenderer(column, idx);
             } else {
