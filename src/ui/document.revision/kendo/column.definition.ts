@@ -1,6 +1,6 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { chain } from "lodash";
-import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo.column.templates/types";
+import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [
   {

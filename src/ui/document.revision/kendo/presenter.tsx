@@ -13,7 +13,7 @@ import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisio
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
-import { DocumentTypeOptions, KendoGridCriteria } from "../../components/common/kendo.column.templates/types";
+import { DocumentTypeOptions, KendoGridCriteria } from "../../components/common/kendo/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { checkIfDocumentHasOptions } from "../../documentRevision/helpers/checkDocumentGroup";
