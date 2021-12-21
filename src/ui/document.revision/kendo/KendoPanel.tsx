@@ -6,7 +6,8 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid, GridColumn,
+  Grid as KendoGrid,
+  GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -23,12 +24,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus,
+} from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import { KendoColumn, KendoPanelProps } from "../../components/common/kendo.column.templates/types";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -37,18 +42,19 @@ import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
-import { canEditDocumentRevision, documentRevisionQueryStatus } from "../utils/helpers";
+import {
+  canEditDocumentRevision,
+  documentRevisionQueryStatus,
+} from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
-import { KendoPanelProps } from "./types";
-
 
 type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  columns,
+  gridConfiguration,
   queryUrl = "",
   statuses,
   customDataSet,
@@ -67,9 +73,8 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const [fireAPI, setFireAPI] = useState(true);
   const { columnConfig, kendoConfig } = tableCriteria;
-  const gridConfiguration = columns;
 
-  const updateDataColumnsState = (dataColumns) => {
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -84,7 +89,9 @@ export function KendoPanel<T extends any>({
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
+  const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
+    gridConfiguration.columns
+  );
 
   const initialDataState: State = kendoConfig
     ? JSON.parse(kendoConfig)
@@ -102,7 +109,6 @@ export function KendoPanel<T extends any>({
     };
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
-
 
   const [defaultDDItem, setDefaultDDItem] = useState("Released");
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -209,7 +215,7 @@ export function KendoPanel<T extends any>({
         }
         data = map(data, (record) =>
           pick(record, [
-            ...map(columns.columns, "field"),
+            ...map(gridConfiguration.columns, "field"),
             "id",
             "document.docId",
             "owner.user.avatar",
@@ -257,7 +263,7 @@ export function KendoPanel<T extends any>({
       });
   };
   // Kendo Helper Methods
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -328,7 +334,7 @@ export function KendoPanel<T extends any>({
   const clearFilter = () => setSearchStatus();
 
   // Kendo Grid Actions Methods
-  const onStateChange = (setDefault) => {
+  const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
       setDefaultDDItem("Select State");
     }
@@ -386,9 +392,14 @@ export function KendoPanel<T extends any>({
   };
   const onRowClick = (rowData: { dataItem: DocumentRevision }) => {
     if (canEditDocumentRevision(rowData.dataItem)) {
-      editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+      editDocumentRevision &&
+        editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
     }
-    previewDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
+    previewDocumentRevision &&
+      previewDocumentRevision(
+        rowData.dataItem.id,
+        rowData.dataItem.document.id
+      );
   };
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
@@ -413,7 +424,7 @@ export function KendoPanel<T extends any>({
     [collapsedState]
   );
   // On Show / Hide Column From Main Menu
-  const onColumnShowHide = (item: any) => {
+  const onColumnShowHide = (item: KendoColumn) => {
     const dataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
@@ -424,10 +435,13 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
+  const sortedColumnDefinitions = orderByLockedState(
+    columnDefinitions,
+    gridConfiguration.groupableFields
+  );
 
   // Render Kendo Columns
-  const renderKendoColumns = (column: any, index: React.Key | undefined) => (
+  const renderKendoColumns = (column: KendoColumn, index: React.Key | undefined) => (
     <GridColumn
       key={index}
       {...column}

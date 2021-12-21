@@ -13,6 +13,7 @@ import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisio
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
+import { DocumentTypeOptions, KendoGridCriteria } from "../../components/common/kendo.column.templates/types";
 import Text from "../../components/Text";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { checkIfDocumentHasOptions } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -25,9 +26,9 @@ import KendoGridStyles from "./styles";
 interface KendoGridProps {
   data: DocumentRevision[];
   tableName: string;
-  tableCriteria: any;
-  statuses: any[];
-  documentTypeOptions: any[];
+  tableCriteria: KendoGridCriteria;
+  statuses: string[];
+  documentTypeOptions: DocumentTypeOptions[];
   editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
 }
@@ -135,7 +136,7 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
       <Grid item={true} xs={12}>
         <KendoPanel<DocumentRevision>
           tableCriteria={tableCriteria}
-          columns={gridConfiguration}
+          gridConfiguration={gridConfiguration}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
           data={data}
           customDataSet={customDataSet}
