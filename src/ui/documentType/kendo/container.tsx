@@ -28,7 +28,6 @@ import { isTranslation } from "../../translations/types";
 import DocumentByTypeListPresenter from "../kendo/presenter";
 import { columnSearchConfiguration, getStaticColumns } from "../list/helpers";
 import { RouteParams } from "../utils/types";
-import GridColumns from "./column.definition";
 import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
 import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
 
@@ -161,7 +160,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         };
       },
     );
-  GridColumns[TABLE_NAME] = [];
   const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
     isByCategory,
     categoryName,
@@ -189,8 +187,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       operator= {"gt"}
     />
   );
-
-  GridColumns[TABLE_NAME] = createDynamicColDef.map((CCCOnfig, index) => {
+  const dynamicColumns = createDynamicColDef.map((CCCOnfig, index) => {
     let filterCellTemplate; // component
     let dynamicCellTemplate;
     let filterField = "text";
@@ -232,7 +229,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     <div>
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
-        dynamicColumns={GridColumns[TABLE_NAME]}
+        dynamicColumns={dynamicColumns}
         tableCriteria={tableCriteria}
         providedData={providedData}
         clearFilter={clearFilter}
