@@ -135,12 +135,12 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
       </Grid>
       <Grid item={true} xs={12}>
         <KendoPanel<DocumentRevision>
-          tableCriteria={tableCriteria}
           gridConfiguration={gridConfiguration}
-          queryUrl={DOCUMENT_REVISION_ROOT_URL}
-          data={data}
-          customDataSet={customDataSet}
           tableName={tableName}
+          gridData={data}
+          tableCriteria={tableCriteria}
+          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          customDataSet={customDataSet}
           normalizrSchema={[docRevSch]}
           statuses={statuses}
           editDocumentRevision={editDocumentRevision}
@@ -148,7 +148,6 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           documentTypeOptions={documentTypeOptions}
         />
       </Grid>
-      {/* TODO: Test all grid functionalities */}
     </Grid>
   );
 };

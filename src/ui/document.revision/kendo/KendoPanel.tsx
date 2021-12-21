@@ -65,7 +65,7 @@ export function KendoPanel<T extends any>({
   previewDocumentRevision,
   documentTypeOptions,
   tableCriteria,
-  data,
+  gridData,
 }: Props<T>) {
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -269,7 +269,7 @@ export function KendoPanel<T extends any>({
     return newDataState;
   };
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(data, initialDataState)
+    processWithGroups(gridData, initialDataState)
   );
   const result = setExpandedState({
     data: resultState.data,
@@ -403,13 +403,13 @@ export function KendoPanel<T extends any>({
   };
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, event.dataState);
+      const newDataState = processWithGroups(gridData, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
     },
-    [data]
+    [gridData]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
