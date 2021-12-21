@@ -1571,6 +1571,26 @@ context("Create company with golden tenant", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
 
+    it("Error message on upload Users List with incorrect email in JSON", () => {
+      cy.atchUploadUserListJSONForNCO({ fileName: "incorrect_users.csv", queue: 0 });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.checkToastMessageContains({ message: "email must be an email" });
+      cy.closeAllAlertMessages();
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
+    });
+
+    it("Error message on upload Users List file other than json or csv", () => {
+      cy.atchUploadUserListJSONForNCO({ fileName: "test.docx", queue: 0 });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
+      cy.closeAllAlertMessages();
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
+    });
+
     it("Upload Users List JSON", () => {
       SystemRequirement("REQ-3550");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
@@ -1594,6 +1614,22 @@ context("Create company with golden tenant", () => {
       SystemRequirement("REQ-3500");
       cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Error message on upload incorrect DAM JSON", () => {
+      cy.get("[data-cy=\"remove-dam.json\"]").arrowClick({ force: true });
+      cy.atchUploadDOMJSONForNCO({ fileName: "incorrect_dam.json", queue: 0 });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
+      cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
+      cy.closeAllAlertMessages();
+      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
+      cy.get("[data-cy=\"remove-incorrect_dam.json\"]").arrowClick({ force: true });
+    });
+
+    it("Upload correct DAM JSON", () => {
+      cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
     });
 
     it("Save document", () => {
@@ -1681,6 +1717,87 @@ context("Create company with golden tenant", () => {
       cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("AR Form");
       cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
       cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(2).contains("Approval Request");
+    });
+  });
+
+  context("Check the DAM and list should be created with defined Document types, Roles and Assigned Approval", () => {
+    it("Open the DAM and its status should be Draft", () => {
+      cy.navigToDocumentList();
+      cy.dlClearFilters();
+      cy.drFilterDocListByNameAndStatus({ title: "Document Approval Matrix", status: "Draft" });
+      cy.get("#Title-field").eq(0).contains("Document Approval Matrix");
+      cy.drCheckDocumentStatus({ status: "Draft" });
+    });
+
+    it("check DAM document types", () => {
+      const documentTypes = [];
+      cy.get("[data-cy=\"documentTypeApprovalMatrix\"]").each(($el) => {
+        documentTypes.push($el.text());
+      });
+      cy.fixture("dam.json").then((file) => {
+        cy.get(file.approvalMatrix).each((obj) => {
+          expect(documentTypes).to.include(obj.docType.name);
+        });
+      });
+    });
+
+    it("Check DAM assigned approval roles", () => {
+      const roles = [];
+      cy.get("table:eq(1) tbody tr:eq(9) td").each(($el) => {
+        roles.push($el.text());
+      });
+      cy.wrap(roles).should("have.length", 12);
+      cy.fixture("dam.json").then((file) => {
+        let damRoles = [];
+        const approvalRoles = file.approvalMatrix[1].approvalRoles;
+        damRoles.push(approvalRoles.stage1);
+        damRoles.push(approvalRoles.stage2);
+        damRoles.push(approvalRoles.stage3);
+        damRoles.push(approvalRoles.admStage);
+        damRoles = [].concat(...damRoles);
+
+        cy.wrap(damRoles).each((obj, i) => {
+          expect(obj ? "Y" : " ").eql(roles[i]);
+        });
+      });
+    });
+
+    it("Check DAM approval roles", () => {
+      const roles = [];
+      cy.get("table:eq(1) thead tr:eq(1) th").each(($el) => {
+        roles.push($el.text());
+      });
+      cy.wrap(roles).should("have.length", 12);
+      cy.fixture("dam.json").then((file) => {
+        cy.wrap(roles).each((obj, i) => {
+          expect(obj).eql(file.approvalRoles[i % 3].name);
+        });
+      });
+    });
+  });
+
+  context("Verify change in DAM should update", () => {
+    it("Edit DAM", () => {
+      cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
+    });
+
+    it("Make a change in DAM", () => {
+      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3) svg").arrowClick();
+    });
+
+    it("Click exit DAM", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+          cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
+        });
+    });
+
+    it("Reload page", () => {
+      cy.reload();
+    });
+
+    it("change should be saved", () => {
+      cy.get("table:eq(0) tbody tr:eq(0) td:eq(3)").should("have.text", "Yes");
     });
   });
 

@@ -678,7 +678,10 @@ context("Self training test", () => {
       const currentDate = new Date();
       cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
       cy.imapVerifyLastEmailContains(
-        { userEmail: USERS[1].email, content: "Your documents are attached.", date: currentDate });
+        {
+          userEmail: USERS[1].email,
+          content: "Your documents are ready for download. Link will expire in 4 hours.", date: currentDate,
+        });
     });
   });
 

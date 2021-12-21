@@ -738,17 +738,21 @@ context("Groups on Training Curriculum landing page", () => {
     it("'test training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("test training title");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
+        .should("contain.text", "test training title");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
+        .should("contain.text", "Developers");
     });
   });
 
   context("Add approver and release training", () => {
     it("Select the filtered record", () => {
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).arrowClick();
+      cy.dlSelectFirstDocument();
     });
 
     it("Select Approver", () => {
@@ -772,7 +776,9 @@ context("Groups on Training Curriculum landing page", () => {
     it("'test training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("test training title");
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "test training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
@@ -781,6 +787,10 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Create One-Time Training form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -837,6 +847,8 @@ context("Groups on Training Curriculum landing page", () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .arrowType("One-Time Training test{downarrow}{enter}");
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'One-Time training title'", () => {
@@ -864,27 +876,29 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
-    it("'One-Time training title' should be present with 'Developers' group", () => {
+    it("'One-Time training title' should be present with 'Developers' group", { retries: 2 }, () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("One-Time training title");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "One-Time training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
+        .should("contain.text", "One-Time training title");
+      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
+        .should("contain.text", "Developers");
     });
   });
 
   context("Add approver and release training", () => {
     it("Select the filtered record", () => {
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).arrowClick();
+      cy.dlSelectFirstDocument();
     });
 
     it("Select Approver", () => {
@@ -908,7 +922,9 @@ context("Groups on Training Curriculum landing page", () => {
     it("'One-Time training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
       cy.get("#name").clear().arrowType("One-Time training title");
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
+      cy.listLoadingElementShouldNotExist();
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
@@ -918,6 +934,10 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Create Training Curriculum record with train users", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
     });
@@ -1019,11 +1039,16 @@ context("Groups on Training Curriculum landing page", () => {
 
     it("Check filters on Training Curriculums page", () => {
       cy.get("#name").clear().arrowType("test training title");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#docId").clear().arrowType("TC-00001");
+      cy.listLoadingElementShouldNotExist();
       cy.get("#owner").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
       cy.get("#displayStatus").parent().arrowClick();
       cy.get("li[data-value=Released]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check export list button should be display", () => {
