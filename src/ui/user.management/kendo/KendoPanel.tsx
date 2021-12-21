@@ -394,9 +394,11 @@ export function KendoPanel<T extends any>({
       title={column.title}
       cell={column.cell}
       filter={column.filter}
-      groupable={column.groupable}
+      sortable={index === 0 ? false : column.sortable}
+      groupable={index === 0 ? false : column.groupable}
       filterCell={column.filterCell}
       filterable={column.filterable}
+      locked={index === 0 ? true : column.locked}
       width={column.width}
     />
   );

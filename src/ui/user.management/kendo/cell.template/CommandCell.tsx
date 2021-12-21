@@ -12,6 +12,12 @@ interface CommandCellProps  {
   add: (dataItem) => void;
   cancel: (dataItem) => void;
   edit: (dataItem) => void;
+  colSpan?: any;
+  style?: any;
+  ariaColumnIndex?: number;
+  className?: string;
+  columnIndex?: number;
+  role?: string;
 }
 
 export const CommandCell = (props: CommandCellProps) => {
@@ -28,7 +34,7 @@ export const CommandCell = (props: CommandCellProps) => {
   const inEdit = dataItem[props.editField];
 
   return inEdit ? (
-    <td className="k-command-cell">
+    <td {...props} className="k-command-cell">
       <IconButton
         disableRipple={true}
         aria-label="update"
@@ -45,7 +51,15 @@ export const CommandCell = (props: CommandCellProps) => {
       </IconButton>
     </td>
   ) : (
-    <td className="k-command-cell">
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}
+    >
       <IconButton
         disableRipple={true}
         aria-label="edit"
