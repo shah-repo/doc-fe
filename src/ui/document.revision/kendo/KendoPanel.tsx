@@ -61,10 +61,14 @@ export function KendoPanel<T extends any>({
   tableCriteria,
   data,
 }: Props<T>) {
+  const classes = KendoGridStyles();
+
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  const classes = KendoGridStyles();
+
   const [isLoading, setIsLoading] = useState(false);
+  const { columnConfig, kendoConfig } = tableCriteria;
+
 
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
@@ -77,20 +81,17 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const kendoConfigColumn = tableCriteria.columnConfig;
   const gridConfiguration = columns;
   const initialGridConfiguration: {columns: any[]} = { ...gridConfiguration };
 
   // Check if the Column config available in State, if so prefer what is available in State
-  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
-    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  if (columnConfig && JSON.parse(columnConfig).length) {
+    gridConfiguration.columns = JSON.parse(columnConfig);
   }
   const [columnDefinitions, setColumnDefinitions] = React.useState(gridConfiguration.columns);
 
-  const kendoConfigFromState = tableCriteria.kendoConfig;
-
-  const initialDataState: State = kendoConfigFromState
-    ? JSON.parse(kendoConfigFromState)
+  const initialDataState: State = kendoConfig
+    ? JSON.parse(kendoConfig)
     : {
       skip: 0, take: 25, group: [],
       sort: [{ field: "document.docId", dir: "asc" }],
