@@ -12,16 +12,17 @@ export interface KendoColumn {
   field: string;
   title: string;
   show: boolean;
-  showColumnMenu: boolean;
+  showColumnMenu?: boolean;
   format?: string;
   filter?: "boolean" | "numeric" | "text" | "date" | undefined;
-  groupable: boolean;
+  groupable?: boolean;
   filterCell?: any;
   cell?: any;
   locked?: boolean;
   width?: number | string | undefined;
   orderIndex?: number | undefined;
   columnMenu?: any;
+  filterable?: boolean;
 }
 
 
@@ -51,7 +52,7 @@ export interface KendoPanelProps<T> {
   tableName: string;
   gridData: T[];
   tableCriteria: KendoGridCriteria;
-  statuses: string[];
+  statuses?: string[];
   queryUrl?: string;
   customQuerySet?: (queryDict: KendoTableSearchQueryType) => KendoTableSearchQueryType;
   customDataSet?: (data: T[]) => T[];

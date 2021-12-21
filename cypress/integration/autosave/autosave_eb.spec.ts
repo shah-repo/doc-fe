@@ -138,13 +138,13 @@ context("Autosave EB test", () => {
     it("While autosaving fill step #1 description and check autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
       cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("Add 'Material' to step #1 and check autosave", () => {
@@ -161,28 +161,27 @@ context("Autosave EB test", () => {
     it("While autosaving add 'Equipment' to step #1 and check autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
-
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Equipment");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("While autosaving, delete Material and check for autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
       cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").parent()
         .find("button").last().arrowClick();
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("Delete attachment and check autosave", () => {
