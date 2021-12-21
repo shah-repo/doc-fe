@@ -13,6 +13,7 @@ import {
   GridCellProps,
   GridColumn,
   GridColumnReorderEvent,
+  GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
@@ -32,6 +33,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -72,6 +74,8 @@ export function KendoPanel<T extends any>({
   isCompanyDropboxEnabled,
   tableCriteria,
 }: Props<T>) {
+// TODO: After KendoPanel props update- Remove const gridData
+  const gridData = data;
   const editField = "inEdit";
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -94,9 +98,9 @@ export function KendoPanel<T extends any>({
   const initialColumnsConfig = tableCriteria.columnConfig
     ? JSON.parse(tableCriteria.columnConfig)
     : [];
-  gridConfiguration.columns.forEach((column) => {
-    const foundObj = initialColumnsConfig.find(
-      (initialColumn) => initialColumn.field === column.field
+  gridConfiguration.columns.forEach((column: KendoColumn) => {
+    const foundObj: KendoColumn = initialColumnsConfig.find(
+      (initialColumn: KendoColumn) => initialColumn.field === column.field
     );
     // further update all column fields here
     if (foundObj) {
@@ -180,14 +184,14 @@ export function KendoPanel<T extends any>({
     },
   });
 
-  const handleCreate = (values) => {
+  const handleCreate = (values: UserManage) => {
     async.start(addEmployeeAction, values, async);
   };
 
 
   const cancel = (dataItem: UserManage) => {
-    data.splice(0, 1);
-    const newDataState = processWithGroups(data, dataState);
+    gridData.splice(0, 1);
+    const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
   };
 
@@ -209,7 +213,7 @@ export function KendoPanel<T extends any>({
     };
     dataState.group = [];
     setDataState(dataState);
-    const newDataState = processWithGroups(data, dataState);
+    const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     dispatch(
@@ -243,7 +247,7 @@ export function KendoPanel<T extends any>({
   const [dataState, setDataState] = useState<State>(initialKendoConfig); // Kendo Grid Data State
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(data, initialKendoConfig)
+    processWithGroups(gridData, initialKendoConfig)
   );
   useEffect(() => {
     if (didMount) {
@@ -361,18 +365,18 @@ export function KendoPanel<T extends any>({
     </div>
   );
   const result = setExpandedState({
-    data: processWithGroups(data, initialKendoConfig).data,
+    data: processWithGroups(gridData, initialKendoConfig).data,
     collapsedIds: collapsedState,
   });
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, event.dataState);
+      const newDataState = processWithGroups(gridData, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState));
     },
-    [data]
+    [gridData]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
@@ -387,7 +391,7 @@ export function KendoPanel<T extends any>({
     [collapsedState]
   );
   const clearFilter = () => setSearchStatus();
-  const columnRenderer = (column: any, index: React.Key | undefined) => (
+  const columnRenderer = (column: KendoColumn, index: React.Key | undefined) => (
     <GridColumn
       key={index}
       field={column.field}
@@ -403,9 +407,9 @@ export function KendoPanel<T extends any>({
     />
   );
 
-  const columnResize = (event) => {
-    let dataColumns = [...gridConfiguration.columns];
-    dataColumns = map(dataColumns, (column) => {
+  const columnResize = (event: GridColumnResizeEvent) => {
+    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.width = columnObject?.width;
       return column;
@@ -422,8 +426,8 @@ export function KendoPanel<T extends any>({
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns = [...gridConfiguration.columns];
-    dataColumns = map(dataColumns, (column) => {
+    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
@@ -448,8 +452,8 @@ export function KendoPanel<T extends any>({
       active: true,
       groups: defaultGroups.map((el) => ({ id: el.value })) as [],
     };
-    data.unshift(newDataItem);
-    setResultState(processWithGroups(data, dataState));
+    gridData.unshift(newDataItem);
+    setResultState(processWithGroups(gridData, dataState));
   };
   const tableRenderer = () => (
     <>
@@ -458,7 +462,7 @@ export function KendoPanel<T extends any>({
           key={tableName}
           className={classes.kGrid}
           data={result}
-          total={resultState.total > 0 ? resultState.total : data.length}
+          total={resultState.total > 0 ? resultState.total : gridData.length}
           pageable={gridConfiguration.pagerSettings}
           sortable={true}
           filterable={true}
