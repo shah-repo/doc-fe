@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
-import { DocumentTypeManagementProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -24,6 +23,7 @@ import gridConfiguration from "./column.definition";
 import { CommandCell } from "./column.templates/CommandCell";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
+import { DocumentTypeManagementProps } from "./types";
 
 export function KendoGrid({
   tableData,
