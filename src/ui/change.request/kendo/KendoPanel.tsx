@@ -31,6 +31,7 @@ import { getCellTemplate } from "../../components/common/kendo.column.templates/
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
+import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -399,13 +400,6 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  // Kendo Loader
-  const loadingPanel = (
-    isLoading && (<div className={`k-loading-mask ${classes.loading}`} >
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>)
-  );
 
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
 
@@ -476,7 +470,7 @@ export function KendoPanel<T extends any>({
           </GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader />}
     </>
   );
   return (
