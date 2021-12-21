@@ -7,7 +7,7 @@ export const orderByLockedState = (
 {
   const isGroupable = (field: string) => groupableFields.includes(field);
   const sortedColumnDefinitions = chain([...columnDefinitions])
-    .orderBy([{ field: "locked", dir: "desc" }])
+    .orderBy(["locked"], ["desc"])
     .map((column) => {
       column.reorderable = !column.locked;
       column.sortable = !column.locked;
