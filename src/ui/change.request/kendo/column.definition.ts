@@ -1,8 +1,8 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { chain } from "lodash";
-import { KendoCellTemplates } from "../../components/common/kendo.column.templates/types";
+import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 
-const columns = [
+const columns: KendoColumn[] = [
   {
     field: "crId",
     title: "AR ID",
@@ -57,7 +57,7 @@ const pagerSettings: GridPagerSettings = {
   previousNext: true,
 };
 
-const gridConfiguration = {
+const gridConfiguration: KendoGridConfiguration = {
   columns,
   pagerSettings,
   groupableFields: chain(columns).filter({ groupable: true }).map("field").value(),

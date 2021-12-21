@@ -13,6 +13,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
+  GridRowClickEvent,
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
@@ -32,6 +33,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -41,23 +43,21 @@ import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helper
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
-import { KendoPanelProps } from "./types";
 
 type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  columns,
-  queryUrl = "",
-  statuses,
-  customDataSet,
+  gridConfiguration,
   tableName,
+  gridData,
   tableCriteria,
-  data,
+  queryUrl = "",
+  customDataSet,
   rootCustomStyle,
   normalizrSchema,
-  currentUserEmail,
+  currentUserEmail = "",
 }: Props<T>) {
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -65,9 +65,8 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const [fireAPI, setFireAPI] = useState(true);
   const { columnConfig, kendoConfig } = tableCriteria;
-  const gridConfiguration = columns;
 
-  const updateDataColumnsState = (dataColumns) => {
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -198,7 +197,7 @@ export function KendoPanel<T extends any>({
         }
         data = map(data, (record) =>
           pick(record, [
-            ...map(columns.columns, "field"),
+            ...map(gridConfiguration.columns, "field"),
             "id",
             "crId",
             "owner.user.avatar",
@@ -251,7 +250,7 @@ export function KendoPanel<T extends any>({
     return newDataState;
   };
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(data, initialDataState)
+    processWithGroups(gridData, initialDataState)
   );
   const result = setExpandedState({
     data: resultState.data,
@@ -300,7 +299,7 @@ export function KendoPanel<T extends any>({
   const clearFilter = () => setSearchStatus(undefined, true);
 
   // Kendo Grid Actions Methods
-  const onStateChange = (setDefault) => {
+  const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
       setDefaultDDItem("Select State");
     }
@@ -359,7 +358,7 @@ export function KendoPanel<T extends any>({
     canEditChangeRequest({ dataProp: data, currentUserEmail });
 
   // On Grid Row click
-  const onRowClick = (props) => {
+  const onRowClick = (props: GridRowClickEvent) => {
     let urlPath = changeRequestPreviewPath(props.dataItem.id);
     if (canEdit(props.dataItem)) {
       urlPath = changeRequestEditPath(props.dataItem.id);
@@ -368,14 +367,14 @@ export function KendoPanel<T extends any>({
   };
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(data, event.dataState);
+      const newDataState = processWithGroups(gridData, event.dataState);
 
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
     },
-    [data]
+    [gridData]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
@@ -390,7 +389,7 @@ export function KendoPanel<T extends any>({
     [collapsedState]
   );
     // On Show / Hide Column From Main Menu
-  const onColumnShowHide = (item: any) => {
+  const onColumnShowHide = (item: KendoColumn) => {
     const dataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
@@ -401,7 +400,7 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gridConfiguration.groupableFields);
 
   // Render Kendo Columns
   const renderKendoColumns = (column: any, index: React.Key | undefined) => (

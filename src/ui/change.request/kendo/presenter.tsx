@@ -29,15 +29,12 @@ const KendoGridList: React.FunctionComponent<any> = ({
       <FromListContainer {...{ headers, tableData: data }} />
       <Grid item={true} xs={12}>
         <KendoPanel<ChangeRequest>
-          columns={gridConfiguration}
-          cellMeasure={true}
-          queryUrl={CHANGE_REQUEST_ROOT_URL}
-          customDataSet={customDataSet}
+          gridConfiguration={gridConfiguration}
           tableName={tableName}
+          queryUrl={CHANGE_REQUEST_ROOT_URL}
+          gridData={data}
           tableCriteria={tableCriteria}
-          sortBy={"crId"}
-          data={data}
-          headers={headers}
+          customDataSet={customDataSet}
           statuses={statuses}
           currentUserEmail={currentUserEmail}
         />
