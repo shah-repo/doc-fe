@@ -24,7 +24,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTableCriteria,
-  getTableData,
 } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -51,14 +50,14 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
-import { CommandCell } from "./cell_template/commandCell";
-import { EmployeesCell } from "./cell_template/employeesCell";
-import { GroupCell } from "./cell_template/groupCell";
-import { NameCell } from "./cell_template/nameCell";
-import { ParentsCell } from "./cell_template/parentsCell";
-import { PermissionsCell } from "./cell_template/permissionsCell";
-import { TagsCell } from "./cell_template/tagsCell";
-import KendoGridStyles from "./kendogrid.styles";
+import { CommandCell } from "./cell.template/CommandCell";
+import { EmployeesCell } from "./cell.template/EmployeesCell";
+import { GroupCell } from "./cell.template/GroupCell";
+import { NameCell } from "./cell.template/NameCell";
+import { ParentsCell } from "./cell.template/ParentsCell";
+import { PermissionsCell } from "./cell.template/PermissionsCell";
+import { TagsCell } from "./cell.template/TagsCell";
+import KendoGridStyles from "./styles";
 import { TablePanelProps } from "./types";
 
 type Props<T> = TablePanelProps<T>;
@@ -75,6 +74,7 @@ export function KendoPanel<T extends any>({
   editGroupsDialog,
   normalizrSchema,
   canCreateGroups,
+  providedData,
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -84,10 +84,10 @@ export function KendoPanel<T extends any>({
   const classes = KendoGridStyles(styleProps);
   const [Official, setOfficial] = useState(false);
   const tableCriteria = useSelector(getTableCriteria(tableName));
-  const tableData = useSelector(getTableData(tableName));
+  const tableData = providedData || [];
   const kendoConfigColumn = tableCriteria.columnConfig;
   const gridConfiguration = columns ? columns : kendoConfigColumn;
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -117,7 +117,7 @@ export function KendoPanel<T extends any>({
       isOfficial: Boolean(),
       inEdit: true,
     };
-    tableData.unshift(sampleData);
+    tableData.unshift(sampleData as any);
     setResultState(processWithGroups(tableData, dataState));
   };
   const createGroupAsync = useAsync({

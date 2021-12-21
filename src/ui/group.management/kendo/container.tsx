@@ -21,7 +21,7 @@ import {
   getIsMemberOfGroup,
 } from "../utils/helpers";
 import { DEFAULT_SELECTED_GROUP } from "../utils/types";
-import KendoPresenter from "./kendogrid.presenter";
+import KendoPresenter from "./presenter";
 
 type OwnProps = RouteComponentProps;
 type Props = OwnProps;

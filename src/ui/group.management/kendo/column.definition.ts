@@ -1,12 +1,12 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
-import { BooleanFilterCell } from "./cell_template/booleanFilterCell";
-import { CommandCell } from "./cell_template/commandCell";
-import { EmployeesCell } from "./cell_template/employeesCell";
-import { GroupCell } from "./cell_template/groupCell";
-import { NameCell } from "./cell_template/nameCell";
-import { ParentsCell } from "./cell_template/parentsCell";
-import { PermissionsCell } from "./cell_template/permissionsCell";
-import { TagsCell } from "./cell_template/tagsCell";
+import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
+import { CommandCell } from "./cell.template/CommandCell";
+import { EmployeesCell } from "./cell.template/EmployeesCell";
+import { GroupCell } from "./cell.template/GroupCell";
+import { NameCell } from "./cell.template/NameCell";
+import { ParentsCell } from "./cell.template/ParentsCell";
+import { PermissionsCell } from "./cell.template/PermissionsCell";
+import { TagsCell } from "./cell.template/TagsCell";
 
 const columns = [
   {

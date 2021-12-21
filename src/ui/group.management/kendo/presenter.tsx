@@ -8,9 +8,9 @@ import {
 } from "../../components/table/types";
 import AddGroup from "../add.group/Group";
 import GroupsDisplay from "../display.groups/GroupsDisplay";
-import gridConfiguration from "./kendogrid.column.definition";
-import KendoGridStyles from "./kendogrid.styles";
+import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
+import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;
@@ -58,6 +58,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
           editGroupsDialog={editGroupsDialog}
           selectedGroup={selectedGroup}
           canCreateGroups={canCreateGroups}
+          providedData={tableData}
         />
       </Grid>
       <GroupsDisplay
