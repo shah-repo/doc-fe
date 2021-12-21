@@ -1,12 +1,12 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { KendoColumnInterface } from "../../components/common/kendo.column.templates/types";
 import { CheckboxCell } from "./column.templates/Checkbox";
 import { Dropdown } from "./column.templates/Dropdown";
 import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { Schema } from "./column.templates/Schema";
 import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "./filter.template/CommonCellDropdownFilterTemplate";
-import { DocumentTypeManagementProps } from "./types";
 
-const columns: DocumentTypeManagementProps[] = [{
+const columns: KendoColumnInterface[] = [{
   field: "id",
   title: "ID",
   show: false,

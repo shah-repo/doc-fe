@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { KendoColumnInterface } from "../../components/common/kendo.column.templates/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
@@ -23,7 +24,6 @@ import gridConfiguration from "./column.definition";
 import { CommandCell } from "./column.templates/CommandCell";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
-import { DocumentTypeManagementProps } from "./types";
 
 export function KendoGrid({
   tableData,
@@ -109,7 +109,7 @@ export function KendoGrid({
   );
 
   // Create Grid Columns
-  const renderColumns = () => columns.map((col: DocumentTypeManagementProps, index) => {
+  const renderColumns = () => columns.map((col: KendoColumnInterface, index) => {
     if (col.show) {
       return <GridColumn
         field={col.field}

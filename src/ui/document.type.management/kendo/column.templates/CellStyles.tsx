@@ -53,7 +53,7 @@ const CellStyles = makeStyles((theme) => ({
   closeButton: {
     position: "absolute",
     right: 8,
-    top: 8,
+    top: 3,
     color: theme.palette.grey[500],
   },
 }
