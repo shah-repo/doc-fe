@@ -47,11 +47,6 @@ const KendoGridStyles = makeStyles((theme) => ({
       background: Colors.navy,
     },
   },
-  columnsCus: {
-    fontFamily: "Sora",
-    fontWeight: "bold",
-    fontSize: "14px",
-  },
   iconSvg: {
     fill: Colors.navy,
     marginRight: 5,

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, FormControl, Grid, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { DataResult, orderBy, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -21,9 +21,6 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -32,6 +29,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -391,17 +389,6 @@ export function KendoPanel<T extends any>({
     );
   };
 
-  const onChange = (item: any) => {
-    const dataColumns = [...columnDefinitions];
-    dataColumns.map((c, i) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-  };
-
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
@@ -426,15 +413,18 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const onColumnShowHide = (item: any) => {
+    const dataColumns = map([...columnDefinitions], (column) => {
+      if (column.field === item.field) {
+        column.show = !column.show;
+      }
+      return column;
+    });
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const sortedColumnDefinitions: any[] = orderBy([...columnDefinitions], [
     { field: "locked", dir: "desc" },
   ]);
@@ -450,7 +440,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className= {classes.kGrid}
+          className={classes.kGrid}
           data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
@@ -469,66 +459,15 @@ export function KendoPanel<T extends any>({
         >
           <GridToolbar>
             <Grid container spacing={1}>
-              <Grid item={true} xs={6}  style={{ textAlign: "left" }}>
+              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item={true} xs={6}  style={{ textAlign: "right" }}>
-                <FormControl variant="outlined">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <ViewGridIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.columnsCus}
-                              color="textPrimary"
-                            >
-                            Columns
-                            </Typography>
-                          </>
-                        }
-                      ></ListItemText>
-                    </MenuItem>
-                    {sortedColumnDefinitions.map((item: any) =>
-                      item.field !== "document.docId" ? (
-                        <MenuItem key={item.title} value={item.field}>
-                          <ListItemText id={item.field} primary={item.title} />
-                          <Box flexGrow={1} mr={5}></Box>
-                          {item.show ? (
-                            <SolidIcon
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          ) : (
-                            <ViewChecked
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          )}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Menu>
-                </FormControl>{" "}
-                {/* </Grid> */}
+              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+                <ColumnShowHideMenu
+                  restrictedColumns={["document.docId"]}
+                  columnDefinition={sortedColumnDefinitions}
+                  onChange={onColumnShowHide}
+                />
               </Grid>
             </Grid>
           </GridToolbar>
@@ -538,9 +477,7 @@ export function KendoPanel<T extends any>({
             }
             return null;
           })}
-          <GridNoRecords>
-            {noDataMessage}
-          </GridNoRecords>
+          <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
       {isLoading && <Loader />}
