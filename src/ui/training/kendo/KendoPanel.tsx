@@ -51,6 +51,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -278,14 +279,6 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  // Kendo Loader
-  const loadingPanel = isLoading && (
-    <div className={`k-loading-mask ${classes.loading}`}>
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>
-  );
-
   // Check if the Kendo config is available in state, if not set the default config
   const kendoConfigFromState = tableCriteria.kendoConfig;
   const dropdownFilterState = tableCriteria.queryDict
@@ -674,7 +667,7 @@ export function KendoPanel<T extends any>({
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader />}
     </>
   );
 

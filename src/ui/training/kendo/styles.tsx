@@ -6,10 +6,6 @@ const KendoGridStyles = makeStyles((theme) => ({
   kGrid: {
     height: "calc(100vh - 115px)",
   },
-  // TODO: Check
-  loading: {
-    top: 0,
-  },
   icon: {
     width: "25px",
     height: "25px",
