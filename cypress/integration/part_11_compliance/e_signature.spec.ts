@@ -459,10 +459,11 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of first approver", () => {
@@ -477,7 +478,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameFirstApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -507,10 +510,11 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of second approver", () => {
@@ -525,7 +529,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameSecondApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -591,7 +597,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
     });
@@ -606,12 +614,14 @@ context("E-signature test", () => {
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
+        cy.progressBarShouldNotExist();
         cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -669,7 +679,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApproverSecondTime);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -682,7 +694,11 @@ context("E-signature test", () => {
       });
 
       it("Check user names and emails of approvers on old revision are not changed", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApprover);
@@ -704,9 +720,10 @@ context("E-signature test", () => {
         });
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });
     });

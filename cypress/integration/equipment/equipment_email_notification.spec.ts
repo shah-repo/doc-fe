@@ -578,7 +578,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify maintenance record is present", () => {
-        cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
           .contains("MR-00001 - MR for EQ with no primary owner and coordinator");
       });
@@ -800,7 +800,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify maintenance record is present", () => {
-        cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
           .contains("MR-00002 - MR for EQ with maintenance in 4 days");
       });
@@ -1023,7 +1023,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify maintenance record is present", () => {
-        cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
           .contains("MR-00003 - MR for EQ with maintenance in 17 days");
       });
@@ -1245,7 +1245,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Verify maintenance record is present", () => {
-        cy.xpath("//div[@data-cy=\"form.builder.maintenance.history\"]/../..")
+        cy.get("[data-cy=\"maintenanceHistory\"]>div")
           .eq(0)
           .contains("MR-00004 - MR for EQ with maintenance done date");
       });
