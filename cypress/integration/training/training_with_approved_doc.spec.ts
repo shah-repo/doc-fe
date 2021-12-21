@@ -708,6 +708,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Verify training notification", () => {
+      cy.reload();
       cy.contains(`TRAINING: ${releasedDocId} - Rev 2 released form`).should("exist");
       cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).should("exist");
     });
