@@ -2,7 +2,7 @@ import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import { DropdownFilterCell } from "./dropdown.filter.cell";
+import { DropdownFilterCell } from "./DropdownFilterCell";
 
 export const GroupDropdown: any = (props: GridFilterCellProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);

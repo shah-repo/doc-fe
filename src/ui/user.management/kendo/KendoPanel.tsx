@@ -12,13 +12,14 @@ import {
   Grid as KendoGrid,
   GridCellProps,
   GridColumn,
+  GridColumnReorderEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { isEmpty } from "lodash";
+import { cloneDeep, find, isEmpty, map, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -43,10 +44,15 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
-import { CommandCell } from "./cell_template/commandCell";
-import { EmailCell } from "./cell_template/emailCell";
-import { NameCell } from "./cell_template/nameCell";
-import KendoGridStyles from "./kendogrid.styles";
+import { ActiveCell } from "./cell.template/ActiveCell";
+import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
+import { CommandCell } from "./cell.template/CommandCell";
+import { EmailCell } from "./cell.template/EmailCell";
+import { GroupDropdown } from "./cell.template/GroupDropdown";
+import { GroupsCell } from "./cell.template/GroupsCell";
+import { NameCell } from "./cell.template/NameCell";
+import { SignedCell } from "./cell.template/SignedCell";
+import KendoGridStyles from "./styles";
 import { TablePanelProps, UserManage } from "./types";
 
 type Props<T> = TablePanelProps<T>;
@@ -74,7 +80,11 @@ export function KendoPanel<T extends any>({
   };
   const classes = KendoGridStyles(styleProps);
   const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = columns ? columns : kendoConfigColumn;
+  const gridConfiguration = cloneDeep(columns);
+  // Check if the Column config available in State, if so prefer what is available in State
+  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
+    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  }
   const processWithGroups = (data: any[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -110,6 +120,34 @@ export function KendoPanel<T extends any>({
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
         <EmailCell {...props} />
+      );
+    }
+
+    if (column.field === "groups") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <GroupsCell {...props} />
+      );
+      // eslint-disable-next-line react/display-name
+      column.filterCell = (props: GridCellProps) => (
+        <GroupDropdown {...props} />
+      );
+    }
+
+    if (column.field === "active") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <ActiveCell {...props} />
+      );
+      // eslint-disable-next-line react/display-name
+      column.filterCell = (props: GridCellProps) => (
+        <BooleanFilterCell {...props} />
+      );
+    }
+    if (column.field === "status") {
+      // eslint-disable-next-line react/display-name
+      column.cell = (props: GridCellProps) => (
+        <SignedCell {...props} />
       );
     }
   });
@@ -178,6 +216,7 @@ export function KendoPanel<T extends any>({
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
+          columnConfig: JSON.stringify(columns.columns),
           queryDict: {},
         },
         tableName
@@ -362,31 +401,41 @@ export function KendoPanel<T extends any>({
     />
   );
 
-  // const columnResize = (event) => {
-  //   // eslint-disable-next-line no-console
-  //   console.log(event.columns);
-  //   dispatch(
-  //     tableSearchActions.setSearchCriteria(
-  //       {
-  //         ...tableCriteria,
-  //         columnConfig: JSON.stringify(event.columns),
-  //       },
-  //       tableName
-  //     )
-  //   );
-  // };
+  const columnResize = (event) => {
+    let dataColumns = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
 
-  // const columnReorder = (event) => {
-  //   dispatch(
-  //     tableSearchActions.setSearchCriteria(
-  //       {
-  //         ...tableCriteria,
-  //         columnConfig: JSON.stringify(event.columns),
-  //       },
-  //       tableName
-  //     )
-  //   );
-  // };
+  const columnReorder = (event: GridColumnReorderEvent) => {
+    let dataColumns = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.orderIndex = columnObject?.orderIndex;
+      return column;
+    });
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
 
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
 
@@ -418,6 +467,8 @@ export function KendoPanel<T extends any>({
           {...dataState}
           onExpandChange={onExpandChange}
           expandField="expanded"
+          onColumnResize={columnResize}
+          onColumnReorder={columnReorder}
         >
           <GridToolbar>
             <Grid
@@ -439,7 +490,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {gridConfiguration.columns.map((column, idx) => {
+          {sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => {
             if (column.show === true) {
               return columnRenderer(column, idx);
             } else {

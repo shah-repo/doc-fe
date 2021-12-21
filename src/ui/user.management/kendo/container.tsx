@@ -8,7 +8,7 @@ import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { HOME_URL } from "../../constants/urls";
 import useDidMount from "../../hooks/useDidMount";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import KendoPresenter from "./kendogrid.presenter";
+import KendoPresenter from "./presenter";
 
 const UserManagementKendoContainer: React.FunctionComponent = () => {
   const didMount = useDidMount();

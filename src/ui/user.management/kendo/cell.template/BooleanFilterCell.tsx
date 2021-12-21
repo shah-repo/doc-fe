@@ -1,5 +1,5 @@
 import React from "react";
-import gridConfiguration from "../kendogrid.column.definition";
+import gridConfiguration from "../column.definition";
 import { DropdownFilterCell } from "./dropdown";
 
 export const BooleanFilterCell = (props: any) => (

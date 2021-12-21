@@ -1,12 +1,4 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
-import { ActiveCell } from "./cell_template/activeCell";
-import { BooleanFilterCell } from "./cell_template/booleanFilterCell";
-import { CommandCell } from "./cell_template/commandCell";
-import { EmailCell } from "./cell_template/emailCell";
-import { GroupDropdown } from "./cell_template/groupDropdown";
-import { GroupsCell } from "./cell_template/groupsCell";
-import { NameCell } from "./cell_template/nameCell";
-import { SignedCell } from "./cell_template/signedCell";
 
 const columns = [
   {
@@ -15,7 +7,6 @@ const columns = [
     show: true,
     filterable: false,
     groupable: false,
-    cell: CommandCell,
     width: "80px",
   },
   {
@@ -24,7 +15,6 @@ const columns = [
     show: true,
     filterable: false,
     groupable: true,
-    cell: SignedCell,
   },
   {
     field: "user.name",
@@ -32,7 +22,6 @@ const columns = [
     show: true,
     filter: "text",
     groupable: true,
-    cell: NameCell,
   },
   {
     field: "user.email",
@@ -40,23 +29,18 @@ const columns = [
     show: true,
     filter: "text",
     groupable: true,
-    cell: EmailCell,
   },
   {
     field: "groups",
     title: "GROUPS",
     show: true,
     groupable: true,
-    filterCell: GroupDropdown,
-    cell: GroupsCell,
   },
   {
     field: "active",
     title: "ACTIVE",
     show: true,
     filter: "boolean",
-    filterCell: BooleanFilterCell,
-    cell: ActiveCell,
   },
 ];
 

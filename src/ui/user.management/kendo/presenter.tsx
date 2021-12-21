@@ -14,9 +14,9 @@ import useAsync from "../../hooks/useAsync";
 import { DropboxResponse } from "../profile/dialog/DialogContent";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
-import gridConfiguration from "./kendogrid.column.definition";
-import KendoGridStyles from "./kendogrid.styles";
+import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
+import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;

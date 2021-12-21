@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import KendoGridStyles from "../kendogrid.styles";
+import KendoGridStyles from "../styles";
 
 export const GroupsCell = (props) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
