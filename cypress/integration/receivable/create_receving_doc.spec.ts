@@ -643,6 +643,7 @@ context("Create receivable test", () => {
         it("Check there is two open PO-s available to select", () => {
           SystemRequirement("REQ-1790");
           cy.recCheckNumberOfAvailablePo({ numberOfOpenPOs: 2 });
+          cy.unClick();
         });
       });
 
