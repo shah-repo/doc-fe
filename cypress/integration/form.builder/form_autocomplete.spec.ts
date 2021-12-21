@@ -18,7 +18,7 @@ let equipmentDocumentType;
 let materialsDocumentType;
 let partDocumentType;
 let equipmentDocument;
-let materialsDocument;
+let partDocument;
 let createdPOFormDocument;
 let formDocumentType;
 let purchaseOrderDocumentType;
@@ -386,9 +386,9 @@ context("Autocomplete test", () => {
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
-        materialsDocument = response;
+        partDocument = response;
         cy.drAPIApproveAndRelease({
-          documentId: materialsDocument.id,
+          documentId: partDocument.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -401,7 +401,7 @@ context("Autocomplete test", () => {
       });
     });
 
-    it("[API]Create part document", () => {
+    it("[API]Create part document", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -429,6 +429,19 @@ context("Autocomplete test", () => {
         },
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdMaintenanceRecordFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdMaintenanceRecordFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
       });
     });
 
@@ -1267,7 +1280,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Approval requests' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 9 });
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
     });
 
     it("Verify count of 'Approvers' in the list", () => {
@@ -1351,10 +1364,9 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document Revisions In Draft without Records' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-draft", length: 2 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-draft", length: 1 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "CP-00001")
         .and("contain", "Clinical protocol document");
-      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
     it("Verify count of 'Approval Roles' in the list", () => {
