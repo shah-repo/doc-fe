@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid, Typography } from "@material-ui/core";
-import { DataResult, orderBy, process, State } from "@progress/kendo-data-query";
+import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -30,6 +30,7 @@ import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
+import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -80,8 +81,6 @@ export function KendoPanel<T extends any>({
     );
   };
   const gridConfiguration = columns;
-  const initialGridConfiguration: { columns: any[] } = { ...gridConfiguration };
-
   // Check if the Column config available in State, if so prefer what is available in State
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
@@ -375,12 +374,9 @@ export function KendoPanel<T extends any>({
     />
   );
 
-  // check if document is editable or readonly
-  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
-
   // On Grid Row click
-  const onRowClick = (rowData) => {
-    if (canEdit(rowData.dataItem)) {
+  const onRowClick = (rowData: { dataItem: DocumentRevision }) => {
+    if (canEditDocumentRevision(rowData.dataItem)) {
       editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
     }
     previewDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
@@ -451,19 +447,7 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const sortedColumnDefinitions: any[] = orderBy(
-    [...columnDefinitions],
-    [{ field: "locked", dir: "desc" }]
-  );
-  sortedColumnDefinitions.forEach((data, index) => {
-    const stateFilerObject =
-      initialGridConfiguration &&
-      find(initialGridConfiguration?.columns, { field: data.field });
-    data.reorderable = !data.locked;
-    data.sortable = !data.locked;
-    data.orderIndex = data.locked ? 0 : data.orderIndex;
-    data.groupable = data.locked ? !data.locked : stateFilerObject?.groupable;
-  });
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
   const clearFilter = () => setSearchStatus();
   const renderKendoGrid = () => (
     <>

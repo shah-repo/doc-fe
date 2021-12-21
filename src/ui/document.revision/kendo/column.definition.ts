@@ -1,4 +1,5 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { chain } from "lodash";
 import { KendoCellTemplates } from "../../components/common/kendo.column.templates/types";
 import { DocumentListColumnsInterface } from "./types";
 
@@ -12,7 +13,7 @@ const columns: DocumentListColumnsInterface[] = [
     width: "200px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 0,
+    orderIndex: 1,
   },
   {
     field: "displayRevision",
@@ -23,7 +24,7 @@ const columns: DocumentListColumnsInterface[] = [
     width: "200px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 1,
+    orderIndex: 2,
   },
   {
     field: "name",
@@ -34,7 +35,7 @@ const columns: DocumentListColumnsInterface[] = [
     width: "400px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 2,
+    orderIndex: 3,
   },
   {
     field: "document.documentType.documentTypeAcronym",
@@ -45,7 +46,7 @@ const columns: DocumentListColumnsInterface[] = [
     width: "200px",
     groupable: true,
     showColumnMenu: true,
-    orderIndex: 3,
+    orderIndex: 4,
   },
   {
     field: "owner.user.name",
@@ -57,7 +58,7 @@ const columns: DocumentListColumnsInterface[] = [
     groupable: true,
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
-    orderIndex: 4,
+    orderIndex: 5,
   },
   {
     field: "changeRequest.crId",
@@ -68,7 +69,7 @@ const columns: DocumentListColumnsInterface[] = [
     width: "200px",
     groupable: false,
     showColumnMenu: true,
-    orderIndex: 5,
+    orderIndex: 6,
   },
   {
     field: "displayStatus",
@@ -77,10 +78,9 @@ const columns: DocumentListColumnsInterface[] = [
     locked: false,
     width: "200px",
     groupable: true,
-    // filterCell: DisplayStatusFilterCell,
     cell: KendoCellTemplates.STATUS,
     showColumnMenu: true,
-    orderIndex: 6,
+    orderIndex: 7,
   },
   {
     field: "effectiveDate",
@@ -91,24 +91,11 @@ const columns: DocumentListColumnsInterface[] = [
     width: "150px",
     groupable: false,
     format: "{0:d}",
-    // cell: KendoDateCell,
     showColumnMenu: true,
-    orderIndex: 7,
+    orderIndex: 8,
   },
 ];
 
-const statusToClassMapping = {
-  "Released": "statusReleased",
-  "Draft": "statusDraft",
-  "In Review": "statusReview",
-  "Pending Change": "statusPendingChange",
-};
-// TODO: Get List Dynamic for now added static datasource
-const typeFilteDS = ["ADM", "AR", "DAM",  "DD", "DFM", "ES", "FM", "LFPO", "LHRT", "MPI", "MT", "NAD", "NCO"];
-interface PageState {
-  skip: number;
-  take: number;
-}
 const pagerSettings: GridPagerSettings = {
   buttonCount: 5,
   info: true,
@@ -117,14 +104,10 @@ const pagerSettings: GridPagerSettings = {
   previousNext: true,
 };
 
-const initialDataState: PageState = { skip: 0, take: 25 };
-
 const gridConfiguration = {
+  groupableFields: chain(columns).filter({ groupable: true }).map("field").value(),
   columns,
   pagerSettings,
-  initialDataState,
-  statusToClassMapping,
-  typeFilteDS,
 };
 
 export default gridConfiguration;
