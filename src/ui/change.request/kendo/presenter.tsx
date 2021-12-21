@@ -31,9 +31,9 @@ const KendoGridList: React.FunctionComponent<any> = ({
         <KendoPanel<ChangeRequest>
           gridConfiguration={gridConfiguration}
           tableName={tableName}
-          queryUrl={CHANGE_REQUEST_ROOT_URL}
           gridData={data}
           tableCriteria={tableCriteria}
+          queryUrl={CHANGE_REQUEST_ROOT_URL}
           customDataSet={customDataSet}
           statuses={statuses}
           currentUserEmail={currentUserEmail}
