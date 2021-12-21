@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-import { isEmpty, set } from "lodash";
+import { isEmpty, map, set } from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
@@ -18,7 +18,6 @@ import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { checkIfDocumentHasOptions } from "../../documentRevision/helpers/checkDocumentGroup";
 import useDialog from "../../hooks/useDialog";
 import ExportListDialog from "../list/ExportListDialog/ExportListDialog";
-import { documentRevisionEffectiveDateOption } from "../utils/helpers";
 import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
 import KendoGridStyles from "./styles";
@@ -45,34 +44,12 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   const classes = KendoGridStyles();
 
   const dialog = useDialog();
-  const documentTypeSearchName = documentTypeOptions.find(
-    (e) => e.value === tableCriteria.queryDict.documentTypeId
-  )?.text;
-  const effectiveDateSearch = documentRevisionEffectiveDateOption().find(
-    (e) => e.value === tableCriteria.queryDict.effectiveDate
-  )?.text;
-  const headers = [
-    { label: `DOC ID: ${tableCriteria.queryDict.docId || ""}`, key: "docId" },
-    {
-      label: `REVISION: ${tableCriteria.queryDict.displayRevision || ""}`,
-      key: "displayRevision",
-    },
-    {
-      label: `DOCUMENT TITLE: ${tableCriteria.queryDict.name || ""}`,
-      key: "documentTitle",
-    },
-    { label: `TYPE: ${documentTypeSearchName || ""}`, key: "type" },
-    { label: `OWNER: ${tableCriteria.queryDict.owner || ""}`, key: "owner" },
-    { label: `AR ID: ${tableCriteria.queryDict.crId || ""}`, key: "crId" },
-    {
-      label: `STATUS: ${tableCriteria.queryDict.displayStatus || ""}`,
-      key: "status",
-    },
-    {
-      label: `EFFECTIVE DATE: ${effectiveDateSearch || ""}`,
-      key: "effectiveDate",
-    },
-  ];
+
+  const headers = map(gridConfiguration.columns, (column) => ({
+    label: column.title,
+    key: column.field,
+  }));
+
   const renderTableData = () => {
     if (!isEmpty(data)) {
       return data.map((e) => ({
@@ -141,7 +118,7 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          data={data}
+          data={exportData}
           {...{ dialog, headers  }}
           customFileName="DocumentList"
         />
