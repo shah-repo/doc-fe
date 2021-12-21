@@ -1,14 +1,10 @@
+import { Box, Grid, Typography } from "@material-ui/core";
 import {
-  Box,
-  FormControl,
-  Grid,
-  IconButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@material-ui/core";
-import { DataResult, orderBy, process, State } from "@progress/kendo-data-query";
+  DataResult,
+  orderBy,
+  process,
+  State,
+} from "@progress/kendo-data-query";
 import {
   // setExpandedState,
   setGroupIds,
@@ -40,11 +36,6 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import { default as React, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-// import { DropdownFilterCell } from "./column.filter.formatter/dropdown.filter.cell";
-// import { AutoSizer } from "react-virtualized";
-import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
-import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
-import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -54,6 +45,7 @@ import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -86,7 +78,8 @@ export function KendoGrid<T extends any>({
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
-  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } = tableCriteria;
+  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } =
+    tableCriteria;
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const queryData = providedData;
   const classes = GridStyles();
@@ -142,7 +135,7 @@ export function KendoGrid<T extends any>({
     // Put Initial column configuration in store
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
-  const initialGridConfigurationColumns = [ ...configColumns ];
+  const initialGridConfigurationColumns = [...configColumns];
   const formatParams = () => {
     const params: any = {};
     if (!queryDict) {
@@ -341,31 +334,13 @@ export function KendoGrid<T extends any>({
     },
     [queryData]
   );
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const [columnDefinitions, setColumnDefinitions] =
     React.useState(configColumns);
   useEffect(() => {
     setColumnDefinitions(configColumns);
   }, [tableName]);
 
-  const onChange = (item: any) => {
-    const dataColumns = [...columnDefinitions];
-    dataColumns.map((c, i) => {
-      if (c.field === item.field) {
-        c.show = !c.show;
-      }
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-  };
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
       let dataColumns = [...columnDefinitions];
@@ -396,9 +371,10 @@ export function KendoGrid<T extends any>({
     return foundObj?.length ? foundObj[0].filterCell : undefined;
   };
 
-  const sortedColumnDefinitions: any[] = orderBy([...columnDefinitions], [
-    { field: "locked", dir: "desc" },
-  ]);
+  const sortedColumnDefinitions: any[] = orderBy(
+    [...columnDefinitions],
+    [{ field: "locked", dir: "desc" }]
+  );
   sortedColumnDefinitions.forEach((data, index) => {
     const stateFilerObject =
       initialGridConfigurationColumns &&
@@ -462,6 +438,17 @@ export function KendoGrid<T extends any>({
     }
   };
 
+  const onColumnShowHide = (item: any) => {
+    const updatedDataColumns = map([...columnDefinitions], (column) => {
+      if (column.field === item.field) {
+        column.show = !column.show;
+      }
+      return column;
+    });
+    setColumnDefinitions(updatedDataColumns);
+    updateDataColumnsState(updatedDataColumns);
+  };
+
   const renderTable = () => (
     <>
       {isLoading && <Loader />}
@@ -493,63 +480,12 @@ export function KendoGrid<T extends any>({
               <Grid xs item>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item>
-                <FormControl variant="outlined">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <ViewGridIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.columnsCus}
-                              color="textPrimary"
-                            >
-                              Columns
-                            </Typography>
-                          </>
-                        }
-                      ></ListItemText>
-                    </MenuItem>
-                    {/* TODO: Add Column configuration */}
-                    {configColumns.map((item: any) =>
-                      item.field !== "docID" ? (
-                        <MenuItem key={item.title} value={item.field}>
-                          <ListItemText id={item.field} primary={item.title} />
-                          <Box flexGrow={1} mr={5}></Box>
-                          {item.show ? (
-                            <SolidIcon
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          ) : (
-                            <ViewChecked
-                              onClick={() => {
-                                onChange(item);
-                              }}
-                            />
-                          )}
-                        </MenuItem>
-                      ) : null
-                    )}
-                  </Menu>
-                </FormControl>{" "}
+              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+                <ColumnShowHideMenu
+                  restrictedColumns={["document.docId"]}
+                  columnDefinition={sortedColumnDefinitions}
+                  onChange={onColumnShowHide}
+                />
               </Grid>
             </Grid>
           </GridToolbar>
