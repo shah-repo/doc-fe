@@ -14,7 +14,7 @@ import { documentRevisionEffectiveDateOption } from "../../document.revision/uti
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
 // import CreateDocumentByType from "../list/CreateDocumentByType";
-import { KendoGrid } from "./kendoPanel";
+import { KendoGrid } from "./KendoPanel_temp";
 import KendoGridStyles from "./styles";
 
 interface Props {
