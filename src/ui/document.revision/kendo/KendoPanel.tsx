@@ -56,7 +56,7 @@ let call: CancelTokenSource;
 export function KendoPanel<T extends any>({
   gridConfiguration,
   queryUrl = "",
-  statuses,
+  statuses = [],
   customDataSet,
   tableName,
   rootCustomStyle,
