@@ -6,12 +6,12 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   // setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as Kgrid,
@@ -22,7 +22,7 @@ import {
   GridExpandChangeEvent,
   GridNoRecords,
   // GridFilterCellProps,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig } from "axios";
 import {
@@ -34,7 +34,7 @@ import {
   merge,
   omit,
   pick,
-  set
+  set,
 } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
@@ -47,7 +47,7 @@ import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
 // import { useLocation } from "react-router-dom";
 import {
-  getTableCriteria
+  getTableCriteria,
 } from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -65,7 +65,7 @@ import Text from "../../components/Text";
 import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
 import {
   documentEditPath,
-  documentPreviewPath
+  documentPreviewPath,
 } from "../../document.revision/utils/paths";
 import useDidMount from "../../hooks/useDidMount";
 import GridStyles from "./styles";
