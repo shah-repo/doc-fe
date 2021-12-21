@@ -34,8 +34,6 @@ export interface KendoPanelProps<T> {
   columns: any;
   statuses: any;
   createUrl?: string;
-  dialog?: any;
-  headers?: any;
   data?: any;
   noRowsTranslation?: Translation;
   cellMeasure?: boolean;
@@ -53,6 +51,7 @@ export interface KendoPanelProps<T> {
   editDocumentRevision?: any;
   previewDocumentRevision?: any;
   documentTypeOptions: any[];
+  tableCriteria: any;
 }
 
 // Document List Landing Paging Grid Columns

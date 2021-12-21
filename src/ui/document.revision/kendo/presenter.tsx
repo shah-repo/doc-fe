@@ -134,14 +134,11 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
       </Grid>
       <Grid item={true} xs={12}>
         <KendoPanel<DocumentRevision>
+          tableCriteria={tableCriteria}
           columns={gridConfiguration}
           queryUrl={DOCUMENT_REVISION_ROOT_URL}
-          createUrl={DOCUMENT_REVISION_CREATE_URL}
-          data={exportData}
-          dialog={dialog}
-          headers={headers}
+          data={data}
           customDataSet={customDataSet}
-          sortBy={"docId"}
           tableName={tableName}
           normalizrSchema={[docRevSch]}
           statuses={statuses}

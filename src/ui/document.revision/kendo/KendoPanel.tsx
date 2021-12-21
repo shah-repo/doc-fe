@@ -20,14 +20,10 @@ import { each, find, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
-import {
-  getTableCriteria,
-  getTableData,
-} from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -62,13 +58,14 @@ export function KendoPanel<T extends any>({
   editDocumentRevision,
   previewDocumentRevision,
   documentTypeOptions,
+  tableCriteria,
+  data,
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
   const [isLoading, setIsLoading] = useState(false);
-  const tableCriteria = useSelector(getTableCriteria(tableName));
-  const tableData = useSelector(getTableData(tableName));
+  const tableData = data;
 
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
