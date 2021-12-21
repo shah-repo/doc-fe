@@ -30,7 +30,10 @@ import {
   each,
   find,
   get,
-  map, merge, omit, pick,
+  map,
+  merge,
+  omit,
+  pick,
   set,
 } from "lodash";
 import { denormalize } from "normalizr";
@@ -83,7 +86,8 @@ export function KendoGrid<T extends any>({
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
-  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } = tableCriteria;
+  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } =
+    tableCriteria;
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const queryData = providedData;
   const classes = GridStyles();
@@ -145,7 +149,7 @@ export function KendoGrid<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
-    if (!queryDict ) {
+    if (!queryDict) {
       return;
     }
     Object.entries(queryDict).forEach(([key, value]) => {
@@ -449,7 +453,7 @@ export function KendoGrid<T extends any>({
 
   const renderTable = () => (
     <>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
       <KendoGlobalization>
         <Kgrid
           className={classes.kGrid}
