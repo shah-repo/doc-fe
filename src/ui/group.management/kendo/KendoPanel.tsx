@@ -12,6 +12,7 @@ import {
   GridCellProps,
   GridColumn,
   GridColumnReorderEvent,
+  GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
@@ -35,6 +36,8 @@ import {
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import Loader from "../../components/common/kendo/Loader";
+import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -147,9 +150,9 @@ export function KendoPanel<T extends any>({
     };
     handleCreate(payload);
   };
-  gridConfiguration.columns.forEach((column) => {
+  gridConfiguration.columns.forEach((column: KendoColumn) => {
     const foundObj = initialColumnsConfig.find(
-      (initialColumn) => initialColumn.field === column.field
+      (initialColumn: KendoColumn) => initialColumn.field === column.field
     );
     // further update all column fields here
     if (foundObj) {
@@ -426,12 +429,12 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  const loadingPanel = isLoading && (
-    <div className={`k-loading-mask ${classes.loading}`}>
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>
-  );
+  // const loadingPanel = isLoading && (
+  //   <div className={`k-loading-mask ${classes.loading}`}>
+  //     <div className="k-loading-image"></div>
+  //     <div className="k-loading-color"></div>
+  //   </div>
+  // );
   const result = setExpandedState({
     data: processWithGroups(tableData, initialKendoConfig).data,
     collapsedIds: collapsedState,
@@ -459,7 +462,7 @@ export function KendoPanel<T extends any>({
     [collapsedState]
   );
   const clearFilter = () => setSearchStatus();
-  const columnRenderer = (column: any, index: React.Key | undefined) => (
+  const columnRenderer = (column: KendoColumn, index: React.Key | undefined) => (
     <GridColumn
       key={index}
       field={column.field}
@@ -474,9 +477,9 @@ export function KendoPanel<T extends any>({
     />
   );
 
-  const columnResize = (event) => {
-    let dataColumns = [...gridConfiguration.columns];
-    dataColumns = map(dataColumns, (column) => {
+  const columnResize = (event: GridColumnResizeEvent) => {
+    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.width = columnObject?.width;
       return column;
@@ -493,8 +496,8 @@ export function KendoPanel<T extends any>({
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns = [...gridConfiguration.columns];
-    dataColumns = map(dataColumns, (column) => {
+    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
@@ -594,7 +597,7 @@ export function KendoPanel<T extends any>({
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader/>}
     </>
   );
   return (
