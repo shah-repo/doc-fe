@@ -45,10 +45,7 @@ Cypress.Commands.add("trSelectFirstDocument", () => {
 Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string }) => {
   cy.trClearFiltersNoWait();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-    cy.get("#docRevTitle").arrowType(params.title);
-    cy.listLoadingElementShouldAppear();
-  });
+  cy.trLandingPageDocRevTitle({ title: params.title });
   cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
 });
 
@@ -60,7 +57,7 @@ Cypress.Commands.add("trClearFilters", () => {
 });
 
 Cypress.Commands.add("trClearFiltersNoWait", () => {
-  cy.get("button[data-cy=clearFilter]").arrowClick();
+  cy.get("button[data-cy=clearFilter]").arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
