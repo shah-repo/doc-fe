@@ -65,7 +65,6 @@ export function KendoPanel<T extends any>({
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
   const [isLoading, setIsLoading] = useState(false);
-  const tableData = data;
 
   const updateDataColumnsState = (dataColumns) => {
     dispatch(
@@ -252,7 +251,7 @@ export function KendoPanel<T extends any>({
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(tableData, initialDataState)
+    processWithGroups(data, initialDataState)
   );
   const result = setExpandedState({
     data: resultState.data,
@@ -290,14 +289,13 @@ export function KendoPanel<T extends any>({
   const [fireAPI, setFireAPI] = useState(true);
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(tableData, event.dataState);
-
+      const newDataState = processWithGroups(data, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
     },
-    [tableData]
+    [data]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
