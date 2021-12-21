@@ -1,8 +1,7 @@
+/* eslint-disable no-console */
 import { Box, Grid, Typography } from "@material-ui/core";
 import {
-  DataResult,
-  orderBy,
-  process,
+  DataResult, process,
   State,
 } from "@progress/kendo-data-query";
 import {
@@ -46,6 +45,7 @@ import { getCellTemplate } from "../../components/common/kendo.column.templates/
 import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
+import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -136,6 +136,7 @@ export function KendoGrid<T extends any>({
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
   const initialGridConfigurationColumns = [...configColumns];
+  const gropableColumnFields = initialGridConfigurationColumns.map((column) => column.field);
   const formatParams = () => {
     const params: any = {};
     if (!queryDict) {
@@ -371,19 +372,7 @@ export function KendoGrid<T extends any>({
     return foundObj?.length ? foundObj[0].filterCell : undefined;
   };
 
-  const sortedColumnDefinitions: any[] = orderBy(
-    [...columnDefinitions],
-    [{ field: "locked", dir: "desc" }]
-  );
-  sortedColumnDefinitions.forEach((data, index) => {
-    const stateFilerObject =
-      initialGridConfigurationColumns &&
-      find(initialGridConfigurationColumns, { field: data.field });
-    data.reorderable = !data.locked;
-    data.sortable = !data.locked;
-    data.orderIndex = data.locked ? 0 : data.orderIndex;
-    data.groupable = data.locked ? !data.locked : stateFilerObject?.groupable;
-  });
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gropableColumnFields);
 
   const renderColumns = () =>
     sortedColumnDefinitions.map((column, index) => {
