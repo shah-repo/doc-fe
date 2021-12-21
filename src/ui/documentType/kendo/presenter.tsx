@@ -106,6 +106,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           tableName={tableName}
           normalizrSchema={[docRevSch]}
           providedData={providedData}
+          tableCriteria={tableCriteria}
         />
       </Grid>
     </Grid>

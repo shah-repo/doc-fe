@@ -30,25 +30,18 @@ import {
   each,
   find,
   get,
-  map,
-  merge,
-  omit,
-  pick,
+  map, merge, omit, pick,
   set,
 } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import { default as React, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { DropdownFilterCell } from "./column.filter.formatter/dropdown.filter.cell";
 // import { AutoSizer } from "react-virtualized";
 import { ReactComponent as ViewGridIcon } from "../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../assets/images/view_checked.svg";
-// import { useLocation } from "react-router-dom";
-import {
-  getTableCriteria,
-} from "../../../common/utils/selectors";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -58,9 +51,9 @@ import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import Loader from "../../components/common/kendo/Loader";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
-import { TablePanelProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
 import {
@@ -69,11 +62,12 @@ import {
 } from "../../document.revision/utils/paths";
 import useDidMount from "../../hooks/useDidMount";
 import GridStyles from "./styles";
+import { KendoPanelProps } from "./types";
 
 interface CreateExport {
   dynamicColumns?: any;
 }
-type Props<T> = TablePanelProps<T> & CreateExport;
+type Props<T> = KendoPanelProps<T> & CreateExport;
 let call;
 
 export function KendoGrid<T extends any>({
@@ -82,13 +76,14 @@ export function KendoGrid<T extends any>({
   providedData,
   queryUrl,
   normalizrSchema,
+  tableCriteria,
   customDataSet,
 }: Props<T>) {
   const dispatch = useDispatch();
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
-  const tableCriteria = useSelector(getTableCriteria(tableName));
+  const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } = tableCriteria;
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
   const queryData = providedData;
   const classes = GridStyles();
@@ -138,8 +133,8 @@ export function KendoGrid<T extends any>({
     temp.push(pick(o, list));
   });
 
-  if (tableCriteria && tableCriteria?.columnConfig) {
-    const savedconfig = JSON.parse(tableCriteria?.columnConfig);
+  if (columnConfig) {
+    const savedconfig = JSON.parse(columnConfig);
     savedconfig.forEach((o: any, i) => {
       configColumns.push(merge(temp[i], omit(o, omitList)));
     });
@@ -150,10 +145,10 @@ export function KendoGrid<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
-    if (!tableCriteria.queryDict) {
+    if (!queryDict ) {
       return;
     }
-    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
+    Object.entries(queryDict).forEach(([key, value]) => {
       if (key.startsWith("dynamicParams")) {
         set(params, key, value);
       } else {
@@ -278,15 +273,15 @@ export function KendoGrid<T extends any>({
     if (didMount) {
       queryApi();
     }
-  }, [tableCriteria.queryDict, didMount, tableName]);
+  }, [queryDict, didMount, tableName]);
 
   useEffect(() => {
-    if (tableCriteria.forceUpdate) {
+    if (forceUpdate) {
       queryApi();
     }
-  }, [tableCriteria.forceUpdate]);
+  }, [forceUpdate]);
 
-  const kendoConfigFromState = tableCriteria?.kendoConfig;
+  const kendoConfigFromState = kendoConfig;
   const initialDataState: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : { skip: 0, take: 25, group: [] };
@@ -451,17 +446,10 @@ export function KendoGrid<T extends any>({
       setResultState(newDataState);
     }
   };
-  // Kendo Loader
-  const loadingPanel = isLoading && (
-    <div className={`k-loading-mask`}>
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>
-  );
 
   const renderTable = () => (
     <>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader/>}
       <KendoGlobalization>
         <Kgrid
           className={classes.kGrid}
@@ -558,7 +546,7 @@ export function KendoGrid<T extends any>({
   );
   return (
     <Box>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+      <div style={{ color: "red" }}>{apiError}</div>
       {renderTable()}
     </Box>
   );
