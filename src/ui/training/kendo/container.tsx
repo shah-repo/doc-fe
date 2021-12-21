@@ -19,7 +19,7 @@ const KendoContainer: React.FunctionComponent<Props> = () => {
     <KendoGridList
       tableName={TABLE_NAME}
       columns={gridConfiguration}
-      data={tableData}
+      gridData={tableData}
       tableCriteria={tableCriteria}
     />
   );

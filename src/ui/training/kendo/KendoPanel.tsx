@@ -8,7 +8,6 @@ import {
   State,
 } from "@progress/kendo-data-query";
 import {
-  // setExpandedState,
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
@@ -16,6 +15,7 @@ import {
   GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
+  GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
@@ -30,6 +30,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
@@ -42,6 +43,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -56,16 +58,15 @@ import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
-import { KendoPanelProps } from "./types";
 
 type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  columns, // its grid configuration
+  gridConfiguration, // its grid configuration
   queryUrl = "",
-  data,
+  gridData,
   tableName,
   tableCriteria,
   rootCustomStyle,
@@ -77,9 +78,8 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const [fireAPI, setFireAPI] = useState(true);
   const { columnConfig, kendoConfig } = tableCriteria;
-  const gridConfiguration = columns;
 
-  const updateDataColumnsState = (dataColumns) => {
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -227,7 +227,7 @@ export function KendoPanel<T extends any>({
         }
         data = map(data, (record) =>
           pick(record, [
-            ...map(columns.columns, "field"),
+            ...map(gridConfiguration.columns, "field"),
             "id",
             "trId",
             "owner.user.avatar",
@@ -277,14 +277,14 @@ export function KendoPanel<T extends any>({
   };
 
   // Kendo Helper Methods
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(data, initialKendoConfig)
+    processWithGroups(gridData, initialKendoConfig)
   );
 
   const trainingDetailsDialog = useDialog();
@@ -320,7 +320,7 @@ export function KendoPanel<T extends any>({
     setKendoDropdownFilter(updatedFilter);
     setFireAPI(true);
   };
-  const setSearchStatus = (state?: any, isClearAll?: boolean) => {
+  const setSearchStatus = (state?: ChangeRequestStatus | undefined, isClearAll?: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: state && !isClearAll ? [] : [],
@@ -366,19 +366,19 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  const onRowClick = (rowData: any) => {
+  const onRowClick = (rowData: { dataItem: TrainingRecordQuery }) => {
     trainingDetailsDialog.open();
     setTraining(rowData.dataItem);
   };
   const onDataStateChange = useCallback(
-    (event: any) => {
-      const newDataState = processWithGroups(data, event.dataState);
+    (event: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(gridData, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
     },
-    [data]
+    [gridData]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
@@ -394,7 +394,7 @@ export function KendoPanel<T extends any>({
   );
 
   // On Show / Hide Column From Main Menu
-  const onColumnShowHide = (item: any) => {
+  const onColumnShowHide = (item: KendoColumn) => {
     const dataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
@@ -434,7 +434,7 @@ export function KendoPanel<T extends any>({
     React.useState(initialCompletedOnSelectedOption);
 
 
-  const setKendoDropdownFilter = (dropdownConfig: any) => {
+  const setKendoDropdownFilter = (dropdownConfig) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -498,7 +498,7 @@ export function KendoPanel<T extends any>({
     }
   };
 
-  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, columns.groupableFields);
+  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gridConfiguration.groupableFields);
   // Render Kendo Columns
   const columnRenderer = (column: any, index: React.Key | undefined) => (
     <GridColumn
@@ -573,7 +573,6 @@ export function KendoPanel<T extends any>({
                     />
                   </Dialog>
                 )}
-                {/* </Grid> */}
               </Grid>
             </Grid>
           </GridToolbar>

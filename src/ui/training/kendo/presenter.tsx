@@ -8,28 +8,24 @@ import {
   MomentFormats,
 } from "../../../common/utils/date";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
-import { TrainingListData } from "../../../state/ducks/training/types";
-import {
-  TableDataProps,
-  TablePanelStateProps,
-} from "../../components/table/types";
+import { KendoGridConfiguration, KendoGridCriteria } from "../../components/common/kendo/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import useDialog from "../../hooks/useDialog";
 import { KendoPanel } from "./KendoPanel";
 import KendoGridStyles from "./styles";
 
-interface Props {
+interface Props<T> {
   tableName: string;
-  data: TableDataProps<TrainingListData>;
-  columns: any;
-  tableCriteria: TablePanelStateProps;
+  gridData: T[];
+  columns: KendoGridConfiguration;
+  tableCriteria: KendoGridCriteria;
 }
 
-export const KendoGridList: React.FunctionComponent<Props> = ({
+export const KendoGridList: React.FunctionComponent<Props<any>> = ({
   tableName,
   tableCriteria,
-  data,
+  gridData,
   columns,
 }) => {
   const classes = KendoGridStyles();
@@ -41,8 +37,8 @@ export const KendoGridList: React.FunctionComponent<Props> = ({
   }));
 
   const renderTableData = () => {
-    if (!isEmpty(data)) {
-      return data.map((e) => ({
+    if (!isEmpty(gridData)) {
+      return gridData.map((e) => ({
         trId: e.trId,
         docId: e.trainingPlan.document.docId,
         revision: e.documentRevision.displayRevision,
@@ -92,11 +88,11 @@ export const KendoGridList: React.FunctionComponent<Props> = ({
       </Grid>
       <Grid item={true} xs={12}>
         <KendoPanel
-          columns={columns}
-          queryUrl={TRAINING_RECORD_ROOT_URL}
-          data={data}
+          gridConfiguration={columns}
+          gridData={gridData}
           tableName={tableName}
           tableCriteria={tableCriteria}
+          queryUrl={TRAINING_RECORD_ROOT_URL}
           normalizrSchema={[docRevSch]}
         />
       </Grid>
