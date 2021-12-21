@@ -51,7 +51,7 @@ export interface KendoPanelProps<T> {
   tableName: string;
   gridData: T[];
   tableCriteria: KendoGridCriteria;
-  statuses: string[];
+  statuses?: string[];
   queryUrl?: string;
   customQuerySet?: (queryDict: KendoTableSearchQueryType) => KendoTableSearchQueryType;
   customDataSet?: (data: T[]) => T[];
