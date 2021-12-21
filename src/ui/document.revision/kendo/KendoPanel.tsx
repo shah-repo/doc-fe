@@ -94,8 +94,7 @@ export function KendoPanel<T extends any>({
     ? JSON.parse(kendoConfig)
     : {
       skip: 0, take: 25, group: [],
-      sort: [{ field: "document.docId", dir: "asc" }],
-      // Initial filter descriptor
+      sort: [],
       filter: {
         logic: "and",
         filters: [{ field: "displayStatus", operator: "eq", value: "Released" }],
