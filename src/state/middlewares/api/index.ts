@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { first, get, has, isArray, join } from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import { redirectTo } from "../../../common/redirectHandler";
-import { MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
+import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
 import { authActions } from "../../ducks/auth";
@@ -93,10 +93,12 @@ const apiMiddleware: Middleware = ({
     }
     const redirectToMaintenance = exception?.response?.status === 491 &&
       window.location.pathname !== MAINTENANCE &&
-      window.location.pathname !== STATUS;
+      window.location.pathname !== STATUS &&
+      window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
 
     const userLocked = exception?.response?.status === 423 &&
-      window.location.pathname !== USER_LOCKED;
+      window.location.pathname !== USER_LOCKED &&
+      window.location.pathname !== EXPORTED_FILE_DOWNLOAD;
 
     userLocked && redirectTo(USER_LOCKED)();
     redirectToMaintenance && redirectTo(MAINTENANCE)();

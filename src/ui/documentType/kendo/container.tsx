@@ -14,7 +14,7 @@ import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/docume
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
-import { KendoCellTemplates } from "../../components/common/kendo.column.templates/types";
+import { KendoCellTemplates } from "../../components/common/kendo/types";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";

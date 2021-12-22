@@ -1143,10 +1143,6 @@ context("LHR flow", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create lot document", () => {
@@ -1168,14 +1164,12 @@ context("LHR flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add lot title", () => {
       cy.drEnterDocumentTitle({ name: "Component specification lot document" });
-    });
-
-    it("Select 'Part document' in references", () => {
-      cy.drSelectReferences( "Material one" );
     });
 
     it("Enter quantity received", () => {
@@ -1186,9 +1180,10 @@ context("LHR flow", () => {
       cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
     });
 
-    it("Select 'Part document' for Part lot", () => {
-      cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+    it("Select 'Material one' for Part lot", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"lot_part\"]").arrowType("Material one");
+      cy.get("ul[role=listbox]>li").contains("Material one").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -1257,67 +1252,111 @@ context("LHR flow", () => {
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add attachment", () => {
           SystemRequirement("REQ-3090");
-          cy.contains("Step #1").parentsUntil("li")
-            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.elUploadAttachment({
-            fileName: "image.jpg",
-            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.contains("Step #1").parentsUntil("li")
+              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+            cy.elUploadAttachment({
+              fileName: "image.jpg",
+              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+            });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Material one' to step #1", () => {
           SystemRequirement("REQ-3100");
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Material parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
 
         it("Add 'Equipment one' to step #1", () => {
           SystemRequirement("REQ-3130");
-          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Equipment parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
       context("Fill step #2", () => {
         it("Add step #2", () => {
           SystemRequirement("REQ-3060");
-          cy.mpiAddStep();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddStep();
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add attachment", () => {
           SystemRequirement("REQ-3090");
-          cy.contains("Step #2").parentsUntil("li")
-            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.elUploadAttachment({
-            fileName: "test_image.jpg",
-            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.contains("Step #2").parentsUntil("li")
+              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+            cy.elUploadAttachment({
+              fileName: "test_image.jpg",
+              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+            });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Fill step #2 description", () => {
-          cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Material two' to step #2", () => {
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 2, material: "Material two", quntity: "5", unit: "Day(s)" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Equipment two' to step #2", () => {
-          cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentToStep({ numbOfStep: 2, equipment: "Equipment two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -1370,8 +1409,12 @@ context("LHR flow", () => {
 
         it("remove Step #2", () => {
           SystemRequirement("REQ-3080");
-          cy.contains("Step #2").parentsUntil("li").find("[data-cy=\"remove-schema-item\"]")
-            .arrowClick({ force: true });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.contains("Step #2").parentsUntil("li").find("[data-cy=\"remove-schema-item\"]")
+              .arrowClick({ force: true });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Check step count after remove", () => {
@@ -1437,9 +1480,11 @@ context("LHR flow", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         SystemRequirement("REQ-3131");
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Enable notes in LHR step", () => {
@@ -1453,7 +1498,11 @@ context("LHR flow", () => {
         });
 
         it("Save changes made to field", () => {
-          cy.get("[data-cy=\"common.add\"]").arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy=\"common.add\"]").arrowClick();
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -1462,10 +1511,12 @@ context("LHR flow", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -1481,19 +1532,25 @@ context("LHR flow", () => {
           cy.get("ul[role=listbox]>li").contains("Manufacturing Process Instructions Test").arrowClick();
           cy.get("[data-cy=\"editorConfig.filters.revisionStatus\"]").arrowClick();
           cy.get("ul[role=listbox]>li").contains("Released").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.fbAddNewFieldButton();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
           cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetAutocompleteOptions], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
+            CyRoutes.GetAutocompleteOptions,
+            CyRoutes.PatchDocRev], () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("input[data-cy^=\"lhr-step\"]").arrowType("MPI created with API{downarrow}{enter}", { force: true });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify indicator for parametrized Material", () => {
@@ -1516,9 +1573,21 @@ context("LHR flow", () => {
       context("Try to release LHRt without parameters expecting validation error", () => {
         it("Approve and release LHRt document", () => {
           SystemRequirement("REQ-3640");
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-          cy.checkToastMessageContains({ message: "Parameters from MPI are not defined" });
-          cy.get("[data-cy=ApproveAndRelease-cancelButton]").arrowClick();
+          cy.drApproveAndReleaseDialog();
+          cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.ReleaseDocRev,
+            () => {
+              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+            });
+        });
+
+        it("Verify error message", () => {
+          cy.checkToastMessageIsEqual({
+            message: "Parameters from MPI are not defined.",
+          });
+          cy.closeAllAlertMessages();
+          cy.drCloseApproveAndReleaseDialog();
         });
       });
 
