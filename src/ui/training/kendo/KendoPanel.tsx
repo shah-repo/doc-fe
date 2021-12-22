@@ -499,7 +499,10 @@ export function KendoPanel<T extends any>({
     }
   };
 
-  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gridConfiguration.groupableFields);
+  const sortedColumnDefinitions = orderByLockedState(
+    columnDefinitions,
+    gridConfiguration.groupableFields || []
+  );
   // Render Kendo Columns
   const columnRenderer = (column: KendoColumn, index: React.Key | undefined) => (
     <GridColumn
