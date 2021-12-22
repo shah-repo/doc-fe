@@ -32,11 +32,17 @@ export interface GridDropDownSettings {
   value: boolean;
 }
 
+export interface PageState {
+  skip: number;
+  take: number;
+  group?: any[];
+}
+
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
   pagerSettings: GridPagerSettings;
-  initialDataState? : any; // TODO: check
+  initialDataState? : PageState;
   booleanFilterCellOptions? : GridDropDownSettings[];
 }
 
