@@ -65,7 +65,7 @@ type Props<T> = KendoPanelProps<T>;
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  gridConfiguration, // its grid configuration
+  gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
   gridData,
   tableName,
