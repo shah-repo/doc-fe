@@ -437,7 +437,7 @@ export function KendoPanel<T extends any>({
 
   const sortedColumnDefinitions = orderByLockedState(
     columnDefinitions,
-    gridConfiguration.groupableFields
+    gridConfiguration.groupableFields || []
   );
 
   // Render Kendo Columns
