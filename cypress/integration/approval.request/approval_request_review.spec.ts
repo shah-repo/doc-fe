@@ -332,20 +332,24 @@ context("Approval request form scenario", () => {
       });
 
       it("Rejecting request gives prompt", () => {
-        cy.arRejectComfirmationAR();
+        // cy.arRejectComfirmationAR();
+        cy.arRejectComfirmationARNew();
       });
 
-      it("Verify message is shown if e-signature not met", () => {
-        SystemRequirement("REQ-0880");
-        cy.arVerifySignatureIsNotMet();
-        cy.closeAllAlertMessages();
-      });
+      // it("Verify message is shown if e-signature not met", () => {
+      //   SystemRequirement("REQ-0880");
+      //   cy.arVerifySignatureIsNotMet();
+      //   cy.closeAllAlertMessages();
+      // });
 
       it("Reject AR from dashboard", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-          cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+      // cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
+      // cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCRNew, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
+          cy.poRejectARNew({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         });
       });
+
     });
 
     context("Verify dashboard notification are not shown", () => {
@@ -417,7 +421,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveAR();
+        cy.arApproveARNew();
       });
     });
 
@@ -438,7 +442,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveAR();
+        cy.arApproveARNew();
       });
     });
   });

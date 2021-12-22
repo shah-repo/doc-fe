@@ -527,13 +527,19 @@ context("Mpi/Qpi flow", () => {
 
     context("Approve document in review", () => {
       it(`approve document`, () => {
-
-        cy.get("#root").contains("Approve").arrowClick();
+        // cy.get("#root").contains("Approve").arrowClick();
+        cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+        cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       });
 
       it("Confirm password", () => {
         cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        // cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        //   () => {
+        //     cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        //   });
+        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
@@ -647,8 +653,10 @@ context("Mpi/Qpi flow", () => {
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-
-        cy.get("#root").contains("Reject").arrowClick();
+        // cy.get("#root").contains("Reject").arrowClick();
+        cy.get(".MuiListItemText-dense").first().trigger("mouseover");
+        cy.get("[data-cy=transition-reject]").first().trigger("mouseover");
+        cy.get("[data-cy=transition-reject]").first().arrowClick({ force: true });
       });
 
       it("Confirm password", () => {
@@ -840,12 +848,18 @@ context("Mpi/Qpi flow", () => {
     context("Approve document in review", () => {
       it(`approve document`, () => {
 
-        cy.get("#root").contains("Approve").arrowClick();
+        // cy.get("#root").contains("Approve").arrowClick();
+        cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+        cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       });
-
       it("Confirm password", () => {
         cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        // cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        //   () => {
+        //     cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        //   });
+        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
@@ -959,8 +973,10 @@ context("Mpi/Qpi flow", () => {
 
     context("Reject document in review", () => {
       it(`Reject document`, () => {
-
-        cy.get("#root").contains("Reject").arrowClick();
+        // cy.get("#root").contains("Reject").arrowClick();
+        cy.get(".MuiListItemText-dense").first().trigger("mouseover");
+        cy.get("[data-cy=transition-reject]").first().trigger("mouseover");
+        cy.get("[data-cy=transition-reject]").first().arrowClick({ force: true });
       });
 
       it("Confirm password", () => {

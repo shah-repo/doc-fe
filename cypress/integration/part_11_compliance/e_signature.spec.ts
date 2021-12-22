@@ -424,16 +424,17 @@ context("E-signature test", () => {
 
     it("Add approvers to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+      cy.wait(2000);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+      cy.wait(2000);
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+      cy.wait(2000);
     });
-
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
-
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -449,17 +450,28 @@ context("E-signature test", () => {
     });
 
     it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      // cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+      // cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+      //   () => {
+      //     cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      //   });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+      // cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+      // cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -500,17 +512,25 @@ context("E-signature test", () => {
     });
 
     it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      // cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove],
+      // cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+      // cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true });
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+      // cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -607,17 +627,30 @@ context("E-signature test", () => {
     context("Approve AR and EB", () => {
       it("Approve AR and EB", () => {
         cy.grpNavigateToDashboard();
-        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+        cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover").wait(1000);
+        cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover").wait(1000);
+        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true }).wait(1000);
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        // cy.wrapWithWaitOnApiCalls(
+        //   [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
+        //   () => {
+        //     cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        //   });
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
+          [CyRoutes.ChangeRequestApprove],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
-        cy.progressBarShouldNotExist();
-        cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+        // cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
+        cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover").wait(1000);
+        cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover").wait(1000);
+        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick({ force: true }).wait(1000);
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+        // cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+        //   () => {
+        //     cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+        //   });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });

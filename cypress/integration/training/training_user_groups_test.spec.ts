@@ -841,21 +841,23 @@ context("Training user groups test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'Test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(1000);
+      cy.wait(2000);
       cy.get("#name").clear().arrowType("Test training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
         .should("contain", "Test training title");
-      cy.wait(1000);
+      cy.wait(2000);
     });
   });
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick().wait(2000);
     });
 
     it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+      // cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+      cy.contains(`${releasedFormId}`).should("exist").wait(1000);
+      cy.contains(`released form`).should("exist").wait(1000);
     });
 
     it("Logout user", () => {
@@ -881,7 +883,7 @@ context("Training user groups test", () => {
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.get("[data-cy='dashboard.noPendingActions']").should("exist");
+      cy.get("[data-cy='dashboard.noPendingActions']").should("exist").wait(1000);
     });
 
     it("Logout user", () => {
@@ -909,11 +911,15 @@ context("Training user groups test", () => {
 
   context("Open and complete Training", () => {
     it("Open assigned Training", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      // cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
+      //   .find(".MuiButton-containedSecondary").then(($el) => {
+      //     const link = $el.attr("href");
+      //     cy.visit(CONFIG.FE_URL + link);
+      //   });
+      cy.contains(`${releasedFormId}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link).wait(2000);
+      });
     });
 
     it("Complete Training", () => {

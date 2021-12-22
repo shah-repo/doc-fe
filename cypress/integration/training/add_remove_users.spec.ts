@@ -756,12 +756,14 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it(`Open and complete training for ${USERS[1].name}`, () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    // it(`Open and complete training for ${USERS[1].name}`, () => {
+    //   cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
+    //     .find(".MuiButton-containedSecondary").then(($el) => {
+    it(`Open and complete training`, () => {
+      cy.contains(`${releasedDoc1Id}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
       cy.trCompleteTraining();
     });
 
@@ -774,12 +776,14 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it(`Open and complete training for ${USERS[2].name}`, () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    // it(`Open and complete training for ${USERS[2].name}`, () => {
+    //   cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
+    //     .find(".MuiButton-containedSecondary").then(($el) => {
+    it(`Open and complete training`, () => {
+      cy.contains(`${releasedDoc1Id}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
       cy.trCompleteTraining();
     });
 
@@ -1031,7 +1035,8 @@ context("Add/Remove users from Training Curriculum", () => {
       });
 
       it("Verify training notification should be present", () => {
-        cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 1 released doc1`).should("exist");
+        cy.contains(`${releasedDoc1Id}`).should("exist");
+        cy.contains(`released doc1`).should("exist");
       });
     });
   });
