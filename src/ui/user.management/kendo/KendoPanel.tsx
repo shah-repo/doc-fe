@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box, Grid, Typography,
+  Box, Grid, Typography
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -16,11 +16,10 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
-  GridNoRecords,
-  GridToolbar,
+  GridNoRecords, GridRowClickEvent, GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, isEmpty, map, sortBy } from "lodash";
+import { find, isEmpty, map, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -30,15 +29,15 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
-import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
-  TableStyleProps,
+  TableStyleProps
 } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -55,18 +54,18 @@ import { GroupsCell } from "./cell.template/GroupsCell";
 import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
-import { TablePanelProps, UserManage } from "./types";
+import { UserManage, UserManagementProps } from "./types";
 
-type Props<T> = TablePanelProps<T>;
+type Props<T> = UserManagementProps<T>  ;
 
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  columns,
+  gridConfiguration,
   queryUrl,
   tableName,
   onSelect,
-  data,
+  gridData,
   normalizrSchema,
   hasDropboxPermission,
   dropboxAsync,
@@ -74,8 +73,7 @@ export function KendoPanel<T extends any>({
   isCompanyDropboxEnabled,
   tableCriteria,
 }: Props<T>) {
-// TODO: After KendoPanel props update- Remove const gridData
-  const gridData = data;
+
   const editField = "inEdit";
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -84,12 +82,11 @@ export function KendoPanel<T extends any>({
   };
   const classes = KendoGridStyles(styleProps);
   const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = cloneDeep(columns);
   // Check if the Column config available in State, if so prefer what is available in State
   if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
     gridConfiguration.columns = JSON.parse(kendoConfigColumn);
   }
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -155,7 +152,8 @@ export function KendoPanel<T extends any>({
       );
     }
   });
-  const edit = (dataItem: any) => {
+  
+  const edit = (dataItem: GridRowClickEvent) => {
     onSelect && onSelect({ dataItem })();
   };
 
@@ -206,7 +204,8 @@ export function KendoPanel<T extends any>({
       take: 25,
       group: [],
     };
-  const setSearchStatus = (state?: LoadCompanyGroup) => {
+    
+  const setSearchStatus = () => {
     dataState.filter = {
       logic: "and",
       filters: [{ field: "active", operator: "eq", value: true }],
@@ -220,7 +219,7 @@ export function KendoPanel<T extends any>({
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          columnConfig: JSON.stringify(columns.columns),
+          columnConfig: JSON.stringify(gridConfiguration.columns),
           queryDict: {},
         },
         tableName
@@ -358,12 +357,7 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  const loadingPanel = isLoading && (
-    <div className={`k-loading-mask`}>
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>
-  );
+
   const result = setExpandedState({
     data: processWithGroups(gridData, initialKendoConfig).data,
     collapsedIds: collapsedState,
@@ -446,7 +440,8 @@ export function KendoPanel<T extends any>({
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
 
   const addNew = () => {
-    const newDataItem: UserManage = {
+    // TODO: NOT WORKING USERMGMT
+    const newDataItem: any = {
       id: generateUuid(),
       inEdit: true,
       active: true,
@@ -514,7 +509,7 @@ export function KendoPanel<T extends any>({
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
-      {isLoading && loadingPanel}
+      {isLoading && <Loader/>}
     </>
   );
   return (

@@ -59,10 +59,9 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
     <Grid container className={classes.cRoot}>
       <Grid item={true}>
         <KendoPanel<GetEmployeeResponse>
-          columns={gridConfiguration}
+          gridConfiguration={gridConfiguration}
           queryUrl={EMPLOYEES_URL}
-          data={data}
-          cellMeasure={true}
+          gridData={data}
           tableName={tableName}
           hasDropboxPermission={hasDropboxPermission}
           dropboxAsync={dropboxAsync}

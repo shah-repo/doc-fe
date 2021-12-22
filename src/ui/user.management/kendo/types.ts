@@ -1,4 +1,7 @@
 import { schema } from "normalizr";
+import { ActionCreator } from "redux";
+import { ApiAction } from "../../../state/types";
+import { KendoPanelProps } from "../../components/common/kendo/types";
 import { TableColumnActionType } from "../../components/table/column/types";
 import { TableSearchQueryType } from "../../components/table/types";
 import { Translation } from "../../translations/types";
@@ -48,4 +51,12 @@ export interface UserManage {
   confirmed?: boolean | string;
   inEdit?: boolean | string;
   groupsOrg?: string[];
+}
+
+export interface UserManagementProps<T> extends KendoPanelProps<T>{
+  onSelect: any; // TableSelectionRenderer<T>;
+  hasDropboxPermission: boolean;
+  dropboxAsync: any;
+  enableDropboxAction: ActionCreator<ApiAction<any, any>>;
+  isCompanyDropboxEnabled: boolean | undefined;
 }
