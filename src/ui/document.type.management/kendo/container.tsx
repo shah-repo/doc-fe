@@ -17,6 +17,6 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   }
 
   return (
-    <KendoGrid tableData= {sortBy(documentTypes, "documentTypeName")} />
+    <KendoGrid gridData= {sortBy(documentTypes, "documentTypeName")} />
   );
 };

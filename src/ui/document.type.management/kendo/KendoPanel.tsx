@@ -11,7 +11,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
-import { KendoColumnInterface } from "../../components/common/kendo.column.templates/types";
+import Loader from "../../components/common/kendo/Loader";
+import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import Text from "../../components/Text";
@@ -26,10 +27,10 @@ import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
 
 export function KendoGrid({
-  tableData,
+  gridData,
 }) {
   const classes = KendoGridStyles();
-  const actualData = cloneDeep(tableData);
+  const actualData = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
   const columns = gridConfiguration.columns;
@@ -61,8 +62,8 @@ export function KendoGrid({
     },
   });
   // For Pagination
-  const createDataState = (dataState) => ({
-    result: processWithGroups(tableData, dataState),
+  const createDataState = (dataState: State) => ({
+    result: processWithGroups(gridData, dataState),
     dataState,
   });
 
@@ -83,14 +84,14 @@ export function KendoGrid({
     setDataState(dataState);
     setResultState(newDataState);
 
-    if (!tableData.length ) {
+    if (!gridData.length ) {
       setNoDataMessage(<Typography><Text translation="table.no.results.found"></Text></Typography>);
     }
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableData]);
+  }, [gridData]);
 
   const onDataStateChange = ((
     event: GridDataStateChangeEvent) => {
@@ -100,16 +101,9 @@ export function KendoGrid({
     setIsLoading(false);
   }
   );
-  // Grid Loader
-  const loadingPanel = (
-    isLoading && (<div className={`k-loading-mask`} >
-      <div className="k-loading-image"></div>
-      <div className="k-loading-color"></div>
-    </div>)
-  );
 
   // Create Grid Columns
-  const renderColumns = () => columns.map((col: KendoColumnInterface, index) => {
+  const renderColumns = () => columns.map((col: KendoColumn, index) => {
     if (col.show) {
       return <GridColumn
         field={col.field}
@@ -154,7 +148,7 @@ export function KendoGrid({
 
   // On cancel- come out of edit mode
   const cancel = () => {
-    const newDataState = processWithGroups(tableData, dataState);
+    const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
   };
@@ -275,7 +269,7 @@ export function KendoGrid({
       logic: "and",
       filters: [],
     };
-    const newDataState = processWithGroups(tableData, dataState);
+    const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
   };
@@ -283,7 +277,7 @@ export function KendoGrid({
   return (
     <>
       <Grid>
-        {isLoading && loadingPanel}
+        {isLoading && <Loader/>}
         <Grid container spacing={1}>
           <Grid item={true} xs={6} style={{ textAlign: "left" }}>
             <Button
