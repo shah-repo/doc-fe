@@ -283,6 +283,8 @@ Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.contains(params.label).parent().trigger("mouseover");
 });
 
@@ -337,6 +339,7 @@ Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label:
 
 Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string; length: number }) => {
   cy.get("[data-cy=\"form.builder.form.preview\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
     .find(`[data-cy^="${params.el}-"]`)
     .click();
