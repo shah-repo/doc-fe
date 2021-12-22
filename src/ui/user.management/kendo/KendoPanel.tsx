@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box, Grid, Typography,
+  Box, Grid, Typography
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -16,7 +16,7 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
-  GridNoRecords, GridRowClickEvent, GridToolbar,
+  GridNoRecords, GridRowClickEvent, GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
@@ -31,13 +31,14 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
-  TableStyleProps,
+  TableStyleProps
 } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -45,7 +46,6 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
-import { ActiveCell } from "./cell.template/ActiveCell";
 import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
 import { CommandCell } from "./cell.template/CommandCell";
 import { EmailCell } from "./cell.template/EmailCell";
@@ -138,7 +138,7 @@ export function KendoPanel<T extends any>({
     if (column.field === "active") {
       // eslint-disable-next-line react/display-name
       column.cell = (props: GridCellProps) => (
-        <ActiveCell {...props} />
+        <ActiveDropdown {...props} />
       );
       // eslint-disable-next-line react/display-name
       column.filterCell = (props: GridCellProps) => (
