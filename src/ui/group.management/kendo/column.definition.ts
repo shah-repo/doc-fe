@@ -1,5 +1,5 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
-import { GridDropDownSettings, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
+import { GridDropDownSettings, KendoColumn, KendoGridConfiguration, PageState } from "../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [
   {
@@ -53,11 +53,6 @@ const columns: KendoColumn[] = [
     groupable: false,
   },
 ];
-
-interface PageState {
-  skip: number;
-  take: number;
-}
 
 const pagerSettings: GridPagerSettings = {
   buttonCount: 5,

@@ -16,10 +16,11 @@ import {
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridNoRecords,
+  GridRowClickEvent,
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, isEmpty, map, set, sortBy } from "lodash";
+import { find, isEmpty, map, set, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -37,7 +38,7 @@ import {
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import Loader from "../../components/common/kendo/Loader";
-import { KendoColumn } from "../../components/common/kendo/types";
+import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -60,33 +61,38 @@ import { ParentsCell } from "./cell.template/ParentsCell";
 import { PermissionsCell } from "./cell.template/PermissionsCell";
 import { TagsCell } from "./cell.template/TagsCell";
 import KendoGridStyles from "./styles";
-import { TablePanelProps } from "./types";
 
-type Props<T> = TablePanelProps<T>;
+interface GroupManagementProps {
+  onSelect: any;
+  refreshTable: boolean;
+  canCreateGroups: boolean;
+}
+
+type Props<T> = KendoPanelProps<T> & GroupManagementProps;
 
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
-  columns,
-  queryUrl,
+  gridConfiguration,
   tableName,
+  gridData,
+  tableCriteria,
+  queryUrl,
   onSelect,
   refreshTable,
   normalizrSchema,
   canCreateGroups,
-  providedData,
-  tableCriteria,
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
+  // TODO: Check If BELOW Props required
   const styleProps: TableStyleProps = {
     isSelectable: onSelect !== undefined,
   };
   const classes = KendoGridStyles(styleProps);
   const [Official, setOfficial] = useState(false);
-  const tableData = providedData || [];
+  const tableData = gridData || [];
   const kendoConfigColumn = tableCriteria.columnConfig;
-  const gridConfiguration = cloneDeep(columns);
   // Check if the Column config available in State, if so prefer what is available in State
   if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
     gridConfiguration.columns = JSON.parse(kendoConfigColumn);
@@ -101,7 +107,7 @@ export function KendoPanel<T extends any>({
     ? JSON.parse(tableCriteria.columnConfig)
     : [];
 
-  const edit = (dataItem: any) => {
+  const edit = (dataItem: GridRowClickEvent) => {
     // eslint-disable-next-line no-console
     console.log("EDIT ROW");
     // enableInlineEdit(dataItem);
@@ -235,7 +241,7 @@ export function KendoPanel<T extends any>({
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          columnConfig: JSON.stringify(columns.columns),
+          columnConfig: JSON.stringify(gridConfiguration.columns),
           queryDict: {},
         },
         tableName
@@ -429,12 +435,7 @@ export function KendoPanel<T extends any>({
         );
       });
   };
-  // const loadingPanel = isLoading && (
-  //   <div className={`k-loading-mask ${classes.loading}`}>
-  //     <div className="k-loading-image"></div>
-  //     <div className="k-loading-color"></div>
-  //   </div>
-  // );
+
   const result = setExpandedState({
     data: processWithGroups(tableData, initialKendoConfig).data,
     collapsedIds: collapsedState,

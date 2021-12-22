@@ -46,18 +46,15 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     <Grid container={true} className={classes.cRoot}>
       <Grid item={true}>
         <KendoPanel<LoadCompanyGroup>
-          columns={gridConfiguration}
+          gridConfiguration={gridConfiguration}
           queryUrl={GROUPS_URL}
-          cellMeasure={true}
           tableName={tableName}
           onSelect={({ dataItem }) =>
             () =>
               handlePermission(dataItem)}
           refreshTable={refreshTable}
-          editGroupsDialog={editGroupsDialog}
-          selectedGroup={selectedGroup}
           canCreateGroups={canCreateGroups}
-          providedData={tableData}
+          gridData={tableData}
           tableCriteria={tableCriteria}
         />
       </Grid>
