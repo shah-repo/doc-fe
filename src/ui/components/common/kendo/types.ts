@@ -22,9 +22,15 @@ export interface KendoColumn {
   cell?: any;
   locked?: boolean;
   width?: number | string | undefined;
+  reorderable?: boolean;
   orderIndex?: number | undefined;
   columnMenu?: any;
   filterable?: boolean;
+}
+
+export interface DropdownFilterDefaultItem {
+  text: string;
+  value: string;
 }
 
 export interface GridDropDownSettings {
@@ -32,11 +38,17 @@ export interface GridDropDownSettings {
   value: boolean;
 }
 
+export interface PageState {
+  skip: number;
+  take: number;
+  group?: any[];
+}
+
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
   pagerSettings: GridPagerSettings;
-  initialDataState? : any; // TODO: check
+  initialDataState? : PageState;
   booleanFilterCellOptions? : GridDropDownSettings[];
 }
 
