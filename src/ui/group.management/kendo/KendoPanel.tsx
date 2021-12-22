@@ -475,6 +475,8 @@ export function KendoPanel<T extends any>({
       groupable={column.groupable}
       locked={column.locked}
       width={column.width}
+      reorderable={column.reorderable}
+      resizable={column.resizable}
     />
   );
 

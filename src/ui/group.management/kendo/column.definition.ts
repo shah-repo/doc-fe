@@ -3,15 +3,6 @@ import { GridDropDownSettings, KendoColumn, KendoGridConfiguration, PageState } 
 
 const columns: KendoColumn[] = [
   {
-    field: "",
-    title: "",
-    show: true,
-    groupable: false,
-    filterable: false,
-    locked: true,
-    width: "80px",
-  },
-  {
     field: "isOfficial",
     title: "GROUP TYPE",
     show: true,
@@ -51,6 +42,17 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "text",
     groupable: false,
+  },
+  {
+    field: "",
+    title: "",
+    show: true,
+    groupable: false,
+    filterable: false,
+    locked: true,
+    width: "80px",
+    reorderable: false,
+    resizable: false,
   },
 ];
 
