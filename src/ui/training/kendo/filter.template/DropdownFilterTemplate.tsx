@@ -4,11 +4,11 @@ import React from "react";
 
 interface DropdownFilterTemplateProps extends GridFilterCellProps {
   defaultItem: {
-    text: any;
+    text: string;
     value: string;
   };
   defaultValue: {
-    text: any;
+    text: string;
     value: string;
   };
   operator: string;

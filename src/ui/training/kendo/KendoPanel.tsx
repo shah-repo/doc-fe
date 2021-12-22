@@ -43,7 +43,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
-import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
+import { DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -58,6 +58,7 @@ import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
+import { DroDownFilterChangeProps } from "./types";
 
 type Props<T> = KendoPanelProps<T>;
 
@@ -305,7 +306,7 @@ export function KendoPanel<T extends any>({
   };
 
   // Kendo Grid Actions Methods
-  const onStateChange = (setDefault) => {
+  const onStateChange = (setDefault: DroDownFilterChangeProps) => {
     const updatedFilter = {
       ...setDefault.selectedItem,
       field: setDefault.parentField,
@@ -405,7 +406,7 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const defaultItem = {
+  const defaultItem: DropdownFilterDefaultItem = {
     text: "Select Item",
     value: "",
   };
@@ -500,7 +501,7 @@ export function KendoPanel<T extends any>({
 
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gridConfiguration.groupableFields);
   // Render Kendo Columns
-  const columnRenderer = (column: any, index: React.Key | undefined) => (
+  const columnRenderer = (column: KendoColumn, index: React.Key | undefined) => (
     <GridColumn
       key={index}
       field={column.field}
