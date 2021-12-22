@@ -48,8 +48,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
-import { KendoColumn } from "../../components/common/kendo/types";
-// import { KendoPanelProps } from "../../components/common/kendo/types";
+import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import Text from "../../components/Text";
@@ -61,22 +60,21 @@ import {
 import useDidMount from "../../hooks/useDidMount";
 import GridStyles from "./styles";
 
-// interface CreateExport {
-//   dynamicColumns?: any;
-// }
-// type Props<T> = KendoPanelProps<T> & CreateExport;
+interface CreateExport {
+  dynamicColumns?: any;
+}
+type Props<T> = KendoPanelProps<T> & CreateExport;
 let call;
 
 export function KendoGrid<T extends any>({
   dynamicColumns,
   tableName,
-  providedData,
-  queryUrl,
-  normalizrSchema,
+  gridData,
   tableCriteria,
+  queryUrl = "",
   customDataSet,
-  // Props<T>
-}: any) {
+  normalizrSchema,
+}: Props<T>) {
   const dispatch = useDispatch();
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +82,6 @@ export function KendoGrid<T extends any>({
   const { columnConfig, queryDict, forceUpdate, apiError, kendoConfig } =
     tableCriteria;
   const [collapsedState, setCollapsedState] = React.useState<string[]>([]);
-  const queryData = providedData;
   const classes = GridStyles();
   const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
     dispatch(
@@ -100,7 +97,7 @@ export function KendoGrid<T extends any>({
 
   const copyDynamicColumns = cloneDeep(dynamicColumns);
   // TODO: Not Sure
-  const temp: any[] = [];
+  const temp: any = [];
   let configColumns: KendoColumn[] = [];
   const list = [
     "field",
@@ -283,7 +280,7 @@ export function KendoGrid<T extends any>({
   const initialDataState: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : { skip: 0, take: 25, group: [] };
-  const processWithGroups = (data: any, dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -291,7 +288,7 @@ export function KendoGrid<T extends any>({
   };
   const [dataState, setDataState] = React.useState<State>(initialDataState);
   const [resultState, setResultState] = React.useState<DataResult>(
-    processWithGroups(queryData, initialDataState)
+    processWithGroups(gridData, initialDataState)
   );
   const onExpandChange = React.useCallback(
     (event: GridExpandChangeEvent) => {
@@ -323,7 +320,7 @@ export function KendoGrid<T extends any>({
   };
   const onDataStateChange = React.useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(queryData, event.dataState);
+      const newDataState = processWithGroups(gridData, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       tableCriteria.columnConfig = JSON.stringify(columnDefinitions);
       setDataState(event.dataState);
@@ -337,7 +334,7 @@ export function KendoGrid<T extends any>({
         )
       );
     },
-    [queryData]
+    [gridData]
   );
 
   const [columnDefinitions, setColumnDefinitions] =
@@ -425,7 +422,7 @@ export function KendoGrid<T extends any>({
       dataState.filter.filters.length
     ) {
       dataState.filter.filters = [];
-      const newDataState = processWithGroups(queryData, dataState);
+      const newDataState = processWithGroups(gridData, dataState);
       setDataState(dataState);
       setResultState(newDataState);
     }

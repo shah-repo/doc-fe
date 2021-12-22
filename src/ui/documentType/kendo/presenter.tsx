@@ -85,7 +85,6 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     : {
       documentTypeId: documentType.id,
     };
-  // TODO:  Pass Style props
   return (
     <Grid container={true} className={classes.root}>
       <CreateDocumentByType
@@ -99,14 +98,12 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       />
       <Grid item={true}>
         <KendoGrid<DocumentRevision>
-          columns={columns}
           dynamicColumns={dynamicColumns}
-          queryUrl={queryUrl}
-          cellMeasure={true}
           tableName={tableName}
-          normalizrSchema={[docRevSch]}
-          providedData={providedData}
+          gridData={providedData}
           tableCriteria={tableCriteria}
+          queryUrl={queryUrl}
+          normalizrSchema={[docRevSch]}
         />
       </Grid>
     </Grid>
