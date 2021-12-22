@@ -196,49 +196,6 @@ td[role="gridcell"] {
   border-color: rgba(0, 0, 0, 0.08);
 }
 
-
-/* For Schema window in document Type management grid */
-.schemaForm .k-dialog-titlebar {
-  background-color: var(--white);
-  color: var(--almost_black);
-  height: 58px;
-}
-
-.schemaForm .k-textarea>.k-input {
-  resize: none;
-}
-
-.schemaForm .k-textarea {
-  width: 35em;
-}
-
-.schemaForm .k-window-title {
-  font-family: Sora;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 0px;
-  text-align: left;
-}
-
-/* Check colorname to move to colors.ts */
-/* TODO: Check if this color looks good */
-.schemaForm .k-button.k-flat {
-  /* background: #8C8C8C !important;   */
-  /* opacity: 0.1 !important;  */
-  border-radius: 6px !important;
-}
-
-/* .schemaForm .k-icon .k-i-close {
-  background: #8C8C8C !important;  
-} */
-
-.schemaForm .k-actions {
-  background: #F9F9F9;
-  margin-top: "15px";
-}
-
 .k-grid-header .k-grid-filter:hover,
 .k-grid-header th.k-grid-header-sticky,
 .k-grid-header td.k-grid-header-sticky,
