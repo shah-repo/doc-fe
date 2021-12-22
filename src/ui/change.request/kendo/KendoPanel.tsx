@@ -6,7 +6,8 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid, GridColumn,
+  Grid as KendoGrid,
+  GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -24,7 +25,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
-import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import {
+  ChangeRequest,
+  ChangeRequestStatus,
+} from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -33,14 +37,23 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
-import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
+import {
+  KendoColumn,
+  KendoPanelProps,
+} from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
-import { canEditChangeRequest, changeRequestStatusOption } from "../utils/helpers";
-import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
+import {
+  canEditChangeRequest,
+  changeRequestStatusOption,
+} from "../utils/helpers";
+import {
+  changeRequestEditPath,
+  changeRequestPreviewPath,
+} from "../utils/paths";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 
@@ -81,12 +94,16 @@ export function KendoPanel<T extends any>({
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
   }
-  const [columnDefinitions, setColumnDefinitions] = useState(gridConfiguration.columns);
+  const [columnDefinitions, setColumnDefinitions] = useState(
+    gridConfiguration.columns
+  );
 
   const initialDataState: State = kendoConfig
     ? JSON.parse(kendoConfig)
     : {
-      skip: 0, take: 25, group: [],
+      skip: 0,
+      take: 25,
+      group: [],
       sort: [{ field: "crId", dir: "asc" }],
       // Initial filter descriptor
       filter: {
@@ -113,7 +130,7 @@ export function KendoPanel<T extends any>({
             setSearchStatus(ChangeRequestStatus.InReview);
           }
         }
-      } else if  (fireAPI) {
+      } else if (fireAPI) {
         queryApi();
       }
     }
@@ -186,13 +203,19 @@ export function KendoPanel<T extends any>({
           data = customDataSet(data);
           // For Kendo Date picker
           each(data, (o) => {
-            o.effectiveDate = o.effectiveDate ? new Date(o.effectiveDate) : null;
+            o.effectiveDate = o.effectiveDate
+              ? new Date(o.effectiveDate)
+              : null;
           });
           const newDataState: any = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
           if (data.length === 0) {
-            setNoDataMessage(<Typography><Text translation="table.no.results.found"></Text></Typography>);
+            setNoDataMessage(
+              <Typography>
+                <Text translation="table.no.results.found"></Text>
+              </Typography>
+            );
           }
         }
         data = map(data, (record) =>
@@ -256,9 +279,14 @@ export function KendoPanel<T extends any>({
     data: resultState.data,
     collapsedIds: collapsedState,
   });
-  const setKendoFilterStatus = (kendoConfig: string, tableCriteria: Partial<TablePanelStateProps>): void => {
+  const setKendoFilterStatus = (
+    kendoConfig: string,
+    tableCriteria: Partial<TablePanelStateProps>
+  ): void => {
     const kendoConfigObject = JSON.parse(kendoConfig);
-    const statusFilterObj = find(kendoConfigObject.filter?.filters, { field: "state" });
+    const statusFilterObj = find(kendoConfigObject.filter?.filters, {
+      field: "state",
+    });
     if (statusFilterObj) {
       dispatch(
         tableSearchActions.setSearchCriteria(
@@ -276,7 +304,7 @@ export function KendoPanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            queryDict: { },
+            queryDict: {},
           },
           tableName
         )
@@ -285,13 +313,15 @@ export function KendoPanel<T extends any>({
   };
 
   // Column Menu Filters
-  const StatusFilterTemplate: any = (props: GridFilterCellProps) => (<DropdownFilterTemplate
-    {...props}
-    data={changeRequestStatusOption().map((col) => col.value)}
-    defaultItem={"Select State"}
-    defaultValue={defaultDDItem}
-    onStateChange={onStateChange}
-  />);
+  const StatusFilterTemplate: any = (props: GridFilterCellProps) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={changeRequestStatusOption().map((col) => col.value)}
+      defaultItem={"Select State"}
+      defaultValue={defaultDDItem}
+      onStateChange={onStateChange}
+    />
+  );
   const filterCellMapping = {
     state: StatusFilterTemplate,
   };
@@ -305,12 +335,16 @@ export function KendoPanel<T extends any>({
     }
     setFireAPI(true);
   };
-  const setSearchStatus = (state?: ChangeRequestStatus, isClearAll?: boolean) => {
+  const setSearchStatus = (
+    state?: ChangeRequestStatus,
+    isClearAll?: boolean
+  ) => {
     dataState.filter = {
       logic: "and",
-      filters: state && !isClearAll
-        ? [{ field: "state", operator: "eq", value: "IN_REVIEW" }]
-        : [],
+      filters:
+        state && !isClearAll
+          ? [{ field: "state", operator: "eq", value: "IN_REVIEW" }]
+          : [],
     };
     if (isClearAll) {
       setDefaultDDItem("Select State");
@@ -322,9 +356,11 @@ export function KendoPanel<T extends any>({
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
-          queryDict: isClearAll ? {} : {
-            state,
-          },
+          queryDict: isClearAll
+            ? {}
+            : {
+              state,
+            },
         },
         tableName
       )
@@ -388,7 +424,7 @@ export function KendoPanel<T extends any>({
     },
     [collapsedState]
   );
-    // On Show / Hide Column From Main Menu
+  // On Show / Hide Column From Main Menu
   const onColumnShowHide = (item: KendoColumn) => {
     const dataColumns = map([...columnDefinitions], (column) => {
       if (column.field === item.field) {
@@ -400,7 +436,10 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
 
-  const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gridConfiguration.groupableFields);
+  const sortedColumnDefinitions = orderByLockedState(
+    columnDefinitions,
+    gridConfiguration.groupableFields || []
+  );
 
   // Render Kendo Columns
   const renderKendoColumns = (column: any, index: React.Key | undefined) => (
@@ -427,7 +466,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className= {classes.kGrid}
+          className={classes.kGrid}
           data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
@@ -446,10 +485,10 @@ export function KendoPanel<T extends any>({
         >
           <GridToolbar>
             <Grid container spacing={1}>
-              <Grid item={true} xs={6}  style={{ textAlign: "left" }}>
+              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item={true} xs={6}  style={{ textAlign: "right" }}>
+              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
                 <ColumnShowHideMenu
                   restrictedColumns={["crId"]}
                   columnDefinition={sortedColumnDefinitions}
@@ -464,9 +503,7 @@ export function KendoPanel<T extends any>({
             }
             return null;
           })}
-          <GridNoRecords>
-            {noDataMessage}
-          </GridNoRecords>
+          <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
       {isLoading && <Loader />}
