@@ -20,6 +20,10 @@ const KendoGridStyles = makeStyles((theme) => ({
   groupCell: {
     whiteSpace: "pre-wrap",
   },
+  link: {
+    fontSize: "14px",
+    fontFamily: "Sora",
+  },
 }));
 
 export default KendoGridStyles;

@@ -6,8 +6,10 @@ import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/type
 import { toastInfo } from "../../../components/notifications";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
+import KendoGridStyles from "../styles";
 
 export const SignedCell = (props) => {
+  const classes = KendoGridStyles();
   const intl = useIntl();
   const getResendSignupEmailAction = useActionCreator(
     authActions.resendSignupEmail
@@ -71,7 +73,7 @@ export const SignedCell = (props) => {
               variant="body2"
               onClick={() => handleResendEmail(props.dataItem)}
             >
-              Resend signup email
+              <span className={classes.link}>Resend signup email</span>
             </Link>
           )}
         </span>
