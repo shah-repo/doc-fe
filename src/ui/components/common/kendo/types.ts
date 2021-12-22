@@ -26,7 +26,6 @@ export interface KendoColumn {
   columnMenu?: any;
   filterable?: boolean;
   reorderable?: boolean | undefined;
-  sortable?: boolean | undefined;
 }
 
 export interface GridDropDownSettings {
@@ -59,7 +58,8 @@ export interface KendoTableSearchQueryType {
 }
 
 export interface KendoPanelProps<T> {
-  gridConfiguration: KendoGridConfiguration;
+  // For Records GridConfiguartion does not exist
+  gridConfiguration?: KendoGridConfiguration;
   tableName: string;
   gridData: T[];
   tableCriteria: KendoGridCriteria;
