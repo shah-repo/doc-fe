@@ -1,7 +1,7 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
+import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import { GridDropDownSettings, KendoColumn, PageState } from "../../components/common/kendo/types";
 import { CheckboxCell } from "./column.templates/Checkbox";
-import { Dropdown } from "./column.templates/Dropdown";
 import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { Schema } from "./column.templates/Schema";
 import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "./filter.template/CommonCellDropdownFilterTemplate";
@@ -14,7 +14,7 @@ const columns: KendoColumn[] = [{
 {
   field: "active",
   title: "Status",
-  cell: Dropdown,
+  cell: ActiveDropdown,
   filter: "text",
   filterCell: DropdownFilterCellTemplate,
   show: true,
