@@ -31,6 +31,7 @@ export enum MomentFormats {
   DateTimeAlt = "D MMM YYYY hh:mm a",
   DateTimeComplete = "M/D/YYYY hh:mm A",
   DayMonthDateYear = "ddd MMMM D YYYY",
+  DayMonthDateYearAlt = "ddd, MMMM D, YYYY",
   DateTimeSeconds = "M/D/YYYY hh:mm:ss A",
   Time = "hh:mm:ss A",
   AsyncTasksDefaultDateTimeFormatter = "YYYY-MM-DDTHH:mm:ss",

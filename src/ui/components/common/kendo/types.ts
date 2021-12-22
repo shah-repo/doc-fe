@@ -1,3 +1,4 @@
+import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
 import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
 
@@ -9,27 +10,42 @@ export enum KendoCellTemplates {
   COMMON_CELL="CommonCell"
 }
 export interface KendoColumn {
+  sortable?: ColumnSortSettings | undefined;
   field: string;
   title: string;
   show: boolean;
-  showColumnMenu: boolean;
+  showColumnMenu?: boolean;
   format?: string;
   filter?: "boolean" | "numeric" | "text" | "date" | undefined;
-  groupable: boolean;
+  groupable?: boolean;
   filterCell?: any;
   cell?: any;
   locked?: boolean;
   width?: number | string | undefined;
   orderIndex?: number | undefined;
   columnMenu?: any;
+  filterable?: boolean;
 }
 
+export interface GridDropDownSettings {
+  text: string;
+  value: boolean;
+}
+
+export interface PageState {
+  skip: number;
+  take: number;
+  group?: any[];
+}
 
 export interface KendoGridConfiguration {
-  groupableFields: string[];
+  groupableFields?: string[];
   columns: KendoColumn[];
   pagerSettings: GridPagerSettings;
+  initialDataState? : PageState;
+  booleanFilterCellOptions? : GridDropDownSettings[];
 }
+
 export interface KendoGridCriteria {
   queryDict: KendoTableSearchQueryType;
   apiError: string;
