@@ -107,6 +107,15 @@ export function KendoPanel<T extends any>({
         ],
       },
     };
+  if (initialDataState) {
+    if (!initialDataState?.filter?.filters.length) {
+      initialDataState?.filter?.filters.push({
+        field: "displayStatus",
+        operator: "eq",
+        value: "Released",
+      });
+    }
+  }
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
 
