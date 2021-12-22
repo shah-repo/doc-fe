@@ -22,10 +22,16 @@ export interface KendoColumn {
   cell?: any;
   locked?: boolean;
   width?: number | string | undefined;
+  reorderable?: boolean;
   orderIndex?: number | undefined;
   columnMenu?: any;
   filterable?: boolean;
   reorderable?: boolean | undefined;
+}
+
+export interface DropdownFilterDefaultItem {
+  text: string;
+  value: string;
 }
 
 export interface GridDropDownSettings {
