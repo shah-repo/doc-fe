@@ -120,14 +120,12 @@ export function KendoPanel<T extends any>({
     if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
         if (fireAPI) {
-          if (defaultDDItem === "IN_REVIEW") {
-            setSearchStatus(ChangeRequestStatus.InReview);
-          } else {
-            queryApi();
-          }
+          queryApi();
         } else {
           if (defaultDDItem === "IN_REVIEW") {
-            setSearchStatus(ChangeRequestStatus.InReview);
+            setSearchStatus(
+              ChangeRequestStatus.InReview,
+            );
           }
         }
       } else if (fireAPI) {
@@ -135,7 +133,6 @@ export function KendoPanel<T extends any>({
       }
     }
   }, [tableCriteria.kendoConfig, didMount]);
-
   useEffect(() => {
     if (tableCriteria.forceUpdate) {
       queryApi();
