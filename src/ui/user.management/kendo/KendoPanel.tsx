@@ -62,16 +62,16 @@ let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
   gridConfiguration,
-  queryUrl,
   tableName,
-  onSelect,
   gridData,
+  tableCriteria,
+  queryUrl = "",
+  onSelect,
   normalizrSchema,
   hasDropboxPermission,
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
-  tableCriteria,
 }: Props<T>) {
 
   const editField = "inEdit";
