@@ -3,14 +3,6 @@ import { GridDropDownSettings, KendoColumn, KendoGridConfiguration, PageState } 
 
 const columns: KendoColumn[] = [
   {
-    field: "",
-    title: "",
-    show: true,
-    filterable: false,
-    groupable: false,
-    width: "80px",
-  },
-  {
     field: "status",
     title: "SIGNED UP",
     show: true,
@@ -42,6 +34,17 @@ const columns: KendoColumn[] = [
     title: "ACTIVE",
     show: true,
     filter: "boolean",
+  },
+  {
+    field: "",
+    title: "",
+    show: true,
+    groupable: false,
+    filterable: false,
+    locked: true,
+    width: "80px",
+    reorderable: false,
+    resizable: false,
   },
 ];
 

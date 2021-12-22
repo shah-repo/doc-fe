@@ -34,7 +34,15 @@ export const CommandCell = (props: CommandCellProps) => {
   const inEdit = dataItem[props.editField];
 
   return inEdit ? (
-    <td {...props} className="k-command-cell">
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}
+    >
       <IconButton
         disableRipple={true}
         aria-label="update"
