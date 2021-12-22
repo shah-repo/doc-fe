@@ -35,7 +35,7 @@ export interface GridDropDownSettings {
 export interface PageState {
   skip: number;
   take: number;
-  group?: string[];
+  group?: any[];
 }
 
 export interface KendoGridConfiguration {
