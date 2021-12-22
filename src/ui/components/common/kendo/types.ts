@@ -26,7 +26,6 @@ export interface KendoColumn {
   orderIndex?: number | undefined;
   columnMenu?: any;
   filterable?: boolean;
-  reorderable?: boolean | undefined;
 }
 
 export interface DropdownFilterDefaultItem {
