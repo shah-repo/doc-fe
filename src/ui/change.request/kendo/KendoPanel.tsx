@@ -104,7 +104,7 @@ export function KendoPanel<T extends any>({
       skip: 0,
       take: 25,
       group: [],
-      sort: [{ field: "crId", dir: "asc" }],
+      sort: [],
       // Initial filter descriptor
       filter: {
         logic: "and",
