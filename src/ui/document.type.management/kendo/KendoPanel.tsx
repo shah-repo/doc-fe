@@ -5,7 +5,8 @@ import {
   Grid as Kgrid,
   GridColumn,
   GridDataStateChangeEvent,
-  GridNoRecords,
+  GridItemChangeEvent,
+  GridNoRecords
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -28,10 +29,10 @@ import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
 
 interface KendoPanelProps<T> {
-  gridData: any[];
+  gridData: T[];
 }
 type Props<T> = KendoPanelProps<T>;
-export function KendoGrid<T extends any>({ gridData }: Props<T>) {
+export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   const classes = KendoGridStyles();
   const actualData = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -254,19 +255,19 @@ export function KendoGrid<T extends any>({ gridData }: Props<T>) {
   };
 
   // While editing setting the new values to the dataItem
-  const itemChange = (e) => {
+  const itemChange = (e: GridItemChangeEvent) => {
     // For Update
     let newData: any = [];
     if (e.dataItem.id) {
       newData = map(actualData, (item) => {
         if (item.id === e.dataItem.id) {
-          item = set(e.dataItem, e.field, e.value);
+          item = set(e.dataItem, e.field || "", e.value);
         }
         return item;
       });
     } else {
       // For New Record
-      const updatedDataItem = set(e.dataItem, e.field, e.value);
+      const updatedDataItem = set(e.dataItem, e.field || "", e.value);
       newData = [updatedDataItem, ...actualData];
     }
     const newDataState = processWithGroups(newData, dataState);
