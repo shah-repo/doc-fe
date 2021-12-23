@@ -208,7 +208,7 @@ export function KendoPanel<T extends any>({
   const setSearchStatus = () => {
     dataState.filter = {
       logic: "and",
-      filters: [{ field: "active", operator: "eq", value: true }],
+      filters: [],
     };
     dataState.group = [];
     setDataState(dataState);
