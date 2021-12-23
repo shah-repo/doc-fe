@@ -563,7 +563,6 @@ export function KendoPanel<T extends any>({
               </Grid>
               <Grid item={true} xs={6} style={{ textAlign: "right" }}>
                 <ColumnShowHideMenu
-                  restrictedColumns={["document.docId"]}
                   columnDefinition={sortedColumnDefinitions}
                   onChange={onColumnShowHide}
                 />
