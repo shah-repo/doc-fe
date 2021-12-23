@@ -17,7 +17,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, find, isEmpty, map, pick, set } from "lodash";
+import { each, filter, find, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -93,9 +93,26 @@ export function KendoPanel<T extends any>({
     gridConfiguration.columns
   );
 
-  const initialDataState: State = kendoConfig
-    ? JSON.parse(kendoConfig)
-    : {
+
+  let defaultStatus = "Released";
+  let initialDataState: State;
+
+  if (kendoConfig) {
+    initialDataState = JSON.parse(kendoConfig);
+    if (initialDataState.filter?.filters.length) {
+      const fObj: any = find(initialDataState.filter?.filters, {
+        field: "displayStatus",
+      }) || { field: null, value: null };
+      if (fObj) {
+        defaultStatus = fObj.value;
+      } else {
+        defaultStatus = "Select State";
+      }
+    } else {
+      defaultStatus = "Select State";
+    }
+  } else {
+    initialDataState = {
       skip: 0,
       take: 25,
       group: [],
@@ -107,19 +124,12 @@ export function KendoPanel<T extends any>({
         ],
       },
     };
-  if (initialDataState) {
-    if (!initialDataState?.filter?.filters.length) {
-      initialDataState?.filter?.filters.push({
-        field: "displayStatus",
-        operator: "eq",
-        value: "Released",
-      });
-    }
   }
+
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
 
-  const [defaultDDItem, setDefaultDDItem] = useState("Released");
+  const [defaultDDItem, setDefaultDDItem] = useState(defaultStatus);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   useEffect(() => {
     if (didMount) {
@@ -298,7 +308,9 @@ export function KendoPanel<T extends any>({
           {
             ...tableCriteria,
             queryDict: {
-              displayStatus: statusFilterObj.value,
+              "status[]": documentRevisionQueryStatus(),
+              "displayStatus": statusFilterObj.value,
+              "documentTypeWithoutCategory": true,
             },
           },
           tableName
@@ -321,7 +333,7 @@ export function KendoPanel<T extends any>({
   const StatusFilterTempalte = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
-      data={statuses}
+      data={statuses as any[]}
       defaultItem={"Select State"}
       defaultValue={defaultDDItem}
       onStateChange={onStateChange}
@@ -340,23 +352,26 @@ export function KendoPanel<T extends any>({
     "document.documentType.documentTypeAcronym": TypeFilterTemplate,
   };
 
-  const clearFilter = () => setSearchStatus();
+  const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
 
   // Kendo Grid Actions Methods
   const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
       setDefaultDDItem("Select State");
+      setSearchStatus(documentRevisionQueryStatus(), undefined, false);
+    } else {
+      setFireAPI(true);
     }
-    setFireAPI(true);
   };
   const setSearchStatus = (
     status?: DocumentRevisionStatus | DocumentRevisionStatus[],
-    displayStatus?: DocumentRevisionStatus
+    displayStatus?: DocumentRevisionStatus,
+    clearOtherFilter = true
   ) => {
-    // Clearing Kendo Grid Filter
+    const currentFilters = dataState.filter?.filters || [];
     dataState.filter = {
       logic: "and",
-      filters: [], // status ? [{ field: "displayStatus", operator: "eq", value: "Released" }] : [],
+      filters: clearOtherFilter ? [] : filter(currentFilters, (o: any) => o.field !== "displayStatus"),
     };
     setDefaultDDItem("Select State");
     setDataState(dataState);

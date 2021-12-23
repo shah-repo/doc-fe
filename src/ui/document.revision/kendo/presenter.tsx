@@ -11,7 +11,7 @@ import {
 import { stripTags } from "../../../common/utils/helpers";
 import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
 import { DocumentTypeOptions, KendoGridCriteria } from "../../components/common/kendo/types";
 import Text from "../../components/Text";
@@ -27,7 +27,7 @@ interface KendoGridProps {
   data: DocumentRevision[];
   tableName: string;
   tableCriteria: KendoGridCriteria;
-  statuses: string[];
+  statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
   documentTypeOptions: DocumentTypeOptions[];
   editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;

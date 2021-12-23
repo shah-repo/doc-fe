@@ -1,6 +1,7 @@
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
 import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 
 export enum KendoCellTemplates {
   USER_AVATAR="UserAvatar",
@@ -73,7 +74,7 @@ export interface KendoPanelProps<T> {
   tableName: string;
   gridData: T[];
   tableCriteria: KendoGridCriteria;
-  statuses?: string[];
+  statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
   queryUrl?: string;
   customQuerySet?: (queryDict: KendoTableSearchQueryType) => KendoTableSearchQueryType;
   customDataSet?: (data: T[]) => T[];
