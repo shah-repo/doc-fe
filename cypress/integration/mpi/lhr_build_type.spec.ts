@@ -1213,6 +1213,8 @@ context("LHR Build type flow", () => {
         CyRoutes.GetAutocompleteOptions], () => {
         cy.dlSelectFirstDocument();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Alert message should display on change 'Production' to 'R&D' build type", () => {
@@ -1320,7 +1322,7 @@ context("LHR Build type flow", () => {
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetDocRevs, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl1);
       });
@@ -1428,7 +1430,7 @@ context("LHR Build type flow", () => {
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetDocRevs, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl2);
       });
