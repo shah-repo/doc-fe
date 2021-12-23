@@ -3,7 +3,7 @@ import {
   GridColumnMenuItem,
   GridColumnMenuProps,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, find } from "lodash";
+import { cloneDeep, filter, find } from "lodash";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria } from "../../../../../common/utils/selectors";
@@ -24,6 +24,9 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
     newState.forEach((c, i) => {
       if (c.field === field) {
         c.show = !c.show;
+      }
+      if (!filter(newState, "show").length) {
+        newState[i].show = true;
       }
     });
     setColumns(newState);

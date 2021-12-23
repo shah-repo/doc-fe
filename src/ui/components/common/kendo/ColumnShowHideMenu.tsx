@@ -8,14 +8,13 @@ import { KendoColumn } from "./types";
 interface Props {
   columnDefinition: any;
   onChange: (colum: KendoColumn ) => void;
-  restrictedColumns: string[];
 }
 
 const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   columnDefinition,
   onChange,
-  restrictedColumns,
 }) => {
+
   const styles = makeStyles(() => ({
     columnsCus: {
       fontFamily: "Sora",
@@ -66,25 +65,23 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
           ></ListItemText>
         </MenuItem>
         {columnDefinition.map((item: any) =>
-          !restrictedColumns.includes(item.field) ? (
-            <MenuItem key={item.title} value={item.field}>
-              <ListItemText id={item.field} primary={item.title} />
-              <Box flexGrow={1} mr={5}></Box>
-              {item.show ? (
-                <SolidIcon
-                  onClick={() => {
-                    onChange(item);
-                  }}
-                />
-              ) : (
-                <ViewChecked
-                  onClick={() => {
-                    onChange(item);
-                  }}
-                />
-              )}
-            </MenuItem>
-          ) : null
+          <MenuItem key={item.title} value={item.field} disabled={item.disabled}>
+            <ListItemText id={item.field} primary={item.title} />
+            <Box flexGrow={1} mr={5}></Box>
+            {item.show ? (
+              <SolidIcon
+                onClick={() => {
+                  onChange(item);
+                }}
+              />
+            ) : (
+              <ViewChecked
+                onClick={() => {
+                  onChange(item);
+                }}
+              />
+            )}
+          </MenuItem>
         )}
       </Menu>
     </FormControl>
