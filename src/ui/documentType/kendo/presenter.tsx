@@ -5,15 +5,11 @@ import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-// import ClearFilters from "../../components/table/ClearFilters";
 import { TableColumnProps } from "../../components/table/column/types";
-// import { DocumentInfo } from "../../components/table/DocumentInfo";
-// import { TablePanel } from "../../components/table/panel";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { documentRevisionEffectiveDateOption } from "../../document.revision/utils/helpers";
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
-// import CreateDocumentByType from "../list/CreateDocumentByType";
 import { KendoGrid } from "./KendoPanel";
 import KendoGridStyles from "./styles";
 
