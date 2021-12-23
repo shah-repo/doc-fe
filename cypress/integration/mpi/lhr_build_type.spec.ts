@@ -1060,6 +1060,8 @@ context("LHR Build type flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -1141,6 +1143,8 @@ context("LHR Build type flow", () => {
           cy.url().then((url: any) => {
             lhrtUrl = url;
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -1153,6 +1157,8 @@ context("LHR Build type flow", () => {
         CyRoutes.GetAutocompleteOptions], () => {
         cy.drCreateNewDocumentFromForm();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -1225,6 +1231,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([ CyRoutes.PatchDocRev ], () => {
         cy.contains("Yes switch build type").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Build type 'Production' radiobutton should be disabled", () => {
@@ -1236,6 +1244,8 @@ context("LHR Build type flow", () => {
         CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(startMpiUrl);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify notes and redline button should present", () => {
@@ -1255,6 +1265,8 @@ context("LHR Build type flow", () => {
           lhrDocUrl1 = url;
         });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -1309,6 +1321,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Complete step", () => {
@@ -1326,6 +1340,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
@@ -1337,6 +1353,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
@@ -1363,6 +1381,8 @@ context("LHR Build type flow", () => {
           lhrDocUrl2 = url;
         });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -1417,6 +1437,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Complete step", () => {
@@ -1434,6 +1456,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(lhrDocUrl2);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
@@ -1445,6 +1469,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
@@ -1468,6 +1494,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
@@ -1489,6 +1517,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(lhrDocUrl2);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
@@ -1510,6 +1540,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(startMpiUrl1);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
@@ -1535,6 +1567,8 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(startMpiUrl2);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
