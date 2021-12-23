@@ -15,8 +15,7 @@ import {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
-  GridExpandChangeEvent,
-  GridNoRecords, GridToolbar,
+  GridExpandChangeEvent, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
@@ -196,13 +195,15 @@ export function KendoPanel<T extends any>({
   const initialKendoConfig: State = kendoConfigFromState
     ? JSON.parse(kendoConfigFromState)
     : {
-      filter: {
-        logic: "and",
-        filters: [{ field: "active", operator: "eq", value: true }],
-      },
+      filter:
+        {
+          logic: "and",
+          filters: [{ field: "active", operator: "eq", value: true }],
+        },
       skip: 0,
       take: 25,
       group: [],
+      sort: [],
     };
 
   const setSearchStatus = () => {
@@ -456,8 +457,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          key={tableName}
-          className={`${classes.kGrid} no-row-pointer`}
+          className={classes.kGrid}
           data={result}
           total={resultState.total > 0 ? resultState.total : gridData.length}
           pageable={gridConfiguration.pagerSettings}
@@ -494,19 +494,10 @@ export function KendoPanel<T extends any>({
             </Grid>
           </GridToolbar>
           {sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => {
-            if (column.show === true) {
+            if (column.show) {
               return columnRenderer(column, idx);
-            } else {
-              return (
-                <>
-                  <KendoGrid data={[]}>
-                    <GridNoRecords>There is no data available</GridNoRecords>
-                    <GridColumn field="id" />
-                    <GridColumn field="name" />
-                  </KendoGrid>
-                </>
-              );
             }
+            return null;
           })}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
