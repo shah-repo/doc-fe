@@ -32,6 +32,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
+import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
@@ -45,6 +46,7 @@ import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
   documentRevisionQueryStatus,
+  trainingCompletedOnDateOption,
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -131,6 +133,13 @@ export function KendoPanel<T extends any>({
 
   const [defaultDDItem, setDefaultDDItem] = useState(defaultStatus);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
+  const defaultItem = {
+    text: "Select Item",
+    value: "",
+  };
+  const dropdownFilterState = tableCriteria.queryDict ? tableCriteria.queryDict : {};
+  const initialCompletedOnSelectedOption = dropdownFilterState.effectiveDate || defaultItem;
+  const [completedOnSelectedOption, setCompletedOnSelectedOption] = React.useState(initialCompletedOnSelectedOption);
   useEffect(() => {
     if (didMount) {
       if (isEmpty(tableCriteria.queryDict)) {
@@ -148,7 +157,7 @@ export function KendoPanel<T extends any>({
         queryApi();
       }
     }
-  }, [tableCriteria.kendoConfig, didMount]);
+  }, [tableCriteria.kendoConfig, didMount, completedOnSelectedOption]);
 
   useEffect(() => {
     if (tableCriteria.forceUpdate) {
@@ -165,7 +174,13 @@ export function KendoPanel<T extends any>({
       if (key.startsWith("dynamicParams")) {
         set(params, key, value);
       } else {
-        params[key] = value;
+        if (key === "effectiveDate") {
+          if (value.value) {
+            params[key] = value.value;
+          }
+        } else {
+          params[key] = value;
+        }
       }
     });
     params.dynamicParams = JSON.stringify(params.dynamicParams);
@@ -308,6 +323,7 @@ export function KendoPanel<T extends any>({
           {
             ...tableCriteria,
             queryDict: {
+              ...tableCriteria.queryDict,
               "status[]": documentRevisionQueryStatus(),
               "displayStatus": statusFilterObj.value,
               "documentTypeWithoutCategory": true,
@@ -321,7 +337,6 @@ export function KendoPanel<T extends any>({
         tableSearchActions.setSearchCriteria(
           {
             ...tableCriteria,
-            queryDict: {},
           },
           tableName
         )
@@ -347,21 +362,57 @@ export function KendoPanel<T extends any>({
       defaultValue={"Select Type"}
     />
   );
+  const CompletedOnFilterCell: any = (props: GridFilterCellProps) => (
+    <DateDropdownFilterCell
+      {...props}
+      data={trainingCompletedOnDateOption()}
+      defaultItem={completedOnSelectedOption}
+      onStateChange={onEffectiveDateChange}
+      defaultValue={completedOnSelectedOption}
+      operator={"gt"}
+    />
+  );
   const filterCellMapping = {
     "displayStatus": StatusFilterTempalte,
     "document.documentType.documentTypeAcronym": TypeFilterTemplate,
+    "effectiveDate": CompletedOnFilterCell,
   };
 
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
 
   // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: boolean) => {
+  const onStateChange = (setDefault: any) => {
     if (setDefault) {
       setDefaultDDItem("Select State");
       setSearchStatus(documentRevisionQueryStatus(), undefined, false);
     } else {
       setFireAPI(true);
     }
+  };
+  const onEffectiveDateChange = (setDefault: any) => {
+    const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
+    if (setDefault) {
+      setDefaultDDItem("Select State");
+      setSearchStatus(documentRevisionQueryStatus(), undefined, false);
+    } else {
+      setFireAPI(true);
+    }
+    if (setDefault.parentField === "effectiveDate") {
+      setCompletedOnSelectedOption(updatedFilter);
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              ...tableCriteria.queryDict,
+              effectiveDate: updatedFilter,
+            },
+          },
+          tableName
+        )
+      );
+    }
+    setFireAPI(true);
   };
   const setSearchStatus = (
     status?: DocumentRevisionStatus | DocumentRevisionStatus[],
