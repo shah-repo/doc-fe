@@ -3,10 +3,11 @@ import { process, State } from "@progress/kendo-data-query";
 import { setGroupIds } from "@progress/kendo-react-data-tools";
 import {
   Grid as Kgrid,
+  GridCellProps,
   GridColumn,
   GridDataStateChangeEvent,
   GridItemChangeEvent,
-  GridNoRecords
+  GridNoRecords,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, isEmpty, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -27,6 +28,7 @@ import gridConfiguration from "./column.definition";
 import { CommandCell } from "./column.templates/CommandCell";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import KendoGridStyles from "./styles";
+import { DTMAddRow, DTMRowItem } from "./types";
 
 interface KendoPanelProps<T> {
   gridData: T[];
@@ -34,14 +36,14 @@ interface KendoPanelProps<T> {
 type Props<T> = KendoPanelProps<T>;
 export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   const classes = KendoGridStyles();
-  const actualData = cloneDeep(gridData);
+  const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
   const columns = gridConfiguration.columns;
   const editField = "inEdit";
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -116,7 +118,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
 
   // Create Grid Columns
   const renderColumns = () =>
-    columns.map((col: KendoColumn, index) => {
+    columns.map((col: KendoColumn, index: number) => {
       if (col.show) {
         return (
           <GridColumn
@@ -136,7 +138,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     });
 
   // Services
-  const commandCell = (props) => (
+  const commandCell = (props: GridCellProps) =>
     <CommandCell
       {...props}
       edit={enterEdit}
@@ -146,9 +148,9 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       cancel={cancel}
       editField={editField}
     />
-  );
+  ;
   // On edit click- all cells in edit mode
-  const enterEdit = (dataItem) => {
+  const enterEdit = (dataItem: DTMRowItem) => {
     each(actualData, (item: any) => {
       if (item.id === dataItem.id) {
         item.inEdit = true;
@@ -173,7 +175,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   };
 
   // On field config: inline edit
-  const update = (dataItem) => {
+  const update = (dataItem: DTMRowItem) => {
     const newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
@@ -184,7 +186,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       defaultTraining: dataItem.defaultTraining,
       startingNumber: dataItem.startingNumber,
       hiddenForCreationForUsersWithoutTags:
-        dataItem.hiddenForCreationForUsersWithoutTags,
+      dataItem.hiddenForCreationForUsersWithoutTags,
       group: dataItem.group,
       category: dataItem.category,
       schema: dataItem.schema,
@@ -202,7 +204,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     }
   };
   // On field config: inline edit- Update api call
-  const onFieldConfig = (values, id) => {
+  const onFieldConfig = (values, id: string) => {
     async.start(
       updateDocumentTypeAction,
       id,
@@ -215,7 +217,8 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   const addNewRowObject = () => {
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
-    const newDataArr: any = [newDataItem, ...actualData];
+    // TODO: Define type
+    const newDataArr: any[] = [newDataItem, ...actualData];
     setGridEditID("inEdit");
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
@@ -223,7 +226,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   };
 
   // TODO: FIND BETTER SOLUTION
-  const gridCellValidation = (dataItem) => {
+  const gridCellValidation = (dataItem: DTMAddRow) => {
     const emptyFields: string[] = [];
     if (isEmpty(dataItem.documentTypeName)) {
       emptyFields.push("Document Type");
@@ -238,7 +241,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   };
 
   // Api Call on Add New Row
-  const addNewRow = (values: any) => {
+  const addNewRow = (values: DTMAddRow) => {
     const emptyFields: string[] = gridCellValidation(values);
     if (!isEmpty(emptyFields)) {
       toastError(`${emptyFields.join(",")} is missing.`);
@@ -250,14 +253,14 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   };
 
   // Delete document
-  const deleteDocumnet = (dataItem) => {
+  const deleteDocumnet = (dataItem: DTMRowItem) => {
     dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
   };
 
   // While editing setting the new values to the dataItem
   const itemChange = (e: GridItemChangeEvent) => {
     // For Update
-    let newData: any = [];
+    let newData: T[] = [];
     if (e.dataItem.id) {
       newData = map(actualData, (item) => {
         if (item.id === e.dataItem.id) {

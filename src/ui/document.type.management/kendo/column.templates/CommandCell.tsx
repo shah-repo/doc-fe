@@ -3,10 +3,12 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
+// import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
+import { CellCommandConfig } from "../types";
 
-export const CommandCell = (props) => {
+export const CommandCell = (props: CellCommandConfig) => {
   const styles = makeStyles(() => ({
     ButtonColor: {
       color: Colors.navy,

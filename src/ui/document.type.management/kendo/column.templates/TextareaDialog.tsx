@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, 
 import CloseIcon from "@material-ui/icons/Close";
 import { Field, FieldWrapper, Form, FormElement } from "@progress/kendo-react-form";
 import { TextArea } from "@progress/kendo-react-inputs";
+import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
 import GridCellStyles from "./CellStyles";
@@ -90,7 +91,7 @@ export const TextareaDialog = (props) => {
           <DialogContent dividers>
             <Field id={fieldName} name={fieldName} label={props.title}
               component={FormTextArea}
-              defaultV={props.item ? JSON.stringify(props.item, undefined, 4) : ""}
+              defaultV={!isEmpty(props.item) ? JSON.stringify(props.item, undefined, 4) : ""}
               isEdit={props.isEdit} />
           </DialogContent>
           <DialogActions>

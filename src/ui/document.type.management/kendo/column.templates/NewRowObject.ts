@@ -10,8 +10,8 @@ export const NewRowObject = {
   hiddenForCreationForUsersWithoutTags: [],
   group: "",
   category: null,
-  schema: null,
-  fieldsConfig: null,
-  defaultRevStage: null,
+  schema: [],
+  fieldsConfig: undefined,
+  defaultRevStage: "",
   active: false,
 };
