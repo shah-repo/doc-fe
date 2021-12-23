@@ -39,6 +39,7 @@ import {
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
+import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState } from "../../components/common/kendo/helpers";
@@ -56,7 +57,6 @@ import {
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
-import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DroDownFilterChangeProps } from "./types";
 
@@ -454,7 +454,7 @@ export function KendoPanel<T extends any>({
   const clearFilter = () => setSearchStatus(undefined, true);
 
   const AssignedDateFilterTemplate: any = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+    <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
       defaultItem={defaultTrainingItem}
@@ -465,7 +465,7 @@ export function KendoPanel<T extends any>({
   );
 
   const DueDateFilterTemplate: any = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+    <DateDropdownFilterCell
       {...props}
       data={dueDateOption()}
       defaultItem={dueDateSelectedOption}
@@ -476,7 +476,7 @@ export function KendoPanel<T extends any>({
   );
 
   const CompletedOnFilterTemplate: any = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+    <DateDropdownFilterCell
       {...props}
       data={trainingCompletedOnDateOption()}
       defaultItem={completedOnSelectedOption}
