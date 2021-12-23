@@ -88,6 +88,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: "150px",
     groupable: false,
+    cell: KendoCellTemplates.DATE_INFO,
     showColumnMenu: true,
     orderIndex: 8,
   },
