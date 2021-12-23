@@ -73,7 +73,9 @@ const AddGroup: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Dialog fullScreen={true} open={isOpen}>
+    <Dialog fullScreen={false} open={isOpen}  fullWidth
+      maxWidth="xl"
+    >
       <DialogTitle
         closeDialog={closeDialog}
         title={title}
