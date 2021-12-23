@@ -154,11 +154,6 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     each(actualData, (item: any) => {
       if (item.id === dataItem.id) {
         item.inEdit = true;
-        item.hiddenForCreationForUsersWithoutTags = !isEmpty(
-          dataItem.hiddenForCreationForUsersWithoutTagsFormatted
-        )
-          ? dataItem.hiddenForCreationForUsersWithoutTagsFormatted[0]
-          : null;
       }
     });
     setGridEditID("inEdit");
@@ -186,7 +181,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       defaultTraining: dataItem.defaultTraining,
       startingNumber: dataItem.startingNumber,
       hiddenForCreationForUsersWithoutTags:
-      dataItem.hiddenForCreationForUsersWithoutTags,
+      dataItem.hiddenForCreationForUsersWithoutTagsFormatted,
       group: dataItem.group,
       category: dataItem.category,
       schema: dataItem.schema,
