@@ -16,7 +16,7 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
-  GridNoRecords, GridRowClickEvent, GridToolbar
+  GridNoRecords, GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
@@ -153,7 +153,7 @@ export function KendoPanel<T extends any>({
     }
   });
 
-  const edit = (dataItem: GridRowClickEvent) => {
+  const edit = (dataItem) => {
     onSelect && onSelect({ dataItem })();
   };
 
@@ -187,7 +187,7 @@ export function KendoPanel<T extends any>({
   };
 
 
-  const cancel = (dataItem: UserManage) => {
+  const cancel = () => {
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
