@@ -14,6 +14,7 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
     text: string;
     value: string;
   }[];
+  customOperator: string;
 }
 
 export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
@@ -31,7 +32,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
     // hasValue = hasValue(event.target.value);
     props.onChange({
       value: hasValue ? selectedItem?.value : "",
-      operator: hasValue ? "contains" : "",
+      operator: hasValue ? props.customOperator : "",
       syntheticEvent: event.syntheticEvent,
     });
   };

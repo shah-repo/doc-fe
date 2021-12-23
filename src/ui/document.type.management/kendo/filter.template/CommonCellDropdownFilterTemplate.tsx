@@ -14,7 +14,16 @@ const getDSByType = (type) => enumToOptions(type).map((o) => ({
   value: o.value,
 }));
 
-const getDropDownDataSource = (field: string) => {
+interface DataSourceProps {
+  text: string;
+  value: string | boolean;
+}
+interface ResultProps {
+  dataSource: DataSourceProps[];
+  operator: string;
+
+}
+const getDropDownDataSource: (f: string) => ResultProps = (field: string) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const intl = useIntl();
   const revisionStageOptions = translatedOptions(intl, REVISION_STAGE_OPTIONS).map((o) => ({
@@ -22,19 +31,29 @@ const getDropDownDataSource = (field: string) => {
     value: o.value,
   }));
   const statusOptions = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
+  const result: ResultProps = {
+    dataSource: [],
+    operator: "eq",
+  };
   switch (field) {
     case "defaultRevStage":
-      return orderBy(revisionStageOptions, "text");
+      result.dataSource = orderBy(revisionStageOptions, "text");
+      return result;
     case "hiddenForCreationForUsersWithoutTags":
-      return orderBy(getDSByType(GroupTag), "text");
+      result.dataSource = orderBy(getDSByType(GroupTag), "text");
+      return result;
     case "hiddenForCreationForUsersWithoutTagsFormatted":
-      return orderBy(getDSByType(GroupTag), "text");
+      result.dataSource = orderBy(getDSByType(GroupTag), "text");
+      result.operator = "contains";
+      return result;
     case "group":
-      return orderBy(getDSByType(DOC_TYPE_GROUP), "text");
+      result.dataSource = orderBy(getDSByType(DOC_TYPE_GROUP), "text");
+      return result;
     case "active":
-      return statusOptions;
+      result.dataSource = statusOptions;
+      return result;
     default:
-      return [];
+      return result;
   }
 };
 
@@ -43,24 +62,26 @@ export const BooleanFilterCell = (props: any) => (
     {...props}
     data={gridConfiguration.booleanFilterCellOptions}
     defaultItem={{ text: "All", value: "All" }}
+    customOperator="eq"
   />
 );
 
 export const DropdownFilterCellTemplate = (props: any) => {
-  const dataSource = getDropDownDataSource(props.field);
+  const result: ResultProps  = getDropDownDataSource(props.field);
   return (
     <DropdownFilterCell
       {...props}
-      data={dataSource}
+      data={result.dataSource}
       defaultItem={{ text: "", value: "" }}
+      customOperator={result.operator}
     />
   );
 };
 
 // MOVE IN ANOTHER FILE
 export const EditDropdownCellFormatter = (props) => {
-  const localizedData = getDropDownDataSource(props.field);
-  const isEdit = get(props.dataItem, "inEdit");
+  const localizedData: ResultProps = getDropDownDataSource(props.field);
+  const isEdit: boolean = get(props.dataItem, "inEdit");
   const handleChange = (e) => {
     if (props.onChange) {
       props.onChange({
@@ -81,8 +102,8 @@ export const EditDropdownCellFormatter = (props) => {
       {isEdit ? (
         <DropDownList
           onChange={handleChange}
-          value={localizedData.find((c) => c.value === dataValue)}
-          data={localizedData}
+          value={localizedData.dataSource.find((c) => c.value === dataValue)}
+          data={localizedData.dataSource}
           textField="text"
           dataItemKey="value"
         />
