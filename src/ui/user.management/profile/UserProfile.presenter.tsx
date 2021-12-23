@@ -94,7 +94,9 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Dialog fullScreen={true} open={isOpen}>
+    <Dialog fullScreen={false} fullWidth
+      maxWidth="xl"
+      open={isOpen}>
       <DialogTitle
         showEditUser={showEditUser}
         name={name}
