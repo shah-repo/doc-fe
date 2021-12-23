@@ -45,8 +45,8 @@ import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
+  documentRevisionEffectiveDateOption,
   documentRevisionQueryStatus,
-  trainingCompletedOnDateOption,
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -365,7 +365,7 @@ export function KendoPanel<T extends any>({
   const CompletedOnFilterCell: any = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
-      data={trainingCompletedOnDateOption()}
+      data={documentRevisionEffectiveDateOption()}
       defaultItem={completedOnSelectedOption}
       onStateChange={onEffectiveDateChange}
       defaultValue={completedOnSelectedOption}
