@@ -391,12 +391,6 @@ export function KendoPanel<T extends any>({
   };
   const onEffectiveDateChange = (setDefault: any) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
-    if (setDefault) {
-      setDefaultDDItem("Select State");
-      setSearchStatus(documentRevisionQueryStatus(), undefined, false);
-    } else {
-      setFireAPI(true);
-    }
     if (setDefault.parentField === "effectiveDate") {
       setCompletedOnSelectedOption(updatedFilter);
       dispatch(
@@ -424,6 +418,7 @@ export function KendoPanel<T extends any>({
       logic: "and",
       filters: clearOtherFilter ? [] : filter(currentFilters, (o: any) => o.field !== "displayStatus"),
     };
+    setCompletedOnSelectedOption(defaultItem);
     setDefaultDDItem("Select State");
     setDataState(dataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
