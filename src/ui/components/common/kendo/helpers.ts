@@ -1,4 +1,4 @@
-import { chain } from "lodash";
+import { chain, filter, findIndex } from "lodash";
 import { denormalize, normalize, schema } from "normalizr";
 
 export const orderByLockedState = (
@@ -14,9 +14,15 @@ export const orderByLockedState = (
       column.sortable = !column.locked;
       column.orderIndex = column.locked ? 0 : column.orderIndex;
       column.groupable = column.locked ? !column.locked : isGroupable(column.field);
+      column.disabled = false;
       return column;
     })
     .value();
+  const hiddenColumns = filter(sortedColumnDefinitions, { show: false }).length;
+  if (hiddenColumns === sortedColumnDefinitions.length - 1) {
+    const indexOfObject =  findIndex(sortedColumnDefinitions, ["show", true]);
+    sortedColumnDefinitions[indexOfObject].disabled = true;
+  }
   return sortedColumnDefinitions;
 };
 
@@ -24,9 +30,9 @@ export const orderByLockedState = (
  * Entity schema for the group entity. Along with the required field to identify the entity,
  */
 const columnSchema = new schema.Entity("columns", {}, { idAttribute: "field" });
-const filter = new schema.Entity("filter", {}, { idAttribute: "field" });
+const filterentity = new schema.Entity("filter", {}, { idAttribute: "field" });
 const group = new schema.Entity("group");
-const filters = { filters: [filter] };
+const filters = { filters: [filterentity] };
 const groups = { groups: [group] };
 const kendoConfigSchema = new schema.Object({ filter: filters, groups });
 
