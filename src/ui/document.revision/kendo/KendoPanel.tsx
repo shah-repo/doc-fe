@@ -345,13 +345,9 @@ export function KendoPanel<T extends any>({
   // Kendo Grid Actions Methods
   const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
-      setSearchStatus(
-        documentRevisionQueryStatus(),
-        "Released" as DocumentRevisionStatus
-      );
-    } else {
-      setFireAPI(true);
+      setDefaultDDItem("Select State");
     }
+    setFireAPI(true);
   };
   const setSearchStatus = (
     status?: DocumentRevisionStatus | DocumentRevisionStatus[],
