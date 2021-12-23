@@ -155,9 +155,9 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       if (item.id === dataItem.id) {
         item.inEdit = true;
         item.hiddenForCreationForUsersWithoutTags = !isEmpty(
-          dataItem.hiddenForCreationForUsersWithoutTags
+          dataItem.hiddenForCreationForUsersWithoutTagsFormatted
         )
-          ? dataItem.hiddenForCreationForUsersWithoutTags[0]
+          ? dataItem.hiddenForCreationForUsersWithoutTagsFormatted[0]
           : null;
       }
     });
@@ -248,6 +248,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       return;
     } else {
       delete values.inEdit;
+      delete values?.hiddenForCreationForUsersWithoutTagsFormatted;
       async.start(addDocumentTypeAction, toDocumentTypeBody(values), async);
     }
   };

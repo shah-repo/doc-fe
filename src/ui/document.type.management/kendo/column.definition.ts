@@ -92,11 +92,12 @@ const columns: KendoColumn[] = [{
   filterCell: DropdownFilterCellTemplate,
   show: true,
   width: "165px",
-}, {
-  field: "hiddenForCreationForUsersWithoutTags",
+},
+{
+  field: "hiddenForCreationForUsersWithoutTagsFormatted",
   title: "Users without Tags", // TODO: Check if multiSelect
   cell: EditDropdownCellFormatter,
-  filterCell: DropdownFilterCellTemplate, // Not working
+  filterCell: DropdownFilterCellTemplate,
   show: true,
   width: "200px",
 },
@@ -120,7 +121,7 @@ const columns: KendoColumn[] = [{
   filterable: false,
   width: "95px",
 }, {
-  field: "fieldsConfig", // TODO: Update svg, check with Shiv
+  field: "fieldsConfig",
   title: "Field Config",
   cell: FieldsConfig,
   show: true,

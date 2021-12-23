@@ -27,6 +27,8 @@ const getDropDownDataSource = (field: string) => {
       return orderBy(revisionStageOptions, "text");
     case "hiddenForCreationForUsersWithoutTags":
       return orderBy(getDSByType(GroupTag), "text");
+    case "hiddenForCreationForUsersWithoutTagsFormatted":
+      return orderBy(getDSByType(GroupTag), "text");
     case "group":
       return orderBy(getDSByType(DOC_TYPE_GROUP), "text");
     case "active":
@@ -85,7 +87,7 @@ export const EditDropdownCellFormatter = (props) => {
           dataItemKey="value"
         />
       ) : (
-        dataValue.toString()
+        dataValue
       )}
     </td>
   );

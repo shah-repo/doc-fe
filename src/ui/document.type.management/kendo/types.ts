@@ -23,6 +23,7 @@ export interface CellCommandConfig extends GridCellProps {
 }
 
 export interface DTMRowItem {
+  hiddenForCreationForUsersWithoutTagsFormatted: any;
   active: boolean;
   canRedLine: boolean;
   category: string;
@@ -49,6 +50,7 @@ export interface DTMRowItem {
 }
 
 export interface DTMAddRow {
+  hiddenForCreationForUsersWithoutTagsFormatted?: GroupTag[];
   active?: boolean;
   id?: string;
   documentTypeAcronym: string;

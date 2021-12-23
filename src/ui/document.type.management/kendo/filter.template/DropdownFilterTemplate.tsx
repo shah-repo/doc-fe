@@ -31,7 +31,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
     // hasValue = hasValue(event.target.value);
     props.onChange({
       value: hasValue ? selectedItem?.value : "",
-      operator: hasValue ? "eq" : "",
+      operator: hasValue ? "contains" : "",
       syntheticEvent: event.syntheticEvent,
     });
   };
