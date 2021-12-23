@@ -231,7 +231,7 @@ export function KendoPanel<T extends any>({
     dataState.group = [];
     setDataState(dataState);
     setResultState({
-      data: [],
+      data: tableData,
       total: 0,
     });
     tableCriteria.kendoConfig = JSON.stringify(dataState);
