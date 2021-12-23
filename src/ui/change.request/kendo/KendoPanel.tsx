@@ -98,23 +98,49 @@ export function KendoPanel<T extends any>({
     gridConfiguration.columns
   );
 
-  const initialDataState: State = kendoConfig
-    ? JSON.parse(kendoConfig)
-    : {
+
+  let defaultStatus = "IN_REVIEW";
+  let initialDataState: State;
+
+  if (kendoConfig) {
+    initialDataState = JSON.parse(kendoConfig);
+    if (initialDataState.filter?.filters.length) {
+      const fObj: any = find(initialDataState.filter?.filters, {
+        field: "state",
+      }) || { field: null, value: null };
+      if (fObj) {
+        defaultStatus = fObj.value;
+      } else {
+        defaultStatus = "Select State";
+      }
+    } else {
+      defaultStatus = "Select State";
+    }
+  } else {
+    initialDataState = {
       skip: 0,
       take: 25,
       group: [],
       sort: [],
-      // Initial filter descriptor
       filter: {
         logic: "and",
-        filters: [{ field: "state", operator: "eq", value: "IN_REVIEW" }],
+        filters: [
+          { field: "state", operator: "eq", value: "IN_REVIEW" },
+        ],
       },
     };
+  }
+  useEffect(() => {
+    if (!initialDataState.filter?.filters.length && defaultDDItem !== "IN_REVIEW") {
+      setSearchStatus(
+        ChangeRequestStatus.InReview,
+      );
+    }
+
+  }, [tableName]);
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
-
-  const [defaultDDItem, setDefaultDDItem] = React.useState("IN_REVIEW");
+  const [defaultDDItem, setDefaultDDItem] = React.useState(defaultStatus);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   useEffect(() => {
     if (didMount) {
@@ -133,6 +159,7 @@ export function KendoPanel<T extends any>({
       }
     }
   }, [tableCriteria.kendoConfig, didMount]);
+
   useEffect(() => {
     if (tableCriteria.forceUpdate) {
       queryApi();
@@ -329,6 +356,7 @@ export function KendoPanel<T extends any>({
   const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
       setDefaultDDItem("Select State");
+      setSearchStatus(undefined);
     }
     setFireAPI(true);
   };
