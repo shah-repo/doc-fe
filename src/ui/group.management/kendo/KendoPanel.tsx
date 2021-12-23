@@ -547,7 +547,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={classes.kGrid}
+          className={`${classes.kGrid} no-row-pointer`}
           data={result}
           editField={editField}
           total={resultState.total}
