@@ -8,6 +8,7 @@ import {
   State,
 } from "@progress/kendo-data-query";
 import {
+  setExpandedState,
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
@@ -288,7 +289,10 @@ export function KendoPanel<T extends any>({
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(gridData, initialKendoConfig)
   );
-
+  const result = setExpandedState({
+    data: resultState.data,
+    collapsedIds: collapsedState,
+  });
   const trainingDetailsDialog = useDialog();
   const [training, setTraining] = useState<TrainingRecordQuery>(
     DEFAULT_TRAINING_RECORD_QUERY
@@ -533,7 +537,7 @@ export function KendoPanel<T extends any>({
         <KendoGrid
           className={classes.kGrid}
           style={{ width: `${width}px` }}
-          data={resultState}
+          data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
           sortable={true}
