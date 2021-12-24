@@ -44,9 +44,9 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -405,7 +405,7 @@ export function KendoGrid<T extends any>({
             }
             filter={column.filter}
             filterCell={getFilterCell(column.field)}
-            cell={getCellTemplate(column.cell)}
+            cell={(props) => RenderCustomCell(props, column.cell)}
             orderIndex={column.orderIndex}
             format={column.format}
             columnMenu={
