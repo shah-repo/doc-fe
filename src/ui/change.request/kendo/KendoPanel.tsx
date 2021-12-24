@@ -421,6 +421,9 @@ export function KendoPanel<T extends any>({
 
   // On Grid Row click
   const onRowClick = (props: GridRowClickEvent) => {
+    if (isEmpty(props.dataItem.id)) {
+      return false;
+    }
     let urlPath = changeRequestPreviewPath(props.dataItem.id);
     if (canEdit(props.dataItem)) {
       urlPath = changeRequestEditPath(props.dataItem.id);
