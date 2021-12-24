@@ -44,7 +44,7 @@ import { getCellTemplate } from "../../components/common/kendo.column.templates/
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
+import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -357,6 +357,7 @@ export function KendoPanel<T extends any>({
         column.width = columnObject ? columnObject.width : column.width;
         return column;
       });
+      hideColumnTitleOnResize();
       setColumnDefinitions(dataColumns);
       updateDataColumnsState(dataColumns);
     }
