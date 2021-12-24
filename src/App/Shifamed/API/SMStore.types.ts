@@ -50,6 +50,7 @@ export interface SMStoreAdapter {
 
 export interface SMStoreRequestSet<Body> {
   url?: string;
+  urlValues?: Record<string, any>;
   body?: Body;
   mapping?: string;
   persist?: boolean;

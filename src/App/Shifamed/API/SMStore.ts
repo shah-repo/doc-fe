@@ -1,8 +1,8 @@
 import { first, get, has, isArray, isEmpty, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
-import { smStoreClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../../..";
-import { store } from "../../../../state/store";
-import { toastError } from "../../../../ui/components/notifications";
+import { apiClient, SMStoreError, SMStorePassword, SMStoreProps, SMStoreRequestMethod, SMStoreRequestSet, storeClient } from "../..";
+import { store } from "../../../state/store";
+import { toastError } from "../../../ui/components/notifications";
 
 class SMStore implements SMStoreProps {
   // MARK: @config
@@ -41,16 +41,29 @@ class SMStore implements SMStoreProps {
     callback?: (data?: Data, error?: SMStoreError) => any
   ) => this.start<Data, Body>("post", set, callback);
 
+  public patch = <Data, Body>(
+    set: SMStoreRequestSet<Body>,
+    callback?: (data?: Data, error?: SMStoreError) => any
+  ) => this.start<Data, Body>("patch", set, callback);
+
   private start = <Data, Body>(
     method: SMStoreRequestMethod,
     set: SMStoreRequestSet<Body>,
     callback?: (data?: Data, error?: SMStoreError) => any
   ) => {
-    const { url, body, mapping = "" } = set;
+    let urlStr = set.url;
+    const { urlValues, body, mapping = "" } = set;
 
-    if (!url || isEmpty(url)) {
+    if (urlValues) {
+      const urlTpl = template(urlStr);
+      urlStr = urlTpl(urlValues);
+    }
+
+    if (!urlStr || isEmpty(urlStr)) {
       return toastError("SMStore Error: Missing url in api call!");
     }
+
+    const url = urlStr;
 
     // If data is loading
     if (this.loading.get(url)) {
@@ -68,13 +81,13 @@ class SMStore implements SMStoreProps {
     }
 
     storeClient(authorization);
-    const apiClient = smStoreClient();
+    const api = apiClient();
 
     const request: Record<SMStoreRequestMethod, () => Promise<any>> = {
-      get: () => apiClient.get(url, body).promise,
-      post: () => apiClient.post(url, body).promise,
-      patch: () => apiClient.patch(url, body).promise,
-      delete: () => apiClient.del(url, body).promise,
+      get: () => api.get(url, body).promise,
+      post: () => api.post(url, body).promise,
+      patch: () => api.patch(url, body).promise,
+      delete: () => api.del(url, body).promise,
     };
 
     const promise = request[method]();

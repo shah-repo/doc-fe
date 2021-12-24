@@ -4,6 +4,10 @@ export * from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentR
 export { default as DocumentRevisionForm } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm";
 export { default as DocumentRevisionFormState } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.state";
 export * from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.types";
+export { default as SMStore } from "./Shifamed/API/SMStore";
+export * from "./Shifamed/API/SMStore.client";
+export * from "./Shifamed/API/SMStore.defaults";
+export * from "./Shifamed/API/SMStore.types";
 export { default as SMButton } from "./Shifamed/Components/SMButton/SMButton";
 export * from "./Shifamed/Components/SMButton/SMButton.types";
 export { default as SMDialogState } from "./Shifamed/Components/SMDialog/SMDialog.state";
@@ -32,8 +36,4 @@ export * from "./Shifamed/Utils/SM/SM";
 export { default as SM } from "./Shifamed/Utils/SM/SM";
 export { default as SMProvider } from "./Shifamed/Utils/SMProvider/SMProvider";
 export * from "./Shifamed/Utils/SMProvider/SMProvider.types";
-export { default as SMStore } from "./Shifamed/Utils/SMStore/SMStore";
-export * from "./Shifamed/Utils/SMStore/SMStore.client";
-export * from "./Shifamed/Utils/SMStore/SMStore.defaults";
-export * from "./Shifamed/Utils/SMStore/SMStore.types";
 

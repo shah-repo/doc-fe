@@ -1,6 +1,6 @@
 import axios from "axios";
-import { SMStoreAdapter } from "../../..";
-import Config from "../../../../config";
+import { SMStoreAdapter } from "../..";
+import Config from "../../../config";
 
 
 let currentAdapter: any;
@@ -8,7 +8,7 @@ let currentAdapter: any;
 /**
  * Sets or gets the api client instance
  */
-export function smStoreClient(
+export function apiClient(
   adapter?: SMStoreAdapter,
   options: { [key: string]: any } = {},
 ): SMStoreAdapter {
@@ -23,10 +23,9 @@ export function smStoreClient(
   return currentAdapter;
 }
 
-
 export const storeClient = (authorization: string) => {
   const createAdapter: any = require("mobx-rest-axios-adapter").default;
-  smStoreClient(createAdapter(axios), {
+  apiClient(createAdapter(axios), {
     apiPath: Config.ApiEndpoint,
     commonOptions: {
       headers: {
