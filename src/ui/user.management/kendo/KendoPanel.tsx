@@ -458,7 +458,7 @@ export function KendoPanel<T extends any>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={classes.kGrid}
+          className={`${classes.kGrid} no-row-pointer`}
           data={result}
           total={resultState.total > 0 ? resultState.total : gridData.length}
           pageable={gridConfiguration.pagerSettings}
