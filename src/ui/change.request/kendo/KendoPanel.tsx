@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -15,7 +15,7 @@ import {
   GridFilterCellProps,
   GridNoRecords,
   GridRowClickEvent,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { each, find, isEmpty, map, pick, set } from "lodash";
@@ -28,19 +28,19 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
   ChangeRequest,
-  ChangeRequestStatus,
+  ChangeRequestStatus
 } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import {
   KendoColumn,
-  KendoPanelProps,
+  KendoPanelProps
 } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
@@ -49,11 +49,11 @@ import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import {
   canEditChangeRequest,
-  changeRequestStatusOption,
+  changeRequestStatusOption
 } from "../utils/helpers";
 import {
   changeRequestEditPath,
-  changeRequestPreviewPath,
+  changeRequestPreviewPath
 } from "../utils/paths";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -475,7 +475,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
-      cell={getCellTemplate(column.cell)}
+      cell={(props) => RenderCustomCell(props, column.cell)}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
