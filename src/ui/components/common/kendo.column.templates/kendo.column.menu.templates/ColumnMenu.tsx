@@ -78,12 +78,12 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   return (
     <>
       {columnDef?.groupable && <GridColumnMenuGroup {...props} />}
-      <GridColumnMenuItem
+      {!columnDef?.disabled && <GridColumnMenuItem
         {...props}
         iconClass="k-i-preview .k-i-eye"
         onClick={() => onChange(props.column.field)}
         title="Hide Column"
-      />
+      />}
       <GridColumnMenuItem
         {...props}
         iconClass={columnDef?.locked ? "k-icon k-i-unlock" : "k-icon k-i-lock"}
