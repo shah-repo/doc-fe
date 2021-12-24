@@ -27,12 +27,18 @@ export const EmployeesCell = (props) => {
     setData(newData.sort((a, b) => (a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd()) ? 1 : -1));
   };
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <td
       colSpan={props.colSpan}
+      style={props.style}
       role="gridcell"
       aria-colindex={props.ariaColumnIndex}
       aria-selected="false"
+      className={props.className}
       data-grid-col-index={props.columnIndex}
     >
       {props.dataItem.inEdit ? (

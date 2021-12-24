@@ -18,6 +18,10 @@ export const CommandCell = (props) => {
   const { dataItem } = props;
   const inEdit = dataItem.inEdit;
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return inEdit ? (
     <td
       colSpan={props.colSpan}

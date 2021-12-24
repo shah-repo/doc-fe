@@ -19,8 +19,20 @@ export const GroupCell = (props) => {
     (e) => e.value === props.isOfficial
   )[0];
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
-    <td>
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}
+    >
       {props.dataItem.inEdit ? (
         <DropDownList
           onChange={updateGroupField}

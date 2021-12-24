@@ -14,6 +14,7 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
     text: string;
     value: string;
   }[];
+  rowType: string;
 }
 
 export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
@@ -47,6 +48,11 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
       value: props.defaultItem,
     });
   };
+
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <div className="k-filtercell">
       <DropDownList

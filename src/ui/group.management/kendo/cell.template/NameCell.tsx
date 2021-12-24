@@ -7,14 +7,21 @@ export const NameCell = (props) => {
     setName(event?.target?.value);
     props.dataItem.name = event?.target?.value;
   };
+
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <>
       {!props.dataItem.inEdit && (
         <td
           colSpan={props.colSpan}
+          style={props.style}
           role="gridcell"
           aria-colindex={props.ariaColumnIndex}
           aria-selected="false"
+          className={props.className}
           data-grid-col-index={props.columnIndex}
         >
           <span>{props.dataItem.name}</span>
@@ -23,9 +30,11 @@ export const NameCell = (props) => {
       {props.dataItem.inEdit && (
         <td
           colSpan={props.colSpan}
+          style={props.style}
           role="gridcell"
           aria-colindex={props.ariaColumnIndex}
           aria-selected="false"
+          className={props.className}
           data-grid-col-index={props.columnIndex}
         >
 
