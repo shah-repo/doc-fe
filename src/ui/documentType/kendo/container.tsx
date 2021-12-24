@@ -214,7 +214,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       field: upDateField,
       title: columnLabel,
       filter: filterField,
-      width: "200px",
+      width: 15,
       groupable: true,
       cell: dynamicCellTemplate,
       locked: false,

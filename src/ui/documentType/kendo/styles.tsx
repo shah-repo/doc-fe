@@ -8,7 +8,6 @@ const GridStyles = makeStyles((theme) => ({
   },
   kGrid: {
     height: "calc(100vh - 115px)",
-    width: "calc(100vw - 255px)",
   },
   filterBtn: {
     color: Colors.navy,

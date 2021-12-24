@@ -92,7 +92,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
             : documentType.documentTypeName
         }
       />
-      <Grid item={true}>
+      <Grid item={true} xs={12}>
         <KendoGrid<DocumentRevision>
           dynamicColumns={dynamicColumns}
           tableName={tableName}
