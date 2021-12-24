@@ -254,6 +254,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
 
   // Add New row object
   const addNewRowObject = () => {
+    clearFilter();
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     // TODO: Define type
@@ -326,6 +327,10 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       logic: "and",
       filters: [],
     };
+    dataState.group = [];
+    dataState.sort = [];
+    dataState.take = 25;
+    dataState.skip = 0;
     setDropDownState({});
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
