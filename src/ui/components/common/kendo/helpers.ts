@@ -78,3 +78,18 @@ export const getFilterDenormalizedDData = (result, entities) => {
     kendoConfigSchema, entities);
   return denormalizedData;
 };
+
+/**
+ * To calculate and set column width
+ * If it is below 100% then it will be calculated considering the grid width given
+ * or else it will be same as column width
+ * @param columnWidth
+ * @param gridWidth
+ * @return [newColumnWidth]
+ */
+export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
+  if (columnWidth < 100) {
+    return (gridWidth / 100) * columnWidth;
+  }
+  return columnWidth;
+};
