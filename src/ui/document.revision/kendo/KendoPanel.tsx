@@ -22,6 +22,7 @@ import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
@@ -35,7 +36,7 @@ import { getCellTemplate } from "../../components/common/kendo.column.templates/
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { orderByLockedState } from "../../components/common/kendo/helpers";
+import { orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -442,7 +443,7 @@ export function KendoPanel<T extends any>({
       let dataColumns = [...columnDefinitions];
       dataColumns = map(dataColumns, (column) => {
         const columnObject = find(event.columns, { field: column.field });
-        column.width = columnObject?.width;
+        column.width = columnObject ? columnObject.width : column.width;
         return column;
       });
       setColumnDefinitions(dataColumns);
@@ -511,10 +512,12 @@ export function KendoPanel<T extends any>({
   );
 
   // Render Kendo Columns
-  const renderKendoColumns = (column: KendoColumn, index: React.Key | undefined) => (
+  const renderKendoColumns = (column: KendoColumn, index: React.Key | undefined, gridWidth: number) => (
     <GridColumn
       key={index}
       {...column}
+      width={setColumnWidth(column.width as number, gridWidth)}
+      minResizableWidth={100}
       cell={getCellTemplate(column.cell)}
       filterCell={
         filterCellMapping[column.field]
@@ -535,11 +538,12 @@ export function KendoPanel<T extends any>({
     />
   );
   // Render Kendo Columns
-  const renderKendoGrid = () => (
+  const renderKendoGrid = ({ width, height }: Size) => (
     <>
       <KendoGlobalization>
         <KendoGrid
           className={classes.kGrid}
+          style={{ width: `${width}px` }}
           data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
@@ -571,7 +575,7 @@ export function KendoPanel<T extends any>({
           </GridToolbar>
           {sortedColumnDefinitions.map((column, idx) => {
             if (column.show) {
-              return renderKendoColumns(column, idx);
+              return renderKendoColumns(column, idx, width);
             }
             return null;
           })}
@@ -581,10 +585,11 @@ export function KendoPanel<T extends any>({
       {isLoading && <Loader />}
     </>
   );
+  const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
-      {renderKendoGrid()}
+      {renderBody()}
     </Box>
   );
 }
