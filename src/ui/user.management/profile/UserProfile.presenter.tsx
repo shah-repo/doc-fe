@@ -1,4 +1,4 @@
-import { Dialog } from "@material-ui/core";
+import { Dialog, makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
@@ -92,10 +92,15 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
     close();
     handleCloseEdit();
   };
-
+  const styles = makeStyles(() => ({
+    dialogPaper: {
+      height: "90%",
+      width: "90%",
+    },
+  }));
+  const classes = styles();
   return (
-    <Dialog fullScreen={false} fullWidth
-      maxWidth="xl"
+    <Dialog fullScreen={true} classes={{ paper: classes.dialogPaper }}
       open={isOpen}>
       <DialogTitle
         showEditUser={showEditUser}
