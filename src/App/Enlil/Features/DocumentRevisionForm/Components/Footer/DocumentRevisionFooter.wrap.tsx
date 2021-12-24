@@ -15,7 +15,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
 
     // MARK: @config
     _documentRevisionFooterState = SM.useRef(DocumentRevisionFooterState);
-    const { _formState, _formFooterState } = SM.useStores();
+    const { _formState } = SM.useStores();
 
     // MARK: @state
 
@@ -28,7 +28,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
     // MARK: @helpers
     function setFormDocument(formDocument?: FBDocumentRevisionProps) {
       if (!formDocument) {
-        _formFooterState?.setHidden(true);
+        _documentRevisionFooterState?.setHidden(true);
         return;
       }
       const {
@@ -47,7 +47,7 @@ export const withDocumentRevisionFooterWrap = <T extends DocumentRevisionFooterP
         revisionChangeType
       );
       _documentRevisionFooterState?.setInfo({ docId, version, releasedAt });
-      _formFooterState?.setHidden(false);
+      _documentRevisionFooterState?.setHidden(false);
     }
 
     // MARK: @methods

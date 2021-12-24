@@ -7,6 +7,7 @@ export default class DocumentRevisionFooterState implements DocumentRevisionFoot
 
   // MARK: @observables
   @observable public info?: DocumentRevisionFooterInfo;
+  @observable public hidden = true;
 
   // MARK: @api
 
@@ -28,6 +29,10 @@ export default class DocumentRevisionFooterState implements DocumentRevisionFoot
   // MARK: @actions
   @action public setInfo = (info?: DocumentRevisionFooterInfo) => {
     set(this, "info", info);
+  };
+
+  @action setHidden = (hidden: boolean) => {
+    set(this, "hidden", hidden);
   };
 
   // MARK: @helpers
