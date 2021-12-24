@@ -42,7 +42,7 @@ const columns: KendoColumn[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  width: "200px",
+  width: "85px",
 },
 {
   field: "canRedLine",
@@ -51,7 +51,7 @@ const columns: KendoColumn[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  width: "110px",
+  width: "85px",
 },
 {
   field: "isQms",
@@ -69,7 +69,7 @@ const columns: KendoColumn[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  width: "185px",
+  width: "85px",
 },
 {
   field: "defaultTraining",
@@ -78,7 +78,7 @@ const columns: KendoColumn[] = [{
   filter: "boolean",
   filterCell: BooleanFilterCell,
   show: true,
-  width: "125px",
+  width: "85px",
 }, {
   field: "startingNumber",
   title: "Starting Number",

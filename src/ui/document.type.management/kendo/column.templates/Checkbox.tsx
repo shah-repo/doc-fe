@@ -6,6 +6,7 @@ import {
 } from "@progress/kendo-react-inputs";
 import { result, set } from "lodash";
 import React, { useEffect } from "react";
+import "./KendoStyles.css";
 
 export const CheckboxCell = (props: GridCellProps) => {
   const editMode = props.dataItem.inEdit;
@@ -37,8 +38,9 @@ export const CheckboxCell = (props: GridCellProps) => {
       role="gridcell"
       aria-colindex={props.ariaColumnIndex}
       aria-selected="false"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}>
+      className={`checkbox-cell ${props.className}`}
+      data-grid-col-index={props.columnIndex}
+    >
       <Checkbox
         value={dataValue}
         onChange={handleChange}

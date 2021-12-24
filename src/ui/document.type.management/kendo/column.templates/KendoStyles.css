@@ -19,4 +19,7 @@ font-weight: 600;
 font-size: 14px;
 line-height: 18px;
 }
+.checkbox-cell {
+  text-align: center !important; 
+}  
 /* For pop up window - schema, fieldConfig in document Type management grid ends here */
