@@ -230,10 +230,7 @@ export function KendoPanel<T extends any>({
     };
     dataState.group = [];
     setDataState(dataState);
-    setResultState({
-      data: tableData,
-      total: 0,
-    });
+    setResultState(processWithGroups(tableData, dataState));
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     dispatch(
       tableSearchActions.setSearchCriteria(
