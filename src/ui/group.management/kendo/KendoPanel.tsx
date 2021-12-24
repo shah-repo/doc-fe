@@ -114,9 +114,7 @@ export function KendoPanel<T extends any>({
     onSelect && onSelect({ dataItem })();
   };
   const addGroup = () => {
-    if (initialKendoConfig?.filter?.filters?.length || initialKendoConfig?.sort?.length) {
-      clearFilter();
-    }
+    clearFilter();
     // Modify Here to change sample or editable data
     const sampleData = {
       name: "",
@@ -229,6 +227,7 @@ export function KendoPanel<T extends any>({
       filters: [],
     };
     dataState.group = [];
+    dataState.sort = [];
     setDataState(dataState);
     setResultState(processWithGroups(tableData, dataState));
     tableCriteria.kendoConfig = JSON.stringify(dataState);
