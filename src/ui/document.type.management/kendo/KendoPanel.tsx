@@ -6,6 +6,7 @@ import {
   GridCellProps,
   GridColumn,
   GridDataStateChangeEvent,
+  GridFilterCellProps,
   GridItemChangeEvent,
   GridNoRecords,
 } from "@progress/kendo-react-grid";
@@ -27,11 +28,18 @@ import { toDocumentTypeBody } from "../transform";
 import gridConfiguration from "./column.definition";
 import { CommandCell } from "./column.templates/CommandCell";
 import { NewRowObject } from "./column.templates/NewRowObject";
+import { getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
+import { DropdownFilterCell } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
 interface KendoPanelProps<T> {
   gridData: T[];
+}
+interface ResultProps {
+  dataSource: any[];
+  operator: string;
+
 }
 type Props<T> = KendoPanelProps<T>;
 export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
@@ -89,6 +97,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   });
 
   const [resultState, setResultState] = React.useState(initialState.result);
+  const [dropDownState, setDropDownState] = React.useState({});
   const [dataState, setDataState] = React.useState(initialState.dataState);
   useEffect(() => {
     setIsLoading(true);
@@ -116,6 +125,41 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     setIsLoading(false);
   };
 
+  // Kendo Grid Actions Methods
+  const onStateChange = (setDefault: any) => {
+    setDropDownState((prevState) => {
+      const object = Object.assign({}, { ...prevState });
+      object[setDefault.parentField] = setDefault.selectedItem;
+      return object;
+    });
+  };
+
+  const DropdownFilterCellTemplate = (props: GridFilterCellProps) => {
+    const result: ResultProps  = getDropDownDataSource(props.field || "");
+    return <DropdownFilterCell
+      {...props}
+      data={result.dataSource}
+      defaultItem={{ text: "", value: "" }}
+      defaultValue={dropDownState[props.field || ""] || { text: "", value: "" }}
+      customOperator={result.operator}
+      onStateChange={onStateChange}
+    />;
+  };
+  const BooleanFilterCell = (props: any) => (
+    <DropdownFilterCell
+      {...props}
+      data={gridConfiguration.booleanFilterCellOptions}
+      defaultItem={{ text: "All", value: "All" }}
+      defaultValue={dropDownState[props.field || ""] || { text: "All", value: "All" }}
+      customOperator="eq"
+      onStateChange={onStateChange}
+    />
+  );
+  const FilterCellMapping = {
+    DropdownFilterCellTemplate,
+    BooleanFilterCell,
+  };
+
   // Create Grid Columns
   const renderColumns = () =>
     columns.map((col: KendoColumn, index: number) => {
@@ -127,7 +171,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
             key={index}
             cell={col.cell}
             filter={col.filter}
-            filterCell={col.filterCell}
+            filterCell={FilterCellMapping[col.filterCell] ? FilterCellMapping[col.filterCell] : undefined}
             // columnMenu={col.columnMenu}  // TODO: Will Check Later
             filterable={col.filterable}
             width={col.width}
@@ -282,6 +326,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       logic: "and",
       filters: [],
     };
+    setDropDownState({});
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -357,3 +402,4 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     </>
   );
 }
+

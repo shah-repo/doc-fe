@@ -4,7 +4,7 @@ import { GridDropDownSettings, KendoColumn, PageState } from "../../components/c
 import { CheckboxCell } from "./column.templates/Checkbox";
 import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { Schema } from "./column.templates/Schema";
-import { BooleanFilterCell, DropdownFilterCellTemplate, EditDropdownCellFormatter } from "./filter.template/CommonCellDropdownFilterTemplate";
+import { EditDropdownCellFormatter } from "./filter.template/CommonCellDropdownFilterTemplate";
 
 const columns: KendoColumn[] = [{
   field: "id",
@@ -16,7 +16,7 @@ const columns: KendoColumn[] = [{
   title: "Status",
   cell: ActiveDropdown,
   filter: "text",
-  filterCell: DropdownFilterCellTemplate,
+  filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "150px",
   locked: true,
@@ -40,7 +40,7 @@ const columns: KendoColumn[] = [{
   title: "Private Number Pool",
   cell: CheckboxCell,
   filter: "boolean",
-  filterCell: BooleanFilterCell,
+  filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
 },
@@ -49,7 +49,7 @@ const columns: KendoColumn[] = [{
   title: "RedLine",
   cell: CheckboxCell,
   filter: "boolean",
-  filterCell: BooleanFilterCell,
+  filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
 },
@@ -58,7 +58,7 @@ const columns: KendoColumn[] = [{
   title: "Qms",
   cell: CheckboxCell,
   filter: "boolean",
-  filterCell: BooleanFilterCell,
+  filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
 },
@@ -67,7 +67,7 @@ const columns: KendoColumn[] = [{
   title: "Needs Signature",
   cell: CheckboxCell,
   filter: "boolean",
-  filterCell: BooleanFilterCell,
+  filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
 },
@@ -76,7 +76,7 @@ const columns: KendoColumn[] = [{
   title: "Training",
   cell: CheckboxCell,
   filter: "boolean",
-  filterCell: BooleanFilterCell,
+  filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
 }, {
@@ -89,7 +89,7 @@ const columns: KendoColumn[] = [{
   field: "defaultRevStage",
   title: "Revision Stage",
   cell: EditDropdownCellFormatter,
-  filterCell: DropdownFilterCellTemplate,
+  filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "165px",
 },
@@ -97,7 +97,7 @@ const columns: KendoColumn[] = [{
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
   title: "Users without Tags", // TODO: Check if multiSelect
   cell: EditDropdownCellFormatter,
-  filterCell: DropdownFilterCellTemplate,
+  filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "200px",
 },
@@ -105,7 +105,7 @@ const columns: KendoColumn[] = [{
   field: "group",
   title: "Group",
   cell: EditDropdownCellFormatter,
-  filterCell: DropdownFilterCellTemplate,
+  filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "125px",
 }, {

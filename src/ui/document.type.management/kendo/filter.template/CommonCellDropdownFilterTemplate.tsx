@@ -23,7 +23,7 @@ interface ResultProps {
   operator: string;
 
 }
-const getDropDownDataSource: (f: string) => ResultProps = (field: string) => {
+export const getDropDownDataSource: (f: string) => ResultProps = (field: string) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const intl = useIntl();
   const revisionStageOptions = translatedOptions(intl, REVISION_STAGE_OPTIONS).map((o) => ({

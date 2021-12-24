@@ -6,6 +6,7 @@ import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
+  defaultValue: { text: string; value: string };
   defaultItem: {
     text: string;
     value: string;
@@ -15,11 +16,12 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
     value: string;
   }[];
   customOperator: string;
+  onStateChange: any;
 }
 
 export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   const [state, setState] = React.useState({
-    value: props.defaultItem,
+    value: props.defaultValue,
   });
   let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
 
@@ -35,6 +37,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
       operator: hasValue ? props.customOperator : "",
       syntheticEvent: event.syntheticEvent,
     });
+    props.onStateChange && props.onStateChange({ selectedItem, parentField: props.field });
   };
 
   const onClearButtonClick = (event) => {
@@ -47,6 +50,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
     setState({
       value: props.defaultItem,
     });
+    props.onStateChange && props.onStateChange({ parentField: props.field });
   };
   return (
     <div className="k-filtercell">
