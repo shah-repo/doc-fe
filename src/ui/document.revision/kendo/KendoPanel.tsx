@@ -6,9 +6,7 @@ import {
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoGrid,
-  GridColumn,
-  GridColumnReorderEvent,
+  Grid as KendoGrid, GridColumn, GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
@@ -32,9 +30,9 @@ import {
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -518,7 +516,7 @@ export function KendoPanel<T extends any>({
       {...column}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
-      cell={getCellTemplate(column.cell)}
+      cell={(props) => RenderCustomCell(props, column.cell)}
       filterCell={
         filterCellMapping[column.field]
           ? filterCellMapping[column.field]
