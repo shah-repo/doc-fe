@@ -1,35 +1,36 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../layout/theme/utils/colors";
 
 export const DRAWER_WIDTH = 240;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
     link: {
-      "color": theme.palette.secondary.contrastText,
-      "backgroundColor": theme.palette.secondary.main,
+      "color": Colors.white,
+      "backgroundColor": Colors.mirage,
       "&:hover": {
-        color: theme.palette.secondary.contrastText,
-        backgroundColor: theme.palette.secondary.main,
+        color: Colors.white,
+        backgroundColor: Colors.bright_grey,
       },
       "& svg": {
-        stroke: theme.palette.secondary.contrastText,
+        stroke: Colors.white,
       },
     },
     childLink: {
       paddingLeft: theme.spacing(6),
     },
     activeLink: {
-      "backgroundColor": theme.palette.secondary.contrastText,
-      "color": theme.palette.secondary.main,
+      "backgroundColor": Colors.bright_grey,
+      "color": Colors.white,
       "& .MuiListItemText-primary": {
         fontWeight: "bold",
       },
       "&:hover": {
-        backgroundColor: theme.palette.secondary.contrastText,
-        color: theme.palette.secondary.main,
+        backgroundColor: Colors.bright_grey,
+        color: Colors.white,
       },
       "& svg": {
-        stroke: theme.palette.secondary.main,
+        stroke: Colors.white,
       },
     },
     itemIcon: {
@@ -50,14 +51,14 @@ export default makeStyles((theme: Theme) =>
     icon: ({ iconLink }) => ({
       "width": 20,
       "height": 20,
-      "backgroundColor": theme.palette.secondary.contrastText,
+      "backgroundColor": Colors.white,
       "mask":
         `url(${iconLink}) no-repeat center / contain`,
       "-webkit-mask":
         `url(${iconLink}) no-repeat center / contain`,
     }),
     iconActive: {
-      backgroundColor: `${theme.palette.secondary.main} !important`,
+      backgroundColor: `${Colors.white} !important`,
     },
   })
 );
