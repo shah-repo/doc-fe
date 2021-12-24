@@ -18,6 +18,7 @@ interface CommandCellProps  {
   className?: string;
   columnIndex?: number;
   role?: string;
+  rowType?: string;
 }
 
 export const CommandCell = (props: CommandCellProps) => {
@@ -32,6 +33,10 @@ export const CommandCell = (props: CommandCellProps) => {
   const classes = styles();
   const { dataItem } = props;
   const inEdit = dataItem[props.editField];
+
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
 
   return inEdit ? (
     <td

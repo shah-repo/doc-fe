@@ -18,7 +18,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: true,
     locked: false,
-    orderIndex: 1,
+    orderIndex: 2,
   },
   {
     field: "user.email",
@@ -27,7 +27,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: true,
     locked: false,
-    orderIndex: 1,
+    orderIndex: 3,
   },
   {
     field: "groups",
@@ -36,7 +36,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: true,
     locked: false,
-    orderIndex: 1,
+    orderIndex: 4,
   },
   {
     field: "active",
@@ -45,7 +45,7 @@ const columns: KendoColumn[] = [
     filter: "boolean",
     groupable: true,
     locked: false,
-    orderIndex: 1,
+    orderIndex: 5,
   },
   {
     field: "",
@@ -57,6 +57,7 @@ const columns: KendoColumn[] = [
     width: "80px",
     reorderable: false,
     resizable: false,
+    orderIndex: 6,
   },
 ];
 

@@ -53,6 +53,10 @@ export const SignedCell = (props) => {
       );
   };
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <td
       colSpan={props.colSpan}

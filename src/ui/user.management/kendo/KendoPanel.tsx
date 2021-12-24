@@ -211,6 +211,7 @@ export function KendoPanel<T extends any>({
       logic: "and",
       filters: [],
     };
+    dataState.sort = [];
     dataState.group = [];
     setDataState(dataState);
     const newDataState = processWithGroups(gridData, dataState);
@@ -443,7 +444,7 @@ export function KendoPanel<T extends any>({
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
 
   const addNew = () => {
-    // TODO: NOT WORKING USERMGMT
+    clearFilter();
     const newDataItem: any = {
       id: generateUuid(),
       inEdit: true,

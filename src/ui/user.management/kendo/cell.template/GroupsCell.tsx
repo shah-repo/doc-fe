@@ -35,6 +35,10 @@ export const GroupsCell = (props) => {
     setData(newData as any);
   };
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <td
       colSpan={props.colSpan}

@@ -43,6 +43,10 @@ export const ActiveDropdown = (props) => {
     }
   };
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   const { dataItem } = props;
   const field = props.field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
