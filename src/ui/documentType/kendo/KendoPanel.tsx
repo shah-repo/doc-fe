@@ -5,7 +5,7 @@ import {
   State,
 } from "@progress/kendo-data-query";
 import {
-  // setExpandedState,
+  setExpandedState,
   setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
@@ -26,6 +26,7 @@ import {
   each,
   find,
   get,
+  isEmpty,
   map,
   merge,
   omit,
@@ -291,6 +292,10 @@ export function KendoGrid<T extends any>({
   const [resultState, setResultState] = React.useState<DataResult>(
     processWithGroups(gridData, initialDataState)
   );
+  const result = setExpandedState({
+    data: resultState.data,
+    collapsedIds: collapsedState,
+  });
   const onExpandChange = React.useCallback(
     (event: GridExpandChangeEvent) => {
       const item = event.dataItem;
@@ -307,6 +312,9 @@ export function KendoGrid<T extends any>({
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   // On Grid Row click
   const onRowClick = (rowData: GridRowClickEvent) => {
+    if (isEmpty(rowData.dataItem.id) || isEmpty(rowData.dataItem.document.id)) {
+      return false;
+    }
     let urlPath = documentPreviewPath(
       rowData.dataItem.id,
       rowData.dataItem.document.id
@@ -448,7 +456,7 @@ export function KendoGrid<T extends any>({
         <Kgrid
           className={classes.kGrid}
           style={{ width: `${width}px` }}
-          data={resultState}
+          data={result}
           sortable={true}
           filterable={true}
           reorderable={true}
