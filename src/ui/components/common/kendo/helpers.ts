@@ -1,4 +1,4 @@
-import { chain, filter, findIndex } from "lodash";
+import { chain, filter, findIndex, isEmpty } from "lodash";
 import { denormalize, normalize, schema } from "normalizr";
 
 export const orderByLockedState = (
@@ -92,4 +92,14 @@ export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
     return (gridWidth / 100) * columnWidth;
   }
   return columnWidth;
+};
+
+/**
+ * To hide the column title on mouse while resizing the grid
+ */
+export const hideColumnTitleOnResize = () => {
+  const selector: any = document.querySelector(".k-drag-clue");
+  if (!isEmpty(selector)) {
+    selector.style.display = "none";
+  }
 };
