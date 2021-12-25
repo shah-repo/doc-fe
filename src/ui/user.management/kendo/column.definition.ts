@@ -34,7 +34,7 @@ const columns: KendoColumn[] = [
     title: "GROUPS",
     show: true,
     filter: "text",
-    groupable: true,
+    groupable: false,
     locked: false,
     orderIndex: 4,
   },
