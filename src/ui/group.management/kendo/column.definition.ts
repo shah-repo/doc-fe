@@ -8,13 +8,15 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "boolean",
     groupable: true,
+    orderIndex: 1,
   },
   {
     field: "name",
     title: "NAME",
     show: true,
     filter: "text",
-    groupable: true,
+    groupable: false,
+    orderIndex: 2,
   },
   {
     field: "memberNames",
@@ -22,6 +24,7 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "text",
     groupable: false,
+    orderIndex: 3,
   },
   {
     field: "formattedPermissions",
@@ -29,6 +32,7 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "text",
     groupable: false,
+    orderIndex: 4,
   },
   {
     field: "formattedTags",
@@ -36,6 +40,7 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "text",
     groupable: false,
+    orderIndex: 5,
   },
   {
     field: "parentName",
@@ -43,6 +48,7 @@ const columns: KendoColumn[] = [
     show: true,
     filter: "text",
     groupable: false,
+    orderIndex: 6,
   },
   {
     field: "",
@@ -54,6 +60,7 @@ const columns: KendoColumn[] = [
     width: "80px",
     reorderable: false,
     resizable: false,
+    orderIndex: 7,
   },
 ];
 
