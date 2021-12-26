@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box, Grid, Typography,
 } from "@material-ui/core";
@@ -80,77 +78,29 @@ export function KendoPanel<T extends any>({
     isSelectable: onSelect !== undefined,
   };
   const classes = KendoGridStyles(styleProps);
-  const kendoConfigColumn = tableCriteria.columnConfig;
-  // Check if the Column config available in State, if so prefer what is available in State
-  if (kendoConfigColumn && JSON.parse(kendoConfigColumn).length) {
-    gridConfiguration.columns = JSON.parse(kendoConfigColumn);
+  const { columnConfig, kendoConfig } = tableCriteria;
+  if (columnConfig && JSON.parse(columnConfig).length) {
+    gridConfiguration.columns = JSON.parse(columnConfig);
   }
+  const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
+    gridConfiguration.columns
+  );
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
   const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  const kendoConfigFromState = tableCriteria.kendoConfig;
-  const initialColumnsConfig = tableCriteria.columnConfig
-    ? JSON.parse(tableCriteria.columnConfig)
-    : [];
-  gridConfiguration.columns.forEach((column: KendoColumn) => {
-    const foundObj: KendoColumn = initialColumnsConfig.find(
-      (initialColumn: KendoColumn) => initialColumn.field === column.field
-    );
-    // further update all column fields here
-    if (foundObj) {
-      column.show = foundObj.show;
-    }
-    if (!column.field && !column.title) {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <CommandCell {...props} edit={edit} add={add} cancel={cancel} editField={editField} />
-      );
-    }
-
-    if (column.field === "user.name") {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <NameCell {...props} />
-      );
-    }
-
-    if (column.field === "user.email") {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <EmailCell {...props} />
-      );
-    }
-
-    if (column.field === "groups") {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <GroupsCell {...props} />
-      );
-      // eslint-disable-next-line react/display-name
-      column.filterCell = (props: GridCellProps) => (
-        <GroupDropdown {...props} />
-      );
-    }
-
-    if (column.field === "active") {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <ActiveDropdown {...props} />
-      );
-      // eslint-disable-next-line react/display-name
-      column.filterCell = (props: GridCellProps) => (
-        <BooleanFilterCell {...props} />
-      );
-    }
-    if (column.field === "status") {
-      // eslint-disable-next-line react/display-name
-      column.cell = (props: GridCellProps) => (
-        <SignedCell {...props} />
-      );
-    }
-  });
 
   const edit = (dataItem) => {
     onSelect && onSelect({ dataItem })();
@@ -158,7 +108,6 @@ export function KendoPanel<T extends any>({
 
   const add = (dataItem: UserManage) => {
     dataItem.inEdit = true;
-    console.log("Added Item", dataItem);
     const payload = {
       user: {
         id: dataItem.id,
@@ -167,7 +116,6 @@ export function KendoPanel<T extends any>({
       },
       groups: dataItem.groups,
     };
-    console.log("payload", payload);
     handleCreate(payload);
   };
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
@@ -192,9 +140,12 @@ export function KendoPanel<T extends any>({
     setResultState(newDataState);
   };
 
-  const initialKendoConfig: State = kendoConfigFromState
-    ? JSON.parse(kendoConfigFromState)
-    : {
+  let initialDataState: State;
+
+  if (kendoConfig) {
+    initialDataState = JSON.parse(kendoConfig);
+  } else  {
+    initialDataState = {
       filter:
         {
           logic: "and",
@@ -205,6 +156,7 @@ export function KendoPanel<T extends any>({
       group: [],
       sort: [],
     };
+  }
 
   const setSearchStatus = () => {
     dataState.filter = {
@@ -245,10 +197,10 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [fireAPI, setFireAPI] = useState(true);
-  const [dataState, setDataState] = useState<State>(initialKendoConfig); // Kendo Grid Data State
+  const [dataState, setDataState] = useState<State>(initialDataState); // Kendo Grid Data State
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialKendoConfig)
+    processWithGroups(gridData, initialDataState)
   );
   useEffect(() => {
     if (didMount) {
@@ -260,6 +212,7 @@ export function KendoPanel<T extends any>({
         queryApi();
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.kendoConfig, didMount, tableCriteria.forceUpdate]);
 
   const queryApi = () => {
@@ -288,8 +241,8 @@ export function KendoPanel<T extends any>({
           apiError: "",
           scrollToIndex: 0,
           forceUpdate: false,
-          kendoConfig: JSON.stringify(initialKendoConfig),
-          columnConfig: JSON.stringify(initialColumnsConfig),
+          kendoConfig: JSON.stringify(initialDataState),
+          columnConfig: JSON.stringify(columnDefinitions),
         },
         tableName
       )
@@ -310,8 +263,8 @@ export function KendoPanel<T extends any>({
           groups: el.groups.map((e) => e.name.trimLeft().trimEnd()).sort().join(", "),
           status: el.user.confirmed ? "Signed up" : "Resend signup email",
         }));
-        const newDataState = processWithGroups(data, initialKendoConfig);
-        setDataState(initialKendoConfig);
+        const newDataState = processWithGroups(data, initialDataState);
+        setDataState(initialDataState);
         setResultState(newDataState);
         if (data.length === 0) {
           setNoDataMessage(
@@ -351,8 +304,8 @@ export function KendoPanel<T extends any>({
               queryDict: {},
               apiError: "Error: " + errorMessage,
               forceUpdate: false,
-              kendoConfig: JSON.stringify(initialKendoConfig),
-              columnConfig: JSON.stringify(initialColumnsConfig),
+              kendoConfig: JSON.stringify(initialDataState),
+              columnConfig: JSON.stringify(columnDefinitions),
             },
             tableName
           )
@@ -361,7 +314,7 @@ export function KendoPanel<T extends any>({
   };
 
   const result = setExpandedState({
-    data: processWithGroups(gridData, initialKendoConfig).data,
+    data: resultState.data,
     collapsedIds: collapsedState,
   });
   const onDataStateChange = useCallback(
@@ -387,23 +340,46 @@ export function KendoPanel<T extends any>({
     [collapsedState]
   );
   const clearFilter = () => setSearchStatus();
-  const columnRenderer = (column: KendoColumn, index: React.Key | undefined) => (
-    <GridColumn
-      key={index}
-      field={column.field}
-      title={column.title}
-      cell={column.cell}
-      filter={column.filter}
-      sortable={column.sortable}
-      groupable={column.groupable}
-      filterCell={column.filterCell}
-      filterable={column.filterable}
-      locked={index === 0 ? true : column.locked}
-      width={column.width}
-      reorderable={column.reorderable}
-      resizable={column.resizable}
+
+  const commandCell = (props: GridCellProps) =>
+    <CommandCell
+      {...props}
+      edit={edit}
+      add={add}
+      cancel={cancel}
+      editField={editField}
     />
-  );
+  ;
+
+  const filterCellMapping = {
+    groups: GroupDropdown,
+    active: BooleanFilterCell,
+  };
+
+  const fieldToCellMapping = {
+    "user.name": NameCell,
+    "user.email": EmailCell,
+    "groups": GroupsCell,
+    "active": ActiveDropdown,
+    "status": SignedCell,
+    "": commandCell,
+  };
+
+  const columnRenderer = () => (
+    sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => (
+      <GridColumn
+        key={idx}
+        {...column}
+        minResizableWidth={100}
+        cell={fieldToCellMapping[column.field]
+          ? fieldToCellMapping[column.field] : undefined}
+        filterCell={
+          filterCellMapping[column.field]
+            ? filterCellMapping[column.field]
+            : undefined
+        }
+      />
+    )));
 
   const columnResize = (event: GridColumnResizeEvent) => {
     let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
@@ -412,15 +388,8 @@ export function KendoPanel<T extends any>({
       column.width = columnObject?.width;
       return column;
     });
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          columnConfig: JSON.stringify(dataColumns),
-        },
-        tableName
-      )
-    );
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
@@ -430,15 +399,8 @@ export function KendoPanel<T extends any>({
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          columnConfig: JSON.stringify(dataColumns),
-        },
-        tableName
-      )
-    );
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
@@ -454,13 +416,14 @@ export function KendoPanel<T extends any>({
     gridData.unshift(newDataItem);
     setResultState(processWithGroups(gridData, dataState));
   };
+
   const tableRenderer = () => (
     <>
       <KendoGlobalization>
         <KendoGrid
           className={`${classes.kGrid} no-row-pointer`}
           data={result}
-          total={resultState.total > 0 ? resultState.total : gridData.length}
+          total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
           sortable={true}
           filterable={true}
@@ -494,12 +457,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => {
-            if (column.show) {
-              return columnRenderer(column, idx);
-            }
-            return null;
-          })}
+          {columnRenderer()}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
