@@ -37,6 +37,7 @@ import {
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -453,6 +454,9 @@ export function KendoPanel<T extends any>({
           filterCellMapping[column.field]
             ? filterCellMapping[column.field]
             : undefined
+        }
+        headerCell={
+          column.title ? (props) => <ColumnHeader data={props} /> : undefined
         }
       />
     )));
