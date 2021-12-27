@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -171,9 +172,16 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
             key={index}
             cell={col.cell}
             filter={col.filter}
-            filterCell={FilterCellMapping[col.filterCell] ? FilterCellMapping[col.filterCell] : undefined}
+            filterCell={
+              FilterCellMapping[col.filterCell]
+                ? FilterCellMapping[col.filterCell]
+                : undefined
+            }
             // columnMenu={col.columnMenu}  // TODO: Will Check Later
             filterable={col.filterable}
+            headerCell={
+              col.title ? (props) => <ColumnHeader data={props} /> : undefined
+            }
             width={col.width}
             locked={col.locked}
           ></GridColumn>
