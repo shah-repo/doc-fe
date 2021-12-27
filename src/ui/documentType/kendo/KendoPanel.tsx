@@ -47,6 +47,7 @@ import { store } from "../../../state/store";
 import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -406,6 +407,11 @@ export function KendoGrid<T extends any>({
             }
             filter={column.filter}
             filterCell={getFilterCell(column.field)}
+            headerCell={
+              column.title
+                ? (props) => <ColumnHeader data={props} />
+                : undefined
+            }
             cell={(props) => RenderCustomCell(props, column.cell)}
             orderIndex={column.orderIndex}
             format={column.format}
