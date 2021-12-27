@@ -461,6 +461,9 @@ export function KendoPanel<T extends any>({
     updateDataColumnsState(dataColumns);
   };
   const onRowClick = (rowData: { dataItem: DocumentRevision }) => {
+    if (isEmpty(rowData.dataItem.id) || isEmpty(rowData.dataItem.document.id)) {
+      return false;
+    }
     if (canEditDocumentRevision(rowData.dataItem)) {
       editDocumentRevision &&
         editDocumentRevision(rowData.dataItem.id, rowData.dataItem.document.id);
