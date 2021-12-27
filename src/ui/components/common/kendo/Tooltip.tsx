@@ -22,11 +22,14 @@ const Tooltip: React.FunctionComponent<Props> = ({
   return (
     <StyledTooltip
       interactive={true}
-      title={<Typography>
-        <div className={`${classes.tooltip}`}>
+      title={
+        <Typography
+          component={"span"}
+          className={`${classes.tooltip}`}
+        >
           {data?.replace(/,/g, ",\n")}
-        </div>
-      </Typography>}
+        </Typography>
+      }
       placement="left"
       arrow
     >
