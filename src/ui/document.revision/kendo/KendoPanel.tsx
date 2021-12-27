@@ -33,6 +33,7 @@ import { store } from "../../../state/store";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -514,7 +515,11 @@ export function KendoPanel<T extends any>({
   );
 
   // Render Kendo Columns
-  const renderKendoColumns = (column: KendoColumn, index: React.Key | undefined, gridWidth: number) => (
+  const renderKendoColumns = (
+    column: KendoColumn,
+    index: React.Key | undefined,
+    gridWidth: number
+  ) => (
     <GridColumn
       key={index}
       {...column}
@@ -525,6 +530,9 @@ export function KendoPanel<T extends any>({
         filterCellMapping[column.field]
           ? filterCellMapping[column.field]
           : undefined
+      }
+      headerCell={
+        column.title ? (props) => <ColumnHeader data={props} /> : undefined
       }
       columnMenu={
         column.showColumnMenu
