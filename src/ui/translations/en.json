@@ -548,6 +548,7 @@
   "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
+  "page.table.title.changeRequest": "Change Request",
   "page.title.documentCreate": "Create New Document",
   "page.title.changeRequestCreate": "Create New Approval Request",
   "page.details": "Page Details",

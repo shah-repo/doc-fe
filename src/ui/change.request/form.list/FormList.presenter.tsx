@@ -30,7 +30,11 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   const classes = styles();
   return (
     <>
-      <Grid item xs ><Typography className={classes.title}>Change Requests</Typography></Grid>
+      <Grid item xs>
+        <Typography className={classes.title}>
+          <Text translation="page.table.title.changeRequest" />
+        </Typography>
+      </Grid>
       <Grid item={true} style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
           variant="outlined"
@@ -45,7 +49,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           <Text translation="document.revision.export.list" />
         </Button>
         <ExportListDialog
-          {...{ headers, data  }}
+          {...{ headers, data }}
           dialog={exportDialog}
           customFileName="DocumentList"
         />
