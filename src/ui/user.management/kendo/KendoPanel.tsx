@@ -29,6 +29,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -381,6 +382,17 @@ export function KendoPanel<T extends any>({
         }
         headerCell={
           column.title ? (props) => <ColumnHeader data={props} /> : undefined
+        }
+        columnMenu={
+          column.showColumnMenu
+            ? (props) => (
+              <ColumnMenu
+                {...props}
+                tableName={tableName}
+                columns={gridConfiguration.columns}
+              />
+            )
+            : undefined
         }
       />
     )));
