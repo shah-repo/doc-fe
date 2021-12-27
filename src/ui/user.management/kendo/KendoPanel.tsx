@@ -29,6 +29,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -377,6 +378,9 @@ export function KendoPanel<T extends any>({
           filterCellMapping[column.field]
             ? filterCellMapping[column.field]
             : undefined
+        }
+        headerCell={
+          column.title ? (props) => <ColumnHeader data={props} /> : undefined
         }
       />
     )));
