@@ -44,7 +44,6 @@ import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
   TablePanelStateProps,
-  TableStyleProps,
 } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -85,13 +84,8 @@ export function KendoPanel<T extends any>({
 }: Props<T>) {
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  // TODO: Check If BELOW Props required
-  const styleProps: TableStyleProps = {
-    isSelectable: onSelect !== undefined,
-  };
-  const classes = KendoGridStyles(styleProps);
+  const classes = KendoGridStyles();
   const [Official, setOfficial] = useState(false);
-  const tableData = gridData || [];
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
@@ -130,8 +124,8 @@ export function KendoPanel<T extends any>({
       isOfficial: Boolean(),
       inEdit: true,
     };
-    tableData.unshift(sampleData as any);
-    setResultState(processWithGroups(tableData, dataState));
+    gridData.unshift(sampleData as any);
+    setResultState(processWithGroups(gridData, dataState));
   };
   const createGroupAsync = useAsync({
     onSuccess: (response) => {
@@ -186,7 +180,7 @@ export function KendoPanel<T extends any>({
     dataState.skip = 0;
     dataState.take = 25;
     setDataState(dataState);
-    setResultState(processWithGroups(tableData, dataState));
+    setResultState(processWithGroups(gridData, dataState));
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -218,7 +212,7 @@ export function KendoPanel<T extends any>({
   const [dataState, setDataState] = useState<State>(initialDataState); // Kendo Grid Data State
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(tableData, initialDataState)
+    processWithGroups(gridData, initialDataState)
   );
   // EMPLOYEES
   const [activeEmployees, setActiveEmployees] = useState<GetEmployeeResponse[]>(
@@ -376,13 +370,13 @@ export function KendoPanel<T extends any>({
   });
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(tableData, event.dataState);
+      const newDataState = processWithGroups(gridData, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
     },
-    [tableData]
+    [gridData]
   );
   const onExpandChange = useCallback(
     (event: GridExpandChangeEvent) => {
@@ -480,31 +474,17 @@ export function KendoPanel<T extends any>({
   };
   const editField = "inEdit";
 
-  // const enableInlineEdit = (dataItem: GroupRequestBody) => {
-  //   dataItem.inEdit = !dataItem.inEdit;
-  //   // eslint-disable-next-line no-console
-  //   console.log("tableData ::", tableData);
-  //   const index = tableData.findIndex((data) => data.id === dataItem.id);
-  //   if (tableData[index]) {
-  //     tableData[index].inEdit = dataItem.inEdit;
-  //   }
-  //   const newDataState = processWithGroups(tableData, dataState);
-  //   setResultState(newDataState);
-  // };
-
   const discardEditMode = (dataItem: LoadCompanyGroup) => {
-    // eslint-disable-next-line no-console
-    console.log("tableData ::", tableData);
-    const index = tableData.findIndex((data) => data.id === dataItem.id);
-    if (tableData[index]) {
-      tableData[index].inEdit = false;
+    const index = gridData.findIndex((data) => data.id === dataItem.id);
+    if (gridData[index]) {
+      gridData[index].inEdit = false;
     }
-    const newDataState = processWithGroups(tableData, dataState);
+    const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
   };
   const cancel = (dataItem: LoadCompanyGroup) => {
-    tableData.splice(0, 1);
-    const newDataState = processWithGroups(tableData, dataState);
+    gridData.splice(0, 1);
+    const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
   };
 
