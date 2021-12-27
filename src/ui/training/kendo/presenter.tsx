@@ -65,7 +65,9 @@ export const KendoGridList: React.FunctionComponent<Props<any>> = ({
   return (
     <Grid container={true} className={classes.root}>
       <Grid item xs>
-        <Typography className={classes.title}>Training</Typography>
+        <Typography className={classes.title}>
+          <Text translation="page.title.training" />
+        </Typography>
       </Grid>
       <Grid item style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
