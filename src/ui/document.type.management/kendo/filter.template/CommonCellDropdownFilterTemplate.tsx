@@ -4,6 +4,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 import { enumToOptions, translatedOptions } from "../../transform";
 import gridConfiguration from "../column.definition";
 import { DropdownFilterCell } from "./DropdownFilterTemplate";
@@ -108,7 +109,7 @@ export const EditDropdownCellFormatter = (props) => {
           dataItemKey="value"
         />
       ) : (
-        dataValue
+        <Tooltip data={dataValue} />
       )}
     </td>
   );
