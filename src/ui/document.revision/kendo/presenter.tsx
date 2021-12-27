@@ -103,7 +103,11 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
 
   return (
     <Grid container={true} className={classes.root}>
-      <Grid item xs ><Typography className={classes.title}>Document List</Typography></Grid>
+      <Grid item xs>
+        <Typography className={classes.title}>
+          <Text translation="navigation.document.list"></Text>
+        </Typography>
+      </Grid>
       <Grid item={true} style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
           variant="outlined"
@@ -119,7 +123,7 @@ export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
         </Button>
         <ExportListDialog
           data={exportData}
-          {...{ dialog, headers  }}
+          {...{ dialog, headers }}
           customFileName="DocumentList"
         />
         <Button
