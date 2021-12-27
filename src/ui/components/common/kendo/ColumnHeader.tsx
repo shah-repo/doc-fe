@@ -26,8 +26,8 @@ const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => {
       <StyledTooltip
         interactive={true}
         title={
-          <Typography>
-            <div className={`${classes.tooltip}`}>{data.title}</div>
+          <Typography className={`${classes.tooltip}`}>
+            {data.title}
           </Typography>
         }
         placement="top"

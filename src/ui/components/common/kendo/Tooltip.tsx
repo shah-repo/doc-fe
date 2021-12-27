@@ -24,7 +24,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
       interactive={true}
       title={
         <Typography
-          component={"span"}
+          component={"p"}
           className={`${classes.tooltip}`}
         >
           {data?.replace(/,/g, ",\n")}
