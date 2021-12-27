@@ -36,9 +36,6 @@ import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import {
-  TableStyleProps,
-} from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -76,10 +73,7 @@ export function KendoPanel<T extends any>({
   const editField = "inEdit";
   const didMount = useDidMount();
   const dispatch = useDispatch();
-  const styleProps: TableStyleProps = {
-    isSelectable: onSelect !== undefined,
-  };
-  const classes = KendoGridStyles(styleProps);
+  const classes = KendoGridStyles();
   const { columnConfig, kendoConfig } = tableCriteria;
   if (columnConfig && JSON.parse(columnConfig).length) {
     gridConfiguration.columns = JSON.parse(columnConfig);
