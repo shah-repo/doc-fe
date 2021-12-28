@@ -27,11 +27,11 @@ export const Schema = (props) => {
     }
   };
 
+  const formattedValue = get(props.dataItem, props.field);
+  const isEdit = get(props.dataItem, "inEdit");
   if (props.rowType === "groupHeader") {
     return null;
   }
-  const formattedValue = get(props.dataItem, props.field);
-  const isEdit = get(props.dataItem, "inEdit");
   return (
     <>
       <td colSpan={props.colSpan}

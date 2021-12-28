@@ -32,6 +32,10 @@ export const CheckboxCell = (props: GridCellProps) => {
     }
   };
 
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
   return (
     <td colSpan={props.colSpan}
       style= {props.style}

@@ -2,11 +2,13 @@ import { each, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { getTableCriteria } from "../../../common/utils/selectors";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { HOME_URL } from "../../constants/urls";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import { KendoGrid } from "./KendoPanel";
+import gridConfiguration from "./column.definition";
+import { DocumentTypeManagementPresenter } from "./presenter";
 
 export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const documentTypes = useSelector(documentTypeSelectors.getDocumentTypeList);
@@ -16,12 +18,22 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
     }
   });
   const canManageDocumentType = useGetHasTag(GroupTag.DOCUMENT_TYPE_MANAGEMENT);
+  const tableName = "documentTypeManage";
+  const tableCriteria = useSelector(getTableCriteria(tableName));
 
   if (!canManageDocumentType) {
     return <Redirect to={HOME_URL} />;
   }
 
+  const gridData = sortBy(documentTypes, "documentTypeName");
+  const gridConfig = gridConfiguration;
+
   return (
-    <KendoGrid gridData= {sortBy(documentTypes, "documentTypeName")} />
+    <DocumentTypeManagementPresenter
+      gridConfiguration={gridConfig}
+      gridData={gridData}
+      tableName={tableName}
+      tableCriteria={tableCriteria}
+    />
   );
 };

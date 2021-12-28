@@ -98,6 +98,9 @@ export const EditDropdownCellFormatter = (props) => {
   const { dataItem } = props;
   const field = props.field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
   return (
     <td>
       {isEdit ? (

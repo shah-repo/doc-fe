@@ -46,6 +46,9 @@ export const ActiveDropdown = (props) => {
   const { dataItem } = props;
   const field = props.field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
   return (
     <td colSpan={props.colSpan}
       style= {props.style}

@@ -24,6 +24,9 @@ export const CommandCell = (props: CellCommandConfig) => {
   const { dataItem } = props;
   const inEdit = dataItem.inEdit;
   const isNewItem = dataItem.id === undefined;
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
   return inEdit ? (
     <td
       colSpan={props.colSpan}

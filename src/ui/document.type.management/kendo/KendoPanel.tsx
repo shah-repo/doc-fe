@@ -1,41 +1,51 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import { process, State } from "@progress/kendo-data-query";
-import { setGroupIds } from "@progress/kendo-react-data-tools";
+import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
   Grid as Kgrid,
   GridCellProps,
   GridColumn,
+  GridColumnReorderEvent,
+  GridColumnResizeEvent,
   GridDataStateChangeEvent,
+  GridExpandChangeEvent,
   GridFilterCellProps,
   GridItemChangeEvent,
   GridNoRecords,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, each, isEmpty, map, set } from "lodash";
-import React, { useEffect, useState } from "react";
+import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-// import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
-import { KendoColumn } from "../../components/common/kendo/types";
+import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
+import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
-import gridConfiguration from "./column.definition";
+import { CheckboxCell } from "./column.templates/Checkbox";
 import { CommandCell } from "./column.templates/CommandCell";
+import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { NewRowObject } from "./column.templates/NewRowObject";
-import { getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
+import { Schema } from "./column.templates/Schema";
+import { EditDropdownCellFormatter, getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
 import { DropdownFilterCell } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
 interface KendoPanelProps<T> {
   gridData: T[];
+  gridConfiguration: KendoGridConfiguration;
+  tableName: string;
+  tableCriteria: TablePanelStateProps;
 }
 interface ResultProps {
   dataSource: any[];
@@ -43,12 +53,23 @@ interface ResultProps {
 
 }
 type Props<T> = KendoPanelProps<T>;
-export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
+export function KendoGrid<T extends { id?: string }>({
+  gridData,
+  gridConfiguration,
+  tableName,
+  tableCriteria,
+}: Props<T>) {
   const classes = KendoGridStyles();
   const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
-  const columns = gridConfiguration.columns;
+
+  const { columnConfig, kendoConfig } = tableCriteria;
+
+  const [columnDefinitions, setColumnDefinitions] = useState<KendoColumn[]>(
+    columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns
+  );
+
   const editField = "inEdit";
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
@@ -80,31 +101,65 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       toastError(error as string);
     },
   });
-  // For Pagination
-  const createDataState = (dataState: State) => ({
-    result: processWithGroups(gridData, dataState),
-    dataState,
-  });
 
-  const initialState = createDataState({
-    take: 25,
-    skip: 0,
-    group: [],
-    sort: [
-      {
-        field: "documentTypeName",
-      },
-    ],
-  });
-
-  const [resultState, setResultState] = React.useState(initialState.result);
   const [dropDownState, setDropDownState] = React.useState({});
-  const [dataState, setDataState] = React.useState(initialState.dataState);
+  let initialDataState: State;
+
+  if (kendoConfig) {
+    initialDataState = JSON.parse(kendoConfig);
+  } else {
+    initialDataState = {
+      filter: {
+        logic: "and",
+        filters: [],
+      },
+      take: 25,
+      skip: 0,
+      group: [],
+      sort: [
+        {
+          field: "documentTypeName",
+        },
+      ],
+    };
+  }
+
+  const [dataState, setDataState] = React.useState(initialDataState);
+  const [collapsedState, setCollapsedState] = useState<string[]>([]);
+  const [resultState, setResultState] = React.useState(
+    processWithGroups(gridData, dataState)
+  );
   useEffect(() => {
     setIsLoading(true);
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
+
+    initialDataState?.filter?.filters.forEach((el: any) => {
+      if (["privateNumberPool",
+        "canRedLine",
+        "isQms",
+        "needsSignature",
+        "defaultTraining",
+        "defaultRevStage",
+        "hiddenForCreationForUsersWithoutTagsFormatted",
+        "group"].includes(el.field)) {
+        setDropDownState((prevState) => {
+          const object = Object.assign({}, { ...prevState });
+          let value;
+          if (typeof el.value === "boolean") {
+            value = el.value ? "Yes" : "No";
+          } else {
+            value = el.value;
+          }
+          object[el.field] = {
+            value: el.value,
+            text: value,
+          };
+          return object;
+        });
+      }
+    });
 
     if (!gridData.length) {
       setNoDataMessage(
@@ -119,10 +174,25 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridData]);
 
+  const setKendoFilterStatus = (
+    kendoConfig: string,
+  ): void => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          kendoConfig,
+        },
+        tableName
+      )
+    );
+  };
+
   const onDataStateChange = (event: GridDataStateChangeEvent) => {
     const newDataState = processWithGroups(actualData, event.dataState);
     setDataState(event.dataState);
     setResultState(newDataState);
+    setKendoFilterStatus(JSON.stringify(event.dataState));
     setIsLoading(false);
   };
 
@@ -156,40 +226,7 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       onStateChange={onStateChange}
     />
   );
-  const FilterCellMapping = {
-    DropdownFilterCellTemplate,
-    BooleanFilterCell,
-  };
 
-  // Create Grid Columns
-  const renderColumns = () =>
-    columns.map((col: KendoColumn, index: number) => {
-      if (col.show) {
-        return (
-          <GridColumn
-            field={col.field}
-            title={col.title.toUpperCase()}
-            key={index}
-            cell={col.cell}
-            filter={col.filter}
-            filterCell={
-              FilterCellMapping[col.filterCell]
-                ? FilterCellMapping[col.filterCell]
-                : undefined
-            }
-            // columnMenu={col.columnMenu}  // TODO: Will Check Later
-            filterable={col.filterable}
-            headerCell={
-              col.title ? (props) => <ColumnHeader data={props} /> : undefined
-            }
-            width={col.width}
-            locked={col.locked}
-          ></GridColumn>
-        );
-      }
-    });
-
-  // Services
   const commandCell = (props: GridCellProps) =>
     <CommandCell
       {...props}
@@ -200,7 +237,51 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
       cancel={cancel}
       editField={editField}
     />
-  ;
+;
+
+  const FilterCellMapping = {
+    DropdownFilterCellTemplate,
+    BooleanFilterCell,
+  };
+
+  const TemplateCellMapping = {
+    "active": ActiveDropdown,
+    "privateNumberPool": CheckboxCell,
+    "canRedLine": CheckboxCell,
+    "isQms": CheckboxCell,
+    "needsSignature": CheckboxCell,
+    "defaultTraining": CheckboxCell,
+    "defaultRevStage": EditDropdownCellFormatter,
+    "hiddenForCreationForUsersWithoutTagsFormatted": EditDropdownCellFormatter,
+    "group": EditDropdownCellFormatter,
+    "schema": Schema,
+    "fieldsConfig": FieldsConfig,
+    "": commandCell,
+  };
+
+  // Create Grid Columns
+  const renderColumns = () =>
+    sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => {
+      if (col.show) {
+        return (
+          <GridColumn
+            {...col}
+            title={col.title.toUpperCase()}
+            key={index}
+            cell={TemplateCellMapping[col.field]}
+            filterCell={
+              FilterCellMapping[col.filterCell]
+                ? FilterCellMapping[col.filterCell]
+                : undefined
+            }
+            headerCell={
+              col.title ? (props) => <ColumnHeader data={props} /> : undefined
+            }
+          ></GridColumn>
+        );
+      }
+    });
+
   // On edit click- all cells in edit mode
   const enterEdit = (dataItem: DTMRowItem) => {
     each(actualData, (item: any) => {
@@ -261,11 +342,10 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
   };
 
   // Add New row object
-  const addNewRowObject = () => {
-    clearFilter();
+  const addNewRowObject = async () => {
+    await clearFilter();
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
-    // TODO: Define type
     const newDataArr: any[] = [newDataItem, ...actualData];
     setGridEditID("inEdit");
     const newDataState = processWithGroups(newDataArr, dataState);
@@ -327,10 +407,8 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     setResultState(newDataState);
   };
 
-  // CLear All Grid Filters
-  const clearFilter = () => {
-    // TODO: Reset dropdown values
-    // console.log(dataState);
+  // eslint-disable-next-line @typescript-eslint/require-await
+  const clearFilter = async () => {
     dataState.filter = {
       logic: "and",
       filters: [],
@@ -343,7 +421,70 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
+    tableCriteria.kendoConfig = JSON.stringify(dataState);
+    setColumnDefinitions(gridConfiguration.columns);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(gridConfiguration.columns),
+        },
+        tableName
+      )
+    );
   };
+
+  const updateDataColumnsState = (dataColumns: KendoColumn[]) => {
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
+
+  const columnResize = (event: GridColumnResizeEvent) => {
+    let dataColumns: KendoColumn[] = [...columnDefinitions];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
+  const columnReorder = (event: GridColumnReorderEvent) => {
+    let dataColumns: KendoColumn[] = [...columnDefinitions];
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(event.columns, { field: column.field });
+      column.orderIndex = columnObject?.orderIndex;
+      return column;
+    });
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
+  const onExpandChange = useCallback(
+    (event: GridExpandChangeEvent) => {
+      const item = event.dataItem;
+      if (item.groupId) {
+        const newCollapsedIds = !event.value
+          ? [...collapsedState, item.groupId]
+          : collapsedState.filter((groupId) => groupId !== item.groupId);
+        setCollapsedState(newCollapsedIds);
+      }
+    },
+    [collapsedState]
+  );
+
+  const result = setExpandedState({
+    data: resultState.data,
+    collapsedIds: collapsedState,
+  });
 
   return (
     <>
@@ -381,31 +522,24 @@ export function KendoGrid<T extends { id?: string }>({ gridData }: Props<T>) {
           <KendoGlobalization>
             <Kgrid
               className={classes.kGrid}
-              data={resultState}
+              data={result}
               sortable={true}
               filterable={true}
               reorderable={true}
               pageable={gridConfiguration.pagerSettings}
               resizable={true}
-              // groupable={true}
+              groupable={true}
               total={resultState.total}
               onDataStateChange={onDataStateChange}
               {...dataState}
-              // onExpandChange={onExpandChange}
+              onExpandChange={onExpandChange}
               expandField="expanded"
               editField={gridEditID}
               onItemChange={itemChange}
+              onColumnReorder={columnReorder}
+              onColumnResize={columnResize}
             >
               {renderColumns()}
-              <GridColumn
-                cell={commandCell}
-                title=""
-                width="90px"
-                filterable={false}
-                locked={true}
-                reorderable={false}
-                resizable={false}
-              />
               <GridNoRecords>{noDataMessage}</GridNoRecords>
             </Kgrid>
           </KendoGlobalization>

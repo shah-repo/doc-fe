@@ -20,6 +20,8 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "150px",
   locked: true,
+  orderIndex: 0,
+  groupable: true,
 },
 {
   field: "documentTypeName",
@@ -27,6 +29,8 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "165px",
   locked: true,
+  groupable: false,
+  orderIndex: 1,
 },
 {
   field: "documentTypeAcronym",
@@ -34,6 +38,8 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "125px",
   locked: false,
+  groupable: false,
+  orderIndex: 2,
 },
 {
   field: "privateNumberPool",
@@ -43,6 +49,8 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
+  groupable: false,
+  orderIndex: 3,
 },
 {
   field: "canRedLine",
@@ -52,6 +60,8 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
+  groupable: false,
+  orderIndex: 4,
 },
 {
   field: "isQms",
@@ -61,6 +71,8 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
+  groupable: false,
+  orderIndex: 5,
 },
 {
   field: "needsSignature",
@@ -70,6 +82,8 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
+  groupable: false,
+  orderIndex: 6,
 },
 {
   field: "defaultTraining",
@@ -79,11 +93,15 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "85px",
+  groupable: false,
+  orderIndex: 7,
 }, {
   field: "startingNumber",
   title: "Starting Number",
   show: true,
   width: "185px",
+  groupable: false,
+  orderIndex: 8,
 },
 {
   field: "defaultRevStage",
@@ -92,6 +110,8 @@ const columns: KendoColumn[] = [{
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "165px",
+  groupable: true,
+  orderIndex: 9,
 },
 {
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
@@ -100,6 +120,8 @@ const columns: KendoColumn[] = [{
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "200px",
+  groupable: false,
+  orderIndex: 10,
 },
 {
   field: "group",
@@ -108,11 +130,15 @@ const columns: KendoColumn[] = [{
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "125px",
+  groupable: true,
+  orderIndex: 11,
 }, {
   field: "category",
   title: "Category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
   width: "125px",
+  groupable: true,
+  orderIndex: 12,
 }, {
   field: "schema",
   title: "Schema",
@@ -120,6 +146,8 @@ const columns: KendoColumn[] = [{
   show: true,
   filterable: false,
   width: "95px",
+  groupable: false,
+  orderIndex: 13,
 }, {
   field: "fieldsConfig",
   title: "Field Config",
@@ -127,6 +155,19 @@ const columns: KendoColumn[] = [{
   show: true,
   filterable: false,
   width: "95px",
+  groupable: false,
+  orderIndex: 14,
+}, {
+  field: "",
+  title: "",
+  show: true,
+  groupable: false,
+  filterable: false,
+  locked: true,
+  width: "90px",
+  reorderable: false,
+  resizable: false,
+  orderIndex: 15,
 }];
 
 // TODO: Move in common file

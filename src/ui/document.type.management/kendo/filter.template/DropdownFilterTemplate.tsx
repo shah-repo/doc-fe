@@ -23,7 +23,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   const [state, setState] = React.useState({
     value: props.defaultValue,
   });
-  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
+  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem.value);
 
   const onChange = (event: DropDownListChangeEvent) => {
     hasValue = hasValue(event.target.value, "props.data ::", props.data);
@@ -65,7 +65,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
         className="k-button k-button-icon k-clear-button-visible"
         title="Clear"
         onClick={onClearButtonClick}
-        disabled={!props.value}
+        disabled={props.value === null || props.value === props.defaultItem.value}
       >
         {/* Add condition for edit field */}
         <span className="k-icon k-i-filter-clear" />
