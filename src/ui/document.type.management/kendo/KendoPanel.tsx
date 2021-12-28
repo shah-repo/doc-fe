@@ -143,11 +143,14 @@ export function KendoGrid<T extends { id?: string }>({
         "defaultTraining",
         "defaultRevStage",
         "hiddenForCreationForUsersWithoutTagsFormatted",
-        "group"].includes(el.field)) {
+        "group",
+        "active"].includes(el.field)) {
         setDropDownState((prevState) => {
           const object = Object.assign({}, { ...prevState });
           let value;
-          if (typeof el.value === "boolean") {
+          if (typeof el.value === "boolean" && el.field === "active") {
+            value = el.value ? "Active" : "Inactive";
+          } else if (typeof el.value === "boolean") {
             value = el.value ? "Yes" : "No";
           } else {
             value = el.value;
@@ -376,6 +379,7 @@ export function KendoGrid<T extends { id?: string }>({
       return;
     } else {
       delete values.inEdit;
+      delete values.expanded;
       delete values?.hiddenForCreationForUsersWithoutTagsFormatted;
       async.start(addDocumentTypeAction, toDocumentTypeBody(values), async);
     }

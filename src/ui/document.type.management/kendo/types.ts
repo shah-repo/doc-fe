@@ -70,4 +70,5 @@ export interface DTMAddRow {
   startingNumber?: number;
   category?: Nullable<string>;
   inEdit? : boolean;
+  expanded?: boolean;
 }
