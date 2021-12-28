@@ -173,4 +173,3 @@ AvailableReferencesFieldProps
 > = (props) => <FormikField component={AvailableReferences} {...props} />;
 
 export default AvailableReferencesField;
-
