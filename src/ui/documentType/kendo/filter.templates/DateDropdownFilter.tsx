@@ -44,6 +44,7 @@ export const DateDropdownFilterCell = (props: DateDropdownFilterCellProps) => {
   return (
     <div className="k-filtercell">
       <DropDownList
+        style={{ textTransform: "uppercase" }}
         data={props.data}
         textField="text"
         dataItemKey="value"
