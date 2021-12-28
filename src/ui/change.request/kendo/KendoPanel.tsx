@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, find, isEmpty, map, pick, set } from "lodash";
+import { each, find, isEmpty, map, pick } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -169,17 +169,17 @@ export function KendoPanel<T extends any>({
   }, [tableCriteria.forceUpdate]);
 
   const formatParams = () => {
-    const params: any = {};
-    if (!tableCriteria.queryDict) {
-      return;
+    interface FilterObj {
+      value: string;
+      field: string;
     }
-    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
-      if (key.startsWith("dynamicParams")) {
-        set(params, key, value);
-      } else {
-        params[key] = value;
-      }
-    });
+    const params: any = {};
+    const statusFilterObj = find(dataState.filter?.filters, {
+      field: "state",
+    }) as FilterObj;
+    if (statusFilterObj) {
+      params[statusFilterObj.field] = statusFilterObj.value;
+    }
     params.dynamicParams = JSON.stringify(params.dynamicParams);
     return params;
   };
