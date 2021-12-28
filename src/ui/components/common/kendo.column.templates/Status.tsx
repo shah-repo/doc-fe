@@ -10,45 +10,76 @@ export const Status = (props) => {
       flexDirection: "row",
       padding: "0px !important",
       borderRadius: "10px",
-      background: "grey",
+      background: Colors.light_cyan,
       fontFamily: "Sora",
       fontStyle: "normal",
-      fontWeight: "normal",
-      fontSize: "12px",
-      lineHeight: "22px",
+      fontWeight: 600,
+      fontSize: "10px",
+      lineHeight: "13px",
+      textTransform: "uppercase",
       alignItems: "center",
       justifyContent: "center",
-      color: Colors.white,
+      color: Colors.lochmara,
     },
     APPROVED: {
-      background: Colors.latest_green_varient,
+      background: Colors.carla,
+      color: Colors.fruit_salad,
     },
     RELEASED: {
-      background: Colors.latest_green_varient,
+      background: Colors.carla,
+      color: Colors.fruit_salad,
     },
     DRAFT: {
-      background: Colors.font_gray,
+      background: Colors.light_cyan,
+      color: Colors.lochmara,
     },
     INREVIEW: {
-      background: Colors.latest_blue_varient,
+      background: Colors.old_lace,
+      color: Colors.tawny,
     },
     IMPLEMENTATION: {
-      background: Colors.latest_yellow_varient,
+      background: Colors.light_cyan,
+      color: Colors.lochmara,
+    },
+    CURRENT: {
+      background: Colors.light_cyan,
+      color: Colors.lochmara,
+    },
+    LASTSIGNED: {
+      background: Colors.light_cyan,
+      color: Colors.lochmara,
+    },
+    WIP: {
+      background: Colors.light_cyan,
+      color: Colors.lochmara,
     },
     PENDINGCHANGE: {
-      background: Colors.latest_yellow_varient,
+      background: Colors.old_lace,
+      color: Colors.tawny,
+    },
+    PENDINGAPPROVAL: {
+      background: Colors.old_lace,
+      color: Colors.tawny,
     },
     CLOSED: {
-      background: Colors.olivine,
+      background: Colors.lily_white,
+      color: Colors.font_gray,
     },
     VOIDED: {
-      background: Colors.basket_ball_orange,
+      background: Colors.lily_white,
+      color: Colors.font_gray,
+    },
+    VOID: {
+      background: Colors.lily_white,
+      color: Colors.font_gray,
     },
     OBSOLETE: {
-      background: Colors.latest_yellow_varient,
+      background: Colors.lily_white,
+      color: Colors.font_gray,
     },
     SUPERSEDED: {
-      background: Colors.basket_ball_orange,
+      background: Colors.lily_white,
+      color: Colors.font_gray,
     },
   }));
   const classes = styles();
