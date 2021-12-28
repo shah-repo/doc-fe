@@ -3,7 +3,6 @@ import {
   DropDownListChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { toUpper } from "lodash";
 import * as React from "react";
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
@@ -34,9 +33,10 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   return (
     <div className="k-filtercell">
       <DropDownList
+        style={{ textTransform: "uppercase" }}
         data={props.data}
         onChange={onChange}
-        value={toUpper(props.value || props.defaultItem)}
+        value={props.value || props.defaultItem}
         defaultItem={props.defaultItem}
       />
       <button
