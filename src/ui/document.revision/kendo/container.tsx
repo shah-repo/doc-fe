@@ -85,7 +85,7 @@ const ListContainer: React.FunctionComponent<any> = ({ history }) => {
     if (isEmpty(tableCriteria.queryDict)) {
       setSearchStatus(
         documentRevisionQueryStatus(),
-        undefined
+        "Released" as DocumentRevisionStatus
       );
     }
     dispatch(documentTypeActions.loadList());
