@@ -32,35 +32,15 @@ export const Status = (props) => {
       color: Colors.fruit_salad,
       border: `1px solid ${Colors.fruit_salad_border}`,
     },
-    // DRAFT: {
-    //   background: Colors.light_cyan,
-    //   color: Colors.lochmara,
-    //   border: "1px solid #457AB5",
-    // },
     INREVIEW: {
       background: Colors.old_lace,
       color: Colors.tawny,
       border: `1px solid ${Colors.ochre}`,
     },
-    // IMPLEMENTATION: {
-    //   background: Colors.light_cyan,
-    //   color: Colors.lochmara,
-    //   border: "1px solid #457AB5",
-    // },
     CURRENT: {
       background: Colors.light_cyan,
       color: Colors.lochmara,
     },
-    // LASTSIGNED: {
-    //   background: Colors.light_cyan,
-    //   color: Colors.lochmara,
-    //   border: "1px solid #457AB5",
-    // },
-    // WIP: {
-    //   background: Colors.light_cyan,
-    //   color: Colors.lochmara,
-    //   border: "1px solid #457AB5",
-    // },
     PENDINGCHANGE: {
       background: Colors.old_lace,
       color: Colors.tawny,
