@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid, GridColumn, GridColumnReorderEvent,
@@ -12,7 +12,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { each, filter, find, isEmpty, map, pick, set } from "lodash";
@@ -25,7 +25,7 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
   DocumentRevision,
-  DocumentRevisionStatus
+  DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
@@ -46,7 +46,7 @@ import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
   documentRevisionEffectiveDateOption,
-  documentRevisionQueryStatus
+  documentRevisionQueryStatus,
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -333,6 +333,7 @@ export function KendoPanel<T extends any>({
         )
       );
     } else {
+      delete tableCriteria?.queryDict?.displayStatus;
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
