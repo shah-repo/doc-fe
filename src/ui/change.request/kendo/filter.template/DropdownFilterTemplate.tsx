@@ -41,6 +41,7 @@ export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
   return (
     <div className="k-filtercell">
       <DropDownList
+        style={{ textTransform: "uppercase" }}
         data={props.data}
         onChange={onChange}
         value={props.value || props.defaultValue}
