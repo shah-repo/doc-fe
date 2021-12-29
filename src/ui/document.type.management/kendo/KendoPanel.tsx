@@ -12,6 +12,7 @@ import {
   GridFilterCellProps,
   GridItemChangeEvent,
   GridNoRecords,
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -494,17 +495,13 @@ export function KendoGrid<T extends { id?: string }>({
     <>
       <Grid>
         {isLoading && <Loader />}
-        <Grid container spacing={1}>
-          <Grid item={true} xs={6} style={{ textAlign: "left" }}>
-            <Button
-              variant="outlined"
-              className={classes.clearButton}
-              onClick={clearFilter}
-            >
-              <Text translation={"common.clear.filters"} />
-            </Button>
+        <Grid container justify="space-between">
+          <Grid item>
+            <Typography className={classes.title}>
+              <Text translation="documenttype.management"></Text>
+            </Typography>
           </Grid>
-          <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+          <Grid item>
             <Button
               onClick={exportDAMDialog.open}
               variant="outlined"
@@ -543,6 +540,17 @@ export function KendoGrid<T extends { id?: string }>({
               onColumnReorder={columnReorder}
               onColumnResize={columnResize}
             >
+              <GridToolbar>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    className={classes.clearButton}
+                    onClick={clearFilter}
+                  >
+                    <Text translation={"common.clear.filters"} />
+                  </Button>
+                </Grid>
+              </GridToolbar>
               {renderColumns()}
               <GridNoRecords>{noDataMessage}</GridNoRecords>
             </Kgrid>

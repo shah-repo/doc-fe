@@ -56,6 +56,15 @@ const KendoGridStyles = makeStyles((theme) => ({
     border: `1px solid ${Colors.navy}`,
     backgroundColor: Colors.white,
   },
+  title: {
+    fontWeight: 700,
+    fontSize: 14,
+    color: Colors.almost_black,
+    textTransform: "uppercase",
+    fontFamily: "Sora",
+    marginTop: 10,
+    marginLeft: 5,
+  },
 }
 ));
 export default KendoGridStyles;
