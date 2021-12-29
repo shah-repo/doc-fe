@@ -524,9 +524,6 @@ export function KendoPanel<T extends any>({
               <Grid item>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item style={{ display: "flex" }}>
-                {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
-              </Grid>
             </Grid>
           </GridToolbar>
           {columnRenderer()}
@@ -537,9 +534,21 @@ export function KendoPanel<T extends any>({
     </>
   );
   return (
-    <Box className={classes.root}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
-      {tableRenderer()}
-    </Box>
+    <>
+      <Grid container justify="space-between">
+        <Grid item>
+          <Typography className={classes.title}>
+            <Text translation="navigation.group.management"></Text>
+          </Typography>
+        </Grid>
+        <Grid item  style={{ marginBottom: 10 }}>
+          {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+        </Grid>
+      </Grid>
+      <Box className={classes.root}>
+        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+        {tableRenderer()}
+      </Box>
+    </>
   );
 }
