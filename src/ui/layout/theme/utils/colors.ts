@@ -34,6 +34,7 @@ enum Colors {
   light_gray_blue = "#CBD5E0",
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
+  steel_blue="#457AB5",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -54,6 +55,7 @@ enum Colors {
   olivine = "#9EB774",
   carla="#E6FCD9",
   fruit_salad="#4C9646",
+  fruit_salad_border="#509849",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
@@ -62,6 +64,7 @@ enum Colors {
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",
   tawny="#C77401",
+  ochre="#CE8723",
   // cyan
   light_cyan="#DCF4FD",
   lochmara="#306AAC"
