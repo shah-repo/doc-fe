@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme) => ({
   cRoot: {
@@ -23,6 +24,15 @@ const KendoGridStyles = makeStyles((theme) => ({
   link: {
     fontSize: "14px",
     fontFamily: "Sora",
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: 14,
+    color: Colors.almost_black,
+    textTransform: "uppercase",
+    fontFamily: "Sora",
+    marginTop: 10,
+    marginLeft: 5,
   },
 }));
 

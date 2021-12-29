@@ -445,14 +445,6 @@ export function KendoPanel<T extends any>({
               <Grid item>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item style={{ display: "flex" }}>
-                <EnableDropboxButton
-                  shouldDisplayButton={hasDropboxPermission}
-                  {...{ dropboxAsync, enableDropboxAction }}
-                  disabled={Boolean(isCompanyDropboxEnabled)}
-                />
-                <AddEmployeeContainer  addGroup={addNew} />
-              </Grid>
             </Grid>
           </GridToolbar>
           {columnRenderer()}
@@ -463,9 +455,26 @@ export function KendoPanel<T extends any>({
     </>
   );
   return (
-    <Box className={classes.root}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
-      {tableRenderer()}
-    </Box>
+    <>
+      <Grid container justify="space-between">
+        <Grid item>
+          <Typography className={classes.title}>
+            <Text translation="navigation.user.management"></Text>
+          </Typography>
+        </Grid>
+        <Grid item style={{ display: "flex" }}>
+          <EnableDropboxButton
+            shouldDisplayButton={hasDropboxPermission}
+            {...{ dropboxAsync, enableDropboxAction }}
+            disabled={Boolean(isCompanyDropboxEnabled)}
+          />
+          <AddEmployeeContainer addGroup={addNew} />
+        </Grid>
+      </Grid>
+      <Box className={classes.root}>
+        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+        {tableRenderer()}
+      </Box>
+    </>
   );
 }
