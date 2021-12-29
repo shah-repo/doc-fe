@@ -22,6 +22,10 @@ export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
       operator: hasValue ? "eq" : "",
       syntheticEvent: event.syntheticEvent,
     });
+    if (event.target.value === "Select State") {
+      props.onStateChange && props.onStateChange(true);
+      return;
+    }
     props.onStateChange && props.onStateChange(false);
   };
 

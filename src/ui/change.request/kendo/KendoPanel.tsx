@@ -326,6 +326,7 @@ export function KendoPanel<T extends any>({
         )
       );
     } else {
+      delete tableCriteria?.queryDict?.displayStatus;
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
