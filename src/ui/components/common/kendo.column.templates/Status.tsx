@@ -9,7 +9,8 @@ export const Status = (props) => {
       display: "flex",
       flexDirection: "row",
       padding: "0px !important",
-      borderRadius: "10px",
+      borderRadius: "3px",
+      border: `1px solid ${Colors.steel_blue}`,
       background: Colors.light_cyan,
       fontFamily: "Sora",
       fontStyle: "normal",
@@ -24,62 +25,56 @@ export const Status = (props) => {
     APPROVED: {
       background: Colors.carla,
       color: Colors.fruit_salad,
+      border: `1px solid ${Colors.fruit_salad_border}`,
     },
     RELEASED: {
       background: Colors.carla,
       color: Colors.fruit_salad,
-    },
-    DRAFT: {
-      background: Colors.light_cyan,
-      color: Colors.lochmara,
+      border: `1px solid ${Colors.fruit_salad_border}`,
     },
     INREVIEW: {
       background: Colors.old_lace,
       color: Colors.tawny,
-    },
-    IMPLEMENTATION: {
-      background: Colors.light_cyan,
-      color: Colors.lochmara,
+      border: `1px solid ${Colors.ochre}`,
     },
     CURRENT: {
-      background: Colors.light_cyan,
-      color: Colors.lochmara,
-    },
-    LASTSIGNED: {
-      background: Colors.light_cyan,
-      color: Colors.lochmara,
-    },
-    WIP: {
       background: Colors.light_cyan,
       color: Colors.lochmara,
     },
     PENDINGCHANGE: {
       background: Colors.old_lace,
       color: Colors.tawny,
+      border: `1px solid ${Colors.ochre}`,
     },
     PENDINGAPPROVAL: {
       background: Colors.old_lace,
       color: Colors.tawny,
+      border: `1px solid ${Colors.ochre}`,
     },
     CLOSED: {
       background: Colors.lily_white,
       color: Colors.font_gray,
+      border: `1px solid ${Colors.font_gray}`,
     },
     VOIDED: {
       background: Colors.lily_white,
       color: Colors.font_gray,
+      border: `1px solid ${Colors.font_gray}`,
     },
     VOID: {
       background: Colors.lily_white,
       color: Colors.font_gray,
+      border: `1px solid ${Colors.font_gray}`,
     },
     OBSOLETE: {
       background: Colors.lily_white,
       color: Colors.font_gray,
+      border: `1px solid ${Colors.font_gray}`,
     },
     SUPERSEDED: {
       background: Colors.lily_white,
       color: Colors.font_gray,
+      border: `1px solid ${Colors.font_gray}`,
     },
   }));
   const classes = styles();
