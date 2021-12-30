@@ -17,6 +17,7 @@ import {
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
@@ -89,8 +90,7 @@ export function KendoGrid<T extends { id?: string }>({
   const addDocumentTypeAction = useActionCreator(
     documentTypeActions.addDocumentType
   );
-  // TODO: CHECK WHEN TO DISABLE FIELD
-  // const disabled = Config.docTypeManagementEditDisabled;
+  const disabled = Config.docTypeManagementEditDisabled;
   const dispatch = useDispatch();
   const async = useAsync({
     onSuccess: () => {
@@ -239,6 +239,7 @@ export function KendoGrid<T extends { id?: string }>({
       add={addNewRow}
       update={update}
       cancel={cancel}
+      disabled={disabled}
       editField={editField}
     />
 ;
@@ -513,7 +514,8 @@ export function KendoGrid<T extends { id?: string }>({
             <Button
               variant="outlined"
               onClick={addNewRowObject}
-              className={classes.addBtn}
+              className={ disabled ? classes.disabledAddBtn : classes.addBtn}
+              {...{ disabled }}
             >
               <Text translation={"common.add.document.type"} />
             </Button>

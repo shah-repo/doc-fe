@@ -20,6 +20,7 @@ export interface CellCommandConfig extends GridCellProps {
   cancel: (dataItem: DTMRowItem) => void;
   remove: (dataItem: DTMRowItem) => void;
   editField?: string;
+  disabled?: boolean;
 }
 
 export interface DTMRowItem {

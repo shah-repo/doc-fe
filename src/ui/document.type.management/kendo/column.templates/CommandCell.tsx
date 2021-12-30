@@ -42,21 +42,30 @@ export const CommandCell = (props: CellCommandConfig) => {
         disableRipple
         style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="add"
-        onClick={() => isNewItem ? props.add(dataItem) : props.update(dataItem)}
+        disabled={props.disabled}
+        onClick={() =>
+          isNewItem ? props.add(dataItem) : props.update(dataItem)
+        }
       >
         <AddCircleOutlineIcon
-          className={classes.ButtonColor}
+          className={props.disabled ? "" : classes.ButtonColor}
           fontSize="small"
+          color={props.disabled ? "disabled" : "secondary"}
         />
       </IconButton>
       <IconButton
         disableFocusRipple
         disableRipple
+        disabled={props.disabled}
         style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="cancel"
         onClick={() => props.cancel(dataItem)}
       >
-        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+        <CancelOutlinedIcon
+          className={props.disabled ? "" : classes.Cancel}
+          fontSize="small"
+          color={props.disabled ? "disabled" : "secondary"}
+        />
       </IconButton>
     </td>
   ) : (
@@ -72,21 +81,31 @@ export const CommandCell = (props: CellCommandConfig) => {
       <IconButton
         disableFocusRipple
         disableRipple
+        disabled={props.disabled}
         style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="edit"
         onClick={() => props.edit(dataItem)}
       >
-        <EditIcon className={classes.ButtonColor} fontSize="small" />
+        <EditIcon
+          className={props.disabled ? "" : classes.ButtonColor}
+          fontSize="small"
+          color={props.disabled ? "disabled" : "secondary"}
+        />
       </IconButton>
       {/* TODO: check and put Remove */}
       <IconButton
         disableFocusRipple
         disableRipple
+        disabled={props.disabled}
         style={{ backgroundColor: "transparent", padding: 5 }}
         aria-label="cancel"
         onClick={() => props.remove(dataItem)}
       >
-        <DeleteIcon className={classes.Remove} fontSize="small" />
+        <DeleteIcon
+          className={props.disabled ? "" : classes.Remove}
+          fontSize="small"
+          color={props.disabled ? "disabled" : "secondary"}
+        />
       </IconButton>
     </td>
   );

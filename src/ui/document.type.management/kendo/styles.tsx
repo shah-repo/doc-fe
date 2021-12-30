@@ -41,6 +41,20 @@ const KendoGridStyles = makeStyles((theme) => ({
       background: Colors.navy,
     },
   },
+  disabledAddBtn: {
+    "marginRight": "10px",
+    "boxShadow": "none",
+    "borderRadius": 100,
+    "background": Colors.white,
+    "color": Colors.black,
+    "fontFamily": "Sora",
+    "paddingRight": 20,
+    "paddingLeft": 20,
+    "textTransform": "none",
+    "&:hover": {
+      background: Colors.navy,
+    },
+  },
   clearButton: {
     marginLeft: "5px",
     boxShadow: "none",
