@@ -28,6 +28,7 @@ export interface KendoColumn {
   filterable?: boolean;
   resizable?: boolean;
   disabled?: boolean;
+  resizable?: boolean;
 }
 
 export interface DropdownFilterDefaultItem {
