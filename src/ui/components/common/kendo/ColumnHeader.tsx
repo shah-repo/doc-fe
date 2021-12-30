@@ -26,9 +26,7 @@ const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => {
       <StyledTooltip
         interactive={true}
         title={
-          <Typography>
-            <div className={`${classes.tooltip}`}>{data.title}</div>
-          </Typography>
+          <Typography className={`${classes.tooltip}`}>{data.title}</Typography>
         }
         placement="top"
         arrow
@@ -38,7 +36,9 @@ const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => {
           {data.children}
         </span>
       </StyledTooltip>
-      <GridColumnMenuWrapper {...data.columnMenuWrapperProps} />
+      {data.columnMenuWrapperProps.columnMenu && (
+        <GridColumnMenuWrapper {...data.columnMenuWrapperProps} />
+      )}
     </>
   );
 };
