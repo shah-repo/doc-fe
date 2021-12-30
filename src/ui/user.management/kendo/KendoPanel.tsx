@@ -30,6 +30,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import { hideColumnTitleOnResize } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -380,14 +381,18 @@ export function KendoPanel<T extends any>({
     )));
 
   const columnResize = (event: GridColumnResizeEvent) => {
-    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
-    dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
-      column.width = columnObject?.width;
-      return column;
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
+    if (event.end) {
+      let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+      dataColumns = map(dataColumns, (column: KendoColumn) => {
+        const columnObject = find(event.columns, { field: column.field });
+        column.width = columnObject?.width;
+        return column;
+      });
+      hideColumnTitleOnResize();
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }
+    return false;
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
