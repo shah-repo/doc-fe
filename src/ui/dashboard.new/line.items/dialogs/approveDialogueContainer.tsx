@@ -1,10 +1,12 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import {
   ChangeRequestTransition,
   ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest/types";
+import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
@@ -39,6 +41,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const applyTransitionAction = useActionCreator(
     changeRequestsActions.applyTransition
   );
+  const dispatch = useDispatch();
 
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
@@ -48,6 +51,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       } else {
         transitionDialog.close();
       }
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
     onError: (error) => {
       transitionDialog.close();

@@ -59,10 +59,10 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Typography className={classes.nameStyle} noWrap={true}> {name}</Typography>
+                <Typography data-cy="UserName" className={classes.nameStyle} noWrap={true}> {name}</Typography>
               }
               secondary={
-                <Typography className={classes.emailStyle} noWrap={true}> {email}</Typography>
+                <Typography data-cy="UserEmail" className={classes.emailStyle} noWrap={true}> {email}</Typography>
               }
             />
             <UserMenu {...{ handleCloseMenu, anchorEl }} />
