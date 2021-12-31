@@ -154,13 +154,17 @@ export function KendoPanel<T extends any>({
     };
   }
 
-  const setSearchStatus = () => {
+  const setSearchStatus = (reset: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: [],
     };
-    dataState.sort = [];
-    dataState.group = [];
+    if (reset) {
+      dataState.group = [];
+      dataState.sort = [];
+      dataState.skip = 0;
+      dataState.take = 25;
+    }
     setDataState(dataState);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
@@ -335,7 +339,7 @@ export function KendoPanel<T extends any>({
     },
     [collapsedState]
   );
-  const clearFilter = () => setSearchStatus();
+  const clearFilter = () => setSearchStatus(false);
 
   const commandCell = (props: GridCellProps) =>
     <CommandCell
@@ -409,7 +413,7 @@ export function KendoPanel<T extends any>({
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
 
   const addNew = () => {
-    clearFilter();
+    setSearchStatus(true);
     const newDataItem: any = {
       id: generateUuid(),
       inEdit: true,
