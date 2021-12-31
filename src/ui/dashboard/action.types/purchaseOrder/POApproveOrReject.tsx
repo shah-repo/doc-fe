@@ -1,6 +1,8 @@
 import { Box, Button, Grid } from "@material-ui/core";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { approvalsActions } from "../../../../state/ducks/approvals";
+import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
@@ -19,10 +21,11 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
 }) => {
   const passwordDialog = useDialog();
   const alertDialog = useDialog();
+  const dispatch = useDispatch();
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const async = useAsync({
     onSuccess: () => {
-      window.location.reload();
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
     onError: (error) => {
       toastError(error as string);

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
@@ -18,6 +19,7 @@ import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/
 import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
@@ -67,6 +69,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
@@ -124,7 +127,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: () => {
-      window.location.reload();
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
     onError: (error) => {
       toastError(error as string);
