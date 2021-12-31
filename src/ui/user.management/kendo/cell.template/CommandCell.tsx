@@ -1,9 +1,10 @@
-import { IconButton, makeStyles } from "@material-ui/core";
+import { IconButton, makeStyles, Typography } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
 
 interface CommandCellProps {
@@ -34,6 +35,13 @@ export const CommandCell = (props: CommandCellProps) => {
     Cancel: {
       color: Colors.latest_yellow_varient,
     },
+    tooltip: {
+      maxHeight: "100px",
+      overflow: "auto",
+      fontFamily: "Sora",
+      fontSize: 12,
+      whiteSpace: "pre-line",
+    },
   }));
   const classes = styles();
   const { dataItem } = props;
@@ -53,27 +61,47 @@ export const CommandCell = (props: CommandCellProps) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <IconButton
-        disableRipple={true}
-        aria-label="update"
-        size="small"
-        onClick={() => props.add(dataItem)}
-        className={classes.button}
+      <StyledTooltip
+        interactive={true}
+        title={
+          <Typography className={`${classes.tooltip}`}>
+            {"Add Employee"}
+          </Typography>
+        }
+        placement="top"
+        arrow
       >
-        <AddCircleOutlineIcon
-          className={classes.ButtonColor}
-          fontSize="small"
-        />
-      </IconButton>
-      <IconButton
-        disableRipple={true}
-        aria-label="cancel"
-        size="small"
-        onClick={() => props.cancel(dataItem)}
-        className={classes.button}
+        <IconButton
+          disableRipple={true}
+          aria-label="update"
+          size="small"
+          onClick={() => props.add(dataItem)}
+          className={classes.button}
+        >
+          <AddCircleOutlineIcon
+            className={classes.ButtonColor}
+            fontSize="small"
+          />
+        </IconButton>
+      </StyledTooltip>
+      <StyledTooltip
+        interactive={true}
+        title={
+          <Typography className={`${classes.tooltip}`}>{"Discard"}</Typography>
+        }
+        placement="top"
+        arrow
       >
-        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
-      </IconButton>
+        <IconButton
+          disableRipple={true}
+          aria-label="cancel"
+          size="small"
+          onClick={() => props.cancel(dataItem)}
+          className={classes.button}
+        >
+          <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+        </IconButton>
+      </StyledTooltip>
     </td>
   ) : (
     <td
@@ -85,15 +113,26 @@ export const CommandCell = (props: CommandCellProps) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <IconButton
-        disableRipple={true}
-        aria-label="edit"
-        size="small"
-        onClick={() => props.edit(dataItem)}
-        className={classes.button}
+      <StyledTooltip
+        interactive={true}
+        title={
+          <Typography className={`${classes.tooltip}`}>
+            {"Edit Employee"}
+          </Typography>
+        }
+        placement="top"
+        arrow
       >
-        <EditIcon className={classes.ButtonColor} fontSize="small" />
-      </IconButton>
+        <IconButton
+          disableRipple={true}
+          aria-label="edit"
+          size="small"
+          onClick={() => props.edit(dataItem)}
+          className={classes.button}
+        >
+          <EditIcon className={classes.ButtonColor} fontSize="small" />
+        </IconButton>
+      </StyledTooltip>
     </td>
   );
 };
