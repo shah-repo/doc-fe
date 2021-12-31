@@ -7,6 +7,11 @@ import Colors from "../../../layout/theme/utils/colors";
 
 export const CommandCell = (props) => {
   const styles = makeStyles(() => ({
+    button: {
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    },
     ButtonColor: {
       color: Colors.navy,
     },
@@ -37,14 +42,21 @@ export const CommandCell = (props) => {
         aria-label="add"
         size="small"
         onClick={() => props.update(dataItem)}
-      ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
+        className={classes.button}
+      >
+        <AddCircleOutlineIcon
+          className={classes.ButtonColor}
+          fontSize="small"
+        />
       </IconButton>
       <IconButton
         disableRipple={true}
         aria-label="cancel"
         size="small"
         onClick={() => props.cancel(dataItem)}
-      ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+        className={classes.button}
+      >
+        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
     </td>
   ) : (
@@ -62,7 +74,9 @@ export const CommandCell = (props) => {
         aria-label="edit"
         size="small"
         onClick={() => props.edit(dataItem)}
-      ><EditIcon className={classes.ButtonColor} fontSize="small" />
+        className={classes.button}
+      >
+        <EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
     </td>
   );
