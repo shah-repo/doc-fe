@@ -118,10 +118,13 @@ td[role="gridcell"] {
 
 .k-button,
 .k-button-secondary,
-.k-pager-wrap,
 .k-dropdown .k-dropdown-wrap,
 .k-dropdowntree .k-dropdown-wrap {
   background-color: var(--white);
+}
+
+.k-pager-wrap {
+  background-color: var(--water);
 }
 
 .k-dropdown .k-dropdown-wrap:hover {
