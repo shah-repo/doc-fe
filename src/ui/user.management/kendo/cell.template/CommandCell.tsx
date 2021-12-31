@@ -6,7 +6,7 @@ import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 
-interface CommandCellProps  {
+interface CommandCellProps {
   dataItem: GridFilterCellProps;
   editField: string;
   add: (dataItem) => void;
@@ -23,6 +23,11 @@ interface CommandCellProps  {
 
 export const CommandCell = (props: CommandCellProps) => {
   const styles = makeStyles(() => ({
+    button: {
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    },
     ButtonColor: {
       color: Colors.navy,
     },
@@ -53,14 +58,21 @@ export const CommandCell = (props: CommandCellProps) => {
         aria-label="update"
         size="small"
         onClick={() => props.add(dataItem)}
-      ><AddCircleOutlineIcon className={classes.ButtonColor} fontSize="small" />
+        className={classes.button}
+      >
+        <AddCircleOutlineIcon
+          className={classes.ButtonColor}
+          fontSize="small"
+        />
       </IconButton>
       <IconButton
         disableRipple={true}
         aria-label="cancel"
         size="small"
         onClick={() => props.cancel(dataItem)}
-      ><CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+        className={classes.button}
+      >
+        <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
       </IconButton>
     </td>
   ) : (
@@ -78,7 +90,9 @@ export const CommandCell = (props: CommandCellProps) => {
         aria-label="edit"
         size="small"
         onClick={() => props.edit(dataItem)}
-      ><EditIcon className={classes.ButtonColor} fontSize="small" />
+        className={classes.button}
+      >
+        <EditIcon className={classes.ButtonColor} fontSize="small" />
       </IconButton>
     </td>
   );
