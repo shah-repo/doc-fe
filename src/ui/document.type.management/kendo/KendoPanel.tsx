@@ -526,7 +526,7 @@ export function KendoGrid<T extends { id?: string }>({
         <Grid item={true}>
           <KendoGlobalization>
             <Kgrid
-              className={classes.kGrid}
+              className={`${classes.kGrid} no-row-pointer`}
               data={result}
               sortable={true}
               filterable={true}
