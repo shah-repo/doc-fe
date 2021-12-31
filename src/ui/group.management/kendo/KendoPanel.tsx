@@ -116,7 +116,7 @@ export function KendoPanel<T extends any>({
     onSelect && onSelect({ dataItem })();
   };
   const addGroup = () => {
-    clearFilter();
+    setSearchStatus(true);
     const sampleData = {
       name: "",
       employees: [],
@@ -172,15 +172,17 @@ export function KendoPanel<T extends any>({
     };
   }
 
-  const setSearchStatus = (state?: LoadCompanyGroup) => {
+  const setSearchStatus = (reset: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: [],
     };
-    dataState.group = [];
-    dataState.sort = [];
-    dataState.skip = 0;
-    dataState.take = 25;
+    if (reset) {
+      dataState.group = [];
+      dataState.sort = [];
+      dataState.skip = 0;
+      dataState.take = 25;
+    }
     setDataState(dataState);
     setResultState(processWithGroups(gridData, dataState));
     tableCriteria.kendoConfig = JSON.stringify(dataState);
@@ -392,7 +394,7 @@ export function KendoPanel<T extends any>({
     },
     [collapsedState]
   );
-  const clearFilter = () => setSearchStatus();
+  const clearFilter = () => setSearchStatus(false);
 
   const commandCell = (props: GridCellProps) =>
     <CommandCell
