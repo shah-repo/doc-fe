@@ -348,7 +348,7 @@ export function KendoGrid<T extends { id?: string }>({
 
   // Add New row object
   const addNewRowObject = async () => {
-    await clearFilter();
+    await clearFilter(true);
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     const newDataArr: any[] = [newDataItem, ...actualData];
@@ -414,15 +414,17 @@ export function KendoGrid<T extends { id?: string }>({
   };
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  const clearFilter = async () => {
+  const clearFilter = async (reset: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: [],
     };
-    dataState.group = [];
-    dataState.sort = [];
-    dataState.take = 25;
-    dataState.skip = 0;
+    if (reset) {
+      dataState.group = [];
+      dataState.sort = [];
+      dataState.take = 25;
+      dataState.skip = 0;
+    }
     setDropDownState({});
     const newDataState = processWithGroups(gridData, dataState);
     setDataState(dataState);
@@ -547,7 +549,7 @@ export function KendoGrid<T extends { id?: string }>({
                   <Button
                     variant="outlined"
                     className={classes.clearButton}
-                    onClick={clearFilter}
+                    onClick={async () => { await clearFilter(false); }}
                   >
                     <Text translation={"common.clear.filters"} />
                   </Button>
