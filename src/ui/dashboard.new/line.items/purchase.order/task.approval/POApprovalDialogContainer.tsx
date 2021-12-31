@@ -1,7 +1,9 @@
 import { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransition } from "../../../../../state/ducks/changeRequest/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { toastError } from "../../../../components/notifications";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -28,9 +30,10 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   transitionDialog,
   onSuccess,
 }) => {
+  const dispatch = useDispatch();
   const async = useAsync({
     onSuccess: () => {
-      window.location.reload();
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
     onError: (error) => {
       toastError(error as string);
