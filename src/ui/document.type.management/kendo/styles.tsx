@@ -8,8 +8,8 @@ const KendoGridStyles = makeStyles((theme) => ({
     fontFamily: "Sora",
   },
   kGrid: {
-    width: "calc(100vw - 263px)",
-    height: "calc(100vh - 125px)",
+    width: "calc(100vw - 255px)",
+    height: "calc(100vh - 110px)",
     margin: "5px",
   },
   exportBtn: {
