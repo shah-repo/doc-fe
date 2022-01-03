@@ -11,7 +11,7 @@ interface IFieldConfigItem {
   tooltipConfig?: TooltipLabelConfig;
 }
 type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
-export type FieldType = InputFieldType | DisplayFieldType;
+type FieldType = InputFieldType | DisplayFieldType;
 
 export interface CellCommandConfig extends GridCellProps {
   add: (dataItem: DTMRowItem) => void;

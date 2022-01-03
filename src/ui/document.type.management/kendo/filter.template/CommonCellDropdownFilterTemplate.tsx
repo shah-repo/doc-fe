@@ -6,8 +6,6 @@ import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import { enumToOptions, translatedOptions } from "../../transform";
-import gridConfiguration from "../column.definition";
-import { DropdownFilterCell } from "./DropdownFilterTemplate";
 
 
 const getDSByType = (type) => enumToOptions(type).map((o) => ({
@@ -56,27 +54,6 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
     default:
       return result;
   }
-};
-
-export const BooleanFilterCell = (props: any) => (
-  <DropdownFilterCell
-    {...props}
-    data={gridConfiguration.booleanFilterCellOptions}
-    defaultItem={{ text: "All", value: "All" }}
-    customOperator="eq"
-  />
-);
-
-export const DropdownFilterCellTemplate = (props: any) => {
-  const result: ResultProps  = getDropDownDataSource(props.field);
-  return (
-    <DropdownFilterCell
-      {...props}
-      data={result.dataSource}
-      defaultItem={{ text: "", value: "" }}
-      customOperator={result.operator}
-    />
-  );
 };
 
 // MOVE IN ANOTHER FILE
