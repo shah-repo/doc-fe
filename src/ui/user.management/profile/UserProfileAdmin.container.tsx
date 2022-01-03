@@ -35,7 +35,7 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   const editSelectedEmployeeAction = useActionCreator(authActions.editSelectedEmployee);
   const getSlackUrlAction = useActionCreator(userManagementActions.getSlackUrl);
 
-  const [realUser, setRealUser] = useState<any>({ user: {}, groups: [] });
+  const [realUser, setRealUser] = useState<any>({ user: {}, groups: [], groupsOrg: [] });
   const [showEditUser, setEditUser] = useState(false);
   const [previewAvatar, setPreviewAvatar] = useState("");
 
@@ -46,12 +46,12 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
     setRealUser(selectedEmployee);
   }, [selectedEmployee, setRealUser]);
 
-  const { groups, id, active } = realUser;
+  const { groupsOrg, id, active } = realUser;
   const { name, avatar, email } = realUser.user;
 
-  const employeeGroups: OptionType[] = groups.map((group: any) => ({
-    value: group.id,
-    label: group.name,
+  const employeeGroups: OptionType[] = groupsOrg?.map((group: any) => ({
+    value: group?.id,
+    label: group?.name,
   }));
 
   const async = useAsync({

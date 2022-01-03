@@ -1,6 +1,7 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, makeStyles } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 import AddEmployeeDialogPresenter from "./dialog.presenter";
 import AddEmployeeFormContainer from "./form.container";
 
@@ -14,24 +15,41 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
   isOpen,
   openDialog,
   closeDialog,
-}) => (
-  <Box>
-    <Button
-      color="primary"
-      variant="contained"
-      onClick={openDialog}
-      id="AddEmployeePresenter-openDialog"
-      style={{ margin: 0 }}
-    >
-      <Text message="user.management.add.employee" />
-    </Button>
-    <AddEmployeeDialogPresenter
-      isOpen={isOpen}
-      closeDialog={closeDialog}
-    >
-      <AddEmployeeFormContainer />
-    </AddEmployeeDialogPresenter>
-  </Box>
-);
+}) => {
+  const styles = makeStyles(() => ({
+    Button: {
+      "margin": "0px",
+      "boxShadow": "none",
+      "borderRadius": 100,
+      "background": Colors.navy,
+      "color": Colors.white,
+      "fontFamily": "Sora",
+      "paddingRight": 20,
+      "paddingLeft": 20,
+      "textTransform": "none",
+      "&:hover": {
+        background: Colors.navy,
+      },
+    },
+  }));
+  const classes = styles();
+  return (
+    <Box>
+      <Button
+        variant="contained"
+        onClick={openDialog}
+        id="AddEmployeePresenter-openDialog"
+        className={classes.Button}
+      >
+        <Text message="user.management.add.employee" />
+      </Button>
+      <AddEmployeeDialogPresenter
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+      >
+        <AddEmployeeFormContainer />
+      </AddEmployeeDialogPresenter>
+    </Box>
+  ); };
 
 export default AddEmployeePresenter;

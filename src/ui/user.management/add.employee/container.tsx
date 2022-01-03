@@ -2,9 +2,12 @@ import React from "react";
 import useDialog from "../../hooks/useDialog";
 import AddEmployeePresenter from "./presenter";
 
-const AddEmployeeContainer: React.FunctionComponent = () => {
+interface Props {
+  addGroup?: () => void;
+}
+const AddEmployeeContainer: React.FunctionComponent<Props> = ({ addGroup }) => {
   const dialog = useDialog();
-  const openDialog = () => dialog.open();
+  const openDialog = () => addGroup && addGroup(); // dialog.open();
   const closeDialog = () => dialog.close();
 
   return (
