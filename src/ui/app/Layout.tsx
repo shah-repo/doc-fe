@@ -12,7 +12,7 @@ import DashboardLayout from "../dashboard.new/Dashboard.layout";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
 import DocumentRevisionListContainer from "../document.revision/kendo/container";
-import { DocumentTypeManagementContainer } from "../document.type.management/list/container";
+import { DocumentTypeManagementContainer } from "../document.type.management/kendo/container";
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/kendo/container";
 import GroupManagementListContainer from "../group.management/kendo/container";

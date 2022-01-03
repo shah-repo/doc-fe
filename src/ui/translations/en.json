@@ -1159,5 +1159,6 @@
   "exportFileDownload.expired": "Link expired!",
   "exportFileDownload.downloading": "Your download will start in a few seconds...",
   "exportFileDownload.downloaded": "Your download started.",
-  "exportFileDownload.error": "There was an error processing your request."
+  "exportFileDownload.error": "There was an error processing your request.",
+  "documenttype.management": "DOCUMENT TYPE MANAGER"
 }
