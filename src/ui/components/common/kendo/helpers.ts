@@ -1,5 +1,4 @@
 import { chain, filter, findIndex, isEmpty } from "lodash";
-import { denormalize, normalize, schema } from "normalizr";
 
 export const orderByLockedState = (
   columnDefinitions: any,
@@ -29,22 +28,24 @@ export const orderByLockedState = (
 /**
  * Entity schema for the group entity. Along with the required field to identify the entity,
  */
+/*
 const columnSchema = new schema.Entity("columns", {}, { idAttribute: "field" });
 const filterentity = new schema.Entity("filter", {}, { idAttribute: "field" });
 const group = new schema.Entity("group");
 const filters = { filters: [filterentity] };
 const groups = { groups: [group] };
 const kendoConfigSchema = new schema.Object({ filter: filters, groups });
+*/
 
 /**
   * To normalize data, we need to define a schema for the data we want to normalize.
   * @param data
   * @returns [normalizedData, result, normalizedEntities]
   */
-export const getColumnNormalizedData = (data) => {
+/* export const getColumnNormalizedData = (data) => {
   const normalizedData = normalize(data, [columnSchema]);
   return normalizedData;
-};
+}; */
 
 /**
   * To denormalize data, we need to define a schema for the data we want to denormalize.
@@ -52,20 +53,20 @@ export const getColumnNormalizedData = (data) => {
   * @param normalizedData - [normalizedData, result, normalizedEntities]
   * @returns [denormalizedData]
   */
-export const getColumnDenormalizedData = (result, entities) => {
+/* export const getColumnDenormalizedData = (result, entities) => {
   const denormalizedData = denormalize(result, [columnSchema], entities);
   return denormalizedData;
-};
+}; */
 
 /**
    * To normalize data, we need to define a schema for the data we want to normalize.
    * @param data
    * @returns [normalizedData, result, normalizedEntities]
    */
-export const getFilterNormalizedDData = (data) => {
+/* export const getFilterNormalizedDData = (data) => {
   const normalizedData = normalize(data, kendoConfigSchema);
   return normalizedData;
-};
+}; */
 
 /**
    * To denormalize data, we need to define a schema for the data we want to denormalize.
@@ -73,11 +74,11 @@ export const getFilterNormalizedDData = (data) => {
    * @param normalizedData - [normalizedData, result, normalizedEntities]
    * @returns [denormalizedData]
    */
-export const getFilterDenormalizedDData = (result, entities) => {
+/* export const getFilterDenormalizedDData = (result, entities) => {
   const denormalizedData = denormalize(result,
     kendoConfigSchema, entities);
   return denormalizedData;
-};
+}; */
 
 /**
  * To calculate and set column width
