@@ -32,7 +32,7 @@ interface KendoGridProps {
   previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
 }
 
-export const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
+const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   documentTypeOptions,
   tableName,
   tableCriteria,

@@ -17,9 +17,6 @@ import { documentRevisionQueryStatus } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import KendoGridList from "./presenter";
 
-// type OwnProps = ListOwnProps;
-// type Props = OwnProps;
-export const DR_TABLE_NAME = "documentRevisions";
 const ListContainer: React.FunctionComponent<any> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
