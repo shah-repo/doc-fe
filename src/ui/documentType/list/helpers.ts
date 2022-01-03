@@ -27,6 +27,8 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
   if (valuePath === "owner.user.name") {
     omitSearch = false;
     searchOptions.dataKey = "owner";
+    searchOptions.ownerTemplate = true;
+
   }
   if (valuePath === "effectiveDate") {
     omitSearch = false;
@@ -35,6 +37,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       searchType: "select",
       selectOptions: documentRevisionEffectiveDateOption(),
       defaultValue: tableCriteria.queryDict?.effectiveDate,
+      dateFilter: true,
     };
   }
   if (valuePath === "releasedAt") {
@@ -44,6 +47,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
       searchType: "select",
       selectOptions: documentRevisionEffectiveDateOption(),
       defaultValue: tableCriteria.queryDict?.releasedAfter,
+      dateFilter: true,
     };
   }
   if (valuePath === "name") {
@@ -57,6 +61,7 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.searchType = "select";
     searchOptions.selectOptions = documentRevisionStatusOption(statuses);
     searchOptions.defaultValue = tableCriteria.queryDict?.displayStatus;
+    searchOptions.statusTemplate = true;
   }
 
   return [omitSearch, searchOptions];
@@ -93,6 +98,7 @@ export const getStaticColumns = (
       width: 150,
     },
     searchOptions: {
+      dataKey: "document.docId",
       defaultValue: tableCriteria.queryDict?.docId,
     },
   },
@@ -113,7 +119,9 @@ export const getStaticColumns = (
       cellDataGetter: ({ rowData }) => rowData.owner.user.name,
     },
     searchOptions: {
+      dataKey: "owner.user.name",
       defaultValue: tableCriteria.queryDict?.owner,
+      ownerTemplate: true,
     },
   },
   {
@@ -129,6 +137,7 @@ export const getStaticColumns = (
       defaultValue: tableCriteria.queryDict?.displayStatus,
       searchType: "select",
       selectOptions: documentRevisionStatusOption(statuses),
+      statusTemplate: true,
     },
   },
   {

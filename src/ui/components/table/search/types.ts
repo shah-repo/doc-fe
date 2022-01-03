@@ -10,6 +10,9 @@ export interface TableSearchFieldProps {
   searchValueGetter?: TableSearchQueryHandler;
   queryGetter?: (key: string, value: string) => any;
   defaultValue?: string;
+  dateFilter?: boolean;
+  ownerTemplate?: boolean;
+  statusTemplate? : boolean;
 }
 
 export interface TableSearchQueryProps {
