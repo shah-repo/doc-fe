@@ -77,7 +77,6 @@ function Row(props: { row: DocumentType }) {
 }
 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const classes = styles();
   const dialog = useDialog();
@@ -121,3 +120,5 @@ const DocumentTypeManagementContainer: React.FunctionComponent = () => {
 
   );
 };
+
+DocumentTypeManagementContainer;
