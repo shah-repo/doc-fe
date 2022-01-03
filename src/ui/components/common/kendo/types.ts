@@ -87,5 +87,6 @@ export interface KendoPanelProps<T> {
   rootCustomStyle?: any;
   previewDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
   documentTypeOptions?: DocumentTypeOptions[];
+  currentUserEmail?: string;
 }
 

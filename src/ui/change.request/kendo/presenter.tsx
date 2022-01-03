@@ -1,0 +1,46 @@
+import { Grid } from "@material-ui/core";
+import { map } from "lodash";
+import { default as React } from "react";
+import { stripTagsFromObject } from "../../../common/utils/helpers";
+import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import FromListContainer from "../form.list/FormList.container";
+import gridConfiguration from "./column.definition";
+import { KendoPanel } from "./KendoPanel";
+import KendoGridStyles from "./styles";
+
+const KendoGridList: React.FunctionComponent<any> = ({
+  currentUserEmail,
+  tableName,
+  tableCriteria,
+  data,
+  statuses,
+}) => {
+  const classes = KendoGridStyles();
+  const headers = map(gridConfiguration.columns, (column) => ({
+    label: column.title,
+    key: column.field,
+  }));
+  const customDataSet = (data: ChangeRequest[]) =>
+    data.map((cr) => stripTagsFromObject(cr));
+
+  return (
+    <Grid container={true} className={classes.root}>
+      <FromListContainer {...{ headers, tableData: data }} />
+      <Grid item={true} xs={12}>
+        <KendoPanel<ChangeRequest>
+          gridConfiguration={gridConfiguration}
+          tableName={tableName}
+          gridData={data}
+          tableCriteria={tableCriteria}
+          queryUrl={CHANGE_REQUEST_ROOT_URL}
+          customDataSet={customDataSet}
+          statuses={statuses}
+          currentUserEmail={currentUserEmail}
+        />
+      </Grid>
+    </Grid>
+  );
+};
+
+export default KendoGridList;
