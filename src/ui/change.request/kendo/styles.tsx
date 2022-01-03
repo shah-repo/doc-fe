@@ -5,7 +5,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     padding: "0 5px 10px 5px",
   },
   kGrid: {
-    height: "calc(100vh - 115px)",
+    height: "calc(100vh - 99px)",
   },
 }));
 
