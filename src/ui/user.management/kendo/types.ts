@@ -3,12 +3,12 @@ import { ApiAction } from "../../../state/types";
 import { KendoPanelProps } from "../../components/common/kendo/types";
 import { TableColumnActionType } from "../../components/table/column/types";
 
-export type GridRowSelection<T> = (
+type GridRowSelection<T> = (
   props: GridRowSelectionProps<T>
 ) => () => any;
 
 
-export interface GridRowSelectionProps<T> {
+interface GridRowSelectionProps<T> {
   dataItem: T;
   actionType?: TableColumnActionType;
 }
