@@ -724,7 +724,6 @@ context("Repeat Training with Training Curriculum", () => {
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.wait(3000);
       cy.navigToDashboard();
     });
 
@@ -744,7 +743,6 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
-      cy.wait(3000);
     });
 
     it("Verify expire on is 1 day", () => {
@@ -785,8 +783,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[2].name).and("contain", "Pending");
     });
