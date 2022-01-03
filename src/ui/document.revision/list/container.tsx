@@ -18,7 +18,6 @@ import ListPresenter from "./presenter";
 type OwnProps = ListOwnProps;
 type Props = OwnProps;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
@@ -92,3 +91,6 @@ const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
     />
   );
 };
+
+// export default ListContainer;
+ListContainer;
