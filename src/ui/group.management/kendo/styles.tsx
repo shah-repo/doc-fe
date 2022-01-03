@@ -13,7 +13,7 @@ const KendoGridStyles = makeStyles(() => ({
   },
   kGrid: {
     width: "calc(100vw - 263px)",
-    height: "calc(100vh - 75px)",
+    height: "calc(100vh - 105px)",
   },
   loading: {
     top: 0,
