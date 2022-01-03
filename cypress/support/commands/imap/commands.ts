@@ -130,7 +130,7 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
 function getEmailsThatAreInReceivedList(receivedEmails, emailToTest) {
   return receivedEmails.filter(
     (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
-      arrayContainsArray(receivedEmail.body.html, emailToTest.contains));
+      arrayContainsArray(receivedEmail.body.text, emailToTest.contains));
 }
 
 function arrayContainsArray(superset, subset) {
