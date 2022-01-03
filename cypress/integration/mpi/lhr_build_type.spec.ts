@@ -1006,10 +1006,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
     });
 
@@ -1314,10 +1311,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
     });
 
     it("Click save document", () => {
@@ -1348,10 +1342,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
     });
 
@@ -1433,10 +1424,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
     });
 
     it("Click save document", () => {
@@ -1467,10 +1455,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
     });
 
@@ -1597,4 +1582,3 @@ context("LHR Build type flow", () => {
 });
 
 export { };
-
