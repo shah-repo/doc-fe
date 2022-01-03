@@ -1006,7 +1006,10 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+      });
       cy.unClick();
     });
 
@@ -1345,7 +1348,10 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+      });
       cy.unClick();
     });
 
@@ -1461,7 +1467,10 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+      });
       cy.unClick();
     });
 
