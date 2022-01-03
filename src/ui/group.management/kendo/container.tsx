@@ -26,7 +26,6 @@ import KendoPresenter from "./presenter";
 type OwnProps = RouteComponentProps;
 type Props = OwnProps;
 
-export const CR_TABLE_NAME = "changeRequests";
 const KendoContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();
   const editGroupsDialog = useDialog();
