@@ -22,7 +22,7 @@ interface Props<T> {
   tableCriteria: KendoGridCriteria;
 }
 
-export const KendoGridList: React.FunctionComponent<Props<any>> = ({
+const KendoGridList: React.FunctionComponent<Props<any>> = ({
   tableName,
   tableCriteria,
   gridData,
