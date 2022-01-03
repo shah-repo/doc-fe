@@ -1,0 +1,44 @@
+import { MultiSelect } from "@progress/kendo-react-dropdowns";
+import React from "react";
+import { useSelector } from "react-redux";
+import { authSelectors } from "../../../../state/ducks/auth";
+import Tooltip from "../../../components/common/kendo/Tooltip";
+import { toOptions } from "../../utils/transform";
+
+export const PermissionsCell = (props) => {
+  const currentEmployeePermissions = useSelector(
+    authSelectors.currentEmployeePermissions,
+  );
+  const permissions = props.dataItem[props.field];
+  const updatePermissionField = (event: any) => {
+    props.dataItem.permissions = event?.target?.value.map((e) => e.value);
+  };
+
+  if (props.rowType === "groupHeader") {
+    return null;
+  }
+
+  return (
+    <td
+      colSpan={props.colSpan}
+      style={props.style}
+      role="gridcell"
+      aria-colindex={props.ariaColumnIndex}
+      aria-selected="false"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}
+    >
+      {props.dataItem.inEdit && props.isOfficial ? (
+        <MultiSelect
+          data={toOptions(currentEmployeePermissions)}
+          filterable={true}
+          onChange={updatePermissionField}
+          dataItemKey="value"
+          textField="label"
+        />
+      ) : (
+        <Tooltip data={permissions} />
+      )}
+    </td>
+  );
+};
