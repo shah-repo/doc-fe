@@ -8,7 +8,6 @@ import ListPresenter from "./presenter";
 
 type Props = RouteComponentProps;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TrainingListContainer: React.FunctionComponent<Props> = () => {
   const dispatch = useDispatch();
 
@@ -43,3 +42,6 @@ const TrainingListContainer: React.FunctionComponent<Props> = () => {
     />
   );
 };
+
+// export default TrainingListContainer;
+TrainingListContainer;
