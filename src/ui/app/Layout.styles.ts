@@ -20,7 +20,7 @@ export default (theme: Theme) =>
     content: {
       "position": "absolute",
       "left": DRAWER_WIDTH,
-      "top": 64,
+      "top": 48,
       "bottom": 0,
       "right": 0,
       "overflow": "auto",
