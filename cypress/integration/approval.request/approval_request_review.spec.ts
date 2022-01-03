@@ -520,6 +520,7 @@ context("Approval request form scenario", () => {
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 3,
+        isEmailTypeText: false,
       });
     });
 
@@ -535,6 +536,7 @@ context("Approval request form scenario", () => {
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 1,
+        isEmailTypeText: false,
       });
     });
 
@@ -550,6 +552,7 @@ context("Approval request form scenario", () => {
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 1,
+        isEmailTypeText: false,
       });
     });
   });

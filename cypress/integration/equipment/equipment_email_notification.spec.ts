@@ -1332,6 +1332,7 @@ context("Test Equipment maintenance email notifications", () => {
           emailsToTest: emailsThatShouldNotBeReceived,
           getEmailsSincedate: dateAfterEmailShouldArrive,
           assertNumberOfEmailsFoundInList: 0,
+          isEmailTypeText: false,
         });
       });
     });
