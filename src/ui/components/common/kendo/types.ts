@@ -2,6 +2,10 @@ import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
 import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
 
+interface KendoTableSearchQueryType {
+  [key: string]: any;
+}
+
 export enum KendoCellTemplates {
   USER_AVATAR="UserAvatar",
   STATUS="Status",
@@ -65,9 +69,6 @@ export interface KendoGridCriteria {
 export interface DocumentTypeOptions{
   text: string;
   value: string;
-}
-export interface KendoTableSearchQueryType {
-  [key: string]: any;
 }
 
 export interface KendoPanelProps<T> {
