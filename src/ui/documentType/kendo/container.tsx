@@ -190,14 +190,12 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dynamicColumns = createDynamicColDef.map((CCCOnfig, index) => {
     let filterCellTemplate; // component
     let dynamicCellTemplate;
-    let filterField = "text";
+    const filterField = "text";
     let formatField;
 
     let upDateField = !columns.length ? CCCOnfig.searchOptions?.dataKey || CCCOnfig.key :  CCCOnfig.key;
 
     if (CCCOnfig.searchOptions?.dateFilter) {
-      filterField = "date";
-      formatField = "{0:d}";
       filterCellTemplate = RealeaseDateFilterCell;
       dynamicCellTemplate = KendoCellTemplates.DATE_INFO;
     } else if (CCCOnfig.searchOptions?.ownerTemplate) {

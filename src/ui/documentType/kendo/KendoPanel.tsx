@@ -22,11 +22,7 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig } from "axios";
 import {
-  cloneDeep,
-  each,
-  find,
-  get,
-  isEmpty,
+  cloneDeep, find, isEmpty,
   map,
   merge,
   omit,
@@ -44,7 +40,6 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { toValidateIfDate } from "../../components/common/kendo.column.templates/helper";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -203,15 +198,6 @@ export function KendoGrid<T extends any>({
         if (customDataSet) {
           data = customDataSet(data);
         }
-        // TODO: without this Date dropdown filter is not working
-        each(data, (o) => {
-          each(dynamicColumns, (k) => {
-            const toCheckIfDate = toValidateIfDate(get(o, k.field));
-            if (toCheckIfDate) {
-              k.field = new Date(get(o, k.field));
-            }
-          });
-        });
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
         setResultState(newDataState);
@@ -439,6 +425,15 @@ export function KendoGrid<T extends any>({
       dataState.filter.filters.length
     ) {
       dataState.filter.filters = [];
+      tableCriteria.kendoConfig = JSON.stringify(dataState);
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+          },
+          tableName
+        )
+      );
       const newDataState = processWithGroups(gridData, dataState);
       setDataState(dataState);
       setResultState(newDataState);
