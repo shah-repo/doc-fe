@@ -54,6 +54,7 @@ const getFormattedRowValue = (path: any, rowData: any) => {
   return isDate ? <Date value={value} /> : override;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
 }) => {
@@ -178,6 +179,3 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     </div>
   );
 };
-
-// export default DocumentByTypeListContainer;
-DocumentByTypeListContainer;
