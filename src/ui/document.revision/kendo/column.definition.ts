@@ -1,5 +1,5 @@
-import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { chain } from "lodash";
+import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [
@@ -94,16 +94,11 @@ const columns: KendoColumn[] = [
   },
 ];
 
-const pagerSettings: GridPagerSettings = {
-  buttonCount: 5,
-  info: true,
-  type: "numeric",
-  pageSizes: [25, 50, 75, 100, 500, 1000],
-  previousNext: true,
-};
-
 const gridConfiguration: KendoGridConfiguration = {
-  groupableFields: chain(columns).filter({ groupable: true }).map("field").value(),
+  groupableFields: chain(columns)
+    .filter({ groupable: true })
+    .map("field")
+    .value(),
   columns,
   pagerSettings,
 };
