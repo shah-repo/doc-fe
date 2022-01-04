@@ -58,8 +58,6 @@ const ListContainer: React.FunctionComponent<any> = ({ history }) => {
     status: DocumentRevisionStatus | DocumentRevisionStatus[],
     displayStatus?: DocumentRevisionStatus
   ) => {
-    // eslint-disable-next-line no-console
-    console.log("Set Search....");
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
