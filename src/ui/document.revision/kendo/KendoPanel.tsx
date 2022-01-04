@@ -3,7 +3,7 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid, GridColumn, GridColumnReorderEvent,
@@ -12,7 +12,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { each, filter, find, isEmpty, map, pick, set } from "lodash";
@@ -25,7 +25,7 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
   DocumentRevision,
-  DocumentRevisionStatus,
+  DocumentRevisionStatus
 } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
@@ -46,7 +46,7 @@ import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
   documentRevisionEffectiveDateOption,
-  documentRevisionQueryStatus,
+  documentRevisionQueryStatus
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -54,6 +54,10 @@ import KendoGridStyles from "./styles";
 type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
+
+interface StateChangeProps {
+  value?: string | null;
+}
 
 export function KendoPanel<T extends any>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
@@ -352,7 +356,7 @@ export function KendoPanel<T extends any>({
       data={statuses as any[]}
       defaultItem={"Select State"}
       defaultValue={defaultDDItem}
-      onStateChange={onStateChange}
+      onStateChange={onDisplayStatusChange}
     />
   );
   const TypeFilterTemplate = (props: GridFilterCellProps) => (
@@ -363,7 +367,7 @@ export function KendoPanel<T extends any>({
       defaultValue={"Select Type"}
     />
   );
-  const CompletedOnFilterCell: any = (props: GridFilterCellProps) => (
+  const EffectiveDateFilterCell: any = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
@@ -376,20 +380,43 @@ export function KendoPanel<T extends any>({
   const filterCellMapping = {
     "displayStatus": StatusFilterTempalte,
     "document.documentType.documentTypeAcronym": TypeFilterTemplate,
-    "effectiveDate": CompletedOnFilterCell,
+    "effectiveDate": EffectiveDateFilterCell,
   };
 
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
 
-  // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: any) => {
-    if (setDefault) {
-      setDefaultDDItem("Select State");
-      setSearchStatus(documentRevisionQueryStatus(), undefined, false);
+  const onDisplayStatusChange = (data: StateChangeProps) => {
+    const displayStatus = data && data.value ? data.value : null;
+    setDefaultDDItem(displayStatus || "Select State");
+    if (displayStatus) {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              ...tableCriteria.queryDict,
+              displayStatus,
+            },
+          },
+          tableName
+        )
+      );
     } else {
-      setFireAPI(true);
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              ...tableCriteria.queryDict,
+            },
+          },
+          tableName
+        )
+      );
     }
+    setFireAPI(true);
   };
+
   const onEffectiveDateChange = (setDefault: any) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {
@@ -604,5 +631,3 @@ export function KendoPanel<T extends any>({
     </Box>
   );
 }
-
-
