@@ -1,10 +1,11 @@
 import { get } from "lodash";
 import moment from "moment";
 import React from "react";
+import { TIME_ZONE } from "../../../../common/utils/date";
 
 export const DateInfo = (props) => {
   const date = get(props.dataItem, props.field);
-  const formattedDate = date ? moment(date).format("MM/DD/YYYY") : null;
+  const formattedDate = date ? moment(date).tz(TIME_ZONE).format("MM/DD/YYYY") : null;
   if (props.rowType === "groupHeader") {
     return null;
   }

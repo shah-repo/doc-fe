@@ -1,9 +1,10 @@
 import moment from "moment";
 import React from "react";
+import { TIME_ZONE } from "../../../../common/utils/date";
 
 export const DateCompleted = (props) => {
   const date = props.dataItem[props.field];
-  const formattedDate = date ? moment(date).format("MM/DD/YYYY") : "Pending";
+  const formattedDate = date ? moment(date).tz(TIME_ZONE).format("MM/DD/YYYY") : "Pending";
   if (props.rowType === "groupHeader") {
     return null;
   }
