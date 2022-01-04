@@ -31,8 +31,8 @@ export interface KendoColumn {
   orderIndex?: number | undefined;
   columnMenu?: any;
   filterable?: boolean;
-  resizable?: boolean;
   disabled?: boolean;
+  resizable?: boolean;
 }
 
 export interface DropdownFilterDefaultItem {
