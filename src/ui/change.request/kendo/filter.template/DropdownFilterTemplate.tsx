@@ -4,6 +4,8 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 interface DropdownFilterTemplateProps extends GridFilterCellProps {
   defaultItem: string;
@@ -13,6 +15,7 @@ interface DropdownFilterTemplateProps extends GridFilterCellProps {
 }
 
 export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
+  const intl = useIntl();
   let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
 
   const onChange = (event: DropDownListChangeEvent) => {
@@ -22,7 +25,10 @@ export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
       operator: hasValue ? "eq" : "",
       syntheticEvent: event.syntheticEvent,
     });
-    if (event.target.value === "Select State") {
+    if (
+      event.target.value ===
+      intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+    ) {
       props.onStateChange && props.onStateChange(true);
       return;
     }
