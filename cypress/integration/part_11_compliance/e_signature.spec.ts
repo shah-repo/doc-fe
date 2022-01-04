@@ -422,9 +422,15 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to EB document", () => {
+    it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+    });
+
+    it("Add second approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+    });
+
+    it("Add third approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
     });
 
