@@ -40,8 +40,6 @@ export const CommandCell = (props: CellCommandConfig) => {
       colSpan={props.colSpan}
       style={props.style}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
@@ -101,8 +99,6 @@ export const CommandCell = (props: CellCommandConfig) => {
       colSpan={props.colSpan}
       style={props.style}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >

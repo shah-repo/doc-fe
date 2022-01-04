@@ -40,8 +40,6 @@ export const CheckboxCell = (props: GridCellProps) => {
     <td colSpan={props.colSpan}
       style= {props.style}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       className={`checkbox-cell ${props.className}`}
       data-grid-col-index={props.columnIndex}
     >
