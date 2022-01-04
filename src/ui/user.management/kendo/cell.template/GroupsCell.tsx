@@ -43,8 +43,6 @@ export const GroupsCell = (props) => {
     <td
       colSpan={props.colSpan}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       data-grid-col-index={props.columnIndex}
       className={classes.groupCell}
     >
