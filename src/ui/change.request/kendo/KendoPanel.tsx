@@ -22,6 +22,7 @@ import { each, find, isEmpty, map, pick } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
@@ -37,7 +38,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import {
   KendoColumn,
@@ -74,6 +75,7 @@ export function KendoPanel<T extends any>({
   normalizrSchema,
   currentUserEmail = "",
 }: Props<T>) {
+  const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -113,10 +115,14 @@ export function KendoPanel<T extends any>({
       if (fObj) {
         defaultStatus = fObj.value;
       } else {
-        defaultStatus = "Select State";
+        defaultStatus = intl.formatMessage({
+          id: TranslatedText[DisplayText.SELECT_STATE],
+        });
       }
     } else {
-      defaultStatus = "Select State";
+      defaultStatus = intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_STATE],
+      });
     }
   } else {
     initialDataState = {
@@ -344,7 +350,7 @@ export function KendoPanel<T extends any>({
     <DropdownFilterTemplate
       {...props}
       data={changeRequestStatusOption().map((col) => col.value)}
-      defaultItem={"Select State"}
+      defaultItem={(intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] }))}
       defaultValue={defaultDDItem}
       onStateChange={onStateChange}
     />
@@ -358,7 +364,9 @@ export function KendoPanel<T extends any>({
   // Kendo Grid Actions Methods
   const onStateChange = (setDefault: boolean) => {
     if (setDefault) {
-      setDefaultDDItem("Select State");
+      setDefaultDDItem(
+        intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+      );
       setSearchStatus(undefined);
     }
     setFireAPI(true);
@@ -375,7 +383,9 @@ export function KendoPanel<T extends any>({
           : [],
     };
     if (isClearAll) {
-      setDefaultDDItem("Select State");
+      setDefaultDDItem(
+        intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+      );
       setFireAPI(true);
     }
     setDataState(dataState);
