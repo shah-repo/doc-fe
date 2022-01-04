@@ -19,6 +19,7 @@ import { each, filter, find, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
@@ -35,7 +36,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -55,6 +56,10 @@ type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
 
+interface StateChangeProps {
+  value?: string | null;
+}
+
 export function KendoPanel<T extends any>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
@@ -69,6 +74,7 @@ export function KendoPanel<T extends any>({
   tableCriteria,
   gridData,
 }: Props<T>) {
+  const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -108,10 +114,14 @@ export function KendoPanel<T extends any>({
       if (fObj) {
         defaultStatus = fObj.value;
       } else {
-        defaultStatus = "Select State";
+        defaultStatus = intl.formatMessage({
+          id: TranslatedText[DisplayText.SELECT_STATE],
+        });
       }
     } else {
-      defaultStatus = "Select State";
+      defaultStatus = intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_STATE],
+      });
     }
   } else {
     initialDataState = {
@@ -350,20 +360,26 @@ export function KendoPanel<T extends any>({
     <DropdownFilterTemplate
       {...props}
       data={statuses as any[]}
-      defaultItem={"Select State"}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_STATE],
+      })}
       defaultValue={defaultDDItem}
-      onStateChange={onStateChange}
+      onStateChange={onDisplayStatusChange}
     />
   );
   const TypeFilterTemplate = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
       data={map(documentTypeOptions, "text")}
-      defaultItem={"Select Type"}
-      defaultValue={"Select Type"}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_TYPE],
+      })}
+      defaultValue={intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_TYPE],
+      })}
     />
   );
-  const CompletedOnFilterCell: any = (props: GridFilterCellProps) => (
+  const EffectiveDateFilterCell: any = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
@@ -376,20 +392,46 @@ export function KendoPanel<T extends any>({
   const filterCellMapping = {
     "displayStatus": StatusFilterTempalte,
     "document.documentType.documentTypeAcronym": TypeFilterTemplate,
-    "effectiveDate": CompletedOnFilterCell,
+    "effectiveDate": EffectiveDateFilterCell,
   };
 
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
 
-  // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: any) => {
-    if (setDefault) {
-      setDefaultDDItem("Select State");
-      setSearchStatus(documentRevisionQueryStatus(), undefined, false);
+  const onDisplayStatusChange = (data: StateChangeProps) => {
+    const displayStatus = data && data.value ? data.value : null;
+    setDefaultDDItem(
+      displayStatus ||
+        intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+    );
+    if (displayStatus) {
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              ...tableCriteria.queryDict,
+              displayStatus,
+            },
+          },
+          tableName
+        )
+      );
     } else {
-      setFireAPI(true);
+      dispatch(
+        tableSearchActions.setSearchCriteria(
+          {
+            ...tableCriteria,
+            queryDict: {
+              ...tableCriteria.queryDict,
+            },
+          },
+          tableName
+        )
+      );
     }
+    setFireAPI(true);
   };
+
   const onEffectiveDateChange = (setDefault: any) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {
@@ -417,10 +459,14 @@ export function KendoPanel<T extends any>({
     const currentFilters = dataState.filter?.filters || [];
     dataState.filter = {
       logic: "and",
-      filters: clearOtherFilter ? [] : filter(currentFilters, (o: any) => o.field !== "displayStatus"),
+      filters: clearOtherFilter
+        ? []
+        : filter(currentFilters, (o: any) => o.field !== "displayStatus"),
     };
     setCompletedOnSelectedOption(defaultItem);
-    setDefaultDDItem("Select State");
+    setDefaultDDItem(
+      intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+    );
     setDataState(dataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
     setFireAPI(true);
@@ -604,5 +650,3 @@ export function KendoPanel<T extends any>({
     </Box>
   );
 }
-
-
