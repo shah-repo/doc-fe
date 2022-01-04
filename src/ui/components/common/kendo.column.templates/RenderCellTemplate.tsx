@@ -1,19 +1,9 @@
-import { CommonCell } from "./CommonCell";
-import { DateCompleted } from "./DateCompleted";
-import { DateInfo } from "./DateInfo";
+// import { GridCellProps } from "@progress/kendo-react-grid";
+import { GridCellProperties } from "../kendo/types";
+import { cellTemplateMapping } from "./config";
 import { Default } from "./Default";
-import { Status } from "./Status";
-import { UserAvatar } from "./UserAvatar";
 
-const cellTemplateMapping = {
-  UserAvatar,
-  Status,
-  DateCompleted,
-  DateInfo,
-  CommonCell,
-};
-
-export const RenderCustomCell = (props: any, cellTemplate: string) => {
+export const RenderCustomCell = (props: GridCellProperties, cellTemplate: string) => {
   const template = cellTemplateMapping[cellTemplate];
   if (props.rowType === "groupHeader") {
     return null;
