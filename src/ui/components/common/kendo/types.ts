@@ -1,5 +1,6 @@
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
 import { GridCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
+import { GridRowType } from "@progress/kendo-react-grid/dist/npm/interfaces/GridRowType";
 import { schema } from "normalizr";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 
@@ -92,4 +93,5 @@ export interface KendoPanelProps<T> {
 
 export interface GridCellProperties extends GridCellProps {
   field?: string | undefined;
+  rowType?: GridRowType | undefined;
 }
