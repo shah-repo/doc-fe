@@ -26,7 +26,7 @@ let receivePageDetailsId;
 let receivingDocumentType;
 let oldReceivingForm;
 
-const receivingReleasedDate = moment().tz("America/Los_Angeles").format("L");
+const receivingReleasedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 
