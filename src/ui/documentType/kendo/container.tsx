@@ -1,10 +1,10 @@
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import { get, isEmpty } from "lodash";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
+import { toValidateIfDate } from "../../../common/utils/date";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -36,7 +36,7 @@ type Props = RouteComponentProps<RouteParams>;
 
 const getFormattedRowValue = (path: any, rowData: any) => {
   const value = get(rowData, path);
-  const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+  const isDate = toValidateIfDate(value);
   // Check Below
   const versionNumber = generateRevisionNumber(
     rowData.revision,
@@ -76,8 +76,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       saveStatuses(response);
     },
   });
-  // eslint-disable-next-line no-console
-  // console.log("Category name", categoryName );
+
   const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
 
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
