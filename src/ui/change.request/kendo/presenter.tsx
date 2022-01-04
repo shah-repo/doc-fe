@@ -14,7 +14,6 @@ const KendoGridList: React.FunctionComponent<any> = ({
   tableName,
   tableCriteria,
   data,
-  statuses,
 }) => {
   const classes = KendoGridStyles();
   const headers = map(gridConfiguration.columns, (column) => ({
@@ -35,7 +34,6 @@ const KendoGridList: React.FunctionComponent<any> = ({
           tableCriteria={tableCriteria}
           queryUrl={CHANGE_REQUEST_ROOT_URL}
           customDataSet={customDataSet}
-          statuses={statuses}
           currentUserEmail={currentUserEmail}
         />
       </Grid>
