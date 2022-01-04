@@ -113,6 +113,7 @@ export enum DisplayText {
   HIDE_COLUMN,
   UNLOCK_COLUMN,
   LOCK_COLUMN,
+  SELECT_STATE,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -121,4 +122,5 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.HIDE_COLUMN]: "common.column.hide",
   [DisplayText.UNLOCK_COLUMN]: "common.column.unlock",
   [DisplayText.LOCK_COLUMN]: "common.column.lock",
+  [DisplayText.SELECT_STATE]: "common.select.state",
 };
