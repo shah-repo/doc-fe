@@ -23,7 +23,7 @@ export const styles = makeStyles((theme: Theme) =>
       overflowY: "unset",
     },
     createButton: {
-      "margin": "0px",
+      "margin": 0,
       "boxShadow": "none",
       "borderRadius": 100,
       "background": Colors.navy,
@@ -45,7 +45,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginBottom: "10px",
     },
     exportListbutton: {
-      margin: "0px",
+      margin: 0,
       boxShadow: "none",
       borderRadius: 100,
       marginRight: 15,

@@ -15,7 +15,7 @@ import ListPresenter from "./presenter";
 type OwnProps = RouteComponentProps;
 type Props = OwnProps;
 
-const CR_TABLE_NAME = "changeRequests";
+export const CR_TABLE_NAME = "changeRequests";
 const ListContainer: React.FunctionComponent<Props> = ({
   history,
 }) => {
@@ -63,5 +63,4 @@ const ListContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-// export default ListContainer;
-ListContainer;
+export default ListContainer;

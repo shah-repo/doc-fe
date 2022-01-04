@@ -10,7 +10,7 @@ import { DisplayText, TranslatedText } from "../../../components/common/kendo/he
 interface DropdownFilterTemplateProps extends GridFilterCellProps {
   defaultItem: string;
   defaultValue: string;
-  data: any[];
+  data: (string | number)[];
   onStateChange?: (setDefault: boolean) => void;
 }
 
