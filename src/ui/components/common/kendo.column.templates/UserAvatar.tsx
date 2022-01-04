@@ -3,8 +3,9 @@ import { get } from "lodash";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 import { getInitalsFromName } from "../../icons/avatar/helpers";
+import { GridCellProperties } from "../kendo/types";
 
-export const UserAvatar = (props) => {
+export const UserAvatar = (props: GridCellProperties) => {
   const styles = makeStyles(() => ({
     icon: {
       width: "25px",
@@ -30,9 +31,9 @@ export const UserAvatar = (props) => {
     },
   }));
   const classes = styles();
-
-  const userName = get(props.dataItem, props.field);
-  const userDetails = userName ? get(props.dataItem, props.field.replace(".name", "")) : undefined;
+  const { field } = props;
+  const userName = get(props.dataItem, props.field || "");
+  const userDetails = userName ? get(props.dataItem, field ? field.replace(".name", "") : "") : undefined;
   const owner = userDetails ? userDetails.name : "";
   const avatar = userDetails ? userDetails.avatar : "";
 
