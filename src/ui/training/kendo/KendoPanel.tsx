@@ -28,6 +28,7 @@ import moment from "moment";
 import "moment-timezone";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
@@ -45,7 +46,7 @@ import { DateDropdownFilterCell } from "../../components/common/kendo.column.tem
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -76,6 +77,7 @@ export function KendoPanel<T extends any>({
   rootCustomStyle,
   normalizrSchema,
 }: Props<T>) {
+  const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -414,7 +416,7 @@ export function KendoPanel<T extends any>({
   };
 
   const defaultItem: DropdownFilterDefaultItem = {
-    text: "Select Item",
+    text: intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] }),
     value: "",
   };
 
