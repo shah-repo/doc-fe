@@ -18,8 +18,6 @@ export const EmailCell = (props) => {
       style={props.style}
       colSpan={props.colSpan}
       role={"gridcell"}
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected={"false"}
       {...{ [GRID_COL_INDEX_ATTRIBUTE]: props.columnIndex }}
       {...navigationAttributes}
     >
