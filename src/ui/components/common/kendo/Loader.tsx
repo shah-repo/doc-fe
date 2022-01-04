@@ -5,6 +5,7 @@ const Loader: React.FunctionComponent = () => {
   const styles = makeStyles(() => ({
     loading: {
       top: 0,
+      position: "fixed",
     },
   }));
   const classes = styles();
