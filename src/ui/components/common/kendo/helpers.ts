@@ -124,3 +124,19 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.LOCK_COLUMN]: "common.column.lock",
   [DisplayText.SELECT_STATE]: "common.select.state",
 };
+
+export enum statusClassMapping {
+  "Pending Approval"="PENDING_STATUS",
+  "In Review"="PENDING_STATUS",
+  "Pending Change"="PENDING_STATUS",
+  "IN_REVIEW" = "PENDING_STATUS",
+  "Approved"="GREEN_STATUS",
+  "Released"="GREEN_STATUS",
+  "APPROVED" = "GREEN_STATUS",
+  "Obsolete"="GRAY_STATUS",
+  "Voided"="GRAY_STATUS",
+  "CLOSED" = "GRAY_STATUS",
+  "VOIDED" = "GRAY_STATUS",
+  "Superseded"="GRAY_STATUS",
+  "Void"="GRAY_STATUS",
+}
