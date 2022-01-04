@@ -109,8 +109,16 @@ export const hideColumnTitleOnResize = () => {
 export enum DisplayText {
   ACTIVE,
   INACTIVE,
+  SELECT_ITEM,
+  HIDE_COLUMN,
+  UNLOCK_COLUMN,
+  LOCK_COLUMN,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
   [DisplayText.INACTIVE]: "common.inactive",
+  [DisplayText.SELECT_ITEM]: "common.select.item",
+  [DisplayText.HIDE_COLUMN]: "common.column.hide",
+  [DisplayText.UNLOCK_COLUMN]: "common.column.unlock",
+  [DisplayText.LOCK_COLUMN]: "common.column.lock",
 };
