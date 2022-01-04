@@ -4,15 +4,16 @@ import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../kendo/helpers";
+import { GridCellProperties } from "../kendo/types";
 
-export const ActiveDropdown = (props) => {
+export const ActiveDropdown = (props: GridCellProperties) => {
   const intl = useIntl();
   const dropDownData = [
     { text: TranslatedText[DisplayText.ACTIVE], value: true },
     { text: TranslatedText[DisplayText.INACTIVE], value: false },
   ];
-  const isEdit = get(props.dataItem, "inEdit");
-  const formattedValue = get(props.dataItem, props.field) ? (
+  const isEdit = props.dataItem.inEdit;
+  const formattedValue = get(props.dataItem, props.field || "") ? (
     intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
   ) : (
     intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] })
@@ -60,10 +61,6 @@ export const ActiveDropdown = (props) => {
   const { dataItem } = props;
   const field = props.field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
-
-  if (props.rowType === "groupHeader") {
-    return null;
-  }
 
   return (
     <td colSpan={props.colSpan}
