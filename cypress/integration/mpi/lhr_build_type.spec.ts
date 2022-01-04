@@ -1134,12 +1134,23 @@ context("LHR Build type flow", () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
       context("Release LHRt", () => {
         it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDialog();
+          cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.ReleaseDocRev,
+            () => {
+              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+            });
+        });
+
+        it("Goto LHRt", () => {
           cy.url().then((url: any) => {
             lhrtUrl = url;
           });
@@ -1153,8 +1164,7 @@ context("LHR Build type flow", () => {
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drCreateNewDocumentFromForm();
       });
       cy.progressBarShouldNotExist();
@@ -1240,7 +1250,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Goto start MPI", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs, CyRoutes.GetFieldLocks,
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs,
         CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(startMpiUrl);
       });
@@ -1280,6 +1290,12 @@ context("LHR Build type flow", () => {
 
     it("Add 'Due Date'", () => {
       cy.poAddDateRequired();
+    });
+
+    it("Click save document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
     });
 
     it("Click 'START MPI'", () => {
@@ -1333,7 +1349,7 @@ context("LHR Build type flow", () => {
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl1);
       });
@@ -1395,6 +1411,12 @@ context("LHR Build type flow", () => {
       cy.poAddDateRequired();
     });
 
+    it("Click save document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
     it("Click 'START MPI'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
@@ -1446,7 +1468,7 @@ context("LHR Build type flow", () => {
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl2);
       });
@@ -1477,6 +1499,8 @@ context("LHR Build type flow", () => {
 
     it("Verify status is 'Released'", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1484,7 +1508,7 @@ context("LHR Build type flow", () => {
     it("Revise LHR of 'Production' build type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl1);
       });
@@ -1496,6 +1520,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify notes icon should not be present", () => {
@@ -1507,7 +1533,7 @@ context("LHR Build type flow", () => {
     it("Revise LHR of 'R&D' build type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(lhrDocUrl2);
       });
@@ -1519,6 +1545,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify notes icon should be present", () => {
@@ -1530,7 +1558,7 @@ context("LHR Build type flow", () => {
     it("Revise LHRs of 'Production' build type LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(startMpiUrl1);
       });
@@ -1542,6 +1570,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify notes icon should not be present", () => {
@@ -1557,7 +1587,7 @@ context("LHR Build type flow", () => {
     it("Revise LHRs of 'R&D' build type LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
       ], () => {
         cy.visit(startMpiUrl2);
       });
@@ -1569,6 +1599,8 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify notes icon should be present", () => {
