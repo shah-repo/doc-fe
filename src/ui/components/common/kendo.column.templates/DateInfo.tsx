@@ -1,10 +1,11 @@
 import { get } from "lodash";
 import moment from "moment";
 import React from "react";
+import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
 
 export const DateInfo = (props) => {
   const date = get(props.dataItem, props.field);
-  const formattedDate = date ? moment(date).format("MM/DD/YYYY") : null;
+  const formattedDate = date ? moment(date).tz(TIME_ZONE).format(MomentFormats.MonthDateYear) : null;
   if (props.rowType === "groupHeader") {
     return null;
   }
@@ -13,8 +14,6 @@ export const DateInfo = (props) => {
       colSpan={props.colSpan}
       style={props.style}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
