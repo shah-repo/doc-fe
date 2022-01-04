@@ -4,6 +4,8 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../kendo/helpers";
 
 interface DateDropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
@@ -23,6 +25,7 @@ interface DateDropdownFilterCellProps extends GridFilterCellProps {
 }
 
 export const DateDropdownFilterCell = (props: DateDropdownFilterCellProps) => {
+  const intl = useIntl();
   const [state, setState] = React.useState({
     value: props.defaultItem,
   });
@@ -49,13 +52,16 @@ export const DateDropdownFilterCell = (props: DateDropdownFilterCellProps) => {
       value: props.defaultItem,
     });
 
-    props.onStateChange && props.onStateChange({
-      selectedItem: {
-        text: "Select Item",
-        value: "",
-      },
-      parentField: props.field,
-    });
+    props.onStateChange &&
+      props.onStateChange({
+        selectedItem: {
+          text: intl.formatMessage({
+            id: TranslatedText[DisplayText.SELECT_ITEM],
+          }),
+          value: "",
+        },
+        parentField: props.field,
+      });
   };
   return (
     <div className="k-filtercell">
