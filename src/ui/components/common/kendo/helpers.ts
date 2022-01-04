@@ -1,3 +1,4 @@
+import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { chain, filter, findIndex, isEmpty } from "lodash";
 import { Translation } from "../../../translations/types";
 
@@ -142,3 +143,11 @@ export enum statusClassMapping {
   "Superseded"="GRAY_STATUS",
   "Void"="GRAY_STATUS",
 }
+
+export const pagerSettings: GridPagerSettings = {
+  buttonCount: 5,
+  info: true,
+  type: "numeric",
+  pageSizes: [25, 50, 75, 100, 500],
+  previousNext: true,
+};
