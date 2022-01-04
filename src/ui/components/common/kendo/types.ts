@@ -73,7 +73,7 @@ export interface DocumentTypeOptions{
 }
 
 export interface KendoPanelProps<T> {
-  gridConfiguration: KendoGridConfiguration;
+  gridConfiguration?: KendoGridConfiguration;
   tableName: string;
   gridData: T[];
   tableCriteria: KendoGridCriteria;
