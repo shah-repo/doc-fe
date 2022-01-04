@@ -1,10 +1,15 @@
 import moment from "moment";
 import React from "react";
 import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
+import Text from "../../../components/Text";
 
 export const DateCompleted = (props) => {
   const date = props.dataItem[props.field];
-  const formattedDate = date ? moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete) : "Pending";
+  const formattedDate = date ? (
+    moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete)
+  ) : (
+    <Text translation="common.pending" />
+  );
   if (props.rowType === "groupHeader") {
     return null;
   }

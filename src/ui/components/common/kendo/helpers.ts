@@ -1,4 +1,5 @@
 import { chain, filter, findIndex, isEmpty } from "lodash";
+import { Translation } from "../../../translations/types";
 
 export const orderByLockedState = (
   columnDefinitions: any,
@@ -103,4 +104,13 @@ export const hideColumnTitleOnResize = () => {
   if (!isEmpty(selector)) {
     selector.style.display = "none";
   }
+};
+
+export enum DisplayText {
+  ACTIVE,
+  INACTIVE,
+}
+export const TranslatedText: { [Key in DisplayText]: Translation } = {
+  [DisplayText.ACTIVE]: "common.active",
+  [DisplayText.INACTIVE]: "common.inactive",
 };
