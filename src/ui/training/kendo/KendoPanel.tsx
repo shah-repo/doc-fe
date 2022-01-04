@@ -40,7 +40,7 @@ import {
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { getCellTemplate } from "../../components/common/kendo.column.templates/config";
+import { cellTemplateMapping } from "../../components/common/kendo.column.templates/config";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -519,7 +519,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
-      cell={getCellTemplate(column.cell)}
+      cell={cellTemplateMapping[column.cell]}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
       filterCell={column.field && filterCellMapping(column.field)}
