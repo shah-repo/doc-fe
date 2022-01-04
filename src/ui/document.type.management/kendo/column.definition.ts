@@ -1,5 +1,5 @@
-import { GridPagerSettings } from "@progress/kendo-react-grid/dist/npm/paging/GridPagerSettings";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import { pagerSettings } from "../../components/common/kendo/helpers";
 import { GridDropDownSettings, KendoColumn, PageState } from "../../components/common/kendo/types";
 import { CheckboxCell } from "./column.templates/Checkbox";
 import { FieldsConfig } from "./column.templates/FieldsConfig";
@@ -170,15 +170,6 @@ const columns: KendoColumn[] = [{
   orderIndex: 15,
 }];
 
-// TODO: Move in common file
-const pagerSettings: GridPagerSettings = {
-  buttonCount: 5,
-  info: true,
-  type: "numeric",
-  pageSizes: [25, 50, 75, 100, 500, 1000],
-  previousNext: true,
-};
-
 const booleanFilterCellOptions: GridDropDownSettings[] = [{
   text: "Yes",
   value: true,
@@ -188,6 +179,11 @@ const booleanFilterCellOptions: GridDropDownSettings[] = [{
 }];
 
 const initialDataState: PageState = { skip: 0, take: 25, group: [] };
-const gridConfiguration = { columns, pagerSettings, initialDataState, booleanFilterCellOptions };
+const gridConfiguration = {
+  columns,
+  pagerSettings,
+  initialDataState,
+  booleanFilterCellOptions,
+};
 
 export default gridConfiguration;
