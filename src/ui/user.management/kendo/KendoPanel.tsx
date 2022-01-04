@@ -366,7 +366,7 @@ export function KendoPanel<T extends any>({
   };
 
   const columnRenderer = () => (
-    sortBy(gridConfiguration.columns, ["orderIndex"]).map((column, idx) => (
+    sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
