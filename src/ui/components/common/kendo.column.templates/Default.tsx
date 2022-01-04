@@ -1,8 +1,9 @@
 import { get } from "lodash";
 import React from "react";
+import { GridCellProperties } from "../kendo/types";
 
-export const Default = (props) => {
-  const value = get(props.dataItem, props.field);
+export const Default = (props: GridCellProperties) => {
+  const value = get(props.dataItem, props.field || "");
   return (
     <td
       colSpan={props.colSpan}

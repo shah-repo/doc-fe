@@ -2,8 +2,9 @@ import { Chip, Grid, makeStyles } from "@material-ui/core";
 import { toUpper } from "lodash";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
+import { GridCellProperties } from "../kendo/types";
 
-export const Status = (props) => {
+export const Status = (props: GridCellProperties) => {
   const styles = makeStyles(() => ({
     chip: {
       display: "flex",
@@ -78,7 +79,7 @@ export const Status = (props) => {
     },
   }));
   const classes = styles();
-  const status = props.dataItem[props.field];
+  const status = props.dataItem[props.field || ""];
 
   return (
     <td
