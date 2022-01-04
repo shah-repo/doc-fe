@@ -2,9 +2,11 @@ import { get } from "lodash";
 import moment from "moment";
 import React from "react";
 import { MomentFormats, TIME_ZONE, toValidateIfDate } from "../../../../common/utils/date";
+import { GridCellProperties } from "../kendo/types";
 
-export const CommonCell = (props) => {
-  const value = get(props.dataItem, props.field);
+
+export const CommonCell = (props: GridCellProperties) => {
+  const value = get(props.dataItem, props.field || "");
   // To check if value is date
   const toCheckIfDate = toValidateIfDate(value);
   const formattedValue = toCheckIfDate

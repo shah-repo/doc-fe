@@ -5,9 +5,11 @@ import {
 } from "@progress/kendo-react-grid";
 import { cloneDeep, filter, find } from "lodash";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria } from "../../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
+import { DisplayText, TranslatedText } from "../../kendo/helpers";
 import { KendoColumn } from "../../kendo/types";
 
 interface CustomColumnMenuProps extends GridColumnMenuProps {
@@ -16,6 +18,7 @@ interface CustomColumnMenuProps extends GridColumnMenuProps {
 }
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
+  const intl = useIntl();
   const dispatch = useDispatch();
   const [columns, setColumns] = useState<KendoColumn[]>(props.columns);
   const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
@@ -78,17 +81,29 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   return (
     <>
       {columnDef?.groupable && <GridColumnMenuGroup {...props} />}
-      {!columnDef?.disabled && <GridColumnMenuItem
-        {...props}
-        iconClass="k-i-preview .k-i-eye"
-        onClick={() => onChange(props.column.field)}
-        title="Hide Column"
-      />}
+      {!columnDef?.disabled && (
+        <GridColumnMenuItem
+          {...props}
+          iconClass="k-i-preview .k-i-eye"
+          onClick={() => onChange(props.column.field)}
+          title={intl.formatMessage({
+            id: TranslatedText[DisplayText.HIDE_COLUMN],
+          })}
+        />
+      )}
       <GridColumnMenuItem
         {...props}
         iconClass={columnDef?.locked ? "k-icon k-i-unlock" : "k-icon k-i-lock"}
         onClick={() => handleColumnLockToggle(props.column.field)}
-        title={columnDef?.locked ? "Unlock Column" : "Lock Column"}
+        title={
+          columnDef?.locked
+            ? intl.formatMessage({
+              id: TranslatedText[DisplayText.UNLOCK_COLUMN],
+            })
+            : intl.formatMessage({
+              id: TranslatedText[DisplayText.LOCK_COLUMN],
+            })
+        }
       />
     </>
   );
