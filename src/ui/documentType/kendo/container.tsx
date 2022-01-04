@@ -14,6 +14,7 @@ import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/docume
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
+import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates } from "../../components/common/kendo/types";
 import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
@@ -171,11 +172,15 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   );
 
   const createDynamicColDef = columns.length ? columns : staticColumns;
-  const DisplayStatusFilterCell: any = (props: GridFilterCellProps) => (<DropdownFilterCell
-    {...props}
-    data={statuses}
-    defaultItem={"Select State"}
-  />);
+  const DisplayStatusFilterCell: any = (props: GridFilterCellProps) => (
+    <DropdownFilterCell
+      {...props}
+      data={statuses}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.SELECT_STATE],
+      })}
+    />
+  );
 
   // const dueDateFilterOptions = documentRevisionEffectiveDateOption().map((data) => data.text);
 
