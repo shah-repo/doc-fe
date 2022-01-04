@@ -1,9 +1,10 @@
 import moment from "moment";
 import React from "react";
+import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
 
 export const DateCompleted = (props) => {
   const date = props.dataItem[props.field];
-  const formattedDate = date ? moment(date).format("MM/DD/YYYY") : "Pending";
+  const formattedDate = date ? moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete) : "Pending";
   if (props.rowType === "groupHeader") {
     return null;
   }
@@ -12,8 +13,6 @@ export const DateCompleted = (props) => {
       colSpan={props.colSpan}
       style={props.style}
       role="gridcell"
-      aria-colindex={props.ariaColumnIndex}
-      aria-selected="false"
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
