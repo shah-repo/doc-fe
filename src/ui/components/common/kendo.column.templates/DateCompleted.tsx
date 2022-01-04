@@ -8,7 +8,7 @@ export const DateCompleted = (props) => {
   const formattedDate = date ? (
     moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete)
   ) : (
-    <Text translation="common.completed.pending" />
+    <Text translation="common.pending" />
   );
   if (props.rowType === "groupHeader") {
     return null;

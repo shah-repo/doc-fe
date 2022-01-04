@@ -323,7 +323,7 @@
   "common.trainee": "Trainee",
   "common.assign.date": "Assign Date",
   "common.completed.on": "Completed On",
-  "common.completed.pending": "Pending",
+  "common.pending": "Pending",
   "common.tc.id": "TC ID",
   "common.warning.message": "Are you sure you want to approve and release {name}?",
   "common.permissions": "Permissions",
