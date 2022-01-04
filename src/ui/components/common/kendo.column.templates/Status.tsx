@@ -1,7 +1,7 @@
 import { Chip, Grid, makeStyles } from "@material-ui/core";
-import { toUpper } from "lodash";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
+import { statusClassMapping } from "../kendo/helpers";
 import { GridCellProperties } from "../kendo/types";
 
 export const Status = (props: GridCellProperties) => {
@@ -23,56 +23,17 @@ export const Status = (props: GridCellProperties) => {
       justifyContent: "center",
       color: Colors.lochmara,
     },
-    APPROVED: {
+    GREEN_STATUS: {
       background: Colors.carla,
       color: Colors.fruit_salad,
       border: `1px solid ${Colors.fruit_salad_border}`,
     },
-    RELEASED: {
-      background: Colors.carla,
-      color: Colors.fruit_salad,
-      border: `1px solid ${Colors.fruit_salad_border}`,
-    },
-    INREVIEW: {
+    PENDING_STATUS: {
       background: Colors.old_lace,
       color: Colors.tawny,
       border: `1px solid ${Colors.ochre}`,
     },
-    CURRENT: {
-      background: Colors.light_cyan,
-      color: Colors.lochmara,
-    },
-    PENDINGCHANGE: {
-      background: Colors.old_lace,
-      color: Colors.tawny,
-      border: `1px solid ${Colors.ochre}`,
-    },
-    PENDINGAPPROVAL: {
-      background: Colors.old_lace,
-      color: Colors.tawny,
-      border: `1px solid ${Colors.ochre}`,
-    },
-    CLOSED: {
-      background: Colors.lily_white,
-      color: Colors.font_gray,
-      border: `1px solid ${Colors.font_gray}`,
-    },
-    VOIDED: {
-      background: Colors.lily_white,
-      color: Colors.font_gray,
-      border: `1px solid ${Colors.font_gray}`,
-    },
-    VOID: {
-      background: Colors.lily_white,
-      color: Colors.font_gray,
-      border: `1px solid ${Colors.font_gray}`,
-    },
-    OBSOLETE: {
-      background: Colors.lily_white,
-      color: Colors.font_gray,
-      border: `1px solid ${Colors.font_gray}`,
-    },
-    SUPERSEDED: {
+    GRAY_STATUS: {
       background: Colors.lily_white,
       color: Colors.font_gray,
       border: `1px solid ${Colors.font_gray}`,
@@ -80,7 +41,6 @@ export const Status = (props: GridCellProperties) => {
   }));
   const classes = styles();
   const status = props.dataItem[props.field || ""];
-
   return (
     <td
       colSpan={props.colSpan}
@@ -97,9 +57,7 @@ export const Status = (props: GridCellProperties) => {
       >
         <Chip
           size="small"
-          className={`${classes.chip} ${
-            classes[toUpper(status?.replaceAll(/[^a-z]/gi, ""))]
-          }`}
+          className={`${classes.chip} ${classes[statusClassMapping[status]]}`}
           label={status}
         />
       </Grid>

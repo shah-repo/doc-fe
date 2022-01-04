@@ -269,6 +269,7 @@
   "common.select": "Select",
   "common.select.item": "Select Item",
   "common.select.state": "Select State",
+  "common.select.type": "Select Type",
   "common.Numeric": "Numeric",
   "common.NumericAlpha": "Numeric Alpha",
   "common.Alpha": "Alpha",
