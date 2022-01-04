@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { each, find, isEmpty, map, pick } from "lodash";
+import { find, isEmpty, map, pick } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -233,12 +233,6 @@ export function KendoPanel<T extends any>({
       .then(({ data }) => {
         if (customDataSet) {
           data = customDataSet(data);
-          // For Kendo Date picker
-          each(data, (o) => {
-            o.effectiveDate = o.effectiveDate
-              ? new Date(o.effectiveDate)
-              : null;
-          });
           const newDataState: any = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
@@ -406,7 +400,7 @@ export function KendoPanel<T extends any>({
   };
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
-      let dataColumns = [...columnDefinitions];
+      let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject ? columnObject.width : column.width;
@@ -419,7 +413,7 @@ export function KendoPanel<T extends any>({
     return false;
   };
   const onColumnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns = [...columnDefinitions];
+    let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
@@ -468,7 +462,7 @@ export function KendoPanel<T extends any>({
   );
   // On Show / Hide Column From Main Menu
   const onColumnShowHide = (item: KendoColumn) => {
-    const dataColumns = map([...columnDefinitions], (column) => {
+    const dataColumns = map(columnDefinitions, (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
       }
