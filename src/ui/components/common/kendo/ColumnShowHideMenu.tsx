@@ -3,6 +3,7 @@ import React from "react";
 import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
+import Text from "../../../components/Text";
 import { KendoColumn } from "./types";
 
 interface Props {
@@ -58,7 +59,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
                   className={classes.columnsCus}
                   color="textPrimary"
                 >
-            Columns
+                  <Text translation="common.column" />
                 </Typography>
               </>
             }

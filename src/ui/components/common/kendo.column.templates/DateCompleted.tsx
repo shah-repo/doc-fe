@@ -2,9 +2,10 @@ import moment from "moment";
 import React from "react";
 import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
 import Text from "../../../components/Text";
+import { GridCellProperties } from "../kendo/types";
 
-export const DateCompleted = (props) => {
-  const date = props.dataItem[props.field];
+export const DateCompleted = (props: GridCellProperties) => {
+  const date = props.dataItem[props.field || ""];
   const formattedDate = date ? (
     moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete)
   ) : (
