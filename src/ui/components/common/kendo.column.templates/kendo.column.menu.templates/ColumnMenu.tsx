@@ -3,7 +3,7 @@ import {
   GridColumnMenuItem,
   GridColumnMenuProps,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, filter, find } from "lodash";
+import { filter, find } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,18 +23,17 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const [columns, setColumns] = useState<KendoColumn[]>(props.columns);
   const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
   const onChange = (field: string | undefined) => {
-    const newState = [...columns];
-    newState.forEach((c, i) => {
+    columns.forEach((c, i) => {
       if (c.field === field) {
         c.show = !c.show;
       }
-      if (!filter(newState, "show").length) {
-        newState[i].show = true;
+      if (!filter(columns, "show").length) {
+        columns[i].show = true;
       }
     });
-    setColumns(newState);
+    setColumns(columns);
     if (props.column.field === field) {
-      const columnConfig = JSON.stringify(cloneDeep(newState));
+      const columnConfig = JSON.stringify(columns);
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
@@ -54,15 +53,14 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
     props.columns
   );
   const handleColumnLockToggle = (field) => {
-    const newState = [...columnLock];
-    newState.forEach((c, i) => {
+    columnLock.forEach((c, i) => {
       if (c.field === field) {
         c.locked = !c.locked;
       }
     });
-    setColumnLock(newState);
+    setColumnLock(columnLock);
     if (props.column.field === field) {
-      const columnConfig = JSON.stringify(cloneDeep(newState));
+      const columnConfig = JSON.stringify(columnLock);
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
