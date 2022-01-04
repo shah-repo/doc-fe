@@ -44,7 +44,7 @@ import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { hideColumnTitleOnResize, orderByLockedState, setColumnWidth } from "../../components/common/kendo/helpers";
+import { hideColumnTitleOnResize, orderByLockedState, pagerSettings, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -462,11 +462,7 @@ export function KendoGrid<T extends any>({
           sortable={true}
           filterable={true}
           reorderable={true}
-          // TODO: Configuration
-          pageable={{
-            pageSizes: [25, 50, 100, 250, 500, 1000],
-            buttonCount: 4,
-          }}
+          pageable={pagerSettings}
           resizable={true}
           groupable={true}
           total={resultState.total}
