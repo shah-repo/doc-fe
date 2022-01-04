@@ -252,11 +252,12 @@ export function KendoPanel<T extends any>({
           }
         }
         data = map(data, (record) =>
-          pick(record, map(gridConfiguration.columns, "field"),
+          pick(record,  [
+            ...map(gridConfiguration.columns, "field"),
             "id",
             "document.docId",
             "owner.user.avatar",
-          )
+          ])
         );
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
