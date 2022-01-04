@@ -103,7 +103,7 @@ export function KendoPanel<T extends any>({
   );
 
 
-  let defaultStatus = "IN_REVIEW";
+  let defaultStatus: string = ChangeRequestStatus.InReview;
   let initialDataState: State;
 
   if (kendoConfig) {
@@ -133,13 +133,13 @@ export function KendoPanel<T extends any>({
       filter: {
         logic: "and",
         filters: [
-          { field: "state", operator: "eq", value: "IN_REVIEW" },
+          { field: "state", operator: "eq", value: ChangeRequestStatus.InReview },
         ],
       },
     };
   }
   useEffect(() => {
-    if (!initialDataState.filter?.filters.length && defaultDDItem !== "IN_REVIEW") {
+    if (!initialDataState.filter?.filters.length && defaultDDItem !== ChangeRequestStatus.InReview) {
       setSearchStatus(
         ChangeRequestStatus.InReview,
       );
@@ -156,7 +156,7 @@ export function KendoPanel<T extends any>({
         if (fireAPI) {
           queryApi();
         } else {
-          if (defaultDDItem === "IN_REVIEW") {
+          if (defaultDDItem === ChangeRequestStatus.InReview) {
             setSearchStatus(
               ChangeRequestStatus.InReview,
             );
@@ -379,7 +379,7 @@ export function KendoPanel<T extends any>({
       logic: "and",
       filters:
         state && !isClearAll
-          ? [{ field: "state", operator: "eq", value: "IN_REVIEW" }]
+          ? [{ field: "state", operator: "eq", value: ChangeRequestStatus.InReview }]
           : [],
     };
     if (isClearAll) {
