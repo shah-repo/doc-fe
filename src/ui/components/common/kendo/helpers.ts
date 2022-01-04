@@ -114,6 +114,7 @@ export enum DisplayText {
   UNLOCK_COLUMN,
   LOCK_COLUMN,
   SELECT_STATE,
+  SELECT_TYPE,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -123,4 +124,5 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.UNLOCK_COLUMN]: "common.column.unlock",
   [DisplayText.LOCK_COLUMN]: "common.column.lock",
   [DisplayText.SELECT_STATE]: "common.select.state",
+  [DisplayText.SELECT_TYPE]: "common.select.type",
 };
