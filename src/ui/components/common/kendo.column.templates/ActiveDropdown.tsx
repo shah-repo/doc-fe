@@ -2,11 +2,21 @@ import { makeStyles } from "@material-ui/core";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { get } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../kendo/helpers";
 
 export const ActiveDropdown = (props) => {
-  const localizedData = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
+  const intl = useIntl();
+  const dropDownData = [
+    { text: TranslatedText[DisplayText.ACTIVE], value: true },
+    { text: TranslatedText[DisplayText.INACTIVE], value: false },
+  ];
   const isEdit = get(props.dataItem, "inEdit");
-  const formattedValue = get(props.dataItem, props.field) ? "Active" : "Inactive";
+  const formattedValue = get(props.dataItem, props.field) ? (
+    intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
+  ) : (
+    intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] })
+  );
   if (props.rowType === "groupHeader") {
     return null;
   }
@@ -60,8 +70,8 @@ export const ActiveDropdown = (props) => {
       {isEdit ? (
         <DropDownList
           onChange={handleChange}
-          value={localizedData.find((c) => c.value === dataValue)}
-          data={localizedData}
+          value={dropDownData.find((c) => c.value === dataValue)}
+          data={dropDownData}
           textField="text"
         />
       ) : (
