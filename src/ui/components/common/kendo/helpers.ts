@@ -116,6 +116,13 @@ export enum DisplayText {
   LOCK_COLUMN,
   SELECT_STATE,
   SELECT_TYPE,
+  NONE,
+  ALL,
+  CLEAR,
+  OFFICIAL,
+  UNOFFICIAL,
+  INEDIT,
+  ERROR,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -126,6 +133,13 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.LOCK_COLUMN]: "common.column.lock",
   [DisplayText.SELECT_STATE]: "common.select.state",
   [DisplayText.SELECT_TYPE]: "common.select.type",
+  [DisplayText.NONE]: "fields.select.none",
+  [DisplayText.ALL]: "common.all",
+  [DisplayText.CLEAR]: "common.clear",
+  [DisplayText.OFFICIAL]: "common.official",
+  [DisplayText.UNOFFICIAL]: "common.unofficial",
+  [DisplayText.INEDIT]: "common.inEdit",
+  [DisplayText.ERROR]: "common.error",
 };
 
 export enum statusClassMapping {
