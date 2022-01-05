@@ -102,7 +102,7 @@ export function KendoPanel<T extends any>({
   );
 
 
-  let defaultStatus = "Released";
+  let defaultStatus: string = DocumentRevisionStatus.Released;
   let initialDataState: State;
 
   if (kendoConfig) {
@@ -132,7 +132,7 @@ export function KendoPanel<T extends any>({
       filter: {
         logic: "and",
         filters: [
-          { field: "displayStatus", operator: "eq", value: "Released" },
+          { field: "displayStatus", operator: "eq", value: DocumentRevisionStatus.Released },
         ],
       },
     };
@@ -144,7 +144,7 @@ export function KendoPanel<T extends any>({
   const [defaultDDItem, setDefaultDDItem] = useState(defaultStatus);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const defaultItem = {
-    text: "Select Item",
+    text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
     value: "",
   };
   const dropdownFilterState = tableCriteria.queryDict ? tableCriteria.queryDict : {};
@@ -156,10 +156,10 @@ export function KendoPanel<T extends any>({
         if (fireAPI) {
           queryApi();
         } else {
-          if (defaultDDItem === "Released") {
+          if (defaultDDItem === DocumentRevisionStatus.Released) {
             setSearchStatus(
               documentRevisionQueryStatus(),
-              "Released" as DocumentRevisionStatus
+              DocumentRevisionStatus.Released
             );
           }
         }
