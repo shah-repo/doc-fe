@@ -24,6 +24,7 @@ import { find, isEmpty, map, set, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -38,7 +39,7 @@ import {
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { hideColumnTitleOnResize } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -84,6 +85,7 @@ export function KendoPanel<T extends any>({
   normalizrSchema,
   canCreateGroups,
 }: Props<T>) {
+  const intl = useIntl();
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -357,7 +359,7 @@ export function KendoPanel<T extends any>({
           tableSearchActions.setSearchCriteria(
             {
               queryDict: {},
-              apiError: "Error: " + errorMessage,
+              apiError: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }) + errorMessage,
               forceUpdate: false,
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
@@ -379,6 +381,13 @@ export function KendoPanel<T extends any>({
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
+      if (!newDataState.total) {
+        setNoDataMessage(
+          <Typography>
+            <Text translation="table.no.results.found"></Text>
+          </Typography>
+        );
+      }
     },
     [gridData]
   );
@@ -483,7 +492,7 @@ export function KendoPanel<T extends any>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  const editField = "inEdit";
+  const editField = intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] });
 
   const discardEditMode = (dataItem: LoadCompanyGroup) => {
     const index = gridData.findIndex((data) => data.id === dataItem.id);
@@ -545,7 +554,7 @@ export function KendoPanel<T extends any>({
       <Grid container justify="space-between">
         <Grid item>
           <Typography className={classes.title}>
-            <Text translation="navigation.group.management"></Text>
+            <Text translation="navigation.group.management" />
           </Typography>
         </Grid>
         <Grid item  style={{ marginBottom: 10 }}>
