@@ -391,7 +391,7 @@ export function KendoPanel<T extends any>({
 
   const columnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
-      let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+      let dataColumns: KendoColumn[] = gridConfiguration.columns;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject?.width;
@@ -405,7 +405,7 @@ export function KendoPanel<T extends any>({
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    let dataColumns: KendoColumn[] = gridConfiguration.columns;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
