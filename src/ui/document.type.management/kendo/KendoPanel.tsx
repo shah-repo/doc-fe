@@ -16,12 +16,14 @@ import {
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
@@ -81,6 +83,11 @@ export function KendoGrid<T extends { id?: string }>({
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
+  };
+  const intl = useIntl();
+  const defaultItem = {
+    text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
+    value: "",
   };
 
   // Update
@@ -214,8 +221,8 @@ export function KendoGrid<T extends { id?: string }>({
     return <DropdownFilterCell
       {...props}
       data={result.dataSource}
-      defaultItem={{ text: "", value: "" }}
-      defaultValue={dropDownState[props.field || ""] || { text: "", value: "" }}
+      defaultItem={defaultItem}
+      defaultValue={dropDownState[props.field || ""] || defaultItem}
       customOperator={result.operator}
       onStateChange={onStateChange}
     />;
