@@ -1,5 +1,10 @@
+import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { GridDropDownSettings, KendoColumn, PageState } from "../../components/common/kendo/types";
+import { CheckboxCell } from "./column.templates/Checkbox";
+import { FieldsConfig } from "./column.templates/FieldsConfig";
+import { Schema } from "./column.templates/Schema";
+import { EditDropdownCellFormatter } from "./filter.template/CommonCellDropdownFilterTemplate";
 
 const columns: KendoColumn[] = [{
   field: "id",
@@ -9,6 +14,7 @@ const columns: KendoColumn[] = [{
 {
   field: "active",
   title: "Status",
+  cell: ActiveDropdown,
   filter: "text",
   filterCell: "DropdownFilterCellTemplate",
   show: true,
@@ -38,6 +44,7 @@ const columns: KendoColumn[] = [{
 {
   field: "privateNumberPool",
   title: "Private Number Pool",
+  cell: CheckboxCell,
   filter: "boolean",
   filterCell: "BooleanFilterCell",
   show: true,
@@ -48,6 +55,7 @@ const columns: KendoColumn[] = [{
 {
   field: "canRedLine",
   title: "RedLine",
+  cell: CheckboxCell,
   filter: "boolean",
   filterCell: "BooleanFilterCell",
   show: true,
@@ -58,6 +66,7 @@ const columns: KendoColumn[] = [{
 {
   field: "isQms",
   title: "Qms",
+  cell: CheckboxCell,
   filter: "boolean",
   filterCell: "BooleanFilterCell",
   show: true,
@@ -68,6 +77,7 @@ const columns: KendoColumn[] = [{
 {
   field: "needsSignature",
   title: "Needs Signature",
+  cell: CheckboxCell,
   filter: "boolean",
   filterCell: "BooleanFilterCell",
   show: true,
@@ -78,6 +88,7 @@ const columns: KendoColumn[] = [{
 {
   field: "defaultTraining",
   title: "Training",
+  cell: CheckboxCell,
   filter: "boolean",
   filterCell: "BooleanFilterCell",
   show: true,
@@ -95,6 +106,7 @@ const columns: KendoColumn[] = [{
 {
   field: "defaultRevStage",
   title: "Revision Stage",
+  cell: EditDropdownCellFormatter,
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "165px",
@@ -104,6 +116,7 @@ const columns: KendoColumn[] = [{
 {
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
   title: "Users without Tags", // TODO: Check if multiSelect
+  cell: EditDropdownCellFormatter,
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "200px",
@@ -113,6 +126,7 @@ const columns: KendoColumn[] = [{
 {
   field: "group",
   title: "Group",
+  cell: EditDropdownCellFormatter,
   filterCell: "DropdownFilterCellTemplate",
   show: true,
   width: "125px",
@@ -128,6 +142,7 @@ const columns: KendoColumn[] = [{
 }, {
   field: "schema",
   title: "Schema",
+  cell: Schema,
   show: true,
   filterable: false,
   width: "110px",
@@ -136,6 +151,7 @@ const columns: KendoColumn[] = [{
 }, {
   field: "fieldsConfig",
   title: "Field Config",
+  cell: FieldsConfig,
   show: true,
   filterable: false,
   width: "110px",

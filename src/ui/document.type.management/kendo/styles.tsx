@@ -13,7 +13,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     margin: "5px",
   },
   exportBtn: {
-    margin: 0,
+    margin: "0px",
     boxShadow: "none",
     borderRadius: 100,
     marginRight: 15,

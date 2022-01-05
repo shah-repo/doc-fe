@@ -24,7 +24,7 @@ export interface CellCommandConfig extends GridCellProps {
 }
 
 export interface DTMRowItem {
-  hiddenForCreationForUsersWithoutTagsFormatted?: GroupTag[];
+  hiddenForCreationForUsersWithoutTagsFormatted: any;
   active: boolean;
   canRedLine: boolean;
   category: string;

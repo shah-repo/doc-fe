@@ -53,24 +53,22 @@ export const CommandCell = (props: CellCommandConfig) => {
         placement="top"
         arrow
       >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            // aria-label="add"
-            disabled={props.disabled}
-            onClick={() =>
-              isNewItem ? props.add(dataItem) : props.update(dataItem)
-            }
-          >
-            <AddCircleOutlineIcon
-              className={props.disabled ? "" : classes.ButtonColor}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
+        <IconButton
+          disableFocusRipple
+          disableRipple
+          style={{ backgroundColor: "transparent", padding: 5 }}
+          aria-label="add"
+          disabled={props.disabled}
+          onClick={() =>
+            isNewItem ? props.add(dataItem) : props.update(dataItem)
+          }
+        >
+          <AddCircleOutlineIcon
+            className={props.disabled ? "" : classes.ButtonColor}
+            fontSize="small"
+            color={props.disabled ? "disabled" : "secondary"}
+          />
+        </IconButton>
       </StyledTooltip>
       <StyledTooltip
         interactive={true}
@@ -80,22 +78,20 @@ export const CommandCell = (props: CellCommandConfig) => {
         placement="top"
         arrow
       >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            // aria-label="cancel"
-            onClick={() => props.cancel(dataItem)}
-          >
-            <CancelOutlinedIcon
-              className={props.disabled ? "" : classes.Cancel}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
+        <IconButton
+          disableFocusRipple
+          disableRipple
+          disabled={props.disabled}
+          style={{ backgroundColor: "transparent", padding: 5 }}
+          aria-label="cancel"
+          onClick={() => props.cancel(dataItem)}
+        >
+          <CancelOutlinedIcon
+            className={props.disabled ? "" : classes.Cancel}
+            fontSize="small"
+            color={props.disabled ? "disabled" : "secondary"}
+          />
+        </IconButton>
       </StyledTooltip>
     </td>
   ) : (
@@ -116,22 +112,20 @@ export const CommandCell = (props: CellCommandConfig) => {
         placement="top"
         arrow
       >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            // aria-label="edit"
-            onClick={() => props.edit(dataItem)}
-          >
-            <EditIcon
-              className={props.disabled ? "" : classes.ButtonColor}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
+        <IconButton
+          disableFocusRipple
+          disableRipple
+          disabled={props.disabled}
+          style={{ backgroundColor: "transparent", padding: 5 }}
+          aria-label="edit"
+          onClick={() => props.edit(dataItem)}
+        >
+          <EditIcon
+            className={props.disabled ? "" : classes.ButtonColor}
+            fontSize="small"
+            color={props.disabled ? "disabled" : "secondary"}
+          />
+        </IconButton>
       </StyledTooltip>
       <StyledTooltip
         interactive={true}
@@ -143,22 +137,20 @@ export const CommandCell = (props: CellCommandConfig) => {
         placement="top"
         arrow
       >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            // aria-label="remove"
-            onClick={() => props.remove(dataItem)}
-          >
-            <DeleteIcon
-              className={props.disabled ? "" : classes.Remove}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
+        <IconButton
+          disableFocusRipple
+          disableRipple
+          disabled={props.disabled}
+          style={{ backgroundColor: "transparent", padding: 5 }}
+          aria-label="remove"
+          onClick={() => props.remove(dataItem)}
+        >
+          <DeleteIcon
+            className={props.disabled ? "" : classes.Remove}
+            fontSize="small"
+            color={props.disabled ? "disabled" : "secondary"}
+          />
+        </IconButton>
       </StyledTooltip>
     </td>
   );

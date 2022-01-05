@@ -67,6 +67,7 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
         onClick={onClearButtonClick}
         disabled={props.value === null || props.value === props.defaultItem.value}
       >
+        {/* Add condition for edit field */}
         <span className="k-icon k-i-filter-clear" />
       </button>
     </div>

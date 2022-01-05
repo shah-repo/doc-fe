@@ -55,7 +55,7 @@ const CustomDialogTitle = (props) => {
       {children}
       {onClose ? (
         <IconButton
-          // aria-label="close"
+          aria-label="close"
           onClick={onClose}
           className={classes.closeButton}
         >
@@ -77,7 +77,7 @@ export const TextareaDialog = (props) => {
   return (
     <CustomDialog
       onClose={props.cancelEdit}
-      // aria-labelledby="customized-dialog-title"
+      aria-labelledby="customized-dialog-title"
       open={props.openForm}
       fullWidth
       maxWidth="sm"

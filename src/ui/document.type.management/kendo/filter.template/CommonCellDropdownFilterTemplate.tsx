@@ -1,5 +1,5 @@
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
-import { orderBy } from "lodash";
+import { get, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -56,9 +56,10 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
   }
 };
 
+// MOVE IN ANOTHER FILE
 export const EditDropdownCellFormatter = (props) => {
   const localizedData: ResultProps = getDropDownDataSource(props.field);
-  const isEdit: boolean = props.dataItem.inEdit;
+  const isEdit: boolean = get(props.dataItem, "inEdit");
   const handleChange = (e) => {
     if (props.onChange) {
       props.onChange({
