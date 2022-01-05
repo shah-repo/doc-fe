@@ -117,6 +117,15 @@ export enum DisplayText {
   SELECT_STATE,
   SELECT_TYPE,
   NONE,
+  ALL,
+  ADD_GROUP,
+  DISCARD,
+  EDIT_GROUP,
+  CLEAR,
+  OFFICIAL,
+  UNOFFICIAL,
+  INEDIT,
+  ERROR,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -128,6 +137,15 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.SELECT_STATE]: "common.select.state",
   [DisplayText.SELECT_TYPE]: "common.select.type",
   [DisplayText.NONE]: "fields.select.none",
+  [DisplayText.ALL]: "common.all",
+  [DisplayText.ADD_GROUP]: "common.add.group",
+  [DisplayText.DISCARD]: "common.discard",
+  [DisplayText.EDIT_GROUP]: "common.edit.group",
+  [DisplayText.CLEAR]: "common.clear",
+  [DisplayText.OFFICIAL]: "common.official",
+  [DisplayText.UNOFFICIAL]: "common.unofficial",
+  [DisplayText.INEDIT]: "common.inEdit",
+  [DisplayText.ERROR]: "common.error",
 };
 
 export enum statusClassMapping {
