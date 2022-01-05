@@ -30,6 +30,7 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -266,13 +267,7 @@ export function KendoPanel<T extends any>({
             .map((e) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el.user.confirmed
-            ? intl.formatMessage({
-              id: TranslatedText[DisplayText.SIGNEDUP],
-            })
-            : intl.formatMessage({
-              id: TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL],
-            }),
+          status: el.user.confirmed,
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -447,6 +442,7 @@ export function KendoPanel<T extends any>({
           reorderable={true}
           resizable={true}
           groupable={true}
+          cellRender={CellRender}
           onDataStateChange={onDataStateChange}
           {...dataState}
           onExpandChange={onExpandChange}
