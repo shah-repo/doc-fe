@@ -4,6 +4,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import { enumToOptions, translatedOptions } from "../../transform";
 
@@ -29,7 +30,16 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
     text: o.label,
     value: o.value,
   }));
-  const statusOptions = [{ text: "Active", value: true }, { text: "Inactive", value: false }];
+  const statusOptions = [
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+      value: true,
+    },
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+      value: false,
+    },
+  ];
   const result: ResultProps = {
     dataSource: [],
     operator: "eq",
@@ -58,8 +68,12 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
 
 // MOVE IN ANOTHER FILE
 export const EditDropdownCellFormatter = (props) => {
+  const intl = useIntl();
   const localizedData: ResultProps = getDropDownDataSource(props.field);
-  const isEdit: boolean = get(props.dataItem, "inEdit");
+  const isEdit: boolean = get(
+    props.dataItem,
+    intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+  );
   const handleChange = (e) => {
     if (props.onChange) {
       props.onChange({

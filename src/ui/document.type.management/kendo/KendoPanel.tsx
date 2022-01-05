@@ -64,6 +64,7 @@ export function KendoGrid<T extends { id?: string }>({
   tableName,
   tableCriteria,
 }: Props<T>) {
+  const intl = useIntl();
   const classes = KendoGridStyles();
   const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -75,7 +76,9 @@ export function KendoGrid<T extends { id?: string }>({
     columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns
   );
 
-  const editField = "inEdit";
+  const editField = intl.formatMessage({
+    id: TranslatedText[DisplayText.INEDIT],
+  });
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
   const processWithGroups = (data: T[], dataState: State) => {
@@ -158,7 +161,11 @@ export function KendoGrid<T extends { id?: string }>({
           const object = Object.assign({}, { ...prevState });
           let value;
           if (typeof el.value === "boolean" && el.field === "active") {
-            value = el.value ? "Active" : "Inactive";
+            value = el.value
+              ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
+              : intl.formatMessage({
+                id: TranslatedText[DisplayText.INACTIVE],
+              });
           } else if (typeof el.value === "boolean") {
             value = el.value ? "Yes" : "No";
           } else {
@@ -231,8 +238,16 @@ export function KendoGrid<T extends { id?: string }>({
     <DropdownFilterCell
       {...props}
       data={gridConfiguration.booleanFilterCellOptions}
-      defaultItem={{ text: "All", value: "All" }}
-      defaultValue={dropDownState[props.field || ""] || { text: "All", value: "All" }}
+      defaultItem={{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        value: "All",
+      }}
+      defaultValue={
+        dropDownState[props.field || ""] || {
+          text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+          value: "All",
+        }
+      }
       customOperator="eq"
       onStateChange={onStateChange}
     />
@@ -301,7 +316,9 @@ export function KendoGrid<T extends { id?: string }>({
         item.inEdit = true;
       }
     });
-    setGridEditID("inEdit");
+    setGridEditID(
+      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+    );
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -359,7 +376,9 @@ export function KendoGrid<T extends { id?: string }>({
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     const newDataArr: any[] = [newDataItem, ...actualData];
-    setGridEditID("inEdit");
+    setGridEditID(
+      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+    );
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -508,7 +527,7 @@ export function KendoGrid<T extends { id?: string }>({
         <Grid container justify="space-between">
           <Grid item>
             <Typography className={classes.title}>
-              <Text translation="documenttype.management"></Text>
+              <Text translation="documenttype.management" />
             </Typography>
           </Grid>
           <Grid item>
