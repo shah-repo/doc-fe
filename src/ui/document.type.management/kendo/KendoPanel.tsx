@@ -87,7 +87,6 @@ export function KendoGrid<T extends { id?: string }>({
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
-  const intl = useIntl();
   const defaultItem = {
     text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
     value: "",
