@@ -52,7 +52,7 @@ const KendoGridList: React.FunctionComponent<Props<any>> = ({
           : "",
         completedAtAfter: e.completedAt
           ? getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear)
-          : "Pending",
+          : <Text translation="common.pending" />,
         tcId: e.trainingPlan?.curriculumDocIds,
       }));
     }
