@@ -215,3 +215,8 @@ td[role="gridcell"] {
   background-color: var(--navy);
   border-color: var(--navy);
 }
+
+.k-textbox::selection,
+.k-textbox .k-input::selection {
+  background-color: var(--navy);
+}
