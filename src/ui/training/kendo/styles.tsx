@@ -3,13 +3,13 @@ import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme) => ({
   root: {
-    padding: "0 5px 10px 5px",
+    padding: "0 5px 10px",
   },
   kGrid: {
     height: "calc(100vh - 99px)",
   },
   exportListbutton: {
-    margin: "0px",
+    margin: 0,
     boxShadow: "none",
     borderRadius: 100,
     marginRight: 15,

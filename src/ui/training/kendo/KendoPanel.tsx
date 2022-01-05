@@ -354,7 +354,7 @@ export function KendoPanel<T extends any>({
   };
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
-      let dataColumns = [...columnDefinitions];
+      let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject ? columnObject.width : column.width;
@@ -367,7 +367,7 @@ export function KendoPanel<T extends any>({
     return false;
   };
   const onColumnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns = [...columnDefinitions];
+    let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
@@ -405,7 +405,7 @@ export function KendoPanel<T extends any>({
 
   // On Show / Hide Column From Main Menu
   const onColumnShowHide = (item: KendoColumn) => {
-    const dataColumns = map([...columnDefinitions], (column) => {
+    const dataColumns = map(columnDefinitions, (column) => {
       if (column.field === item.field) {
         column.show = !column.show;
       }
