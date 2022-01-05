@@ -198,6 +198,13 @@ export function KendoGrid<T extends { id?: string }>({
     setResultState(newDataState);
     setKendoFilterStatus(JSON.stringify(event.dataState));
     setIsLoading(false);
+    if (!newDataState.total) {
+      setNoDataMessage(
+        <Typography>
+          <Text translation="table.no.results.found"></Text>
+        </Typography>
+      );
+    }
   };
 
   // Kendo Grid Actions Methods
