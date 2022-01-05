@@ -441,6 +441,13 @@ export function KendoPanel<T extends any>({
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
+      if (!newDataState.total) {
+        setNoDataMessage(
+          <Typography>
+            <Text translation="table.no.results.found"></Text>
+          </Typography>
+        );
+      }
     },
     [gridData]
   );
