@@ -27,7 +27,7 @@ export const FieldsConfig = (props) => {
     }
   };
   const formattedValue = get(props.dataItem, props.field);
-  const isEdit = get(props.dataItem, "inEdit");
+  const isEdit = props.dataItem.inEdit;
 
   if (props.rowType === "groupHeader") {
     return null;
