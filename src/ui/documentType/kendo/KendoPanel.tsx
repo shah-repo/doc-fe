@@ -329,6 +329,13 @@ export function KendoGrid<T extends any>({
           tableName
         )
       );
+      if (!newDataState.total) {
+        setNoDataMessage(
+          <Typography>
+            <Text translation="table.no.results.found"></Text>
+          </Typography>
+        );
+      }
     },
     [gridData]
   );
@@ -384,13 +391,7 @@ export function KendoGrid<T extends any>({
             locked={column.locked}
             reorderable={column.reorderable}
             sortable={column.sortable}
-            title={
-              column.title
-                ? column.title
-                  .replace(/[&\/\\#,()$~%.'":*?<>{}]/g, "")
-                  .toUpperCase()
-                : column.title
-            }
+            title={column.title}
             filter={column.filter}
             filterCell={getFilterCell(column.field)}
             headerCell={
