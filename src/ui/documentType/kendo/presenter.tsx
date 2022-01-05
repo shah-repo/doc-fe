@@ -7,7 +7,6 @@ import { DocumentType, PageDetails } from "../../../state/ducks/documentRevision
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
-import { documentRevisionEffectiveDateOption } from "../../document.revision/utils/helpers";
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
 import { KendoGrid } from "./KendoPanel";
@@ -47,13 +46,8 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
         true
       ).isValid()
     ) {
-      const dateSearchString = documentRevisionEffectiveDateOption().find(
-        (e) =>
-          e.value ===
-          tableCriteria.queryDict?.[column.searchOptions?.dataKey || ""]
-      )?.text;
       return {
-        label: `${column.label}: ${dateSearchString || ""}`,
+        label: column.label,
         key: column.key,
       };
     }
@@ -63,14 +57,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: `${columnLabel}: ${tableCriteria.queryDict?.[
-        column.searchOptions?.dataKey ||
-        column.searchOptions?.defaultValue ||
-        ""
-      ] ||
-        column.searchOptions?.defaultValue ||
-        ""
-      }`,
+      label: columnLabel,
       key: column.key,
     };
   });
