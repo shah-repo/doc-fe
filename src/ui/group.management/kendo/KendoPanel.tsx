@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box, Grid, Typography,
+  Box, Grid, Typography
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -17,7 +17,7 @@ import {
   GridExpandChangeEvent,
   GridNoRecords,
   GridRowClickEvent,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, set, sortBy } from "lodash";
@@ -34,7 +34,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import {
   GetEmployeeResponse,
-  LoadCompanyGroup,
+  LoadCompanyGroup
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -48,7 +48,7 @@ import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
-  TablePanelStateProps,
+  TablePanelStateProps
 } from "../../components/table/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -463,7 +463,7 @@ export function KendoPanel<T extends any>({
 
   const columnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
-      let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+      let dataColumns: KendoColumn[] = gridConfiguration.columns;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject?.width;
@@ -477,7 +477,7 @@ export function KendoPanel<T extends any>({
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns: KendoColumn[] = [...gridConfiguration.columns];
+    let dataColumns: KendoColumn[] = gridConfiguration.columns;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
@@ -496,7 +496,7 @@ export function KendoPanel<T extends any>({
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
   };
-  const cancel = (dataItem: LoadCompanyGroup) => {
+  const cancel = () => {
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);

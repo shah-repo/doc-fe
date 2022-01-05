@@ -5,7 +5,7 @@ import Colors from "../../layout/theme/utils/colors";
 
 const AddGroupStyles = makeStyles(() => ({
   Button: {
-    "margin": "0px",
+    "margin": 0,
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.navy,
