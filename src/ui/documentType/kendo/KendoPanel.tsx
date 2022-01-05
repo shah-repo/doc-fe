@@ -134,7 +134,7 @@ export function KendoGrid<T extends any>({
     // Put Initial column configuration in store
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
-  const initialGridConfigurationColumns: KendoColumn[] = [...configColumns];
+  const initialGridConfigurationColumns: KendoColumn[] = configColumns;
   const gropableColumnFields = initialGridConfigurationColumns.map((column: KendoColumn) => column.field);
   const formatParams = () => {
     const params: any = {};
@@ -341,7 +341,7 @@ export function KendoGrid<T extends any>({
 
   const onColumnResize = (event: GridColumnResizeEvent) => {
     if (event.end) {
-      let dataColumns = [...columnDefinitions];
+      let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
         const columnObject = find(event.columns, { field: column.field });
         column.width = columnObject ? columnObject.width : column.width;
@@ -355,7 +355,7 @@ export function KendoGrid<T extends any>({
   };
 
   const onColumnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns = [...columnDefinitions];
+    let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
@@ -441,7 +441,7 @@ export function KendoGrid<T extends any>({
   };
 
   const onColumnShowHide = (item: KendoColumn) => {
-    const updatedDataColumns = map([...columnDefinitions], (column: KendoColumn) => {
+    const updatedDataColumns = map(columnDefinitions, (column: KendoColumn) => {
       if (column.field === item.field) {
         column.show = !column.show;
       }

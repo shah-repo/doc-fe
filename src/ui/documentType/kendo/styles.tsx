@@ -4,7 +4,7 @@ import Colors from "../../layout/theme/utils/colors";
 const GridStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
-    padding: "0 5px 10px 5px",
+    padding: "0 5px 10px",
   },
   kGrid: {
     height: "calc(100vh - 99px)",
@@ -13,7 +13,7 @@ const GridStyles = makeStyles((theme) => ({
     color: Colors.navy,
   },
   toolBarBtn: {
-    margin: "0px",
+    margin: 0,
     boxShadow: "none",
     marginRight: theme.spacing(0.625),
     borderRadius: "100px",
