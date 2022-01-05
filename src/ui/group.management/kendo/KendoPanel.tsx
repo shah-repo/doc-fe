@@ -38,6 +38,7 @@ import {
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -515,6 +516,7 @@ export function KendoPanel<T extends any>({
           reorderable={true}
           resizable={true}
           groupable={true}
+          cellRender={CellRender}
           onDataStateChange={onDataStateChange}
           {...dataState}
           onExpandChange={onExpandChange}
