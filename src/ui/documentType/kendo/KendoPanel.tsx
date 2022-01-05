@@ -329,6 +329,13 @@ export function KendoGrid<T extends any>({
           tableName
         )
       );
+      if (!newDataState.total) {
+        setNoDataMessage(
+          <Typography>
+            <Text translation="table.no.results.found"></Text>
+          </Typography>
+        );
+      }
     },
     [gridData]
   );
