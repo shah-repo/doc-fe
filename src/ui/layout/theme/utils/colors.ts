@@ -63,7 +63,7 @@ enum Colors {
   // orange
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",
-  tawny="#C77401",
+  tawny="#B25F00",
   ochre="#CE8723",
   // cyan
   light_cyan="#DCF4FD",
