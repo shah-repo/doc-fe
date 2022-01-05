@@ -187,8 +187,11 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
-      defaultItem={{ text: "None", value: "none" }}
-      operator= {"gt"}
+      defaultItem={{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.NONE] }),
+        value: "none",
+      }}
+      operator={"gt"}
     />
   );
   const dynamicColumns = createDynamicColDef.map((CCCOnfig, index) => {
