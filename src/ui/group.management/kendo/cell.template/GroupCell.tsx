@@ -1,17 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 export const GroupCell = (props) => {
+  const intl = useIntl();
   const isOfficial = props.dataItem[props.field];
   const localizedData = [
-    { text: "Official", value: true },
-    { text: "Unofficial", value: false },
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }),
+      value: true,
+    },
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.UNOFFICIAL] }),
+      value: false,
+    },
   ];
   const updateGroupField = (event: any) => {
     const Selectedvalue = event?.target?.value;
-    // eslint-disable-next-line no-console
-    console.log("Selectedvalue", Selectedvalue.value);
     props.dataItem.isOfficial = Selectedvalue.value;
     props.setOfficial(Selectedvalue.value);
   };
@@ -40,7 +47,13 @@ export const GroupCell = (props) => {
           value={valueSelected}
         />
       ) : (
-        <span>{isOfficial ? "Official" : "Unofficial"}</span>
+        <span>
+          {isOfficial
+            ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
+            : intl.formatMessage({
+              id: TranslatedText[DisplayText.UNOFFICIAL],
+            })}
+        </span>
       )}
     </td>
   );

@@ -3,6 +3,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
+import Text from "../../../components/Text";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
 
@@ -47,7 +48,7 @@ export const CommandCell = (props) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Add Group"}
+            <Text translation="common.add.group" />
           </Typography>
         }
         placement="top"
@@ -69,7 +70,9 @@ export const CommandCell = (props) => {
       <StyledTooltip
         interactive={true}
         title={
-          <Typography className={`${classes.tooltip}`}>{"Discard"}</Typography>
+          <Typography className={`${classes.tooltip}`}>
+            <Text translation="common.discard" />
+          </Typography>
         }
         placement="top"
         arrow
@@ -97,7 +100,7 @@ export const CommandCell = (props) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Edit Group"}
+            <Text translation="common.edit.group" />
           </Typography>
         }
         placement="top"
