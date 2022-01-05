@@ -22,6 +22,7 @@ import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -560,6 +561,7 @@ export function KendoGrid<T extends { id?: string }>({
               resizable={true}
               groupable={true}
               total={resultState.total}
+              cellRender={CellRender}
               onDataStateChange={onDataStateChange}
               {...dataState}
               onExpandChange={onExpandChange}
