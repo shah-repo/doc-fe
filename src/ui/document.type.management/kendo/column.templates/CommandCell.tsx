@@ -5,6 +5,7 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 // import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
+import Text from "../../../components/Text";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
 import { CellCommandConfig } from "../types";
@@ -47,51 +48,55 @@ export const CommandCell = (props: CellCommandConfig) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Add Document Type"}
+            <Text translation="common.add.document.type" />
           </Typography>
         }
         placement="top"
         arrow
       >
-        <IconButton
-          disableFocusRipple
-          disableRipple
-          style={{ backgroundColor: "transparent", padding: 5 }}
-          aria-label="add"
-          disabled={props.disabled}
-          onClick={() =>
-            isNewItem ? props.add(dataItem) : props.update(dataItem)
-          }
-        >
-          <AddCircleOutlineIcon
-            className={props.disabled ? "" : classes.ButtonColor}
-            fontSize="small"
-            color={props.disabled ? "disabled" : "secondary"}
-          />
-        </IconButton>
+        <span>
+          <IconButton
+            disableFocusRipple
+            disableRipple
+            style={{ backgroundColor: "transparent", padding: 5 }}
+            disabled={props.disabled}
+            onClick={() =>
+              isNewItem ? props.add(dataItem) : props.update(dataItem)
+            }
+          >
+            <AddCircleOutlineIcon
+              className={props.disabled ? "" : classes.ButtonColor}
+              fontSize="small"
+              color={props.disabled ? "disabled" : "secondary"}
+            />
+          </IconButton>
+        </span>
       </StyledTooltip>
       <StyledTooltip
         interactive={true}
         title={
-          <Typography className={`${classes.tooltip}`}>{"Discard"}</Typography>
+          <Typography className={`${classes.tooltip}`}>
+            <Text translation="common.discard" />
+          </Typography>
         }
         placement="top"
         arrow
       >
-        <IconButton
-          disableFocusRipple
-          disableRipple
-          disabled={props.disabled}
-          style={{ backgroundColor: "transparent", padding: 5 }}
-          aria-label="cancel"
-          onClick={() => props.cancel(dataItem)}
-        >
-          <CancelOutlinedIcon
-            className={props.disabled ? "" : classes.Cancel}
-            fontSize="small"
-            color={props.disabled ? "disabled" : "secondary"}
-          />
-        </IconButton>
+        <span>
+          <IconButton
+            disableFocusRipple
+            disableRipple
+            disabled={props.disabled}
+            style={{ backgroundColor: "transparent", padding: 5 }}
+            onClick={() => props.cancel(dataItem)}
+          >
+            <CancelOutlinedIcon
+              className={props.disabled ? "" : classes.Cancel}
+              fontSize="small"
+              color={props.disabled ? "disabled" : "secondary"}
+            />
+          </IconButton>
+        </span>
       </StyledTooltip>
     </td>
   ) : (
@@ -106,51 +111,53 @@ export const CommandCell = (props: CellCommandConfig) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Edit Document Type"}
+            <Text translation="common.edit.document.type" />
           </Typography>
         }
         placement="top"
         arrow
       >
-        <IconButton
-          disableFocusRipple
-          disableRipple
-          disabled={props.disabled}
-          style={{ backgroundColor: "transparent", padding: 5 }}
-          aria-label="edit"
-          onClick={() => props.edit(dataItem)}
-        >
-          <EditIcon
-            className={props.disabled ? "" : classes.ButtonColor}
-            fontSize="small"
-            color={props.disabled ? "disabled" : "secondary"}
-          />
-        </IconButton>
+        <span>
+          <IconButton
+            disableFocusRipple
+            disableRipple
+            disabled={props.disabled}
+            style={{ backgroundColor: "transparent", padding: 5 }}
+            onClick={() => props.edit(dataItem)}
+          >
+            <EditIcon
+              className={props.disabled ? "" : classes.ButtonColor}
+              fontSize="small"
+              color={props.disabled ? "disabled" : "secondary"}
+            />
+          </IconButton>
+        </span>
       </StyledTooltip>
       <StyledTooltip
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Delete Document Type"}
+            <Text translation="common.delete.document.type" />
           </Typography>
         }
         placement="top"
         arrow
       >
-        <IconButton
-          disableFocusRipple
-          disableRipple
-          disabled={props.disabled}
-          style={{ backgroundColor: "transparent", padding: 5 }}
-          aria-label="remove"
-          onClick={() => props.remove(dataItem)}
-        >
-          <DeleteIcon
-            className={props.disabled ? "" : classes.Remove}
-            fontSize="small"
-            color={props.disabled ? "disabled" : "secondary"}
-          />
-        </IconButton>
+        <span>
+          <IconButton
+            disableFocusRipple
+            disableRipple
+            disabled={props.disabled}
+            style={{ backgroundColor: "transparent", padding: 5 }}
+            onClick={() => props.remove(dataItem)}
+          >
+            <DeleteIcon
+              className={props.disabled ? "" : classes.Remove}
+              fontSize="small"
+              color={props.disabled ? "disabled" : "secondary"}
+            />
+          </IconButton>
+        </span>
       </StyledTooltip>
     </td>
   );

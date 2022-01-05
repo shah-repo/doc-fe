@@ -16,13 +16,17 @@ import {
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
+import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
@@ -61,6 +65,7 @@ export function KendoGrid<T extends { id?: string }>({
   tableName,
   tableCriteria,
 }: Props<T>) {
+  const intl = useIntl();
   const classes = KendoGridStyles();
   const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -72,7 +77,9 @@ export function KendoGrid<T extends { id?: string }>({
     columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns
   );
 
-  const editField = "inEdit";
+  const editField = intl.formatMessage({
+    id: TranslatedText[DisplayText.INEDIT],
+  });
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
   const processWithGroups = (data: T[], dataState: State) => {
@@ -80,6 +87,10 @@ export function KendoGrid<T extends { id?: string }>({
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
+  };
+  const defaultItem = {
+    text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
+    value: "",
   };
 
   // Update
@@ -150,7 +161,11 @@ export function KendoGrid<T extends { id?: string }>({
           const object = Object.assign({}, { ...prevState });
           let value;
           if (typeof el.value === "boolean" && el.field === "active") {
-            value = el.value ? "Active" : "Inactive";
+            value = el.value
+              ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
+              : intl.formatMessage({
+                id: TranslatedText[DisplayText.INACTIVE],
+              });
           } else if (typeof el.value === "boolean") {
             value = el.value ? "Yes" : "No";
           } else {
@@ -166,11 +181,7 @@ export function KendoGrid<T extends { id?: string }>({
     });
 
     if (!gridData.length) {
-      setNoDataMessage(
-        <Typography>
-          <Text translation="table.no.results.found"></Text>
-        </Typography>
-      );
+      setNoDataMessage(<NoDataFound />);
     }
     setTimeout(() => {
       setIsLoading(false);
@@ -198,6 +209,9 @@ export function KendoGrid<T extends { id?: string }>({
     setResultState(newDataState);
     setKendoFilterStatus(JSON.stringify(event.dataState));
     setIsLoading(false);
+    if (!newDataState.total) {
+      setNoDataMessage(<NoDataFound />);
+    }
   };
 
   // Kendo Grid Actions Methods
@@ -214,8 +228,8 @@ export function KendoGrid<T extends { id?: string }>({
     return <DropdownFilterCell
       {...props}
       data={result.dataSource}
-      defaultItem={{ text: "", value: "" }}
-      defaultValue={dropDownState[props.field || ""] || { text: "", value: "" }}
+      defaultItem={defaultItem}
+      defaultValue={dropDownState[props.field || ""] || defaultItem}
       customOperator={result.operator}
       onStateChange={onStateChange}
     />;
@@ -224,8 +238,16 @@ export function KendoGrid<T extends { id?: string }>({
     <DropdownFilterCell
       {...props}
       data={gridConfiguration.booleanFilterCellOptions}
-      defaultItem={{ text: "All", value: "All" }}
-      defaultValue={dropDownState[props.field || ""] || { text: "All", value: "All" }}
+      defaultItem={{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        value: "All",
+      }}
+      defaultValue={
+        dropDownState[props.field || ""] || {
+          text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+          value: "All",
+        }
+      }
       customOperator="eq"
       onStateChange={onStateChange}
     />
@@ -294,7 +316,9 @@ export function KendoGrid<T extends { id?: string }>({
         item.inEdit = true;
       }
     });
-    setGridEditID("inEdit");
+    setGridEditID(
+      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+    );
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -352,7 +376,9 @@ export function KendoGrid<T extends { id?: string }>({
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     const newDataArr: any[] = [newDataItem, ...actualData];
-    setGridEditID("inEdit");
+    setGridEditID(
+      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+    );
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -501,7 +527,7 @@ export function KendoGrid<T extends { id?: string }>({
         <Grid container justify="space-between">
           <Grid item>
             <Typography className={classes.title}>
-              <Text translation="documenttype.management"></Text>
+              <Text translation="documenttype.management" />
             </Typography>
           </Grid>
           <Grid item>
@@ -535,6 +561,7 @@ export function KendoGrid<T extends { id?: string }>({
               resizable={true}
               groupable={true}
               total={resultState.total}
+              cellRender={CellRender}
               onDataStateChange={onDataStateChange}
               {...dataState}
               onExpandChange={onExpandChange}

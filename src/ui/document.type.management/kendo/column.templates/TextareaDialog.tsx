@@ -5,6 +5,7 @@ import { TextArea } from "@progress/kendo-react-inputs";
 import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
+import Text from "../../../components/Text";
 import GridCellStyles from "./CellStyles";
 import "./KendoStyles.css";
 
@@ -55,7 +56,6 @@ const CustomDialogTitle = (props) => {
       {children}
       {onClose ? (
         <IconButton
-          aria-label="close"
           onClick={onClose}
           className={classes.closeButton}
         >
@@ -77,7 +77,6 @@ export const TextareaDialog = (props) => {
   return (
     <CustomDialog
       onClose={props.cancelEdit}
-      aria-labelledby="customized-dialog-title"
       open={props.openForm}
       fullWidth
       maxWidth="sm"
@@ -86,28 +85,44 @@ export const TextareaDialog = (props) => {
       <CustomDialogTitle onClose={props.cancelEdit}>
         {props.title}
       </CustomDialogTitle>
-      <Form onSubmit={props.addClick} render={() => <FormElement >
-        <fieldset className={"k-form-fieldset"}>
-          <DialogContent dividers>
-            <Field id={fieldName} name={fieldName} label={props.title}
-              component={FormTextArea}
-              defaultV={!isEmpty(props.item) ? JSON.stringify(props.item, undefined, 4) : ""}
-              isEdit={props.isEdit} />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              className={`${"k-button"} ${classes.schemaCancelBtn}`}
-              onClick={props.cancelEdit}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className= {`${"k-button"} ${classes.schemaAddBtn}`}
-              disabled={!props.isEdit}
-            >Add</Button>
-          </DialogActions>
-        </fieldset>
-      </FormElement>} />
+      <Form
+        onSubmit={props.addClick}
+        render={() => (
+          <FormElement>
+            <fieldset className={"k-form-fieldset"}>
+              <DialogContent dividers>
+                <Field
+                  id={fieldName}
+                  name={fieldName}
+                  label={props.title}
+                  component={FormTextArea}
+                  defaultV={
+                    !isEmpty(props.item)
+                      ? JSON.stringify(props.item, undefined, 4)
+                      : ""
+                  }
+                  isEdit={props.isEdit}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className={`${"k-button"} ${classes.schemaCancelBtn}`}
+                  onClick={props.cancelEdit}
+                >
+                  <Text translation="common.cancel" />
+                </Button>
+                <Button
+                  type="submit"
+                  className={`${"k-button"} ${classes.schemaAddBtn}`}
+                  disabled={!props.isEdit}
+                >
+                  <Text translation="common.add" />
+                </Button>
+              </DialogActions>
+            </fieldset>
+          </FormElement>
+        )}
+      />
     </CustomDialog>
   );
 };
