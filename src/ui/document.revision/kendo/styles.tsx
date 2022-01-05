@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme) => ({
-  // marginBottom: "16px",
   root: {
     padding: "0 5px 10px 5px",
   },
@@ -20,7 +19,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     backgroundColor: Colors.grey_cloud,
   },
   exportListbutton: {
-    margin: "0px",
+    margin: 0,
     boxShadow: "none",
     borderRadius: 100,
     marginRight: 15,
@@ -35,7 +34,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     backgroundColor: Colors.white,
   },
   createDocButton: {
-    "margin": "0px",
+    "margin": 0,
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.navy,

@@ -1,3 +1,4 @@
+import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { chain, filter, findIndex, isEmpty } from "lodash";
 import { Translation } from "../../../translations/types";
 
@@ -115,6 +116,13 @@ export enum DisplayText {
   LOCK_COLUMN,
   SELECT_STATE,
   SELECT_TYPE,
+  NONE,
+  ALL,
+  CLEAR,
+  OFFICIAL,
+  UNOFFICIAL,
+  INEDIT,
+  ERROR,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -125,4 +133,35 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.LOCK_COLUMN]: "common.column.lock",
   [DisplayText.SELECT_STATE]: "common.select.state",
   [DisplayText.SELECT_TYPE]: "common.select.type",
+  [DisplayText.NONE]: "fields.select.none",
+  [DisplayText.ALL]: "common.all",
+  [DisplayText.CLEAR]: "common.clear",
+  [DisplayText.OFFICIAL]: "common.official",
+  [DisplayText.UNOFFICIAL]: "common.unofficial",
+  [DisplayText.INEDIT]: "common.inEdit",
+  [DisplayText.ERROR]: "common.error",
+};
+
+export enum statusClassMapping {
+  "Pending Approval"="PENDING_STATUS",
+  "In Review"="PENDING_STATUS",
+  "Pending Change"="PENDING_STATUS",
+  "IN_REVIEW" = "PENDING_STATUS",
+  "Approved"="GREEN_STATUS",
+  "Released"="GREEN_STATUS",
+  "APPROVED" = "GREEN_STATUS",
+  "Obsolete"="GRAY_STATUS",
+  "Voided"="GRAY_STATUS",
+  "CLOSED" = "GRAY_STATUS",
+  "VOIDED" = "GRAY_STATUS",
+  "Superseded"="GRAY_STATUS",
+  "Void"="GRAY_STATUS",
+}
+
+export const pagerSettings: GridPagerSettings = {
+  buttonCount: 5,
+  info: true,
+  type: "numeric",
+  pageSizes: [25, 50, 75, 100, 500],
+  previousNext: true,
 };
