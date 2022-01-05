@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import {
   DataResult, process,
   State,
@@ -46,10 +46,10 @@ import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { hideColumnTitleOnResize, orderByLockedState, pagerSettings, setColumnWidth } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
-import Text from "../../components/Text";
 import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
 import {
   documentEditPath,
@@ -203,11 +203,7 @@ export function KendoGrid<T extends any>({
         setResultState(newDataState);
         setIsLoading(false);
         if (data.length === 0) {
-          setNoDataMessage(
-            <Typography>
-              <Text translation="table.no.results.found"></Text>
-            </Typography>
-          );
+          setNoDataMessage(<NoDataFound />);
         }
         data = map(data, (record) =>
           pick(record, [
@@ -330,11 +326,7 @@ export function KendoGrid<T extends any>({
         )
       );
       if (!newDataState.total) {
-        setNoDataMessage(
-          <Typography>
-            <Text translation="table.no.results.found"></Text>
-          </Typography>
-        );
+        setNoDataMessage(<NoDataFound />);
       }
     },
     [gridData]
