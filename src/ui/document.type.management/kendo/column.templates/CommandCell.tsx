@@ -58,7 +58,6 @@ export const CommandCell = (props: CellCommandConfig) => {
             disableFocusRipple
             disableRipple
             style={{ backgroundColor: "transparent", padding: 5 }}
-            aria-label="add"
             disabled={props.disabled}
             onClick={() =>
               isNewItem ? props.add(dataItem) : props.update(dataItem)
@@ -86,7 +85,6 @@ export const CommandCell = (props: CellCommandConfig) => {
             disableRipple
             disabled={props.disabled}
             style={{ backgroundColor: "transparent", padding: 5 }}
-            aria-label="cancel"
             onClick={() => props.cancel(dataItem)}
           >
             <CancelOutlinedIcon
@@ -122,7 +120,6 @@ export const CommandCell = (props: CellCommandConfig) => {
             disableRipple
             disabled={props.disabled}
             style={{ backgroundColor: "transparent", padding: 5 }}
-            aria-label="edit"
             onClick={() => props.edit(dataItem)}
           >
             <EditIcon
@@ -149,7 +146,6 @@ export const CommandCell = (props: CellCommandConfig) => {
             disableRipple
             disabled={props.disabled}
             style={{ backgroundColor: "transparent", padding: 5 }}
-            aria-label="remove"
             onClick={() => props.remove(dataItem)}
           >
             <DeleteIcon
