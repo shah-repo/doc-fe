@@ -20,6 +20,7 @@ import { find, isEmpty, map, sortBy } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import * as generateUuid from "uuid/v4";
 import apiClient from "../../../state/apiClient";
@@ -30,7 +31,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { hideColumnTitleOnResize } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -70,8 +71,8 @@ export function KendoPanel<T extends any>({
   enableDropboxAction,
   isCompanyDropboxEnabled,
 }: Props<T>) {
-
-  const editField = "inEdit";
+  const intl = useIntl();
+  const editField = intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] });
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -261,8 +262,17 @@ export function KendoPanel<T extends any>({
         data = data.map((el) => ({
           ...el,
           groupsOrg: el.groups,
-          groups: el.groups.map((e) => e.name.trimLeft().trimEnd()).sort().join(", "),
-          status: el.user.confirmed ? "Signed up" : "Resend signup email",
+          groups: el.groups
+            .map((e) => e.name.trimLeft().trimEnd())
+            .sort()
+            .join(", "),
+          status: el.user.confirmed
+            ? intl.formatMessage({
+              id: TranslatedText[DisplayText.SIGNEDUP],
+            })
+            : intl.formatMessage({
+              id: TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL],
+            }),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -468,7 +478,7 @@ export function KendoPanel<T extends any>({
       <Grid container justify="space-between">
         <Grid item>
           <Typography className={classes.title}>
-            <Text translation="navigation.user.management"></Text>
+            <Text translation="navigation.user.management" />
           </Typography>
         </Grid>
         <Grid item style={{ display: "flex" }}>
