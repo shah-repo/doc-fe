@@ -34,6 +34,7 @@ import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { TrainingStatus } from "../../../state/ducks/dashboard/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
@@ -147,7 +148,7 @@ export function KendoPanel<T extends any>({
     }
     if (
       dueDateSelectedOption?.field === "dueOn" &&
-      dueDateSelectedOption?.text === "Due in 7 days"
+      dueDateSelectedOption?.text === TrainingStatus.DUE_IN_7_DAYS
     ) {
       params.dueOnAfter = moment().toISOString();
       params.dueOnBefore = dueDateSelectedOption.value;
@@ -155,7 +156,7 @@ export function KendoPanel<T extends any>({
     }
     if (
       dueDateSelectedOption?.field === "dueOn" &&
-      dueDateSelectedOption?.text === "Overdue"
+      dueDateSelectedOption?.text === TrainingStatus.OVERDUE
     ) {
       params.dueOnBefore = moment().toISOString();
       params.isCompleted = false;
