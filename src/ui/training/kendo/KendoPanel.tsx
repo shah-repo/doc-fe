@@ -34,7 +34,6 @@ import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { TrainingStatus } from "../../../state/ducks/dashboard/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
@@ -59,6 +58,7 @@ import {
   dueDateOption,
   trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
+import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
@@ -148,7 +148,7 @@ export function KendoPanel<T extends any>({
     }
     if (
       dueDateSelectedOption?.field === "dueOn" &&
-      dueDateSelectedOption?.text === TrainingStatus.DUE_IN_7_DAYS
+      dueDateSelectedOption?.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
       params.dueOnAfter = moment().toISOString();
       params.dueOnBefore = dueDateSelectedOption.value;
@@ -156,7 +156,7 @@ export function KendoPanel<T extends any>({
     }
     if (
       dueDateSelectedOption?.field === "dueOn" &&
-      dueDateSelectedOption?.text === TrainingStatus.OVERDUE
+      dueDateSelectedOption?.text === CompletedOnDateOptions.OVERDUE
     ) {
       params.dueOnBefore = moment().toISOString();
       params.isCompleted = false;
