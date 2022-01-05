@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog, Grid, Typography,
+  Dialog, Grid,
 } from "@material-ui/core";
 import {
   DataResult, process,
@@ -48,11 +48,11 @@ import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
-import Text from "../../components/Text";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
@@ -225,11 +225,7 @@ export function KendoPanel<T extends any>({
         setDataState(dataState);
         setResultState(newDataState);
         if (data.length === 0) {
-          setNoDataMessage(
-            <Typography>
-              <Text translation="table.no.results.found"></Text>
-            </Typography>
-          );
+          setNoDataMessage(<NoDataFound />);
         }
         data = map(data, (record) =>
           pick(record, [
@@ -388,11 +384,7 @@ export function KendoPanel<T extends any>({
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
       if (!newDataState.total) {
-        setNoDataMessage(
-          <Typography>
-            <Text translation="table.no.results.found"></Text>
-          </Typography>
-        );
+        setNoDataMessage(<NoDataFound />);
       }
     },
     [gridData]
