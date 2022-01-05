@@ -9,8 +9,14 @@ import { GridCellProperties } from "../kendo/types";
 export const ActiveDropdown = (props: GridCellProperties) => {
   const intl = useIntl();
   const dropDownData = [
-    { text: TranslatedText[DisplayText.ACTIVE], value: true },
-    { text: TranslatedText[DisplayText.INACTIVE], value: false },
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+      value: true,
+    },
+    {
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+      value: false,
+    },
   ];
   const isEdit = props.dataItem.inEdit;
   const formattedValue = get(props.dataItem, props.field || "") ? (
