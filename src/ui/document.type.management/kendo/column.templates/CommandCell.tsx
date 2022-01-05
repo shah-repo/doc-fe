@@ -5,6 +5,7 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 // import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
+import Text from "../../../components/Text";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
 import { CellCommandConfig } from "../types";
@@ -47,7 +48,7 @@ export const CommandCell = (props: CellCommandConfig) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Add Document Type"}
+            <Text translation="common.add.document.type" />
           </Typography>
         }
         placement="top"
@@ -74,7 +75,9 @@ export const CommandCell = (props: CellCommandConfig) => {
       <StyledTooltip
         interactive={true}
         title={
-          <Typography className={`${classes.tooltip}`}>{"Discard"}</Typography>
+          <Typography className={`${classes.tooltip}`}>
+            <Text translation="common.discard" />
+          </Typography>
         }
         placement="top"
         arrow
@@ -108,7 +111,7 @@ export const CommandCell = (props: CellCommandConfig) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Edit Document Type"}
+            <Text translation="common.edit.document.type" />
           </Typography>
         }
         placement="top"
@@ -134,7 +137,7 @@ export const CommandCell = (props: CellCommandConfig) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Delete Document Type"}
+            <Text translation="common.delete.document.type" />
           </Typography>
         }
         placement="top"
