@@ -23,6 +23,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
@@ -166,11 +167,7 @@ export function KendoGrid<T extends { id?: string }>({
     });
 
     if (!gridData.length) {
-      setNoDataMessage(
-        <Typography>
-          <Text translation="table.no.results.found"></Text>
-        </Typography>
-      );
+      setNoDataMessage(<NoDataFound />);
     }
     setTimeout(() => {
       setIsLoading(false);
@@ -199,11 +196,7 @@ export function KendoGrid<T extends { id?: string }>({
     setKendoFilterStatus(JSON.stringify(event.dataState));
     setIsLoading(false);
     if (!newDataState.total) {
-      setNoDataMessage(
-        <Typography>
-          <Text translation="table.no.results.found"></Text>
-        </Typography>
-      );
+      setNoDataMessage(<NoDataFound />);
     }
   };
 
