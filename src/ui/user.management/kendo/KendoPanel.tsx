@@ -32,6 +32,7 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { hideColumnTitleOnResize } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
@@ -267,11 +268,7 @@ export function KendoPanel<T extends any>({
         setDataState(initialDataState);
         setResultState(newDataState);
         if (data.length === 0) {
-          setNoDataMessage(
-            <Typography>
-              <Text translation="table.no.results.found"></Text>
-            </Typography>
-          );
+          setNoDataMessage(<NoDataFound />);
         }
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
@@ -325,11 +322,7 @@ export function KendoPanel<T extends any>({
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState));
       if (!newDataState.total) {
-        setNoDataMessage(
-          <Typography>
-            <Text translation="table.no.results.found"></Text>
-          </Typography>
-        );
+        setNoDataMessage(<NoDataFound />);
       }
     },
     [gridData]
