@@ -356,7 +356,7 @@ export function KendoPanel<T extends any>({
           tableSearchActions.setSearchCriteria(
             {
               queryDict: {},
-              apiError: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }) + errorMessage,
+              apiError: "Error: " + errorMessage,
               forceUpdate: false,
               kendoConfig: JSON.stringify(initialDataState),
               columnConfig: JSON.stringify(columnDefinitions),
