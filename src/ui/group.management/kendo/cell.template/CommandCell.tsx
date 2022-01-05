@@ -56,7 +56,6 @@ export const CommandCell = (props) => {
       >
         <IconButton
           disableRipple={true}
-          aria-label="add"
           size="small"
           onClick={() => props.update(dataItem)}
           className={classes.button}
@@ -79,7 +78,6 @@ export const CommandCell = (props) => {
       >
         <IconButton
           disableRipple={true}
-          aria-label="cancel"
           size="small"
           onClick={() => props.cancel(dataItem)}
           className={classes.button}
@@ -108,7 +106,6 @@ export const CommandCell = (props) => {
       >
         <IconButton
           disableRipple={true}
-          aria-label="edit"
           size="small"
           onClick={() => props.edit(dataItem)}
           className={classes.button}
