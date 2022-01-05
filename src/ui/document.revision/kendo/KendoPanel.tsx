@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -38,11 +38,11 @@ import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
-import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
@@ -244,11 +244,7 @@ export function KendoPanel<T extends any>({
           setDataState(initialDataState);
           setResultState(newDataState);
           if (data.length === 0) {
-            setNoDataMessage(
-              <Typography>
-                <Text translation="table.no.results.found"></Text>
-              </Typography>
-            );
+            setNoDataMessage(<NoDataFound />);
           }
         }
         data = map(data, (record) =>
@@ -524,11 +520,7 @@ export function KendoPanel<T extends any>({
       setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(event.dataState), tableCriteria);
       if (!newDataState.total) {
-        setNoDataMessage(
-          <Typography>
-            <Text translation="table.no.results.found"></Text>
-          </Typography>
-        );
+        setNoDataMessage(<NoDataFound />);
       }
     },
     [gridData]
