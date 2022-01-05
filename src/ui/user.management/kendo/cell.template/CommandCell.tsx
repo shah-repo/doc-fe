@@ -4,6 +4,7 @@ import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import Text from "../../../components/Text";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
 
@@ -63,7 +64,7 @@ export const CommandCell = (props: CommandCellProps) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Add Employee"}
+            <Text translation="user.management.add.employee" />
           </Typography>
         }
         placement="top"
@@ -84,7 +85,7 @@ export const CommandCell = (props: CommandCellProps) => {
       <StyledTooltip
         interactive={true}
         title={
-          <Typography className={`${classes.tooltip}`}>{"Discard"}</Typography>
+          <Typography className={`${classes.tooltip}`}><Text translation="common.discard" /></Typography>
         }
         placement="top"
         arrow
@@ -111,7 +112,7 @@ export const CommandCell = (props: CommandCellProps) => {
         interactive={true}
         title={
           <Typography className={`${classes.tooltip}`}>
-            {"Edit Employee"}
+            <Text translation="user.management.edit.employee" />
           </Typography>
         }
         placement="top"
