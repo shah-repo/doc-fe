@@ -4,6 +4,8 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultValue: { text: string; value: string };
@@ -20,6 +22,7 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
 }
 
 export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
+  const intl = useIntl();
   const [state, setState] = React.useState({
     value: props.defaultValue,
   });
@@ -63,9 +66,11 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title="Clear"
+        title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={onClearButtonClick}
-        disabled={props.value === null || props.value === props.defaultItem.value}
+        disabled={
+          props.value === null || props.value === props.defaultItem.value
+        }
       >
         {/* Add condition for edit field */}
         <span className="k-icon k-i-filter-clear" />
