@@ -379,6 +379,13 @@ export function KendoPanel<T extends any>({
       setDataState(event.dataState);
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
+      if (!newDataState.total) {
+        setNoDataMessage(
+          <Typography>
+            <Text translation="table.no.results.found"></Text>
+          </Typography>
+        );
+      }
     },
     [gridData]
   );
