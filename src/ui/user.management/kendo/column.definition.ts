@@ -6,7 +6,7 @@ const columns: KendoColumn[] = [
     field: "status",
     title: "SIGNED UP",
     show: true,
-    filter: "text",
+    filter: "boolean",
     locked: false,
     orderIndex: 1,
     groupable: true,
