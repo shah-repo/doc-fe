@@ -24,7 +24,7 @@ export interface UserManage {
   groupsOrg?: string[];
 }
 
-export interface User {
+interface User {
   id: string;
   name: string;
   email: string;
