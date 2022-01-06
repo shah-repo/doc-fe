@@ -4,10 +4,12 @@ import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTo
 
 interface Props {
   data: string;
+  customClass?: string;
 }
 
 const Tooltip: React.FunctionComponent<Props> = ({
   data,
+  customClass,
 }) => {
   const styles = makeStyles(() => ({
     tooltip: {
@@ -33,7 +35,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
       placement="left"
       arrow
     >
-      <span>{data}</span>
+      <span className={customClass}>{data}</span>
     </StyledTooltip>
   );
 };
