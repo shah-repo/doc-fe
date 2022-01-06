@@ -60,7 +60,7 @@ const columns: KendoColumn[] = [
     orderIndex: 5,
   },
   {
-    field: "trainingPlan.createdAt",
+    field: "createdAt",
     title: "ASSIGNED DATE",
     show: true,
     locked: false,

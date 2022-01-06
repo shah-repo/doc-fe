@@ -142,7 +142,7 @@ export function KendoPanel<T extends any>({
     const params: any = {};
 
     if (
-      defaultTrainingItem?.field === "trainingPlan.createdAt" &&
+      defaultTrainingItem?.field === "createdAt" &&
       defaultTrainingItem?.value
     ) {
       params.createdAtAfter = defaultTrainingItem.value;
@@ -317,7 +317,7 @@ export function KendoPanel<T extends any>({
       ...setDefault.selectedItem,
       field: setDefault.parentField,
     };
-    if (setDefault.parentField === "trainingPlan.createdAt") {
+    if (setDefault.parentField === "createdAt") {
       setDefaultTrainingItem(updatedFilter);
     } else if (setDefault.parentField === "dueOn") {
       setDueDateSelectedOption(updatedFilter);
@@ -427,7 +427,7 @@ export function KendoPanel<T extends any>({
     : {};
 
   const initialDropdownConfig =
-    dropdownFilterState["trainingPlan.createdAt"] || defaultItem;
+    dropdownFilterState.createdAt || defaultItem;
   const initialDueDateSelectedOption = dropdownFilterState.dueOn || defaultItem;
   const initialCompletedOnSelectedOption =
     dropdownFilterState.completedAt || defaultItem;
@@ -498,7 +498,7 @@ export function KendoPanel<T extends any>({
 
   const filterCellMapping = (field: string) => {
     switch (field) {
-      case "trainingPlan.createdAt":
+      case "createdAt":
         return AssignedDateFilterTemplate;
       case "dueOn":
         return DueDateFilterTemplate;
