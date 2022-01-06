@@ -8,11 +8,16 @@ const KendoGlobalization: React.FunctionComponent = ({
   children,
 }) => {
   const intl = useIntl();
+  const getDisplayText = (localiseString) =>
+    isTranslation(localiseString)
+      ? intl.formatMessage({ id: localiseString })
+      : null;
   const messages = {
     grid: {
-      groupPanelEmpty: isTranslation("kendo.groupPanelEmpty")
-        ? intl.formatMessage({ id: "kendo.groupPanelEmpty" })
-        : null,
+      filterBooleanAll: getDisplayText("common.all"),
+      filterIsTrue: getDisplayText("common.true"),
+      filterIsFalse: getDisplayText("common.false"),
+      groupPanelEmpty: getDisplayText("kendo.groupPanelEmpty"),
     },
   };
 
