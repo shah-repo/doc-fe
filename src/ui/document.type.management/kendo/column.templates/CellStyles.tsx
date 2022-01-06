@@ -21,7 +21,7 @@ const CellStyles = makeStyles((theme) => ({
     margin: "5px",
   },
   schemaCancelBtn: {
-    margin: "0px",
+    margin: 0,
     boxShadow: "none",
     borderRadius: 200,
     marginRight: 15,
@@ -37,7 +37,7 @@ const CellStyles = makeStyles((theme) => ({
   },
   schemaAddBtn: {
     "fontWeight": 600,
-    "margin": "0px",
+    "margin": 0,
     "boxShadow": "none",
     "borderRadius": 200,
     "background": Colors.navy,

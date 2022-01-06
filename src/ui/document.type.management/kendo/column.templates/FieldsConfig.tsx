@@ -3,12 +3,15 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as FieldConfigIcon } from "../../../../assets/images/grid_field_config.svg";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import { parseJSON } from "../../transform";
+import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
 
 export const FieldsConfig = (props) => {
   const intl = useIntl();
+  const title = intl.formatMessage({
+    id: TranslatedText[DisplayText.FIELD_CONFIG],
+  });
   const [openForm, setOpenForm] = React.useState(false);
   const openPopUpWindow = () => {
     setOpenForm(true);
@@ -19,21 +22,20 @@ export const FieldsConfig = (props) => {
 
   const onAddClick = (event) => {
     if (props.onChange) {
-      props.onChange({
-        dataIndex: 0,
-        dataItem: props.dataItem,
-        field: props.field,
-        // syntheticEvent: event.syntheticEvent,
-        value: parseJSON(event.fieldsConfig),
-      });
-      setOpenForm(false);
+      const fieldConfigValue = checkIfJSONObject(event.schema, title);
+      if (fieldConfigValue && typeof fieldConfigValue === "object") {
+        props.onChange({
+          dataIndex: 0,
+          dataItem: props.dataItem,
+          field: props.field,
+          value: fieldConfigValue,
+        });
+        setOpenForm(false);
+      }
     }
   };
   const formattedValue = get(props.dataItem, props.field);
-  const isEdit = get(
-    props.dataItem,
-    intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
-  );
+  const isEdit =  props.dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
 
   if (props.rowType === "groupHeader") {
     return null;
@@ -56,12 +58,9 @@ export const FieldsConfig = (props) => {
       </td>
       {openForm && (
         <TextareaDialog
-          title={intl.formatMessage({
-            id: TranslatedText[DisplayText.FIELD_CONFIG],
-          })}
+          title ={title}
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}
-          // onSubmit={handleSubmit}
           item={formattedValue}
           isEdit={isEdit}
           fieldName={props.field}
