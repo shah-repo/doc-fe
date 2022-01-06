@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog, Grid,
+  Dialog, Grid
 } from "@material-ui/core";
 import {
   DataResult, process,
-  State,
+  State
 } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -20,7 +20,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, isEmpty, map, pick } from "lodash";
@@ -38,13 +38,13 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
-  TrainingRecordQuery,
+  TrainingRecordQuery
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { cellTemplateMapping } from "../../components/common/kendo.column.templates/config";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
+import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
@@ -57,7 +57,7 @@ import { TablePanelStateProps } from "../../components/table/types";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
-  trainingCompletedOnDateOption,
+  trainingCompletedOnDateOption
 } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
@@ -522,7 +522,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
-      cell={cellTemplateMapping[column.cell]}
+      cell={(props) => RenderCustomCell(props, column.cell)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
       filterCell={column.field && filterCellMapping(column.field)}
