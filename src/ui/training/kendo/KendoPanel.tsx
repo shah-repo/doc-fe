@@ -31,6 +31,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
+import { TIME_ZONE } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
@@ -150,7 +151,7 @@ export function KendoPanel<T extends any>({
       dueDateSelectedOption?.field === "dueOn" &&
       dueDateSelectedOption?.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
-      params.dueOnAfter = moment().toISOString();
+      params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
       params.dueOnBefore = dueDateSelectedOption.value;
       params.isCompleted = false;
     }
@@ -158,7 +159,7 @@ export function KendoPanel<T extends any>({
       dueDateSelectedOption?.field === "dueOn" &&
       dueDateSelectedOption?.text === CompletedOnDateOptions.OVERDUE
     ) {
-      params.dueOnBefore = moment().toISOString();
+      params.dueOnBefore = moment().tz(TIME_ZONE).toISOString();
       params.isCompleted = false;
     }
 

@@ -26,7 +26,7 @@ const columns: KendoColumn[] = [
     orderIndex: 2,
   },
   {
-    field: "documentRevision.revision",
+    field: "documentRevision.displayRevision",
     title: "REVISION",
     show: true,
     filter: "text",
