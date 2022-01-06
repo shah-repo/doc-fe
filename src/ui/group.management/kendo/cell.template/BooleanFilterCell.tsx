@@ -1,7 +1,6 @@
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import gridConfiguration from "../column.definition";
 import { DropdownFilterCell } from "./Dropdown";
 
 export const BooleanFilterCell = (props: any) => {
@@ -9,7 +8,13 @@ export const BooleanFilterCell = (props: any) => {
   return (
     <DropdownFilterCell
       {...props}
-      data={gridConfiguration.booleanFilterCellOptions}
+      data={[{
+        text: intl.formatMessage({ id: "common.official" }),
+        value: true,
+      }, {
+        text: intl.formatMessage({ id: "common.unofficial" }),
+        value: false,
+      }]}
       defaultItem={{
         text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
         value: "All",
