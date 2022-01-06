@@ -40,12 +40,6 @@ export interface DropdownFilterDefaultItem {
   text: string;
   value: string;
 }
-
-export interface GridDropDownSettings {
-  text: string;
-  value: boolean;
-}
-
 export interface PageState {
   skip: number;
   take: number;
