@@ -57,7 +57,6 @@ export interface KendoGridConfiguration {
   columns: KendoColumn[];
   pagerSettings: GridPagerSettings;
   initialDataState? : PageState;
-  booleanFilterCellOptions? : GridDropDownSettings[];
 }
 
 export interface KendoGridCriteria {
