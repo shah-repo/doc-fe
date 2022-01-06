@@ -13,7 +13,7 @@ import {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
-  GridExpandChangeEvent, GridNoRecords, GridToolbar,
+  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
@@ -31,6 +31,7 @@ import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -45,7 +46,6 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
-import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
 import { CommandCell } from "./cell.template/CommandCell";
 import { EmailCell } from "./cell.template/EmailCell";
 import { GroupDropdown } from "./cell.template/GroupDropdown";
@@ -53,7 +53,7 @@ import { GroupsCell } from "./cell.template/GroupsCell";
 import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
-import { UserManage, UserManagementProps } from "./types";
+import { AddUserManage, UserManage, UserManagementProps } from "./types";
 
 type Props<T> = UserManagementProps<T>  ;
 
@@ -128,7 +128,7 @@ export function KendoPanel<T extends any>({
     },
   });
 
-  const handleCreate = (values: UserManage) => {
+  const handleCreate = (values: AddUserManage) => {
     async.start(addEmployeeAction, values, async);
   };
 
@@ -356,9 +356,44 @@ export function KendoPanel<T extends any>({
     />
   ;
 
+  const BooleanFilterCell = (props: GridFilterCellProps) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={[{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+        value: true,
+      }, {
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+        value: false,
+      }]}
+      defaultItem={{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        value: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+      }}
+    />
+  );
+
+  const SignUpBooleanFilterCell = (props: GridFilterCellProps) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={[{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.SIGNEDUP] }),
+        value: true,
+      }, {
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL] }),
+        value: false,
+      }]}
+      defaultItem={{
+        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        value: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+      }}
+    />
+  );
+
   const filterCellMapping = {
     groups: GroupDropdown,
     active: BooleanFilterCell,
+    status: SignUpBooleanFilterCell,
   };
 
   const fieldToCellMapping = {
