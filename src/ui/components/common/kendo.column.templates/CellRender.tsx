@@ -7,7 +7,7 @@ const CellRender = (td: any, props: GridCellProps) => {
   const intl = useIntl();
   if (td && td.props.children && props.rowType === "groupHeader") {
     const formatMessageMap = (text: string | number) => intl.formatMessage({ id: TranslatedText[text] });
-    let children;
+    let children = <span>{td.props.children.props?.children} {props.dataItem.value}</span>;
     if (props.dataItem.field === "active") {
       children = (
         <span>{td.props.children.props?.children} {props.dataItem.value ?
