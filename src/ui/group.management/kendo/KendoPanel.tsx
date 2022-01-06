@@ -76,7 +76,7 @@ type Props<T> = KendoPanelProps<T> & GroupManagementProps;
 
 let call: CancelTokenSource;
 
-export function KendoPanel<T extends {id: string; inEdit: boolean}>({
+export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
