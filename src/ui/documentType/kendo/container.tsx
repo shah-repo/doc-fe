@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
-import { get, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, RouteComponentProps } from "react-router-dom";
-import { toValidateIfDate } from "../../../common/utils/date";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -16,50 +16,20 @@ import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates } from "../../components/common/kendo/types";
-import Date from "../../components/Date";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
-import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
-import { checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
+import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { isTranslation } from "../../translations/types";
 import DocumentByTypeListPresenter from "../kendo/presenter";
-import { columnSearchConfiguration, getStaticColumns } from "../list/helpers";
 import { RouteParams } from "../utils/types";
 import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
 import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
+import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 
 type Props = RouteComponentProps<RouteParams>;
-
-const getFormattedRowValue = (path: any, rowData: any) => {
-  const value = get(rowData, path);
-  const isDate = toValidateIfDate(value);
-  // Check Below
-  const versionNumber = generateRevisionNumber(
-    rowData.revision,
-    rowData.revisionStage,
-    rowData.subRevision,
-    rowData.revisionChangeType,
-    undefined,
-    checkIsDocumentRecord(rowData?.document?.documentType?.groupOptions)
-  );
-  let override = value;
-  if (typeof value === "object" && !isDate) {
-    override = "";
-  }
-  if (path.startsWith("precalc.revision")) {
-    override = versionNumber;
-  }
-  if (path === "status") {
-    override = rowData.displayStatus;
-  }
-
-
-  return isDate ? <Date value={value} /> : override;
-};
 
 const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   match,
@@ -67,7 +37,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const { categoryName, docTypeId } = match.params;
   const currentUsersName = useSelector(authSelectors.currentUserName);
-  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
 
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
@@ -117,27 +86,17 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
         ),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docTypeId]);
 
   useEffect(() => {
     getStatuses();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
   if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
     return <Redirect to={HOME_URL} />;
   }
 
-  const clearFilter = () =>
-    dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
-
-  const cellHrefRenderer = (rowData: DocumentRevision): string => {
-    if (canEdit(rowData)) {
-      return documentEditPath(rowData.id, rowData.document.id);
-    }
-    return documentPreviewPath(rowData.id, rowData.document.id);
-  };
+  const clearFilter = () => dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
 
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
@@ -145,32 +104,22 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     .filter((c) => c.showOnWeb)
     .map(
       (column: PageDetailsColumn) => {
-        const [omitSearch, searchOptions] = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
+        const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
         return {
           key: column.valuePath as keyof DocumentRevision,
           // version is a hack need to insert inside configuration 20.19
           label: column.label === "Version" as string ? "common.revision" : column.label,
-          cellHref: cellHrefRenderer,
-          omitSearch,
-          columnOptions: {
-            cellDataGetter: ({ rowData }) =>
-              getFormattedRowValue(column.valuePath, rowData),
-          },
           searchOptions,
-        };
-      },
+        }; },
     );
   const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
     isByCategory,
     categoryName,
     documentType,
-    cellHrefRenderer,
-    tableCriteria,
-    canEdit,
-    statuses,
   );
 
-  const createDynamicColDef = columns.length ? columns : staticColumns;
+  const columnDef = columns.length ? columns : staticColumns;
+
   const DisplayStatusFilterCell: any = (props: GridFilterCellProps) => (
     <DropdownFilterCell
       {...props}
@@ -180,9 +129,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       })}
     />
   );
-
-  // const dueDateFilterOptions = documentRevisionEffectiveDateOption().map((data) => data.text);
-
   const RealeaseDateFilterCell = (props: any) => (
     <DateDropdownFilterCell
       {...props}
@@ -194,31 +140,34 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
       operator={"gt"}
     />
   );
-  const dynamicColumns = createDynamicColDef.map((CCCOnfig, index) => {
-    let filterCellTemplate; // component
+
+  const kendoColumnDef = columnDef.map((columnDetails, index) => {
+    let filterCellTemplate;
     let dynamicCellTemplate;
-    const filterField = "text";
     let formatField;
 
-    let upDateField = !columns.length ? CCCOnfig.searchOptions?.dataKey || CCCOnfig.key :  CCCOnfig.key;
+    let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key :  columnDetails.key;
 
-    if (CCCOnfig.searchOptions?.dateFilter) {
+    if (columnDetails.searchOptions?.dateFilter) {
       filterCellTemplate = RealeaseDateFilterCell;
       dynamicCellTemplate = KendoCellTemplates.DATE_INFO;
-    } else if (CCCOnfig.searchOptions?.ownerTemplate) {
+    } else if (columnDetails.searchOptions?.ownerTemplate) {
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
-    } else if (CCCOnfig.searchOptions?.statusTemplate) {
-      dynamicCellTemplate = KendoCellTemplates.STATUS;
+    } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = DisplayStatusFilterCell;
+      dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = "displayStatus";
     } else {
       dynamicCellTemplate = KendoCellTemplates.COMMON_CELL;
     }
-    const columnLabel = isTranslation(CCCOnfig.label) ? intl.formatMessage({ id: CCCOnfig.label }) : CCCOnfig.label;
+    const columnLabel = isTranslation(columnDetails.label)
+      ? intl.formatMessage({ id: columnDetails.label })
+      : columnDetails.label;
+
     return {
       field: upDateField,
       title: columnLabel,
-      filter: filterField,
+      filter: "text",
       width: 15,
       groupable: true,
       cell: dynamicCellTemplate,
@@ -234,7 +183,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     <div>
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
-        dynamicColumns={dynamicColumns}
+        dynamicColumns={kendoColumnDef}
         tableCriteria={tableCriteria}
         providedData={providedData}
         clearFilter={clearFilter}
