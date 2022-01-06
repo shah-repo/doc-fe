@@ -1,5 +1,5 @@
 import { pagerSettings } from "../../components/common/kendo/helpers";
-import { GridDropDownSettings, KendoColumn, PageState } from "../../components/common/kendo/types";
+import { KendoColumn, PageState } from "../../components/common/kendo/types";
 
 const columns: KendoColumn[] = [{
   field: "id",
@@ -154,20 +154,11 @@ const columns: KendoColumn[] = [{
   orderIndex: 15,
 }];
 
-const booleanFilterCellOptions: GridDropDownSettings[] = [{
-  text: "Yes",
-  value: true,
-}, {
-  text: "No",
-  value: false,
-}];
-
 const initialDataState: PageState = { skip: 0, take: 25, group: [] };
 const gridConfiguration = {
   columns,
   pagerSettings,
   initialDataState,
-  booleanFilterCellOptions,
 };
 
 export default gridConfiguration;
