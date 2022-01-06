@@ -3,11 +3,13 @@ import React from "react";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 
 interface Props {
-  data: string;
+  data: string | number;
+  customClass?: string;
 }
 
 const Tooltip: React.FunctionComponent<Props> = ({
   data,
+  customClass,
 }) => {
   const styles = makeStyles(() => ({
     tooltip: {
@@ -27,13 +29,13 @@ const Tooltip: React.FunctionComponent<Props> = ({
           component={"p"}
           className={`${classes.tooltip}`}
         >
-          {data?.replace(/,/g, ",\n")}
+          {typeof data === "string" ? data?.replace(/,/g, ",\n") : data}
         </Typography>
       }
       placement="left"
       arrow
     >
-      <span>{data}</span>
+      <span className={customClass}>{data}</span>
     </StyledTooltip>
   );
 };
