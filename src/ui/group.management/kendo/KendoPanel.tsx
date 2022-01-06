@@ -15,6 +15,7 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
+  GridFilterCellProps,
   GridNoRecords,
   GridRowClickEvent,
   GridToolbar,
@@ -39,6 +40,7 @@ import {
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -56,7 +58,7 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
-import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
+// import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
 import { CommandCell } from "./cell.template/CommandCell";
 import { EmployeesCell } from "./cell.template/EmployeesCell";
 import { GroupCell } from "./cell.template/GroupCell";
@@ -427,6 +429,21 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
 
   const permissionCell = (props: GridCellProps) =>
     <PermissionsCell {...props} isOfficial={Official} />;
+
+  const BooleanFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
+    {...props}
+    data={[{
+      text: intl.formatMessage({ id: "common.official" }),
+      value: true,
+    }, {
+      text: intl.formatMessage({ id: "common.unofficial" }),
+      value: false,
+    }]}
+    defaultItem={{
+      text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+      value: "All",
+    }}
+  />;
 
   const filterCellMapping = {
     isOfficial: BooleanFilterCell,
