@@ -18,7 +18,7 @@ export const ActiveDropdown = (props: GridCellProperties) => {
       value: false,
     },
   ];
-  const isEdit = props.dataItem.inEdit;
+  const isEdit = props.dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
   const formattedValue = get(props.dataItem, props.field || "") ? (
     intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
   ) : (

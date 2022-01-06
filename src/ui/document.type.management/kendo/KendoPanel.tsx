@@ -24,7 +24,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
@@ -481,18 +481,22 @@ export function KendoGrid<T extends { id?: string }>({
   };
 
   const columnResize = (event: GridColumnResizeEvent) => {
-    let dataColumns: KendoColumn[] = [...columnDefinitions];
-    dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
-      column.width = columnObject?.width;
-      return column;
-    });
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
+    let dataColumns: KendoColumn[] = columnDefinitions;
+    if (event.end) {
+      dataColumns = map(dataColumns, (column: KendoColumn) => {
+        const columnObject = find(event.columns, { field: column.field });
+        column.width = columnObject?.width;
+        return column;
+      });
+      hideColumnTitleOnResize();
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }
+    return false;
   };
 
   const columnReorder = (event: GridColumnReorderEvent) => {
-    let dataColumns: KendoColumn[] = [...columnDefinitions];
+    let dataColumns: KendoColumn[] = columnDefinitions;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
       const columnObject = find(event.columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
@@ -538,7 +542,6 @@ export function KendoGrid<T extends { id?: string }>({
             >
               <Text translation={"common.export.dam.details"} />
             </Button>
-            {/* onClick={dialog.open}  {...{ disabled }} */}
             <Button
               variant="outlined"
               onClick={addNewRowObject}
