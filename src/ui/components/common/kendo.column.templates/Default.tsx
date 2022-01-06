@@ -1,5 +1,6 @@
 import { get } from "lodash";
 import React from "react";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const Default = (props: GridCellProperties) => {
@@ -12,7 +13,7 @@ export const Default = (props: GridCellProperties) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      {value}
+      <Tooltip data={value}/>
     </td>
   );
 };
