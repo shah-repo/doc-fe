@@ -2,6 +2,7 @@ import { get } from "lodash";
 import moment from "moment";
 import React from "react";
 import { MomentFormats, TIME_ZONE, toValidateIfDate } from "../../../../common/utils/date";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 
@@ -23,7 +24,7 @@ export const CommonCell = (props: GridCellProperties) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      {formattedValue}
+      <Tooltip data={formattedValue}/>
     </td>
   );
 };
