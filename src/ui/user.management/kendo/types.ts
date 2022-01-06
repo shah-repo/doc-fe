@@ -14,14 +14,25 @@ interface GridRowSelectionProps<T> {
 }
 
 export interface UserManage {
-  id?: string;
-  name?: string;
-  email?: string;
+  id: string;
+  name: string;
+  email: string;
   groups?: string[];
   active?: boolean | string;
   confirmed?: boolean | string;
   inEdit?: boolean | string;
   groupsOrg?: string[];
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface AddUserManage {
+  user: User;
+  groups: string[] | undefined;
 }
 
 export interface UserManagementProps<T> extends KendoPanelProps<T>{
