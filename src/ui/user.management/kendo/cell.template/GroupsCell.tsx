@@ -1,36 +1,49 @@
 import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect } from "@progress/kendo-react-dropdowns";
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Group, GroupTag, GroupType, Permission } from "../../../../state/ducks/auth/types";
+import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 import KendoGridStyles from "../styles";
 
-export const GroupsCell = (props) => {
+interface GroupOptions {
+  label: string;
+  text: string;
+  value: string;
+  tags: Nullable<GroupTag[]>;
+  type: GroupType | undefined;
+  defaultForNewUsers: boolean;
+  permissions: Permission[];
+  parents: Group[];
+  joinedParents: Group[];
+  isOfficial: boolean;
+}
+
+export const GroupsCell = (props: GridCellProperties) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
-  const [result, setResult] = React.useState([]);
-  const [data, setData] = React.useState([]);
-
-  const processDataByField = (data, field) => data.filter((el) => el[field]).sort((beforeVal, afterVal) =>
-    beforeVal[field].trimLeft().trimEnd() > afterVal[field].trimLeft().trimEnd() ? 1 : -1);
+  const [result, setResult] = React.useState<GroupOptions[]>([]);
+  const [data, setData] = React.useState<GroupOptions[]>([]);
 
   React.useEffect(() => {
-    setData(processDataByField(groupOptions, "label"));
-    setResult(processDataByField(defaultGroups, "label"));
+    setData(groupOptions);
+    setResult(defaultGroups);
   }, [groupOptions, defaultGroups]);
 
-  const updateGroupField = (event: any) => {
-    props.dataItem.groups = event?.target?.value.map((item) => ({
-      id: item?.value || "",
+  const updateGroupField = (event: MultiSelectChangeEvent) => {
+    props.dataItem.groups = event.target.value.map((item) => ({
+      id: item.value || "",
     }));
-    setResult(event.target.value);
+    setResult(event.target.value as any);
   };
 
-  const filterChange = (event: any) => {
+  const filterChange = (event: MultiSelectFilterChangeEvent) => {
     const filter = event.filter;
-    const allData = processDataByField(groupOptions, "label").slice();
+    const allData = groupOptions.slice();
     const newData = filterBy(allData, filter);
     setData(newData as any);
   };
@@ -55,10 +68,10 @@ export const GroupsCell = (props) => {
           onFilterChange={filterChange}
           dataItemKey="value"
           textField="label"
-          defaultValue={processDataByField(defaultGroups, "label")}
+          defaultValue={defaultGroups}
         />
       ) : (
-        <Tooltip data={props?.dataItem?.groups} />
+        <Tooltip data={props.dataItem.groups} />
       )}
     </td>
   );
