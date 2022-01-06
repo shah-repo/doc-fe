@@ -12,7 +12,7 @@ export const BooleanFilterCell = (props: any) => {
       data={gridConfiguration.booleanFilterCellOptions}
       defaultItem={{
         text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
-        value: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        value: "All",
       }}
     />
   );
