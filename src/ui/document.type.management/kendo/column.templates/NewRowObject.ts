@@ -12,6 +12,6 @@ export const NewRowObject = {
   category: null,
   schema: [],
   fieldsConfig: undefined,
-  defaultRevStage: "",
+  defaultRevStage: null,
   active: false,
 };

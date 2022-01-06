@@ -22,7 +22,7 @@ export const FieldsConfig = (props) => {
 
   const onAddClick = (event) => {
     if (props.onChange) {
-      const fieldConfigValue = checkIfJSONObject(event.schema, title);
+      const fieldConfigValue = checkIfJSONObject(event.fieldsConfig, title);
       if (fieldConfigValue && typeof fieldConfigValue === "object") {
         props.onChange({
           dataIndex: 0,

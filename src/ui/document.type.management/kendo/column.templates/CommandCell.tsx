@@ -5,6 +5,8 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 // import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Text from "../../../components/Text";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
 import Colors from "../../../layout/theme/utils/colors";
@@ -30,8 +32,9 @@ export const CommandCell = (props: CellCommandConfig) => {
     },
   }));
   const classes = styles();
+  const intl = useIntl();
   const { dataItem } = props;
-  const inEdit = dataItem.inEdit;
+  const inEdit = dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
   const isNewItem = dataItem.id === undefined;
   if (props.rowType === "groupHeader") {
     return null;
