@@ -1,5 +1,6 @@
 import { TextField } from "@material-ui/core";
 import React from "react";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 
 export const NameCell = (props) => {
   const updateNameField = (event: any) => {
@@ -24,7 +25,7 @@ export const NameCell = (props) => {
           onChange={updateNameField}
         />
       ) : (
-        <span>{props.dataItem.user ? props.dataItem.user.name : props.dataItem.items[0]?.user?.name}</span>
+        <Tooltip data ={props.dataItem.user ? props.dataItem.user.name : props.dataItem.items[0]?.user?.name}/>
       )}
     </td>
   );
