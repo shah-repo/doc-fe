@@ -4,6 +4,7 @@ import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../kendo/helpers";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const ActiveDropdown = (props: GridCellProperties) => {
@@ -80,7 +81,7 @@ export const ActiveDropdown = (props: GridCellProperties) => {
       ) : (
         <div className={classes.topButton}>
           <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
-          <p className={classes.value}>{formattedValue}</p>
+          <Tooltip customClass={classes.value} data={formattedValue} />
         </div>
       )}
     </td>
