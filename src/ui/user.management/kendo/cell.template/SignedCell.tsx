@@ -4,6 +4,7 @@ import { useIntl } from "react-intl";
 import { authActions } from "../../../../state/ducks/auth";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import { toastInfo } from "../../../components/notifications";
+import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import KendoGridStyles from "../styles";
@@ -68,14 +69,16 @@ export const SignedCell = (props) => {
       {!props.dataItem.inEdit && (
         <span>
           {props.dataItem?.user?.confirmed ? (
-            "Signed up"
+            <Text translation="user.management.signed.up" />
           ) : (
             <Link
               component="button"
               variant="body2"
               onClick={() => handleResendEmail(props.dataItem)}
             >
-              <span className={classes.link}>Resend signup email</span>
+              <span className={classes.link}>
+                <Text translation="user.management.resend.signup.email" />
+              </span>
             </Link>
           )}
         </span>
