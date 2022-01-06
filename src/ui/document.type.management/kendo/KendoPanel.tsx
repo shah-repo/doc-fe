@@ -237,7 +237,16 @@ export function KendoGrid<T extends { id?: string }>({
   const BooleanFilterCell = (props: any) => (
     <DropdownFilterCell
       {...props}
-      data={gridConfiguration.booleanFilterCellOptions}
+      data={[
+        {
+          text: intl.formatMessage({ id: "common.true" }),
+          value: true,
+        },
+        {
+          text: intl.formatMessage({ id: "common.false" }),
+          value: false,
+        },
+      ]}
       defaultItem={{
         text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
         value: "All",
