@@ -1,6 +1,7 @@
 import { chain } from "lodash";
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
+import { DateFields } from "./types";
 
 const columns: KendoColumn[] = [
   {
@@ -60,7 +61,7 @@ const columns: KendoColumn[] = [
     orderIndex: 5,
   },
   {
-    field: "createdAt",
+    field: DateFields.CREATED_AT,
     title: "ASSIGNED DATE",
     show: true,
     locked: false,
@@ -71,7 +72,7 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.DATE_INFO,
   },
   {
-    field: "dueOn",
+    field: DateFields.DUE_ON,
     title: "DUE DATE",
     show: true,
     filter: "text",
@@ -83,7 +84,7 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.DATE_INFO,
   },
   {
-    field: "completedAt",
+    field: DateFields.COMPLETED_AT,
     title: "COMPLETED ON",
     show: true,
     filter: "text",
