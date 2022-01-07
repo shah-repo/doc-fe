@@ -23,6 +23,7 @@ import { documentTypeActions } from "../../../state/ducks/documentRevisions/docu
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -43,7 +44,6 @@ import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import { Schema } from "./column.templates/Schema";
 import { EditDropdownCellFormatter, getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
-import { DropdownFilterCell } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
@@ -225,7 +225,7 @@ export function KendoGrid<T extends { id?: string }>({
 
   const DropdownFilterCellTemplate = (props: GridFilterCellProps) => {
     const result: ResultProps  = getDropDownDataSource(props.field || "");
-    return <DropdownFilterCell
+    return <DropdownFilterTemplate
       {...props}
       data={result.dataSource}
       defaultItem={defaultItem}
@@ -235,7 +235,7 @@ export function KendoGrid<T extends { id?: string }>({
     />;
   };
   const BooleanFilterCell = (props: any) => (
-    <DropdownFilterCell
+    <DropdownFilterTemplate
       {...props}
       data={[
         {

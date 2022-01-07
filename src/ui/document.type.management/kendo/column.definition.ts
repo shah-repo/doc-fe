@@ -42,7 +42,7 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
-  groupable: false,
+  groupable: true,
   orderIndex: 3,
 },
 {
@@ -52,7 +52,7 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
-  groupable: false,
+  groupable: true,
   orderIndex: 4,
 },
 {
@@ -62,7 +62,7 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
-  groupable: false,
+  groupable: true,
   orderIndex: 5,
 },
 {
@@ -72,7 +72,7 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
-  groupable: false,
+  groupable: true,
   orderIndex: 6,
 },
 {
@@ -82,7 +82,7 @@ const columns: KendoColumn[] = [{
   filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
-  groupable: false,
+  groupable: true,
   orderIndex: 7,
 }, {
   field: "startingNumber",
