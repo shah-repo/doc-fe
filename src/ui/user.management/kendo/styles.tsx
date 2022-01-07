@@ -15,9 +15,6 @@ const KendoGridStyles = makeStyles((theme) => ({
     width: "calc(100vw - 263px)",
     height: "calc(100vh - 105px)",
   },
-  loading: {
-    top: 0,
-  },
   groupCell: {
     whiteSpace: "pre-wrap",
   },

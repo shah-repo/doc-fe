@@ -1,8 +1,9 @@
 import { TextField } from "@material-ui/core";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 
-export const NameCell = (props) => {
+export const NameCell = (props: GridCellProperties) => {
   const updateNameField = (event: any) => {
     props.dataItem.name = event?.target?.value;
   };

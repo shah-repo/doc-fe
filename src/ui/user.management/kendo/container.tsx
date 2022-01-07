@@ -35,15 +35,11 @@ const UserManagementKendoContainer: React.FunctionComponent = () => {
     return <Redirect to={HOME_URL} />;
   }
 
-  const clearFilter = () =>
-    dispatch(tableSearchActions.clearSearchCriteria(TABLE_NAME));
-
   return (
     <KendoPresenter
       tableName={TABLE_NAME}
       tableCriteria={tableCriteria}
       data={data}
-      clearFilter={clearFilter}
     />
   );
 };
