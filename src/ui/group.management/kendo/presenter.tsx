@@ -49,9 +49,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
           gridConfiguration={gridConfiguration}
           queryUrl={GROUPS_URL}
           tableName={tableName}
-          onSelect={({ dataItem }) =>
-            () =>
-              handlePermission(dataItem)}
+          onSelect={({ dataItem }) => () => handlePermission(dataItem)}
           refreshTable={refreshTable}
           canCreateGroups={canCreateGroups}
           gridData={tableData}
