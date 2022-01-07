@@ -9,7 +9,7 @@ const CellRender = (td: any, props: GridCellProps) => {
     const formatMessageMap = (text: string | number) => intl.formatMessage({ id: TranslatedText[text] });
     let children = <span>{td.props.children.props?.children}
       {typeof (props.dataItem.value) === "boolean" ? props.dataItem.value ?
-        formatMessageMap(DisplayText.YES) : formatMessageMap(DisplayText.NO) : props.dataItem.value}</span>;
+        formatMessageMap(DisplayText.YES) : formatMessageMap(DisplayText.NO) : null}</span>;
     if (props.dataItem.field === "active") {
       children = (
         <span>{td.props.children.props?.children} {props.dataItem.value ?
