@@ -1,24 +1,44 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
-let createdCompany;
-let loginResponse;
-let multipleCompanies;
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
 const newCompanyAbbr = "NC-" + randomNumberForCompany;
-
+const apiCreatedCompany = {
+  employees: [],
+  documentTypes: [],
+};
 let lhrUrl;
 let lhrUrl1;
 let lhrUrl2;
 let lhrUrl3;
 let lhrUrl4;
 let lhrUrl5;
+let createdCompany;
+let adminEmployee;
+let thirdEmployee;
+let loginResponse;
+let multipleCompanies;
+let approvalRequestDocumentType;
+let equipmentDocumentType;
+let partDocumentType;
+let MPIDocumentType;
+let LHRtDocumentType;
+let LHRDocumentType;
+let group;
+let initialArDocument;
+let equipmentDocument;
+let createdPartDocument;
+let createdMPIDocument;
+let createdLHRtDocument;
+let ceoGroup;
 
 context("DAM approvals in LHR", () => {
   before(() => {
@@ -707,12 +727,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Upload Users List JSON", () => {
-        cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
-      });
-
-      it("Upload logo picture 'image.jpg'", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
-        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.atchUploadUserListJSONForNCO({ fileName: "dam_users.csv", queue: 0 });
       });
 
       it("Save document", () => {
@@ -736,20 +751,487 @@ context("DAM approvals in LHR", () => {
     });
   });
 
-  context("Add a User, Part doc, MPI doc, LHRt doc", () => {
-    context("Login user", () => {
-      it("Logs user in", () => {
-        cy.authLogin({
-          email: USERS[1].email,
+  context("Add new User, Part doc, MPI doc, LHRt doc", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
+    it("Intercept APIs", () => {
+      cy.intercept({ method: "GET", pathname: "/api/v1/company/mine" }, (req) => {
+        req.reply((res) => {
+          if (res.body !== "") {
+            const response = res.body;
+            apiCreatedCompany.employees = response.employees;
+            adminEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+            thirdEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          }
+        });
+      }).as("response");
+
+      cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
+        req.reply((res) => {
+          if (res.body !== "") {
+            apiCreatedCompany.documentTypes = res.body;
+            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Approval Request");
+            equipmentDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Equipment or Fixture");
+            partDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Component Specification");
+            MPIDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Manufacturing Process Instruction");
+            LHRtDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Lot History Record Template");
+            LHRDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Lot History Record");
+          }
+        });
+      }).as("response1");
+
+      cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
+        req.reply((res) => {
+          if (res.body !== "") {
+            loginResponse = res.body;
+          }
+        });
+      }).as("response2");
+
+      cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+      cy.wait("@response");
+      cy.wait("@response1");
+      cy.wait("@response2");
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("[API]Create equipment one", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "All Users",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Equipment one</p>",
+              document: {
+                docId: "ET-00003",
+                documentType: {
+                  id: equipmentDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Equipment one",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            equipmentDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: equipmentDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
         });
       });
+    });
 
-      it("Selects company", () => {
-        cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    it("[API]Create part document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Part document</p>",
+          document: {
+            docId: "PRT-00005",
+            documentType: {
+              id: partDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Part document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPartDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPartDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
       });
+    });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
+    it("[API]Create MPI document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>MPI created through API</p>",
+          document: {
+            docId: "PI-00001",
+            documentType: {
+              id: MPIDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "API MPI",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [],
+            schema: [
+              {
+                name: "fb-mpi-procedure-section-built-in",
+                type: "section",
+                index: 0,
+                label: "form.builder.mpiprocedure",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "mpi-procedure-built-in",
+                type: "mpiprocedure",
+                index: 1,
+                stepIndex: 1,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                includeNotes: true,
+                editorConfig: {
+                  description: "<p>Description for step 1</p>",
+                  materials: [
+                    {
+                      id: "kvasuama",
+                      title: createdPartDocument.id,
+                      quantity: 3,
+                      unit: "each",
+                    },
+                  ],
+                  equipment: [
+                    {
+                      id: "kvasulmm",
+                      title: equipmentDocument.id,
+                    },
+                  ],
+                },
+              },
+              {
+                name: "lhrs-start-quantity",
+                type: "quantity",
+                index: 2,
+                label: "Start quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Start quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
+                name: "lhrs-accepted-quantity",
+                type: "quantity",
+                index: 3,
+                label: "Accepted quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Accepted quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
+                name: "lhrs-rejected-quantity",
+                type: "quantity",
+                index: 4,
+                label: "Rejected quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                editorProperties: [
+                  "includeNotes",
+                ],
+                validationAttribute: "Rejected quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+                includeNotes: true,
+              },
+              {
+                name: "approvals-built-in",
+                type: "approvals",
+                index: 5,
+                label: "Approvals",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                uniqueSchemaItem: true,
+                validationAttribute: "Approvals",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdMPIDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdMPIDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Create LHRt document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>LHRt created with API</p>",
+          document: {
+            docId: "LHRT-00003",
+            documentType: {
+              id: LHRtDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "API LHRt document",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [
+              { id: LHRDocumentType[0].id },
+            ],
+            schema: [
+              {
+                name: "lhr-selected-part",
+                type: "partsselection",
+                index: 0,
+                label: "Part to be Manufactured",
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+                editorConfig: {
+                  id: createdPartDocument.documentId,
+                },
+              },
+              {
+                name: "lhr_initial_quantity",
+                type: "quantity",
+                index: 1,
+                label: "Initial Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationAttribute: "Initial Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lhr-end-quantity",
+                type: "quantity",
+                index: 2,
+                label: "End Quantity",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                outputDisabled: true,
+                validationAttribute: "End Quantity",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lhr-build-type",
+                type: "radiogroup",
+                index: 3,
+                label: "Build Type",
+                options: [
+                  {
+                    text: "R&D",
+                    value: "R&D",
+                  },
+                  {
+                    text: "Production",
+                    value: "Production",
+                  },
+                ],
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                validationAttribute: "Build Type",
+                deleteInFormDisabled: true,
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lhr-due-date",
+                type: "datepicker",
+                index: 4,
+                label: "Due Date",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                validationMode: "default",
+                validationAttribute: "Due Date",
+                applicableValidationSchema: true,
+              },
+              {
+                name: "lhrstep-built-in",
+                type: "lhrstep",
+                index: 5,
+                label: "LHR Step",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                validationMode: "default",
+                applicableValidationSchema: true,
+                stepIndex: 1,
+                editorConfig: {
+                  value: createdMPIDocument.id,
+                },
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kvateryo",
+                uniqueSchemaItem: true,
+                index: 6,
+              },
+            ],
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdLHRtDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdLHRtDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "CEO",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        ceoGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: ceoGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: thirdEmployee.id }],
+        },
       });
     });
 
@@ -766,248 +1248,16 @@ context("DAM approvals in LHR", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
-    context("Add a new User which is not in DAM role in 'CEO' group", () => {
-      it("Navigates to User management", () => {
-        cy.usrNavigateToUserManagement();
-      });
-
-      it("Clicks on 'Add Employee'", () => {
-        cy.usrClickAddEmployee();
-      });
-
-      it("Enters e-mail", () => {
-        cy.usrEnterEmail({ email: USERS[3].email });
-      });
-
-      it("Enters name", () => {
-        cy.usrEnterName({ name: USERS[3].name });
-      });
-
-      it("Clicks the save button", () => {
-        cy.usrClickSaveButton();
-      });
-
-      it("Clicks on the close button", () => {
-        cy.usrClickCloseDialogButton();
-      });
-
-      it("Navigates to Group management", () => {
-        cy.grpNavigateToGroupManagement();
-      });
-
-      it("Select the 'CEO' group", function() {
-        cy.get(".ReactVirtualized__Table__rowColumn").contains("CEO").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Assigns user to the group", () => {
-        cy.grpAssignUser({ name: USERS[3].name });
-      });
-
-      it("Saves the group", () => {
-        cy.grpSaveGroupPatch();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-    });
-
-    context("Create Part", () => {
-      it("Navigate to Document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click on 'Create a document' button", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter title 'CS form", () => {
-        cy.drEnterDocumentTitle({ name: "CS form" });
-      });
-
-      it("Enter description 'CS form description'", () => {
-        cy.drEnterDocumentDescription({ description: "CS form description" });
-      });
-
-      it("Select 'Form' document type from dropdown", () => {
-        cy.drSelectDocumentType({ documentType: "Form" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Select 'Component Specification' output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
-      });
-
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Click 'Create New' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId], () => {
-          cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.checkToastMessage({ exists: false });
-      });
-
-      it("Enter part title 'Part document", () => {
-        cy.drEnterDocumentTitle({ name: "Part document" });
-      });
-
-      it("Enter part description 'Part document description'", () => {
-        cy.drEnterDocumentDescription({ description: "Part document description" });
-      });
-
-      it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-    });
-
-    context("Create MPI document", () => {
-      it("Navigate to Document list", () => {
-        cy.navigToDocumentList();
-      });
-
-      it("Click on 'Create a document' button", () => {
-        cy.cmpClickCreateNewDocument();
-      });
-
-      it("Enter title 'MPI document", () => {
-        cy.drEnterDocumentTitle({ name: "MPI document" });
-      });
-
-      it("Enter description 'MPI document description'", () => {
-        cy.drEnterDocumentDescription({ description: "MPI document description" });
-      });
-
-      it("Select 'Manufacturing Process Instruction' document type from dropdown", () => {
-        cy.drSelectDocumentType({ documentType: "Manufacturing Process Instruction" });
-      });
-
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-
-      it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-    });
-
-    context("Create LHRt document", () => {
-      context("Start document creation flow", () => {
-        it("Navigate to Document list", () => {
-          cy.unClick();
-          cy.navigToDocumentList();
-        });
-
-        it("Click on 'Create a document' button", () => {
-          cy.cmpClickCreateNewDocument();
-        });
-      });
-
-      context("Fill LHRt document attributes", () => {
-        it("Enter document title 'LHRt document'", () => {
-          cy.drEnterDocumentTitle({ name: "LHRt document" });
-        });
-
-        it("Fill LHRt document description", () => {
-          cy.drEnterDocumentDescription({ description: "LHRt document description" });
-        });
-
-        it("Select 'LHRt' document type", () => {
-          cy.drSelectDocumentType({ documentType: "Lot History Record Template" });
-        });
-
-        it("Select 'Numeric' revision stage", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-
-        it("Select 'Lot History Record' output document type", () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
-        });
-
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-
-        it("Select 'Part document' for Part to be Manufactured", () => {
-          cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
-          });
-        });
-
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
-          });
-        });
-
-        it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-            });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
-      });
-    });
   });
 
   context("Owner and operator in LHR", () => {
     context("Create LHR", () => {
-      it("Click create new document from LHRt", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.GetAutocompleteOptions], () => {
-          cy.drCreateNewDocumentFromForm();
-          cy.url().then((url: any) => {
-            lhrUrl = url;
-          });
-        });
+      it("Navigate to LHR landing page", () => {
+        cy.navigToLHR();
+      });
+
+      it("Click create new button", () => {
+        cy.recCreateRecordFromLandingPage();
       });
 
       it("Enter initial quantity", () => {
@@ -1021,13 +1271,13 @@ context("DAM approvals in LHR", () => {
 
       it("Add 'Due Date'", () => {
         cy.poAddDateRequired();
+        cy.url().then((url: any) => {
+          lhrUrl = url;
+        });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1043,7 +1293,7 @@ context("DAM approvals in LHR", () => {
       it("Reload page", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.reload();
         });
@@ -1082,9 +1332,9 @@ context("DAM approvals in LHR", () => {
       it("Verify 3 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 3);
-        cy.get(".MuiAutocomplete-popper ul li").eq(0).should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(1).should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(2).should("contain.text", USERS[3].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
       });
     });
 
@@ -1106,7 +1356,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl);
         });
@@ -1135,17 +1385,13 @@ context("DAM approvals in LHR", () => {
       it("Verify 3 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 3);
-        cy.get(".MuiAutocomplete-popper ul li").eq(0).should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(1).should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(2).should("contain.text", USERS[3].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
       });
 
       it("Click 'START MPI'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.mpiStart();
       });
 
       it("Add an Approval", () => {
@@ -1156,10 +1402,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1175,7 +1418,7 @@ context("DAM approvals in LHR", () => {
       it("visit the LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl);
         });
@@ -1210,10 +1453,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1237,12 +1477,16 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl);
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Submit for approval", () => {
@@ -1251,19 +1495,8 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Owner should display approve button", () => {
-        cy.get("[data-cy='form.builder.request.approve']").should("be.exist");
-      });
-
       it("Click Approve button", () => {
-        cy.get("[data-cy='form.builder.request.approve']").arrowClick();
-      });
-
-      it("Enter password", () => {
-        cy.get("[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([ CyRoutes.PostApprovalsApprove ], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
+        cy.ebApprove();
       });
     });
   });
@@ -1313,6 +1546,10 @@ context("DAM approvals in LHR", () => {
     });
 
     context("Revise DAM", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Open the DAM and revise it", () => {
         cy.navigToDocumentList();
         cy.dlClearFilters();
@@ -1327,8 +1564,6 @@ context("DAM approvals in LHR", () => {
 
       it("Click the save button", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release DAM document", () => {
@@ -1347,9 +1582,6 @@ context("DAM approvals in LHR", () => {
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-        cy.url().then((url: any) => {
-          lhrUrl1 = url;
-        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1361,18 +1593,17 @@ context("DAM approvals in LHR", () => {
 
       it("Add 'Due Date'", () => {
         cy.poAddDateRequired();
+        cy.url().then((url: any) => {
+          lhrUrl1 = url;
+        });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drSaveDocumentWithoutaudit();
       });
 
       it("Click on sidebar permission icon to add group", () => {
+        cy.cmpTurnOnAutosave();
         cy.get("[data-cy='permission-icon']").arrowClick();
       });
 
@@ -1400,7 +1631,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl1);
         });
@@ -1437,7 +1668,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl1);
         });
@@ -1477,6 +1708,10 @@ context("DAM approvals in LHR", () => {
         cy.drClickReviseDocument();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it(`Remove ${USERS[4].name} in approving users`, () => {
         cy.contains(USERS[4].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
       });
@@ -1488,8 +1723,6 @@ context("DAM approvals in LHR", () => {
 
       it("Click the save button", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release DAM document", () => {
@@ -1508,9 +1741,6 @@ context("DAM approvals in LHR", () => {
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-        cy.url().then((url: any) => {
-          lhrUrl2 = url;
-        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1522,13 +1752,13 @@ context("DAM approvals in LHR", () => {
 
       it("Add 'Due Date'", () => {
         cy.poAddDateRequired();
+        cy.url().then((url: any) => {
+          lhrUrl2 = url;
+        });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1561,7 +1791,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl2);
         });
@@ -1598,7 +1828,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl2);
         });
@@ -1638,12 +1868,12 @@ context("DAM approvals in LHR", () => {
         cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click create new button", () => {
@@ -1669,10 +1899,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1682,7 +1909,6 @@ context("DAM approvals in LHR", () => {
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
-
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().find(".MuiChip-deleteIcon").arrowClick();
       });
 
@@ -1709,7 +1935,7 @@ context("DAM approvals in LHR", () => {
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl3);
         });
@@ -1742,12 +1968,12 @@ context("DAM approvals in LHR", () => {
         cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click create new button", () => {
@@ -1773,20 +1999,17 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'START MPI'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.mpiStart();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
@@ -1807,10 +2030,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1833,6 +2053,10 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -1843,10 +2067,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1862,12 +2083,16 @@ context("DAM approvals in LHR", () => {
       it("visit the LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl4);
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Verify no approver should be selected", () => {
@@ -1891,10 +2116,10 @@ context("DAM approvals in LHR", () => {
       it("Verify 4 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 4);
-        cy.get(".MuiAutocomplete-popper ul li").eq(0).should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(1).should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(2).should("contain.text", USERS[3].name);
-        cy.get(".MuiAutocomplete-popper ul li").eq(3).should("contain.text", USERS[4].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
       });
 
       it("Add approver and verify checkmark should be ticked", () => {
@@ -1906,10 +2131,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1921,14 +2143,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Approve button", () => {
-        cy.get("[data-cy='form.builder.request.approve']").arrowClick();
-      });
-
-      it("Enter password", () => {
-        cy.get("[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([ CyRoutes.PostApprovalsApprove ], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
+        cy.ebApprove();
       });
 
       it("Click 'Revise Document' LHR", () => {
@@ -1973,12 +2188,12 @@ context("DAM approvals in LHR", () => {
         cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click create new button", () => {
@@ -1987,9 +2202,6 @@ context("DAM approvals in LHR", () => {
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-        cy.url().then((url: any) => {
-          lhrUrl5 = url;
-        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1997,13 +2209,13 @@ context("DAM approvals in LHR", () => {
       it("Select 'Production' build type", () => {
         cy.unClick();
         cy.get("[value=\"Production\"]").check();
+        cy.url().then((url: any) => {
+          lhrUrl5 = url;
+        });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -2030,19 +2242,19 @@ context("DAM approvals in LHR", () => {
         cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Goto LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl5);
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("New owner can add 'Due Date'", () => {
@@ -2056,20 +2268,17 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'START MPI'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.mpiStart();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
@@ -2090,10 +2299,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -2109,12 +2315,16 @@ context("DAM approvals in LHR", () => {
       it("visit the LHR", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetSpecificDocumentType, CyRoutes.GetFieldLocks, CyRoutes.DocPreview,
+          CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
         ], () => {
           cy.visit(lhrUrl5);
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("New owner can add approver and verify checkmark should be ticked", () => {
@@ -2126,10 +2336,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
+        cy.drSaveDocumentWithoutaudit();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -2141,20 +2348,17 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Approve button", () => {
-        cy.get("[data-cy='form.builder.request.approve']").arrowClick();
-      });
-
-      it("Enter password", () => {
-        cy.get("[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([ CyRoutes.PostApprovalsApprove ], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
+        cy.ebApprove();
       });
 
       it("Click 'Revise Document' LHR", () => {
         cy.recClickUpdateRecord();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Verify no approver should be selected", () => {
@@ -2190,16 +2394,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Approve button", () => {
-        cy.get("[data-cy='form.builder.request.approve']").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Enter password", () => {
-        cy.get("[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([ CyRoutes.PostApprovalsApprove ], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
+        cy.ebApprove();
       });
     });
   });
