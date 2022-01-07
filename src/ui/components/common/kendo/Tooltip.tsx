@@ -5,13 +5,15 @@ import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTo
 interface Props {
   data: string | number;
   customClass?: string;
-  childrenElement?: any;
+  childrenElement?: JSX.Element;
+  placement?: "bottom" | "left" | "right" | "top";
 }
 
 const Tooltip: React.FunctionComponent<Props> = ({
   data,
   customClass,
   childrenElement,
+  placement = "left",
 }) => {
   const styles = makeStyles(() => ({
     tooltip: {
@@ -28,16 +30,14 @@ const Tooltip: React.FunctionComponent<Props> = ({
       interactive={true}
       enterDelay={1000}
       title={
-        <Typography
-          component={"p"}
-          className={`${classes.tooltip}`}
-        >
+        <Typography component={"p"} className={`${classes.tooltip}`}>
           {typeof data === "string" ? data?.replace(/,/g, ",\n") : data}
         </Typography>
       }
-      placement="left"
+      placement={placement}
       arrow
-    ><span>
+    >
+      <span>
         {!childrenElement && <span className={customClass}>{data}</span>}
         {childrenElement && childrenElement}
       </span>
