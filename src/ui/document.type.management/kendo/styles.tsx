@@ -2,11 +2,6 @@ import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme) => ({
-  root: {
-    textAlign: "right",
-    marginLeft: "5px",
-    fontFamily: "Sora",
-  },
   kGrid: {
     width: "calc(100vw - 255px)",
     height: "calc(100vh - 110px)",

@@ -20,7 +20,7 @@ export const Schema = (props) => {
   };
 
 
-  const onAddClick = (event) => {
+  const onAddClick = (event: any) => {
     if (props.onChange) {
       const schemaValue = checkIfJSONObject(event.schema, title);
       if (schemaValue && typeof schemaValue === "object") {

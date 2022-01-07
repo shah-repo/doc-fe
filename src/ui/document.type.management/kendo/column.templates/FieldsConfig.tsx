@@ -20,7 +20,7 @@ export const FieldsConfig = (props) => {
     setOpenForm(false);
   };
 
-  const onAddClick = (event) => {
+  const onAddClick = (event: any) => {
     if (props.onChange) {
       const fieldConfigValue = checkIfJSONObject(event.fieldsConfig, title);
       if (fieldConfigValue && typeof fieldConfigValue === "object") {
