@@ -3,6 +3,7 @@ import { get } from "lodash";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 import { getInitalsFromName } from "../../icons/avatar/helpers";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const UserAvatar = (props: GridCellProperties) => {
@@ -54,7 +55,7 @@ export const UserAvatar = (props: GridCellProperties) => {
               {getInitalsFromName(owner)}
             </Avatar>
           }
-          {owner}
+          <Tooltip data={owner}/>
         </Box>
       </td>
     );

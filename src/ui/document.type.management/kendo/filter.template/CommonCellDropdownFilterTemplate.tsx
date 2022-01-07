@@ -92,6 +92,10 @@ export const EditDropdownCellFormatter = (props) => {
   if (props.rowType === "groupHeader") {
     return null;
   }
+  const defaultItem = {
+    text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
+    value: "",
+  };
   return (
     <td>
       {isEdit ? (
@@ -99,6 +103,7 @@ export const EditDropdownCellFormatter = (props) => {
           onChange={handleChange}
           value={localizedData.dataSource.find((c) => c.value === dataValue)}
           data={localizedData.dataSource}
+          defaultItem={defaultItem}
           textField="text"
           dataItemKey="value"
         />
