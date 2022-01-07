@@ -756,10 +756,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    // it(`Open and complete training for ${USERS[1].name}`, () => {
-    //   cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-    //     .find(".MuiButton-containedSecondary").then(($el) => {
-    it(`Open and complete training`, () => {
+    it(`Open and complete training for ${USERS[1].name}`, () => {
       cy.contains(`${releasedDoc1Id}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
@@ -776,10 +773,7 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    // it(`Open and complete training for ${USERS[2].name}`, () => {
-    //   cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-    //     .find(".MuiButton-containedSecondary").then(($el) => {
-    it(`Open and complete training`, () => {
+    it(`Open and complete training for ${USERS[2].name}`, () => {
       cy.contains(`${releasedDoc1Id}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);

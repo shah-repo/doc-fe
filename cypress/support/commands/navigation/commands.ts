@@ -14,6 +14,7 @@ declare global {
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
+      navigToNewDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
@@ -57,13 +58,13 @@ Cypress.Commands.add("navigToDashboard", () => {
     });
 });
 
-// Cypress.Commands.add("navigToNewDashboard", () => {
-//   cy.wrapWithWaitOnApiCall(
-//     CyRoutes.GetDashboardFeed,
-//     () => {
-//       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
-//     });
-// });
+Cypress.Commands.add("navigToNewDashboard", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetDashboardFeed,
+    () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+    });
+});
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
   cy.get("a[href=\"/document_type_management\"]").arrowClick();

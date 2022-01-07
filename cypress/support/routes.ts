@@ -598,7 +598,6 @@ export const routes: ICyRoutes =   {
   ChangeRequestApprove: {
     requestConfig: {
       method: "POST",
-      // url: "/api/v1/change_requests/*/approve",
       url: "/api/v1/approvals/*/approve",
     },
     callConfig: {
@@ -686,13 +685,13 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/document_revisions/cancel/*",
     },
   },
-  // GetPendingActions: {
-  //   requestConfig: {
-  //     method: "GET",
-  //     url: "/api/v1/pending_actions",
-  //   },
-  // },
   GetPendingActions: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/pending_actions",
+    },
+  },
+  GetDashboardFeed: {
     requestConfig: {
       method: "GET",
       url: "/api/v1/dashboard_feed",

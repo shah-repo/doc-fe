@@ -755,14 +755,7 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    // it(`Open and complete training for ${USERS[1]}`, () => {
-    //   cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-    //     .find(".MuiButton-containedSecondary").then(($el) => {
-    //       const link = $el.attr("href");
-    //       cy.visit(CONFIG.FE_URL + link);
-    //     });
-    //   cy.trCompleteTraining();
-    // });
+
     it(`Open and complete training for ${USERS[1].name}`, () => {
       cy.contains(`${releasedDoc1Id}`).then(($el) => {
         const link = $el.attr("href");
@@ -858,8 +851,7 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it("Verify training notification for doc with rev 2 should be present", () => {
-      // cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 2 released doc1`).should("exist");
+    it(`Verify training notification for doc with rev 2 should be present`, () => {
       cy.contains(`${releasedDoc1Id}`).should("exist");
       cy.contains(`released doc1`).should("exist");
     });
@@ -878,8 +870,7 @@ context("Revising Documents assigned as Training material", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification for doc with rev 2 should be present", () => {
-      // cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 2 released doc1`).should("exist");
+    it(`Verify training notification for doc with rev 2 should be present`, () => {
       cy.contains(`${releasedDoc1Id}`).should("exist");
       cy.contains(`released doc1`).should("exist");
     });

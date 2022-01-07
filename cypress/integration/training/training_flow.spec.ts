@@ -2,8 +2,6 @@
 /// <reference types="Cypress" />
 import moment from "moment";
 import "moment-timezone";
-// import "moment-timezone";
-// import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -1067,20 +1065,13 @@ context("Training Flow test", () => {
     });
 
     it("Verify training notification", () => {
-      // cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
       cy.contains(`${releasedFormId}`).should("exist");
       cy.contains(`released form 1`).should("exist");
     });
   });
 
   context("Open and complete Training", () => {
-    it("Open assigned Training", () => {
-      // cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-      //   .find(".MuiButton-containedSecondary").then(($el) => {
-      //     const link = $el.attr("href");
-      //     cy.visit(CONFIG.FE_URL + link);
-      //   });
-
+    it(`Open assigned Training`, () => {
       cy.contains(`${releasedFormId}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
@@ -1210,19 +1201,12 @@ context("Training Flow test", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it("Verify training notification", () => {
-      // cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+    it(`Verify training notification`, () => {
       cy.contains(`${releasedFormId}`).should("exist");
       cy.contains(`released form`).should("exist");
     });
 
-    it("Open assigned Training", () => {
-      // cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-      //   .find(".MuiButton-containedSecondary").then(($el) => {
-      //     const link = $el.attr("href");
-      //     cy.visit(CONFIG.FE_URL + link);
-      //   });
-
+    it(`Open assigned Training`, () => {
       cy.contains(`${releasedFormId}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);

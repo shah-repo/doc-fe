@@ -297,19 +297,17 @@ Cypress.Commands.add("poAMCheckForAlertMessage", () => {
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
-  // cy.get("button[aria-label=reject]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowClick().arrowType(params.password);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("poRejectARNew", (params: {password: string}) => {
-  // cy.get("button[aria-label=reject]").first().arrowClick();
-  cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-  cy.get("[data-cy=\"transition-reject\"]").first().trigger("mouseover");
-  cy.get("[data-cy=\"transition-reject\"]").first().arrowClick({ force: true });
-  cy.get("[data-cy=\"transition.action.password\"]").arrowClick().arrowType(params.password);
-  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+  cy.get(`[data-cy="transition.action.password"]`).arrowClick().arrowType(params.password);
+  cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 

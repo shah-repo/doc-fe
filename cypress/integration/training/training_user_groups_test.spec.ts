@@ -854,8 +854,7 @@ context("Training user groups test", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick().wait(2000);
     });
 
-    it("Verify training notification", () => {
-      // cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+    it(`Verify training notification ${releasedFormId}`, () => {
       cy.contains(`${releasedFormId}`).should("exist").wait(1000);
       cy.contains(`released form`).should("exist").wait(1000);
     });
@@ -910,12 +909,7 @@ context("Training user groups test", () => {
   });
 
   context("Open and complete Training", () => {
-    it("Open assigned Training", () => {
-      // cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-      //   .find(".MuiButton-containedSecondary").then(($el) => {
-      //     const link = $el.attr("href");
-      //     cy.visit(CONFIG.FE_URL + link);
-      //   });
+    it(`Open assigned Training`, () => {
       cy.contains(`${releasedFormId}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link).wait(2000);

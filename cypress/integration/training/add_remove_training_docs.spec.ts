@@ -807,8 +807,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      // cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 1 released doc1`).should("exist");
-      // cy.contains(`TRAINING: ${releasedDoc2Id} - Rev 1 released doc2`).should("exist");
       cy.contains(`${releasedDoc1Id}`).should("exist");
       cy.contains(`released doc1`).should("exist");
       cy.contains(`${releasedDoc2Id}`).should("exist");
@@ -819,10 +817,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Complete trainings", () => {
     it("Open and complete second training", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
-      // cy.get("#Dashboard-open-1").then(($el) => {
-      //   const link = $el.attr("href");
-      //   cy.visit(CONFIG.FE_URL + link);
-      // });
       cy.contains(`released doc2`).arrowClick();
       cy.trCompleteTraining();
     });
@@ -832,10 +826,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Open and complete first training", () => {
-      // cy.get("#Dashboard-open-0").then(($el) => {
-      //   const link = $el.attr("href");
-      //   cy.visit(CONFIG.FE_URL + link);
-      // });
       cy.contains(`released doc1`).arrowClick();
       cy.trCompleteTraining();
     });
@@ -966,18 +956,18 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-
+      cy.cmpSelectCompany({
+        name: createdCompany.name,
+        multiple: multipleCompanies,
+      });
     });
 
-    it("Verify training notification for doc 2 should not present", () => {
-      // cy.contains(`TRAINING: ${releasedDoc2Id} - Rev 1 released doc2`).should("not.exist");
+    it(`Verify training notification for doc 2 should not present`, () => {
       cy.contains(`${releasedDoc2Id}`).should("not.exist");
       cy.contains(`released doc2`).should("not.exist");
     });
 
-    it("Verify training notification for doc 3 should be present", () => {
-      // cy.contains(`TRAINING: ${releasedDoc3Id} - Rev 1 released doc3`).should("exist");
+    it(`Verify training notification for doc 3 should be present`, () => {
       cy.contains(`${releasedDoc3Id}`).should("exist");
       cy.contains(`released doc3`).should("exist");
     });

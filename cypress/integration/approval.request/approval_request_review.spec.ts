@@ -332,19 +332,10 @@ context("Approval request form scenario", () => {
       });
 
       it("Rejecting request gives prompt", () => {
-        // cy.arRejectComfirmationAR();
         cy.arRejectComfirmationARNew();
       });
 
-      // it("Verify message is shown if e-signature not met", () => {
-      //   SystemRequirement("REQ-0880");
-      //   cy.arVerifySignatureIsNotMet();
-      //   cy.closeAllAlertMessages();
-      // });
-
       it("Reject AR from dashboard", () => {
-      // cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-      // cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCRNew, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
           cy.poRejectARNew({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         });
@@ -479,7 +470,7 @@ context("Approval request form scenario", () => {
 
     it("Navigate to dashboard", () => {
       SystemRequirement("REQ-2200");
-      cy.navigToDashboard();
+      cy.navigToNewDashboard();
     });
 
     it("Verify there is no dashboard notifications", () => {

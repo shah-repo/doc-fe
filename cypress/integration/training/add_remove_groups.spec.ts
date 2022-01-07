@@ -844,7 +844,7 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).arrowClick();
     });
 
-    it("Click on 'Revise Document'", () => {
+    it(`Click on Revise Document`, () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
     });
 
@@ -970,8 +970,7 @@ context("Add/Remove groups from Training Curriculum", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
 
-      it("Verify training notification should be present", () => {
-        // cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 1 released doc1`).should("exist");
+      it(`Verify training notification should be present`, () => {
         cy.contains(`${releasedDoc1Id}`).should("exist");
         cy.contains(`released doc1`).should("exist");
       });
