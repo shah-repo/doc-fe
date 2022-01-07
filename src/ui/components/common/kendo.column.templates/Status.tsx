@@ -2,6 +2,7 @@ import { Chip, Grid, makeStyles } from "@material-ui/core";
 import React from "react";
 import Colors from "../../../layout/theme/utils/colors";
 import { statusClassMapping } from "../kendo/helpers";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const Status = (props: GridCellProperties) => {
@@ -55,10 +56,17 @@ export const Status = (props: GridCellProperties) => {
         alignContent="flex-start"
         justify="flex-start"
       >
-        <Chip
-          size="small"
-          className={`${classes.chip} ${classes[statusClassMapping[status]]}`}
-          label={status}
+        <Tooltip
+          data={status}
+          childrenElement={
+            <Chip
+              size="small"
+              className={`${classes.chip} ${
+                classes[statusClassMapping[status]]
+              }`}
+              label={status}
+            />
+          }
         />
       </Grid>
     </td>
