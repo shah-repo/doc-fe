@@ -1,3 +1,4 @@
+import { DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { get, orderBy } from "lodash";
 import React from "react";
@@ -9,10 +10,11 @@ import Tooltip from "../../../components/common/kendo/Tooltip";
 import { enumToOptions, translatedOptions } from "../../transform";
 
 
-const getDSByType = (type) => enumToOptions(type).map((o) => ({
-  text: o.label,
-  value: o.value,
-}));
+const getDSByType = (type: typeof GroupTag | typeof DOC_TYPE_GROUP) =>
+  enumToOptions(type).map((o: { label: string; value: string }) => ({
+    text: o.label,
+    value: o.value,
+  }));
 
 interface DataSourceProps {
   text: string;
@@ -26,17 +28,18 @@ interface ResultProps {
 export const getDropDownDataSource: (f: string) => ResultProps = (field: string) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const revisionStageOptions = translatedOptions(intl, REVISION_STAGE_OPTIONS).map((o) => ({
     text: o.label,
     value: o.value,
   }));
   const statusOptions = [
     {
-      text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+      text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
       value: true,
     },
     {
-      text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+      text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
       value: false,
     },
   ];
@@ -69,12 +72,13 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
 // MOVE IN ANOTHER FILE
 export const EditDropdownCellFormatter = (props) => {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const localizedData: ResultProps = getDropDownDataSource(props.field);
   const isEdit: boolean = get(
     props.dataItem,
-    intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
+    getTranslatedText(TranslatedText[DisplayText.INEDIT])
   );
-  const handleChange = (e) => {
+  const handleChange = (e: DropDownListChangeEvent) => {
     if (props.onChange) {
       props.onChange({
         dataIndex: 0,
@@ -92,6 +96,10 @@ export const EditDropdownCellFormatter = (props) => {
   if (props.rowType === "groupHeader") {
     return null;
   }
+  const defaultItem = {
+    text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
+    value: "",
+  };
   return (
     <td>
       {isEdit ? (
@@ -99,6 +107,7 @@ export const EditDropdownCellFormatter = (props) => {
           onChange={handleChange}
           value={localizedData.dataSource.find((c) => c.value === dataValue)}
           data={localizedData.dataSource}
+          defaultItem={defaultItem}
           textField="text"
           dataItemKey="value"
         />

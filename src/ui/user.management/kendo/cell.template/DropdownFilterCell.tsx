@@ -14,18 +14,17 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
 
 export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   const intl = useIntl();
-  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
+  const hasValue = (value: string) => value && value !== props.defaultItem;
 
   const onChange = (event: DropDownListChangeEvent) => {
-    hasValue = hasValue(event.target.value);
     props.onChange({
-      value: hasValue ? event.target.value : "",
-      operator: hasValue ? "contains" : "",
+      value: hasValue(event.target.value) ? event.target.value : "",
+      operator: hasValue(event.target.value) ? "contains" : "",
       syntheticEvent: event.syntheticEvent,
     });
   };
 
-  const onClearButtonClick = (event) => {
+  const onClearButtonClick = (event: React.MouseEvent) => {
     event.preventDefault();
     props.onChange({
       value: "",

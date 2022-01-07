@@ -22,7 +22,6 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, set, sortBy } from "lodash";
-import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -58,7 +57,6 @@ import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddGroupContainer from "../add.group/AddGroup.container";
 import { DEFAULT_ACTIVE_EMPLOYEES } from "../utils/types";
-// import { BooleanFilterCell } from "./cell.template/BooleanFilterCell";
 import { CommandCell } from "./cell.template/CommandCell";
 import { EmployeesCell } from "./cell.template/EmployeesCell";
 import { GroupCell } from "./cell.template/GroupCell";
@@ -86,10 +84,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   queryUrl,
   onSelect,
   refreshTable,
-  normalizrSchema,
   canCreateGroups,
 }: Props<T>) {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -136,7 +134,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     setResultState(processWithGroups(gridData, dataState));
   };
   const createGroupAsync = useAsync({
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryApi();
     },
     onError: (error) => {
@@ -288,9 +286,6 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
-    }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
@@ -309,10 +304,6 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     apiClient
       .request(requestConfig)
       .then((resp) => {
-        if (normalizrSchema) {
-          const { entities, result } = resp.data;
-          resp.data = denormalize(result, normalizrSchema, entities);
-        }
         resp.data = resp.data.map((el) => ({
           ...el,
           memberNames: el.employees.map((e) => e.user.name.trimLeft().trimEnd()).sort().join(", ") || "",
@@ -433,14 +424,14 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const BooleanFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
     {...props}
     data={[{
-      text: intl.formatMessage({ id: "common.official" }),
+      text: getTranslatedText("common.official"),
       value: true,
     }, {
-      text: intl.formatMessage({ id: "common.unofficial" }),
+      text: getTranslatedText("common.unofficial"),
       value: false,
     }]}
     defaultItem={{
-      text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+      text: getTranslatedText(TranslatedText[DisplayText.ALL]),
       value: "All",
     }}
   />;
@@ -503,7 +494,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     setColumnDefinitions(dataColumns);
     updateDataColumnsState(dataColumns);
   };
-  const editField = intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] });
+  const editField = getTranslatedText(TranslatedText[DisplayText.OFFICIAL]);
 
   const discardEditMode = (dataItem: LoadCompanyGroup) => {
     const index = gridData.findIndex((data) => data.id === dataItem.id);
@@ -538,7 +529,6 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           {...dataState}
           onExpandChange={onExpandChange}
           expandField="expanded"
-          // onRowClick={onSelect && (({ dataItem }) => !dataItem.inEdit && onSelect({ dataItem })())}
           onColumnResize={columnResize}
           onColumnReorder={columnReorder}
         >

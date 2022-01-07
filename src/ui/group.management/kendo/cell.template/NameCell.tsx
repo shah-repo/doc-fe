@@ -1,5 +1,6 @@
 import { TextField } from "@material-ui/core";
 import React from "react";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 
 export const NameCell = (props) => {
   const [name, setName] = React.useState("");
@@ -22,7 +23,7 @@ export const NameCell = (props) => {
           className={props.className}
           data-grid-col-index={props.columnIndex}
         >
-          <span>{props.dataItem.name}</span>
+          <Tooltip data ={props.dataItem.name}/>
         </td>
       )}
       {props.dataItem.inEdit && (

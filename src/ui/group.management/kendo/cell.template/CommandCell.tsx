@@ -1,13 +1,15 @@
-import { IconButton, makeStyles, Typography } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
-import Text from "../../../components/Text";
-import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import { useIntl } from "react-intl";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 import Colors from "../../../layout/theme/utils/colors";
 
 export const CommandCell = (props) => {
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const styles = makeStyles(() => ({
     button: {
       "&:hover": {
@@ -44,47 +46,37 @@ export const CommandCell = (props) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.add.group" />
-          </Typography>
-        }
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <IconButton
-          disableRipple={true}
-          size="small"
-          onClick={() => props.update(dataItem)}
-          className={classes.button}
-        >
-          <AddCircleOutlineIcon
-            className={classes.ButtonColor}
-            fontSize="small"
-          />
-        </IconButton>
-      </StyledTooltip>
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.discard" />
-          </Typography>
+        data={getTranslatedText("common.add.group")}
+        childrenElement={
+          <IconButton
+            disableRipple={true}
+            size="small"
+            onClick={() => props.update(dataItem)}
+            className={classes.button}
+          >
+            <AddCircleOutlineIcon
+              className={classes.ButtonColor}
+              fontSize="small"
+            />
+          </IconButton>
         }
+      />
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <IconButton
-          disableRipple={true}
-          size="small"
-          onClick={() => props.cancel(dataItem)}
-          className={classes.button}
-        >
-          <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
-        </IconButton>
-      </StyledTooltip>
+        data={getTranslatedText("common.discard")}
+        childrenElement={
+          <IconButton
+            disableRipple={true}
+            size="small"
+            onClick={() => props.cancel(dataItem)}
+            className={classes.button}
+          >
+            <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
+          </IconButton>
+        }
+      />
     </td>
   ) : (
     <td
@@ -94,25 +86,20 @@ export const CommandCell = (props) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.edit.group" />
-          </Typography>
-        }
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <IconButton
-          disableRipple={true}
-          size="small"
-          onClick={() => props.edit(dataItem)}
-          className={classes.button}
-        >
-          <EditIcon className={classes.ButtonColor} fontSize="small" />
-        </IconButton>
-      </StyledTooltip>
+        data={getTranslatedText("common.edit.group")}
+        childrenElement={
+          <IconButton
+            disableRipple={true}
+            size="small"
+            onClick={() => props.edit(dataItem)}
+            className={classes.button}
+          >
+            <EditIcon className={classes.ButtonColor} fontSize="small" />
+          </IconButton>
+        }
+      />
     </td>
   );
 };

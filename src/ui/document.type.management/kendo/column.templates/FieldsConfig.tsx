@@ -3,15 +3,15 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as FieldConfigIcon } from "../../../../assets/images/grid_field_config.svg";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
 
 export const FieldsConfig = (props) => {
   const intl = useIntl();
-  const title = intl.formatMessage({
-    id: TranslatedText[DisplayText.FIELD_CONFIG],
-  });
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const title = getTranslatedText(TranslatedText[DisplayText.FIELD_CONFIG]);
   const [openForm, setOpenForm] = React.useState(false);
   const openPopUpWindow = () => {
     setOpenForm(true);
@@ -20,7 +20,7 @@ export const FieldsConfig = (props) => {
     setOpenForm(false);
   };
 
-  const onAddClick = (event) => {
+  const onAddClick = (event: any) => {
     if (props.onChange) {
       const fieldConfigValue = checkIfJSONObject(event.fieldsConfig, title);
       if (fieldConfigValue && typeof fieldConfigValue === "object") {
@@ -35,7 +35,7 @@ export const FieldsConfig = (props) => {
     }
   };
   const formattedValue = get(props.dataItem, props.field);
-  const isEdit =  props.dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
+  const isEdit =  props.dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
 
   if (props.rowType === "groupHeader") {
     return null;
@@ -50,15 +50,26 @@ export const FieldsConfig = (props) => {
         className={props.className}
         data-grid-col-index={props.columnIndex}
       >
-        <FieldConfigIcon
-          onClick={() => {
-            openPopUpWindow();
-          }}
+        <Tooltip
+          placement="top"
+          data={
+            isEdit
+              ? getTranslatedText("documenttype.edit.config")
+              : getTranslatedText("documenttype.view.config")
+          }
+          childrenElement={
+            <FieldConfigIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                openPopUpWindow();
+              }}
+            />
+          }
         />
       </td>
       {openForm && (
         <TextareaDialog
-          title ={title}
+          title={title}
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}
           item={formattedValue}

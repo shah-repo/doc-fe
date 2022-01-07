@@ -17,7 +17,6 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
-import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -66,14 +65,14 @@ export function KendoPanel<T extends any>({
   tableCriteria,
   queryUrl = "",
   onSelect,
-  normalizrSchema,
   hasDropboxPermission,
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
 }: Props<T>) {
   const intl = useIntl();
-  const editField = intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] });
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -131,7 +130,6 @@ export function KendoPanel<T extends any>({
   const handleCreate = (values: AddUserManage) => {
     async.start(addEmployeeAction, values, async);
   };
-
 
   const cancel = () => {
     gridData.splice(0, 1);
@@ -200,7 +198,7 @@ export function KendoPanel<T extends any>({
   const [isLoading, setIsLoading] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [fireAPI, setFireAPI] = useState(true);
-  const [dataState, setDataState] = useState<State>(initialDataState); // Kendo Grid Data State
+  const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [resultState, setResultState] = useState<DataResult>(
     processWithGroups(gridData, initialDataState)
@@ -232,9 +230,6 @@ export function KendoPanel<T extends any>({
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
-    }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
@@ -252,13 +247,7 @@ export function KendoPanel<T extends any>({
     );
     apiClient
       .request(requestConfig)
-      .then((resp) => {
-        if (normalizrSchema) {
-          const { entities, result } = resp.data;
-          resp.data = denormalize(result, normalizrSchema, entities);
-        }
-        return resp;
-      })
+      .then((resp) => resp)
       .then(({ data }) => {
         data = data.map((el) => ({
           ...el,
@@ -330,6 +319,7 @@ export function KendoPanel<T extends any>({
         setNoDataMessage(<NoDataFound />);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [gridData]
   );
   const onExpandChange = useCallback(
@@ -360,15 +350,15 @@ export function KendoPanel<T extends any>({
     <DropdownFilterTemplate
       {...props}
       data={[{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] }),
+        text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
         value: true,
       }, {
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] }),
+        text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
         value: false,
       }]}
       defaultItem={{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
-        value: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
+        value: getTranslatedText(TranslatedText[DisplayText.ALL]),
       }}
     />
   );
@@ -377,15 +367,15 @@ export function KendoPanel<T extends any>({
     <DropdownFilterTemplate
       {...props}
       data={[{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.SIGNEDUP] }),
+        text: getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
         value: true,
       }, {
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL] }),
+        text: getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
         value: false,
       }]}
       defaultItem={{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
-        value: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
+        value: getTranslatedText(TranslatedText[DisplayText.ALL]),
       }}
     />
   );

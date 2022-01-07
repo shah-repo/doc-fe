@@ -23,6 +23,7 @@ import { documentTypeActions } from "../../../state/ducks/documentRevisions/docu
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -43,7 +44,6 @@ import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import { Schema } from "./column.templates/Schema";
 import { EditDropdownCellFormatter, getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
-import { DropdownFilterCell } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
@@ -59,13 +59,14 @@ interface ResultProps {
 
 }
 type Props<T> = KendoPanelProps<T>;
-export function KendoGrid<T extends { id?: string }>({
+export function KendoPanel<T extends { id?: string }>({
   gridData,
   gridConfiguration,
   tableName,
   tableCriteria,
 }: Props<T>) {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const classes = KendoGridStyles();
   const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -77,9 +78,7 @@ export function KendoGrid<T extends { id?: string }>({
     columnConfig ? JSON.parse(columnConfig) : gridConfiguration.columns
   );
 
-  const editField = intl.formatMessage({
-    id: TranslatedText[DisplayText.INEDIT],
-  });
+  const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
   const processWithGroups = (data: T[], dataState: State) => {
@@ -89,7 +88,7 @@ export function KendoGrid<T extends { id?: string }>({
     return newDataState;
   };
   const defaultItem = {
-    text: (intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] })),
+    text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
     value: "",
   };
 
@@ -104,11 +103,7 @@ export function KendoGrid<T extends { id?: string }>({
   const disabled = Config.docTypeManagementEditDisabled;
   const dispatch = useDispatch();
   const async = useAsync({
-    onSuccess: () => {
-      // On success Reload
-    },
     onError: (error) => {
-      // On fail reset grid to original state
       cancel();
       toastError(error as string);
     },
@@ -158,14 +153,12 @@ export function KendoGrid<T extends { id?: string }>({
         "group",
         "active"].includes(el.field)) {
         setDropDownState((prevState) => {
-          const object = Object.assign({}, { ...prevState });
-          let value;
+          const object = { ...prevState };
+          let value: string;
           if (typeof el.value === "boolean" && el.field === "active") {
             value = el.value
-              ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
-              : intl.formatMessage({
-                id: TranslatedText[DisplayText.INACTIVE],
-              });
+              ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
+              : getTranslatedText(TranslatedText[DisplayText.INACTIVE]);
           } else if (typeof el.value === "boolean") {
             value = el.value ? "Yes" : "No";
           } else {
@@ -225,7 +218,7 @@ export function KendoGrid<T extends { id?: string }>({
 
   const DropdownFilterCellTemplate = (props: GridFilterCellProps) => {
     const result: ResultProps  = getDropDownDataSource(props.field || "");
-    return <DropdownFilterCell
+    return <DropdownFilterTemplate
       {...props}
       data={result.dataSource}
       defaultItem={defaultItem}
@@ -235,25 +228,25 @@ export function KendoGrid<T extends { id?: string }>({
     />;
   };
   const BooleanFilterCell = (props: any) => (
-    <DropdownFilterCell
+    <DropdownFilterTemplate
       {...props}
       data={[
         {
-          text: intl.formatMessage({ id: "common.true" }),
+          text: getTranslatedText("common.true"),
           value: true,
         },
         {
-          text: intl.formatMessage({ id: "common.false" }),
+          text: getTranslatedText("common.false"),
           value: false,
         },
       ]}
       defaultItem={{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
         value: "All",
       }}
       defaultValue={
         dropDownState[props.field || ""] || {
-          text: intl.formatMessage({ id: TranslatedText[DisplayText.ALL] }),
+          text: getTranslatedText(TranslatedText[DisplayText.ALL]),
           value: "All",
         }
       }
@@ -297,26 +290,22 @@ export function KendoGrid<T extends { id?: string }>({
 
   // Create Grid Columns
   const renderColumns = () =>
-    sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => {
-      if (col.show) {
-        return (
-          <GridColumn
-            {...col}
-            title={col.title.toUpperCase()}
-            key={index}
-            cell={TemplateCellMapping[col.field]}
-            filterCell={
-              FilterCellMapping[col.filterCell]
-                ? FilterCellMapping[col.filterCell]
-                : undefined
-            }
-            headerCell={
-              col.title ? (props) => <ColumnHeader data={props} /> : undefined
-            }
-          ></GridColumn>
-        );
-      }
-    });
+    sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => (
+      col.show && <GridColumn
+        {...col}
+        title={col.title.toUpperCase()}
+        key={index}
+        cell={TemplateCellMapping[col.field]}
+        filterCell={
+          FilterCellMapping[col.filterCell]
+            ? FilterCellMapping[col.filterCell]
+            : undefined
+        }
+        headerCell={
+          col.title ? (props) => <ColumnHeader data={props} /> : undefined
+        }
+      />
+    ));
 
   // On edit click- all cells in edit mode
   const enterEdit = (dataItem: DTMRowItem) => {
@@ -325,9 +314,7 @@ export function KendoGrid<T extends { id?: string }>({
         item.inEdit = true;
       }
     });
-    setGridEditID(
-      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
-    );
+    setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
     setResultState(newDataState);
@@ -385,9 +372,7 @@ export function KendoGrid<T extends { id?: string }>({
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
     const newDataArr: any[] = [newDataItem, ...actualData];
-    setGridEditID(
-      intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })
-    );
+    setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
     setResultState(newDataState);
