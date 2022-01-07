@@ -3,6 +3,7 @@ import { DropDownList } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 
 export const GroupCell = (props) => {
   const intl = useIntl();
@@ -47,13 +48,13 @@ export const GroupCell = (props) => {
           value={valueSelected}
         />
       ) : (
-        <span>
-          {isOfficial
+        <Tooltip
+          data ={isOfficial
             ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
             : intl.formatMessage({
               id: TranslatedText[DisplayText.UNOFFICIAL],
             })}
-        </span>
+        />
       )}
     </td>
   );
