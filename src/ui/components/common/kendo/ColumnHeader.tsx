@@ -25,6 +25,7 @@ const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => {
     <>
       <StyledTooltip
         interactive={true}
+        enterDelay={1000}
         title={
           <Typography className={`${classes.tooltip}`}>{data.title}</Typography>
         }
