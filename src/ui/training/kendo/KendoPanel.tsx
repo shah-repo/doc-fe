@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog, Grid
+  Dialog, Grid,
 } from "@material-ui/core";
 import {
   DataResult, process,
-  State
+  State,
 } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -20,7 +20,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, isEmpty, map, pick } from "lodash";
@@ -38,7 +38,7 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
-  TrainingRecordQuery
+  TrainingRecordQuery,
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -57,14 +57,14 @@ import { TablePanelStateProps } from "../../components/table/types";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
-  trainingCompletedOnDateOption
+  trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
 import KendoGridStyles from "./styles";
-import { DroDownFilterChangeProps } from "./types";
+import { DateFields, DroDownFilterChangeProps } from "./types";
 
 type Props<T> = KendoPanelProps<T>;
 
@@ -142,13 +142,13 @@ export function KendoPanel<T extends any>({
     const params: any = {};
 
     if (
-      defaultTrainingItem?.field === "createdAt" &&
+      defaultTrainingItem?.field === DateFields.CREATED_AT &&
       defaultTrainingItem?.value
     ) {
       params.createdAtAfter = defaultTrainingItem.value;
     }
     if (
-      dueDateSelectedOption?.field === "dueOn" &&
+      dueDateSelectedOption?.field === DateFields.DUE_ON &&
       dueDateSelectedOption?.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
       params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
@@ -156,7 +156,7 @@ export function KendoPanel<T extends any>({
       params.isCompleted = false;
     }
     if (
-      dueDateSelectedOption?.field === "dueOn" &&
+      dueDateSelectedOption?.field === DateFields.DUE_ON &&
       dueDateSelectedOption?.text === CompletedOnDateOptions.OVERDUE
     ) {
       params.dueOnBefore = moment().tz(TIME_ZONE).toISOString();
@@ -164,7 +164,7 @@ export function KendoPanel<T extends any>({
     }
 
     if (
-      completedOnSelectedOption?.field === "completedAt" &&
+      completedOnSelectedOption?.field === DateFields.COMPLETED_AT &&
       completedOnSelectedOption?.value
     ) {
       params.completedAtAfter = completedOnSelectedOption.value;
@@ -317,11 +317,11 @@ export function KendoPanel<T extends any>({
       ...setDefault.selectedItem,
       field: setDefault.parentField,
     };
-    if (setDefault.parentField === "createdAt") {
+    if (setDefault.parentField === DateFields.CREATED_AT) {
       setDefaultTrainingItem(updatedFilter);
-    } else if (setDefault.parentField === "dueOn") {
+    } else if (setDefault.parentField === DateFields.DUE_ON) {
       setDueDateSelectedOption(updatedFilter);
-    } else if (setDefault.parentField === "completedAt") {
+    } else if (setDefault.parentField === DateFields.COMPLETED_AT) {
       setCompletedOnSelectedOption(updatedFilter);
     }
     setKendoDropdownFilter(updatedFilter);
@@ -498,11 +498,11 @@ export function KendoPanel<T extends any>({
 
   const filterCellMapping = (field: string) => {
     switch (field) {
-      case "createdAt":
+      case DateFields.CREATED_AT:
         return AssignedDateFilterTemplate;
-      case "dueOn":
+      case DateFields.DUE_ON:
         return DueDateFilterTemplate;
-      case "completedAt":
+      case DateFields.COMPLETED_AT:
         return CompletedOnFilterTemplate;
       default:
         return null;
