@@ -24,6 +24,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
   return (
     <StyledTooltip
       interactive={true}
+      enterDelay={1000}
       title={
         <Typography
           component={"p"}
