@@ -1,4 +1,4 @@
-import { IconButton, makeStyles, Typography } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
@@ -7,8 +7,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
-import Text from "../../../components/Text";
-import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import Tooltip from "../../../components/common/kendo/Tooltip";
 import Colors from "../../../layout/theme/utils/colors";
 import { CellCommandConfig } from "../types";
 
@@ -23,18 +22,12 @@ export const CommandCell = (props: CellCommandConfig) => {
     Remove: {
       color: Colors.latest_red_varient,
     },
-    tooltip: {
-      maxHeight: "100px",
-      overflow: "auto",
-      fontFamily: "Sora",
-      fontSize: 12,
-      whiteSpace: "pre-line",
-    },
   }));
   const classes = styles();
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const { dataItem } = props;
-  const inEdit = dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
+  const inEdit = dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
   const isNewItem = dataItem.id === undefined;
   if (props.rowType === "groupHeader") {
     return null;
@@ -47,60 +40,50 @@ export const CommandCell = (props: CellCommandConfig) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.add.document.type" />
-          </Typography>
-        }
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            disabled={props.disabled}
-            onClick={() =>
-              isNewItem ? props.add(dataItem) : props.update(dataItem)
-            }
-          >
-            <AddCircleOutlineIcon
-              className={props.disabled ? "" : classes.ButtonColor}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
-      </StyledTooltip>
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.discard" />
-          </Typography>
+        data={getTranslatedText("common.add.document.type")}
+        childrenElement={
+          <span>
+            <IconButton
+              disableFocusRipple
+              disableRipple
+              style={{ backgroundColor: "transparent", padding: 5 }}
+              disabled={props.disabled}
+              onClick={() =>
+                isNewItem ? props.add(dataItem) : props.update(dataItem)
+              }
+            >
+              <AddCircleOutlineIcon
+                className={props.disabled ? "" : classes.ButtonColor}
+                fontSize="small"
+                color={props.disabled ? "disabled" : "secondary"}
+              />
+            </IconButton>
+          </span>
         }
+      />
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            onClick={() => props.cancel(dataItem)}
-          >
-            <CancelOutlinedIcon
-              className={props.disabled ? "" : classes.Cancel}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
-      </StyledTooltip>
+        data={getTranslatedText("common.discard")}
+        childrenElement={
+          <span>
+            <IconButton
+              disableFocusRipple
+              disableRipple
+              disabled={props.disabled}
+              style={{ backgroundColor: "transparent", padding: 5 }}
+              onClick={() => props.cancel(dataItem)}
+            >
+              <CancelOutlinedIcon
+                className={props.disabled ? "" : classes.Cancel}
+                fontSize="small"
+                color={props.disabled ? "disabled" : "secondary"}
+              />
+            </IconButton>
+          </span>
+        }
+      />
     </td>
   ) : (
     <td
@@ -110,58 +93,48 @@ export const CommandCell = (props: CellCommandConfig) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.edit.document.type" />
-          </Typography>
-        }
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            onClick={() => props.edit(dataItem)}
-          >
-            <EditIcon
-              className={props.disabled ? "" : classes.ButtonColor}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
-      </StyledTooltip>
-      <StyledTooltip
-        interactive={true}
-        title={
-          <Typography className={`${classes.tooltip}`}>
-            <Text translation="common.delete.document.type" />
-          </Typography>
+        data={getTranslatedText("common.edit.document.type")}
+        childrenElement={
+          <span>
+            <IconButton
+              disableFocusRipple
+              disableRipple
+              disabled={props.disabled}
+              style={{ backgroundColor: "transparent", padding: 5 }}
+              onClick={() => props.edit(dataItem)}
+            >
+              <EditIcon
+                className={props.disabled ? "" : classes.ButtonColor}
+                fontSize="small"
+                color={props.disabled ? "disabled" : "secondary"}
+              />
+            </IconButton>
+          </span>
         }
+      />
+      <Tooltip
         placement="top"
-        arrow
-      >
-        <span>
-          <IconButton
-            disableFocusRipple
-            disableRipple
-            disabled={props.disabled}
-            style={{ backgroundColor: "transparent", padding: 5 }}
-            onClick={() => props.remove(dataItem)}
-          >
-            <DeleteIcon
-              className={props.disabled ? "" : classes.Remove}
-              fontSize="small"
-              color={props.disabled ? "disabled" : "secondary"}
-            />
-          </IconButton>
-        </span>
-      </StyledTooltip>
+        data={getTranslatedText("common.delete.document.type")}
+        childrenElement={
+          <span>
+            <IconButton
+              disableFocusRipple
+              disableRipple
+              disabled={props.disabled}
+              style={{ backgroundColor: "transparent", padding: 5 }}
+              onClick={() => props.remove(dataItem)}
+            >
+              <DeleteIcon
+                className={props.disabled ? "" : classes.Remove}
+                fontSize="small"
+                color={props.disabled ? "disabled" : "secondary"}
+              />
+            </IconButton>
+          </span>
+        }
+      />
     </td>
   );
 };
