@@ -3,15 +3,17 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { authActions } from "../../../../state/ducks/auth";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 import { toastInfo } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import KendoGridStyles from "../styles";
 
-export const SignedCell = (props) => {
+export const SignedCell = (props: GridCellProperties) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const getResendSignupEmailAction = useActionCreator(
     authActions.resendSignupEmail
   );
@@ -22,9 +24,7 @@ export const SignedCell = (props) => {
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
       toastInfo(
-        intl.formatMessage({
-          id: "user.management.signup.email.sent",
-        })
+        getTranslatedText("user.management.signup.email.sent")
       );
     },
   });
@@ -32,9 +32,7 @@ export const SignedCell = (props) => {
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
       toastInfo(
-        intl.formatMessage({
-          id: "user.management.reset.password.email.sent",
-        })
+        getTranslatedText("user.management.reset.password.email.sent")
       );
     },
   });

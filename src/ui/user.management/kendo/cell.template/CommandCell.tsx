@@ -2,18 +2,18 @@ import { IconButton, makeStyles } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import Colors from "../../../layout/theme/utils/colors";
+import { UserManage } from "../types";
 
 interface CommandCellProps {
-  dataItem: GridFilterCellProps;
+  dataItem: UserManage;
   editField: string;
-  add: (dataItem) => void;
-  cancel: (dataItem) => void;
-  edit: (dataItem) => void;
+  add: (dataItem: UserManage) => void;
+  cancel: (dataItem: UserManage) => void;
+  edit: (dataItem: UserManage) => void;
   colSpan?: any;
   style?: any;
   ariaColumnIndex?: number;

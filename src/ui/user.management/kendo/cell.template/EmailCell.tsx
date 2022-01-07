@@ -1,14 +1,12 @@
 import { TextField } from "@material-ui/core";
-import { useTableKeyboardNavigation } from "@progress/kendo-react-data-tools";
-import { GRID_COL_INDEX_ATTRIBUTE } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 
-export const EmailCell = (props) => {
+export const EmailCell = (props: GridCellProperties) => {
   const updateEmailField = (event: any) => {
-    props.dataItem.email = event?.target?.value;
+    props.dataItem.email = event.target.value;
   };
-  const navigationAttributes = useTableKeyboardNavigation(props.columnIndex);
 
   if (props.rowType === "groupHeader") {
     return null;
@@ -16,11 +14,11 @@ export const EmailCell = (props) => {
 
   return (
     <td
-      style={props.style}
       colSpan={props.colSpan}
-      role={"gridcell"}
-      {...{ [GRID_COL_INDEX_ATTRIBUTE]: props.columnIndex }}
-      {...navigationAttributes}
+      style={props.style}
+      role="gridcell"
+      className={props.className}
+      data-grid-col-index={props.columnIndex}
     >
       {props.dataItem.inEdit ? (
         <TextField
@@ -30,7 +28,13 @@ export const EmailCell = (props) => {
           onChange={updateEmailField}
         />
       ) : (
-        <Tooltip data = {props?.dataItem?.user ? props?.dataItem?.user?.email : props?.dataItem?.items[0]?.user?.email}/>
+        <Tooltip
+          data={
+            props.dataItem.user
+              ? props.dataItem.user.email
+              : props.dataItem.items[0]?.user.email
+          }
+        />
       )}
     </td>
   );

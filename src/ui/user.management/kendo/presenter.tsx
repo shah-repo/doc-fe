@@ -22,7 +22,6 @@ interface Props {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   data: TableDataProps<any>;
-  clearFilter?: () => void;
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
