@@ -7,8 +7,20 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
+interface SelectedItemProps {
+  text: string;
+  value: string | boolean;
+}
+interface StateChangeProps {
+  selectedItem?: SelectedItemProps | undefined;
+  parentField: string | undefined;
+}
 interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
+    text: string;
+    value: string;
+  };
+  defaultValue?: {
     text: string;
     value: string;
   };
@@ -16,6 +28,8 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
     text: string;
     value: string | boolean;
   }[];
+  customOperator?: string;
+  onStateChange?: (data: StateChangeProps) => void;
 }
 
 export const DropdownFilterTemplate = (props: DropdownFilterCellProps) => {
@@ -33,9 +47,10 @@ export const DropdownFilterTemplate = (props: DropdownFilterCellProps) => {
     });
     props.onChange({
       value: hasValue ? selectedItem?.value : "",
-      operator: hasValue ? "eq" : "",
+      operator: hasValue ? props.customOperator || "eq" : "",
       syntheticEvent: event.syntheticEvent,
     });
+    props.onStateChange && props.onStateChange({ selectedItem, parentField: props.field });
   };
 
   const onClearButtonClick = (event) => {
@@ -48,6 +63,7 @@ export const DropdownFilterTemplate = (props: DropdownFilterCellProps) => {
     setState({
       value: props.defaultItem,
     });
+    props.onStateChange && props.onStateChange({ parentField: props.field });
   };
   return (
     <div className="k-filtercell">
