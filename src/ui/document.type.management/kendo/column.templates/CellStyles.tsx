@@ -12,10 +12,10 @@ const CellStyles = makeStyles((theme) => ({
     borderRadius: "50%",
   },
   Active: {
-    background: "#0DB78D",
+    background: Colors.latest_green_varient,
   },
   Inactive: {
-    background: "#B4B4B4",
+    background: Colors.grey_cloud,
   },
   value: {
     margin: "5px",
