@@ -1,7 +1,9 @@
+import { Grid } from "@material-ui/core";
 import { get } from "lodash";
 import moment from "moment";
 import React from "react";
 import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
+import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const DateInfo = (props: GridCellProperties) => {
@@ -18,7 +20,14 @@ export const DateInfo = (props: GridCellProperties) => {
       className={props.className}
       data-grid-col-index={props.columnIndex}
     >
-      {formattedDate}
+      <Grid
+        container
+        direction="row"
+        alignContent="flex-start"
+        justify="flex-start"
+      >
+        {formattedDate && <Tooltip data={formattedDate} />}
+      </Grid>
     </td>
   );
 };
