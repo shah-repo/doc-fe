@@ -127,6 +127,8 @@ export enum DisplayText {
   SIGNEDUP,
   FIELD_CONFIG,
   SCHEMA,
+  YES,
+  NO,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -148,6 +150,8 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.RESEND_SIGNUP_EMAIL]: "user.management.resend.signup.email",
   [DisplayText.FIELD_CONFIG]: "form.builder.field.config",
   [DisplayText.SCHEMA]: "common.schema",
+  [DisplayText.YES]: "common.true",
+  [DisplayText.NO]: "common.false",
 };
 
 export enum statusClassMapping {
