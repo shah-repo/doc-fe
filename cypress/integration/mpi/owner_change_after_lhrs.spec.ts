@@ -1145,16 +1145,22 @@ context("Change owner after starting LHRs", () => {
         {
           sentToUser: USERS[1].email,
           contains: [
-            "Hello ", `${USERS[1].name}`, ",\r\nPart PRT-00005 Part document, LOT #", `${lotDateSuffix}`, "01RD - ",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}`, " , Step #1 - ",
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}`, " (PI-00001 API MPI, Rev 1) has been completed."],
+            `Hello <b>${USERS[1].name},</b><br>`,
+            "Part PRT-00005 Part document, <a href=",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
+            "1) has been completed.",
+            companyId],
         },
         {
           sentToUser: USERS[3].email,
           contains: [
-            "Hello ", `${USERS[3].name}`, ",\r\nPart PRT-00005 Part document, LOT #", `${lotDateSuffix}`, "01RD - ",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}`, " , Step #1 - ",
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}`, " (PI-00001 API MPI, Rev 1) has been completed."],
+            `Hello <b>${USERS[3].name},</b><br>`,
+            "Part PRT-00005 Part document, <a href=",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
+            "1) has been completed.",
+            companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -1162,7 +1168,6 @@ context("Change owner after starting LHRs", () => {
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 1,
-        isEmailTypeText: true,
       });
     });
 
@@ -1171,16 +1176,22 @@ context("Change owner after starting LHRs", () => {
         {
           sentToUser: USERS[4].email,
           contains: [
-            "Hello ", `${USERS[4].name}`, ",\r\nPart PRT-00005 Part document, LOT #", `${lotDateSuffix}`, "01RD - ",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}`, " , Step #1 - ",
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}`, " (PI-00001 API MPI, Rev 1) has been completed."]
+            `Hello <b>${USERS[4].name},</b><br>`,
+            "Part PRT-00005 Part document, <a href=",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
+            "1) has been completed.",
+            companyId],
         },
         {
           sentToUser: USERS[2].email,
           contains: [
-            "Hello ", `${USERS[2].name}`, ",\r\nPart PRT-00005 Part document, LOT #", `${lotDateSuffix}`, "01RD - ",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}`, " , Step #1 - ",
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}`, " (PI-00001 API MPI, Rev 1) has been completed."]
+            `Hello <b>${USERS[2].name},</b><br>`,
+            "Part PRT-00005 Part document, <a href=",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
+            "1) has been completed.",
+            companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -1188,7 +1199,6 @@ context("Change owner after starting LHRs", () => {
         emailsToTest: emailsThatShouldNotBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
         assertNumberOfEmailsFoundInList: 0,
-        isEmailTypeText: true,
       });
     });
   });

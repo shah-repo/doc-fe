@@ -27,8 +27,7 @@ declare global {
         receivedEmails: IMAPEmail[];
         emailsToTest: IMAPEmailsInTesting[];
         getEmailsSincedate: Date;
-        assertNumberOfEmailsFoundInList: integer;
-        isEmailTypeText: boolean}): Chainable;
+        assertNumberOfEmailsFoundInList: integer;}): Chainable;
       imapGetNewPasswordLink(params: {userEmail: string}): Chainable;
     }
   }
@@ -111,11 +110,10 @@ Cypress.Commands.add("imapVerifyEmailsInList", (params: {
   receivedEmails: IMAPEmail[];
   emailsToTest: IMAPEmailsInTesting[];
   getEmailsSincedate: Date;
-  assertNumberOfEmailsFoundInList: integer;
-  isEmailTypeText: boolean}) => {
+  assertNumberOfEmailsFoundInList: integer;}) => {
 
   params.emailsToTest.forEach((email) => {
-    const numberOfEmails = getEmailsThatAreInReceivedList(params.receivedEmails, email, params.isEmailTypeText);
+    const numberOfEmails = getEmailsThatAreInReceivedList(params.receivedEmails, email);
     assert.lengthOf(numberOfEmails, params.assertNumberOfEmailsFoundInList);
   });
 });
@@ -129,16 +127,10 @@ Cypress.Commands.add("imapGetNewPasswordLink", (params: { userEmail: string}) =>
   });
 });
 
-function getEmailsThatAreInReceivedList(receivedEmails, emailToTest, isEmailTypeText) {
-  if (isEmailTypeText) {
-    return receivedEmails.filter(
-      (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
-        arrayContainsArray(receivedEmail.body.text, emailToTest.contains));
-  } else {
-    return receivedEmails.filter(
-      (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
-        arrayContainsArray(receivedEmail.body.html, emailToTest.contains));
-  }
+function getEmailsThatAreInReceivedList(receivedEmails, emailToTest) {
+  return receivedEmails.filter(
+    (receivedEmail) => receivedEmail.receiver === emailToTest.sentToUser &&
+      arrayContainsArray(receivedEmail.body.html, emailToTest.contains));
 }
 
 function arrayContainsArray(superset, subset) {
