@@ -56,10 +56,6 @@ type Props<T> = KendoPanelProps<T>;
 
 let call: CancelTokenSource;
 
-interface StateChangeProps {
-  value?: string | null;
-}
-
 export function KendoPanel<T extends any>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
@@ -387,41 +383,15 @@ export function KendoPanel<T extends any>({
 
   const clearFilter = () => setSearchStatus(documentRevisionQueryStatus());
 
-  const onDisplayStatusChange = (data: StateChangeProps) => {
-    const displayStatus = data && data.value ? data.value : null;
-    setDefaultDDItem(
-      displayStatus ||
+  const onDisplayStatusChange = (setDefault: boolean) => {
+    if (setDefault) {
+      setDefaultDDItem(
         intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
-    );
-    if (displayStatus) {
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-            queryDict: {
-              ...tableCriteria.queryDict,
-              displayStatus,
-            },
-          },
-          tableName
-        )
       );
-    } else {
-      dispatch(
-        tableSearchActions.setSearchCriteria(
-          {
-            ...tableCriteria,
-            queryDict: {
-              ...tableCriteria.queryDict,
-            },
-          },
-          tableName
-        )
-      );
+      setSearchStatus(documentRevisionQueryStatus());
     }
     setFireAPI(true);
   };
-
   const onEffectiveDateChange = (setDefault: any) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {

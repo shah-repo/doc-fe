@@ -4,20 +4,19 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
-interface StateChangeProps {
-  value?: string | null;
-}
 interface Props extends GridFilterCellProps {
   defaultItem: string;
   defaultValue: string;
   data: string[];
-  onStateChange?: (setDefault: StateChangeProps) => void;
+  onStateChange?: (setDefault: boolean) => void;
 }
 
 export const DropdownFilterTemplate = (props: Props) => {
   let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
-
+  const intl = useIntl();
   const onChange = (event: DropDownListChangeEvent) => {
     hasValue = hasValue(event.target.value);
     props.onChange({
@@ -25,9 +24,14 @@ export const DropdownFilterTemplate = (props: Props) => {
       operator: hasValue ? "eq" : "",
       syntheticEvent: event.syntheticEvent,
     });
-    props.onStateChange && props.onStateChange({
-      value: hasValue ? event.target.value : "",
-    });
+    if (
+      event.target.value ===
+      intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
+    ) {
+      props.onStateChange && props.onStateChange(true);
+      return;
+    }
+    props.onStateChange && props.onStateChange(false);
   };
 
   const onClearButtonClick = (event) => {
@@ -37,7 +41,7 @@ export const DropdownFilterTemplate = (props: Props) => {
       operator: "",
       syntheticEvent: event,
     });
-    props.onStateChange && props.onStateChange({});
+    props.onStateChange && props.onStateChange(true);
   };
   return (
     <div className="k-filtercell">
@@ -52,7 +56,7 @@ export const DropdownFilterTemplate = (props: Props) => {
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title="Clear"
-        disabled={!hasValue(props.value) && !hasValue(props.defaultValue)}
+        disabled={!hasValue(props.value)}
         onClick={onClearButtonClick}
       >
         <span className="k-icon k-i-filter-clear" />
