@@ -3,7 +3,7 @@ import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme: Theme) => ({
   root: {
-    padding: "0 5px 10px",
+    padding: theme.spacing(0, 0.625, 1.25),
   },
   kGrid: {
     height: "calc(100vh - 99px)",
