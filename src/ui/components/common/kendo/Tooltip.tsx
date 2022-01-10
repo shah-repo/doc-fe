@@ -1,6 +1,7 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import React from "react";
 import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import { styles } from "./Tooltip.styles";
 
 interface Props {
   data: string | number;
@@ -15,15 +16,6 @@ const Tooltip: React.FunctionComponent<Props> = ({
   childrenElement,
   placement = "left",
 }) => {
-  const styles = makeStyles(() => ({
-    tooltip: {
-      maxHeight: "calc(100vh - 700px)",
-      overflow: "auto",
-      fontFamily: "Sora",
-      fontSize: 12,
-      whiteSpace: "pre-line",
-    },
-  }));
   const classes = styles();
   return (
     <StyledTooltip

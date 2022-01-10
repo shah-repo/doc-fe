@@ -1,7 +1,6 @@
 import { get } from "lodash";
-import moment from "moment";
 import React from "react";
-import { MomentFormats, TIME_ZONE, toValidateIfDate } from "../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
@@ -11,7 +10,7 @@ export const CommonCell = (props: GridCellProperties) => {
   // To check if value is date
   const toCheckIfDate = toValidateIfDate(value);
   const formattedValue = toCheckIfDate
-    ? moment(value).tz(TIME_ZONE).format(MomentFormats.MonthDateYear)
+    ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
   if (props.rowType === "groupHeader") {
     return null;
