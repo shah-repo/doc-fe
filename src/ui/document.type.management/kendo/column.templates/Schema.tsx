@@ -1,3 +1,4 @@
+import { GridCellProps } from "@progress/kendo-react-grid/dist/npm/interfaces/GridCellProps";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -7,7 +8,7 @@ import Tooltip from "../../../components/common/kendo/Tooltip";
 import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
-export const Schema = (props) => {
+export const Schema = (props: GridCellProps) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const title = getTranslatedText(TranslatedText[DisplayText.SCHEMA]);
@@ -29,13 +30,14 @@ export const Schema = (props) => {
           dataItem: props.dataItem,
           field: props.field,
           value: schemaValue,
+          syntheticEvent: event.syntheticEvent,
         });
         setOpenForm(false);
       }
     }
   };
 
-  const formattedValue = get(props.dataItem, props.field);
+  const formattedValue = get(props.dataItem, props.field || "");
   const isEdit = props.dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
   if (props.rowType === "groupHeader") {
     return null;

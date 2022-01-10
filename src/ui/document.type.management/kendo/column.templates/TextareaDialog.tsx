@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, styled } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { Field, FieldWrapper, Form, FormElement } from "@progress/kendo-react-form";
-import { TextArea } from "@progress/kendo-react-inputs";
+import { Field, FieldWrapper, FieldWrapperProps, Form, FormElement } from "@progress/kendo-react-form";
+import { TextArea, TextAreaProps } from "@progress/kendo-react-inputs";
 import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
@@ -9,31 +9,28 @@ import Text from "../../../components/Text";
 import GridCellStyles from "./CellStyles";
 import "./KendoStyles.css";
 
-const FormTextArea = (fieldRenderProps) => {
+interface FormAreaProps extends FieldWrapperProps {
+  defaultVal: string;
+  isEdit: boolean;
+}
+interface TextAreaDialogProps extends TextAreaProps {
+  cancelEdit: () => void;
+  addClick: (event: any) => void;
+  openForm: boolean;
+  fieldName: string | undefined;
+  item: any;
+  isEdit: boolean;
+}
+const FormTextArea = (fieldRenderProps: FormAreaProps) => {
   const {
-    validationMessage,
-    touched,
-    label,
-    id,
-    valid,
-    disabled,
-    hint,
-    type,
-    optional,
-    defaultV,
+    defaultVal,
     isEdit,
     ...others
   } = fieldRenderProps;
-  const showValidationMessage = touched && validationMessage;
-  const showHint = !showValidationMessage && hint;
-  const hindId = showHint ? `${id}_hint` : "";
-  const errorId = showValidationMessage ? `${id}_error` : "";
-
   return <FieldWrapper>
     <div className={"k-form-field-wrap"}>
-      <TextArea defaultValue={defaultV} valid={valid}
-        type={type} id={id} disabled={disabled}
-        rows={17} ariaDescribedBy={`${hindId} ${errorId}`}
+      <TextArea defaultValue={defaultVal}
+        rows={17}
         {...others} />
     </div>
   </FieldWrapper>;
@@ -70,9 +67,9 @@ CustomDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
 };
-export const TextareaDialog = (props) => {
+export const TextareaDialog = (props: TextAreaDialogProps) => {
   const classes = GridCellStyles();
-  const fieldName = props.fieldName;
+  const fieldName = props.fieldName || "";
 
   return (
     <CustomDialog
@@ -96,7 +93,7 @@ export const TextareaDialog = (props) => {
                   name={fieldName}
                   label={props.title}
                   component={FormTextArea}
-                  defaultV={
+                  defaultVal={
                     !isEmpty(props.item)
                       ? JSON.stringify(props.item, undefined, 4)
                       : ""
