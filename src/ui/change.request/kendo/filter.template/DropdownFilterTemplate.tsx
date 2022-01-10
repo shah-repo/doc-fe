@@ -14,13 +14,20 @@ interface DropdownFilterTemplateProps extends GridFilterCellProps {
   onStateChange?: (setDefault: boolean) => void;
 }
 
-export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
+export const DropdownFilterTemplate: React.FunctionComponent<DropdownFilterTemplateProps> = ({
+  onChange,
+  defaultItem,
+  onStateChange,
+  data,
+  defaultValue,
+  value,
+}) => {
   const intl = useIntl();
-  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
+  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
 
-  const onChange = (event: DropDownListChangeEvent) => {
+  const handleChange = (event: DropDownListChangeEvent) => {
     hasValue = hasValue(event.target.value);
-    props.onChange({
+    onChange({
       value: hasValue ? event.target.value : "",
       operator: hasValue ? "eq" : "",
       syntheticEvent: event.syntheticEvent,
@@ -29,35 +36,35 @@ export const DropdownFilterTemplate = (props: DropdownFilterTemplateProps) => {
       event.target.value ===
       intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
     ) {
-      props.onStateChange && props.onStateChange(true);
+      onStateChange && onStateChange(true);
       return;
     }
-    props.onStateChange && props.onStateChange(false);
+    onStateChange && onStateChange(false);
   };
 
   const onClearButtonClick = (event) => {
     event.preventDefault();
-    props.onChange({
+    onChange({
       value: "",
       operator: "",
       syntheticEvent: event,
     });
-    props.onStateChange && props.onStateChange(true);
+    onStateChange && onStateChange(true);
   };
   return (
     <div className="k-filtercell">
       <DropDownList
         style={{ textTransform: "uppercase" }}
-        data={props.data}
-        onChange={onChange}
-        value={props.value || props.defaultValue}
-        defaultItem={props.defaultItem}
-        defaultValue={props.defaultValue}
+        data={data}
+        onChange={handleChange}
+        value={value || defaultValue}
+        defaultItem={defaultItem}
+        defaultValue={defaultValue}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title="Clear"
-        disabled={!hasValue(props.value)}
+        disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >
         <span className="k-icon k-i-filter-clear" />
