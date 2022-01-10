@@ -1,14 +1,13 @@
 import { Grid } from "@material-ui/core";
 import { get } from "lodash";
-import moment from "moment";
 import React from "react";
-import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 
 export const DateInfo = (props: GridCellProperties) => {
   const date = get(props.dataItem, props.field || "");
-  const formattedDate = date ? moment(date).tz(TIME_ZONE).format(MomentFormats.MonthDateYear) : null;
+  const formattedDate = date ? getFormattedDateString(date, MomentFormats.MonthDateYear) : null;
   if (props.rowType === "groupHeader") {
     return null;
   }
