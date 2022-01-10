@@ -3,20 +3,10 @@ import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme) => ({
   root: {
-    padding: "0 5px 10px 5px",
+    padding: theme.spacing(0, 0.625, 1.25, 0.625),
   },
   kGrid: {
     height: "calc(100vh - 99px)",
-  },
-  icon: {
-    width: "25px",
-    height: "25px",
-    marginRight: 4,
-    fontFamily: "Sora",
-    fontSize: 12,
-    fontWeight: 600,
-    color: Colors.white,
-    backgroundColor: Colors.grey_cloud,
   },
   exportListbutton: {
     margin: 0,
