@@ -73,12 +73,12 @@ const KendoContainer: React.FunctionComponent<Props> = () => {
     userManagementActions.loadGroupById
   );
 
-  const handleGroupsPreview = (rowData: LoadCompanyGroup) => {
-    asyncPreview.start(loadGroupByIdAction, rowData.id, asyncPreview);
+  const handleGroupsPreview = ({ id }: LoadCompanyGroup) => {
+    asyncPreview.start(loadGroupByIdAction, id, asyncPreview);
   };
 
-  const handleGroupsEdit = (rowData: LoadCompanyGroup) => {
-    asyncEdit.start(loadGroupByIdAction, rowData.id, asyncEdit);
+  const handleGroupsEdit = ({ id }: LoadCompanyGroup) => {
+    asyncEdit.start(loadGroupByIdAction, id, asyncEdit);
   };
 
   const handlePermission = (rowData: LoadCompanyGroup) => {
