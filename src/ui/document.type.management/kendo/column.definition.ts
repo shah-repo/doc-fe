@@ -1,6 +1,10 @@
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoColumn, PageState } from "../../components/common/kendo/types";
 
+enum DTMCellTemplates {
+  DROPDOWN_FILTER_CELL = "DropdownFilterCellTemplate"
+}
+
 const columns: KendoColumn[] = [{
   field: "id",
   title: "ID",
@@ -10,7 +14,7 @@ const columns: KendoColumn[] = [{
   field: "active",
   title: "Status",
   filter: "text",
-  filterCell: "DropdownFilterCellTemplate",
+  filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "150px",
   locked: true,
@@ -39,7 +43,6 @@ const columns: KendoColumn[] = [{
   field: "privateNumberPool",
   title: "Private Number Pool",
   filter: "boolean",
-  filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
   groupable: true,
@@ -49,7 +52,6 @@ const columns: KendoColumn[] = [{
   field: "canRedLine",
   title: "RedLine",
   filter: "boolean",
-  filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
   groupable: true,
@@ -59,7 +61,6 @@ const columns: KendoColumn[] = [{
   field: "isQms",
   title: "Qms",
   filter: "boolean",
-  filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
   groupable: true,
@@ -69,7 +70,6 @@ const columns: KendoColumn[] = [{
   field: "needsSignature",
   title: "Needs Signature",
   filter: "boolean",
-  filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
   groupable: true,
@@ -79,7 +79,6 @@ const columns: KendoColumn[] = [{
   field: "defaultTraining",
   title: "Training",
   filter: "boolean",
-  filterCell: "BooleanFilterCell",
   show: true,
   width: "110px",
   groupable: true,
@@ -95,7 +94,7 @@ const columns: KendoColumn[] = [{
 {
   field: "defaultRevStage",
   title: "Revision Stage",
-  filterCell: "DropdownFilterCellTemplate",
+  filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "165px",
   groupable: true,
@@ -104,7 +103,7 @@ const columns: KendoColumn[] = [{
 {
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
   title: "Users without Tags", // TODO: Check if multiSelect
-  filterCell: "DropdownFilterCellTemplate",
+  filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "200px",
   groupable: false,
@@ -113,7 +112,7 @@ const columns: KendoColumn[] = [{
 {
   field: "group",
   title: "Group",
-  filterCell: "DropdownFilterCellTemplate",
+  filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "125px",
   groupable: true,
