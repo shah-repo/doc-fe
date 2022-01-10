@@ -311,17 +311,17 @@ export function KendoPanel<T extends any>({
     );
   };
 
-  // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: DroDownFilterChangeProps) => {
+  // Kendo Grid Actions Methods ({selectedItem, parentField})
+  const onStateChange = ({ selectedItem, parentField }: DroDownFilterChangeProps) => {
     const updatedFilter = {
-      ...setDefault.selectedItem,
-      field: setDefault.parentField,
+      ...selectedItem,
+      field: parentField,
     };
-    if (setDefault.parentField === DateFields.CREATED_AT) {
+    if (parentField === DateFields.CREATED_AT) {
       setDefaultTrainingItem(updatedFilter);
-    } else if (setDefault.parentField === DateFields.DUE_ON) {
+    } else if (parentField === DateFields.DUE_ON) {
       setDueDateSelectedOption(updatedFilter);
-    } else if (setDefault.parentField === DateFields.COMPLETED_AT) {
+    } else if (parentField === DateFields.COMPLETED_AT) {
       setCompletedOnSelectedOption(updatedFilter);
     }
     setKendoDropdownFilter(updatedFilter);
@@ -350,11 +350,11 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const onColumnResize = (event: GridColumnResizeEvent) => {
-    if (event.end) {
+  const onColumnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    if (end) {
       let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column) => {
-        const columnObject = find(event.columns, { field: column.field });
+        const columnObject = find(columns, { field: column.field });
         column.width = columnObject ? columnObject.width : column.width;
         return column;
       });
@@ -364,10 +364,10 @@ export function KendoPanel<T extends any>({
     }
     return false;
   };
-  const onColumnReorder = (event: GridColumnReorderEvent) => {
+  const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -392,10 +392,10 @@ export function KendoPanel<T extends any>({
     [gridData]
   );
   const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
@@ -405,9 +405,9 @@ export function KendoPanel<T extends any>({
   );
 
   // On Show / Hide Column From Main Menu
-  const onColumnShowHide = (item: KendoColumn) => {
+  const onColumnShowHide = ({ field }: KendoColumn) => {
     const dataColumns = map(columnDefinitions, (column) => {
-      if (column.field === item.field) {
+      if (column.field === field) {
         column.show = !column.show;
       }
       return column;
