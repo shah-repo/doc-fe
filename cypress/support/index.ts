@@ -51,7 +51,7 @@ import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =
     err.message.includes("The following error originated from your application code, not from Cypress") &&
-    err.message.includes("Socket is clos") && err.message.includes("scheduledForDeletion");
+    err.message.includes("Socket is clos");
 
   if (socketIsClosingError) {
     // eslint-disable-next-line no-console
