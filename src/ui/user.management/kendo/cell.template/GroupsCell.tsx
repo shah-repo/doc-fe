@@ -1,8 +1,17 @@
 import { filterBy } from "@progress/kendo-data-query";
-import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import {
+  MultiSelect,
+  MultiSelectChangeEvent,
+  MultiSelectFilterChangeEvent,
+} from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Group, GroupTag, GroupType, Permission } from "../../../../state/ducks/auth/types";
+import {
+  Group,
+  GroupTag,
+  GroupType,
+  Permission,
+} from "../../../../state/ducks/auth/types";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
@@ -22,7 +31,12 @@ interface GroupOptions {
   isOfficial: boolean;
 }
 
-export const GroupsCell = (props: GridCellProperties) => {
+export const GroupsCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  columnIndex,
+}: GridCellProperties) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
@@ -34,32 +48,31 @@ export const GroupsCell = (props: GridCellProperties) => {
     setResult(defaultGroups);
   }, [groupOptions, defaultGroups]);
 
-  const updateGroupField = (event: MultiSelectChangeEvent) => {
-    props.dataItem.groups = event.target.value.map((item) => ({
+  const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
+    dataItem.groups = target.value.map((item) => ({
       id: item.value || "",
     }));
-    setResult(event.target.value as any);
+    setResult(target.value as any);
   };
 
-  const filterChange = (event: MultiSelectFilterChangeEvent) => {
-    const filter = event.filter;
+  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
     const allData = groupOptions.slice();
     const newData = filterBy(allData, filter);
     setData(newData as any);
   };
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <td
-      colSpan={props.colSpan}
+      colSpan={colSpan}
       role="gridcell"
-      data-grid-col-index={props.columnIndex}
+      data-grid-col-index={columnIndex}
       className={classes.groupCell}
     >
-      {props.dataItem.inEdit ? (
+      {dataItem.inEdit ? (
         <MultiSelect
           data={data}
           value={result}
@@ -71,7 +84,7 @@ export const GroupsCell = (props: GridCellProperties) => {
           defaultValue={defaultGroups}
         />
       ) : (
-        <Tooltip data={props.dataItem.groups} />
+        <Tooltip data={dataItem.groups} />
       )}
     </td>
   );
