@@ -867,4 +867,121 @@ context("Equipment maintenance test", () => {
       });
     });
   });
+
+  context("Update EQ and verify History word", () => {
+    it("Toggle off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Click revise on EQ", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Change PM section", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
+        .type("UPDATED ").wait(500);
+      cy.unClick();
+    });
+
+    it("Change calibration section", () => {
+      cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy,\"calibration\")]/../div[2]")
+        .type("UPDATED ").wait(500);
+      cy.unClick();
+    });
+
+    it("Save changes", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    context("Verify Maintenance History is changed to History", () => {
+      it("Verify for pm", () => {
+        cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+      });
+
+      it("Verify for calibration", () => {
+        cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+      });
+    });
+  });
+
+  context("Update EQ form nad upgrade EQ to latest version with new PM and cal", () => {
+    it("Navig to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filter list to find EQ form", () => {
+      cy.dlFilterByDocId({ docId: "FM-00003" });
+    });
+
+    it("Select first document on list", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    it("Click revise on EQ form", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Add Section", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "New section" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save changes", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    context("Navigate to EQ document and upgrade to latest form", () => {
+      it("Navig to equipment", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Select 'Equipment maintenance document'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
+          CyRoutes.DocPreview,
+          CyRoutes.AvailableMaintenanceForms,
+          CyRoutes.GetFieldLocks], () => {
+          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click revise on EQ form", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Save changes", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Click on upgrade to new form", () => {
+        cy.drClickUpgradeForm();
+      });
+
+      it("Approve and release", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Verify Maintenance History is changed to History", () => {
+      it("Verify for pm", () => {
+        cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+      });
+
+      it("Verify for calibration", () => {
+        cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+      });
+    });
+  });
 });
