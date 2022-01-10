@@ -567,10 +567,10 @@ export function KendoPanel<T extends any>({
         >
           <GridToolbar>
             <Grid container spacing={1}>
-              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+              <Grid item={true} xs={6} className={classes.leftAlign}>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+              <Grid item={true} xs={6} className={classes.rightAlign}>
                 <ColumnShowHideMenu
                   columnDefinition={sortedColumnDefinitions}
                   onChange={onColumnShowHide}
@@ -606,7 +606,7 @@ export function KendoPanel<T extends any>({
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+      <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
     </Box>
   );
