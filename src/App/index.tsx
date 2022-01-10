@@ -1,6 +1,13 @@
 export { default as DocumentRevisionFooter } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter";
 export { default as DocumentRevisionFooterState } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.state";
 export * from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.types";
+export { default as DocumentRevisionFormHeader } from "./Enlil/Features/DocumentRevisionForm/Components/FormHeader/DocumentRevisionFormHeader";
+export * from "./Enlil/Features/DocumentRevisionForm/Components/FormHeader/DocumentRevisionFormHeader.types";
+export { default as DocumentRevisionHeader } from "./Enlil/Features/DocumentRevisionForm/Components/Header/DocumentRevisionHeader";
+export * from "./Enlil/Features/DocumentRevisionForm/Components/Header/DocumentRevisionHeader.types";
+export { default as DocumentRevisionSidebar } from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar";
+export { default as DocumentRevisionSidebarState } from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.state";
+export * from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.types";
 export { default as DocumentRevisionForm } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm";
 export { default as DocumentRevisionFormState } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.state";
 export * from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.types";
