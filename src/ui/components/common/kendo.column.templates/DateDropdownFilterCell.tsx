@@ -76,7 +76,9 @@ export const DateDropdownFilterCell = (props: DateDropdownFilterCellProps) => {
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title="Clear"
+        title={intl.formatMessage({
+          id: "common.clear",
+        })}
         disabled={!hasValue(props?.defaultItem?.value)}
         onClick={onClearButtonClick}
       >
