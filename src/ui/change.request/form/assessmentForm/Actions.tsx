@@ -6,6 +6,7 @@ import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
+import ExportARToEmail from "../../export.email/ExportAREmail";
 import { RouteParamsCreate } from "../../utils/types";
 import { formIdContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
@@ -51,7 +52,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   return (
     <Grid
       container={true}
-      alignItems="flex-end"
+      alignItems="center"
       justify="flex-end"
       direction="row"
     >
@@ -61,6 +62,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
+      {changeRequest?.id && <ExportARToEmail id={changeRequest?.id}/>}
       <AssessmentFormControlsContainer changeRequest={changeRequest} />
     </Grid>
   );

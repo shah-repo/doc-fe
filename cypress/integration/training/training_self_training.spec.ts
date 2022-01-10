@@ -678,7 +678,10 @@ context("Self training test", () => {
       const currentDate = new Date();
       cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
       cy.imapVerifyLastEmailContains(
-        { userEmail: USERS[1].email, content: "Your documents are attached.", date: currentDate });
+        {
+          userEmail: USERS[1].email,
+          content: "Your documents are ready for download. Link will expire in 4 hours.", date: currentDate,
+        });
     });
   });
 
@@ -724,7 +727,7 @@ context("Self training test", () => {
     });
 
     it("Check if next available TRN ID added", () => {
-      cy.get("#trId").clear().arrowType("TRN-00002");
+      cy.trLandingPagetrId({ trId: "TRN-00002" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TRN-00002");
       cy.trClearFilters();

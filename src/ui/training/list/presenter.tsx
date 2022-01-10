@@ -83,7 +83,7 @@ const TrainingListPresenter: React.FunctionComponent<Props> = ({
       return data.map((e) => ({
         trId: e.trId,
         docId: e.trainingPlan.document.docId,
-        revision: e.documentRevision.revision,
+        revision: e.documentRevision.displayRevision,
         docRevTitle: e.documentRevision.name,
         userName: e.trainingPlan.employee.user?.name,
         createdAtAfter: e.createdAt ? getFormattedDateString(e.createdAt, MomentFormats.MonthDateYear) : "",

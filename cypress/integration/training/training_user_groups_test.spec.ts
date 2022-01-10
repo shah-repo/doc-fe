@@ -841,11 +841,9 @@ context("Training user groups test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'Test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(1000);
-      cy.get("#name").clear().arrowType("Test training title");
+      cy.trLandingPageName({ name: "Test training title" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
         .should("contain", "Test training title");
-      cy.wait(1000);
     });
   });
 
@@ -927,9 +925,9 @@ context("Training user groups test", () => {
     });
 
     it(`${USERS[2].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7)
         .should("contain", completedDate);

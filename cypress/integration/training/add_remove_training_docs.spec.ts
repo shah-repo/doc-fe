@@ -841,9 +841,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released doc1");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id);
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
@@ -852,9 +852,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("clear filters", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-        cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      });
+      cy.trLandingPageClearFilter();
     });
   });
 
@@ -915,35 +913,29 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
     });
 
-    it("clear filters", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-        cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      });
-    });
-
     it("Training record for doc1 should be as it is", () => {
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it("Training record for doc3", () => {
-      cy.get("#docId").clear().arrowType(releasedDoc3Id).wait(1000);
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
+      cy.trLandingPageDocId({ docId: releasedDoc3Id });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc3Id).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc3Id).and("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it("Training record for doc2", () => {
-      cy.get("#docId").clear().arrowType(releasedDoc2Id).wait(1000);
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
+      cy.trLandingPageDocId({ docId: releasedDoc2Id });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc2Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
