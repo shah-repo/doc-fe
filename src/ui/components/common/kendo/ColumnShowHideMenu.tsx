@@ -1,9 +1,10 @@
-import { Box, FormControl, IconButton, ListItemText, makeStyles, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Box, FormControl, IconButton, ListItemText, Menu, MenuItem, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
 import Text from "../../../components/Text";
+import { styles } from "./ColumnShowHideMenu.styles";
 import { KendoColumn } from "./types";
 
 interface Props {
@@ -15,14 +16,6 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   columnDefinition,
   onChange,
 }) => {
-
-  const styles = makeStyles(() => ({
-    columnsCus: {
-      fontFamily: "Sora",
-      fontWeight: "bold",
-      fontSize: "14px",
-    },
-  }));
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
