@@ -51,7 +51,7 @@ import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =
     err.message.includes("The following error originated from your application code, not from Cypress") &&
-    err.message.includes("Socket is clos");
+    err.message.includes("Socket is clos") && err.message.includes("scheduledForDeletion");
 
   if (socketIsClosingError) {
     // eslint-disable-next-line no-console
@@ -68,6 +68,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   if (err.message.includes("Cannot read property 'data' of undefined")) {
     // eslint-disable-next-line no-console
     console.log("Ignoring 'Cannot read property 'data' of undefined' error");
+    return false;
+  }
+
+  if (err.message.includes("scheduledForDeletion")) {
+    // eslint-disable-next-line no-console
+    console.log("Cannot read properties of undefined (reading 'scheduledForDeletion')");
     return false;
   }
   return true;
