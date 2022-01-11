@@ -55,8 +55,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     useObserver(() => {
       const value = cloneDeep(purchaseOrderState?.value);
       calculation = omit(value, "items");
-      console.log({ calculation, value });
-
       items = cloneDeep(value?.items);
       if (props.mode === "preview") {
         items?.map((item) => {
