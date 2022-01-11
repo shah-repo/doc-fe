@@ -1,14 +1,24 @@
-import { GridCellProps } from "@progress/kendo-react-grid/dist/npm/interfaces/GridCellProps";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
-export const Schema = (props: GridCellProps) => {
+export const Schema: React.FunctionComponent<GridCellProperties> = ({
+  onChange,
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+
+}) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const title = getTranslatedText(TranslatedText[DisplayText.SCHEMA]);
@@ -22,34 +32,33 @@ export const Schema = (props: GridCellProps) => {
 
 
   const onAddClick = (event: any) => {
-    if (props.onChange) {
-      const schemaValue = checkIfJSONObject(event.schema, title);
-      if (schemaValue && typeof schemaValue === "object") {
-        props.onChange({
-          dataIndex: 0,
-          dataItem: props.dataItem,
-          field: props.field,
-          value: schemaValue,
-          syntheticEvent: event.syntheticEvent,
-        });
-        setOpenForm(false);
-      }
+    if (!onChange) { return; }
+    const schemaValue = checkIfJSONObject(event.schema, title);
+    if ((schemaValue && typeof schemaValue === "object") || (schemaValue === "")) {
+      onChange({
+        dataIndex: 0,
+        dataItem,
+        field,
+        value: schemaValue,
+        syntheticEvent: event.syntheticEvent,
+      });
+      setOpenForm(false);
     }
   };
 
-  const formattedValue = get(props.dataItem, props.field || "");
-  const isEdit = props.dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
-  if (props.rowType === "groupHeader") {
+  const formattedValue = get(dataItem, field || "");
+  const isEdit = dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <>
       <td
-        colSpan={props.colSpan}
-        style={props.style}
+        colSpan={colSpan}
+        style={style}
         role="gridcell"
-        className={props.className}
-        data-grid-col-index={props.columnIndex}
+        className={className}
+        data-grid-col-index={columnIndex}
       >
         <Tooltip
           placement="top"
@@ -75,7 +84,7 @@ export const Schema = (props: GridCellProps) => {
           addClick={onAddClick}
           item={formattedValue}
           isEdit={isEdit}
-          fieldName={props.field}
+          fieldName={field}
           openForm={openForm}
         />
       )}

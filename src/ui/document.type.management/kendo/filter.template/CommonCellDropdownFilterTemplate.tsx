@@ -7,6 +7,7 @@ import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { GridCellProperties } from "../../../components/common/kendo/types";
 import { enumToOptions, translatedOptions } from "../../transform";
 
 
@@ -69,31 +70,34 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
   }
 };
 
-// MOVE IN ANOTHER FILE
-export const EditDropdownCellFormatter = (props) => {
+export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProperties> = ({
+  dataItem,
+  field,
+  rowType,
+  onChange,
+}) => {
   const intl = useIntl();
+  const path = field || "";
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const localizedData: ResultProps = getDropDownDataSource(props.field);
+  const localizedData: ResultProps = getDropDownDataSource(path);
   const isEdit: boolean = get(
-    props.dataItem,
+    dataItem,
     getTranslatedText(TranslatedText[DisplayText.INEDIT])
   );
   const handleChange = (e: DropDownListChangeEvent) => {
-    if (props.onChange) {
-      props.onChange({
+    if (onChange) {
+      onChange({
         dataIndex: 0,
-        dataItem: props.dataItem,
-        field: props.field,
+        dataItem,
+        field,
         syntheticEvent: e.syntheticEvent,
         value: e.target.value.value,
       });
     }
   };
 
-  const { dataItem } = props;
-  const field = props.field || "";
-  const dataValue = dataItem[field] === null ? "" : dataItem[field];
-  if (props.rowType === "groupHeader") {
+  const dataValue = dataItem[path] === null ? "" : dataItem[path];
+  if (rowType === "groupHeader") {
     return null;
   }
   const defaultItem = {
