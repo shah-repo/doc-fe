@@ -5,16 +5,23 @@ import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 import { styles } from "./Status.styles";
 
-export const Status = (props: GridCellProperties) => {
+export const Status = ({
+  dataItem,
+  field,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProperties) => {
   const classes = styles();
-  const status = props.dataItem[props.field || ""];
+  const status = dataItem[field || ""];
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Grid
         container
