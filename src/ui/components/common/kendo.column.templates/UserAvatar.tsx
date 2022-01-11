@@ -6,11 +6,17 @@ import Tooltip from "../kendo/Tooltip";
 import { GridCellProperties } from "../kendo/types";
 import { styles } from "./UserAvatar.style";
 
-export const UserAvatar = (props: GridCellProperties) => {
+export const UserAvatar = ({
+  dataItem,
+  field,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProperties) => {
   const classes = styles();
-  const { field } = props;
-  const userName = get(props.dataItem, props.field || "");
-  const userDetails = userName ? get(props.dataItem, field ? field.replace(".name", "") : "") : undefined;
+  const userName = get(dataItem, field || "");
+  const userDetails = userName ? get(dataItem, field ? field.replace(".name", "") : "") : undefined;
   const owner = userDetails ? userDetails.name : "";
   const avatar = userDetails ? userDetails.avatar : "";
   if (!owner) {
@@ -18,11 +24,11 @@ export const UserAvatar = (props: GridCellProperties) => {
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Box className={classes.avatar}>
         {avatar ?

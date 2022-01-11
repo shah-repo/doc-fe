@@ -1,4 +1,3 @@
-// import { GridCellProps } from "@progress/kendo-react-grid";
 import { GridCellProperties } from "../kendo/types";
 import { cellTemplateMapping } from "./config";
 import { Default } from "./Default";

@@ -32,55 +32,64 @@ interface DropdownFilterCellProps extends GridFilterCellProps {
   onStateChange?: (data: StateChangeProps) => void;
 }
 
-export const DropdownFilterTemplate = (props: DropdownFilterCellProps) => {
+export const DropdownFilterTemplate = ({
+  defaultItem,
+  data,
+  field,
+  onStateChange,
+  defaultValue,
+  onChange,
+  customOperator,
+  value,
+}: DropdownFilterCellProps) => {
   const intl = useIntl();
   const [state, setState] = React.useState({
-    value: props.defaultItem,
+    value: defaultItem,
   });
-  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
+  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
 
-  const onChange = (event: DropDownListChangeEvent) => {
-    hasValue = hasValue(event.target.value, "props.data ::", props.data);
-    const selectedItem = props.data.find((dd) => dd.text === event.target.value.text);
+  const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    hasValue = hasValue(target.value, "props.data ::", data);
+    const selectedItem = data.find((dd) => dd.text === target.value.text);
     setState({
-      value: event.target.value,
+      value: target.value,
     });
-    props.onChange({
+    onChange({
       value: hasValue ? selectedItem?.value : "",
-      operator: hasValue ? props.customOperator || "eq" : "",
-      syntheticEvent: event.syntheticEvent,
+      operator: hasValue ? customOperator || "eq" : "",
+      syntheticEvent,
     });
-    props.onStateChange && props.onStateChange({ selectedItem, parentField: props.field });
+    onStateChange && onStateChange({ selectedItem, parentField: field });
   };
 
-  const onClearButtonClick = (event) => {
+  const onClearButtonClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    props.onChange({
+    onChange({
       value: "",
       operator: "",
       syntheticEvent: event,
     });
     setState({
-      value: props.defaultItem,
+      value: defaultItem,
     });
-    props.onStateChange && props.onStateChange({ parentField: props.field });
+    onStateChange && onStateChange({ parentField: field });
   };
   return (
     <div className="k-filtercell">
       <DropDownList
-        data={props.data}
+        data={data}
         textField="text"
         dataItemKey="value"
-        onChange={onChange}
-        defaultItem={props.defaultItem}
+        onChange={onDropdownChange}
+        defaultItem={defaultItem}
         defaultValue={state.value}
-        value={props.data.find((dd) => dd.value === props.value) || props.defaultItem}
+        value={data.find((dd) => dd.value === value) || defaultItem}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={onClearButtonClick}
-        disabled={(props.value === "" || props.value === null)}
+        disabled={(value === "" || value === null)}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>
