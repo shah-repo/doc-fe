@@ -461,6 +461,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <GridColumn
         key={idx}
         {...column}
+        title={column.title ? getTranslatedText(column.title).toUpperCase() : ""}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
