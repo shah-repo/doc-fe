@@ -13,13 +13,6 @@ const Commandstyles = makeStyles(() => ({
   Cancel: {
     color: Colors.latest_yellow_varient,
   },
-  tooltip: {
-    maxHeight: "100px",
-    overflow: "auto",
-    fontFamily: "Sora",
-    fontSize: 12,
-    whiteSpace: "pre-line",
-  },
 }));
 
 export default Commandstyles;
