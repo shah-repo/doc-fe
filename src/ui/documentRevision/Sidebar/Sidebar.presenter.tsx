@@ -51,7 +51,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                   data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
                   ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
                   onClick={() => handleMenuIconClick(index)}
-                  className={classes.iconButton}
+                  className={classes.iconButtonNew}
                 >
                   {(!loading || item.type !== "bookmarks") && item.icon}
                   {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
@@ -61,7 +61,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
             )
           )}
         </Box>
-        <Box flexGrow={1} >
+        <Box flexGrow={1}>
           {sidebarList[indexNumber].details.component}
         </Box>
       </Box>

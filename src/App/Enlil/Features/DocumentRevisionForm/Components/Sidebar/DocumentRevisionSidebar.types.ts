@@ -1,8 +1,10 @@
 import { IntlShape } from "react-intl";
+import { RouteComponentProps } from "react-router-dom";
 import { DocumentRevisionFormProps, DocumentRevisionFormStateProps, SMProviderProps } from "../../../../..";
 import { DocumentRevision, FBDocumentRevisionProps } from "../../../../../../state/ducks/documentRevisions/types";
 
 export type DocumentRevisionSidebarProps =
+& RouteComponentProps
 & Pick<SMProviderProps, "_documentRevisionFormState" | "_documentRevisionSidebarState">
 & Pick<DocumentRevisionFormProps, "documentRevisions">
 & Pick<Partial<DocumentRevisionFormStateProps>,
