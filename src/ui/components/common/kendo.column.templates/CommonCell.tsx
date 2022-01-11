@@ -1,8 +1,8 @@
-import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
+import { CustomGridCellProps } from "../kendo/types";
 
 
 export const CommonCell = ({
@@ -13,12 +13,17 @@ export const CommonCell = ({
   style,
   className,
   columnIndex,
-}: GridCellProps) => {
+  cellRowClick,
+}: CustomGridCellProps) => {
   const value = get(dataItem, field || "");
   const toCheckIfDate = toValidateIfDate(value);
   const formattedValue = toCheckIfDate
     ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
   if (rowType === "groupHeader") {
     return null;
   }
@@ -29,6 +34,7 @@ export const CommonCell = ({
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       <Tooltip data={formattedValue}/>
     </td>
