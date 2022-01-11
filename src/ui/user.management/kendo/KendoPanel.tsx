@@ -71,7 +71,7 @@ export function KendoPanel<T extends any>({
   isCompanyDropboxEnabled,
 }: Props<T>) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -400,6 +400,7 @@ export function KendoPanel<T extends any>({
       <GridColumn
         key={idx}
         {...column}
+        title={getTranslatedText(column.title).toUpperCase()}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
