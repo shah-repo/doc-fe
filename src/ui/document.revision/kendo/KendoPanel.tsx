@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -52,11 +52,8 @@ import {
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 
-type Props<T> = KendoPanelProps<T>;
-
 let call: CancelTokenSource;
-
-export function KendoPanel<T extends any>({
+export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
   statuses = [],
@@ -69,7 +66,7 @@ export function KendoPanel<T extends any>({
   documentTypeOptions,
   tableCriteria,
   gridData,
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -100,13 +97,12 @@ export function KendoPanel<T extends any>({
 
   let defaultStatus: string = DocumentRevisionStatus.Released;
   let initialDataState: State;
-
   if (kendoConfig) {
     initialDataState = JSON.parse(kendoConfig);
     if (initialDataState.filter?.filters.length) {
-      const fObj: any = find(initialDataState.filter?.filters, {
+      const fObj = find(initialDataState.filter?.filters, {
         field: "displayStatus",
-      }) || { field: null, value: null };
+      }) as FilterDescriptor;
       if (fObj) {
         defaultStatus = fObj.value;
       } else {
@@ -361,7 +357,7 @@ export function KendoPanel<T extends any>({
       })}
     />
   );
-  const EffectiveDateFilterCell: any = (props: GridFilterCellProps) => (
+  const EffectiveDateFilterCell = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
@@ -388,7 +384,7 @@ export function KendoPanel<T extends any>({
     }
     setFireAPI(true);
   };
-  const onEffectiveDateChange = (setDefault: any) => {
+  const onEffectiveDateChange = (setDefault) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {
       setCompletedOnSelectedOption(updatedFilter);
@@ -417,7 +413,7 @@ export function KendoPanel<T extends any>({
       logic: "and",
       filters: clearOtherFilter
         ? []
-        : filter(currentFilters, (o: any) => o.field !== "displayStatus"),
+        : filter(currentFilters as FilterDescriptor[], (filter) => filter.field !== "displayStatus"),
     };
     setCompletedOnSelectedOption(defaultItem);
     setDefaultDDItem(
@@ -441,18 +437,17 @@ export function KendoPanel<T extends any>({
     );
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
-    if (end) {
-      let dataColumns = columnDefinitions;
-      dataColumns = map(dataColumns, (column) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject ? columnObject.width : column.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
+    if (!end) { return false; }
+    let dataColumns = columnDefinitions;
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject ? columnObject.width : column.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
@@ -590,12 +585,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {sortedColumnDefinitions.map((column, idx) => {
-            if (column.show) {
-              return renderKendoColumns(column, idx, width);
-            }
-            return null;
-          })}
+          {sortedColumnDefinitions.map((column, idx) => column.show && renderKendoColumns(column, idx, width))}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
