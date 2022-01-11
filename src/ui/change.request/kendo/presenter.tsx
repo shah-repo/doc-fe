@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { map } from "lodash";
 import { default as React } from "react";
+import { useIntl } from "react-intl";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
@@ -16,8 +17,10 @@ const KendoGridList: React.FunctionComponent<any> = ({
   data,
 }) => {
   const classes = KendoGridStyles();
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const headers = map(gridConfiguration.columns, (column) => ({
-    label: column.title,
+    label: getTranslatedText(column.title).toUpperCase(),
     key: column.field,
   }));
   const customDataSet = (data: ChangeRequest[]) =>
