@@ -1,6 +1,6 @@
 import { GroupDescriptor } from "@progress/kendo-data-query";
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
-import { GridPagerSettings } from "@progress/kendo-react-grid";
+import { GridCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 
@@ -82,4 +82,8 @@ export interface KendoPanelProps<T> {
   previewDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
   documentTypeOptions?: DocumentTypeOptions[];
   currentUserEmail?: string;
+}
+
+export interface CustomGridCellProps extends GridCellProps {
+  cellRowClick?: ((dataItem: any) => void);
 }
