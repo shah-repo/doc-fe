@@ -1,10 +1,10 @@
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableSearchFieldProps } from "../../components/table/search/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { Translation } from "../../translations/types";
 
-export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps, statuses: DocumentRevisionStatus[]): Partial<TableSearchFieldProps> => {
+export const columnSearchConfiguration = (valuePath: string, tableCriteria: TablePanelStateProps): Partial<TableSearchFieldProps> => {
   let searchOptions: Partial<TableSearchFieldProps> = { dataKey: valuePath };
   if (valuePath.startsWith("precalc") || valuePath.startsWith("formInput")) {
     searchOptions.dataKey = `dynamicParams.${valuePath}`;

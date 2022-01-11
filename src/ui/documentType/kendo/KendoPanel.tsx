@@ -17,7 +17,6 @@ import {
   GridExpandChangeEvent,
   GridNoRecords,
   GridRowClickEvent,
-  // GridFilterCellProps,
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig } from "axios";
@@ -61,7 +60,6 @@ import GridStyles from "./styles";
 interface CreateExport {
   dynamicColumns?: any;
 }
-type Props<T> = KendoPanelProps<T> & CreateExport;
 let call;
 
 export function KendoGrid<T extends any>({
@@ -72,7 +70,7 @@ export function KendoGrid<T extends any>({
   queryUrl = "",
   customDataSet,
   normalizrSchema,
-}: Props<T>) {
+}: KendoPanelProps<T> & CreateExport) {
   const dispatch = useDispatch();
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +92,6 @@ export function KendoGrid<T extends any>({
   };
 
   const copyDynamicColumns = cloneDeep(dynamicColumns);
-  // TODO: Not Sure
   const temp: any = [];
   let configColumns: KendoColumn[] = [];
   const list = [
@@ -131,7 +128,6 @@ export function KendoGrid<T extends any>({
       configColumns.push(merge(temp[i], omit(o, omitList)));
     });
   } else {
-    // Put Initial column configuration in store
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
   const initialGridConfigurationColumns: KendoColumn[] = configColumns;
@@ -253,12 +249,14 @@ export function KendoGrid<T extends any>({
     if (didMount) {
       queryApi();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryDict, didMount, tableName]);
 
   useEffect(() => {
     if (forceUpdate) {
       queryApi();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceUpdate]);
 
   const kendoConfigFromState = kendoConfig;
@@ -329,6 +327,7 @@ export function KendoGrid<T extends any>({
         setNoDataMessage(<NoDataFound />);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [gridData]
   );
 
@@ -336,21 +335,20 @@ export function KendoGrid<T extends any>({
     React.useState(configColumns);
   useEffect(() => {
     setColumnDefinitions(configColumns);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableName]);
 
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
-    if (end) {
-      let dataColumns = columnDefinitions;
-      dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject ? columnObject.width : column.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
+    if (!end) { return false; }
+    let dataColumns = columnDefinitions;
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject ? columnObject.width : column.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
@@ -407,12 +405,7 @@ export function KendoGrid<T extends any>({
     ));
 
   const clearFilter = () => {
-    if (
-      dataState &&
-      dataState.filter &&
-      dataState.filter.filters &&
-      dataState.filter.filters.length
-    ) {
+    if (dataState?.filter?.filters?.length) {
       dataState.filter.filters = [];
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       dispatch(

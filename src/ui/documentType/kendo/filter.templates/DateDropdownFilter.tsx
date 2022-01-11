@@ -5,6 +5,8 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
+import { useIntl } from "react-intl";
+import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 
 interface DateDropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
@@ -25,13 +27,13 @@ export const DateDropdownFilterCell = ({
   value,
   operator,
 }: DateDropdownFilterCellProps) => {
-  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
+  const intl = useIntl();
+  const hasValue = (value: { text: string; value: string }) => value && value !== defaultItem;
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
-    hasValue = hasValue(target.value, "props.data ::", data);
+    const isValueExists = hasValue(target.value);
     const selectedItem = data.find((dd) => dd.text === target.value.text);
-
     onChange({
-      value: hasValue ? selectedItem?.value : "",
+      value: isValueExists ? selectedItem?.value : "",
       operator,
       syntheticEvent,
     });
@@ -60,7 +62,7 @@ export const DateDropdownFilterCell = ({
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title="Clear"
+        title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >
