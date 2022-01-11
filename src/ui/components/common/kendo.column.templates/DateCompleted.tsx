@@ -1,8 +1,8 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
 export const DateCompleted = ({
   dataItem,
@@ -12,7 +12,7 @@ export const DateCompleted = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const intl = useIntl();
   const date = dataItem[field || ""];
   const formattedDate = date
