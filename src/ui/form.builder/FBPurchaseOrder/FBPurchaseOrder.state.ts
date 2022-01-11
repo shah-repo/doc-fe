@@ -110,7 +110,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!value) {
       return;
     }
-    const taxRate = Number(this.formatCost(value));
+    const taxRate = Number(this.formatCost(value, 3));
     set(this.value, "taxRate", taxRate);
   };
 
@@ -188,7 +188,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const value = {
       ...this.value,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax),
+      tax: this.formatCost(tax, 3),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
@@ -235,7 +235,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.fetch();
   };
 
-  private formatCost = (value: any) => Number(value || 0).toFixed(2);
+  private formatCost = (value: any, fixedDecimal?: number) => Number(value || 0).toFixed(fixedDecimal || 2);
 
   private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 

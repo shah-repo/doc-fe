@@ -34,13 +34,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
-    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev));
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev));
+    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 3));
+    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 3));
     handleShippingCostChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setShippingCost(getDecimalValue(ev));
 
-    const getDecimalValue = (ev: React.ChangeEvent<any>) => {
+    const getDecimalValue = (ev: React.ChangeEvent<any>, fixedDecimal?: number) => {
       const { target: { value = 0 } = {} } = ev || {};
-      return Math.abs(value).toFixed(2).toString();
+      return Math.abs(value).toFixed(fixedDecimal || 2).toString();
     };
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
@@ -55,6 +55,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     useObserver(() => {
       const value = cloneDeep(purchaseOrderState?.value);
       calculation = omit(value, "items");
+      console.log({ calculation, value });
+
       items = cloneDeep(value?.items);
       if (props.mode === "preview") {
         items?.map((item) => {
