@@ -80,6 +80,7 @@ export function KendoPanel<T extends any>({
   normalizrSchema,
 }: Props<T>) {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -417,7 +418,7 @@ export function KendoPanel<T extends any>({
   };
 
   const defaultItem: DropdownFilterDefaultItem = {
-    text: intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] }),
+    text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
     value: "",
   };
 
@@ -522,6 +523,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
+      title={getTranslatedText(column.title).toUpperCase()}
       cell={(props) => RenderCustomCell(props, column.cell)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
