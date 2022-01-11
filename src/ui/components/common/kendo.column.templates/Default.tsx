@@ -1,7 +1,7 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
 export const Default = ({
   dataItem,
@@ -10,7 +10,7 @@ export const Default = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const value = get(dataItem, field || "");
   return (
     <td

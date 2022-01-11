@@ -4,6 +4,7 @@ export const styles = makeStyles(() =>
   createStyles({
     tooltip: {
       maxHeight: "calc(100vh - 700px)",
+      minHeight: "18px",
       overflow: "auto",
       fontFamily: "Sora",
       fontSize: 12,
