@@ -53,6 +53,13 @@ import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate
 import KendoGridStyles from "./styles";
 
 let call: CancelTokenSource;
+interface DateFilterCellDropdownProps {
+  parentField: string;
+  selectedItem: {
+    text: string;
+    value: string;
+  };
+}
 export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
@@ -383,7 +390,8 @@ export function KendoPanel<T>({
     }
     setFireAPI(true);
   };
-  const onEffectiveDateChange = (setDefault) => {
+
+  const onEffectiveDateChange = (setDefault: DateFilterCellDropdownProps) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {
       setCompletedOnSelectedOption(updatedFilter);
