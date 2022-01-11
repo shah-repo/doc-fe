@@ -23,26 +23,25 @@ export const DropdownFilterTemplate: React.FunctionComponent<DropdownFilterTempl
   value,
 }) => {
   const intl = useIntl();
-  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
-
-  const handleChange = (event: DropDownListChangeEvent) => {
-    hasValue = hasValue(event.target.value);
+  const hasValue = (value: string) => value && value !== defaultItem;
+  const handleChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    const isValueExists = hasValue(target.value);
     onChange({
-      value: hasValue ? event.target.value : "",
-      operator: hasValue ? "eq" : "",
-      syntheticEvent: event.syntheticEvent,
+      value: isValueExists ? target.value : "",
+      operator: isValueExists ? "eq" : "",
+      syntheticEvent,
     });
     if (
-      event.target.value ===
+      target.value ===
       intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
     ) {
       onStateChange && onStateChange(true);
-      return;
+    } else {
+      onStateChange && onStateChange(false);
     }
-    onStateChange && onStateChange(false);
   };
 
-  const onClearButtonClick = (event) => {
+  const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
       value: "",
