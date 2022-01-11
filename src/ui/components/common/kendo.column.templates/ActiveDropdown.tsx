@@ -28,21 +28,11 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProperties> = ({
       value: false,
     },
   ];
-<<<<<<< HEAD
-  const isEdit = props.dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
-  const formattedValue = get(props.dataItem, props.field || "") ? (
-    intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
-  ) : (
-    intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] })
-  );
-  if (props.rowType === "groupHeader") {
-=======
   const isEdit = dataItem.inEdit;
   const formattedValue = get(dataItem, field || "")
     ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
     : intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] });
   if (rowType === "groupHeader") {
->>>>>>> origin/ENC-9914-KENDO-COMMON-CODE
     return null;
   }
   const classes = styles();
