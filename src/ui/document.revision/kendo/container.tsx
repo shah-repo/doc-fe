@@ -1,6 +1,7 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { RouteComponentProps } from "react-router-dom";
 import {
   getTableCriteria,
   getTableData,
@@ -17,7 +18,7 @@ import { documentRevisionQueryStatus } from "../utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import KendoGridList from "./presenter";
 
-const ListContainer: React.FunctionComponent<any> = ({ history }) => {
+const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const data = useSelector(getTableData(TABLE_NAME));

@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { isEmpty, map, set } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { docRevSch } from "../../../common/normalizrSchema";
 import {
@@ -44,9 +45,10 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   const classes = KendoGridStyles();
 
   const dialog = useDialog();
-
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const headers = map(gridConfiguration.columns, (column) => ({
-    label: column.title,
+    label: getTranslatedText(column.title).toUpperCase(),
     key: column.field,
   }));
 
