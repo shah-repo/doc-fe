@@ -50,6 +50,10 @@ const KendoGridStyles = makeStyles((theme) => ({
     marginTop: 10,
     marginLeft: 5,
   },
+  gridExportCreate: {
+    textAlign: "right",
+    marginBottom: theme.spacing(1.25),
+  },
 }
 ));
 export default KendoGridStyles;
