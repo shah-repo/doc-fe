@@ -773,8 +773,12 @@ context("Equipment maintenance test", () => {
             cy.get("div.ReactVirtualized__Table__rowColumn").last().should("have.text", "Active");
           });
 
-          it("Verify 'CAL DUE DATE'", () => {
+          it("Verify 'CAL DUE DATE'", { retries: 3 }, () => {
             SystemRequirement("REQ-2840", "REQ-2910");
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+              cy.reload();
+            });
+            cy.listLoadingElementShouldNotExist();
             cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
           });
 
