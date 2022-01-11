@@ -12,11 +12,8 @@ import {
 } from "../utils/paths";
 import KendoGridList from "./presenter";
 
-type OwnProps = RouteComponentProps;
-type Props = OwnProps;
-
 export const CR_TABLE_NAME = "changeRequests";
-const KendoContainer: React.FunctionComponent<Props> = ({ history }) => {
+const KendoContainer: React.FunctionComponent<RouteComponentProps> = ({ history }) => {
   const edit = (changeRequestId: string) =>
     history.push(changeRequestEditPath(changeRequestId));
   const preview = (changeRequestId: string) =>

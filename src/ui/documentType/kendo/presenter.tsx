@@ -34,7 +34,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   columns,
   isByCategory,
   documentCategory,
-  tableCriteria,  // TODO: Check while doing filter to save in localstorage
+  tableCriteria,
 }) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
@@ -47,7 +47,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       ).isValid()
     ) {
       return {
-        label: column.label,
+        label: column.label.toUpperCase(),
         key: column.key,
       };
     }
@@ -57,7 +57,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: columnLabel,
+      label: columnLabel.toUpperCase(),
       key: column.key,
     };
   });

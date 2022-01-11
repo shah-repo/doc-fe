@@ -14,49 +14,56 @@ interface Props extends GridFilterCellProps {
   onStateChange?: (setDefault: boolean) => void;
 }
 
-export const DropdownFilterTemplate = (props: Props) => {
-  let hasValue: any = (value) => Boolean(value && value !== props.defaultItem);
+export const DropdownFilterTemplate = ({
+  defaultItem,
+  defaultValue,
+  data,
+  onStateChange,
+  onChange,
+  value,
+}: Props) => {
+  const hasValue = (value: string) => value && value !== defaultItem;
   const intl = useIntl();
-  const onChange = (event: DropDownListChangeEvent) => {
-    hasValue = hasValue(event.target.value);
-    props.onChange({
-      value: hasValue ? event.target.value : "",
-      operator: hasValue ? "eq" : "",
-      syntheticEvent: event.syntheticEvent,
+  const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    const isValueExists = hasValue(target.value);
+    onChange({
+      value: isValueExists ? target.value : "",
+      operator: isValueExists ? "eq" : "",
+      syntheticEvent,
     });
     if (
-      event.target.value ===
+      target.value ===
       intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
     ) {
-      props.onStateChange && props.onStateChange(true);
-      return;
+      onStateChange && onStateChange(true);
+    } else {
+      onStateChange && onStateChange(false);
     }
-    props.onStateChange && props.onStateChange(false);
   };
 
-  const onClearButtonClick = (event) => {
+  const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    props.onChange({
+    onChange({
       value: "",
       operator: "",
       syntheticEvent: event,
     });
-    props.onStateChange && props.onStateChange(true);
+    onStateChange && onStateChange(true);
   };
   return (
     <div className="k-filtercell">
       <DropDownList
-        data={props.data}
-        onChange={onChange}
-        value={(props.value || props.defaultValue)}
-        defaultItem={props.defaultItem}
-        defaultValue={props.defaultValue}
+        data={data}
+        onChange={onDropdownChange}
+        value={(value || defaultValue)}
+        defaultItem={defaultItem}
+        defaultValue={defaultValue}
         style={{ textTransform: "uppercase" }}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title="Clear"
-        disabled={!hasValue(props.value)}
+        title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
+        disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >
         <span className="k-icon k-i-filter-clear" />

@@ -6,7 +6,7 @@ import { DateFields } from "./types";
 const columns: KendoColumn[] = [
   {
     field: "trId",
-    title: "TRN ID",
+    title: "common.trId",
     show: true,
     filter: "text",
     locked: false,
@@ -17,7 +17,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "trainingPlan.document.docId",
-    title: "DOC ID",
+    title: "common.docId",
     show: true,
     filter: "text",
     locked: false,
@@ -28,7 +28,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "documentRevision.displayRevision",
-    title: "REVISION",
+    title: "common.revision",
     show: true,
     filter: "text",
     locked: false,
@@ -39,7 +39,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "documentRevision.name",
-    title: "DOCUMENT TITLE",
+    title: "document.title",
     show: true,
     filter: "text",
     locked: false,
@@ -50,7 +50,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "trainingPlan.employee.user.name",
-    title: "TRAINEE",
+    title: "common.trainee",
     show: true,
     filter: "text",
     locked: false,
@@ -62,7 +62,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: DateFields.CREATED_AT,
-    title: "ASSIGNED DATE",
+    title: "common.assign.date",
     show: true,
     locked: false,
     width: 12,
@@ -73,7 +73,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: DateFields.DUE_ON,
-    title: "DUE DATE",
+    title: "common.due.date",
     show: true,
     filter: "text",
     locked: false,
@@ -85,7 +85,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: DateFields.COMPLETED_AT,
-    title: "COMPLETED ON",
+    title: "common.completed.on",
     show: true,
     filter: "text",
     locked: false,
@@ -97,7 +97,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "trainingPlan.curriculumDocIds",
-    title: "TC ID",
+    title: "common.tc.id",
     show: true,
     locked: false,
     width: 10,

@@ -1,23 +1,31 @@
 import { Grid } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
-export const DateInfo = (props: GridCellProperties) => {
-  const date = get(props.dataItem, props.field || "");
+export const DateInfo = ({
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProps) => {
+  const date = get(dataItem, field || "");
   const formattedDate = date ? getFormattedDateString(date, MomentFormats.MonthDateYear) : null;
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Grid
         container

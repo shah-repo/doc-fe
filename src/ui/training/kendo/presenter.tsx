@@ -69,7 +69,7 @@ const KendoGridList: React.FunctionComponent<Props<any>> = ({
           <Text translation="page.title.training" />
         </Typography>
       </Grid>
-      <Grid item style={{ textAlign: "right", marginBottom: 10 }}>
+      <Grid item className={classes.gridClass}>
         <Button
           variant="outlined"
           className={classes.exportListbutton}
@@ -78,7 +78,7 @@ const KendoGridList: React.FunctionComponent<Props<any>> = ({
           onClick={dialog.open}
         >
           <Box display="flex">
-            <ExportIcon className={classes.iconSvg} height={14} width={14} />
+            <ExportIcon className={classes.iconSvg} />
           </Box>
           <Text translation="document.revision.export.list" />
         </Button>

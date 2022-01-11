@@ -1,17 +1,24 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
-export const Default = (props: GridCellProperties) => {
-  const value = get(props.dataItem, props.field || "");
+export const Default = ({
+  dataItem,
+  field,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProps) => {
+  const value = get(dataItem, field || "");
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Tooltip data={value}/>
     </td>

@@ -1,34 +1,54 @@
-import { MultiSelect } from "@progress/kendo-react-dropdowns";
+import { MultiSelect, MultiSelectChangeEvent } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const TagsCell = (props) => {
-  const tags = props.dataItem[props.field];
+interface TagsCellProps {
+  dataItem: any;
+  rowType?: string;
+  colSpan?: number | undefined;
+  style?: any;
+  className?: string;
+  columnIndex?: number;
+  field?: string;
+  isOfficial: boolean;
+}
+
+export const TagsCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  field,
+  isOfficial,
+}: TagsCellProps) => {
+  const tags = dataItem[field || ""];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const availableGroups = allGroups.filter(
-    (group) => group.value !== props.dataItem.id
+    (group) => group.value !== dataItem.id
   );
   const joinTag = availableGroups.map((e) => e.tags).join();
   const selectedTags = joinTag.split(",").filter(Boolean);
-  const updateTagField = (event: any) => {
-    props.dataItem.tags = event?.target?.value;
+  const updateTagField = ({ target }: MultiSelectChangeEvent) => {
+    dataItem.tags = target?.value;
   };
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
-      {props.dataItem.inEdit && props.isOfficial ? (
+      {dataItem.inEdit && isOfficial ? (
         <MultiSelect
           data={selectedTags}
           filterable={true}

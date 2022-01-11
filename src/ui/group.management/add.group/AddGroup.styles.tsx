@@ -1,9 +1,9 @@
 
 
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-const AddGroupStyles = makeStyles(() => ({
+const AddGroupStyles = makeStyles((theme: Theme) => ({
   Button: {
     "margin": 0,
     "boxShadow": "none",
@@ -11,8 +11,8 @@ const AddGroupStyles = makeStyles(() => ({
     "background": Colors.navy,
     "color": Colors.white,
     "fontFamily": "Sora",
-    "paddingRight": 20,
-    "paddingLeft": 20,
+    "paddingRight": theme.spacing(2.5),
+    "paddingLeft": theme.spacing(2.5),
     "textTransform": "none",
     "&:hover": {
       background: Colors.navy,

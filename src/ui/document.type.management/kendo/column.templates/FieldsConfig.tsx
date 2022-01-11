@@ -1,4 +1,4 @@
-import { GridCellProps } from "@progress/kendo-react-grid/dist/npm/interfaces/GridCellProps";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -9,7 +9,17 @@ import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
 
-export const FieldsConfig = (props: GridCellProps) => {
+export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
+  onChange,
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+
+}) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const title = getTranslatedText(TranslatedText[DisplayText.FIELD_CONFIG]);
@@ -21,36 +31,35 @@ export const FieldsConfig = (props: GridCellProps) => {
     setOpenForm(false);
   };
 
-  const onAddClick = (event: any) => {
-    if (props.onChange) {
-      const fieldConfigValue = checkIfJSONObject(event.fieldsConfig, title);
-      if (fieldConfigValue && typeof fieldConfigValue === "object") {
-        props.onChange({
-          dataIndex: 0,
-          dataItem: props.dataItem,
-          field: props.field,
-          value: fieldConfigValue,
-          syntheticEvent: event.syntheticEvent,
-        });
-        setOpenForm(false);
-      }
+  const onAddClick = ({ fieldsConfig, syntheticEvent }: any) => {
+    if (!onChange) { return; }
+    const fieldConfigValue = checkIfJSONObject(fieldsConfig, title);
+    if (fieldConfigValue && typeof fieldConfigValue === "object") {
+      onChange({
+        dataIndex: 0,
+        dataItem,
+        field,
+        value: fieldConfigValue,
+        syntheticEvent,
+      });
+      setOpenForm(false);
     }
   };
-  const formattedValue = get(props.dataItem, props.field || "");
-  const isEdit =  props.dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
+  const formattedValue = get(dataItem, field || "");
+  const isEdit =  dataItem.inEdit;
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <>
       <td
-        colSpan={props.colSpan}
-        style={props.style}
+        colSpan={colSpan}
+        style={style}
         role="gridcell"
-        className={props.className}
-        data-grid-col-index={props.columnIndex}
+        className={className}
+        data-grid-col-index={columnIndex}
       >
         <Tooltip
           placement="top"
@@ -76,7 +85,7 @@ export const FieldsConfig = (props: GridCellProps) => {
           addClick={onAddClick}
           item={formattedValue}
           isEdit={isEdit}
-          fieldName={props.field}
+          fieldName={field}
           openForm={openForm}
         />
       )}

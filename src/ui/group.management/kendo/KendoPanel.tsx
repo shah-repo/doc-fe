@@ -72,8 +72,6 @@ interface GroupManagementProps {
   canCreateGroups: boolean;
 }
 
-type Props<T> = KendoPanelProps<T> & GroupManagementProps;
-
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
@@ -85,9 +83,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   onSelect,
   refreshTable,
   canCreateGroups,
-}: Props<T>) {
+}: KendoPanelProps<T> & GroupManagementProps) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -145,15 +143,21 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     dispatch(groupManagementActions.createGroup(values, createGroupAsync));
   };
 
-  const update = (dataItem: GroupRequestBody) => {
+  const update = ({
+    name,
+    employees,
+    parents,
+    permissions,
+    tags,
+  }: GroupRequestBody) => {
     const payload = {
       defaultForNewUsers: false,
-      name: dataItem.name,
-      employees: dataItem.employees,
+      name,
+      employees,
       isOfficial: Official,
-      parents: dataItem.parents,
-      permissions: dataItem.permissions,
-      tags: dataItem.tags,
+      parents,
+      permissions,
+      tags,
     };
     handleCreate(payload);
   };
@@ -366,10 +370,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     collapsedIds: collapsedState,
   });
   const onDataStateChange = useCallback(
-    (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(gridData, event.dataState);
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
-      setDataState(event.dataState);
+    ({ dataState }: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(gridData, dataState);
+      tableCriteria.kendoConfig = JSON.stringify(dataState);
+      setDataState(dataState);
       setResultState(newDataState);
       setKendoFilterStatus(tableCriteria);
       if (!newDataState.total) {
@@ -379,10 +383,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     [gridData]
   );
   const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
@@ -403,11 +407,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   ;
 
   const employeeCell = (props: GridCellProps) =>
-    <EmployeesCell
-      {...props}
-      employees={activeEmployees}
-    />
-      ;
+    <EmployeesCell {...props} employees={activeEmployees} />;
 
   const groupCell = (props: GridCellProps) =>
     <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />;
@@ -455,6 +455,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <GridColumn
         key={idx}
         {...column}
+        title={getTranslatedText(column.title).toUpperCase()}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
@@ -469,11 +470,11 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       />
     )));
 
-  const columnResize = (event: GridColumnResizeEvent) => {
-    if (event.end) {
+  const columnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    if (end) {
       let dataColumns: KendoColumn[] = gridConfiguration.columns;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(event.columns, { field: column.field });
+        const columnObject = find(columns, { field: column.field });
         column.width = columnObject?.width;
         return column;
       });
@@ -484,10 +485,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     return false;
   };
 
-  const columnReorder = (event: GridColumnReorderEvent) => {
+  const columnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns: KendoColumn[] = gridConfiguration.columns;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -496,8 +497,8 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   };
   const editField = getTranslatedText(TranslatedText[DisplayText.OFFICIAL]);
 
-  const discardEditMode = (dataItem: LoadCompanyGroup) => {
-    const index = gridData.findIndex((data) => data.id === dataItem.id);
+  const discardEditMode = ({ id }: LoadCompanyGroup) => {
+    const index = gridData.findIndex((data) => data.id === id);
     if (gridData[index]) {
       gridData[index].inEdit = false;
     }

@@ -1,25 +1,33 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { useIntl } from "react-intl";
 import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
-export const DateCompleted = (props: GridCellProperties) => {
+export const DateCompleted = ({
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProps) => {
   const intl = useIntl();
-  const date = props.dataItem[props.field || ""];
+  const date = dataItem[field || ""];
   const formattedDate = date
     ? getFormattedDateString(date, MomentFormats.DateTimeComplete)
     : intl.formatMessage({ id: "common.pending" });
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       {formattedDate && <Tooltip data={formattedDate} />}
     </td>

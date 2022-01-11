@@ -1,28 +1,33 @@
-import { Box, FormControl, IconButton, ListItemText, makeStyles, Menu, MenuItem, Typography } from "@material-ui/core";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_view.svg";
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
 import Text from "../../../components/Text";
+import { styles } from "./ColumnShowHideMenu.styles";
 import { KendoColumn } from "./types";
 
 interface Props {
   columnDefinition: any;
-  onChange: (colum: KendoColumn ) => void;
+  onChange: (colum: KendoColumn) => void;
 }
 
 const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   columnDefinition,
   onChange,
 }) => {
-
-  const styles = makeStyles(() => ({
-    columnsCus: {
-      fontFamily: "Sora",
-      fontWeight: "bold",
-      fontSize: "14px",
-    },
-  }));
+  const intl = useIntl();
+  const getTranslatedText = (key: string) =>
+    key ? intl.formatMessage({ id: key }) : "";
   const classes = styles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -34,9 +39,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   };
   return (
     <FormControl variant="outlined">
-      <IconButton
-        onClick={handleClick}
-      >
+      <IconButton onClick={handleClick}>
         <ViewGridIcon />
       </IconButton>
       <Menu
@@ -62,9 +65,16 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
             }
           ></ListItemText>
         </MenuItem>
-        {columnDefinition.map((item: any) =>
-          <MenuItem key={item.title} value={item.field} disabled={item.disabled}>
-            <ListItemText id={item.field} primary={item.title} />
+        {columnDefinition.map((item: any) => (
+          <MenuItem
+            key={item.title}
+            value={item.field}
+            disabled={item.disabled}
+          >
+            <ListItemText
+              id={item.field}
+              primary={getTranslatedText(item.title).toUpperCase()}
+            />
             <Box flexGrow={1} mr={5}></Box>
             {item.show ? (
               <SolidIcon
@@ -80,7 +90,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
               />
             )}
           </MenuItem>
-        )}
+        ))}
       </Menu>
     </FormControl>
   );

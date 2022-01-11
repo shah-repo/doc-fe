@@ -5,7 +5,7 @@ const KendoGridStyles = makeStyles((theme) => ({
   kGrid: {
     width: "calc(100vw - 255px)",
     height: "calc(100vh - 110px)",
-    margin: "5px",
+    margin: theme.spacing(0.625),
   },
   exportBtn: {
     margin: 0,
@@ -23,7 +23,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     backgroundColor: Colors.white,
   },
   addBtn: {
-    "marginRight": "10px",
+    "marginRight": theme.spacing(1.25),
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.navy,
@@ -37,7 +37,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     },
   },
   disabledAddBtn: {
-    "marginRight": "10px",
+    "marginRight": theme.spacing(1.25),
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.white,
@@ -51,7 +51,7 @@ const KendoGridStyles = makeStyles((theme) => ({
     },
   },
   clearButton: {
-    marginLeft: "5px",
+    marginLeft: theme.spacing(0.625),
     boxShadow: "none",
     borderRadius: 100,
     marginRight: 15,

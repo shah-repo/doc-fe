@@ -1,5 +1,6 @@
 import { DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -69,31 +70,34 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
   }
 };
 
-// MOVE IN ANOTHER FILE
-export const EditDropdownCellFormatter = (props) => {
+export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProps> = ({
+  dataItem,
+  field,
+  rowType,
+  onChange,
+}) => {
   const intl = useIntl();
+  const path = field || "";
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const localizedData: ResultProps = getDropDownDataSource(props.field);
+  const localizedData: ResultProps = getDropDownDataSource(path);
   const isEdit: boolean = get(
-    props.dataItem,
+    dataItem,
     getTranslatedText(TranslatedText[DisplayText.INEDIT])
   );
-  const handleChange = (e: DropDownListChangeEvent) => {
-    if (props.onChange) {
-      props.onChange({
+  const handleChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    if (onChange) {
+      onChange({
         dataIndex: 0,
-        dataItem: props.dataItem,
-        field: props.field,
-        syntheticEvent: e.syntheticEvent,
-        value: e.target.value.value,
+        dataItem,
+        field,
+        syntheticEvent,
+        value: target.value.value,
       });
     }
   };
 
-  const { dataItem } = props;
-  const field = props.field || "";
-  const dataValue = dataItem[field] === null ? "" : dataItem[field];
-  if (props.rowType === "groupHeader") {
+  const dataValue = dataItem[path] === null ? "" : dataItem[path];
+  if (rowType === "groupHeader") {
     return null;
   }
   const defaultItem = {

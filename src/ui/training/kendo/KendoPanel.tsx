@@ -66,8 +66,6 @@ import TrainingDetails from "../details/TrainingDetails";
 import KendoGridStyles from "./styles";
 import { DateFields, DroDownFilterChangeProps } from "./types";
 
-type Props<T> = KendoPanelProps<T>;
-
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
@@ -78,8 +76,9 @@ export function KendoPanel<T extends any>({
   tableCriteria,
   rootCustomStyle,
   normalizrSchema,
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const classes = KendoGridStyles();
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -140,32 +139,32 @@ export function KendoPanel<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
-
+    const isoDate = moment().tz(TIME_ZONE).toISOString();
     if (
       defaultTrainingItem?.field === DateFields.CREATED_AT &&
-      defaultTrainingItem?.value
+      defaultTrainingItem.value
     ) {
       params.createdAtAfter = defaultTrainingItem.value;
     }
     if (
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption?.text === CompletedOnDateOptions.NEXT_WEEK
+      dueDateSelectedOption.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
-      params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
+      params.dueOnAfter = isoDate;
       params.dueOnBefore = dueDateSelectedOption.value;
       params.isCompleted = false;
     }
     if (
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption?.text === CompletedOnDateOptions.OVERDUE
+      dueDateSelectedOption.text === CompletedOnDateOptions.OVERDUE
     ) {
-      params.dueOnBefore = moment().tz(TIME_ZONE).toISOString();
+      params.dueOnBefore = isoDate;
       params.isCompleted = false;
     }
 
     if (
       completedOnSelectedOption?.field === DateFields.COMPLETED_AT &&
-      completedOnSelectedOption?.value
+      completedOnSelectedOption.value
     ) {
       params.completedAtAfter = completedOnSelectedOption.value;
     }
@@ -311,23 +310,23 @@ export function KendoPanel<T extends any>({
     );
   };
 
-  // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: DroDownFilterChangeProps) => {
+  // Kendo Grid Actions Methods ({selectedItem, parentField})
+  const onStateChange = ({ selectedItem, parentField }: DroDownFilterChangeProps) => {
     const updatedFilter = {
-      ...setDefault.selectedItem,
-      field: setDefault.parentField,
+      ...selectedItem,
+      field: parentField,
     };
-    if (setDefault.parentField === DateFields.CREATED_AT) {
+    if (parentField === DateFields.CREATED_AT) {
       setDefaultTrainingItem(updatedFilter);
-    } else if (setDefault.parentField === DateFields.DUE_ON) {
+    } else if (parentField === DateFields.DUE_ON) {
       setDueDateSelectedOption(updatedFilter);
-    } else if (setDefault.parentField === DateFields.COMPLETED_AT) {
+    } else if (parentField === DateFields.COMPLETED_AT) {
       setCompletedOnSelectedOption(updatedFilter);
     }
     setKendoDropdownFilter(updatedFilter);
     setFireAPI(true);
   };
-  const setSearchStatus = (state?: ChangeRequestStatus | undefined, isClearAll?: boolean) => {
+  const setSearchStatus = (state?: ChangeRequestStatus, isClearAll?: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: state && !isClearAll ? [] : [],
@@ -350,24 +349,25 @@ export function KendoPanel<T extends any>({
       )
     );
   };
-  const onColumnResize = (event: GridColumnResizeEvent) => {
-    if (event.end) {
-      let dataColumns = columnDefinitions;
-      dataColumns = map(dataColumns, (column) => {
-        const columnObject = find(event.columns, { field: column.field });
-        column.width = columnObject ? columnObject.width : column.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
+  const onColumnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    if (!end) {
+      return false;
     }
-    return false;
-  };
-  const onColumnReorder = (event: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject ? columnObject.width : column.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+
+  };
+  const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
+    let dataColumns = columnDefinitions;
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -392,10 +392,10 @@ export function KendoPanel<T extends any>({
     [gridData]
   );
   const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
@@ -405,9 +405,9 @@ export function KendoPanel<T extends any>({
   );
 
   // On Show / Hide Column From Main Menu
-  const onColumnShowHide = (item: KendoColumn) => {
+  const onColumnShowHide = ({ field }: KendoColumn) => {
     const dataColumns = map(columnDefinitions, (column) => {
-      if (column.field === item.field) {
+      if (column.field === field) {
         column.show = !column.show;
       }
       return column;
@@ -417,7 +417,7 @@ export function KendoPanel<T extends any>({
   };
 
   const defaultItem: DropdownFilterDefaultItem = {
-    text: intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_ITEM] }),
+    text: getTranslatedText(TranslatedText[DisplayText.SELECT_ITEM]),
     value: "",
   };
 
@@ -522,6 +522,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
+      title={getTranslatedText(column.title).toUpperCase()}
       cell={(props) => RenderCustomCell(props, column.cell)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
@@ -543,7 +544,7 @@ export function KendoPanel<T extends any>({
     />
   );
   // Render Kendo Columns
-  const renderKendoGrid = ({ width, height }: Size) => (
+  const renderKendoGrid = ({ width }: Size) => (
     <>
       <KendoGlobalization>
         <KendoGrid
@@ -567,10 +568,10 @@ export function KendoPanel<T extends any>({
         >
           <GridToolbar>
             <Grid container spacing={1}>
-              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+              <Grid item={true} xs={6} className={classes.leftAlign}>
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
-              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+              <Grid item={true} xs={6} className={classes.rightAlign}>
                 <ColumnShowHideMenu
                   columnDefinition={sortedColumnDefinitions}
                   onChange={onColumnShowHide}
@@ -591,12 +592,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {sortedColumnDefinitions.map((column, idx) => {
-            if (column.show) {
-              return renderKendoColumns(column, idx, width);
-            }
-            return null;
-          })}
+          {sortedColumnDefinitions.map((column, idx) => column.show && renderKendoColumns(column, idx, width))}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
@@ -606,7 +602,7 @@ export function KendoPanel<T extends any>({
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
     <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
-      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+      <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
     </Box>
   );

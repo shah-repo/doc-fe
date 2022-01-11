@@ -1,6 +1,13 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
+const commonButtonStyles = {
+  "margin": 0,
+  "boxShadow": "none",
+  "borderRadius": 100,
+  "fontFamily": "Sora",
+  "text-transform": "none",
+};
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -15,15 +22,11 @@ export const styles = makeStyles((theme: Theme) =>
       textDecoration: "none",
     },
     createButton: {
-      "margin": "0px",
-      "boxShadow": "none",
-      "borderRadius": 100,
+      ...commonButtonStyles,
       "background": Colors.navy,
       "color": Colors.white,
-      "fontFamily": "Sora",
-      "paddingRight": 20,
-      "paddingLeft": 20,
-      "textTransform": "none",
+      "paddingRight": theme.spacing(2.5),
+      "paddingLeft": theme.spacing(2.5),
       "&:hover": {
         background: Colors.navy,
       },
@@ -33,22 +36,17 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.common.white,
     },
     exportListbutton: {
-      margin: "0px",
-      boxShadow: "none",
-      fontFamily: "Sora",
-      fontWeight: 600,
-      borderRadius: 100,
-      marginRight: 15,
-      textTransform: "none",
-      paddingRight: 20,
-      paddingLeft: 20,
+      ...commonButtonStyles,
+      marginRight: theme.spacing(1.825),
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
       border: `1px solid ${Colors.navy}`,
       backgroundColor: Colors.white,
       color: Colors.navy,
     },
     iconSvg: {
       fill: Colors.navy,
-      marginRight: 5,
+      marginRight: theme.spacing(0.625),
     },
     title: {
       fontWeight: 700,
@@ -56,8 +54,8 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
       textTransform: "uppercase",
       fontFamily: "Sora",
-      marginTop: 10,
-      marginLeft: 5,
+      marginTop: theme.spacing(1.25),
+      marginLeft: theme.spacing(0.625),
     },
   }),
 );

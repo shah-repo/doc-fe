@@ -1,4 +1,4 @@
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import { ActionCreator } from "redux";
 import { ApiAction } from "../../../state/types";
@@ -18,13 +18,13 @@ const EnableDropboxButton: React.FunctionComponent<Props> = ({
   enableDropboxAction,
   disabled,
 }) => {
-  const styles = makeStyles(() => ({
+  const styles = makeStyles((theme: Theme) => ({
     Button: {
       borderRadius: 100,
-      marginRight: 15,
+      marginRight: theme.spacing(1.825),
       textTransform: "none",
-      paddingRight: 20,
-      paddingLeft: 20,
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
       fontFamily: "Sora",
       fontSize: 12,
       fontWeight: 600,
