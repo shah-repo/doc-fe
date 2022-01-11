@@ -49,7 +49,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
             <IconButton
               disableFocusRipple
               disableRipple
-              style={{ backgroundColor: "transparent", padding: 5 }}
+              className={classes.iconButton}
               disabled={disabled}
               onClick={() =>
                 isNewItem ? add(dataItem) : update(dataItem)
@@ -73,7 +73,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               disableFocusRipple
               disableRipple
               disabled={disabled}
-              style={{ backgroundColor: "transparent", padding: 5 }}
+              className={classes.iconButton}
               onClick={() => cancel(dataItem)}
             >
               <CancelOutlinedIcon
@@ -103,7 +103,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               disableFocusRipple
               disableRipple
               disabled={disabled}
-              style={{ backgroundColor: "transparent", padding: 5 }}
+              className={classes.iconButton}
               onClick={() => edit(dataItem)}
             >
               <EditIcon
@@ -124,7 +124,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
               disableFocusRipple
               disableRipple
               disabled={disabled}
-              style={{ backgroundColor: "transparent", padding: 5 }}
+              className={classes.iconButton}
               onClick={() => remove(dataItem)}
             >
               <DeleteIcon
