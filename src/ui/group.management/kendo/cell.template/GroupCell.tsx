@@ -1,13 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DropDownList } from "@progress/kendo-react-dropdowns";
+import { DropDownList, DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const GroupCell = (props) => {
+interface GroupCellProps {
+  dataItem: any;
+  rowType?: string;
+  colSpan?: number | undefined;
+  style?: any;
+  className?: string;
+  columnIndex?: number;
+  setOfficial: ((props: boolean) => void);
+  isOfficial: boolean;
+  field?: string;
+}
+
+export const GroupCell = ({
+  dataItem,
+  setOfficial,
+  isOfficial,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  field,
+}: GroupCellProps) => {
   const intl = useIntl();
-  const isOfficial = props.dataItem[props.field];
+  const groupData = dataItem[field || ""];
   const localizedData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }),
@@ -18,28 +40,28 @@ export const GroupCell = (props) => {
       value: false,
     },
   ];
-  const updateGroupField = (event: any) => {
-    const Selectedvalue = event?.target?.value;
-    props.dataItem.isOfficial = Selectedvalue.value;
-    props.setOfficial(Selectedvalue.value);
+  const updateGroupField = ({ target }: DropDownListChangeEvent) => {
+    const Selectedvalue = target?.value;
+    dataItem.isOfficial = Selectedvalue.value;
+    setOfficial(Selectedvalue.value);
   };
   const valueSelected = localizedData.filter(
-    (e) => e.value === props.isOfficial
+    (e) => e.value === isOfficial
   )[0];
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
-      {props.dataItem.inEdit ? (
+      {dataItem.inEdit ? (
         <DropDownList
           onChange={updateGroupField}
           data={localizedData}
@@ -49,7 +71,7 @@ export const GroupCell = (props) => {
         />
       ) : (
         <Tooltip
-          data ={isOfficial
+          data ={groupData
             ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
             : intl.formatMessage({
               id: TranslatedText[DisplayText.UNOFFICIAL],

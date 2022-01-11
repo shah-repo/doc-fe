@@ -24,8 +24,8 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     color: Colors.almost_black,
     textTransform: "uppercase",
     fontFamily: "Sora",
-    marginTop: 10,
-    marginLeft: 5,
+    marginTop: theme.spacing(1.25),
+    marginLeft: theme.spacing(0.625),
   },
 }));
 

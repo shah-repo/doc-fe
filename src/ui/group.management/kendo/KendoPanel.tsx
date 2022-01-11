@@ -72,8 +72,6 @@ interface GroupManagementProps {
   canCreateGroups: boolean;
 }
 
-type Props<T> = KendoPanelProps<T> & GroupManagementProps;
-
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
@@ -85,9 +83,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   onSelect,
   refreshTable,
   canCreateGroups,
-}: Props<T>) {
+}: KendoPanelProps<T> & GroupManagementProps) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -409,11 +407,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   ;
 
   const employeeCell = (props: GridCellProps) =>
-    <EmployeesCell
-      {...props}
-      employees={activeEmployees}
-    />
-      ;
+    <EmployeesCell {...props} employees={activeEmployees} />;
 
   const groupCell = (props: GridCellProps) =>
     <GroupCell {...props} isOfficial={Official} setOfficial={setOfficial} />;
@@ -461,6 +455,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <GridColumn
         key={idx}
         {...column}
+        title={getTranslatedText(column.title).toUpperCase()}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}

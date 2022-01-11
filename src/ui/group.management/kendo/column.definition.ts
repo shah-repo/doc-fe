@@ -4,7 +4,7 @@ import { KendoColumn, KendoGridConfiguration, PageState } from "../../components
 const columns: KendoColumn[] = [
   {
     field: "isOfficial",
-    title: "GROUP TYPE",
+    title: "group.management.group.type",
     show: true,
     filter: "boolean",
     groupable: true,
@@ -13,7 +13,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "name",
-    title: "NAME",
+    title: "common.name",
     show: true,
     filter: "text",
     groupable: false,
@@ -22,7 +22,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "memberNames",
-    title: "MEMBERS",
+    title: "common.members",
     show: true,
     filter: "text",
     groupable: false,
@@ -31,7 +31,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "formattedPermissions",
-    title: "PERMISSIONS",
+    title: "common.permissions",
     show: true,
     filter: "text",
     groupable: false,
@@ -40,7 +40,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "formattedTags",
-    title: "TAGS",
+    title: "common.tags",
     show: true,
     filter: "text",
     groupable: false,
@@ -49,7 +49,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "parentName",
-    title: "PARENT GROUPS",
+    title: "common.parent.groups",
     show: true,
     filter: "text",
     groupable: false,
