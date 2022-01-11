@@ -351,7 +351,6 @@ export function KendoPanel<T extends any>({
       setDefaultDDItem(
         getTranslatedText(TranslatedText[DisplayText.SELECT_STATE])
       );
-      setSearchStatus(undefined);
     }
     setFireAPI(true);
   };
