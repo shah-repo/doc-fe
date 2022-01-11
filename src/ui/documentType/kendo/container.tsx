@@ -29,9 +29,7 @@ import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
 import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
 import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 
-type Props = RouteComponentProps<RouteParams>;
-
-const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
+const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({
   match,
 }) => {
   const dispatch = useDispatch();
@@ -104,7 +102,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
     .filter((c) => c.showOnWeb)
     .map(
       (column: PageDetailsColumn) => {
-        const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria, statuses);
+        const searchOptions = columnSearchConfiguration(column.valuePath, tableCriteria);
         return {
           key: column.valuePath as keyof DocumentRevision,
           // version is a hack need to insert inside configuration 20.19
