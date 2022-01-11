@@ -7,8 +7,8 @@ const CellStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   dot: {
-    height: "6px",
-    width: "6px",
+    height: theme.spacing(0.75),
+    width: theme.spacing(0.75),
     borderRadius: "50%",
   },
   Active: {
@@ -65,6 +65,11 @@ const CellStyles = makeStyles((theme) => ({
   Remove: {
     color: Colors.latest_red_varient,
   },
-}
-));
+  iconButton: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+    "padding": 5,
+  },
+}));
 export default CellStyles;
