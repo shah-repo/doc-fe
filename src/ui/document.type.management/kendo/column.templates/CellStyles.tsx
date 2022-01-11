@@ -18,7 +18,7 @@ const CellStyles = makeStyles((theme) => ({
     background: Colors.grey_cloud,
   },
   value: {
-    margin: "5px",
+    margin: theme.spacing(0.625),
   },
   schemaCancelBtn: {
     margin: 0,
@@ -55,6 +55,15 @@ const CellStyles = makeStyles((theme) => ({
     right: 8,
     top: 3,
     color: theme.palette.grey[500],
+  },
+  ButtonColor: {
+    color: Colors.navy,
+  },
+  Cancel: {
+    color: Colors.latest_yellow_varient,
+  },
+  Remove: {
+    color: Colors.latest_red_varient,
   },
 }
 ));

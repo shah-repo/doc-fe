@@ -41,7 +41,7 @@ export const toDocumentTypeBody = (values) => ({
   defaultRevStage: isNull(values.defaultRevStage) ? null : values.defaultRevStage,
   group: values.group,
   hiddenForCreationForUsersWithoutTags: !isEmpty(values.hiddenForCreationForUsersWithoutTags) ?
-    castArray(values.hiddenForCreationForUsersWithoutTags) : null,
+    castArray(values.hiddenForCreationForUsersWithoutTags) : [],
   schema: typeof values.schema == "string" ? parseJSON(values.schema) : values.schema,
   fieldsConfig: typeof values.fieldsConfig === "string" ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });

@@ -21,20 +21,19 @@ interface TextAreaDialogProps extends TextAreaProps {
   item: any;
   isEdit: boolean;
 }
-const FormTextArea = (fieldRenderProps: FormAreaProps) => {
-  const {
-    defaultVal,
-    isEdit,
-    ...others
-  } = fieldRenderProps;
-  return <FieldWrapper>
+const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
+  defaultVal,
+  isEdit,
+  ...others
+}) =>
+  <FieldWrapper>
     <div className={"k-form-field-wrap"}>
       <TextArea defaultValue={defaultVal}
         rows={17}
         {...others} />
     </div>
-  </FieldWrapper>;
-};
+  </FieldWrapper>
+;
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -67,51 +66,59 @@ CustomDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
 };
-export const TextareaDialog = (props: TextAreaDialogProps) => {
+export const TextareaDialog: React.FunctionComponent<TextAreaDialogProps> = ({
+  fieldName,
+  cancelEdit,
+  openForm,
+  title,
+  addClick,
+  item,
+  isEdit,
+}) => {
   const classes = GridCellStyles();
-  const fieldName = props.fieldName || "";
+  const field = fieldName || "";
 
   return (
     <CustomDialog
-      onClose={props.cancelEdit}
-      open={props.openForm}
+      onClose={cancelEdit}
+      open={openForm}
       fullWidth
       maxWidth="sm"
       className="gridTextAreaForm"
     >
-      <CustomDialogTitle onClose={props.cancelEdit}>
-        {props.title}
+      <CustomDialogTitle onClose={cancelEdit}>
+        {title}
       </CustomDialogTitle>
       <Form
-        onSubmit={props.addClick}
+        onSubmit={addClick}
         render={() => (
           <FormElement>
             <fieldset className={"k-form-fieldset"}>
               <DialogContent dividers>
                 <Field
-                  id={fieldName}
-                  name={fieldName}
-                  label={props.title}
+                  id={field}
+                  name={field}
+                  label={title}
                   component={FormTextArea}
                   defaultVal={
-                    !isEmpty(props.item)
-                      ? JSON.stringify(props.item, undefined, 4)
+                    !isEmpty(item)
+                      ? JSON.stringify(item, undefined, 4)
                       : ""
                   }
-                  isEdit={props.isEdit}
+                  isEdit={isEdit}
                 />
               </DialogContent>
               <DialogActions>
                 <Button
                   className={`${"k-button"} ${classes.schemaCancelBtn}`}
-                  onClick={props.cancelEdit}
+                  onClick={cancelEdit}
                 >
                   <Text translation="common.cancel" />
                 </Button>
                 <Button
                   type="submit"
                   className={`${"k-button"} ${classes.schemaAddBtn}`}
-                  disabled={!props.isEdit}
+                  disabled={!isEdit}
                 >
                   <Text translation="common.add" />
                 </Button>

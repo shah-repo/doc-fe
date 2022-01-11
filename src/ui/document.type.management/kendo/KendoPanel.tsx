@@ -196,11 +196,11 @@ export function KendoPanel<T extends { id?: string }>({
     );
   };
 
-  const onDataStateChange = (event: GridDataStateChangeEvent) => {
-    const newDataState = processWithGroups(actualData, event.dataState);
-    setDataState(event.dataState);
+  const onDataStateChange = ({ dataState }: GridDataStateChangeEvent) => {
+    const newDataState = processWithGroups(actualData, dataState);
+    setDataState(dataState);
     setResultState(newDataState);
-    setKendoFilterStatus(JSON.stringify(event.dataState));
+    setKendoFilterStatus(JSON.stringify(dataState));
     setIsLoading(false);
     if (!newDataState.total) {
       setNoDataMessage(<NoDataFound />);
@@ -308,9 +308,9 @@ export function KendoPanel<T extends { id?: string }>({
     ));
 
   // On edit click- all cells in edit mode
-  const enterEdit = (dataItem: DTMRowItem) => {
+  const enterEdit = ({ id }: DTMRowItem) => {
     each(actualData, (item: any) => {
-      if (item.id === dataItem.id) {
+      if (item.id === id) {
         item.inEdit = true;
       }
     });
@@ -379,15 +379,15 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   // TODO: FIND BETTER SOLUTION
-  const gridCellValidation = (dataItem: DTMAddRow) => {
+  const gridCellValidation = ({ documentTypeName, documentTypeAcronym, group }: DTMAddRow) => {
     const emptyFields: string[] = [];
-    if (isEmpty(dataItem.documentTypeName)) {
+    if (isEmpty(documentTypeName)) {
       emptyFields.push("Document Type");
     }
-    if (isEmpty(dataItem.documentTypeAcronym)) {
+    if (isEmpty(documentTypeAcronym)) {
       emptyFields.push("Document Acronym");
     }
-    if (isEmpty(dataItem.group)) {
+    if (isEmpty(group)) {
       emptyFields.push("Group");
     }
     return emptyFields;
@@ -408,24 +408,24 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   // Delete document
-  const deleteDocumnet = (dataItem: DTMRowItem) => {
-    dispatch(documentTypeActions.deleteDocumentType(dataItem.id));
+  const deleteDocumnet = ({ id }: DTMRowItem) => {
+    dispatch(documentTypeActions.deleteDocumentType(id));
   };
 
   // While editing setting the new values to the dataItem
-  const itemChange = (e: GridItemChangeEvent) => {
+  const itemChange = ({ dataItem, field, value }: GridItemChangeEvent) => {
     // For Update
     let newData: T[] = [];
-    if (e.dataItem.id) {
+    if (dataItem.id) {
       newData = map(actualData, (item) => {
-        if (item.id === e.dataItem.id) {
-          item = set(e.dataItem, e.field || "", e.value);
+        if (item.id === dataItem.id) {
+          item = set(dataItem, field || "", value);
         }
         return item;
       });
     } else {
       // For New Record
-      const updatedDataItem = set(e.dataItem, e.field || "", e.value);
+      const updatedDataItem = set(dataItem, field || "", value);
       newData = [updatedDataItem, ...actualData];
     }
     const newDataState = processWithGroups(newData, dataState);
@@ -474,11 +474,11 @@ export function KendoPanel<T extends { id?: string }>({
     );
   };
 
-  const columnResize = (event: GridColumnResizeEvent) => {
+  const columnResize = ({ end, columns }: GridColumnResizeEvent) => {
     let dataColumns: KendoColumn[] = columnDefinitions;
-    if (event.end) {
+    if (end) {
       dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(event.columns, { field: column.field });
+        const columnObject = find(columns, { field: column.field });
         column.width = columnObject?.width;
         return column;
       });
@@ -489,10 +489,10 @@ export function KendoPanel<T extends { id?: string }>({
     return false;
   };
 
-  const columnReorder = (event: GridColumnReorderEvent) => {
+  const columnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns: KendoColumn[] = columnDefinitions;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -501,10 +501,10 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
