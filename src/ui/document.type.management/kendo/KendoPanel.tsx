@@ -66,7 +66,7 @@ export function KendoPanel<T extends { id?: string }>({
   tableCriteria,
 }: Props<T>) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const classes = KendoGridStyles();
   const actualData: T[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
@@ -293,7 +293,7 @@ export function KendoPanel<T extends { id?: string }>({
     sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => (
       col.show && <GridColumn
         {...col}
-        title={col.title.toUpperCase()}
+        title={getTranslatedText(col.title).toUpperCase()}
         key={index}
         cell={TemplateCellMapping[col.field]}
         filterCell={
@@ -357,7 +357,7 @@ export function KendoPanel<T extends { id?: string }>({
     }
   };
   // On field config: inline edit- Update api call
-  const onFieldConfig = (values, id: string) => {
+  const onFieldConfig = (values: DTMAddRow, id: string) => {
     async.start(
       updateDocumentTypeAction,
       id,

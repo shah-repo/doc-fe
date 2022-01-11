@@ -31,16 +31,16 @@ export const FieldsConfig: React.FunctionComponent<GridCellProperties> = ({
     setOpenForm(false);
   };
 
-  const onAddClick = (event) => {
+  const onAddClick = ({ fieldsConfig, syntheticEvent }: any) => {
     if (!onChange) { return; }
-    const fieldConfigValue = checkIfJSONObject(event.fieldsConfig, title);
+    const fieldConfigValue = checkIfJSONObject(fieldsConfig, title);
     if (fieldConfigValue && typeof fieldConfigValue === "object") {
       onChange({
         dataIndex: 0,
         dataItem,
         field,
         value: fieldConfigValue,
-        syntheticEvent: event.syntheticEvent,
+        syntheticEvent,
       });
       setOpenForm(false);
     }

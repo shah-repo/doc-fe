@@ -84,14 +84,14 @@ export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProperti
     dataItem,
     getTranslatedText(TranslatedText[DisplayText.INEDIT])
   );
-  const handleChange = (e: DropDownListChangeEvent) => {
+  const handleChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     if (onChange) {
       onChange({
         dataIndex: 0,
         dataItem,
         field,
-        syntheticEvent: e.syntheticEvent,
-        value: e.target.value.value,
+        syntheticEvent,
+        value: target.value.value,
       });
     }
   };
