@@ -1,14 +1,14 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
-export const Schema: React.FunctionComponent<GridCellProperties> = ({
+export const Schema: React.FunctionComponent<GridCellProps> = ({
   onChange,
   dataItem,
   field,
