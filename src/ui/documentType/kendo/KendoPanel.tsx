@@ -387,7 +387,7 @@ export function KendoGrid<T extends any>({
             ? (props) => <ColumnHeader data={props} />
             : undefined
         }
-        cell={(props) => RenderCustomCell(props, column.cell)}
+        cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}
         orderIndex={column.orderIndex}
         format={column.format}
         columnMenu={
