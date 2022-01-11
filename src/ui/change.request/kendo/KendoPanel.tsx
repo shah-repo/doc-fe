@@ -489,6 +489,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
+      title={getTranslatedText(column.title).toUpperCase()}
       cell={(props) => RenderCustomCell(props, column.cell)}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}

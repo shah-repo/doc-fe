@@ -5,7 +5,7 @@ import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../c
 const columns: KendoColumn[] = [
   {
     field: "crId",
-    title: "AR ID",
+    title: "common.crid",
     show: true,
     filter: "text",
     locked: false,
@@ -16,7 +16,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "title",
-    title: "AR TITLE",
+    title: "cr.title",
     show: true,
     filter: "text",
     locked: false,
@@ -27,7 +27,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "owner.user.name",
-    title: "OWNER",
+    title: "change.request.list.owner",
     show: true,
     filter: "text",
     locked: false,
@@ -39,7 +39,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "state",
-    title: "STATUS",
+    title: "common.status",
     show: true,
     locked: false,
     width: 20,
