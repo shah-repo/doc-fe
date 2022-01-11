@@ -87,7 +87,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   canCreateGroups,
 }: Props<T>) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const didMount = useDidMount();
   const dispatch = useDispatch();
   const classes = KendoGridStyles();
@@ -461,7 +461,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <GridColumn
         key={idx}
         {...column}
-        title={column.title ? getTranslatedText(column.title).toUpperCase() : ""}
+        title={getTranslatedText(column.title).toUpperCase()}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
