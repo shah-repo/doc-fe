@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -60,9 +60,11 @@ import {
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 
-type Props<T> = KendoPanelProps<T>;
-
 let call: CancelTokenSource;
+interface FilterObj {
+  value: string;
+  field: string;
+}
 
 export function KendoPanel<T extends any>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
@@ -74,7 +76,7 @@ export function KendoPanel<T extends any>({
   rootCustomStyle,
   normalizrSchema,
   currentUserEmail = "",
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -109,22 +111,16 @@ export function KendoPanel<T extends any>({
   if (kendoConfig) {
     initialDataState = JSON.parse(kendoConfig);
     if (initialDataState.filter?.filters.length) {
-      const fObj: any = find(initialDataState.filter?.filters, {
+      const statusObject = find(initialDataState.filter?.filters, {
         field: "state",
-      }) || { field: null, value: null };
-      if (fObj) {
-        defaultStatus = fObj.value;
+      }) as FilterDescriptor;
+      if (statusObject) {
+        defaultStatus = statusObject.value;
       } else {
         defaultStatus = getTranslatedText(TranslatedText[DisplayText.SELECT_STATE]);
-        // intl.formatMessage({
-        //   id: TranslatedText[DisplayText.SELECT_STATE],
-        // });
       }
     } else {
       defaultStatus = getTranslatedText(TranslatedText[DisplayText.SELECT_STATE]);
-      // intl.formatMessage({
-      //   id: TranslatedText[DisplayText.SELECT_STATE],
-      // });
     }
   } else {
     initialDataState = {
@@ -177,10 +173,6 @@ export function KendoPanel<T extends any>({
   }, [tableCriteria.forceUpdate]);
 
   const formatParams = () => {
-    interface FilterObj {
-      value: string;
-      field: string;
-    }
     const params: any = {};
     const statusFilterObj = find(dataState.filter?.filters, {
       field: "state",
@@ -358,7 +350,6 @@ export function KendoPanel<T extends any>({
     if (setDefault) {
       setDefaultDDItem(
         getTranslatedText(TranslatedText[DisplayText.SELECT_STATE])
-        // intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
       );
       setSearchStatus(undefined);
     }
@@ -378,7 +369,6 @@ export function KendoPanel<T extends any>({
     if (isClearAll) {
       setDefaultDDItem(
         getTranslatedText(TranslatedText[DisplayText.SELECT_STATE])
-        // intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
       );
       setFireAPI(true);
     }
@@ -546,12 +536,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {sortedColumnDefinitions.map((column, idx) => {
-            if (column.show) {
-              return renderKendoColumns(column, idx, width);
-            }
-            return null;
-          })}
+          {sortedColumnDefinitions.map((column, idx) => column.show && renderKendoColumns(column, idx, width))}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
