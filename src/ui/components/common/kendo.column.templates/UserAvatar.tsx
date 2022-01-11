@@ -1,9 +1,9 @@
 import { Avatar, Box } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { getInitalsFromName } from "../../icons/avatar/helpers";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 import { styles } from "./UserAvatar.style";
 
 export const UserAvatar = ({
@@ -13,7 +13,7 @@ export const UserAvatar = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const classes = styles();
   const userName = get(dataItem, field || "");
   const userDetails = userName ? get(dataItem, field ? field.replace(".name", "") : "") : undefined;
