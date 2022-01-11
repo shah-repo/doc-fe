@@ -66,8 +66,6 @@ import TrainingDetails from "../details/TrainingDetails";
 import KendoGridStyles from "./styles";
 import { DateFields, DroDownFilterChangeProps } from "./types";
 
-type Props<T> = KendoPanelProps<T>;
-
 let call: CancelTokenSource;
 
 export function KendoPanel<T extends any>({
@@ -78,7 +76,7 @@ export function KendoPanel<T extends any>({
   tableCriteria,
   rootCustomStyle,
   normalizrSchema,
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const classes = KendoGridStyles();
@@ -141,32 +139,32 @@ export function KendoPanel<T extends any>({
 
   const formatParams = () => {
     const params: any = {};
-
+    const isoDate = moment().tz(TIME_ZONE).toISOString();
     if (
       defaultTrainingItem?.field === DateFields.CREATED_AT &&
-      defaultTrainingItem?.value
+      defaultTrainingItem.value
     ) {
       params.createdAtAfter = defaultTrainingItem.value;
     }
     if (
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption?.text === CompletedOnDateOptions.NEXT_WEEK
+      dueDateSelectedOption.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
-      params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
+      params.dueOnAfter = isoDate;
       params.dueOnBefore = dueDateSelectedOption.value;
       params.isCompleted = false;
     }
     if (
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption?.text === CompletedOnDateOptions.OVERDUE
+      dueDateSelectedOption.text === CompletedOnDateOptions.OVERDUE
     ) {
-      params.dueOnBefore = moment().tz(TIME_ZONE).toISOString();
+      params.dueOnBefore = isoDate;
       params.isCompleted = false;
     }
 
     if (
       completedOnSelectedOption?.field === DateFields.COMPLETED_AT &&
-      completedOnSelectedOption?.value
+      completedOnSelectedOption.value
     ) {
       params.completedAtAfter = completedOnSelectedOption.value;
     }
@@ -328,7 +326,7 @@ export function KendoPanel<T extends any>({
     setKendoDropdownFilter(updatedFilter);
     setFireAPI(true);
   };
-  const setSearchStatus = (state?: ChangeRequestStatus | undefined, isClearAll?: boolean) => {
+  const setSearchStatus = (state?: ChangeRequestStatus, isClearAll?: boolean) => {
     dataState.filter = {
       logic: "and",
       filters: state && !isClearAll ? [] : [],
@@ -352,18 +350,19 @@ export function KendoPanel<T extends any>({
     );
   };
   const onColumnResize = ({ columns, end }: GridColumnResizeEvent) => {
-    if (end) {
-      let dataColumns = columnDefinitions;
-      dataColumns = map(dataColumns, (column) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject ? columnObject.width : column.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
+    if (!end) {
+      return false;
     }
-    return false;
+    let dataColumns = columnDefinitions;
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject ? columnObject.width : column.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
@@ -593,12 +592,7 @@ export function KendoPanel<T extends any>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {sortedColumnDefinitions.map((column, idx) => {
-            if (column.show) {
-              return renderKendoColumns(column, idx, width);
-            }
-            return null;
-          })}
+          {sortedColumnDefinitions.map((column, idx) => column.show && renderKendoColumns(column, idx, width))}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
