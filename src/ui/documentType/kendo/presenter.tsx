@@ -34,7 +34,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   columns,
   isByCategory,
   documentCategory,
-  tableCriteria,  // TODO: Check while doing filter to save in localstorage
+  tableCriteria,
 }) => {
   const classes = KendoGridStyles();
   const intl = useIntl();

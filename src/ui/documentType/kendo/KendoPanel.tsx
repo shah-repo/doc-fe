@@ -280,10 +280,10 @@ export function KendoGrid<T extends any>({
     collapsedIds: collapsedState,
   });
   const onExpandChange = React.useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
@@ -294,28 +294,28 @@ export function KendoGrid<T extends any>({
   // check if document is editable or readonly
   const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
   // On Grid Row click
-  const onRowClick = (rowData: GridRowClickEvent) => {
-    if (isEmpty(rowData.dataItem.id) || isEmpty(rowData.dataItem.document.id)) {
+  const onRowClick = ({ dataItem }: GridRowClickEvent) => {
+    if (isEmpty(dataItem.id) || isEmpty(dataItem.document.id)) {
       return false;
     }
     let urlPath = documentPreviewPath(
-      rowData.dataItem.id,
-      rowData.dataItem.document.id
+      dataItem.id,
+      dataItem.document.id
     );
-    if (canEdit(rowData.dataItem)) {
+    if (canEdit(dataItem)) {
       urlPath = documentEditPath(
-        rowData.dataItem.id,
-        rowData.dataItem.document.id
+        dataItem.id,
+        dataItem.document.id
       );
     }
     window.open(urlPath, "_self");
   };
   const onDataStateChange = React.useCallback(
-    (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(gridData, event.dataState);
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
+    ({ dataState }: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(gridData, dataState);
+      tableCriteria.kendoConfig = JSON.stringify(dataState);
       tableCriteria.columnConfig = JSON.stringify(columnDefinitions);
-      setDataState(event.dataState);
+      setDataState(dataState);
       setResultState(newDataState);
       dispatch(
         tableSearchActions.setSearchCriteria(
@@ -338,11 +338,11 @@ export function KendoGrid<T extends any>({
     setColumnDefinitions(configColumns);
   }, [tableName]);
 
-  const onColumnResize = (event: GridColumnResizeEvent) => {
-    if (event.end) {
+  const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    if (end) {
       let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(event.columns, { field: column.field });
+        const columnObject = find(columns, { field: column.field });
         column.width = columnObject ? columnObject.width : column.width;
         return column;
       });
@@ -353,10 +353,10 @@ export function KendoGrid<T extends any>({
     return false;
   };
 
-  const onColumnReorder = (event: GridColumnReorderEvent) => {
+  const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -365,7 +365,7 @@ export function KendoGrid<T extends any>({
   };
 
   const getFilterCell = (fieldName: string) => {
-    const foundObj = configColumns?.filter((data: KendoColumn) => data.field === fieldName);
+    const foundObj = configColumns?.filter(({ field }: KendoColumn) => field === fieldName);
     return foundObj?.length ? foundObj[0].filterCell : undefined;
   };
 
@@ -444,7 +444,7 @@ export function KendoGrid<T extends any>({
     updateDataColumnsState(updatedDataColumns);
   };
 
-  const renderKendoGrid = ({ width, height }: Size) => (
+  const renderKendoGrid = ({ width }: Size) => (
     <>
       {isLoading && <Loader />}
       <KendoGlobalization>
