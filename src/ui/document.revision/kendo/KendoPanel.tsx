@@ -124,7 +124,7 @@ export function KendoPanel<T extends any>({
       filter: {
         logic: "and",
         filters: [
-          { field: "displayStatus", operator: "eq", value: DocumentRevisionStatus.Released },
+          { field: "displayStatus", operator: "eq", value: "Released" as DocumentRevisionStatus },
         ],
       },
     };
