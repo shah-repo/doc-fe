@@ -1,3 +1,4 @@
+import { GroupDescriptor } from "@progress/kendo-data-query";
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
 import { GridCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
 import { GridRowType } from "@progress/kendo-react-grid/dist/npm/interfaces/GridRowType";
@@ -43,7 +44,7 @@ export interface DropdownFilterDefaultItem {
 export interface PageState {
   skip: number;
   take: number;
-  group?: any[];
+  group?: GroupDescriptor[];
 }
 
 export interface KendoGridConfiguration {
