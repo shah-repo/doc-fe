@@ -11,7 +11,14 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import KendoGridStyles from "../styles";
 
-export const SignedCell = (props: GridCellProperties) => {
+export const SignedCell = ({
+  rowType,
+  dataItem,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProperties) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
@@ -24,22 +31,17 @@ export const SignedCell = (props: GridCellProperties) => {
 
   const asyncSignUpEmail = useAsync({
     onSuccess: () => {
-      toastInfo(
-        getTranslatedText("user.management.signup.email.sent")
-      );
+      toastInfo(getTranslatedText("user.management.signup.email.sent"));
     },
   });
 
   const asyncResetPasswordEmail = useAsync({
     onSuccess: () => {
-      toastInfo(
-        getTranslatedText("user.management.reset.password.email.sent")
-      );
+      toastInfo(getTranslatedText("user.management.reset.password.email.sent"));
     },
   });
 
-  const handleResendEmail = (employee: GetEmployeeResponse) => {
-    const { user, id } = employee || {};
+  const handleResendEmail = ({ user, id }: GetEmployeeResponse) => {
     user?.locked
       ? asyncResetPasswordEmail.start(
         getSendPasswordResetEmailAction,
@@ -53,36 +55,38 @@ export const SignedCell = (props: GridCellProperties) => {
       );
   };
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
-  const getChildrenElement = <span>
-    {props.dataItem?.user?.confirmed ? (
-      <Text translation="user.management.signed.up" />
-    ) : (
-      <Link
-        component="button"
-        variant="body2"
-        onClick={() => handleResendEmail(props.dataItem)}
-      >
-        <span className={classes.link}>
-          <Text translation="user.management.resend.signup.email" />
-        </span>
-      </Link>
-    )}
-  </span>;
+  const getChildrenElement = (
+    <span>
+      {dataItem?.user?.confirmed ? (
+        <Text translation="user.management.signed.up" />
+      ) : (
+        <Link
+          component="button"
+          variant="body2"
+          onClick={() => handleResendEmail(dataItem)}
+        >
+          <span className={classes.link}>
+            <Text translation="user.management.resend.signup.email" />
+          </span>
+        </Link>
+      )}
+    </span>
+  );
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
-      {!props.dataItem.inEdit && (
+      {!dataItem.inEdit && (
         <Tooltip
           data={
-            props.dataItem?.user?.confirmed
+            dataItem?.user?.confirmed
               ? getTranslatedText("user.management.signed.up")
               : getTranslatedText("user.management.resend.signup.email")
           }

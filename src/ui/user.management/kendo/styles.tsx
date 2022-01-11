@@ -1,14 +1,14 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-const KendoGridStyles = makeStyles((theme) => ({
+const KendoGridStyles = makeStyles((theme: Theme) => ({
   cRoot: {
     width: "99%",
-    margin: "5px",
+    margin: theme.spacing(0.625),
   },
   root: {
     textAlign: "right",
-    marginLeft: "5px",
+    marginLeft: theme.spacing(0.625),
     fontFamily: "Sora",
   },
   kGrid: {
@@ -28,8 +28,14 @@ const KendoGridStyles = makeStyles((theme) => ({
     color: Colors.almost_black,
     textTransform: "uppercase",
     fontFamily: "Sora",
-    marginTop: 10,
-    marginLeft: 5,
+    marginTop: theme.spacing(1.25),
+    marginLeft: theme.spacing(0.625),
+  },
+  errorClass: {
+    color: Colors.red,
+  },
+  dropboxButton: {
+    display: "flex",
   },
 }));
 
