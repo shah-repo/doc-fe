@@ -25,9 +25,10 @@ export const DropdownFilterCell = ({
   const hasValue = (value: string) => value && value !== defaultItem;
 
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    const isValueExists = hasValue(target.value);
     onChange({
-      value: hasValue(target.value) ? target.value : "",
-      operator: hasValue(target.value) ? "contains" : "",
+      value: isValueExists ? target.value : "",
+      operator: isValueExists ? "contains" : "",
       syntheticEvent,
     });
   };

@@ -14,8 +14,8 @@ interface CommandCellProps {
   add: (dataItem: UserManage) => void;
   cancel: (dataItem: UserManage) => void;
   edit: (dataItem: UserManage) => void;
-  colSpan?: any;
-  style?: any;
+  colSpan?: number;
+  style?: React.CSSProperties;
   ariaColumnIndex?: number;
   className?: string;
   columnIndex?: number;

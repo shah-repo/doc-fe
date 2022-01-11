@@ -36,7 +36,7 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   dropboxButton: {
     display: "flex",
-    marginBottom: 10,
+    marginBottom: theme.spacing(1.25),
   },
 }));
 

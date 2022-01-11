@@ -32,7 +32,7 @@ interface User {
 
 export interface AddUserManage {
   user: User;
-  groups: string[] | undefined;
+  groups?: string[];
 }
 
 export interface UserManagementProps<T> extends KendoPanelProps<T>{

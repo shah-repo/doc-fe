@@ -1,10 +1,10 @@
 import { Link } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { useIntl } from "react-intl";
 import { authActions } from "../../../../state/ducks/auth";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 import { toastInfo } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -18,7 +18,7 @@ export const SignedCell = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });

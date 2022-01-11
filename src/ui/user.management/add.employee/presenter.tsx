@@ -1,4 +1,4 @@
-import { Box, Button, makeStyles } from "@material-ui/core";
+import { Box, Button, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
@@ -16,7 +16,7 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
   openDialog,
   closeDialog,
 }) => {
-  const styles = makeStyles(() => ({
+  const styles = makeStyles((theme: Theme) => ({
     Button: {
       "margin": "0px",
       "boxShadow": "none",
@@ -24,8 +24,8 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
       "background": Colors.navy,
       "color": Colors.white,
       "fontFamily": "Sora",
-      "paddingRight": 20,
-      "paddingLeft": 20,
+      "paddingRight": theme.spacing(2.5),
+      "paddingLeft": theme.spacing(2.5),
       "textTransform": "none",
       "&:hover": {
         background: Colors.navy,

@@ -4,6 +4,7 @@ import {
   MultiSelectChangeEvent,
   MultiSelectFilterChangeEvent,
 } from "@progress/kendo-react-dropdowns";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -15,7 +16,6 @@ import {
 import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 import KendoGridStyles from "../styles";
 
 interface GroupOptions {
@@ -23,7 +23,7 @@ interface GroupOptions {
   text: string;
   value: string;
   tags: Nullable<GroupTag[]>;
-  type: GroupType | undefined;
+  type?: GroupType;
   defaultForNewUsers: boolean;
   permissions: Permission[];
   parents: Group[];
@@ -36,7 +36,7 @@ export const GroupsCell = ({
   rowType,
   colSpan,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
@@ -52,13 +52,13 @@ export const GroupsCell = ({
     dataItem.groups = target.value.map((item) => ({
       id: item.value || "",
     }));
-    setResult(target.value as any);
+    setResult(target.value);
   };
 
   const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
     const allData = groupOptions.slice();
     const newData = filterBy(allData, filter);
-    setData(newData as any);
+    setData(newData);
   };
 
   if (rowType === "groupHeader") {
