@@ -372,43 +372,39 @@ export function KendoGrid<T extends any>({
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gropableColumnFields);
 
   const renderKendoColumns = (gridWidth: number) =>
-    sortedColumnDefinitions.map((column: KendoColumn, index: number) => {
-      if (column.show) {
-        return (
-          <GridColumn
-            key={index}
-            field={column.field}
-            width={setColumnWidth(column.width as number, gridWidth)}
-            minResizableWidth={100}
-            locked={column.locked}
-            reorderable={column.reorderable}
-            sortable={column.sortable}
-            title={column.title}
-            filter={column.filter}
-            filterCell={getFilterCell(column.field)}
-            headerCell={
-              column.title
-                ? (props) => <ColumnHeader data={props} />
-                : undefined
-            }
-            cell={(props) => RenderCustomCell(props, column.cell)}
-            orderIndex={column.orderIndex}
-            format={column.format}
-            columnMenu={
-              column.showColumnMenu
-                ? (props) => (
-                  <ColumnMenu
-                    {...props}
-                    columns={columnDefinitions}
-                    tableName={tableName}
-                  />
-                )
-                : undefined
-            }
-          />
-        );
-      }
-    });
+    sortedColumnDefinitions.map((column: KendoColumn, index: number) => column.show && (
+      <GridColumn
+        key={index}
+        field={column.field}
+        width={setColumnWidth(column.width as number, gridWidth)}
+        minResizableWidth={100}
+        locked={column.locked}
+        reorderable={column.reorderable}
+        sortable={column.sortable}
+        title={column.title}
+        filter={column.filter}
+        filterCell={getFilterCell(column.field)}
+        headerCell={
+          column.title
+            ? (props) => <ColumnHeader data={props} />
+            : undefined
+        }
+        cell={(props) => RenderCustomCell(props, column.cell)}
+        orderIndex={column.orderIndex}
+        format={column.format}
+        columnMenu={
+          column.showColumnMenu
+            ? (props) => (
+              <ColumnMenu
+                {...props}
+                columns={columnDefinitions}
+                tableName={tableName}
+              />
+            )
+            : undefined
+        }
+      />
+    ));
 
   const clearFilter = () => {
     if (
@@ -433,9 +429,9 @@ export function KendoGrid<T extends any>({
     }
   };
 
-  const onColumnShowHide = (item: KendoColumn) => {
+  const onColumnShowHide = ({ field }: KendoColumn) => {
     const updatedDataColumns = map(columnDefinitions, (column: KendoColumn) => {
-      if (column.field === item.field) {
+      if (column.field === field) {
         column.show = !column.show;
       }
       return column;
