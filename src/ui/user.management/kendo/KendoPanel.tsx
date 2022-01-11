@@ -54,11 +54,9 @@ import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
 
-type Props<T> = UserManagementProps<T>  ;
-
 let call: CancelTokenSource;
 
-export function KendoPanel<T extends any>({
+export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -69,7 +67,7 @@ export function KendoPanel<T extends any>({
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
-}: Props<T>) {
+}: UserManagementProps<T>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
@@ -100,8 +98,8 @@ export function KendoPanel<T extends any>({
     return newDataState;
   };
 
-  const edit = (dataItem) => {
-    onSelect && onSelect({ dataItem })();
+  const edit = (dataItem: UserManage) => {
+    onSelect && onSelect({ dataItem } as any)();
   };
 
   const add = ({ inEdit, id, name, email, groups }: UserManage) => {
@@ -416,18 +414,16 @@ export function KendoPanel<T extends any>({
     )));
 
   const columnResize = ({ columns, end }: GridColumnResizeEvent) => {
-    if (end) {
-      let dataColumns: KendoColumn[] = gridConfiguration.columns;
-      dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject?.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
+    if (!end) { return false; }
+    let dataColumns: KendoColumn[] = gridConfiguration.columns;
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const columnReorder = ({ columns }: GridColumnReorderEvent) => {

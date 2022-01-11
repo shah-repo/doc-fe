@@ -1,7 +1,7 @@
 import { TextField } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 
 export const NameCell = ({
   dataItem,
@@ -10,8 +10,8 @@ export const NameCell = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
-  const updateNameField = ({ target }: React.ChangeEvent<any>) => {
+}: GridCellProps) => {
+  const updateNameField = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dataItem.name = target?.value;
   };
   if (rowType === "groupHeader") {

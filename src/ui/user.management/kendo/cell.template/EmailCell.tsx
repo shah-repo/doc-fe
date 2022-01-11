@@ -1,7 +1,7 @@
 import { TextField } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 
 export const EmailCell = ({
   dataItem,
@@ -10,8 +10,8 @@ export const EmailCell = ({
   columnIndex,
   style,
   className,
-}: GridCellProperties) => {
-  const updateEmailField = ({ target }: React.ChangeEvent<any>) => {
+}: GridCellProps) => {
+  const updateEmailField = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dataItem.email = target.value;
   };
 
