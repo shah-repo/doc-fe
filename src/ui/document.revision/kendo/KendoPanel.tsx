@@ -380,7 +380,6 @@ export function KendoPanel<T>({
       setDefaultDDItem(
         getTranslatedText(TranslatedText[DisplayText.SELECT_STATE])
       );
-      setSearchStatus(documentRevisionQueryStatus());
     }
     setFireAPI(true);
   };
