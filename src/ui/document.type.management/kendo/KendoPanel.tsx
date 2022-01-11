@@ -357,7 +357,7 @@ export function KendoPanel<T extends { id?: string }>({
     }
   };
   // On field config: inline edit- Update api call
-  const onFieldConfig = (values, id: string) => {
+  const onFieldConfig = (values: DTMAddRow, id: string) => {
     async.start(
       updateDocumentTypeAction,
       id,

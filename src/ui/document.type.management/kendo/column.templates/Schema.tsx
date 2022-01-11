@@ -31,16 +31,16 @@ export const Schema: React.FunctionComponent<GridCellProperties> = ({
   };
 
 
-  const onAddClick = (event: any) => {
+  const onAddClick = ({ schema, syntheticEvent }: any) => {
     if (!onChange) { return; }
-    const schemaValue = checkIfJSONObject(event.schema, title);
+    const schemaValue = checkIfJSONObject(schema, title);
     if ((schemaValue && typeof schemaValue === "object") || (schemaValue === "")) {
       onChange({
         dataIndex: 0,
         dataItem,
         field,
         value: schemaValue,
-        syntheticEvent: event.syntheticEvent,
+        syntheticEvent,
       });
       setOpenForm(false);
     }
