@@ -1,6 +1,6 @@
 import {
   GridColumnMenuWrapper,
-  GridHeaderCellProps
+  GridHeaderCellProps,
 } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "./Tooltip";
@@ -17,7 +17,7 @@ const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => (
         data={data.title}
         childrenElement={
           <span className="k-link" onClick={data.onClick}>
-            <span className="k-column-title">{data.title}</span>
+            <span className="k-column-title">{data.title.toUpperCase()}</span>
 
             {data.children}
           </span>
