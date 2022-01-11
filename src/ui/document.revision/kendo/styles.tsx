@@ -1,6 +1,13 @@
 import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
+const commonButtonStyles = {
+  "margin": 0,
+  "boxShadow": "none",
+  "borderRadius": 100,
+  "fontFamily": "Sora",
+  "text-transform": "none",
+};
 const KendoGridStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(0, 0.625, 1.25, 0.625),
@@ -9,37 +16,27 @@ const KendoGridStyles = makeStyles((theme) => ({
     height: "calc(100vh - 99px)",
   },
   exportListbutton: {
-    margin: 0,
-    boxShadow: "none",
-    borderRadius: 100,
-    marginRight: 15,
-    textTransform: "none",
-    paddingRight: 20,
-    paddingLeft: 20,
-    fontFamily: "Sora",
-    fontSize: 12,
-    fontWeight: 600,
+    ...commonButtonStyles,
+    paddingLeft: theme.spacing(2.5),
+    paddingRight: theme.spacing(2.5),
+    marginRight: theme.spacing(1.875),
     color: Colors.navy,
     border: `1px solid ${Colors.navy}`,
     backgroundColor: Colors.white,
   },
   createDocButton: {
-    "margin": 0,
-    "boxShadow": "none",
-    "borderRadius": 100,
+    ...commonButtonStyles,
+    "paddingLeft": theme.spacing(2.5),
+    "paddingRight": theme.spacing(2.5),
     "background": Colors.navy,
     "color": Colors.white,
-    "fontFamily": "Sora",
-    "paddingRight": 20,
-    "paddingLeft": 20,
-    "textTransform": "none",
     "&:hover": {
       background: Colors.navy,
     },
   },
   iconSvg: {
     fill: Colors.navy,
-    marginRight: 5,
+    marginRight: theme.spacing(0.625),
   },
   title: {
     fontWeight: 700,
@@ -47,8 +44,8 @@ const KendoGridStyles = makeStyles((theme) => ({
     color: Colors.almost_black,
     textTransform: "uppercase",
     fontFamily: "Sora",
-    marginTop: 10,
-    marginLeft: 5,
+    marginTop: theme.spacing(1.25),
+    marginLeft: theme.spacing(0.625),
   },
   gridExportCreate: {
     textAlign: "right",

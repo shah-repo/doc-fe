@@ -22,26 +22,26 @@ export const DropdownFilterTemplate = ({
   onChange,
   value,
 }: Props) => {
-  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
+  const hasValue = (value: string) => value && value !== defaultItem;
   const intl = useIntl();
-  const onDropdownChange = (event: DropDownListChangeEvent) => {
-    hasValue = hasValue(event.target.value);
+  const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    const isValueExists = hasValue(target.value);
     onChange({
-      value: hasValue ? event.target.value : "",
-      operator: hasValue ? "eq" : "",
-      syntheticEvent: event.syntheticEvent,
+      value: isValueExists ? target.value : "",
+      operator: isValueExists ? "eq" : "",
+      syntheticEvent,
     });
     if (
-      event.target.value ===
+      target.value ===
       intl.formatMessage({ id: TranslatedText[DisplayText.SELECT_STATE] })
     ) {
       onStateChange && onStateChange(true);
-      return;
+    } else {
+      onStateChange && onStateChange(false);
     }
-    onStateChange && onStateChange(false);
   };
 
-  const onClearButtonClick = (event) => {
+  const onClearButtonClick = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     onChange({
       value: "",
@@ -62,7 +62,7 @@ export const DropdownFilterTemplate = ({
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
-        title="Clear"
+        title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >
