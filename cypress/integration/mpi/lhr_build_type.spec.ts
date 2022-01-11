@@ -1327,7 +1327,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
     it("Click save document", () => {
@@ -1446,7 +1446,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
     it("Click save document", () => {
