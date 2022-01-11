@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { docRevSch } from "../../../common/normalizrSchema";
 import {
@@ -31,8 +32,11 @@ const KendoGridList: React.FunctionComponent<Props<any>> = ({
   const classes = KendoGridStyles();
 
   const dialog = useDialog();
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
+
   const headers = columns.columns.map((e) => ({
-    label: e.title,
+    label: getTranslatedText(e.title).toUpperCase(),
     key: e.field,
   }));
 
@@ -52,7 +56,7 @@ const KendoGridList: React.FunctionComponent<Props<any>> = ({
           : "",
         completedAtAfter: e.completedAt
           ? getFormattedDateString(e.completedAt, MomentFormats.MonthDateYear)
-          : <Text translation="common.pending" />,
+          : getTranslatedText("common.pending"),
         tcId: e.trainingPlan?.curriculumDocIds,
       }));
     }
