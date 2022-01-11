@@ -19,7 +19,7 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     whiteSpace: "pre-wrap",
   },
   link: {
-    fontSize: "14px",
+    fontSize: 14,
     fontFamily: "Sora",
   },
   title: {
@@ -36,6 +36,7 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   dropboxButton: {
     display: "flex",
+    marginBottom: 10,
   },
 }));
 

@@ -1,12 +1,12 @@
-import { IconButton, makeStyles } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import Colors from "../../../layout/theme/utils/colors";
 import { UserManage } from "../types";
+import Commandstyles from "./CommandCell.styles";
 
 interface CommandCellProps {
   dataItem: UserManage;
@@ -37,20 +37,7 @@ export const CommandCell = ({
 }: CommandCellProps) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const styles = makeStyles(() => ({
-    button: {
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
-    },
-    ButtonColor: {
-      color: Colors.navy,
-    },
-    Cancel: {
-      color: Colors.latest_yellow_varient,
-    },
-  }));
-  const classes = styles();
+  const classes = Commandstyles();
   const inEdit = dataItem[editField];
 
   if (rowType === "groupHeader") {
