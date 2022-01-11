@@ -108,7 +108,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           <Text translation="navigation.document.list"></Text>
         </Typography>
       </Grid>
-      <Grid item={true} style={{ textAlign: "right", marginBottom: 10 }}>
+      <Grid item={true} className={classes.gridExportCreate}>
         <Button
           variant="outlined"
           className={classes.exportListbutton}

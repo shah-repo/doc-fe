@@ -124,7 +124,7 @@ export function KendoPanel<T extends any>({
       filter: {
         logic: "and",
         filters: [
-          { field: "displayStatus", operator: "eq", value: DocumentRevisionStatus.Released },
+          { field: "displayStatus", operator: "eq", value: "Released" as DocumentRevisionStatus },
         ],
       },
     };
@@ -529,6 +529,7 @@ export function KendoPanel<T extends any>({
     <GridColumn
       key={index}
       {...column}
+      title={getTranslatedText(column.title).toUpperCase()}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
       cell={(props) => RenderCustomCell(props, column.cell)}

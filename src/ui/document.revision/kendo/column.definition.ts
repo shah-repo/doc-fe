@@ -5,7 +5,7 @@ import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../c
 const columns: KendoColumn[] = [
   {
     field: "document.docId",
-    title: "DOC ID",
+    title: "document.revision.list.docId",
     show: true,
     filter: "text",
     locked: false,
@@ -16,7 +16,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "displayRevision",
-    title: "REVISION",
+    title: "document.revision.list.revision",
     show: true,
     filter: "text",
     locked: false,
@@ -27,7 +27,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "name",
-    title: "DOCUMENT TITLE",
+    title: "document.revision.list.name",
     show: true,
     filter: "text",
     locked: false,
@@ -38,7 +38,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "document.documentType.documentTypeAcronym",
-    title: "TYPE",
+    title: "document.revision.list.type",
     show: true,
     filter: "text",
     locked: false,
@@ -49,7 +49,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "owner.user.name",
-    title: "OWNER",
+    title: "common.owner",
     show: true,
     filter: "text",
     locked: false,
@@ -61,7 +61,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "changeRequest.crId",
-    title: "AR ID",
+    title: "common.crid",
     show: true,
     filter: "text",
     locked: false,
@@ -72,7 +72,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "displayStatus",
-    title: "STATUS",
+    title: "document.revision.list.state",
     show: true,
     locked: false,
     width: 14,
@@ -83,7 +83,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "effectiveDate",
-    title: "EFFECTIVE DATE",
+    title: "common.effective.date",
     show: true,
     locked: false,
     width: 12,
