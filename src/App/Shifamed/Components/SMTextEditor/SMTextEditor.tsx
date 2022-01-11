@@ -68,6 +68,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               onBlur={(ev) => onBlur?.(ev)}
               {...{ editorRef, onEditorStateChange, toolbar, placeholder }}
               editorState={_textEditorState?.editorState}
+              readOnly={disabled}
               toolbarHidden={isPreview}
               toolbarStyle={{
                 border: "none",
