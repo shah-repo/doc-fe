@@ -13,7 +13,7 @@ import { FormHeaderSummaryContext } from "../../../document.revision/header/Summ
 import { isOperator } from "../../../documentRevision/DocumentRevisionDisplay.container";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { documentRevisionStatusContextFromCR } from "../../../documentRevision/DocumentRevisionUpdate.container";
-import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { documentTypeContext, isOwnerContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
 import FBDynamicValidatorStore from "../../../form.builder/stores/ui/FBDynamicValidatorStore";
 import FBStore from "../../../form.builder/stores/ui/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";

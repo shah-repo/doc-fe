@@ -2,6 +2,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { SM, SMTemplate } from "../../App";
 import AsyncTasksContainer from "../async.tasks/async.tasks.container";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
@@ -34,88 +35,106 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <RemoteValidatorsLoader />
   <PingServer />
   <CssBaseline />
-  <HeaderContainer />
-  <Navigation />
   <SocketsContainer />
   <WatermarkFooterContainer />
-  <main  className={window.location.pathname === "/" ? classes.newContent : classes.content}>
-    <DataFetcherContainer />
-    <Switch>
-      <Route path={DASHBOARD_URL} exact={true} component={DashboardContainer} />
-      <Route path={HOME_URL} exact={true} component={DashboardLayout} />
-      <Route
-        path={CHANGE_REQUEST_CREATE_URL}
-        exact={true}
-        component={ChangeRequestCreateContainer}
-      />
-      <Route
-        path={CHANGE_REQUEST_ROOT_URL}
-        component={ChangeRequestContainer}
-      />
-      <Route
-        path={CHANGE_REQUEST_LIST_URL}
-        exact={true}
-        component={ChangeRequestListContainer}
-      />
-      <Route
-        path={DOCUMENT_REVISION_LIST_URL}
-        exact={true}
-        component={DocumentRevisionListContainer}
-      />
-      <Route
-        path={DOCUMENT_REVISION_CREATE_URL}
-        exact={true}
-        component={DocumentRevisionCreateContainer}
-      />
-      <Route
-        path={DOCUMENT_REVISION_CREATE_MAINTENANCE_URL}
-        exact
-        component={DocumentRevisionCreateContainer}
-      />
-      <Route
-        path={DOCUMENT_REVISION_ROOT_URL}
-        component={DocumentRevisionContainer}
-      />
-      <Route
-        path={TRAINING_DETAIL_URL}
-        component={TrainingDetailContainer}
-      />
-      <Route
-        path={TRAINING_URL}
-        component={TrainingListContainer}
-      />
-      <Route
-        path={USER_MANAGEMENT_ROOT_URL}
-        component={UserManagementListContainer}
-      />
-      <Route
-        path={GROUP_MANAGEMENT_ROOT_URL}
-        component={GroupManagementListContainer}
-      />
-      <Route path={SLACK_ROOT_URL} component={SlackContainer} />
-      <Route
-        path={DOCUMENT_BY_TYPE_LIST_URL}
-        component={DocumentTypeListContainer}
-      />
-      <Route
-        path={DOCUMENT_BY_CATEGORY_LIST_URL}
-        component={DocumentTypeListContainer}
-      />
-      <Route
-        path={DOCUMENT_TYPE_MANAGEMENT_URL}
-        component={DocumentTypeManagementContainer}
-      />
-      <Route
-        path={PAGE_DETAILS_MANAGEMENT_URL}
-        component={PageDetailsManagementContainer}
-      />
-      <Route
-        path={ASYNC_TASKS_URL}
-        component={AsyncTasksContainer}
-      />
-      <Redirect to={{ pathname: HOME_URL }} />
-    </Switch>
-  </main>
+  {SM.isNewLayout && (
+    <main style={{ height: "100vh" }}>
+      <DataFetcherContainer />
+      <SMTemplate leftSidebar={<Navigation />}>
+        <SMTemplate
+          header={<HeaderContainer />}
+          footer={<WatermarkFooterContainer />}
+        >
+          <Switch>
+            <Route
+              path={DOCUMENT_REVISION_CREATE_URL}
+              exact
+              component={DocumentRevisionCreateContainer}
+            />
+            <Route
+              path={DOCUMENT_REVISION_CREATE_MAINTENANCE_URL}
+              exact
+              component={DocumentRevisionCreateContainer}
+            />
+            <Route
+              path={DOCUMENT_REVISION_ROOT_URL}
+              component={DocumentRevisionContainer}
+            />
+          </Switch>
+        </SMTemplate>
+      </SMTemplate>
+    </main>
+  )}
+  {!SM.isNewLayout && (
+    <>
+      <HeaderContainer />
+      <Navigation />
+      <main  className={window.location.pathname === "/" ? classes.newContent : classes.content}>
+        <DataFetcherContainer />
+        <Switch>
+          <Route path={DASHBOARD_URL} exact={true} component={DashboardContainer} />
+          <Route path={HOME_URL} exact={true} component={DashboardLayout} />
+          <Route
+            path={CHANGE_REQUEST_CREATE_URL}
+            exact={true}
+            component={ChangeRequestCreateContainer}
+          />
+          <Route
+            path={CHANGE_REQUEST_ROOT_URL}
+            component={ChangeRequestContainer}
+          />
+          <Route
+            path={CHANGE_REQUEST_LIST_URL}
+            exact={true}
+            component={ChangeRequestListContainer}
+          />
+          <Route
+            path={DOCUMENT_REVISION_LIST_URL}
+            exact={true}
+            component={DocumentRevisionListContainer}
+          />
+          <Route
+            path={TRAINING_DETAIL_URL}
+            component={TrainingDetailContainer}
+          />
+          <Route
+            path={TRAINING_URL}
+            component={TrainingListContainer}
+          />
+          <Route
+            path={USER_MANAGEMENT_ROOT_URL}
+            component={UserManagementListContainer}
+          />
+          <Route
+            path={GROUP_MANAGEMENT_ROOT_URL}
+            component={GroupManagementListContainer}
+          />
+          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
+          <Route
+            path={DOCUMENT_BY_TYPE_LIST_URL}
+            component={DocumentTypeListContainer}
+          />
+          <Route
+            path={DOCUMENT_BY_CATEGORY_LIST_URL}
+            component={DocumentTypeListContainer}
+          />
+          <Route
+            path={DOCUMENT_TYPE_MANAGEMENT_URL}
+            component={DocumentTypeManagementContainer}
+          />
+          <Route
+            path={PAGE_DETAILS_MANAGEMENT_URL}
+            component={PageDetailsManagementContainer}
+          />
+          <Route
+            path={ASYNC_TASKS_URL}
+            component={AsyncTasksContainer}
+          />
+          <Redirect to={{ pathname: HOME_URL }} />
+        </Switch>
+      </main>
+    </>
+  )}
 </div>;
 
 export default withStyles(styles)(Layout);

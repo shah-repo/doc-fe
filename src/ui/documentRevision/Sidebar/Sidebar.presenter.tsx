@@ -2,6 +2,7 @@ import { Box, CircularProgress, Divider, Drawer, IconButton, Typography } from "
 import classNames from "classnames";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { SM } from "../../../App";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
@@ -31,10 +32,41 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const { bookmarkState } = FB.useStores();
+  const { _documentRevisionSidebarState } = SM.useStores();
+
+  _documentRevisionSidebarState?.setTitle(sidebarList[indexNumber].details.title);
 
   useObserver(() => {
     loading = bookmarkState?.loading;
   });
+
+  if (SM.isNewLayout) {
+    return (
+      <Box display="flex">
+        <Box width={55} textAlign="center">
+          {sidebarList.map((item, index) =>
+            item.details.shouldShow && (
+              <Box key={item.details.title}>
+                <IconButton
+                  data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
+                  ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
+                  onClick={() => handleMenuIconClick(index)}
+                  className={classes.iconButton}
+                >
+                  {(!loading || item.type !== "bookmarks") && item.icon}
+                  {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
+                </IconButton>
+
+              </Box>
+            )
+          )}
+        </Box>
+        <Box flexGrow={1} >
+          {sidebarList[indexNumber].details.component}
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Drawer

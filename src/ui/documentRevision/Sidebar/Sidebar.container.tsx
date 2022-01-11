@@ -1,26 +1,26 @@
 import React, { useRef, useState } from "react";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import SidebarPresenter from "./Sidebar.presenter";
 import { Sidebar } from "./types";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];
-  isDrawerOpen: boolean;
-  setOpen: (value: boolean) => void;
+  isDrawerOpen?: boolean;
+  setOpen?: (value: boolean) => void;
 }
 
 export const SidebarContainer: React.FunctionComponent<
   SidebarContainerProps
 > = ({
   sidebarList,
-  isDrawerOpen,
+  isDrawerOpen = true,
   setOpen,
 }) => {
   const [indexNumber, setIndex] = useState(0);
   const inputRef = useRef(null);
   useScrollIntoView();
   const onDrawerToggle = () => {
-    setOpen(!isDrawerOpen);
+    setOpen?.(!isDrawerOpen);
     if (isDrawerOpen) {
       setIndex(0);
     }
@@ -32,7 +32,7 @@ export const SidebarContainer: React.FunctionComponent<
   };
   const handleMenuIconClick = (index: number) => {
     if (!isDrawerOpen) {
-      setOpen(!isDrawerOpen);
+      setOpen?.(!isDrawerOpen);
       setIndex(index);
       return;
     }

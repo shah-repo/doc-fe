@@ -1,8 +1,11 @@
 import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
+import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
+import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
@@ -16,18 +19,33 @@ import { DRAWER_WIDTH } from "../../app/Navigation.styles";
 import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
-import { FBWorkspace, FBWorkspaceMode } from "../../form.builder";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
+import { FBWorkspaceMode } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
+import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isDocumentRevisionReleased } from "../helpers/documentRevisionStatus";
+import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { SIDEBAR_WIDTH } from "../Sidebar/styles";
-import DocumentRevisionFormPresenter from "./DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "./types";
+
+export interface FormHeaderContext {
+  documentRevision: DocumentRevision;
+  canChangeOwnerShip: boolean;
+  values: DocumentRevisionFormValues;
+  isDisabled: boolean;
+  asyncState: AsyncState;
+  type?: DocumentCloneType;
+  lastSavedTimestamp?: string;
+}
+
+export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
+export let isOwnerContext = React.createContext<boolean>(false);
+export let documentTypeContext = React.createContext<string | undefined>(undefined);
 
 interface OwnProps {
   initialValues: DocumentRevisionFormValues;
@@ -52,12 +70,13 @@ interface OwnProps {
   lastSavedTimestamp?: string;
 }
 
-type DocumentRevisionFormContainerProps = OwnProps;
+type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
 
 const DocumentRevisionFormContainer: React.FunctionComponent<
 DocumentRevisionFormContainerProps
 > = ({
   onSubmit,
+  _formState,
   initialValues,
   asyncState,
   showRevisionTypeChange,
@@ -76,7 +95,6 @@ DocumentRevisionFormContainerProps
 }) => {
   const bannerPortal = React.useRef(null);
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
-  const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
@@ -84,6 +102,7 @@ DocumentRevisionFormContainerProps
   const { revisionStage } = documentRevision || {};
 
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
+
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
@@ -148,17 +167,7 @@ DocumentRevisionFormContainerProps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentTypeAcronym]);
 
-  useEffect(() => {
-    if (!document.id) {
-      return;
-    }
-    setReleasedDocRev((document?.documentRevisions).find((doc) => isDocumentRevisionReleased(doc.status)));
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [document?.documentRevisions]);
-
   // FB config
-  const FBContainer = React.useRef(null);
   const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
@@ -183,48 +192,69 @@ DocumentRevisionFormContainerProps
   } else if (pmForm) {
     mode = "form";
   }
+  _formState?.setMode(mode);
+  const email = useSelector(authSelectors.currentUserEmail);
+  const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isDisabled: boolean = initialValues.id !== undefined;
+
+  isOwnerContext = React.createContext(isOwner);
+  documentTypeContext = React.createContext(documentTypeAcronym);
+  FormHeaderContext = React.createContext<FormHeaderContext | undefined>({
+    documentRevision,
+    canChangeOwnerShip,
+    values: initialValues,
+    isDisabled,
+    asyncState,
+    type,
+    lastSavedTimestamp,
+  });
+
+  const groupOptions1 = documentRevision?.document.documentType.groupOptions;
+  const isMPIOutput = checkIsDocumentMPIOutput(groupOptions1);
+  const isLHR = checkIsDocumentLHR(groupOptions1);
+  const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
+    documentRevision?.status,
+    documentRevision?.formDocument?.status,
+    documentRevision?.formDocument?.document?.id
+  );
+  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
+
+  const shouldShowUpgrade =
+    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+    && !isMPIOutput && !isLHR;
 
   const render = (props: FormikProps<DocumentRevisionFormValues>) => (
-    <FBWorkspace
-      portalContainer={FBContainer}
-      isPortal={true}
-      document={{
-        ...props.values as unknown as DocumentRevision,
-        ...documentRevision as unknown as DocumentRevision,
-      }}
-      initialValues={formInput}
-      autosave={autosaveEnabled}
+    <DocumentRevisionForm
+      formValues={props}
       schema={originScheme}
-      {...{ mode }}
-    >
-      <DocumentRevisionFormPresenter
-        {...props}
-        {...{
-          asyncState,
-          documentRevisions,
-          documentRevision,
-          availableReferences,
-          showRevisionTypeChange,
-          proposedDocId,
-          setDocId,
-          doNotPrompt,
-          onDirtyFlagChange,
-          documentTypesById,
-          canChangeOwnerShip,
-          type,
-          isNewVersion,
-          FBContainer,
-          bannerPortal,
-          showAdministrativeAndVoidChange,
-          pmFormId,
-          releasedDocRev,
-          redlineActive,
-          isOutput,
-          lastSavedTimestamp,
-          originScheme,
-        }}
-      />
-    </FBWorkspace>
+      {...{
+        documentRevision,
+        shouldShowUpgrade,
+        bannerPortal,
+        type,
+        isDisabled,
+        documentRevisions,
+        availableReferences,
+        showRevisionTypeChange,
+        proposedDocId,
+        setDocId,
+        doNotPrompt,
+        onDirtyFlagChange,
+        documentTypesById,
+        canChangeOwnerShip,
+        isNewVersion,
+        showAdministrativeAndVoidChange,
+        pmFormId,
+        document,
+        redlineActive,
+        isOutput,
+        lastSavedTimestamp,
+        email,
+        isOwner,
+        autosaveEnabled,
+        formInput,
+      }}
+    />
   );
 
   return (
@@ -234,7 +264,8 @@ DocumentRevisionFormContainerProps
       startActionOnMount={true}
     >
       <div ref={bannerPortal}
-        style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }} />
+        style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
+      />
       <Grid style={{ background: Colors.light_gray }} >
         {
           type !== "newOutput" &&
@@ -254,4 +285,5 @@ DocumentRevisionFormContainerProps
   );
 };
 
-export default DocumentRevisionFormContainer;
+export default withSMForm(DocumentRevisionFormContainer);
+

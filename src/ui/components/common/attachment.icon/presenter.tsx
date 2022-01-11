@@ -11,7 +11,7 @@ import { Document, DocumentRevisionStatus } from "../../../../state/ducks/docume
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
-import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.presenter";
+import { FormHeaderContext } from "../../../documentRevision/forms/DocumentRevisionForm.container";
 import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
