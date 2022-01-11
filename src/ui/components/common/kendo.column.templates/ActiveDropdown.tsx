@@ -1,13 +1,13 @@
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../kendo/helpers";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 import { styles } from "./ActiveDropdown.style";
 
-export const ActiveDropdown: React.FunctionComponent<GridCellProperties> = ({
+export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   dataItem,
   field,
   rowType,
