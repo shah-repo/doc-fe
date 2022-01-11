@@ -1,0 +1,119 @@
+import { ContentState, convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+import { map } from "lodash";
+import React, { useMemo } from "react";
+import { useIntl } from "react-intl";
+import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
+
+export const withSMTextEditor = <T extends SMTextEditorProps>(
+  Component: React.FunctionComponent<T>,
+) => {
+  const Comp = ({
+    onEditorStateChange,
+    handleMask,
+    onBlur,
+    editorRef,
+    _textEditorState,
+    label,
+    isPreview,
+    formValue,
+    toolbar,
+    masked,
+    name = "",
+    ...props
+  }: T) => {
+    // MARK: @config
+    const intl = useIntl();
+    const { _formState, _documentRevisionFormState } = SM.useStores();
+    formValue = _formState?.getValue(name);
+    _textEditorState = SM.useRef(SMTextEditorState, htmlToEditorState(formValue));
+    const emptyHtmlContent = "<p></p>";
+
+    !toolbar && (toolbar = {
+      options: [
+        "inline",
+        "blockType",
+        "fontSize",
+        "fontFamily",
+        "list",
+        "textAlign",
+        "colorPicker",
+        "link",
+        "remove",
+        "history",
+      ],
+      inline: { options: ["bold", "italic", "underline", "monospace"] },
+    });
+
+    useMemo(
+      () => {
+        const intlValues = (label as SMTextLocaleProps).values;
+        map(intlValues, (value, key) => intlValues[key] = intl.formatMessage({ id: value }));
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
+
+    // MARK: @state
+
+    // MARK: @reactions
+    SM.reaction(
+      () => _formState?.getValue(name),
+      (value) => {
+        const editorState = htmlToEditorState(value);
+        _textEditorState?.setEditorState(editorState);
+      }
+    );
+
+    // MARK: @helpers
+    // Creates editor state with initial value
+    function htmlToEditorState(value?: string): EditorState {
+      if (!value) { return EditorState.createEmpty(); }
+      const contentBlock = htmlToDraft(value);
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      return EditorState.createWithContent(contentState);
+    }
+
+    // MARK: @methods
+    onEditorStateChange = (editorState: EditorState) =>
+    _textEditorState?.setEditorState(editorState);
+
+    handleMask = (masked: boolean) => {
+      if (!_textEditorState?.editorReference) { return; }
+      !masked && _textEditorState.editorReference.focus();
+      _textEditorState?.setMasked(masked);
+    };
+
+    onBlur = () => {
+      handleMask?.(true);
+      const editorState = _textEditorState?.editorState;
+      if (!editorState) { return; }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent())).trim();
+      (htmlContent === emptyHtmlContent) && (htmlContent = "");
+      if (_formState?.getValue(name) === htmlContent) { return; }
+      _formState?.setValue(name, htmlContent);
+      _documentRevisionFormState?.save(name, htmlContent);
+    };
+
+    editorRef = (ref) =>
+      _textEditorState && (_textEditorState.editorReference = ref);
+
+    return  Component({
+      ...(props as T),
+      onEditorStateChange,
+      handleMask,
+      onBlur,
+      editorRef,
+      _textEditorState,
+      _formState,
+      name,
+      label,
+      formValue,
+      toolbar,
+    });
+  };
+  Comp.displayName = "withSMTextEditor";
+  return Comp;
+};

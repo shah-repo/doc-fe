@@ -39,6 +39,9 @@ export { default as SMTemplate } from "./Shifamed/Components/SMTemplate/SMTempla
 export * from "./Shifamed/Components/SMTemplate/SMTemplate.types";
 export { default as SMText } from "./Shifamed/Components/SMText/SMText";
 export * from "./Shifamed/Components/SMText/SMText.types";
+export { default as SMTextEditor } from "./Shifamed/Components/SMTextEditor/SMTextEditor";
+export { default as SMTextEditorState } from "./Shifamed/Components/SMTextEditor/SMTextEditor.state";
+export * from "./Shifamed/Components/SMTextEditor/SMTextEditor.types";
 export * from "./Shifamed/Utils/SM/SM";
 export { default as SM } from "./Shifamed/Utils/SM/SM";
 export { default as SMProvider } from "./Shifamed/Utils/SMProvider/SMProvider";
