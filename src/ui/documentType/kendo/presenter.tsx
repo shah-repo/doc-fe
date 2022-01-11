@@ -47,7 +47,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       ).isValid()
     ) {
       return {
-        label: column.label,
+        label: column.label.toUpperCase(),
         key: column.key,
       };
     }
@@ -57,7 +57,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: columnLabel,
+      label: columnLabel.toUpperCase(),
       key: column.key,
     };
   });
