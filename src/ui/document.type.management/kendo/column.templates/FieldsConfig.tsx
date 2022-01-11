@@ -1,15 +1,15 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as FieldConfigIcon } from "../../../../assets/images/grid_field_config.svg";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 import checkIfJSONObject from "../helper";
 import { TextareaDialog } from "./TextareaDialog";
 
 
-export const FieldsConfig: React.FunctionComponent<GridCellProperties> = ({
+export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
   onChange,
   dataItem,
   field,
@@ -46,7 +46,7 @@ export const FieldsConfig: React.FunctionComponent<GridCellProperties> = ({
     }
   };
   const formattedValue = get(dataItem, field || "");
-  const isEdit =  dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
+  const isEdit =  dataItem.inEdit;
 
   if (rowType === "groupHeader") {
     return null;

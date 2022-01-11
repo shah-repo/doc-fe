@@ -1,5 +1,6 @@
 import { DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -7,7 +8,6 @@ import { GroupTag } from "../../../../state/ducks/auth/types";
 import { DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 import { enumToOptions, translatedOptions } from "../../transform";
 
 
@@ -70,7 +70,7 @@ export const getDropDownDataSource: (f: string) => ResultProps = (field: string)
   }
 };
 
-export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProperties> = ({
+export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProps> = ({
   dataItem,
   field,
   rowType,
