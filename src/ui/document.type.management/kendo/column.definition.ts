@@ -7,12 +7,12 @@ enum DTMCellTemplates {
 
 const columns: KendoColumn[] = [{
   field: "id",
-  title: "ID",
+  title: "common.id",
   show: false,
 },
 {
   field: "active",
-  title: "Status",
+  title: "common.status",
   filter: "text",
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
@@ -23,7 +23,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "documentTypeName",
-  title: "Document Type",
+  title: "common.document.type.name",
   show: true,
   width: "165px",
   locked: true,
@@ -32,7 +32,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "documentTypeAcronym",
-  title: "Acronym",
+  title: "common.document.type.acronym",
   show: true,
   width: "125px",
   locked: false,
@@ -41,7 +41,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "privateNumberPool",
-  title: "Private Number Pool",
+  title: "common.private.number.pool",
   filter: "boolean",
   show: true,
   width: "110px",
@@ -50,7 +50,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "canRedLine",
-  title: "RedLine",
+  title: "common.redline",
   filter: "boolean",
   show: true,
   width: "110px",
@@ -59,7 +59,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "isQms",
-  title: "Qms",
+  title: "common.qms",
   filter: "boolean",
   show: true,
   width: "110px",
@@ -68,7 +68,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "needsSignature",
-  title: "Needs Signature",
+  title: "form.builder.needsSignature",
   filter: "boolean",
   show: true,
   width: "110px",
@@ -77,7 +77,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "defaultTraining",
-  title: "Training",
+  title: "common.training",
   filter: "boolean",
   show: true,
   width: "110px",
@@ -85,7 +85,7 @@ const columns: KendoColumn[] = [{
   orderIndex: 7,
 }, {
   field: "startingNumber",
-  title: "Starting Number",
+  title: "common.starting.number",
   show: true,
   width: "185px",
   groupable: false,
@@ -93,7 +93,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "defaultRevStage",
-  title: "Revision Stage",
+  title: "document.revision.stage",
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "165px",
@@ -102,7 +102,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
-  title: "Users without Tags", // TODO: Check if multiSelect
+  title: "common.hidden.message", // TODO: Check if multiSelect
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "200px",
@@ -111,7 +111,7 @@ const columns: KendoColumn[] = [{
 },
 {
   field: "group",
-  title: "Group",
+  title: "common.group",
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "125px",
@@ -119,14 +119,14 @@ const columns: KendoColumn[] = [{
   orderIndex: 11,
 }, {
   field: "category",
-  title: "Category", // In Wireframe its dd but not in existing. No datasource found
+  title: "form.builder.category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
   width: "125px",
   groupable: true,
   orderIndex: 12,
 }, {
   field: "schema",
-  title: "Schema",
+  title: "common.schema",
   show: true,
   filterable: false,
   width: "110px",
@@ -134,7 +134,7 @@ const columns: KendoColumn[] = [{
   orderIndex: 13,
 }, {
   field: "fieldsConfig",
-  title: "Field Config",
+  title: "common.fields.config",
   show: true,
   filterable: false,
   width: "110px",
