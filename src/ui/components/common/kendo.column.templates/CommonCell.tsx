@@ -1,8 +1,8 @@
+import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 
 
 export const CommonCell = ({
@@ -13,7 +13,7 @@ export const CommonCell = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const value = get(dataItem, field || "");
   const toCheckIfDate = toValidateIfDate(value);
   const formattedValue = toCheckIfDate

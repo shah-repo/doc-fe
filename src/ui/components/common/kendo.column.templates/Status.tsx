@@ -1,8 +1,8 @@
 import { Chip, Grid } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { statusClassMapping } from "../kendo/helpers";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
 import { styles } from "./Status.styles";
 
 export const Status = ({
@@ -12,7 +12,7 @@ export const Status = ({
   style,
   className,
   columnIndex,
-}: GridCellProperties) => {
+}: GridCellProps) => {
   const classes = styles();
   const status = dataItem[field || ""];
   return (
