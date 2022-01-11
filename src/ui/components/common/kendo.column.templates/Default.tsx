@@ -1,7 +1,7 @@
-import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
 import React from "react";
 import Tooltip from "../kendo/Tooltip";
+import { CustomGridCellProps } from "../kendo/types";
 
 export const Default = ({
   dataItem,
@@ -10,8 +10,13 @@ export const Default = ({
   style,
   className,
   columnIndex,
-}: GridCellProps) => {
+  cellRowClick,
+}: CustomGridCellProps) => {
   const value = get(dataItem, field || "");
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
   return (
     <td
       colSpan={colSpan}
@@ -19,6 +24,7 @@ export const Default = ({
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       <Tooltip data={value}/>
     </td>
