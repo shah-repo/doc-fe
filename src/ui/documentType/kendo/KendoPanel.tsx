@@ -384,7 +384,7 @@ export function KendoGrid<T extends any>({
         filterCell={getFilterCell(column.field)}
         headerCell={
           column.title
-            ? (props) => <ColumnHeader data={props} />
+            ? (props) => <ColumnHeader {...props} />
             : undefined
         }
         cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}

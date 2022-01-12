@@ -15,7 +15,7 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import tableSearchActions from "../../../state/ducks/tableSearch/actions";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
-import { KendoCellTemplates } from "../../components/common/kendo/types";
+import { KendoCellTemplates, KendoColumn } from "../../components/common/kendo/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
@@ -118,7 +118,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
 
   const columnDef = columns.length ? columns : staticColumns;
 
-  const DisplayStatusFilterCell: any = (props: GridFilterCellProps) => (
+  const DisplayStatusFilterCell = (props: GridFilterCellProps) => (
     <DropdownFilterCell
       {...props}
       data={statuses}
@@ -127,7 +127,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       })}
     />
   );
-  const RealeaseDateFilterCell = (props: any) => (
+  const RealeaseDateFilterCell = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
@@ -181,7 +181,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     <div>
       <DocumentByTypeListPresenter
         tableName={TABLE_NAME}
-        dynamicColumns={kendoColumnDef}
+        dynamicColumns={kendoColumnDef as KendoColumn[]}
         tableCriteria={tableCriteria}
         providedData={providedData}
         clearFilter={clearFilter}
