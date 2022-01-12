@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
 import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { KendoColumn } from "../../components/common/kendo/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import { isTranslation } from "../../translations/types";
@@ -20,7 +21,7 @@ interface Props {
   documentType: DocumentType;
   queryUrl: string;
   columns: TableColumnProps<DocumentRevision>[];
-  dynamicColumns: any;
+  dynamicColumns: KendoColumn[];
   isByCategory: boolean;
   documentCategory: PageDetails;
 }
