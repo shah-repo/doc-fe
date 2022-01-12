@@ -26,6 +26,8 @@ declare global {
         text: string,
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
+      unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      pdfparseFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -136,6 +138,23 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
     fileName: params.fileName,
   }));
 });
+
+Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => cy.task("unzipFile", {
+    path: params.directory,
+    cookies,
+    file: params.fileName,
+  }));
+});
+
+Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => cy.task("pdfparseFile", {
+    path: params.directory,
+    cookies,
+    file: params.fileName,
+  }));
+});
+
 
 Cypress.Commands.add("myCompanies", (token: string) => {
   cy.request({

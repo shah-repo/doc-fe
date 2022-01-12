@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
@@ -14,6 +15,20 @@ let adminEmployee;
 let secondEmployee;
 let developersGroup;
 let releasedFormId;
+let trnId;
+let emailsFromInbox;
+let cdata;
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+
+const downloaddDirectory  = "cypress/downloads";
+
+const dateOffset = (5 * 1000);
+const dateAfterEmailShouldArrive = new Date();
+dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+const currentDate = moment().tz("America/Los_Angeles").format("YYYY MMM D");
+const currentDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
 context("Training notification test", () => {
   before(() => {
@@ -617,7 +632,7 @@ context("Training notification test", () => {
   });
 
   context("Open assigned Training", () => {
-    it(`Click on the Training notification`, () => {
+    it("Click on the Training notification", () => {
       cy.contains(`${releasedFormId}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
@@ -626,6 +641,10 @@ context("Training notification test", () => {
 
     it("Button 'Complete training' should be visible", () => {
       cy.contains("Complete training").should("be.visible");
+    });
+
+    it("click complete training button", () => {
+      cy.trCompleteTraining();
     });
   });
 
@@ -666,10 +685,10 @@ context("Training notification test", () => {
     });
 
     it("Approve AR", () => {
-      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
-      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
-      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
-      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover").wait(1000);
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
         () => {
@@ -689,18 +708,308 @@ context("Training notification test", () => {
     });
   });
 
-  context("Check new training notification", () => {
-    it(`Verify training notification`, () => {
+  context("Check pending training notification", () => {
+    it("Verify pending training notification", () => {
       cy.contains(`${releasedFormId}`).should("exist");
       cy.contains(`released form`).should("exist");
     });
 
-    it(`Click training notification and check doc with Approved status`, () => {
+    it("Click training notification and check doc with Approved status", () => {
       cy.contains(`${releasedFormId}`).then(($el) => {
         const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
       });
-      cy.get(`[data-cy=\"HeaderInfo-status\"]`).should("have.text", "Approved");
+      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(0)").invoke("text")
+        .should("contain", releasedFormId).and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(0)")
+        .should("have.length", 1);
+      cy.get(".ReactVirtualized__Table__row:eq(0) .ReactVirtualized__Table__rowColumn:eq(0)").invoke("text")
+        .then(($el) => {
+          trnId = $el;
+        });
+    });
+
+    it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
+      cy.get(".ReactVirtualized__Table__row").first().contains(`${trnId}`).arrowClick();
+      cy.get("div.MuiDialogTitle-root").contains("Training Record");
+
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.wait(500);
+      cy.go("back");
+      cy.wait(1000);
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
+    });
+  });
+
+  context("Verify email for pending training notification", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        wait_time_sec: 5,
+        max_wait_time_sec: 50,
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${trnId}`,
+      };
+      cy.wait(20000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL: (https:\/\/.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("https://");
+    });
+
+    it("Download zip file containing pending training notification", () => {
+      downloadFile  =  trnId + ".zip";
+      cy.downloadFile({
+        url: downloadUrl,
+        directory: downloaddDirectory,
+        fileName: downloadFile,
+      });
+      cy.wait(10000);
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).should("have.length.within", 500, 75500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify PDF file for pending training notification", () => {
+      cy.pdfparseFile(
+        {
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${trnId}.pdf`,
+        }).then((content) => {
+        cdata = content;
+        tmpRegex = new RegExp( "Training Record", "gi" );
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp( trnId, "gi" );
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`${USERS[1].name} TRAINED ON ${releasedFormId} REV 2`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`${trnId} ${USERS[1].name} trained on.*\\n${releasedFormId}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`TRN ID\\n${trnId}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 2`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`Title\nreleased form`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1].name} \\| Trainee \\| Not Completed`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp(`Print: ${currentDate}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+      });
+    });
+  });
+
+  context("Check the completed training notification", () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+    });
+
+    it("Verify training notification", () => {
+      cy.contains(`${releasedFormId}`).should("exist");
+      cy.contains(`released form`).should("exist");
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
+      cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
+      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+    });
+
+    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#docRevTitle").clear().arrowType("released form");
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.listLoadingElementShouldNotExist();
+
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").last().invoke("text")
+        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
+
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(1)").invoke("text")
+        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(1)")
+        .should("have.length", 1);
+      cy.get(".ReactVirtualized__Table__row:eq(1) .ReactVirtualized__Table__rowColumn:eq(0)").invoke("text")
+        .then(($el) => {
+          trnId = $el;
+        });
+    });
+
+    it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
+      cy.get(".ReactVirtualized__Table__row").last().contains(`${trnId}`).arrowClick();
+      cy.get("div.MuiDialogTitle-root").contains("Training Record");
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.wait(500);
+      cy.go("back");
+      cy.wait(1000);
+    });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
+    });
+  });
+
+  context("Verify email for pending training notification", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        wait_time_sec: 5,
+        max_wait_time_sec: 50,
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${trnId}`,
+      };
+      cy.wait(20000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL: (https:\/\/.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("https://");
+    });
+
+    it("Download zip file containing pending training notification", () => {
+      downloadFile  =  trnId + ".zip";
+
+      cy.downloadFile({
+        url: downloadUrl,
+        directory: downloaddDirectory,
+        fileName: downloadFile,
+      });
+      cy.wait(10000);
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).should("have.length.within", 500, 75500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify PDF file for pending training notification", () => {
+      cy.pdfparseFile(
+        {
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${trnId}.pdf`,
+        }).then((content) => {
+        cdata = content;
+        tmpRegex = new RegExp( "Training Record", "gi" );
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp( trnId, "gi" );
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`${USERS[1].name} TRAINED ON ${releasedFormId} REV 1`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`${trnId} ${USERS[1].name} trained on.*\\n${releasedFormId}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`TRN ID\\n${trnId}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 1`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`Title\nreleased form`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1].name} \\| Trainee \\| ${currentDate1}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp(`Print: ${currentDate}`, "gi");
+        expect(cdata.text).match(tmpRegex);
+      });
     });
   });
 });

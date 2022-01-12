@@ -1,7 +1,8 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
-import fs, { rename, rmdirSync } from "fs";
-import path from "path";
+import { rename, rmdirSync } from "fs";
 import { getEmail, getEmails } from "../support/commands/imap/imap";
+import { pdfparser } from "../support/commands/pdfparser/pdfparser";
+import { unzip } from "../support/commands/unzip/unzip";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
 
@@ -38,7 +39,7 @@ export default (on, config) => {
     gmailGetLastMail(email) {
       return getEmail(email);
     },
-    gmailGetMails(params: {userEmail; options}) {
+    gmailGetMails(params: {usersonEmail; options}) {
       return getEmails(params.userEmail, params.options);
     },
     downloadFile,
@@ -57,6 +58,11 @@ export default (on, config) => {
       fs.writeFileSync(path.resolve(params.CONFIG.JSON_REPORTS_FOLDER, "envInfo.json"), JSON.stringify(params.envInfo));
       return null;
     },
+  });
+
+  on("task", {
+    unzipFile: unzip,
+    pdfparseFile: pdfparser,
   });
 
   on("after:screenshot", (details) => {
