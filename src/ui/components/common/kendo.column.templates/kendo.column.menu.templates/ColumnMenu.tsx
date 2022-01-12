@@ -3,12 +3,13 @@ import {
   GridColumnMenuItem,
   GridColumnMenuProps,
 } from "@progress/kendo-react-grid";
-import { filter, find } from "lodash";
+import { filter, find, findIndex } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { getTableCriteria } from "../../../../../common/utils/selectors";
 import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
+import { toastError } from "../../../notifications";
 import { DisplayText, TranslatedText } from "../../kendo/helpers";
 import { KendoColumn } from "../../kendo/types";
 
@@ -19,10 +20,17 @@ interface CustomColumnMenuProps extends GridColumnMenuProps {
 
 export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const dispatch = useDispatch();
   const [columns, setColumns] = useState<KendoColumn[]>(props.columns);
   const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
+  const kendoConfig = JSON.parse(tableCriteria.kendoConfig);
   const onChange = (field: string | undefined) => {
+    const isGrouped = findIndex(kendoConfig.group, { field });
+    if (isGrouped > -1) {
+      toastError(getTranslatedText("common.no.hide"));
+      return;
+    }
     columns.forEach((c, i) => {
       if (c.field === field) {
         c.show = !c.show;
@@ -84,9 +92,7 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
           {...props}
           iconClass="k-i-preview .k-i-eye"
           onClick={() => onChange(props.column.field)}
-          title={intl.formatMessage({
-            id: TranslatedText[DisplayText.HIDE_COLUMN],
-          })}
+          title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
         />
       )}
       <GridColumnMenuItem
@@ -95,12 +101,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
         onClick={() => handleColumnLockToggle(props.column.field)}
         title={
           columnDef?.locked
-            ? intl.formatMessage({
-              id: TranslatedText[DisplayText.UNLOCK_COLUMN],
-            })
-            : intl.formatMessage({
-              id: TranslatedText[DisplayText.LOCK_COLUMN],
-            })
+            ? getTranslatedText(TranslatedText[DisplayText.UNLOCK_COLUMN])
+            : getTranslatedText(TranslatedText[DisplayText.LOCK_COLUMN])
         }
       />
     </>
