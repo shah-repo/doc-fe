@@ -24,10 +24,10 @@ const CellStyles = makeStyles((theme) => ({
     margin: 0,
     boxShadow: "none",
     borderRadius: 200,
-    marginRight: 15,
+    marginRight: theme.spacing(1.875),
     textTransform: "uppercase",
-    paddingRight: 20,
-    paddingLeft: 20,
+    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2.5),
     fontFamily: "Sora",
     fontSize: 12,
     fontWeight: 600,
@@ -43,8 +43,8 @@ const CellStyles = makeStyles((theme) => ({
     "background": Colors.navy,
     "color": Colors.white,
     "fontFamily": "Sora",
-    "paddingRight": 20,
-    "paddingLeft": 20,
+    "paddingRight": theme.spacing(2.5),
+    "paddingLeft": theme.spacing(2.5),
     "textTransform": "uppercase",
     "&:hover": {
       background: Colors.navy,
@@ -69,7 +69,7 @@ const CellStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "transparent",
     },
-    "padding": 5,
+    "padding": theme.spacing(0.625),
   },
 }));
 export default CellStyles;
