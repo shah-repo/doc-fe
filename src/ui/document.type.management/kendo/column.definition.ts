@@ -6,6 +6,7 @@ const columns: KendoColumn[] = [{
   field: "id",
   title: "common.id",
   show: false,
+  showColumnMenu: false,
 },
 {
   field: "active",
@@ -18,6 +19,7 @@ const columns: KendoColumn[] = [{
   locked: true,
   orderIndex: 0,
   groupable: true,
+  showColumnMenu: true,
 },
 {
   field: "documentTypeName",
@@ -27,6 +29,7 @@ const columns: KendoColumn[] = [{
   locked: true,
   groupable: false,
   orderIndex: 1,
+  showColumnMenu: false,
 },
 {
   field: "documentTypeAcronym",
@@ -35,6 +38,7 @@ const columns: KendoColumn[] = [{
   width: "125px",
   locked: false,
   groupable: false,
+  showColumnMenu: false,
   orderIndex: 2,
 },
 {
@@ -45,6 +49,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "110px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 3,
 },
 {
@@ -55,6 +60,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "110px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 4,
 },
 {
@@ -65,6 +71,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "110px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 5,
 },
 {
@@ -75,6 +82,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "110px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 6,
 },
 {
@@ -85,6 +93,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "110px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 7,
 }, {
   field: "startingNumber",
@@ -92,6 +101,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "185px",
   groupable: false,
+  showColumnMenu: false,
   orderIndex: 8,
 },
 {
@@ -102,6 +112,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "165px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 9,
 },
 {
@@ -112,6 +123,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "200px",
   groupable: false,
+  showColumnMenu: false,
   orderIndex: 10,
 },
 {
@@ -122,6 +134,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "125px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 11,
 }, {
   field: "category",
@@ -129,6 +142,7 @@ const columns: KendoColumn[] = [{
   show: true,
   width: "125px",
   groupable: true,
+  showColumnMenu: true,
   orderIndex: 12,
 }, {
   field: "schema",
@@ -138,6 +152,7 @@ const columns: KendoColumn[] = [{
   filterable: false,
   width: "110px",
   groupable: false,
+  showColumnMenu: false,
   orderIndex: 13,
 }, {
   field: "fieldsConfig",
@@ -147,6 +162,7 @@ const columns: KendoColumn[] = [{
   filterable: false,
   width: "110px",
   groupable: false,
+  showColumnMenu: false,
   orderIndex: 14,
 }, {
   field: "",
@@ -158,6 +174,7 @@ const columns: KendoColumn[] = [{
   width: "90px",
   reorderable: false,
   resizable: false,
+  showColumnMenu: false,
   orderIndex: 15,
 }];
 

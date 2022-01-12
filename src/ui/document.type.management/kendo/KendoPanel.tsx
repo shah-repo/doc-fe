@@ -3,6 +3,7 @@ import { process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
   Grid as Kgrid, GridColumn,
+  GridColumnMenuGroup,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -10,7 +11,7 @@ import {
   GridFilterCellProps,
   GridItemChangeEvent,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -286,6 +287,13 @@ export function KendoPanel<T extends { id?: string }>({
         }
         headerCell={
           col.title ? (props) => <ColumnHeader data={props} /> : undefined
+        }
+        columnMenu={
+          col.showColumnMenu
+            ? (props) => (
+              <GridColumnMenuGroup {...props} />
+            )
+            : undefined
         }
       />
     ));
