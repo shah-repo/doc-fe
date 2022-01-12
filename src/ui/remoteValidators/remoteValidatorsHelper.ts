@@ -21,8 +21,6 @@ const doApiRequest = async (name: string, args: any[]) => {
     };
 
     const { data } = await apiClient.request(requestConfig);
-    // eslint-disable-next-line no-console
-    console.log("doApiRequest response", data);
     return data;
   } catch (error) {
     throw new Error("HTTP REQUEST FOR VALIDATORS FAILED");

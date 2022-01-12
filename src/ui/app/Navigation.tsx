@@ -20,6 +20,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import styles from "./Navigation.styles";
 import NavigationLinkContainer from "./NavigationLink.container";
+import NavigationProfileContainer from "./NavigationProfile.container";
 
 type NavigationProps = WithStyles<typeof styles> & RouteComponentProps;
 
@@ -40,8 +41,20 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   });
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
-
-  const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+  const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
+  // TODO:: REMOVE THIS once Navigation item coming from backend
+  const index = navigationSelectorItems.findIndex((x) => x.path === "/async_tasks");
+  if (index === -1) {
+    navigationSelectorItems.push({
+      icon: "/navigation_icons/document-menu.svg",
+      label: "Async Tasks",
+      path: "/async_tasks",
+      restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+      type: "LINK",
+    });
+  }
+  // const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+  const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
       if (itemAllowedForUser(item, userTags)) {
         if (item.type === "MENU") {
@@ -51,14 +64,11 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       }
       return acc;
     }, []);
-
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     async.start(getCompanyMine, currentEmployeeId, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <Drawer
       PaperProps={{ id: "navigation" }}
@@ -97,6 +107,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             )
         }
       </Box>
+      <NavigationProfileContainer />
       <Box paddingBottom="20px">
         <BottomLogo />
       </Box>

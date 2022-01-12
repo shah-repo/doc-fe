@@ -2,6 +2,7 @@ import { action, observable, set } from "mobx";
 import { FBFormState } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { ApprovalMatrix, ApprovalMatrixItem, ApprovalRole } from "./FBApprovalMatrix.types";
+
 const DEFAULT_AM: ApprovalMatrix = {
   approvalRoles: [] as ApprovalRole[],
   approvalMatrix: [] as ApprovalMatrixItem[],

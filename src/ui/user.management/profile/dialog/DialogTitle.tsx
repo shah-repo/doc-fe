@@ -5,6 +5,7 @@ import React from "react";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import Text from "../../../components/Text";
 import styles from "../UserProfile.styles";
+
 interface OwnProps {
   close: () => void;
   showEditUser: boolean;
