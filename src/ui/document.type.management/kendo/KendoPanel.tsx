@@ -10,7 +10,7 @@ import {
   GridFilterCellProps,
   GridItemChangeEvent,
   GridNoRecords,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -20,7 +20,6 @@ import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
-import { Default } from "../../components/common/kendo.column.templates/Default";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
@@ -54,13 +53,12 @@ interface ResultProps {
   operator: string;
 
 }
-type Props<T> = KendoPanelProps<T>;
 export function KendoPanel<T extends { id?: string }>({
   gridData,
   gridConfiguration,
   tableName,
   tableCriteria,
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const classes = KendoGridStyles();
@@ -260,7 +258,7 @@ export function KendoPanel<T extends { id?: string }>({
     const template = DTMCellTemplateMapping[col.cell];
     if (template) {
       return template(props);
-    } else if (col.field === "") {
+    } else {
       return <CommandCell
         {...props}
         edit={enterEdit}
@@ -272,9 +270,6 @@ export function KendoPanel<T extends { id?: string }>({
         editField={editField}
       />;
     }
-    else {
-      return Default(props);
-    }
   };
   // Create Grid Columns
   const renderColumns = () =>
@@ -283,7 +278,7 @@ export function KendoPanel<T extends { id?: string }>({
         {...col}
         title={getTranslatedText(col.title).toUpperCase()}
         key={index}
-        cell={(props) => renderCol(props, col)}
+        cell={DTMCellTemplateMapping[col.cell] || col.field === "" ? (props) => renderCol(props, col) : undefined}
         filterCell={
           FilterCellMapping[col.filterCell]
             ? FilterCellMapping[col.filterCell]
@@ -463,18 +458,16 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   const columnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    if (!end) { return false; }
     let dataColumns: KendoColumn[] = columnDefinitions;
-    if (end) {
-      dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject?.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const columnReorder = ({ columns }: GridColumnReorderEvent) => {

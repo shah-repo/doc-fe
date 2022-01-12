@@ -31,7 +31,7 @@ export const Schema: React.FunctionComponent<GridCellProps> = ({
   };
 
 
-  const onAddClick = ({ schema, syntheticEvent }: any) => {
+  const onAddClick = ({ schema, syntheticEvent }) => {
     if (!onChange) { return; }
     const schemaValue = checkIfJSONObject(schema, title);
     if ((schemaValue && typeof schemaValue === "object") || (schemaValue === "")) {
@@ -47,7 +47,7 @@ export const Schema: React.FunctionComponent<GridCellProps> = ({
   };
 
   const formattedValue = get(dataItem, field || "");
-  const isEdit = dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
+  const isEdit = dataItem.inEdit;
   if (rowType === "groupHeader") {
     return null;
   }
