@@ -22,8 +22,8 @@ export const styles = makeStyles((theme: Theme) =>
     },
     GREEN_STATUS: {
       background: Colors.carla,
-      color: Colors.fruit_salad,
-      border: `1px solid ${Colors.fruit_salad_border}`,
+      color: Colors.light_forest_green,
+      border: `1px solid ${Colors.light_forest_green_border}`,
     },
     PENDING_STATUS: {
       background: Colors.old_lace,
