@@ -39,7 +39,7 @@ import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu
 import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
-import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
+import { DateFilterStateChangeProps, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -53,13 +53,6 @@ import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate
 import KendoGridStyles from "./styles";
 
 let call: CancelTokenSource;
-interface DateFilterCellDropdownProps {
-  parentField: string;
-  selectedItem: {
-    text: string;
-    value: string;
-  };
-}
 export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
@@ -391,7 +384,7 @@ export function KendoPanel<T>({
     setFireAPI(true);
   };
 
-  const onEffectiveDateChange = (setDefault: DateFilterCellDropdownProps) => {
+  const onEffectiveDateChange = (setDefault: DateFilterStateChangeProps) => {
     const updatedFilter = { ...setDefault.selectedItem, field: setDefault.parentField };
     if (setDefault.parentField === "effectiveDate") {
       setCompletedOnSelectedOption(updatedFilter);
@@ -541,7 +534,7 @@ export function KendoPanel<T>({
           : undefined
       }
       headerCell={
-        column.title ? (props) => <ColumnHeader data={props} /> : undefined
+        column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }
       columnMenu={
         column.showColumnMenu
