@@ -1,9 +1,10 @@
 import { GridPagerSettings } from "@progress/kendo-react-grid";
 import { chain, filter, findIndex, isEmpty } from "lodash";
 import { Translation } from "../../../translations/types";
+import { KendoColumn } from "./types";
 
 export const orderByLockedState = (
-  columnDefinitions: any,
+  columnDefinitions: KendoColumn[],
   groupableFields: string[]
 ) =>
 {
@@ -101,7 +102,7 @@ export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
  * To hide the column title on mouse while resizing the grid
  */
 export const hideColumnTitleOnResize = () => {
-  const selector: any = document.querySelector(".k-drag-clue");
+  const selector = document.querySelector(".k-drag-clue") as HTMLElement;
   if (!isEmpty(selector)) {
     selector.style.display = "none";
   }
