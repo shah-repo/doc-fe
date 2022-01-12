@@ -11,6 +11,7 @@ import {
   Grid as KendoGrid,
   GridCellProps,
   GridColumn,
+  GridColumnMenuGroup,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -466,6 +467,13 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         }
         headerCell={
           column.title ? (props) => <ColumnHeader data={props} /> : undefined
+        }
+        columnMenu={
+          column.showColumnMenu
+            ? (props) => (
+              <GridColumnMenuGroup {...props} />
+            )
+            : undefined
         }
       />
     )));
