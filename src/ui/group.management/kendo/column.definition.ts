@@ -18,7 +18,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     orderIndex: 2,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "memberNames",
@@ -27,7 +27,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     orderIndex: 3,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "formattedPermissions",
@@ -36,7 +36,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     orderIndex: 4,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "formattedTags",
@@ -45,7 +45,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     orderIndex: 5,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "parentName",
@@ -54,7 +54,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     orderIndex: 6,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "",
