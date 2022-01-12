@@ -1,5 +1,6 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import { sortBy } from "lodash";
 import React from "react";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../../state/ducks/userManagement/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
@@ -32,10 +33,7 @@ export const EmployeesCell = ({
 }: EmployeeCellProps) => {
   const employeesData = dataItem[field || ""];
   const [result, setResult] = React.useState([]);
-  const [data, setData] = React.useState(Object.keys(toMembersOptions(employees)).map(
-    (key) => (Number(key), toMembersOptions(employees)[key])
-  ).sort((a, b) => (a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd()) ? 1 : -1));
-
+  const [data, setData] = React.useState(sortBy(toMembersOptions(employees), "label"));
   const updateMembersField = ({ target }: any) => {
     dataItem.employees = target?.value.map((item: { value: string }) => ({
       id: item?.value || "",
@@ -43,13 +41,9 @@ export const EmployeesCell = ({
     setResult(target.value);
   };
 
-  const filterChange = (event: MultiSelectFilterChangeEvent) => {
-    const filter = event.filter;
-    const allData = (Object.keys(toMembersOptions(employees)).map(
-      (key) => (Number(key), toMembersOptions(employees)[key])
-    )).slice();
-    const newData = filterBy(allData, filter);
-    setData(newData.sort((a, b) => (a.label.trimLeft().trimEnd() > b.label.trimLeft().trimEnd()) ? 1 : -1));
+  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
+    const newData = filterBy(toMembersOptions(employees), filter);
+    setData(sortBy(newData, "label"));
   };
 
   if (rowType === "groupHeader") {
