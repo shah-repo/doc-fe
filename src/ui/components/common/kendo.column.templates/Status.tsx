@@ -1,8 +1,8 @@
 import { Chip, Grid } from "@material-ui/core";
-import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import { statusClassMapping } from "../kendo/helpers";
 import Tooltip from "../kendo/Tooltip";
+import { CustomGridCellProps } from "../kendo/types";
 import { styles } from "./Status.styles";
 
 export const Status = ({
@@ -12,9 +12,14 @@ export const Status = ({
   style,
   className,
   columnIndex,
-}: GridCellProps) => {
+  cellRowClick,
+}: CustomGridCellProps) => {
   const classes = styles();
   const status = dataItem[field || ""];
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
   return (
     <td
       colSpan={colSpan}
@@ -22,6 +27,7 @@ export const Status = ({
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       <Grid
         container
