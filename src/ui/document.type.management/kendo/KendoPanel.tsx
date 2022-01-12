@@ -54,13 +54,12 @@ interface ResultProps {
   operator: string;
 
 }
-type Props<T> = KendoPanelProps<T>;
 export function KendoPanel<T extends { id?: string }>({
   gridData,
   gridConfiguration,
   tableName,
   tableCriteria,
-}: Props<T>) {
+}: KendoPanelProps<T>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const classes = KendoGridStyles();
@@ -271,8 +270,7 @@ export function KendoPanel<T extends { id?: string }>({
         disabled={disabled}
         editField={editField}
       />;
-    }
-    else {
+    } else {
       return Default(props);
     }
   };
@@ -463,18 +461,16 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   const columnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    if (!end) { return false; }
     let dataColumns: KendoColumn[] = columnDefinitions;
-    if (end) {
-      dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(columns, { field: column.field });
-        column.width = columnObject?.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
   };
 
   const columnReorder = ({ columns }: GridColumnReorderEvent) => {

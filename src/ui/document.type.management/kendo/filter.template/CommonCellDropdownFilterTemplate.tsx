@@ -1,7 +1,7 @@
 import { DropDownListChangeEvent } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns/dist/npm/DropDownList/DropDownList";
 import { GridCellProps } from "@progress/kendo-react-grid";
-import { get, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../../state/ducks/auth/types";
@@ -80,10 +80,7 @@ export const EditDropdownCellFormatter: React.FunctionComponent<GridCellProps> =
   const path = field || "";
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const localizedData: ResultProps = getDropDownDataSource(path);
-  const isEdit: boolean = get(
-    dataItem,
-    getTranslatedText(TranslatedText[DisplayText.INEDIT])
-  );
+  const isEdit = dataItem.inEdit;
   const handleChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
     if (onChange) {
       onChange({

@@ -5,7 +5,6 @@ import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import { CellCommandConfig } from "../types";
 import CellStyles from "./CellStyles";
@@ -28,7 +27,7 @@ export const CommandCell: React.FunctionComponent<CellCommandConfig> = ({
   const classes = CellStyles();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const inEdit = dataItem[getTranslatedText(TranslatedText[DisplayText.INEDIT])];
+  const inEdit = dataItem.inEdit;
   const isNewItem = dataItem.id === undefined;
   if (rowType === "groupHeader") {
     return null;

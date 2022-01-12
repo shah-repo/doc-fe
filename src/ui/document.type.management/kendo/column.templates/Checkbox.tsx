@@ -6,8 +6,6 @@ import {
 } from "@progress/kendo-react-inputs";
 import { result, set } from "lodash";
 import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import "./KendoStyles.css";
 
 export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
@@ -21,8 +19,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   className,
   columnIndex,
 }) => {
-  const intl = useIntl();
-  const editMode = dataItem[intl.formatMessage({ id: TranslatedText[DisplayText.INEDIT] })];
+  const editMode = dataItem.inEdit;
   const path = field || "";
   const [dataValue, setValue] = React.useState<boolean | null | undefined>(false);
 

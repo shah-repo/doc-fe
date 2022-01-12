@@ -17,7 +17,7 @@ interface TextAreaDialogProps extends TextAreaProps {
   cancelEdit: () => void;
   addClick: (event: any) => void;
   openForm: boolean;
-  fieldName: string | undefined;
+  fieldName?: string;
   item: any;
   isEdit: boolean;
 }
