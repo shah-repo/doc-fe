@@ -5,28 +5,29 @@ import {
 import React from "react";
 import Tooltip from "./Tooltip";
 
-interface Props {
-  data: GridHeaderCellProps;
-}
-
-const HeaderTooltip: React.FunctionComponent<Props> = ({ data }) => (
+const HeaderTooltip: React.FunctionComponent<GridHeaderCellProps> = ({
+  title,
+  onClick,
+  children,
+  columnMenuWrapperProps,
+}) => (
   <>
-    {data.title && (
+    {title && (
       <Tooltip
         placement="top"
-        data={data.title}
+        data={title}
         childrenElement={
-          <span className="k-link" onClick={data.onClick}>
-            <span className="k-column-title">{data.title.toUpperCase()}</span>
+          <span className="k-link" onClick={onClick}>
+            <span className="k-column-title">{title.toUpperCase()}</span>
 
-            {data.children}
+            {children}
           </span>
         }
       />
     )}
 
-    {data.columnMenuWrapperProps.columnMenu && (
-      <GridColumnMenuWrapper {...data.columnMenuWrapperProps} />
+    {columnMenuWrapperProps.columnMenu && (
+      <GridColumnMenuWrapper {...columnMenuWrapperProps} />
     )}
   </>
 );
