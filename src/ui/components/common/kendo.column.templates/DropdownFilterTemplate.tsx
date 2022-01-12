@@ -12,7 +12,7 @@ interface SelectedItemProps {
   value: string | boolean;
 }
 interface StateChangeProps {
-  selectedItem?: SelectedItemProps | undefined;
+  selectedItem?: SelectedItemProps ;
   parentField: string | undefined;
 }
 interface DropdownFilterCellProps extends GridFilterCellProps {
