@@ -2,37 +2,53 @@ import { TextField } from "@material-ui/core";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const NameCell = (props) => {
+interface NameCellProps {
+  dataItem: any;
+  rowType?: string;
+  colSpan?: number | undefined;
+  style?: any;
+  className?: string;
+  columnIndex?: number;
+}
+
+export const NameCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: NameCellProps) => {
   const [name, setName] = React.useState("");
-  const updateNameField = (event: any) => {
-    setName(event?.target?.value);
-    props.dataItem.name = event?.target?.value;
+  const updateNameField = ({ target }: any) => {
+    setName(target?.value);
+    dataItem.name = target?.value;
   };
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <>
-      {!props.dataItem.inEdit && (
+      {!dataItem.inEdit && (
         <td
-          colSpan={props.colSpan}
-          style={props.style}
+          colSpan={colSpan}
+          style={style}
           role="gridcell"
-          className={props.className}
-          data-grid-col-index={props.columnIndex}
+          className={className}
+          data-grid-col-index={columnIndex}
         >
-          <Tooltip data ={props.dataItem.name}/>
+          <Tooltip data ={dataItem.name}/>
         </td>
       )}
-      {props.dataItem.inEdit && (
+      {dataItem.inEdit && (
         <td
-          colSpan={props.colSpan}
-          style={props.style}
+          colSpan={colSpan}
+          style={style}
           role="gridcell"
-          className={props.className}
-          data-grid-col-index={props.columnIndex}
+          className={className}
+          data-grid-col-index={columnIndex}
         >
 
           <TextField

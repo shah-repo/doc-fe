@@ -1,34 +1,54 @@
-import { MultiSelect } from "@progress/kendo-react-dropdowns";
+import { MultiSelect, MultiSelectChangeEvent } from "@progress/kendo-react-dropdowns";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const ParentsCell = (props) => {
-  const parents = props.dataItem[props.field];
+interface ParentCellProps {
+  dataItem: any;
+  rowType?: string;
+  colSpan?: number | undefined;
+  style?: any;
+  className?: string;
+  columnIndex?: number;
+  isOfficial: boolean;
+  field?: string;
+}
+
+export const ParentsCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  isOfficial,
+  field,
+}: ParentCellProps) => {
+  const parents = dataItem[field || ""];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
   const availableGroups = allGroups.filter(
-    (group) => group.value !== props.dataItem.id
+    (group) => group.value !== dataItem.id
   );
-  const updateParentField = (event: any) => {
-    props.dataItem.parents = event?.target?.value.map((item) => ({
+  const updateParentField = ({ target }: MultiSelectChangeEvent) => {
+    dataItem.parents = target?.value.map((item) => ({
       id: item?.value || "",
     }));
   };
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
-      {props.dataItem.inEdit && props.isOfficial ? (
+      {dataItem.inEdit && isOfficial ? (
         <MultiSelect
           data={availableGroups}
           filterable={true}
