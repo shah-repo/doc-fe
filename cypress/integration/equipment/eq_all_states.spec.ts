@@ -13,11 +13,9 @@ const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
 const CAL_DUE_DATE = moment().tz("America/Los_Angeles")
-  .add(5, "days")
-  .format("l");
+  .add(5, "days");
 const PM_DUE_DATE = moment().tz("America/Los_Angeles")
-  .add(10, "days")
-  .format("l");
+  .add(10, "days");
 
 let createdCompany;
 let loginResponse;
@@ -34,6 +32,7 @@ let createdCalibrationForm;
 let createdEquipmentDocument;
 let createdPMRecord;
 let createdCalibrationRecord;
+let createdEquipmentNumericRevision;
 let group;
 
 context("Equipment maintenance test", () => {
@@ -540,9 +539,9 @@ context("Equipment maintenance test", () => {
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
-        createdEquipmentDocument = response;
+        createdEquipmentNumericRevision = response;
         cy.drAPIApproveAndRelease({
-          documentId: createdEquipmentDocument.id,
+          documentId: createdEquipmentNumericRevision.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -555,7 +554,6 @@ context("Equipment maintenance test", () => {
       });
     });
 
-
     it("[API]Create PM record for equipment in numeric version", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
@@ -563,13 +561,13 @@ context("Equipment maintenance test", () => {
             id: createdPMForm.id,
           },
           formInput: {
-            "equipment_id": createdEquipmentDocument.id,
+            "equipment_id": createdEquipmentNumericRevision.id,
             "equipment_maintainer": adminEmployee.id,
             "fb-approvals-kybkhbpt": [],
             "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
           },
           parentEquipment: {
-            id: createdEquipmentDocument.id,
+            id: createdEquipmentNumericRevision.id,
           },
           equipmentSection: "pm-ki5wtk5l",
           description: "",
@@ -620,13 +618,13 @@ context("Equipment maintenance test", () => {
             id: createdCalibrationForm.id,
           },
           formInput: {
-            "equipment_id": createdEquipmentDocument.id,
+            "equipment_id": createdEquipmentNumericRevision.id,
             "equipment_maintainer": adminEmployee.id,
             "fb-approvals-kybkhbpt": [],
             "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
           },
           parentEquipment: {
-            id: createdEquipmentDocument.id,
+            id: createdEquipmentNumericRevision.id,
           },
           equipmentSection: "calibration-ki5wtyj0",
           description: "",
@@ -669,6 +667,404 @@ context("Equipment maintenance test", () => {
         }).then(() => done());
       });
     });
+
+    it("[API]Create Equipment document with Alpha numeric revision", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "EQ-00002",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment document",
+          formDocument: {
+            id: createdEquipmentFormDocument.id,
+          },
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 2,
+          formInput: {
+            "fb-default-eq-status": "Inactive",
+            "fb-primary-owner-eq": adminEmployee.id,
+            "fb-coordinator-eq": adminEmployee.id,
+            "pm-ki5wtk5l": {
+              requirements: "Yes",
+              preventativeForm: createdPMForm.documentId,
+              frequency: 10,
+              instructions: "<p>Instructions for preventative maintenance</p>",
+            },
+            "calibration-ki5wtyj0": {
+              requirements: "Yes",
+              preventativeForm: createdCalibrationForm.documentId,
+              frequency: 5,
+              instructions: "<p>Instructions for calibration</p>",
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdEquipmentDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdEquipmentDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create PM record for equipment in alpha numeric version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdPMForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentDocument.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentDocument.id,
+          },
+          equipmentSection: "pm-ki5wtk5l",
+          description: "",
+          name: "Preventative maintenance document",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00003",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration record for equipment in alpha numeric version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdCalibrationForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentDocument.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentDocument.id,
+          },
+          equipmentSection: "calibration-ki5wtyj0",
+          description: "",
+          name: "Calibration record",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00004",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Equipment document with Alpha revision", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "EQ-00003",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment document",
+          formDocument: {
+            id: createdEquipmentFormDocument.id,
+          },
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 3,
+          formInput: {
+            "fb-default-eq-status": "Active",
+            "fb-primary-owner-eq": adminEmployee.id,
+            "fb-coordinator-eq": adminEmployee.id,
+            "pm-ki5wtk5l": {
+              requirements: "Yes",
+              preventativeForm: createdPMForm.documentId,
+              frequency: 10,
+              instructions: "<p>Instructions for preventative maintenance</p>",
+            },
+            "calibration-ki5wtyj0": {
+              requirements: "Yes",
+              preventativeForm: createdCalibrationForm.documentId,
+              frequency: 5,
+              instructions: "<p>Instructions for calibration</p>",
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdEquipmentDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdEquipmentDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create PM record for equipment in alpha version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdPMForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentDocument.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentDocument.id,
+          },
+          equipmentSection: "pm-ki5wtk5l",
+          description: "",
+          name: "Preventative maintenance document",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00005",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration record for equipment in alpha version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdCalibrationForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentDocument.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentDocument.id,
+          },
+          equipmentSection: "calibration-ki5wtyj0",
+          description: "",
+          name: "Calibration record",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00006",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Equipment in DRAFT for numeric version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdEquipmentFormDocument.id,
+          },
+          formInput: {
+            "pm-ki5wtk5l": {
+              status: "Done",
+              frequency: 10,
+              instructions: "<p>Instructions for preventative maintenance</p>",
+              requirements: "Yes",
+              preventativeForm: createdPMForm.documentId,
+              complianceDueDate: PM_DUE_DATE,
+            },
+            "fb-primary-owner-eq": adminEmployee.id,
+            "fb-coordinator-eq": adminEmployee.id,
+            "calibration-ki5wtyj0": {
+              status: "Done",
+              frequency: 5,
+              instructions: "<p>Instructions for calibration</p>",
+              requirements: "Yes",
+              preventativeForm: createdCalibrationForm.documentId,
+              complianceDueDate: CAL_DUE_DATE,
+            },
+            "fb-default-eq-status": "Active",
+          },
+          description: "<p>Equipment document</p>",
+          name: "Equipment document DRAFT",
+          attachments: [],
+          referenceTo: [],
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            id: createdEquipmentNumericRevision.documentId,
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => done());
+    });
   });
 
   context("Login user", () => {
@@ -677,9 +1073,218 @@ context("Equipment maintenance test", () => {
     });
   });
 
-  context("Create equipment maintenace document", () => {
-    it("Navigate to Equipment list", () => {
-      cy.navigToEquipment();
+  context("Verify Maintenance History is changed to History", () => {
+    context("Verif for Released Alpha Numeric Equipment", () => {
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+      });
+
+      it("Filter Alpha Numeric Equipment", () => {
+        cy.dlFilterByDocId({ docId: "EQ-00002" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
+    });
+
+    context("Verify for Released Alpha Equipment", () => {
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Filter Alpha Equipment", () => {
+        cy.dlFilterByDocId({ docId: "EQ-00003" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
+    });
+
+    context("Verify for DRAFT Numeric Equipment", () => {
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Filter DRAFT Numeric Equipment", () => {
+        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
+    });
+
+    context("Verify for Pending Change Numeric Equipment", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToApprovalRequestList();
+      });
+
+      it("Click Create a Approval Request button", () => {
+        cy.cmpClickCreateApprovalRequest();
+      });
+
+      it("Enter title AR title: 'AR for DRAFT Numeric Equipment'", () => {
+        cy.arEnterApprovalRequestTitle({ title: "AR for DRAFT Numeric Equipment" });
+      });
+
+      it("Enter description 'AR Equipment'", () => {
+        cy.arEnterApprovalRequestDescription(
+          { description: "AR Equipment" });
+      });
+
+      it("Add created document revision", () => {
+        cy.arClickAddDocument();
+        cy.arChoseSpecificProposedDocument({ name: "Equipment document DRAFT" });
+        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+        cy.arClickAddBtnOnAddDocumentsDialog();
+      });
+
+      it("Click Create Approval Request", () => {
+        cy.arClickCreateApprovalRequestAfterCompletingForm();
+      });
+
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Filter DRAFT Numeric Equipment", () => {
+        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
+    });
+
+    context("Verify for IN REVIEW Numeric Equipment", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToApprovalRequestList();
+        cy.alClearFilters();
+      });
+
+      it("Filter list by TITLE", () => {
+        cy.alFilterByTitle({ title: "AR for DRAFT Numeric Equipment" });
+      });
+
+      it("Select first document", () => {
+        cy.arSelectFirstDocument();
+      });
+
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click send to review", () => {
+        cy.arClickSendToReview();
+      });
+
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Filter DRAFT Numeric Equipment", () => {
+        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
+    });
+
+    context("Verify for Approved Numeric Equipment", () => {
+      it("Navigate to approval request list", () => {
+        cy.navigToDashboard();
+      });
+
+      it("Approve from dashboard", () => {
+        cy.arApproveAR();
+      });
+
+      it("Navigate to Equipment list", () => {
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Filter DRAFT Numeric Equipment", () => {
+        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
+      });
+
+      it("Select first Equipment on list", () => {
+        cy.dlSelectFirstDocument();
+      });
+
+      context("Verify Maintenance History is changed to History", () => {
+        it("Verify for pm", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
+        });
+
+        it("Verify for calibration", () => {
+          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
+        });
+      });
     });
   });
 });
