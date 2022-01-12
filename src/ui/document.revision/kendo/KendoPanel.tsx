@@ -15,7 +15,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { filter, find, isEmpty, map, pick, set } from "lodash";
+import { filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -41,6 +41,7 @@ import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { DateFilterStateChangeProps, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
 import useDidMount from "../../hooks/useDidMount";
@@ -500,6 +501,11 @@ export function KendoPanel<T>({
   );
   // On Show / Hide Column From Main Menu
   const onColumnShowHide = ({ field }: KendoColumn) => {
+    const isGrouped = findIndex(dataState.group, { field });
+    if (isGrouped > -1) {
+      toastError(getTranslatedText("common.no.hide"));
+      return;
+    }
     const dataColumns = map(columnDefinitions, (column) => {
       if (column.field === field) {
         column.show = !column.show;
