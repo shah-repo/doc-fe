@@ -25,6 +25,7 @@ export type FBLHRStepProps =
   materials: any;
   equipment: any;
   isDocumentLHRT: boolean;
+  lhrBuildTypeExist: string;
 };
 
 export interface StartMpiBody {
