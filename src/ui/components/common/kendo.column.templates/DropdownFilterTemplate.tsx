@@ -46,17 +46,16 @@ export const DropdownFilterTemplate = ({
   const [state, setState] = React.useState({
     value: defaultItem,
   });
-  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
-
+  const hasValue = (value: { text: string; value: string }) => value && value !== defaultItem;
   const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
-    hasValue = hasValue(target.value, "props.data ::", data);
     const selectedItem = data.find((dd) => dd.text === target.value.text);
+    const isValueExists = hasValue(target.value);
     setState({
       value: target.value,
     });
     onChange({
-      value: hasValue ? selectedItem?.value : "",
-      operator: hasValue ? customOperator || "eq" : "",
+      value: isValueExists ? selectedItem?.value : "",
+      operator: isValueExists ? customOperator || "eq" : "",
       syntheticEvent,
     });
     onStateChange && onStateChange({ selectedItem, parentField: field });

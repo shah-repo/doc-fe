@@ -46,6 +46,14 @@ export interface PageState {
   group?: GroupDescriptor[];
 }
 
+export interface DateFilterStateChangeProps {
+  selectedItem?: {
+    text: string;
+    value: string;
+  };
+  parentField?: string;
+}
+
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
