@@ -1031,7 +1031,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Add an Approval", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
 
         it("Save PO", () => {
