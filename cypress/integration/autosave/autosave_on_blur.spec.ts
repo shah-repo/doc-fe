@@ -883,11 +883,14 @@ context("Autosave on blur", () => {
     });
 
     it("Check Checkbox field and check for autosave", () => {
-      cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option1");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=fb-checkbox-group-]>label>span>span>input").check("option1");
+        cy.unClick();
+      });
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -1135,8 +1138,8 @@ context("Autosave on blur", () => {
     it("While autosaving, check radiobutton", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -1155,8 +1158,8 @@ context("Autosave on blur", () => {
     it("While autosaving, fill text editor field", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -1177,8 +1180,8 @@ context("Autosave on blur", () => {
     it("While autosaving, edit quantity field", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -1200,8 +1203,8 @@ context("Autosave on blur", () => {
     it("While autosaving, edit autocomplete field", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 

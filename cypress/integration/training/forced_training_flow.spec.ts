@@ -755,7 +755,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
@@ -861,24 +861,23 @@ context("Forced training flow", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#mui-component-select-completedAtAfter").arrowClick();
-      cy.get("ul[role=listbox] > li").contains("Pending").arrowClick();
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form");
-      cy.get("#userName").clear().arrowType(USERS[3].name);
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[3].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[3].name).and("contain", "Pending");
     });

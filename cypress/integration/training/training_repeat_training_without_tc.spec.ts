@@ -644,8 +644,8 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[1].name).and("contain", completedDate);
@@ -736,8 +736,14 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -745,11 +751,17 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -762,15 +774,15 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[1].name).and("contain", completedDate);
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[2].name).and("contain", "Pending");
     });

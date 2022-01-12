@@ -58,9 +58,11 @@ Cypress.Commands.add("recAPICreateReceivable", (params: {
 });
 
 Cypress.Commands.add("recCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recVerifyStartingFilter", () => {
@@ -160,7 +162,7 @@ Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: i
 });
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
-  cy.get("[data-cy*=receivable]");
+  cy.get("[data-cy*=receivable]").arrowClick();
   cy.get("ul[role=listbox]>li").contains(params.poTitle).arrowClick();
 });
 

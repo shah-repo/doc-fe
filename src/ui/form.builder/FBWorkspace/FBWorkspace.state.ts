@@ -28,6 +28,7 @@ class FBWorkspaceState extends FBSchemaState {
   public formInput?: Record<string, any>;
 
   @observable public isDirty = false;
+  @observable public disabledAction = false;
 
   // Hack because formik context from autosave & reference comp are not the same ref
   // and we need to know the values from both FB and AvailableReferences to create
@@ -167,6 +168,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "isDirty", isDirty);
   };
 
+  @action public setDisabledAction = (disabledAction: boolean) => {
+    set(this, "disabledAction", disabledAction);
+  };
+
   @action public setFormInputSync = (name: string, value: any) => {
     set(this.formInputSync, name, value);
   };
@@ -178,7 +183,7 @@ class FBWorkspaceState extends FBSchemaState {
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
-    if (mode === "form" && !values) { return; }
+    if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
     if (!id) { return; }
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
@@ -192,11 +197,17 @@ class FBWorkspaceState extends FBSchemaState {
         break;
       case "form":
       case "formDesign":
-        body = {
-          formInput: omit(values,
-            Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
-          ...mode === "formDesign" && this.isOutputSchema && { schema },
-        };
+        if (values) {
+          body = {
+            formInput: omit(values,
+              Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })),
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        } else {
+          body = {
+            ...mode === "formDesign" && this.isOutputSchema && { schema },
+          };
+        }
         break;
       default:
         return;

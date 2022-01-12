@@ -264,7 +264,9 @@ context("Document Operators Access Test", () => {
     it("reload page", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
         cy.reload();
+        cy.progressBarShouldAppear();
       });
+      cy.listLoadingElementShouldExist();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -296,9 +298,13 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if Title input field is disabled", () => {
@@ -412,6 +418,10 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.unClick();
+    });
+
+    it("Confirm password", { retries: 3 }, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });

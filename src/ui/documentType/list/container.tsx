@@ -30,6 +30,7 @@ type Props = RouteComponentProps<RouteParams>;
 const getFormattedRowValue = (path: any, rowData: any) => {
   const value = get(rowData, path);
   const isDate = moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+
   const versionNumber = generateRevisionNumber(
     rowData.revision,
     rowData.revisionStage,

@@ -843,7 +843,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -855,11 +858,13 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApproval();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -967,7 +972,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -975,11 +983,17 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -990,13 +1004,13 @@ context("Training Flow test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("test training title");
+      cy.trLandingPageName({ name: "test training title" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "test training title");
     });
 
     it("'One-Time training title' should be present", () => {
-      cy.get("#name").clear().arrowType("One-Time training title");
+      cy.trLandingPageName({ name: "One-Time training title" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title");
     });
@@ -1018,17 +1032,17 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[2].name).and("contain", "Pending");
     });
@@ -1080,9 +1094,9 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
@@ -1130,7 +1144,10 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -1138,11 +1155,17 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -1154,7 +1177,7 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
-      cy.get("#name").clear().arrowType("One-Time training title1");
+      cy.trLandingPageName({ name: "One-Time training title1" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
         .should("contain", "One-Time training title1");
     });
@@ -1197,9 +1220,10 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.trLandingPagetrId({ trId: forceTrainingRecordId });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
@@ -1207,6 +1231,39 @@ context("Training Flow test", () => {
         .should("contain", completedDate);
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", forceTrainingRecordId);
+    });
+
+    it("Check if export button exist", () => {
+      cy.get("[data-cy=\"document.revision.export.list\"]").should("exist");
+    });
+
+    it("Check if assign date filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-createdAtAfter]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Last 7 days");
+      cy.get("li[data-value]>span").contains("Last 14 days");
+      cy.get("li[data-value]>span").contains("Last 30 days").arrowClick();
+    });
+
+    it("Check if due date filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-dueOnBefore]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Due in 7 days");
+      cy.get("li[data-value]>span").contains("Overdue").arrowClick();
+    });
+
+    it("Check if completed on filter contains expected values in dropdown", () => {
+      cy.get("[id=mui-component-select-completedAtAfter]").arrowClick();
+      cy.get("li[data-value]>em").contains("None");
+      cy.get("li[data-value]>span").contains("Last 7 days");
+      cy.get("li[data-value]>span").contains("Last 14 days");
+      cy.get("li[data-value]>span").contains("Last 30 days");
+      cy.get("li[data-value]>span").contains("Pending").arrowClick();
+    });
+
+    it("Clear filter", () => {
+      cy.unClick();
+      cy.trClearFilters();
     });
   });
 });

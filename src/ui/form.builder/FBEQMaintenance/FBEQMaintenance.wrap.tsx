@@ -1,4 +1,5 @@
-import { isEmpty } from "lodash";
+import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
+import { isEmpty, lowerCase } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -30,7 +31,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
-    const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYear);
+    const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
     availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
 
     useEffect(() => {
@@ -75,17 +76,28 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
     };
 
+    const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
+      const filterValue = lowerCase(inputValue);
+
+      return lowerCase(docRev.name).includes(filterValue) ||
+             lowerCase(docRev.docId).includes(filterValue);
+    };
+
     function handleFilter(
       data: AvailableMaintenanceForm[],
+      state: FilterOptionsState,
     ) {
       const typeValue = formState?.getFieldValue(`${name}.preventativeForm`);
+      const { inputValue = "" } = state || {};
       const options = data?.filter((form) =>
-        form.documentRevisions.some((doc) => doc.status === DocumentRevisionStatus.Released && form.id !== typeValue));
+        filterOutOption(form, inputValue) &&
+        form.documentRevisions.some((doc) =>
+          doc.status === DocumentRevisionStatus.Released && form.id !== typeValue ));
       return options;
     }
 
-    preventativeFormOptions = (options) =>
-      handleFilter(options);
+    preventativeFormOptions = (options, state) =>
+      handleFilter(options, state);
 
     getOptionLabel = (option) => {
       if (!option?.documentRevisions?.find((doc) => doc.status === DocumentRevisionStatus.Released)) {
