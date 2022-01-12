@@ -222,7 +222,7 @@ export function KendoPanel<T extends { id?: string }>({
       onStateChange={onStateChange}
     />;
   };
-  const BooleanFilterCell = (props: any) => (
+  const BooleanFilterCell = (props) => (
     <DropdownFilterTemplate
       {...props}
       data={[
@@ -286,7 +286,7 @@ export function KendoPanel<T extends { id?: string }>({
             : undefined
         }
         headerCell={
-          col.title ? (props) => <ColumnHeader data={props} /> : undefined
+          col.title ? (props) => <ColumnHeader {...props} /> : undefined
         }
         columnMenu={
           col.showColumnMenu
