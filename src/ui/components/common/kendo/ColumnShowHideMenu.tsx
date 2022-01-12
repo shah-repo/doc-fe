@@ -17,7 +17,7 @@ import { styles } from "./ColumnShowHideMenu.styles";
 import { KendoColumn } from "./types";
 
 interface Props {
-  columnDefinition: any;
+  columnDefinition: KendoColumn[];
   onChange: (colum: KendoColumn) => void;
 }
 
@@ -65,7 +65,7 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
             }
           ></ListItemText>
         </MenuItem>
-        {columnDefinition.map((item: any) => (
+        {columnDefinition.map((item: KendoColumn) => (
           <MenuItem
             key={item.title}
             value={item.field}
