@@ -2,9 +2,7 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import { process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
-  Grid as Kgrid,
-  GridCellProps,
-  GridColumn,
+  Grid as Kgrid, GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
@@ -21,8 +19,8 @@ import { useDispatch } from "react-redux";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { Default } from "../../components/common/kendo.column.templates/Default";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
@@ -38,12 +36,10 @@ import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
-import { CheckboxCell } from "./column.templates/Checkbox";
 import { CommandCell } from "./column.templates/CommandCell";
-import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { NewRowObject } from "./column.templates/NewRowObject";
-import { Schema } from "./column.templates/Schema";
-import { EditDropdownCellFormatter, getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
+import { DTMCellTemplateMapping } from "./config";
+import { getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
@@ -255,39 +251,31 @@ export function KendoPanel<T extends { id?: string }>({
     />
   );
 
-  const commandCell = (props: GridCellProps) =>
-    <CommandCell
-      {...props}
-      edit={enterEdit}
-      remove={deleteDocumnet}
-      add={addNewRow}
-      update={update}
-      cancel={cancel}
-      disabled={disabled}
-      editField={editField}
-    />
-;
-
   const FilterCellMapping = {
     DropdownFilterCellTemplate,
     BooleanFilterCell,
   };
 
-  const TemplateCellMapping = {
-    "active": ActiveDropdown,
-    "privateNumberPool": CheckboxCell,
-    "canRedLine": CheckboxCell,
-    "isQms": CheckboxCell,
-    "needsSignature": CheckboxCell,
-    "defaultTraining": CheckboxCell,
-    "defaultRevStage": EditDropdownCellFormatter,
-    "hiddenForCreationForUsersWithoutTagsFormatted": EditDropdownCellFormatter,
-    "group": EditDropdownCellFormatter,
-    "schema": Schema,
-    "fieldsConfig": FieldsConfig,
-    "": commandCell,
+  const renderCol = (props, col: KendoColumn) => {
+    const template = DTMCellTemplateMapping[col.cell];
+    if (template) {
+      return template(props);
+    } else if (col.field === "") {
+      return <CommandCell
+        {...props}
+        edit={enterEdit}
+        remove={deleteDocumnet}
+        add={addNewRow}
+        update={update}
+        cancel={cancel}
+        disabled={disabled}
+        editField={editField}
+      />;
+    }
+    else {
+      return Default(props);
+    }
   };
-
   // Create Grid Columns
   const renderColumns = () =>
     sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => (
@@ -295,7 +283,7 @@ export function KendoPanel<T extends { id?: string }>({
         {...col}
         title={getTranslatedText(col.title).toUpperCase()}
         key={index}
-        cell={TemplateCellMapping[col.field]}
+        cell={(props) => renderCol(props, col)}
         filterCell={
           FilterCellMapping[col.filterCell]
             ? FilterCellMapping[col.filterCell]

@@ -1,9 +1,6 @@
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoColumn, PageState } from "../../components/common/kendo/types";
-
-enum DTMCellTemplates {
-  DROPDOWN_FILTER_CELL = "DropdownFilterCellTemplate"
-}
+import { DTMCellTemplates } from "./config";
 
 const columns: KendoColumn[] = [{
   field: "id",
@@ -14,6 +11,7 @@ const columns: KendoColumn[] = [{
   field: "active",
   title: "common.status",
   filter: "text",
+  cell: DTMCellTemplates.ACTIVE_CELL,
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "150px",
@@ -42,6 +40,7 @@ const columns: KendoColumn[] = [{
 {
   field: "privateNumberPool",
   title: "common.private.number.pool",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
   width: "110px",
@@ -51,6 +50,7 @@ const columns: KendoColumn[] = [{
 {
   field: "canRedLine",
   title: "common.redline",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
   width: "110px",
@@ -60,6 +60,7 @@ const columns: KendoColumn[] = [{
 {
   field: "isQms",
   title: "common.qms",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
   width: "110px",
@@ -69,6 +70,7 @@ const columns: KendoColumn[] = [{
 {
   field: "needsSignature",
   title: "form.builder.needsSignature",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
   width: "110px",
@@ -78,6 +80,7 @@ const columns: KendoColumn[] = [{
 {
   field: "defaultTraining",
   title: "common.training",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
   width: "110px",
@@ -94,6 +97,7 @@ const columns: KendoColumn[] = [{
 {
   field: "defaultRevStage",
   title: "document.revision.stage",
+  cell: DTMCellTemplates.REVISION_STAGE,
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "165px",
@@ -103,6 +107,7 @@ const columns: KendoColumn[] = [{
 {
   field: "hiddenForCreationForUsersWithoutTagsFormatted",
   title: "common.hidden.message", // TODO: Check if multiSelect
+  cell: DTMCellTemplates.REVISION_STAGE,
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "200px",
@@ -112,6 +117,7 @@ const columns: KendoColumn[] = [{
 {
   field: "group",
   title: "common.group",
+  cell: DTMCellTemplates.REVISION_STAGE,
   filterCell: DTMCellTemplates.DROPDOWN_FILTER_CELL,
   show: true,
   width: "125px",
@@ -127,6 +133,7 @@ const columns: KendoColumn[] = [{
 }, {
   field: "schema",
   title: "common.schema",
+  cell: DTMCellTemplates.SCHEMA,
   show: true,
   filterable: false,
   width: "110px",
@@ -135,6 +142,7 @@ const columns: KendoColumn[] = [{
 }, {
   field: "fieldsConfig",
   title: "common.fields.config",
+  cell: DTMCellTemplates.FIELDS_CONFIG,
   show: true,
   filterable: false,
   width: "110px",
