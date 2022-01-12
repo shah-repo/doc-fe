@@ -113,7 +113,7 @@ context("Bulk create record headers", () => {
                 referenceTo: [],
                 retrain: false,
                 revisionChangeType: RevisionChangeType.NextRevision,
-                revisionStage: 1,
+                revisionStage: 2,
                 formTemplate: {
                   outputDocumentTypes: [{
                     id: testDocumentType[0].id,

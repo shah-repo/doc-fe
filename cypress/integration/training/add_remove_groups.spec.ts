@@ -43,7 +43,7 @@ context("Add/Remove groups from Training Curriculum", () => {
           payload: {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4], USERS[6]],
+            users: [USERS[2], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
@@ -379,7 +379,7 @@ context("Add/Remove groups from Training Curriculum", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
-          fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[6].email);
+          fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[7].email);
           done();
         });
       });
@@ -869,8 +869,6 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick({ force: true });
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
@@ -892,52 +890,46 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
     });
 
-    it("clear filters", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-        cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      });
-    });
-
     it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
     it(`Training record for ${USERS[2].name} should not be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get("[data-cy=\"no.results.found\"]").should("have.text", "No results found");
     });
 
     it(`Training record for ${USERS[3].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[3].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[3].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[3].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
     it(`Training record for ${USERS[4].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[4].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[4].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[4].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[6].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[6].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+    it(`Training record for ${USERS[7].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[7].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[6].name).and("contain", "Pending");
+        .should("contain", releasedDoc1Id).and("contain", USERS[7].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
     });
   });
@@ -961,11 +953,11 @@ context("Add/Remove groups from Training Curriculum", () => {
       });
     });
 
-    context(`Verify training notification for ${USERS[6].name}`, () => {
+    context(`Verify training notification for ${USERS[7].name}`, () => {
       it("Logs user in", () => {
         cy.authLogout();
         cy.authLogin({
-          email: USERS[6].email,
+          email: USERS[7].email,
           password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
         });
       });

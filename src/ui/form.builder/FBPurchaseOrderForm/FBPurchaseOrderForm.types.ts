@@ -1,14 +1,12 @@
-import { FBAutocompleteProps, FBFormProps, FBInputProps, FBPurchaseOrderItem } from "..";
+import { FBAutocompleteProps, FBFormProps, FBInputProps, FBProviderProps } from "..";
 
 export type FBPurchaseOrderFormProps =
-& Pick<FBFormProps, "children">
+& Pick<FBProviderProps, "formState" | "purchaseOrderState">
+& Pick<FBFormProps, "children" | "initialValues">
 & {
   handlePartTitle?: FBInputProps["onChange"];
   handleTotal?: FBInputProps["onChange"];
   getOptionDisabled?: FBAutocompleteProps["getOptionDisabled"];
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
-  handleTypeChange?: FBInputProps["onChange"];
-  type?: FBPurchaseOrderItem["type"];
   handlePartDescription?: FBInputProps["onChange"];
-  hasPartNumber?: boolean;
 };

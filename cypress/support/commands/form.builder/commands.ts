@@ -19,6 +19,7 @@ declare global {
       fbSelectApprovalMatrix(): Chainable<Subject>;
       fbSelectTextField(): Chainable<Subject>;
       fbAddNewFieldWhenHidden(): Chainable<Subject>;
+      fbAddNewFieldWhenHiddenLastPlace(): Chainable<Subject>;
       fbCheckboxGroupField(): Chainable<Subject>;
       fbRadioBtnGroupField(): Chainable<Subject>;
       fbGroupName(params: { name: string }): Chainable<Subject>;
@@ -101,6 +102,12 @@ Cypress.Commands.add("fbAddNewField", () => {
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
     cy.get("[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+  });
+});
+
+Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+    cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick({ force: true });
   });
 });
 
@@ -276,6 +283,8 @@ Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.contains(params.label).parent().trigger("mouseover");
 });
 
@@ -330,6 +339,7 @@ Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label:
 
 Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string; length: number }) => {
   cy.get("[data-cy=\"form.builder.form.preview\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
     .find(`[data-cy^="${params.el}-"]`)
     .click();

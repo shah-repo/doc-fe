@@ -1,5 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -14,7 +16,9 @@ let initialArDocument;
 let approvalRequestDocumentType;
 let testDocumentType;
 let formDocumentType;
+let additionalDocumentType;
 let createdDocumentForBulkCreation;
+const currentDate = moment().tz("America/Los_Angeles").format("l");
 
 context("Test invalid data for records", () => {
   before(() => {
@@ -50,6 +54,14 @@ context("Test invalid data for records", () => {
                 isQms: true,
                 canRedLine: true,
               },
+              {
+                documentTypeName: "Additional Document Type",
+                documentTypeAcronym: "ADT-",
+                category: "Record",
+                group: "RECORD",
+                isQms: true,
+                canRedLine: true,
+              },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -58,6 +70,7 @@ context("Test invalid data for records", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
+          additionalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Additional Document Type");
           done();
         });
       });
@@ -109,11 +122,16 @@ context("Test invalid data for records", () => {
                 referenceTo: [],
                 retrain: false,
                 revisionChangeType: RevisionChangeType.NextRevision,
-                revisionStage: 1,
+                revisionStage: 3,
                 formTemplate: {
-                  outputDocumentTypes: [{
-                    id: testDocumentType[0].id,
-                  }],
+                  outputDocumentTypes: [
+                    {
+                      id: testDocumentType[0].id,
+                    },
+                    {
+                      id: additionalDocumentType[0].id,
+                    },
+                  ],
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
@@ -283,6 +301,20 @@ context("Test invalid data for records", () => {
                       validationMode: "default",
                       validationAttribute: "BLC Checkbox group",
                       deleteInFormDisabled: false,
+                      applicableValidationSchema: true,
+                    },
+                    {
+                      name: "approvals-built-in",
+                      type: "approvals",
+                      index: 7,
+                      label: "Approvals",
+                      applicableOn: [
+                        "ON_STATE_TO_IN_REVIEW",
+                      ],
+                      deleteDisabled: true,
+                      uniqueSchemaItem: true,
+                      validationAttribute: "Approvals",
+                      deleteInFormDisabled: true,
                       applicableValidationSchema: true,
                     },
                   ],
@@ -567,6 +599,98 @@ context("Test invalid data for records", () => {
         });
       });
 
+      context("Test multiple document types form", () => {
+        it("Upload template file", () => {
+          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateMultipleTypes.xlsx" });
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Submit for approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+
+        it("Verify error message", () => {
+          cy.checkToastMessageIsEqual({
+            message: "ADT-00001 doesn't start with document type acronym (TDT-).; " +
+            "ADT-00002 doesn't start with document type acronym (TDT-).; ADT-00003 " +
+            "doesn't start with document type acronym (TDT-).",
+          });
+          cy.closeAllAlertMessages();
+        });
+
+        it("Remove file", () => {
+          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+            .find("button").arrowClick({ force: true });
+        });
+      });
+
+      context("Test date formats", () => {
+        it("Upload template file", () => {
+          cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateReleaseDate.xlsx" });
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Submit for approval", () => {
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        });
+
+        it("Verify error message", () => {
+          cy.checkToastMessageIsEqual({
+            message: "Record TDT-00001 with state Voided does not have defined data in column " +
+            "Release/Voided Date.; Record TDT-00002 with state Voided does not have defined data " +
+            "in column Release/Voided Date.; Record TDT-00003 with state Voided does not have defined " +
+            "data in column Release/Voided Date.; Record TDT-00004 with state Voided does not have " +
+            "defined data in column Release/Voided Date.; Record TDT-00009 with state Released does " +
+            "not have defined data in column Release/Voided Date.; Record TDT-00010 with state " +
+            "Released does not have defined data in column Release/Voided Date.; Record TDT-00011 " +
+            "with state Released does not have defined data in column Release/Voided Date.; " +
+            "Record TDT-00012 with state Released does not have defined data in column Release/Voided " +
+            "Date.; Record TDT-00013 with state Released does not have defined data in column " +
+            "Release/Voided Date.; Record TDT-00014 with state Released does not have defined " +
+            "data in column Release/Voided Date.",
+          });
+          cy.closeAllAlertMessages();
+        });
+
+        it("Remove file", () => {
+          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+            .find("button").arrowClick({ force: true });
+        });
+      });
+
+      // context("Test future date formats on Voided/Released", () => {
+      //   it("Upload template file", () => {
+      //     cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplateFutureDate.xlsx" });
+      //   });
+
+      //   it("Click save document", () => {
+      //     cy.drClickCreateDocumentWithApiCallForForms();
+      //   });
+
+      //   it("Submit for approval", () => {
+      //     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      //   });
+
+      //   it("Verify error message", () => {
+      //     cy.checkToastMessageIsEqual({
+      //       message: "Row: 4 - Owner with email enlil.testmail+cyy2@gmail.com not found in company.;" +
+      //       " Row: 5 - Owner with email enlil.testmail+cy22@gmail.com not found in company.",
+      //     });
+      //     cy.closeAllAlertMessages();
+      //   });
+
+      //   it("Remove file", () => {
+      //     cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+      //       .find("button").arrowClick({ force: true });
+      //   });
+      // });
+
       context("Upload two correct templates and check for error", () => {
         it("Upload template file one", () => {
           cy.atchUploadTemplateForBLC({ fileName: "recordBulkTemplate.xlsx" });
@@ -591,9 +715,9 @@ context("Test invalid data for records", () => {
           cy.closeAllAlertMessages();
         });
 
-        it("Remove file two", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-            .find("button").eq(0).arrowClick({ force: true });
+        it("Remove file", () => {
+          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").trigger("mouseover", { force: true });
+          cy.get("[data-cy=\"remove-recordBulkTemplate.xlsx\"]").arrowClick({ force: true });
         });
 
         it("Click save document", () => {
@@ -621,11 +745,17 @@ context("Test invalid data for records", () => {
     it("Navigate to records list and verify number of records", { retries: 2 }, () => {
       cy.navigToDashboard();
       cy.navigToRecords();
-      cy.dlVerifyDocCounter({ docCounterNumber: 2 });
+      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
+    });
+
+    it("Filter by type and verify only 'Test Document Type' records are created", () => {
+      cy.dlFilterByDocId({ docId: "TDT-" });
+      cy.dlVerifyDocCounter({ docCounterNumber: 4 });
     });
 
     it("Filter by record-id", () => {
-      cy.dlFilterByDocId({ docId: "TDT-00002" });
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "TDT-00006" });
     });
 
     context("Verify voided record one data", () => {
@@ -653,7 +783,7 @@ context("Test invalid data for records", () => {
 
       it("Filter record two", () => {
         cy.dlClearFilters();
-        cy.dlFilterByDocId({ docId: "TDT-00005" });
+        cy.dlFilterByDocId({ docId: "TDT-00007" });
       });
 
       it("Select first record", () => {
@@ -699,6 +829,130 @@ context("Test invalid data for records", () => {
         cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
         cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
         cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
+      });
+    });
+
+    context("Verify future dates for WIP records", () => {
+      context("Verify record three data", () => {
+        it("Navigate to record list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record two", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00008" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitle({ title: "Third bulk document" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescription({ description: "description for third bulk document" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+        });
+
+        it("Verify updated date", () => {
+          cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+            .should("contain.text", `Updated: ${currentDate}`);
+        });
+
+        it("Verify text field value", () => {
+          cy.get("[name^=\"blc-text-field\"]").should("have.text", "third bulk document");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+            .should("have.text", "third bulk document");
+        });
+
+        it("Verify Date picker value", () => {
+          cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
+        });
+
+        it("Verify Select field", () => {
+          cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
+        });
+
+        it("Verify Checkbox group", () => {
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
+        });
+      });
+
+      context("Verify record four data", () => {
+        it("Navigate to record list", () => {
+          cy.navigToRecords();
+        });
+
+        it("Filter record two", () => {
+          cy.dlClearFilters();
+          cy.dlFilterByDocId({ docId: "TDT-00009" });
+        });
+
+        it("Select first record", () => {
+          cy.dlSelectFirstDocument();
+        });
+
+        it("Verify title", () => {
+          cy.recVerifyTitle({ title: "Fourth bulk document" });
+        });
+
+        it("Verify description", () => {
+          cy.recVerifyDescription({ description: "description for fourth bulk document" });
+        });
+
+        it("Verify owner", () => {
+          cy.drVerifyDocumentOWner({ owner: USERS[2].name });
+        });
+
+        it("Verify updated date", () => {
+          cy.get("[data-cy=DocumentRevisionList-item]>a:nth-child(2)>div:nth-child(3)")
+            .should("contain.text", `Updated: ${currentDate}`);
+        });
+
+        it("Verify text field value", () => {
+          cy.get("[name^=\"blc-text-field\"]").should("have.text", "fourth bulk document");
+        });
+
+        it("Verify text editor value", () => {
+          cy.get("[id^=\"fb-mpiprocedure-ref-blc-text-editor-\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+            .should("have.text", "fourth bulk document");
+        });
+
+        it("Verify Date picker value", () => {
+          cy.get("[name^=\"blc-date-picker\"]").should("have.attr", "value", "05/08/1995");
+        });
+
+        it("Verify radio button group", () => {
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option1\"]").should("have.attr", "checked");
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option2\"]").should("not.have.attr", "checked");
+          cy.get("[name^=\"blc-radio-button-group-\"][value=\"option3\"]").should("not.have.attr", "checked");
+        });
+
+        it("Verify Select field", () => {
+          cy.get("[name^=\"blc-select-field\"]").should("have.attr", "value", "option1");
+        });
+
+        it("Verify Checkbox group", () => {
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option1\"]").should("not.have.attr", "checked");
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option2\"]").should("have.attr", "checked");
+          cy.get("[name^=\"blc-checkbox-group\"] [value=\"option3\"]").should("not.have.attr", "checked");
+        });
       });
     });
   });

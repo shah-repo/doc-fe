@@ -826,7 +826,7 @@ context("Bulk create flow", () => {
       });
 
       it("Verify file size", () => {
-        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 9300, 9600);
+        cy.readFile(`cypress/downloads/${excelTemplateSaveName}`).should("have.length.within", 11700, 11800);
       });
 
       it("Verify popup message", () => {

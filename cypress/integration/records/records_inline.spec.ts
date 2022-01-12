@@ -184,7 +184,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("[name*=\"fb-ia-inline-field\"] input")
@@ -193,7 +193,7 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit],
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
               .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
@@ -219,7 +219,8 @@ context("Record inline Flow", () => {
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetDocAggregatedAudit], () => {
+          CyRoutes.GetDocAggregatedAudit,
+          CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
@@ -236,12 +237,17 @@ context("Record inline Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080", "REQ-1100");
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Second entry");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
 
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
-
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -257,7 +263,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit], () => {
+            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
           cy.progressBarShouldNotExist();
@@ -271,7 +278,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit], () => {
+            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
           cy.checkToastMessage({ exists: false });
@@ -283,8 +291,15 @@ context("Record inline Flow", () => {
       context("Edit and try to release it ", () => {
         it("Enter text 'Third entry' in textfield for inline", () => {
           SystemRequirement("REQ-1080");
-          cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
+          cy.wrapWithWaitOnApiCalls([
+            CyRoutes.PostOrPatchDocRev,
+            CyRoutes.SessionDetails], () => {
+            cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType(", Third entry");
+            cy.unClick();
+            cy.progressBarShouldNotExist();
+          });
         });
+
         it("Save record", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
         });
@@ -294,7 +309,8 @@ context("Record inline Flow", () => {
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.PostApprovalsApprove,
-            CyRoutes.GetDocAggregatedAudit], () => {
+            CyRoutes.GetDocAggregatedAudit,
+            CyRoutes.SessionDetails], () => {
             cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           });
           cy.checkToastMessage({ exists: false });
