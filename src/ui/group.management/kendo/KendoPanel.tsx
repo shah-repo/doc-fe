@@ -466,7 +466,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
             : undefined
         }
         headerCell={
-          column.title ? (props) => <ColumnHeader data={props} /> : undefined
+          column.title ? (props) => <ColumnHeader {...props} /> : undefined
         }
         columnMenu={
           column.showColumnMenu
