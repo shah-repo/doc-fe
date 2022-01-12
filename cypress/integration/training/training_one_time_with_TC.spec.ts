@@ -741,21 +741,21 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToDashboard();
+      cy.navigToNewDashboard();
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: FM-00002 - Rev 1 released form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.contains(`FM-00002`).should("exist");
+      cy.contains(`released form`).should("exist");
     });
   });
 
   context("Complete Training and check if TR is updated", () => {
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: FM-00002`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    it(`Open assigned Training`, () => {
+      cy.contains(`FM-00002`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
     });
 
     it("Click complete training button", () => {
