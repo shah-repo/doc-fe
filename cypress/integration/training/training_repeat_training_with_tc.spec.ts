@@ -725,21 +725,21 @@ context("Repeat Training with Training Curriculum", () => {
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToDashboard();
+      cy.navigToNewDashboard();
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: FM-00001 - Rev 1 AR Form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.contains(`FM-00001`).should("exist");
+      cy.contains(`AR Form 1`).should("exist");
     });
   });
 
   context("Complete Training and verify expire on field", () => {
     it("Open assigned Training", () => {
-      cy.contains(`TRAINING: FM-00001`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      cy.contains(`FM-00001`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
     });
 
     it("Click complete training button", () => {
