@@ -3,13 +3,15 @@ import {
   DropDownList, DropDownListChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import { isEmpty } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../kendo/helpers";
+import { DateFilterStateChangeProps } from "../kendo/types";
 
 interface DateDropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: {
-    text: any;
+    text: string;
     value: string;
   };
   defaultValue: {
@@ -21,7 +23,7 @@ interface DateDropdownFilterCellProps extends GridFilterCellProps {
     text: string;
     value: string;
   }[];
-  onStateChange?: any;
+  onStateChange?: (object: DateFilterStateChangeProps) => void;
 }
 
 export const DateDropdownFilterCell = ({
@@ -36,9 +38,7 @@ export const DateDropdownFilterCell = ({
   const [state, setState] = React.useState({
     value: defaultItem,
   });
-  let hasValue: any = (value) => Boolean(value && value !== defaultItem);
   const onDropdownChange = ({ target }: DropDownListChangeEvent) => {
-    hasValue = hasValue(target.value, "props.data ::", data);
     const selectedItem = data?.find((dd) => dd.text === target.value.text);
     setState({
       value: target.value,
@@ -86,7 +86,7 @@ export const DateDropdownFilterCell = ({
         title={intl.formatMessage({
           id: "common.clear",
         })}
-        disabled={!hasValue(defaultItem?.value)}
+        disabled={isEmpty(defaultItem?.value)}
         onClick={onClearButtonClick}
       >
         <span className="k-icon k-i-filter-clear" />
