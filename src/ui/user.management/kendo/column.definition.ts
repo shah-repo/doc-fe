@@ -20,7 +20,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     locked: false,
     orderIndex: 2,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "user.email",
@@ -30,7 +30,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     locked: false,
     orderIndex: 3,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "groups",
@@ -40,7 +40,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     locked: false,
     orderIndex: 4,
-    showColumnMenu: true,
+    showColumnMenu: false,
   },
   {
     field: "active",
