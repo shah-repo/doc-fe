@@ -39,7 +39,7 @@ export default (on, config) => {
     gmailGetLastMail(email) {
       return getEmail(email);
     },
-    gmailGetMails(params: {usersonEmail; options}) {
+    gmailGetMails(params: {userEmail; options}) {
       return getEmails(params.userEmail, params.options);
     },
     downloadFile,
