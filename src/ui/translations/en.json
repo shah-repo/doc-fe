@@ -282,6 +282,7 @@
   "common.next": "Next",
   "common.true": "Yes",
   "common.false": "No",
+  "common.no.hide": "Grouped column cannot be hidden",
   "status.true": "Y",
   "status.false": " ",
   "common.original": "Original",
