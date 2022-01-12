@@ -484,7 +484,7 @@ export function KendoPanel<T extends any>({
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
       headerCell={
-        column.title ? (props) => <ColumnHeader data={props} /> : undefined
+        column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }
       columnMenu={
         column.showColumnMenu
