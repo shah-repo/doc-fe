@@ -50,7 +50,7 @@ import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu
 import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
-import { DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
+import { DateFilterStateChangeProps, DropdownFilterDefaultItem, KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import { TablePanelStateProps } from "../../components/table/types";
@@ -64,7 +64,7 @@ import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
 import KendoGridStyles from "./styles";
-import { DateFields, DroDownFilterChangeProps } from "./types";
+import { DateFields } from "./types";
 
 let call: CancelTokenSource;
 
@@ -311,7 +311,7 @@ export function KendoPanel<T extends any>({
   };
 
   // Kendo Grid Actions Methods ({selectedItem, parentField})
-  const onStateChange = ({ selectedItem, parentField }: DroDownFilterChangeProps) => {
+  const onStateChange = ({ selectedItem, parentField }: DateFilterStateChangeProps) => {
     const updatedFilter = {
       ...selectedItem,
       field: parentField,
@@ -528,7 +528,7 @@ export function KendoPanel<T extends any>({
       minResizableWidth={100}
       filterCell={column.field && filterCellMapping(column.field)}
       headerCell={
-        column.title ? (props) => <ColumnHeader data={props} /> : undefined
+        column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }
       columnMenu={
         column.showColumnMenu
