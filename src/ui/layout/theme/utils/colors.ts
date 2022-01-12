@@ -54,8 +54,8 @@ enum Colors {
   latest_green_varient = "#0DB78D",
   olivine = "#9EB774",
   carla="#E6FCD9",
-  fruit_salad="#4C9646",
-  fruit_salad_border="#509849",
+  light_forest_green="#4C9646",
+  light_forest_green_border="#509849",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
