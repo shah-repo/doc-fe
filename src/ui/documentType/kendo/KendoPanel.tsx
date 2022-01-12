@@ -21,7 +21,7 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig } from "axios";
 import {
-  cloneDeep, find, isEmpty,
+  cloneDeep, find, findIndex, isEmpty,
   map,
   merge,
   omit,
@@ -31,6 +31,7 @@ import {
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import { default as React, useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
@@ -48,6 +49,7 @@ import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import { canEditDocumentRevision } from "../../document.revision/utils/helpers";
 import {
@@ -71,6 +73,8 @@ export function KendoGrid<T extends any>({
   customDataSet,
   normalizrSchema,
 }: KendoPanelProps<T> & CreateExport) {
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const dispatch = useDispatch();
   const didMount = useDidMount();
   const [isLoading, setIsLoading] = useState(false);
@@ -423,6 +427,11 @@ export function KendoGrid<T extends any>({
   };
 
   const onColumnShowHide = ({ field }: KendoColumn) => {
+    const isGrouped = findIndex(dataState.group, { field });
+    if (isGrouped > -1) {
+      toastError(getTranslatedText("common.no.hide"));
+      return;
+    }
     const updatedDataColumns = map(columnDefinitions, (column: KendoColumn) => {
       if (column.field === field) {
         column.show = !column.show;
