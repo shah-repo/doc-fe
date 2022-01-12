@@ -1,26 +1,39 @@
-import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
-import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
+import { CustomGridCellProps } from "../kendo/types";
 
-export const DateCompleted = (props: GridCellProperties) => {
+export const DateCompleted = ({
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  cellRowClick,
+}: CustomGridCellProps) => {
   const intl = useIntl();
-  const date = props.dataItem[props.field || ""];
+  const date = dataItem[field || ""];
   const formattedDate = date
-    ? moment(date).tz(TIME_ZONE).format(MomentFormats.DateTimeComplete)
+    ? getFormattedDateString(date, MomentFormats.DateTimeComplete)
     : intl.formatMessage({ id: "common.pending" });
-  if (props.rowType === "groupHeader") {
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       {formattedDate && <Tooltip data={formattedDate} />}
     </td>

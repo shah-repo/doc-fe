@@ -4,7 +4,7 @@ import { KendoColumn, KendoGridConfiguration, PageState } from "../../components
 const columns: KendoColumn[] = [
   {
     field: "status",
-    title: "SIGNED UP",
+    title: "user.management.signed.up",
     show: true,
     filter: "boolean",
     locked: false,
@@ -14,7 +14,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "user.name",
-    title: "NAME",
+    title: "common.name",
     show: true,
     filter: "text",
     groupable: false,
@@ -24,7 +24,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "user.email",
-    title: "EMAIL",
+    title: "common.email",
     show: true,
     filter: "text",
     groupable: false,
@@ -34,7 +34,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "groups",
-    title: "GROUPS",
+    title: "common.groups",
     show: true,
     filter: "text",
     groupable: false,
@@ -44,7 +44,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "active",
-    title: "ACTIVE",
+    title: "common.active",
     show: true,
     filter: "boolean",
     groupable: true,

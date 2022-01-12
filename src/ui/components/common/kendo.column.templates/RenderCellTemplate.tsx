@@ -1,9 +1,8 @@
-// import { GridCellProps } from "@progress/kendo-react-grid";
-import { GridCellProperties } from "../kendo/types";
+import { CustomGridCellProps } from "../kendo/types";
 import { cellTemplateMapping } from "./config";
 import { Default } from "./Default";
 
-export const RenderCustomCell = (props: GridCellProperties, cellTemplate: string) => {
+export const RenderCustomCell = (props: CustomGridCellProps, cellTemplate: string) => {
   const template = cellTemplateMapping[cellTemplate];
   if (props.rowType === "groupHeader") {
     return null;

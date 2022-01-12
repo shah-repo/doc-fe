@@ -55,11 +55,9 @@ import { SignedCell } from "./cell.template/SignedCell";
 import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
 
-type Props<T> = UserManagementProps<T>  ;
-
 let call: CancelTokenSource;
 
-export function KendoPanel<T extends any>({
+export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -70,9 +68,9 @@ export function KendoPanel<T extends any>({
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
-}: Props<T>) {
+}: UserManagementProps<T>) {
   const intl = useIntl();
-  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const didMount = useDidMount();
   const dispatch = useDispatch();
@@ -101,19 +99,19 @@ export function KendoPanel<T extends any>({
     return newDataState;
   };
 
-  const edit = (dataItem) => {
-    onSelect && onSelect({ dataItem })();
+  const edit = (dataItem: UserManage) => {
+    onSelect && onSelect({ dataItem } as any)();
   };
 
-  const add = (dataItem: UserManage) => {
-    dataItem.inEdit = true;
+  const add = ({ inEdit, id, name, email, groups }: UserManage) => {
+    inEdit = true;
     const payload = {
       user: {
-        id: dataItem.id,
-        name: dataItem.name,
-        email: dataItem.email,
+        id,
+        name,
+        email,
       },
-      groups: dataItem.groups,
+      groups,
     };
     handleCreate(payload);
   };
@@ -310,12 +308,12 @@ export function KendoPanel<T extends any>({
     collapsedIds: collapsedState,
   });
   const onDataStateChange = useCallback(
-    (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(gridData, event.dataState);
-      tableCriteria.kendoConfig = JSON.stringify(event.dataState);
-      setDataState(event.dataState);
+    ({ dataState }: GridDataStateChangeEvent) => {
+      const newDataState = processWithGroups(gridData, dataState);
+      tableCriteria.kendoConfig = JSON.stringify(dataState);
+      setDataState(dataState);
       setResultState(newDataState);
-      setKendoFilterStatus(JSON.stringify(event.dataState));
+      setKendoFilterStatus(JSON.stringify(dataState));
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);
       }
@@ -324,10 +322,10 @@ export function KendoPanel<T extends any>({
     [gridData]
   );
   const onExpandChange = useCallback(
-    (event: GridExpandChangeEvent) => {
-      const item = event.dataItem;
+    ({ value, dataItem }: GridExpandChangeEvent) => {
+      const item = dataItem;
       if (item.groupId) {
-        const newCollapsedIds = !event.value
+        const newCollapsedIds = !value
           ? [...collapsedState, item.groupId]
           : collapsedState.filter((groupId) => groupId !== item.groupId);
         setCollapsedState(newCollapsedIds);
@@ -401,6 +399,7 @@ export function KendoPanel<T extends any>({
       <GridColumn
         key={idx}
         {...column}
+        title={getTranslatedText(column.title).toUpperCase()}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
@@ -422,25 +421,23 @@ export function KendoPanel<T extends any>({
       />
     )));
 
-  const columnResize = (event: GridColumnResizeEvent) => {
-    if (event.end) {
-      let dataColumns: KendoColumn[] = gridConfiguration.columns;
-      dataColumns = map(dataColumns, (column: KendoColumn) => {
-        const columnObject = find(event.columns, { field: column.field });
-        column.width = columnObject?.width;
-        return column;
-      });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
-    }
-    return false;
-  };
-
-  const columnReorder = (event: GridColumnReorderEvent) => {
+  const columnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    if (!end) { return false; }
     let dataColumns: KendoColumn[] = gridConfiguration.columns;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
-      const columnObject = find(event.columns, { field: column.field });
+      const columnObject = find(columns, { field: column.field });
+      column.width = columnObject?.width;
+      return column;
+    });
+    hideColumnTitleOnResize();
+    setColumnDefinitions(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
+  const columnReorder = ({ columns }: GridColumnReorderEvent) => {
+    let dataColumns: KendoColumn[] = gridConfiguration.columns;
+    dataColumns = map(dataColumns, (column: KendoColumn) => {
+      const columnObject = find(columns, { field: column.field });
       column.orderIndex = columnObject?.orderIndex;
       return column;
     });
@@ -510,7 +507,7 @@ export function KendoPanel<T extends any>({
             <Text translation="navigation.user.management" />
           </Typography>
         </Grid>
-        <Grid item style={{ display: "flex" }}>
+        <Grid item className={classes.dropboxButton}>
           <EnableDropboxButton
             shouldDisplayButton={hasDropboxPermission}
             {...{ dropboxAsync, enableDropboxAction }}
@@ -520,7 +517,7 @@ export function KendoPanel<T extends any>({
         </Grid>
       </Grid>
       <Box className={classes.root}>
-        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
+        <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {tableRenderer()}
       </Box>
     </>

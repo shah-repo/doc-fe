@@ -5,28 +5,37 @@ import {
 import { GridFilterCellProps } from "@progress/kendo-react-grid";
 import * as React from "react";
 import { useIntl } from "react-intl";
-import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
+import {
+  DisplayText,
+  TranslatedText,
+} from "../../../components/common/kendo/helpers";
 
 interface DropdownFilterCellProps extends GridFilterCellProps {
   defaultItem: string;
   data: string[];
 }
 
-export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
+export const DropdownFilterCell = ({
+  defaultItem,
+  onChange,
+  value,
+  data,
+}: DropdownFilterCellProps) => {
   const intl = useIntl();
-  const hasValue = (value: string) => value && value !== props.defaultItem;
+  const hasValue = (value: string) => value && value !== defaultItem;
 
-  const onChange = (event: DropDownListChangeEvent) => {
-    props.onChange({
-      value: hasValue(event.target.value) ? event.target.value : "",
-      operator: hasValue(event.target.value) ? "contains" : "",
-      syntheticEvent: event.syntheticEvent,
+  const onDropdownChange = ({ target, syntheticEvent }: DropDownListChangeEvent) => {
+    const isValueExists = hasValue(target.value);
+    onChange({
+      value: isValueExists ? target.value : "",
+      operator: isValueExists ? "contains" : "",
+      syntheticEvent,
     });
   };
 
   const onClearButtonClick = (event: React.MouseEvent) => {
     event.preventDefault();
-    props.onChange({
+    onChange({
       value: "",
       operator: "",
       syntheticEvent: event,
@@ -35,15 +44,15 @@ export const DropdownFilterCell = (props: DropdownFilterCellProps) => {
   return (
     <div className="k-filtercell">
       <DropDownList
-        data={props.data.filter((el) => el).sort()}
-        onChange={onChange}
-        value={props.value || props.defaultItem}
-        defaultItem={props.defaultItem}
+        data={data.filter((el) => el).sort()}
+        onChange={onDropdownChange}
+        value={value || defaultItem}
+        defaultItem={defaultItem}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
-        disabled={!hasValue(props.value)}
+        disabled={!hasValue(value)}
         onClick={onClearButtonClick}
       >
         <span className="k-icon k-i-filter-clear" />

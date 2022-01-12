@@ -1,28 +1,40 @@
 import { get } from "lodash";
-import moment from "moment";
 import React from "react";
-import { MomentFormats, TIME_ZONE, toValidateIfDate } from "../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats, toValidateIfDate } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
+import { CustomGridCellProps } from "../kendo/types";
 
 
-export const CommonCell = (props: GridCellProperties) => {
-  const value = get(props.dataItem, props.field || "");
-  // To check if value is date
+export const CommonCell = ({
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  cellRowClick,
+}: CustomGridCellProps) => {
+  const value = get(dataItem, field || "");
   const toCheckIfDate = toValidateIfDate(value);
   const formattedValue = toCheckIfDate
-    ? moment(value).tz(TIME_ZONE).format(MomentFormats.MonthDateYear)
+    ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
-  if (props.rowType === "groupHeader") {
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       <Tooltip data={formattedValue}/>
     </td>

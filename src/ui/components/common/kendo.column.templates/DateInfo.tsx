@@ -1,24 +1,37 @@
 import { Grid } from "@material-ui/core";
 import { get } from "lodash";
-import moment from "moment";
 import React from "react";
-import { MomentFormats, TIME_ZONE } from "../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../kendo/Tooltip";
-import { GridCellProperties } from "../kendo/types";
+import { CustomGridCellProps } from "../kendo/types";
 
-export const DateInfo = (props: GridCellProperties) => {
-  const date = get(props.dataItem, props.field || "");
-  const formattedDate = date ? moment(date).tz(TIME_ZONE).format(MomentFormats.MonthDateYear) : null;
-  if (props.rowType === "groupHeader") {
+export const DateInfo = ({
+  dataItem,
+  field,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  cellRowClick,
+}: CustomGridCellProps) => {
+  const date = get(dataItem, field || "");
+  const formattedDate = date ? getFormattedDateString(date, MomentFormats.MonthDateYear) : null;
+  if (rowType === "groupHeader") {
     return null;
   }
+  const cellClickEvent = () => {
+    if (!cellRowClick) { return; }
+    cellRowClick({ dataItem });
+  };
   return (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
+      onClick={cellClickEvent}
     >
       <Grid
         container

@@ -1,12 +1,12 @@
-import { IconButton, makeStyles } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import Colors from "../../../layout/theme/utils/colors";
 import { UserManage } from "../types";
+import Commandstyles from "./CommandCell.styles";
 
 interface CommandCellProps {
   dataItem: UserManage;
@@ -14,8 +14,8 @@ interface CommandCellProps {
   add: (dataItem: UserManage) => void;
   cancel: (dataItem: UserManage) => void;
   edit: (dataItem: UserManage) => void;
-  colSpan?: any;
-  style?: any;
+  colSpan?: number;
+  style?: React.CSSProperties;
   ariaColumnIndex?: number;
   className?: string;
   columnIndex?: number;
@@ -23,37 +23,34 @@ interface CommandCellProps {
   rowType?: string;
 }
 
-export const CommandCell = (props: CommandCellProps) => {
+export const CommandCell = ({
+  dataItem,
+  editField,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+  add,
+  cancel,
+  edit,
+}: CommandCellProps) => {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const styles = makeStyles(() => ({
-    button: {
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
-    },
-    ButtonColor: {
-      color: Colors.navy,
-    },
-    Cancel: {
-      color: Colors.latest_yellow_varient,
-    },
-  }));
-  const classes = styles();
-  const { dataItem } = props;
-  const inEdit = dataItem[props.editField];
+  const classes = Commandstyles();
+  const inEdit = dataItem[editField];
 
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
 
   return inEdit ? (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Tooltip
         placement="top"
@@ -62,7 +59,7 @@ export const CommandCell = (props: CommandCellProps) => {
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => props.add(dataItem)}
+            onClick={() => add(dataItem)}
             className={classes.button}
           >
             <AddCircleOutlineIcon
@@ -79,7 +76,7 @@ export const CommandCell = (props: CommandCellProps) => {
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => props.cancel(dataItem)}
+            onClick={() => cancel(dataItem)}
             className={classes.button}
           >
             <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
@@ -89,11 +86,11 @@ export const CommandCell = (props: CommandCellProps) => {
     </td>
   ) : (
     <td
-      colSpan={props.colSpan}
-      style={props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
       <Tooltip
         placement="top"
@@ -102,7 +99,7 @@ export const CommandCell = (props: CommandCellProps) => {
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => props.edit(dataItem)}
+            onClick={() => edit(dataItem)}
             className={classes.button}
           >
             <EditIcon className={classes.ButtonColor} fontSize="small" />

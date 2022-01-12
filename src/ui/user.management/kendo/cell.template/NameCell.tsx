@@ -1,24 +1,31 @@
 import { TextField } from "@material-ui/core";
+import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import { GridCellProperties } from "../../../components/common/kendo/types";
 
-export const NameCell = (props: GridCellProperties) => {
-  const updateNameField = (event: any) => {
-    props.dataItem.name = event?.target?.value;
+export const NameCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  style,
+  className,
+  columnIndex,
+}: GridCellProps) => {
+  const updateNameField = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    dataItem.name = target?.value;
   };
-  if (props.rowType === "groupHeader") {
+  if (rowType === "groupHeader") {
     return null;
   }
   return (
     <td
-      colSpan={props.colSpan}
-      style= {props.style}
+      colSpan={colSpan}
+      style={style}
       role="gridcell"
-      className={props.className}
-      data-grid-col-index={props.columnIndex}
+      className={className}
+      data-grid-col-index={columnIndex}
     >
-      {props.dataItem.inEdit ? (
+      {dataItem.inEdit ? (
         <TextField
           id="input-with-icon-textfield"
           variant="outlined"
@@ -26,7 +33,11 @@ export const NameCell = (props: GridCellProperties) => {
           onChange={updateNameField}
         />
       ) : (
-        <Tooltip data ={props.dataItem.user ? props.dataItem.user.name : props.dataItem.items[0]?.user?.name}/>
+        <Tooltip
+          data={
+            dataItem.user ? dataItem.user.name : dataItem.items[0]?.user?.name
+          }
+        />
       )}
     </td>
   );
