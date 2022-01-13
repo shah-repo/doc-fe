@@ -15,7 +15,7 @@ interface DateDropdownFilterCellProps extends GridFilterCellProps {
     value: string;
   };
   defaultValue: {
-    text: any;
+    text: string;
     value: string;
   };
   operator: string;

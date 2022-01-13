@@ -1,6 +1,6 @@
 import { GroupDescriptor } from "@progress/kendo-data-query";
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
-import { GridCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
+import { GridCellProps, GridColumnMenuProps, GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 
@@ -16,21 +16,21 @@ export enum KendoCellTemplates {
   COMMON_CELL="CommonCell"
 }
 export interface KendoColumn {
-  sortable?: ColumnSortSettings | undefined;
+  sortable?: ColumnSortSettings;
   field: string;
   title: string;
   show: boolean;
   showColumnMenu?: boolean;
   format?: string;
-  filter?: "boolean" | "numeric" | "text" | "date" | undefined;
+  filter?: "boolean" | "numeric" | "text" | "date" ;
   groupable?: boolean;
   filterCell?: any;
-  cell?: any;
+  cell?: string;
   locked?: boolean;
-  width?: number | string | undefined;
+  width?: number | string;
   reorderable?: boolean;
-  orderIndex?: number | undefined;
-  columnMenu?: any;
+  orderIndex?: number;
+  columnMenu?: GridColumnMenuProps;
   filterable?: boolean;
   disabled?: boolean;
   resizable?: boolean;
