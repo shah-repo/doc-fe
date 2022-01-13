@@ -535,13 +535,7 @@ context("Training notifications for documents with approved and released revisio
       cy.authLogout();
       cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.arApproveARNew();
       cy.authLogout();
       cy.authLogin({
         email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
@@ -638,12 +632,14 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).should("exist");
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 2 released form`).should("exist");
+      cy.contains(`${releasedDocId} released form 2`).should("exist");
+      cy.contains(`${releasedDocId} released form 1`).should("exist");
     });
 
     it("Click training notification and check doc with Approved status", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 2 released form`).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet], () => {
+        cy.contains(`${releasedDocId} released form 2`).arrowClick();
+      });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
     });
 
@@ -656,7 +652,9 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet], () => {
+        cy.contains(`${releasedDocId} released form 1`).arrowClick();
+      });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });
 
@@ -671,7 +669,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click on the Training notification", () => {
-      cy.contains(`TRAINING: ${releasedDocId}`).parent().parent().parent()
+      cy.contains(`${releasedDocId}`).parent().parent().parent()
         .find(".MuiButton-containedSecondary").then(($el) => {
           const link = $el.attr("href");
           cy.visit(CONFIG.FE_URL + link);

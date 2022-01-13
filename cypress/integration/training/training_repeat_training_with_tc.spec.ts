@@ -725,7 +725,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it(`Verify training notification`, () => {

@@ -470,7 +470,7 @@ context("Approval request form scenario", () => {
 
     it("Navigate to dashboard", () => {
       SystemRequirement("REQ-2200");
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify there is no dashboard notifications", () => {

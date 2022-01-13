@@ -607,7 +607,7 @@ context("Training notification test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {

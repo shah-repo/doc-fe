@@ -766,7 +766,7 @@ context("Forced training flow", () => {
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
       cy.wait(3000);
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
