@@ -851,12 +851,11 @@ context("Training user groups test", () => {
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick().wait(2000);
+      cy.navigToDashboard();
     });
 
     it(`Verify training notification ${releasedFormId}`, () => {
-      cy.contains(`${releasedFormId}`).should("exist").wait(1000);
-      cy.contains(`released form`).should("exist").wait(1000);
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form` });
     });
 
     it("Logout user", () => {
@@ -882,7 +881,7 @@ context("Training user groups test", () => {
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.get("[data-cy='dashboard.noPendingActions']").should("exist").wait(1000);
+      cy.dashVerifyNoPendingActions();
     });
 
     it("Logout user", () => {
@@ -910,10 +909,7 @@ context("Training user groups test", () => {
 
   context("Open and complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.contains(`${releasedFormId}`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link).wait(2000);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 1` });
     });
 
     it("Complete Training", () => {

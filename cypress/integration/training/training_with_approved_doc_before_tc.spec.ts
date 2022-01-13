@@ -632,8 +632,8 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 2` }).should("exist");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 1` }).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 2` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 1` });
     });
 
     it("Click training notification and check doc with Approved status", () => {

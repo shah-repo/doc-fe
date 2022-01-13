@@ -724,22 +724,18 @@ context("Repeat Training with Training Curriculum", () => {
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.wait(3000);
       cy.navigToDashboard();
     });
 
     it(`Verify training notification`, () => {
-      cy.contains(`FM-00001`).should("exist");
-      cy.contains(`AR Form 1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "AR Form 1" });
     });
   });
 
   context("Complete Training and verify expire on field", () => {
     it("Open assigned Training", () => {
-      cy.contains(`FM-00001`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001AR Form 1" });
     });
 
     it("Click complete training button", () => {

@@ -7,6 +7,7 @@ declare global {
     interface Chainable<Subject> {
       dashVerifyListItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashGoToListItemFromDashboard(params: {listItem: string}): Chainable<Subject>;
+      dashVerifyNoPendingActions(): Chainable<Subject>;
     }
   }
 }
@@ -23,5 +24,8 @@ Cypress.Commands.add("dashGoToListItemFromDashboard", (params: { listItem: strin
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("dashVerifyNoPendingActions", () => {
+  cy.get("[data-cy='dashboard.noPendingActions']").should("exist");
+});
 
 export { };
