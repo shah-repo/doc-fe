@@ -21,7 +21,7 @@ import KendoGridStyles from "./styles";
 interface Props {
   tableName: string;
   tableCriteria: TablePanelStateProps;
-  data: TableDataProps<any>;
+  data: TableDataProps<GetEmployeeResponse>;
 }
 
 const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
@@ -66,7 +66,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
           dropboxAsync={dropboxAsync}
           enableDropboxAction={enableDropboxAction}
           isCompanyDropboxEnabled={isCompanyDropboxEnabled}
-          onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem)}
+          onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}
           tableCriteria={tableCriteria}
         />
       </Grid>
