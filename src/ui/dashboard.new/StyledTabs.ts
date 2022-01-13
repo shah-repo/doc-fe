@@ -6,7 +6,8 @@ const styles = () => ({
   indicator: {
     "display": "flex",
     "justifyContent": "center",
-    "backgroundColor": "transparent",
+    "backgroundColor": Colors.navy,
+    "height": 3,
     "& > span": {
       width: "100%",
       backgroundColor: Colors.white,

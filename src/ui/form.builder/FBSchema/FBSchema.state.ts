@@ -57,6 +57,7 @@ import FBTextField from "../FBTextField/FBTextField";
 import FBTextFieldWithRange from "../FBTextFieldWithRange/FBTextFieldWithRange";
 import FBTimerField from "../FBTimerField/FBTimerField";
 import FBUnitMeasures from "../FBUnitMeasures/FBUnitMeasures";
+import FBZIPUpload from "../FBZIPUpload/FBZIPUpload";
 
 class FBSchemaState {
   public static omitLabel: FBInputType[] = [
@@ -89,6 +90,7 @@ class FBSchemaState {
     radio: FBRadio,
     radiogroup: FBRadioGroup,
     fileupload: FBFileUpload,
+    zipattachment: FBZIPUpload,
     blanktplform: FBBlankTplForm,
     schemaselect: FBSchemaSelect,
     paragraph: FBParagraph,

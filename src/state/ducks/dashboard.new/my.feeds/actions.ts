@@ -1,5 +1,5 @@
-import { apiAction } from "../../../factories";
-import { ApiAction } from "../../../types";
+import { apiAction, apiActionWithCallbacks } from "../../../factories";
+import { ApiAction, Handlers } from "../../../types";
 import { DASHBOARD_MY_FEEDS_URL, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC } from "./constants";
 import { MyFeedsItems, MyFeedsListAction } from "./types";
 
@@ -17,7 +17,29 @@ const loadMyFeedsList = (): ApiAction<MyFeedsItems[]> => apiAction({
   },
 });
 
+const pinnedLineItem = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/pinned_items/dashboard_feed/${id}`,
+    method: "post",
+    handlers,
+  });
+
+const unPinnedLineItem = (
+  id: string,
+  handlers: Handlers,
+): ApiAction =>
+  apiActionWithCallbacks({
+    url: `/pinned_items/dashboard_feed/${id}`,
+    method: "delete",
+    handlers,
+  });
+
 export default {
   myFeedsList,
   loadMyFeedsList,
+  pinnedLineItem,
+  unPinnedLineItem,
 };

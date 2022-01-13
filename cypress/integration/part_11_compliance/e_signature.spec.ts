@@ -424,22 +424,17 @@ context("E-signature test", () => {
 
     it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
-    });
-
-    it("Add second approver to EB document", () => {
+      cy.wait(500);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-    });
-
-    it("Add third approver to EB document", () => {
+      cy.wait(500);
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+      cy.wait(500);
     });
-
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
-
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -454,18 +449,22 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+    it(`Approve AR and EB`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(1000);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -506,17 +505,21 @@ context("E-signature test", () => {
     });
 
     it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy=\"transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -612,18 +615,21 @@ context("E-signature test", () => {
 
     context("Approve AR and EB", () => {
       it("Approve AR and EB", () => {
+        cy.wait(3000);
         cy.grpNavigateToDashboard();
-        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-        cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
-          () => {
+          [CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
-        cy.progressBarShouldNotExist();
-        cy.get("button[class*='MuiButton-outlinedSecondary']").contains("Approve").arrowClick();
-        cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails],
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });

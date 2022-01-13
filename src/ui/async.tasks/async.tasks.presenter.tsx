@@ -54,7 +54,7 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
     },
     onError: () => {
       closeApproveDialog();
-      toastError(intl.formatMessage({ id: "common.async.task.failed" }));
+      toastError(intl.formatMessage({ id: "common.sqs.task.failed" }));
     },
   });
   const openApproveDialog = () => {
