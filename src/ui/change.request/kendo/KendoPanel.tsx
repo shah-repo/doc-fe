@@ -74,7 +74,6 @@ export function KendoPanel<T>({
   tableCriteria,
   queryUrl = "",
   customDataSet,
-  rootCustomStyle,
   normalizrSchema,
   currentUserEmail = "",
 }: KendoPanelProps<T>) {
@@ -550,7 +549,7 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
+    <Box className={classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
     </Box>
