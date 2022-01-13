@@ -27,6 +27,7 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions, userManagementSelectors } from "../../../state/ducks/userManagement";
+import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
@@ -68,7 +69,7 @@ export function KendoPanel<T>({
   dropboxAsync,
   enableDropboxAction,
   isCompanyDropboxEnabled,
-}: UserManagementProps<T>) {
+}: UserManagementProps<Partial<GetEmployeeResponse>>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
@@ -93,14 +94,14 @@ export function KendoPanel<T>({
       )
     );
   };
-  const processWithGroups = (data: T[], dataState: State) => {
+  const processWithGroups = (data: Partial<GetEmployeeResponse>[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
 
-  const edit = (dataItem: UserManage) => {
-    onSelect && onSelect({ dataItem } as any)();
+  const edit = (dataItem: GetEmployeeResponse) => {
+    onSelect && onSelect({ dataItem })();
   };
 
   const add = ({ inEdit, id, name, email, groups }: UserManage) => {
@@ -449,7 +450,7 @@ export function KendoPanel<T>({
 
   const addNew = () => {
     setSearchStatus(true);
-    const newDataItem: any = {
+    const newDataItem = {
       id: generateUuid(),
       inEdit: true,
       active: true,

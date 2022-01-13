@@ -4,16 +4,17 @@ import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
 import * as React from "react";
 import { useIntl } from "react-intl";
+import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import { UserManage } from "../types";
 import Commandstyles from "./CommandCell.styles";
 
 interface CommandCellProps {
-  dataItem: UserManage;
+  dataItem: UserManage | GetEmployeeResponse;
   editField: string;
   add: (dataItem: UserManage) => void;
   cancel: (dataItem: UserManage) => void;
-  edit: (dataItem: UserManage) => void;
+  edit: (dataItem: GetEmployeeResponse) => void;
   colSpan?: number;
   style?: React.CSSProperties;
   ariaColumnIndex?: number;
@@ -59,7 +60,7 @@ export const CommandCell = ({
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => add(dataItem)}
+            onClick={() => add(dataItem as UserManage)}
             className={classes.button}
           >
             <AddCircleOutlineIcon
@@ -76,7 +77,7 @@ export const CommandCell = ({
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => cancel(dataItem)}
+            onClick={() => cancel(dataItem as UserManage)}
             className={classes.button}
           >
             <CancelOutlinedIcon className={classes.Cancel} fontSize="small" />
@@ -99,7 +100,7 @@ export const CommandCell = ({
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => edit(dataItem)}
+            onClick={() => edit(dataItem as GetEmployeeResponse)}
             className={classes.button}
           >
             <EditIcon className={classes.ButtonColor} fontSize="small" />
