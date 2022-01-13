@@ -74,7 +74,7 @@ class SMFormState implements SMFormStateProps {
   }
 
   @computed public get schema(): FBSchemaProps[] {
-    let { schema } = this.values.get("formTemplate") || {};
+    let schema = this.values.get("formTemplate.schema") || [];
     if (!schema) {
       schema = this.values.get("schema");
     }

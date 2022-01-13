@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
@@ -53,7 +54,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     onScroll = (ev) => {
       if (!_documentRevisionFormState) { return; }
-      const pageYOffset = ev.currentTarget.scrollTop;
+      const pageYOffset = get(ev.target, "scrollTop");
       const isHeaderHidden = pageYOffset > 0;
       if (isHeaderHidden !== _documentRevisionFormState.isHeaderHidden) {
         _documentRevisionFormState.setIsHeaderHidden(isHeaderHidden);

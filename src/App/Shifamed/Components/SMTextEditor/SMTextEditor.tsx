@@ -54,7 +54,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
       borderColor={Colors.hint_gray}
       borderRadius={4}
       style={{ display: "grid" }}
-      minHeight={isPreview ? "auto" : 140}
+      minHeight={isPreview ? "auto" : 80}
     >
       <Box
         display="flex"

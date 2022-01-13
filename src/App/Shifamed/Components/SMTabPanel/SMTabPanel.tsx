@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { SMTabPanelProps } from "../../..";
@@ -11,15 +11,13 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
 }) =>  (
   <Observer>
     {() => (
-      <div
-        role="tabpanel"
+      <Box
+        p={3}
         hidden={_tabsState?.value !== index}
         id={`sm-tabpanel-${index}`}
       >
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      </div>
+        {children}
+      </Box>
     )}
   </Observer>
 );

@@ -1,4 +1,5 @@
 import { FBDialogState, FBFormProps, FBSchemaProps, FBSnackbarState, FBWorkspaceState } from "..";
+import { SMProviderProps } from "../../../App";
 import { UserGroupsState, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { Company } from "../../../state/ducks/company/types";
@@ -14,6 +15,7 @@ export type FBWorkspaceMode =
 
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
+& Pick<SMProviderProps, "_formState">
 & {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;

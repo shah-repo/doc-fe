@@ -6,7 +6,7 @@ import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Id } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
@@ -16,7 +16,6 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   @observable approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
-  @observable revisionChangeType?: RevisionChangeType;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
@@ -37,7 +36,7 @@ class FBWorkspaceState extends FBSchemaState {
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
-    this.schema = schema;
+    this.schema = schema || [];
     this.mode = mode || "none";
     this.autosave = autosave;
   }
@@ -132,10 +131,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, "mode", mode);
-  };
-
-  @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
-    set(this, "revisionChangeType", revisionChangeType);
   };
 
   @action public setAutosave = (autosave: boolean) => {

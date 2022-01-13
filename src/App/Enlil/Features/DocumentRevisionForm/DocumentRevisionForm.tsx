@@ -1,4 +1,6 @@
+import { ScrollView } from "@cantonjs/react-scroll-view";
 import { Box, Grid } from "@material-ui/core";
+import "intersection-observer";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMForm, SMTabs, SMTemplate } from "../../..";
@@ -73,7 +75,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 height: "100%",
                 overflow: "auto",
                 onScroll,
-                id: "tab-id",
               }}
             >
               <Grid
@@ -112,17 +113,19 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 />
               </Grid>
               {_formState?.mode !== "none" && (
-                <Box mt={5} paddingY={2} paddingX={5}>
-                  <FBWorkspace
-                    isPortal={false}
-                    document={{
-                      ...formValues.values as unknown as DocumentRevision,
-                      ...documentRevision as unknown as DocumentRevision,
-                    }}
-                    {... { schema, autosaveEnabled }}
-                    initialValues={formInput}
-                  />
-                </Box>
+                <ScrollView style={{ height: "100vh", marginBottom: "100px" }}>
+                  <Box  mt={5} paddingY={2} paddingX={5}>
+                    <FBWorkspace
+                      isPortal={false}
+                      document={{
+                        ...formValues.values as unknown as DocumentRevision,
+                        ...documentRevision as unknown as DocumentRevision,
+                      }}
+                      {... { schema, autosaveEnabled }}
+                      initialValues={formInput}
+                    />
+                  </Box>
+                </ScrollView>
               )}
             </SMTabs>
           )}
