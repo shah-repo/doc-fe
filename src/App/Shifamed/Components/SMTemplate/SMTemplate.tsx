@@ -32,7 +32,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
         {children}
       </Box>
       {rightSidebar && (
-        <Box minHeight="100%" zIndex={101}>
+        <Box minHeight="100%" zIndex={1002}>
           {rightSidebar}
         </Box>
       )}
