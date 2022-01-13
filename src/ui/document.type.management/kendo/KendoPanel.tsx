@@ -283,11 +283,7 @@ export function KendoPanel<T extends { id?: string }>({
         title={getTranslatedText(col.title).toUpperCase()}
         key={index}
         cell={DTMCellTemplateMapping[col.cell || ""] || col.field === "" ? (props) => renderCol(props, col) : undefined}
-        filterCell={
-          FilterCellMapping[col.filterCell]
-            ? FilterCellMapping[col.filterCell]
-            : undefined
-        }
+        filterCell={FilterCellMapping[col.filterCell as string]}
         headerCell={
           col.title ? (props) => <ColumnHeader {...props} /> : undefined
         }
