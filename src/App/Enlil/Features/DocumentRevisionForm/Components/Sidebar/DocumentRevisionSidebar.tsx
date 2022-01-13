@@ -72,7 +72,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             </Typography>
           )}
         </Box>
-        <Box display="flex" p={0.5}>
+        <Box display="flex" p={0.5} height="100%">
           <SidebarContainer
             sidebarList={[
               {
