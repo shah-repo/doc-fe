@@ -64,7 +64,7 @@ interface CreateExport {
 }
 let call;
 
-export function KendoGrid<T extends any>({
+export function KendoGrid<T>({
   dynamicColumns,
   tableName,
   gridData,
@@ -391,7 +391,7 @@ export function KendoGrid<T extends any>({
             ? (props) => <ColumnHeader {...props} />
             : undefined
         }
-        cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}
+        cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
         orderIndex={column.orderIndex}
         format={column.format}
         columnMenu={
