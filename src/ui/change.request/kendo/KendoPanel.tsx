@@ -67,7 +67,7 @@ interface FilterObj {
   field: string;
 }
 
-export function KendoPanel<T extends any>({
+export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
   gridData,
@@ -228,7 +228,7 @@ export function KendoPanel<T extends any>({
       .then(({ data }) => {
         if (customDataSet) {
           data = customDataSet(data);
-          const newDataState: any = processWithGroups(data, initialDataState);
+          const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
           if (data.length === 0) {
@@ -284,7 +284,7 @@ export function KendoPanel<T extends any>({
   };
 
   // Kendo Helper Methods
-  const processWithGroups = (data: any[], dataState: State) => {
+  const processWithGroups = (data: T[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -331,7 +331,7 @@ export function KendoPanel<T extends any>({
   };
 
   // Column Menu Filters
-  const StatusFilterTemplate: any = (props: GridFilterCellProps) => (
+  const StatusFilterTemplate = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
       data={changeRequestStatusOption().map((col) => col.value)}
@@ -485,7 +485,7 @@ export function KendoPanel<T extends any>({
       key={index}
       {...column}
       title={getTranslatedText(column.title).toUpperCase()}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}
+      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
