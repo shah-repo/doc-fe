@@ -69,7 +69,7 @@ import { DateFields } from "./types";
 
 let call: CancelTokenSource;
 
-export function KendoPanel<T extends any>({
+export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
   gridData,
@@ -223,7 +223,7 @@ export function KendoPanel<T extends any>({
             ? el.trainingPlan.curriculumDocIds.join(", ")
             : "";
         });
-        const newDataState: any = processWithGroups(data, dataState);
+        const newDataState = processWithGroups(data, dataState);
         setDataState(dataState);
         setResultState(newDataState);
         if (data.length === 0) {
@@ -529,7 +529,7 @@ export function KendoPanel<T extends any>({
       key={index}
       {...column}
       title={getTranslatedText(column.title).toUpperCase()}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}
+      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
       filterCell={column.field && filterCellMapping(column.field)}
