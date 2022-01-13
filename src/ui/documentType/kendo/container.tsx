@@ -142,11 +142,12 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: ((props: GridFilterCellProps) => JSX.Element) | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
-
+    let dynamicCellGroupable = true;
     let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key :  columnDetails.key;
     if (columnDetails.searchOptions?.dateFilter) {
       filterCellTemplate = RealeaseDateFilterCell;
       dynamicCellTemplate = KendoCellTemplates.DATE_INFO;
+      dynamicCellGroupable = false;
     } else if (columnDetails.searchOptions?.ownerTemplate) {
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
     } else if (columnDetails.searchOptions?.statusTemplate) {
@@ -165,7 +166,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       title: columnLabel,
       filter: "text",
       width: 15,
-      groupable: true,
+      groupable: dynamicCellGroupable,
       cell: dynamicCellTemplate,
       locked: false,
       show: true,
