@@ -632,14 +632,12 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Verify training notification", () => {
-      cy.contains(`${releasedDocId} released form 2`).should("exist");
-      cy.contains(`${releasedDocId} released form 1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 2` }).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form 1` }).should("exist");
     });
 
     it("Click training notification and check doc with Approved status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet], () => {
-        cy.contains(`${releasedDocId} released form 2`).arrowClick();
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form 2` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
     });
 
@@ -652,9 +650,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet], () => {
-        cy.contains(`${releasedDocId} released form 1`).arrowClick();
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form 1` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });
 
@@ -669,11 +665,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click on the Training notification", () => {
-      cy.contains(`${releasedDocId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form 1` });
     });
 
     it("Button 'Complete training' should be visible", () => {
