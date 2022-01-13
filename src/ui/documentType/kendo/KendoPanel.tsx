@@ -61,7 +61,7 @@ import useDidMount from "../../hooks/useDidMount";
 import GridStyles from "./styles";
 
 interface CreateExport {
-  dynamicColumns?: any;
+  dynamicColumns: KendoColumn[];
 }
 let call;
 
@@ -97,7 +97,7 @@ export function KendoGrid<T>({
   };
 
   const copyDynamicColumns = cloneDeep(dynamicColumns);
-  const temp: any = [];
+  const temp: KendoColumn[] = [];
   let configColumns: KendoColumn[] = [];
   const list = [
     "field",
@@ -125,7 +125,7 @@ export function KendoGrid<T>({
     "filterCell",
   ];
   copyDynamicColumns.forEach((o: KendoColumn) => {
-    temp.push(pick(o, list));
+    temp.push(pick(o, list) as KendoColumn);
   });
   if (columnConfig) {
     const savedconfig = JSON.parse(columnConfig);
