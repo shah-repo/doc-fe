@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog, Grid,
+  Dialog, Grid
 } from "@material-ui/core";
 import {
   DataResult, process,
-  State,
+  State
 } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -20,7 +20,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, findIndex, isEmpty, map, pick } from "lodash";
@@ -38,7 +38,8 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
-  TrainingRecordQuery,
+  TrainingListData,
+  TrainingRecordQuery
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -58,7 +59,7 @@ import { TablePanelStateProps } from "../../components/table/types";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
-  trainingCompletedOnDateOption,
+  trainingCompletedOnDateOption
 } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
@@ -76,7 +77,7 @@ export function KendoPanel<T>({
   tableName,
   tableCriteria,
   normalizrSchema,
-}: KendoPanelProps<T>) {
+}: KendoPanelProps<TrainingListData>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const classes = KendoGridStyles();
@@ -280,7 +281,7 @@ export function KendoPanel<T>({
   };
 
   // Kendo Helper Methods
-  const processWithGroups = (data: T[], dataState: State) => {
+  const processWithGroups = (data: TrainingListData[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -468,7 +469,7 @@ export function KendoPanel<T>({
   // Clear Filter Button Click
   const clearFilter = () => setSearchStatus(undefined, true);
 
-  const AssignedDateFilterTemplate: any = (props: GridFilterCellProps) => (
+  const AssignedDateFilterTemplate = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={documentRevisionEffectiveDateOption()}
@@ -479,7 +480,7 @@ export function KendoPanel<T>({
     />
   );
 
-  const DueDateFilterTemplate: any = (props: GridFilterCellProps) => (
+  const DueDateFilterTemplate = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={dueDateOption()}
@@ -490,7 +491,7 @@ export function KendoPanel<T>({
     />
   );
 
-  const CompletedOnFilterTemplate: any = (props: GridFilterCellProps) => (
+  const CompletedOnFilterTemplate = (props: GridFilterCellProps) => (
     <DateDropdownFilterCell
       {...props}
       data={trainingCompletedOnDateOption()}
@@ -510,7 +511,7 @@ export function KendoPanel<T>({
       case DateFields.COMPLETED_AT:
         return CompletedOnFilterTemplate;
       default:
-        return null;
+        return undefined;
     }
   };
 
@@ -531,7 +532,7 @@ export function KendoPanel<T>({
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
-      filterCell={column.field && filterCellMapping(column.field)}
+      filterCell={filterCellMapping(column.field)}
       headerCell={
         column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }

@@ -9,21 +9,23 @@ import {
   MomentFormats,
 } from "../../../common/utils/date";
 import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
+import { TrainingListData } from "../../../state/ducks/training/types";
 import { KendoGridConfiguration, KendoGridCriteria } from "../../components/common/kendo/types";
+import { TableDataProps } from "../../components/table/types";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import useDialog from "../../hooks/useDialog";
 import { KendoPanel } from "./KendoPanel";
 import KendoGridStyles from "./styles";
 
-interface Props<T> {
+interface Props {
   tableName: string;
-  gridData: T[];
+  gridData: TableDataProps<TrainingListData>;
   columns: KendoGridConfiguration;
   tableCriteria: KendoGridCriteria;
 }
 
-const KendoGridList: React.FunctionComponent<Props<any>> = ({
+const KendoGridList: React.FunctionComponent<Props> = ({
   tableName,
   tableCriteria,
   gridData,
