@@ -7,7 +7,6 @@ const styles = () => ({
     "text-transform": "capitalize",
     "minWidth": "125px",
     "color": Colors.font_gray,
-    "borderRadius": "100px",
     "font-weight": "normal",
     "fontSize": "18px",
     "lineHeight": "23px",
@@ -15,13 +14,15 @@ const styles = () => ({
     "display": "flex",
     "alignItems": "center",
     "letterSpacing": "0.25px",
+    "padding-right": 0,
+    "padding-left": 0,
+    "margin-right": 12,
+    "margin-left": 12,
   },
   selected: {
     opacity: 1,
-    /* Enlil Navy */
-    color: Colors.navy,
+    color: Colors.black,
     fontWeight: 600,
-    backgroundColor: Colors.sky_blue,
   },
 });
 

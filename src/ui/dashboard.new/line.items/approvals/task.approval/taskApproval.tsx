@@ -17,14 +17,16 @@ import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
-import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
@@ -55,6 +57,9 @@ interface Props {
   title?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -68,21 +73,25 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   docRevOwnerInitialColor,
   hoverItemId,
   onMouseHoverItem,
+  pinned,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
-
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
   const handleClick = () => {
     setOpen(!open);
   };
@@ -103,20 +112,20 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
     setRejectHover(false);
-    // setPinHover(false);
+    setPinHover(false);
   };
-  /* const onMouseHoverPinIcon = () => {
+  const onMouseHoverPinIcon = () => {
     setApproveHover(false);
     setRejectHover(false);
-    // setPinHover(true);
-  };*/
+    setPinHover(true);
+  };
   const onMouseHoverApproveIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setRejectHover(false);
     setApproveHover(true);
   };
   const onMouseHoverRejectIcon = () => {
-    // setPinHover(false);
+    setPinHover(false);
     setApproveHover(false);
     setRejectHover(true);
   };
@@ -133,7 +142,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       transitionDialog.close();
     },
   });
-
   const openApproveDialog = () => {
     async.reset();
     transitionDialog.open();
@@ -142,7 +150,6 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     async.reset();
     transitionDialog1.open();
   };
-
   return (
     <>
       <StyledListItem
@@ -261,7 +268,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && (
+        {hoverItem && !open && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -301,18 +308,57 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {/* <span className={classes.actionIcon}>
-              {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-              {pinHover && (
-                <StyleTooltip title="Pin item" placement="top" arrow>
+            <span className={classes.actionIcon}>
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
+              {pinHover && !pinned && (
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.pin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
               )}
-            </span> */}
+              {pinned && (
+                <StyleTooltip
+                  title={
+                    <Typography>
+                      <Text translation="common.unpin" />
+                    </Typography>
+                  }
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handleUnPinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
           </Box>
+        )}
+        {!open && pinned && !hoverItem && (
+          <StyleTooltip
+            title={
+              <Typography>
+                <Text translation="common.unpin" />
+              </Typography>
+            }
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

@@ -16,14 +16,16 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/im
 import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
 import { ReactComponent as RejectIcon } from "../../../../../../assets/images/reject_status_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../../assets/images/view.svg";
-import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import { ReactComponent as ViewSolidIcon } from "../../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../../change.request/utils/paths";
+import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
@@ -56,6 +58,9 @@ interface Props {
   approverInitialColor: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -70,23 +75,27 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   timestamp,
   hoverItemId,
   onMouseHoverItem,
+  pinned,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-  // const [pinHover, setPinHover] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
-
+  const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const handleClick = () => {
     setOpen(!open);
   };
@@ -302,19 +311,28 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* { hoverItem && (
-          <div className={classes.actionIcons}>
+        { hoverItem && !!open && pinned && (
+          <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
+              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                 />
               </StyleTooltip>
             )}
-          </div>
-        )} */}
+          </Box>
+        )}
+        {!open && pinned && (
+          <Box component="div" className={classes.actionIcons}>
+            <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+              />
+            </StyleTooltip>
+          </Box>
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>

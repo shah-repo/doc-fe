@@ -27,14 +27,14 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
     setTabValue(val);
   };
   return (
-    <Box className={classes.outline}>
+    <Box className={classes.outline} marginLeft={2} marginRight={2}>
       <AsyncGate
         asyncAction={loadTrainingStatsList}
         asyncState={loadTrainingStatsListAsyncInfo}
         startActionOnMount={true}
       >
-        <TrainingChart tabValue={tabValue} />
-        <TrainingLineItems infoChangeTab={handleChildTabChange} />
+        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+        <TrainingLineItems tabValue={tabValue} />
       </AsyncGate>
     </Box>
   );

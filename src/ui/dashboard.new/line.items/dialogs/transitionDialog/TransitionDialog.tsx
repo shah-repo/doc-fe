@@ -115,7 +115,7 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
                 id="simple-modal-title"
                 className={classes.modeltitle}
               >
-                { !hideLabel && <Text
+                {!hideLabel && <Text
                   translation={
                     transition === TransitionTypes.TRANSITION_CLOSED
                       ? "transition.action.close.title"

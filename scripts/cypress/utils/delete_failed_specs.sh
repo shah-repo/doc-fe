@@ -35,7 +35,13 @@ if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
   exit 1
 fi
 
-SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$COMPOSE_PROJECT_NAME"_enlil_cypress_dashboard_mongo_1"
+SORRY_CYPRESS_DASBOARD_CONTAINER_NAME=$(docker ps --format '{{.Names}}' | grep cypress_dashboard_mongo)
+
+if [[ -z "${SORRY_CYPRESS_DASBOARD_CONTAINER_NAME}" ]]; then
+  echo "SORRY_CYPRESS_DASBOARD_CONTAINER_NAME not set, exiting"
+  exit 1
+fi
+
 MOCHAWESOME_FILES=($(find $CYPRESS_JSON_REPORTS_FOLDER -name "$REPORT_TITLE*"))
 
 for i in "${MOCHAWESOME_FILES[@]}"
