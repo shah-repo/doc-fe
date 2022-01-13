@@ -42,6 +42,9 @@ class FB {
 
   public static calculateDateByType = (option: any, type: string) => {
     const { schema, formDocument, formInput } = option || {};
+
+    if (!formInput) { return; }
+
     // Some of the EQs have predefined schema
     const opitionSchema: FBSchemaProps[] = schema || formDocument.formTemplate.schema;
 
