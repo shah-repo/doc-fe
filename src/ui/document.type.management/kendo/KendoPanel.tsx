@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import { process, State } from "@progress/kendo-data-query";
+import { FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
   Grid as Kgrid, GridColumn,
@@ -19,6 +19,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
@@ -44,7 +45,7 @@ import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
 interface KendoPanelProps<T> {
-  gridData: T[];
+  gridData: DocumentType[];
   gridConfiguration: KendoGridConfiguration;
   tableName: string;
   tableCriteria: TablePanelStateProps;
@@ -62,11 +63,11 @@ export function KendoPanel<T extends { id?: string }>({
   gridConfiguration,
   tableName,
   tableCriteria,
-}: KendoPanelProps<T>) {
+}: KendoPanelProps<DocumentType>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const classes = KendoGridStyles();
-  const actualData: T[] = cloneDeep(gridData);
+  const actualData: DocumentType[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -79,7 +80,7 @@ export function KendoPanel<T extends { id?: string }>({
   const editField = getTranslatedText(TranslatedText[DisplayText.INEDIT]);
   const [gridEditID, setGridEditID] = React.useState("");
   const exportDAMDialog = useDialog();
-  const processWithGroups = (data: T[], dataState: State) => {
+  const processWithGroups = (data: DocumentType[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
     const newDataState = process(data, cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
@@ -140,7 +141,7 @@ export function KendoPanel<T extends { id?: string }>({
     setDataState(dataState);
     setResultState(newDataState);
 
-    initialDataState?.filter?.filters.forEach((el: any) => {
+    each(initialDataState.filter?.filters as FilterDescriptor[], ({ field, value }) => {
       if (["privateNumberPool",
         "canRedLine",
         "isQms",
@@ -149,22 +150,22 @@ export function KendoPanel<T extends { id?: string }>({
         "defaultRevStage",
         "hiddenForCreationForUsersWithoutTagsFormatted",
         "group",
-        "active"].includes(el.field)) {
+        "active"].includes(field as string)) {
         setDropDownState((prevState) => {
           const object = { ...prevState };
-          let value: string;
-          if (typeof el.value === "boolean" && el.field === "active") {
-            value = el.value
+          let newValue: string;
+          if (typeof value === "boolean" && field === "active") {
+            newValue = value
               ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
               : getTranslatedText(TranslatedText[DisplayText.INACTIVE]);
-          } else if (typeof el.value === "boolean") {
-            value = el.value ? "Yes" : "No";
+          } else if (typeof value === "boolean") {
+            newValue = value ? "Yes" : "No";
           } else {
-            value = el.value;
+            newValue = value;
           }
-          object[el.field] = {
-            value: el.value,
-            text: value,
+          object[field as string] = {
+            value,
+            text: newValue,
           };
           return object;
         });
@@ -405,7 +406,7 @@ export function KendoPanel<T extends { id?: string }>({
   // While editing setting the new values to the dataItem
   const itemChange = ({ dataItem, field, value }: GridItemChangeEvent) => {
     // For Update
-    let newData: T[] = [];
+    let newData: DocumentType[] = [];
     if (dataItem.id) {
       newData = map(actualData, (item) => {
         if (item.id === dataItem.id) {
