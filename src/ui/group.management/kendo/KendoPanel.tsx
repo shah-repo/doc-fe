@@ -68,7 +68,7 @@ import { TagsCell } from "./cell.template/TagsCell";
 import KendoGridStyles from "./styles";
 
 interface GroupManagementProps {
-  onSelect: any;
+  onSelect;
   refreshTable: boolean;
   canCreateGroups: boolean;
 }

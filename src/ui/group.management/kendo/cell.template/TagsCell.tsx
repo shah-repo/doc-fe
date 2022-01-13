@@ -8,7 +8,7 @@ interface TagsCellProps {
   dataItem: any;
   rowType?: string;
   colSpan?: number | undefined;
-  style?: any;
+  style?: React.CSSProperties;
   className?: string;
   columnIndex?: number;
   field?: string;
