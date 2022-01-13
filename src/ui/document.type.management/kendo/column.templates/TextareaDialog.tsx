@@ -6,6 +6,7 @@ import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
 import Text from "../../../components/Text";
+import { FBSchemaProps } from "../../../form.builder";
 import GridCellStyles from "./CellStyles";
 import "./KendoStyles.css";
 
@@ -15,10 +16,10 @@ interface FormAreaProps extends FieldWrapperProps {
 }
 interface TextAreaDialogProps extends TextAreaProps {
   cancelEdit: () => void;
-  addClick: (event: any) => void;
+  addClick: (event) => void;
   openForm: boolean;
   fieldName?: string;
-  item: any;
+  item: FBSchemaProps;
   isEdit: boolean;
 }
 const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
