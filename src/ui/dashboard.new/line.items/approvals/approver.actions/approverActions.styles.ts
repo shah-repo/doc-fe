@@ -7,9 +7,9 @@ export const styles = makeStyles(() =>
       color: Colors.black,
     },
     avatar: {
-      width: "35px",
-      height: "35px",
-      fontSize: "14px",
+      width: "30px",
+      height: "30px",
+      fontSize: "12px",
       fontWeight: 600,
       color: Colors.white,
       fontFamily: "Sora",

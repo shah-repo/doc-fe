@@ -18,6 +18,8 @@ import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
@@ -64,6 +66,9 @@ interface Props {
   }[];
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -76,36 +81,34 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   approvedApprovers,
   hoverItemId,
   onMouseHoverItem,
+  pinned,
+  pinLineItem,
+  unPinLineItem,
 }) => {
   const classes = styles();
-  id = "02358497-19c6-412f-8ac4-cff69fefcd50"; // TO DO: needs to be removed after getting proper API response
-
-  // const [pinHover, setPinHover] = React.useState(false);
+  const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  // const [pinned, setPinned] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
-
   const handleClick = () => {
     setOpen(!open);
   };
-  // const handlePinClick = () => {
-  //   setPinned(!pinned);
-  // };
-  const handleViewClick = (id: string) => {
-    // setViewItem(id);
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
   };
   const hoverItem = hoverItemId === id;
-
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
-  // const onMouseHoverPinIcon = () => {
-  //   setPinHover(true);
-  // };
-  // const onMouseLeavePinIcon = () => {
-  //   setPinHover(false);
-  // };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
   const onMouseHoverViewIcon = (id: string) => {
     setViewHoverItem(id);
   };
@@ -134,7 +137,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           <ExpandIcon className={classes.icon} onClick={handleClick} />
         )}
         <ListItemIcon>
-          <PendingReviewIcon />
+          <PendingReviewIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText
           primary={
@@ -295,11 +298,19 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {/* {!open && hoverItem && (
+        {!open && hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title="Pin item" placement="top" arrow>
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -307,7 +318,20 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
               </StyleTooltip>
             )}
           </Box>
-        )} */}
+        )}
+        {!open && pinned && (
+          <StyleTooltip
+            title={
+              <Typography>
+                <Text translation="common.unpin" />
+              </Typography>
+            }
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
+          </StyleTooltip>
+        )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
@@ -377,10 +401,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                     placement="top"
                     arrow
                   >
-                    <ViewSolidIcon
-                      onClick={() => handleViewClick(prItem.docId)}
-                      onMouseLeave={onMouseLeaveViewIcon}
-                    />
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
                   </StyleTooltip>
                 )}
               </Box>

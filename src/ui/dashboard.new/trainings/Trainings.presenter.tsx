@@ -1,4 +1,4 @@
-import { Grid, List, ListItemText, Typography } from "@material-ui/core";
+import { Divider, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -11,7 +11,15 @@ import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
 import { styles } from "./Trainings.styles";
 
-const TrainingsLineItemPresenter: React.FunctionComponent = () => {
+interface Props {
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
+}
+
+const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
+  pinLineItem,
+  unPinLineItem,
+}) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
@@ -21,30 +29,37 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
     setHoverItemId("");
   };
   const trainingItems = useSelector(trainingSelectors.trainingList);
+
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
       {trainingItems.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case ActionTypes.TRAINING_STATUS_OWNER:
             return (
-              <NewTraining
-                key={index}
-                id={pendingAction.id}
-                docId={pendingAction.docId}
-                docRevId={pendingAction.docRevId}
-                type={pendingAction.type}
-                docRevName={pendingAction.docRevName}
-                docRevVersion={pendingAction.docRevVersion}
-                docDocumentId={pendingAction.docDocumentId}
-                trainingStatus={pendingAction.trainingStatus}
-                timestamp={getFormattedDateString(
-                  pendingAction.timestamp,
-                  MomentFormats.BriefDateTime
-                )}
-                pendingTrainees={pendingAction.pendingTrainees}
-                hoverItemId={hoverItemId}
-                onMouseHoverItem={onMouseHoverItem}
-              />
+              <>
+                <NewTraining
+                  key={index}
+                  id={pendingAction.id}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction.docRevVersion}
+                  docDocumentId={pendingAction.docDocumentId}
+                  trainingStatus={pendingAction.trainingStatus}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  pendingTrainees={pendingAction.pendingTrainees}
+                  hoverItemId={hoverItemId}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                />
+                <Divider />
+              </>
             );
           default:
             return <Text key={index} translation="common.undefined" />;
@@ -68,12 +83,10 @@ const TrainingsLineItemPresenter: React.FunctionComponent = () => {
   );
 
   return (
-    <Grid container={true} spacing={5} className={classes.grid}>
-      <Grid item={true} md={12} sm={12}>
-        {trainingItems.length > 0 && renderPendingActions()}
-        {renderNoPendingActions}
-      </Grid>
-    </Grid>
+    <>
+      {trainingItems.length > 0 && renderPendingActions()}
+      {renderNoPendingActions}
+    </>
   );
 };
 

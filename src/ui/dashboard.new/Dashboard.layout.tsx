@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React from "react";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
@@ -11,20 +11,23 @@ const DashboardLayout: React.FunctionComponent = () => {
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
   return (
-    <Grid
-      container={true}
-      className={classes.root}
-      justify="center"
-    >
-      <Grid item={true} xs={12} sm={12} md={isDashboardAdmin ? 8 : 12} lg={isDashboardAdmin ? 8 : 12}>
-        <DashboardTabs />
-      </Grid>
-      {isDashboardAdmin && (
-        <Grid item={true} className={classes.trainingStats} xs={6} sm={6} md={4} lg={4}>
-          <TrainingStats />
+    <Box borderRadius={12} className={classes.box} padding={1}>
+      <Grid
+        container={true}
+        className={classes.root}
+        justify="center"
+      >
+        <Grid item={true} xs={12} sm={12} md={isDashboardAdmin ? 8 : 12} lg={isDashboardAdmin ? 8 : 12}>
+          <DashboardTabs />
         </Grid>
-      )}
-    </Grid>
+        {isDashboardAdmin && (
+          <Grid item={true} className={classes.trainingStats} xs={6} sm={6} md={4} lg={4}>
+            <TrainingStats />
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+
   );
 };
 

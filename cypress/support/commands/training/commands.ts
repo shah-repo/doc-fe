@@ -64,7 +64,9 @@ Cypress.Commands.add("trClearFiltersNoWait", () => {
 Cypress.Commands.add("trApproveAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
-      cy.get("button[aria-label=approve]").first().arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
@@ -76,7 +78,9 @@ Cypress.Commands.add("trApproveAR", () => {
 Cypress.Commands.add("trRejectAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostRejectCR], () => {
-      cy.get("button[aria-label=reject]").first().arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
