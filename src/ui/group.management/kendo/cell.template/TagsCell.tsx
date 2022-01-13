@@ -1,4 +1,6 @@
-import { MultiSelect, MultiSelectChangeEvent } from "@progress/kendo-react-dropdowns";
+import { filterBy } from "@progress/kendo-data-query";
+import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import { uniq } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
@@ -25,15 +27,23 @@ export const TagsCell = ({
   field,
   isOfficial,
 }: TagsCellProps) => {
+  const [result, setResult] = React.useState([]);
   const tags = dataItem[field || ""];
-  const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
-  const availableGroups = allGroups.filter(
-    (group) => group.value !== dataItem.id
-  );
-  const joinTag = availableGroups.map((e) => e.tags).join();
-  const selectedTags = joinTag.split(",").filter(Boolean);
-  const updateTagField = ({ target }: MultiSelectChangeEvent) => {
+
+  const allGroups = uniq(useSelector(userManagementSelectors.getOfficialGroups).filter(
+    (group) => group.tags && group.tags.length
+  ).map((e) => e.tags).flat().sort());
+
+  const [data, setData] = React.useState(allGroups);
+
+  const updateTagField = ({ target }) => {
     dataItem.tags = target?.value;
+    setResult(target.value);
+  };
+
+  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
+    const newData = filterBy(allGroups, filter);
+    setData(newData);
   };
 
   if (rowType === "groupHeader") {
@@ -50,8 +60,10 @@ export const TagsCell = ({
     >
       {dataItem.inEdit && isOfficial ? (
         <MultiSelect
-          data={selectedTags}
+          data={data}
+          value={result}
           filterable={true}
+          onFilterChange={filterChange}
           onChange={updateTagField}
         />
       ) : (

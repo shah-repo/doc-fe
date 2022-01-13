@@ -1,4 +1,6 @@
-import { MultiSelect, MultiSelectChangeEvent } from "@progress/kendo-react-dropdowns";
+import { filterBy } from "@progress/kendo-data-query";
+import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -29,9 +31,19 @@ export const PermissionsCell = ({
   const currentEmployeePermissions = useSelector(
     authSelectors.currentEmployeePermissions,
   );
+  const [data, setData] = React.useState(sortBy(toOptions(currentEmployeePermissions), "label"));
+  const [result, setResult] = React.useState([]);
+
   const permissions = dataItem[field || ""];
-  const updatePermissionField = ({ target }: MultiSelectChangeEvent) => {
-    dataItem.permissions = target?.value.map((e) => e.value);
+
+  const updatePermissionField = ({ target }) => {
+    dataItem.permissions = target?.value.map((e: { value: string }) => e.value);
+    setResult(target.value);
+  };
+
+  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
+    const newData = filterBy(toOptions(currentEmployeePermissions), filter);
+    setData(sortBy(newData, "label"));
   };
 
   if (rowType === "groupHeader") {
@@ -48,9 +60,11 @@ export const PermissionsCell = ({
     >
       {dataItem.inEdit && isOfficial ? (
         <MultiSelect
-          data={toOptions(currentEmployeePermissions)}
+          data={data}
+          value={result}
           filterable={true}
           onChange={updatePermissionField}
+          onFilterChange={filterChange}
           dataItemKey="value"
           textField="label"
         />

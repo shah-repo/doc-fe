@@ -6,6 +6,7 @@ import {
   TableDataProps,
   TablePanelStateProps,
 } from "../../components/table/types";
+import useDialog from "../../hooks/useDialog";
 import AddGroup from "../add.group/Group";
 import GroupsDisplay from "../display.groups/GroupsDisplay";
 import gridConfiguration from "./column.definition";
@@ -14,12 +15,12 @@ import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;
-  tableData: TableDataProps<any>;
+  tableData: TableDataProps<LoadCompanyGroup>;
   clearFilter?: () => void;
   tableCriteria: TablePanelStateProps;
   handlePermission: (dataItem: LoadCompanyGroup) => void;
-  previewGroupsDialog: any;
-  editGroupsDialog: any;
+  previewGroupsDialog: ReturnType<typeof useDialog>;
+  editGroupsDialog: ReturnType<typeof useDialog>;
   selectedGroup: LoadCompanyGroup;
   canCreateGroups: boolean;
 }

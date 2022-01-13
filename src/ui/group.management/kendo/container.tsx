@@ -56,15 +56,15 @@ const KendoContainer: React.FunctionComponent<Props> = () => {
   const canCreateGroups = hasOfficialPermissions || hasUnofficialPermissions;
 
   const asyncPreview = useAsync({
-    onSuccess: (data: any) => {
-      setGroup(data);
+    onSuccess: (data) => {
+      setGroup(data as LoadCompanyGroup);
       previewGroupsDialog.open();
     },
   });
 
   const asyncEdit = useAsync({
-    onSuccess: (data: any) => {
-      setGroup(data);
+    onSuccess: (data) => {
+      setGroup(data as LoadCompanyGroup);
       editGroupsDialog.open();
     },
   });
