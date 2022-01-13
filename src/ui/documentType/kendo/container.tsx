@@ -140,12 +140,10 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   );
 
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
-    let filterCellTemplate;
-    let dynamicCellTemplate;
-    let formatField;
+    let filterCellTemplate: ((props: GridFilterCellProps) => JSX.Element) | undefined;
+    let dynamicCellTemplate: KendoCellTemplates;
 
     let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key :  columnDetails.key;
-
     if (columnDetails.searchOptions?.dateFilter) {
       filterCellTemplate = RealeaseDateFilterCell;
       dynamicCellTemplate = KendoCellTemplates.DATE_INFO;
@@ -172,7 +170,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       locked: false,
       show: true,
       showColumnMenu: true,
-      format: formatField,
       filterCell: filterCellTemplate,
       key: { index },
     };

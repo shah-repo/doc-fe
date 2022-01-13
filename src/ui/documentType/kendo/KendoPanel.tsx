@@ -15,6 +15,7 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
+  GridFilterCellProps,
   GridNoRecords,
   GridRowClickEvent,
   GridToolbar,
@@ -30,7 +31,7 @@ import {
 } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
-import { default as React, useEffect, useState } from "react";
+import { ComponentType, default as React, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
@@ -367,8 +368,8 @@ export function KendoGrid<T>({
   };
 
   const getFilterCell = (fieldName: string) => {
-    const foundObj = configColumns?.filter(({ field }: KendoColumn) => field === fieldName);
-    return foundObj?.length ? foundObj[0].filterCell : undefined;
+    const foundObj = configColumns.filter(({ field }: KendoColumn) => field === fieldName);
+    return foundObj.length ? foundObj[0].filterCell : undefined;
   };
 
   const sortedColumnDefinitions = orderByLockedState(columnDefinitions, gropableColumnFields);
@@ -385,7 +386,7 @@ export function KendoGrid<T>({
         sortable={column.sortable}
         title={column.title}
         filter={column.filter}
-        filterCell={getFilterCell(column.field)}
+        filterCell={getFilterCell(column.field) as ComponentType<GridFilterCellProps>}
         headerCell={
           column.title
             ? (props) => <ColumnHeader {...props} />
