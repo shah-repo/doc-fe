@@ -322,10 +322,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
         setResultState(newDataState);
-        if (data.length === 0) {
+        if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
-        // }
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);

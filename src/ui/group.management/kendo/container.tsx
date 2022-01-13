@@ -23,10 +23,7 @@ import {
 import { DEFAULT_SELECTED_GROUP } from "../utils/types";
 import KendoPresenter from "./presenter";
 
-type OwnProps = RouteComponentProps;
-type Props = OwnProps;
-
-const KendoContainer: React.FunctionComponent<Props> = () => {
+const KendoContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const dispatch = useDispatch();
   const editGroupsDialog = useDialog();
   const previewGroupsDialog = useDialog();
