@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Box,
-  Dialog, Grid
+  Dialog, Grid,
 } from "@material-ui/core";
 import {
   DataResult, process,
-  State
+  State,
 } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -20,7 +20,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, findIndex, isEmpty, map, pick } from "lodash";
@@ -39,7 +39,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import {
   DEFAULT_TRAINING_RECORD_QUERY,
   TrainingListData,
-  TrainingRecordQuery
+  TrainingRecordQuery,
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
@@ -59,7 +59,7 @@ import { TablePanelStateProps } from "../../components/table/types";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
-  trainingCompletedOnDateOption
+  trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
@@ -226,7 +226,7 @@ export function KendoPanel<T>({
         const newDataState = processWithGroups(data, dataState);
         setDataState(dataState);
         setResultState(newDataState);
-        if (data.length === 0) {
+        if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
         data = map(data, (record) =>
