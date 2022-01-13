@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
@@ -155,12 +154,14 @@ export function KendoPanel<T>({
         queryApi();
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.kendoConfig, didMount, completedOnSelectedOption]);
 
   useEffect(() => {
     if (tableCriteria.forceUpdate) {
       queryApi();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.forceUpdate]);
 
   const formatParams = () => {
@@ -231,7 +232,7 @@ export function KendoPanel<T>({
           const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
-          if (data.length === 0) {
+          if (newDataState.total === 0) {
             setNoDataMessage(<NoDataFound />);
           }
         }
@@ -240,6 +241,7 @@ export function KendoPanel<T>({
             ...map(gridConfiguration.columns, "field"),
             "id",
             "document.docId",
+            "document.id",
             "owner.user.avatar",
           ])
         );
@@ -484,6 +486,7 @@ export function KendoPanel<T>({
         setNoDataMessage(<NoDataFound />);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [gridData]
   );
   const onExpandChange = useCallback(
