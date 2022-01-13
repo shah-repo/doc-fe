@@ -1,4 +1,6 @@
-import { MultiSelect, MultiSelectChangeEvent } from "@progress/kendo-react-dropdowns";
+import { filterBy } from "@progress/kendo-data-query";
+import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
+import { sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
@@ -27,13 +29,16 @@ export const ParentsCell = ({
 }: ParentCellProps) => {
   const parents = dataItem[field || ""];
   const allGroups = useSelector(userManagementSelectors.getOfficialGroups);
-  const availableGroups = allGroups.filter(
-    (group) => group.value !== dataItem.id
-  );
-  const updateParentField = ({ target }: MultiSelectChangeEvent) => {
-    dataItem.parents = target?.value.map((item) => ({
-      id: item?.value || "",
-    }));
+  const [result, setResult] = React.useState([]);
+  const [data, setData] = React.useState(sortBy(allGroups, "label"));
+  const updateParentField = ({ target }) => {
+    dataItem.parents = target?.value.map((item) => ({ id: item?.value || "" }));
+    setResult(target.value);
+  };
+
+  const filterChange = ({ filter }: MultiSelectFilterChangeEvent) => {
+    const newData = filterBy(allGroups, filter);
+    setData(sortBy(newData, "label"));
   };
 
   if (rowType === "groupHeader") {
@@ -50,9 +55,11 @@ export const ParentsCell = ({
     >
       {dataItem.inEdit && isOfficial ? (
         <MultiSelect
-          data={availableGroups}
+          data={data}
+          value={result}
           filterable={true}
           onChange={updateParentField}
+          onFilterChange={filterChange}
           dataItemKey="value"
           textField="label"
         />
