@@ -136,6 +136,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <Divider />
                 </>
               );
+            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
               return (
                 <>
@@ -428,7 +429,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 </>
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
-            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
               return (
                 <>
                   <ARTaskApproval
