@@ -13,8 +13,8 @@ import Commandstyles from "./CommandCell.styles";
 interface CommandCellProps {
   dataItem: any;
   rowType?: string;
-  colSpan?: number | undefined;
-  style?: any;
+  colSpan?: number;
+  style?: React.CSSProperties;
   className?: string;
   columnIndex?: number;
   update: ((props: GroupRequestBody) => void);

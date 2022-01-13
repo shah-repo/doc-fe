@@ -13,8 +13,8 @@ interface LoadMemberGroupExt extends LoadCompanyGroup {
 interface EmployeeCellProps {
   dataItem: LoadMemberGroupExt;
   rowType?: string;
-  colSpan?: number | undefined;
-  style?: any;
+  colSpan?: number;
+  style?: React.CSSProperties;
   className?: string;
   columnIndex?: number;
   employees: GetEmployeeResponse[];
@@ -34,7 +34,7 @@ export const EmployeesCell = ({
   const employeesData = dataItem[field || ""];
   const [result, setResult] = React.useState([]);
   const [data, setData] = React.useState(sortBy(toMembersOptions(employees), "label"));
-  const updateMembersField = ({ target }: any) => {
+  const updateMembersField = ({ target }) => {
     dataItem.employees = target?.value.map((item: { value: string }) => ({
       id: item?.value || "",
     }));

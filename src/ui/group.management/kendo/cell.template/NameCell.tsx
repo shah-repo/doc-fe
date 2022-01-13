@@ -5,8 +5,8 @@ import Tooltip from "../../../components/common/kendo/Tooltip";
 interface NameCellProps {
   dataItem: any;
   rowType?: string;
-  colSpan?: number | undefined;
-  style?: any;
+  colSpan?: number;
+  style?: React.CSSProperties;
   className?: string;
   columnIndex?: number;
 }
@@ -20,7 +20,7 @@ export const NameCell = ({
   columnIndex,
 }: NameCellProps) => {
   const [name, setName] = React.useState("");
-  const updateNameField = ({ target }: any) => {
+  const updateNameField = ({ target }) => {
     setName(target?.value);
     dataItem.name = target?.value;
   };
