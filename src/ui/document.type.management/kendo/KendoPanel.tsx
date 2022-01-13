@@ -50,7 +50,10 @@ interface KendoPanelProps<T> {
   tableCriteria: TablePanelStateProps;
 }
 interface ResultProps {
-  dataSource: any[];
+  dataSource: {
+    text: string;
+    value: string | boolean;
+  }[];
   operator: string;
 
 }
@@ -203,7 +206,7 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   // Kendo Grid Actions Methods
-  const onStateChange = (setDefault: any) => {
+  const onStateChange = (setDefault) => {
     setDropDownState((prevState) => {
       const object = Object.assign({}, { ...prevState });
       object[setDefault.parentField] = setDefault.selectedItem;
@@ -256,7 +259,7 @@ export function KendoPanel<T extends { id?: string }>({
   };
 
   const renderCol = (props, col: KendoColumn) => {
-    const template = DTMCellTemplateMapping[col.cell];
+    const template = DTMCellTemplateMapping[col.cell || ""];
     if (template) {
       return template(props);
     } else {
@@ -279,7 +282,7 @@ export function KendoPanel<T extends { id?: string }>({
         {...col}
         title={getTranslatedText(col.title).toUpperCase()}
         key={index}
-        cell={DTMCellTemplateMapping[col.cell] || col.field === "" ? (props) => renderCol(props, col) : undefined}
+        cell={DTMCellTemplateMapping[col.cell || ""] || col.field === "" ? (props) => renderCol(props, col) : undefined}
         filterCell={
           FilterCellMapping[col.filterCell]
             ? FilterCellMapping[col.filterCell]
@@ -362,7 +365,7 @@ export function KendoPanel<T extends { id?: string }>({
     await clearFilter(true);
     const newDataItem: any = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
-    const newDataArr: any[] = [newDataItem, ...actualData];
+    const newDataArr = [newDataItem, ...actualData];
     setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
     const newDataState = processWithGroups(newDataArr, dataState);
     setDataState(dataState);
