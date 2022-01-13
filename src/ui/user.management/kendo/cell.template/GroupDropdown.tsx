@@ -6,7 +6,7 @@ import { userManagementSelectors } from "../../../../state/ducks/userManagement"
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import { DropdownFilterCell } from "./DropdownFilterCell";
 
-export const GroupDropdown: any = (props: GridFilterCellProps) => {
+export const GroupDropdown = (props: GridFilterCellProps) => {
   const intl = useIntl();
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
