@@ -229,7 +229,7 @@ export function KendoPanel<T>({
       .then(({ data }) => {
         if (customDataSet) {
           data = customDataSet(data);
-          const newDataState: any = processWithGroups(data, initialDataState);
+          const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
           if (data.length === 0) {
@@ -533,7 +533,7 @@ export function KendoPanel<T>({
       title={getTranslatedText(column.title).toUpperCase()}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={100}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell)}
+      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={
         filterCellMapping[column.field]
           ? filterCellMapping[column.field]
