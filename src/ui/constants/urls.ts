@@ -59,5 +59,3 @@ export const PAGE_DETAILS_MANAGEMENT_URL = "/page_details_management";
 export const ASYNC_TASKS_URL = "/async_tasks";
 
 export const COMPANY_EMAIL = "enlil-feedback@shifamed.com";
-
-export const ASYNC_TASKS_URL = "/async_tasks";
