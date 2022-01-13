@@ -5,12 +5,20 @@ import { useIntl } from "react-intl";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { KendoGridCriteria } from "../../components/common/kendo/types";
 import FromListContainer from "../form.list/FormList.container";
 import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
 import KendoGridStyles from "./styles";
 
-const KendoGridList: React.FunctionComponent<any> = ({
+interface KendoGridProps {
+  currentUserEmail: string;
+  data: ChangeRequest[];
+  tableName: string;
+  tableCriteria: KendoGridCriteria;
+}
+
+const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   currentUserEmail,
   tableName,
   tableCriteria,
