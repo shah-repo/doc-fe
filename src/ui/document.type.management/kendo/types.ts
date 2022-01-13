@@ -63,7 +63,7 @@ export interface DTMAddRow {
   defaultTraining: boolean;
   schema: FBSchemaProps[];
   fieldsConfig?: FieldConfig;
-  defaultRevStage?: string;
+  defaultRevStage?: Nullable<string>;
   hiddenForCreationForUsersWithoutTags?: GroupTag[];
   privateNumberPool?: boolean;
   canRedLine?: boolean;

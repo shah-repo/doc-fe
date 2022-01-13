@@ -1,4 +1,6 @@
-export const NewRowObject = {
+import { DTMAddRow } from "../types";
+
+export const NewRowObject: DTMAddRow = {
   documentTypeName: "",
   documentTypeAcronym: "",
   privateNumberPool: false,
