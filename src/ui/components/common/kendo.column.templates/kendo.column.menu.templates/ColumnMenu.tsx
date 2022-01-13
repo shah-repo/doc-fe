@@ -23,8 +23,8 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const dispatch = useDispatch();
   const [columns, setColumns] = useState<KendoColumn[]>(props.columns);
-  const tableCriteria: any = useSelector(getTableCriteria(props.tableName));
-  const kendoConfig = JSON.parse(tableCriteria.kendoConfig);
+  const tableCriteria = useSelector(getTableCriteria(props.tableName));
+  const kendoConfig = JSON.parse(tableCriteria.kendoConfig as string);
   const onChange = (field: string | undefined) => {
     const isGrouped = findIndex(kendoConfig.group, { field });
     if (isGrouped > -1) {
