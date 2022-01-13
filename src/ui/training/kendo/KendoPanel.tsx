@@ -75,7 +75,6 @@ export function KendoPanel<T>({
   gridData,
   tableName,
   tableCriteria,
-  rootCustomStyle,
   normalizrSchema,
 }: KendoPanelProps<T>) {
   const intl = useIntl();
@@ -607,7 +606,7 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
+    <Box className={classes.root}>
       <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
     </Box>
