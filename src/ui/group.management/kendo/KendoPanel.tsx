@@ -84,7 +84,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   onSelect,
   refreshTable,
   canCreateGroups,
-}: KendoPanelProps<T> & GroupManagementProps) {
+}: KendoPanelProps<Partial<LoadCompanyGroup>> & GroupManagementProps) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const didMount = useDidMount();
@@ -109,7 +109,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       )
     );
   };
-  const processWithGroups = (data: T[], dataState: State) => {
+  const processWithGroups = (data: Partial<LoadCompanyGroup>[], dataState: State) => {
     const newDataState = process(data, dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
@@ -129,7 +129,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       isOfficial: Boolean(),
       inEdit: true,
     };
-    gridData.unshift(sampleData as any);
+    gridData.unshift(sampleData);
     setResultState(processWithGroups(gridData, dataState));
   };
   const createGroupAsync = useAsync({
