@@ -74,7 +74,6 @@ context("Sign up user flow", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
     });
   });
@@ -163,7 +162,7 @@ context("Sign up user flow", () => {
 
     it("Check avatar picture is present", () => {
       // if alt class exists then picture is uploaded
-      cy.get("[alt=UserProfile]").should("exist");
+      cy.get(`[alt="${nameOfUserToSignUp}"]`).should("exist");
     });
   });
 });
