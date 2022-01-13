@@ -35,7 +35,7 @@ let createdCalibrationRecord;
 let createdEquipmentNumericRevision;
 let group;
 
-context("Equipment maintenance test", () => {
+context("Equipment maintenance for checking History in all states", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -209,6 +209,14 @@ context("Equipment maintenance test", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kycyk1n8",
+                    uniqueSchemaItem: true,
+                    index: 5,
                   },
                 ],
               },
@@ -1151,94 +1159,13 @@ context("Equipment maintenance test", () => {
       });
     });
 
-    context("Verify for Pending Change Numeric Equipment", () => {
-      it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
-      });
-
-      it("Click Create a Approval Request button", () => {
-        cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Enter title AR title: 'AR for DRAFT Numeric Equipment'", () => {
-        cy.arEnterApprovalRequestTitle({ title: "AR for DRAFT Numeric Equipment" });
-      });
-
-      it("Enter description 'AR Equipment'", () => {
-        cy.arEnterApprovalRequestDescription(
-          { description: "AR Equipment" });
-      });
-
-      it("Add created document revision", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: "Equipment document DRAFT" });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
-      });
-
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
-      });
-
-      it("Navigate to Equipment list", () => {
-        cy.navigToEquipment();
-        cy.dlClearFilters();
-      });
-
-      it("Filter DRAFT Numeric Equipment", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
-      });
-
-      it("Select first Equipment on list", () => {
-        cy.dlSelectFirstDocument();
-      });
-
-      context("Verify Maintenance History is changed to History", () => {
-        it("Verify for pm", () => {
-          cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
-          cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
-        });
-
-        it("Verify for calibration", () => {
-          cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
-        });
-      });
-    });
-
     context("Verify for IN REVIEW Numeric Equipment", () => {
-      it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
-        cy.alClearFilters();
+      it("Add approval to direct approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
-      it("Filter list by TITLE", () => {
-        cy.alFilterByTitle({ title: "AR for DRAFT Numeric Equipment" });
-      });
-
-      it("Select first document", () => {
-        cy.arSelectFirstDocument();
-      });
-
-      it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Click send to review", () => {
-        cy.arClickSendToReview();
-      });
-
-      it("Navigate to Equipment list", () => {
-        cy.navigToEquipment();
-        cy.dlClearFilters();
-      });
-
-      it("Filter DRAFT Numeric Equipment", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
-      });
-
-      it("Select first Equipment on list", () => {
-        cy.dlSelectFirstDocument();
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
       });
 
       context("Verify Maintenance History is changed to History", () => {
@@ -1254,25 +1181,8 @@ context("Equipment maintenance test", () => {
     });
 
     context("Verify for Approved Numeric Equipment", () => {
-      it("Navigate to approval request list", () => {
-        cy.navigToDashboard();
-      });
-
-      it("Approve from dashboard", () => {
-        cy.arApproveAR();
-      });
-
-      it("Navigate to Equipment list", () => {
-        cy.navigToEquipment();
-        cy.dlClearFilters();
-      });
-
-      it("Filter DRAFT Numeric Equipment", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
-      });
-
-      it("Select first Equipment on list", () => {
-        cy.dlSelectFirstDocument();
+      it("Approve Equipment", () => {
+        cy.ebApprove();
       });
 
       context("Verify Maintenance History is changed to History", () => {
