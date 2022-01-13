@@ -60,7 +60,6 @@ export function KendoPanel<T>({
   statuses = [],
   customDataSet,
   tableName,
-  rootCustomStyle,
   normalizrSchema,
   editDocumentRevision,
   previewDocumentRevision,
@@ -600,7 +599,7 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={rootCustomStyle ? rootCustomStyle : classes.root}>
+    <Box className={classes.root}>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
     </Box>
