@@ -391,6 +391,8 @@ export function KendoPanel<T extends { id?: string }>({
       toastError(`${emptyFields.join(",")} is missing.`);
       return;
     } else {
+      values.hiddenForCreationForUsersWithoutTags =
+      values.hiddenForCreationForUsersWithoutTagsFormatted;
       delete values.inEdit;
       delete values.expanded;
       delete values?.hiddenForCreationForUsersWithoutTagsFormatted;
