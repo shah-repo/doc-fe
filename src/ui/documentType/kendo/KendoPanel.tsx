@@ -203,7 +203,7 @@ export function KendoGrid<T>({
         setDataState(initialDataState);
         setResultState(newDataState);
         setIsLoading(false);
-        if (data.length === 0) {
+        if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
         data = map(data, (record) =>
