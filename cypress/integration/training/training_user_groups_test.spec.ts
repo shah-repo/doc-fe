@@ -927,9 +927,9 @@ context("Training user groups test", () => {
     });
 
     it(`${USERS[2].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7)
         .should("contain", completedDate);
