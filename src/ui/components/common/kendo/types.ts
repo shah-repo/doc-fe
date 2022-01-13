@@ -1,7 +1,8 @@
 import { GroupDescriptor } from "@progress/kendo-data-query";
 import { ColumnSortSettings } from "@progress/kendo-react-data-tools";
-import { GridCellProps, GridColumnMenuProps, GridPagerSettings } from "@progress/kendo-react-grid";
+import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSettings } from "@progress/kendo-react-grid";
 import { schema } from "normalizr";
+import { ComponentType } from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 
 interface KendoTableSearchQueryType {
@@ -24,7 +25,7 @@ export interface KendoColumn {
   format?: string;
   filter?: "boolean" | "numeric" | "text" | "date" ;
   groupable?: boolean;
-  filterCell?: any;
+  filterCell?: ComponentType<GridFilterCellProps> | string;
   cell?: string;
   locked?: boolean;
   width?: number | string;
@@ -86,7 +87,6 @@ export interface KendoPanelProps<T> {
   providedData?: T[];
   normalizrSchema?: schema.Entity | schema.Entity[];
   editDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
-  rootCustomStyle?: any;
   previewDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
   documentTypeOptions?: DocumentTypeOptions[];
   currentUserEmail?: string;
