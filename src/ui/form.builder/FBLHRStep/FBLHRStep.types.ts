@@ -11,7 +11,7 @@ export type FBLHRStepProps =
   startMpi(): void;
   setDisplayToMPI(): void;
   setDisplayToLHRs(): void;
-  openLHRs(): void;
+  openLHRs(docRev?: DocumentRevision): void;
   editorConfig: {
     value: string;
     filters?: FBEditorLHRStepConfigFilter;
