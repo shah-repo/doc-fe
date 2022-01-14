@@ -29,6 +29,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
     },
   ];
   const isEdit = dataItem.inEdit;
+  const disabled = dataItem.isNewRecord || false;
   const formattedValue = get(dataItem, field || "")
     ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
     : intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] });
@@ -61,6 +62,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
     >
       {isEdit ? (
         <DropDownList
+          disabled={disabled}
           onChange={handleChange}
           value={dropDownData.find((c) => c.value === dataValue)}
           data={dropDownData}
