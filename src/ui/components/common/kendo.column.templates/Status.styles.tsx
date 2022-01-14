@@ -19,6 +19,7 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
       color: Colors.lochmara,
+      cursor: "pointer",
     },
     GREEN_STATUS: {
       background: Colors.carla,
