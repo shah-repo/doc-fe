@@ -50,6 +50,10 @@ interface KendoPanelProps<T> {
   tableName: string;
   tableCriteria: TablePanelStateProps;
 }
+interface DocumentTypeCustom extends DocumentType {
+  inEdit?: boolean;
+  isNewRecord?: boolean;
+}
 interface ResultProps {
   dataSource: {
     text: string;
@@ -172,7 +176,7 @@ export function KendoPanel<T extends { id?: string }>({
       }
     });
 
-    if (!gridData.length) {
+    if (!newDataState.total) {
       setNoDataMessage(<NoDataFound />);
     }
     setTimeout(() => {
@@ -300,9 +304,10 @@ export function KendoPanel<T extends { id?: string }>({
 
   // On edit click- all cells in edit mode
   const enterEdit = ({ id }: DTMRowItem) => {
-    each(actualData, (item: any) => {
+    each(actualData, (item: DocumentTypeCustom) => {
       if (item.id === id) {
         item.inEdit = true;
+        item.isNewRecord = false;
       }
     });
     setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
@@ -360,11 +365,12 @@ export function KendoPanel<T extends { id?: string }>({
   // Add New row object
   const addNewRowObject = async () => {
     await clearFilter(true);
-    const newDataItem: any = cloneDeep(NewRowObject);
+    const newDataItem = cloneDeep(NewRowObject);
     newDataItem.inEdit = true;
+    newDataItem.isNewRecord = true;
     const newDataArr = [newDataItem, ...actualData];
     setGridEditID(getTranslatedText(TranslatedText[DisplayText.INEDIT]));
-    const newDataState = processWithGroups(newDataArr, dataState);
+    const newDataState = processWithGroups(newDataArr as DocumentType[], dataState);
     setDataState(dataState);
     setResultState(newDataState);
   };
@@ -395,6 +401,7 @@ export function KendoPanel<T extends { id?: string }>({
       values.hiddenForCreationForUsersWithoutTagsFormatted;
       delete values.inEdit;
       delete values.expanded;
+      delete values.isNewRecord;
       delete values?.hiddenForCreationForUsersWithoutTagsFormatted;
       async.start(addDocumentTypeAction, toDocumentTypeBody(values), async);
     }

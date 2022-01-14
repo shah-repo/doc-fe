@@ -15,5 +15,6 @@ export const NewRowObject: DTMAddRow = {
   schema: [],
   fieldsConfig: undefined,
   defaultRevStage: null,
-  active: false,
+  active: true,
+  isNewRecord: false,
 };

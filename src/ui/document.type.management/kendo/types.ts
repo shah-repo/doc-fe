@@ -72,4 +72,5 @@ export interface DTMAddRow {
   category?: Nullable<string>;
   inEdit? : boolean;
   expanded?: boolean;
+  isNewRecord?: boolean;
 }
