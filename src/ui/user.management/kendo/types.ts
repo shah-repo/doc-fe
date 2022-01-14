@@ -22,6 +22,7 @@ export interface UserManage {
   confirmed?: boolean | string;
   inEdit?: boolean | string;
   groupsOrg?: string[];
+  isNewRecord?: boolean;
 }
 
 interface User {

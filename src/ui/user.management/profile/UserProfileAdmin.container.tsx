@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { getHasPermission } from "../../../common/utils/selectors";
 import Config from "../../../config";
 import { authActions, authSelectors } from "../../../state/ducks/auth";
-import { EmployeeEditRequestBody, GroupTag, Permission } from "../../../state/ducks/auth/types";
+import { EmployeeEditRequestBody, Group, GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import { USER_SLACK_URL } from "../../../state/ducks/userManagement/constants";
@@ -14,6 +14,9 @@ import useAsync from "../../hooks/useAsync";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import UserProfilePresenter from "./UserProfile.presenter";
 
+interface GetEmployeeResponseCustom extends GetEmployeeResponse {
+  groupsOrg?: Group[];
+}
 interface Props {
   closeUserProfile: () => void;
   showUserProfile: boolean;
@@ -35,7 +38,7 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   const editSelectedEmployeeAction = useActionCreator(authActions.editSelectedEmployee);
   const getSlackUrlAction = useActionCreator(userManagementActions.getSlackUrl);
 
-  const [realUser, setRealUser] = useState<any>({ user: {}, groups: [], groupsOrg: [] });
+  const [realUser, setRealUser] = useState<GetEmployeeResponseCustom>(selectedEmployee);
   const [showEditUser, setEditUser] = useState(false);
   const [previewAvatar, setPreviewAvatar] = useState("");
 
@@ -49,10 +52,10 @@ const UserProfileAdminContainer: React.FunctionComponent<Props> = ({
   const { groupsOrg, id, active } = realUser;
   const { name, avatar, email } = realUser.user;
 
-  const employeeGroups: OptionType[] = groupsOrg?.map((group: any) => ({
-    value: group?.id,
-    label: group?.name,
-  }));
+  const employeeGroups = groupsOrg?.map((group: Group) => ({
+    value: group.id,
+    label: group.name,
+  })) as OptionType[];
 
   const async = useAsync({
     onSuccess: (data: any) => {

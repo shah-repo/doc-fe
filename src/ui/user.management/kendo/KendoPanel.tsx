@@ -1,10 +1,10 @@
 import {
-  Box, Grid, Typography,
+  Box, Grid, Typography
 } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -14,7 +14,7 @@ import {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
-  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
+  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy } from "lodash";
@@ -104,8 +104,9 @@ export function KendoPanel<T>({
     onSelect && onSelect({ dataItem })();
   };
 
-  const add = ({ inEdit, id, name, email, groups }: UserManage) => {
+  const add = ({ inEdit, id, name, email, groups, isNewRecord }: UserManage) => {
     inEdit = true;
+    isNewRecord = true;
     const payload = {
       user: {
         id,
@@ -261,7 +262,7 @@ export function KendoPanel<T>({
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
         setResultState(newDataState);
-        if (data.length === 0) {
+        if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
         dispatch(tableSearchActions.setData(data, tableName));
@@ -453,6 +454,7 @@ export function KendoPanel<T>({
     const newDataItem = {
       id: generateUuid(),
       inEdit: true,
+      isNewRecord: true,
       active: true,
       groups: defaultGroups.map((el) => ({ id: el.value })) as [],
     };
