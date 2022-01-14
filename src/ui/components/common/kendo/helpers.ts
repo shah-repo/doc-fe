@@ -5,17 +5,14 @@ import { KendoColumn } from "./types";
 
 export const orderByLockedState = (
   columnDefinitions: KendoColumn[],
-  groupableFields: string[]
+  _groupableFields: string[]
 ) =>
 {
-  const isGroupable = (field: string) => groupableFields.includes(field);
   const sortedColumnDefinitions = chain([...columnDefinitions])
     .orderBy(["locked"], ["desc"])
     .map((column) => {
       column.reorderable = !column.locked;
-      column.sortable = !column.locked;
       column.orderIndex = column.locked ? 0 : column.orderIndex;
-      column.groupable = column.locked ? !column.locked : isGroupable(column.field);
       column.disabled = false;
       return column;
     })
