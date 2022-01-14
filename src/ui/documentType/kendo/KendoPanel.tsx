@@ -28,6 +28,7 @@ import {
   omit,
   pick,
   set,
+  without,
 } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
@@ -136,7 +137,8 @@ export function KendoGrid<T>({
     configColumns = configColumns.length === 0 ? temp : copyDynamicColumns;
   }
   const initialGridConfigurationColumns: KendoColumn[] = configColumns;
-  const gropableColumnFields = initialGridConfigurationColumns.map((column: KendoColumn) => column.field);
+  const gropableColumnFields = without(initialGridConfigurationColumns.map((o) => o.groupable ? o.field : ""), "");
+
   const formatParams = () => {
     const params: any = {};
     if (!queryDict) {
@@ -203,7 +205,7 @@ export function KendoGrid<T>({
         setDataState(initialDataState);
         setResultState(newDataState);
         setIsLoading(false);
-        if (data.length === 0) {
+        if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
         data = map(data, (record) =>
@@ -384,6 +386,7 @@ export function KendoGrid<T>({
         locked={column.locked}
         reorderable={column.reorderable}
         sortable={column.sortable}
+        groupable={column.groupable}
         title={column.title}
         filter={column.filter}
         filterCell={getFilterCell(column.field) as ComponentType<GridFilterCellProps>}
