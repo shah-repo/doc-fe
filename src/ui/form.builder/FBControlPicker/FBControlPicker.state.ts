@@ -89,7 +89,7 @@ class FBControlPickerState {
   private get isOutputBulkCreate(): boolean | undefined {
     const BLCdoc = find(this.workspaceState?.externalState?.documentType?.byId, (doc) =>
       checkIsDocumentBulkCreate(doc.groupOptions));
-    const isBLCOutput = this.workspaceState?.document?.outputDocumentTypes.find((doc) => doc.value === BLCdoc?.id);
+    const isBLCOutput = this.workspaceState?.document?.outputDocumentTypes?.find((doc) => doc.value === BLCdoc?.id);
     return Boolean(isBLCOutput);
   }
 
