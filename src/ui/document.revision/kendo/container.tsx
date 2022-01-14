@@ -85,6 +85,7 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
       );
     }
     dispatch(documentTypeActions.loadList());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const documentTypeOptions = useSelector(
     documentTypeSelectors.getDocumentTypeOptionsForDocumentList
