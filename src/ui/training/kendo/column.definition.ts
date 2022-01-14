@@ -78,7 +78,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     locked: false,
     width: 12,
-    groupable: true,
+    groupable: false,
     showColumnMenu: true,
     orderIndex: 7,
     cell: KendoCellTemplates.DATE_INFO,
