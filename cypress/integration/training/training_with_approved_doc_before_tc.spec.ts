@@ -535,7 +535,7 @@ context("Training notifications for documents with approved and released revisio
       cy.authLogout();
       cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.arApproveARNew();
+      cy.arApproveARFromDashboard();
       cy.authLogout();
       cy.authLogin({
         email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,

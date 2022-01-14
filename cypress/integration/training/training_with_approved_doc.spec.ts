@@ -682,7 +682,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Approve AR", () => {
-      cy.arApproveARNew();
+      cy.arApproveARFromDashboard();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

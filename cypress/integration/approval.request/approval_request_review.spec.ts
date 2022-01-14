@@ -412,7 +412,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveARNew();
+        cy.arApproveARFromDashboard();
       });
     });
 
@@ -433,7 +433,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveARNew();
+        cy.arApproveARFromDashboard();
       });
     });
   });

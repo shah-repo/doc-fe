@@ -1049,24 +1049,16 @@ context("Training Flow test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
-      cy.contains(`${releasedFormId}`).should("exist");
-      cy.contains(`released form 1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form 1` });
     });
   });
 
   context("Open and complete Training", () => {
-    it(`Open assigned Training`, () => {
-      cy.contains(`${releasedFormId}`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
-    });
-
-    it("Verify due of 30 days", () => {
+    it("Navigate to assigned training and verify due of 30 days", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1078,6 +1070,7 @@ context("Training Flow test", () => {
           }
         });
       }).as("response");
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 1` });
       cy.wait("@response");
     });
 
@@ -1182,22 +1175,14 @@ context("Training Flow test", () => {
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it(`Verify training notification`, () => {
-      cy.contains(`${releasedFormId}`).should("exist");
-      cy.contains(`released form`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form 1` });
     });
 
-    it(`Open assigned Training`, () => {
-      cy.contains(`${releasedFormId}`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
-    });
-
-    it("Get training Id", () => {
+    it("Open assigned Training and get training Id", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1206,6 +1191,9 @@ context("Training Flow test", () => {
           }
         });
       }).as("response");
+
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 1` });
+
       cy.wait("@response");
     });
 
