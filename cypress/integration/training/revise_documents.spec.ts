@@ -748,15 +748,12 @@ context("Revising Documents assigned as Training material", () => {
 
   context("Complete training", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
 
     it(`Open and complete training for ${USERS[1].name}`, () => {
-      cy.contains(`${releasedDoc1Id}`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}released doc1` });
       cy.trCompleteTraining();
     });
   });
@@ -838,12 +835,11 @@ context("Revising Documents assigned as Training material", () => {
 
   context(`Verify training notification for ${USERS[1].name}`, () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it(`Verify training notification for doc with rev 2 should be present`, () => {
-      cy.contains(`${releasedDoc1Id}`).should("exist");
-      cy.contains(`released doc1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
     });
   });
 
@@ -861,8 +857,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Verify training notification for doc with rev 2 should be present`, () => {
-      cy.contains(`${releasedDoc1Id}`).should("exist");
-      cy.contains(`released doc1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
     });
   });
 });
