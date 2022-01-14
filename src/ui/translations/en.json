@@ -719,7 +719,7 @@
   "form.builder.quantity.received": "Receipt Quantity",
   "form.builder.comments.optional": "Comments (optional)",
   "form.builder.tax": "Tax: ",
-  "form.builder.tax.rate": "Tax Rate %: ",
+  "form.builder.tax.rate": "Tax Rate: ",
   "form.builder.shipping.cost": "Shipping cost: ",
   "form.builder.total": "Total: ",
   "form.builder.media.album.placeholder": "Media upload placeholder.",
