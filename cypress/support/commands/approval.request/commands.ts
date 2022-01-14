@@ -30,7 +30,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
-      arApproveARNew(): Chainable<Subject>;
+      arApproveARFromDashboard(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
@@ -396,7 +396,7 @@ Cypress.Commands.add("arApproveAR", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("arApproveARNew", () => {
+Cypress.Commands.add("arApproveARFromDashboard", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
