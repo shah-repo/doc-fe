@@ -401,6 +401,7 @@ export function KendoPanel<T extends { id?: string }>({
       values.hiddenForCreationForUsersWithoutTagsFormatted;
       delete values.inEdit;
       delete values.expanded;
+      delete values.isNewRecord;
       delete values?.hiddenForCreationForUsersWithoutTagsFormatted;
       async.start(addDocumentTypeAction, toDocumentTypeBody(values), async);
     }
