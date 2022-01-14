@@ -140,7 +140,6 @@ export function KendoPanel<T>({
 
   const formatParams = () => {
     const params: any = {};
-    const isoDate = moment().tz(TIME_ZONE).toISOString();
     if (
       defaultTrainingItem?.field === DateFields.CREATED_AT &&
       defaultTrainingItem.value
@@ -151,7 +150,7 @@ export function KendoPanel<T>({
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
       dueDateSelectedOption.text === CompletedOnDateOptions.NEXT_WEEK
     ) {
-      params.dueOnAfter = isoDate;
+      params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
       params.dueOnBefore = dueDateSelectedOption.value;
       params.isCompleted = false;
     }
@@ -159,7 +158,7 @@ export function KendoPanel<T>({
       dueDateSelectedOption?.field === DateFields.DUE_ON &&
       dueDateSelectedOption.text === CompletedOnDateOptions.OVERDUE
     ) {
-      params.dueOnBefore = isoDate;
+      params.dueOnBefore = dueDateSelectedOption.value;
       params.isCompleted = false;
     }
 
