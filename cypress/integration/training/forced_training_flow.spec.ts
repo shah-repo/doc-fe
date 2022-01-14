@@ -765,27 +765,23 @@ context("Forced training flow", () => {
 
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
-      cy.wait(3000);
       cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
       cy.get(".MuiTypography-root.MuiListItemText-primary")
         .should("contain", "FM-00001").and("contain", "AR Form");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001AR Form` });
     });
   });
 
   context("Complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.contains(`FM-00001`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001AR Form` });
     });
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
-      cy.wait(3000);
     });
   });
 
