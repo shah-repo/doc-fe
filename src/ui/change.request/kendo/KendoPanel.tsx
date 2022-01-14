@@ -230,7 +230,7 @@ export function KendoPanel<T>({
           const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
-          if (data.length === 0) {
+          if (newDataState.total === 0) {
             setNoDataMessage(<NoDataFound />);
           }
         }
