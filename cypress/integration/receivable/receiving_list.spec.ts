@@ -590,5 +590,4 @@ context("Receivable list test", () => {
       });
     });
   });
-
 });
