@@ -795,7 +795,7 @@ context("Training by Groups", () => {
     });
 
     it("Filter created training on Training Curriculums page", () => {
-      cy.get("#name").clear().arrowType("TC-00001");
+      cy.trLandingPageDocId({ docId: "TC-00001" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TC-00001");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
@@ -806,7 +806,7 @@ context("Training by Groups", () => {
         .should("contain", "Released");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
         .should("contain", "Group1, Group2");
-      cy.get("#clearFilter").arrowClick();
+      cy.dlClearFilters();
     });
   });
 
@@ -863,8 +863,8 @@ context("Training by Groups", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
       cy.reload();
-      cy.get("#owner").clear().arrowType(USERS[2].name).wait(2000);
-      cy.get("#docId").clear().arrowType("TC-00001").wait(2000);
+      cy.trLandingPageOwner({ owner: USERS[2].name });
+      cy.trLandingPageDocId({ docId: "TC-00001" });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TC-00001");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
@@ -875,7 +875,7 @@ context("Training by Groups", () => {
         .should("contain", "Draft");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
         .should("contain", "Group2, Group3");
-      cy.get("#clearFilter").arrowClick();
+      cy.dlClearFilters();
     });
   });
 
@@ -905,8 +905,8 @@ context("Training by Groups", () => {
   context("Verify updation of training data after released training", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#docId").clear().arrowType("TC-00001").wait(1000);
-      cy.get("#owner").clear().arrowType(USERS[2].name).wait(1000);
+      cy.trLandingPageDocId({ docId: "TC-00001" });
+      cy.trLandingPageOwner({ owner: USERS[2].name });
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
         .should("contain", "TC-00001");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
@@ -917,7 +917,7 @@ context("Training by Groups", () => {
         .should("contain", "Released");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
         .should("contain", "Group2, Group3");
-      cy.get("#clearFilter").arrowClick();
+      cy.dlClearFilters();
     });
   });
 });

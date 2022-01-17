@@ -26,7 +26,7 @@ let receivePageDetailsId;
 let receivingDocumentType;
 let oldReceivingForm;
 
-const receivingReleasedDate = moment().tz("America/Los_Angeles").format("L");
+const receivingReleasedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 
@@ -1031,7 +1031,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Add an Approval", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
 
         it("Save PO", () => {

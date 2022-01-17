@@ -69,7 +69,6 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     async.start(getCompanyMine, currentEmployeeId, async);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <Drawer
       PaperProps={{ id: "navigation" }}
