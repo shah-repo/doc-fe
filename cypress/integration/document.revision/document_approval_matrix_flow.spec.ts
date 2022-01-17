@@ -746,19 +746,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
-      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
-      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
-      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
-    });
-
-    it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.arApproveARFromDashboard();
     });
   });
 
