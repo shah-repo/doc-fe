@@ -1097,21 +1097,19 @@ context("LHRs email notifications", () => {
         {
           sentToUser: USERS[1].email,
           contains: [
-            `Hello <b>${USERS[1].name},</b><br>`,
+            "Hello <b>Giovanni Reynolds,</b><br>",
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
         {
           sentToUser: USERS[2].email,
           contains: [
-            `Hello <b>${USERS[2].name},</b><br>`,
+            "Hello <b>Harry Bartoletti,</b><br>",
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
       ];
