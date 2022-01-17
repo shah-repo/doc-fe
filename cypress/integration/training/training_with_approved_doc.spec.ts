@@ -612,9 +612,9 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released form").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDocId).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageDocId({ docId: releasedDocId });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDocId).and("contain", USERS[1].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);

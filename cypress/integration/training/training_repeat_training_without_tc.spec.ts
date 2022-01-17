@@ -644,8 +644,8 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[1].name).and("contain", completedDate);
@@ -774,15 +774,15 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[1].name).and("contain", completedDate);
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
         .should("contain", USERS[2].name).and("contain", "Pending");
     });
