@@ -1,0 +1,13 @@
+diff --git a/node_modules/export-to-csv/build/export-to-csv.js b/node_modules/export-to-csv/build/export-to-csv.js
+index b0347c5..fac8a88 100644
+--- a/node_modules/export-to-csv/build/export-to-csv.js
++++ b/node_modules/export-to-csv/build/export-to-csv.js
+@@ -111,7 +111,7 @@ var ExportToCsv = (function () {
+         if (headers.length > 0) {
+             var row = "";
+             for (var keyPos = 0; keyPos < headers.length; keyPos++) {
+-                row += headers[keyPos] + this._options.fieldSeparator;
++                row += this._formatData(headers[keyPos]) + this._options.fieldSeparator;
+             }
+             row = row.slice(0, -1);
+             this._csv += row + CsvConfigConsts.EOL;

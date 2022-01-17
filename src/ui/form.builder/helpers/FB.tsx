@@ -1,7 +1,7 @@
-import { isUndefined } from "lodash";
+import { isUndefined, maxBy } from "lodash";
 import { MobXProviderContext } from "mobx-react";
 import React from "react";
-import { FBProviderProps } from "..";
+import { FBProviderProps, FBSchemaProps } from "..";
 
 class FB {
   public static useRef<T>(state: (new(props: any) => T), props: any = undefined): T {
@@ -39,6 +39,23 @@ class FB {
       (Array.isArray(input) && input.length === 0) ||
       (typeof input !== "number" && !input);
   }
+
+  public static calculateDateByType = (option: any, type: string) => {
+    const { schema, formDocument, formInput } = option || {};
+    // Some of the EQs have predefined schema
+    const opitionSchema: FBSchemaProps[] = schema || formDocument.formTemplate.schema;
+
+    // Get all the PM or CAL fields
+    const fieldsByType = opitionSchema.filter((field) => field.type === "eqmaintenance" &&
+    field.editorConfig.type === type);
+
+    // Find oldest due date if there is more than one PM or CAL
+    const oldestDueDate = maxBy(fieldsByType, (field) =>
+      new Date(formInput[field?.name || ""].complianceDueDate).getTime());
+
+    // Return oldest due date
+    return formInput[oldestDueDate?.name || ""]?.complianceDueDate;
+  };
 }
 
 export default FB;

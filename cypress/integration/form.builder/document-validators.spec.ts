@@ -228,16 +228,6 @@ context("Validators tests", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
 
-    it("Shows error 'required’ below title field", () => {
-      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
-    it("Shows error 'required’ below description field", () => {
-      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
     it("Shows error 'required’ below 'document type' field", () => {
       cy.get("[data-cy=\"field-document.documentType.id\"] .MuiFormHelperText-root.Mui-error")
         .should("have.text", "Required");
@@ -605,17 +595,6 @@ field is empty: Add text field`, () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
-
-    it("Shows error 'required’ below title field", () => {
-      cy.get("[data-cy=\"field-name\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
-    it("Shows error 'required’ below description field", () => {
-      cy.get("[data-cy=\"field-description\"] .MuiFormHelperText-root.Mui-error")
-        .should("have.text", "Required");
-    });
-
   });
 
   context("Fills in Title and Description", () => {
@@ -814,7 +793,6 @@ field is empty: Add text field`, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
         cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType(`${documentRevisionName}{downarrow}{enter}`);
       });
-      cy.pause();
     });
   });
 
@@ -826,13 +804,6 @@ field is empty: Add text field`, () => {
       });
     });
 
-    // it("Should show error for 'Incorrect document type' field", () => {
-    //   cy.get(`[name^='${requiredDocTypeFieldSelector}']`).then((elem) => {
-    //     const errorBlock = elem.offsetParent().siblings("p");
-    //     cy.wrap(errorBlock)
-    //       .should("have.text", `Incorrect document type.`);
-    //   });
-    // });
     it("Should show error for 'Incorrect document type' field", () => {
       cy.get(`[name^='${requiredDocTypeFieldSelector}']`).parent().siblings("p")
         .should("have.text", `Incorrect document type.`);

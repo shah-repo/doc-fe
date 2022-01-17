@@ -418,20 +418,23 @@ context("E-signature test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.drEnterDocumentDescription({ description: "EB description" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to EB document", () => {
+    it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+      cy.wait(500);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+      cy.wait(500);
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+      cy.wait(500);
     });
-
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
-
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -439,22 +442,33 @@ context("E-signature test", () => {
 
   context("Login in first user and approve AR and EB", () => {
     it("Login in first user to dashboard", () => {
-      cy.authLogin({ email: emailOfFirstUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfFirstUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+    it(`Approve AR and EB`, () => {
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
+        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(1000);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of first approver", () => {
@@ -469,7 +483,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameFirstApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -481,22 +497,33 @@ context("E-signature test", () => {
 
   context("Login in second user and approve AR and EB", () => {
     it("Login in second user to dashboard", () => {
-      cy.authLogin({ email: emailOfSecondUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfSecondUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR and EB", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions],
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy=\"transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
-      cy.get("#root").contains("Approve").arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
+      cy.progressBarShouldNotExist();
     });
 
     context("Change name of second approver", () => {
@@ -511,7 +538,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameSecondApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -523,11 +552,16 @@ context("E-signature test", () => {
 
   context("Login in third user and approve AR and EB", () => {
     it("Login in third user to dashboard", () => {
-      cy.authLogin({ email: emailOfThirdUserToSignUp });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
+        cy.authLogin({ email: emailOfThirdUserToSignUp });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
       it("Navigate to approval request list", () => {
+        cy.wait(3000);
         cy.navigToApprovalRequestList();
       });
 
@@ -572,27 +606,34 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApprover);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
     });
 
     context("Approve AR and EB", () => {
       it("Approve AR and EB", () => {
+        cy.wait(3000);
         cy.grpNavigateToDashboard();
-        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-        cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
+          [CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
+            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+          });
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApproveNew],
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
-        cy.get("#root").contains("Approve").arrowClick();
-        cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove,
-          () => {
-            cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-          });
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -650,7 +691,9 @@ context("E-signature test", () => {
       it("Change name of user", () => {
         cy.get("[id=\"DialogContent-showEdit\"]").arrowClick();
         cy.get("[id=\"DialogTitle-nameEdit\"]").clear().arrowType(newNameThirdApproverSecondTime);
-        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchUsersMe], () => {
+          cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+        });
         cy.get("#DialogContent-close").arrowClick();
       });
 
@@ -663,7 +706,11 @@ context("E-signature test", () => {
       });
 
       it("Check user names and emails of approvers on old revision are not changed", () => {
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApprover);
@@ -676,7 +723,7 @@ context("E-signature test", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("WIP").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
         cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-
+        cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
       });
 
       it("Release EB and check if correct new name is shown", () => {
@@ -685,9 +732,10 @@ context("E-signature test", () => {
         });
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
           cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });
     });

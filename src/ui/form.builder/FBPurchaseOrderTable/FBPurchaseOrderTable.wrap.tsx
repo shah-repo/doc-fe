@@ -1,4 +1,4 @@
-import { first, omit } from "lodash";
+import { cloneDeep, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -34,13 +34,18 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
-    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev));
-    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev));
+    handleTaxChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTax(getDecimalValue(ev, 6));
+    handleTaxRateChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setTaxRate(getDecimalValue(ev, 6));
     handleShippingCostChange = (ev: React.ChangeEvent<any>) => purchaseOrderState?.setShippingCost(getDecimalValue(ev));
 
-    const getDecimalValue = (ev: React.ChangeEvent<any>) => {
+    const getDecimalValue = (ev: React.ChangeEvent<any>, fixedDecimal?: number) => {
       const { target: { value = 0 } = {} } = ev || {};
-      return Math.abs(value).toFixed(2).toString();
+      const val = Math.abs(value);
+      if (val === 0) {
+        return val.toFixed(2).toString();
+      }
+
+      return val.toFixed(fixedDecimal || 2).toString();
     };
 
     reCalculateValueOnBlur = () => purchaseOrderState?.reCalculateValue();
@@ -53,8 +58,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     };
 
     useObserver(() => {
-      calculation = omit(purchaseOrderState?.value, "items");
-      items = purchaseOrderState?.value.items;
+      const value = cloneDeep(purchaseOrderState?.value);
+      calculation = omit(value, "items");
+      items = cloneDeep(value?.items);
       if (props.mode === "preview") {
         items?.map((item) => {
           const lots = smartReferencesFrom?.filter((ref) => item.id === ref.metadata?.fieldId);

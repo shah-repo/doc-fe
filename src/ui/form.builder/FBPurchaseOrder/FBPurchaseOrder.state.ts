@@ -1,6 +1,5 @@
-import { Dictionary, filter, isEmpty, isUndefined, reduce, size, template, toNumber, union } from "lodash";
+import { Dictionary, filter, isEmpty, isNumber, isUndefined, reduce, size, template, toNumber, union } from "lodash";
 import { action, observable, set } from "mobx";
-import { isNumber } from "lodash";
 import moment from "moment";
 import { FB, FBPurchaseOrderConstructor, FBPurchaseOrderItem } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -12,6 +11,7 @@ import { FBCurrency, FBPurchaseOrderValue } from "./FBPurchaseOrder.types";
 class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
   public exchangeRate: FBRequest<any, Dictionary<number>> = new FBRequest();
   @observable public itemTotalAmount = 0;
+  @observable public hasPartNumber = false;
   @observable value: FBPurchaseOrderValue = {
     tax: "0.00",
     taxRate: TAX_RATE,
@@ -73,6 +73,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "value", { ...initialValues, items });
   }
 
+  @action public sePartNumber = (partNumber?: string) => {
+    set(this, "hasPartNumber", (!isUndefined(partNumber) && !isEmpty(partNumber)));
+  };
+
   @action public setCurrency = async (currency: FBCurrency) => {
     // FBInput.onchange, line 87
     // on change is triggered twice
@@ -106,7 +110,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!value) {
       return;
     }
-    const taxRate = Number(this.formatCost(value));
+    const taxRate = Number(this.formatCost(value, 6));
     set(this.value, "taxRate", taxRate);
   };
 
@@ -116,7 +120,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     }
     const taxRate = this.getTaxRateByTax(tax);
     if (isNumber(taxRate)) {
-      set(this.value, "taxRate", taxRate);
+      set(this.value, "taxRate", Number(this.formatCost(taxRate, 6)));
     }
     set(this.value, "tax", tax);
   };
@@ -184,7 +188,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const value = {
       ...this.value,
       subTotal: this.formatCost(sum.subTotal),
-      tax: this.formatCost(tax),
+      tax: this.formatCost(tax, 6),
       shippingCost: this.formatCost(shippingCost),
       totalAmount: this.formatCost(totalAmount),
       totalInUSD: this.formatCost(totalInUSD),
@@ -231,7 +235,13 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     this.fetch();
   };
 
-  private formatCost = (value: any) => Number(value || 0).toFixed(2);
+  private formatCost = (value: any, fixedDecimal?: number) => {
+    const val = Number(value || 0);
+    if (val === 0) {
+      return val.toFixed(2);
+    }
+    return val.toFixed(fixedDecimal || 2);
+  };
 
   private formatDate = (date) => date ? moment(date).format("MM/DD/YYYY") : "";
 

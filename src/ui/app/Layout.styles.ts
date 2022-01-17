@@ -10,9 +10,8 @@ export default (theme: Theme) =>
       "top": 90,
       "bottom": 0,
       "right": 50,
-      "borderRadius": "12px 12px 0 0",
-      "overflow": "auto",
-      "backgroundColor": Colors.white,
+      "borderRadius": 12,
+      "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",
@@ -25,7 +24,7 @@ export default (theme: Theme) =>
       "bottom": 0,
       "right": 0,
       "overflow": "auto",
-      "backgroundColor": "white",
+      "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",

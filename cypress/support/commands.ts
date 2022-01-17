@@ -45,7 +45,11 @@ declare global {
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
+      progressBarShouldExist(): Chainable<Subject>;
+      progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldExist(): Chainable<Subject>;
+      listLoadingElementShouldAppear(): Chainable<Subject>;
     }
   }
 }
@@ -110,8 +114,26 @@ Cypress.Commands.add("progressBarShouldNotExist", () => {
   cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
+Cypress.Commands.add("progressBarShouldExist", () => {
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("progressBarShouldAppear", () => {
+  cy.progressBarShouldExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldExist", () => {
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldAppear", () => {
+  cy.listLoadingElementShouldExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
@@ -184,20 +206,20 @@ Cypress.Commands.add("unClick", () => {
 // Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
 //   const functionRequestTimeout: number = 40 * 1000;
 //   const functionResponseTimeout: number = 40 * 1000;
+//   const aliasesToWait: string[] = [];
+
 //   names.forEach((name) => {
 //     const { requestConfig } = routes[name];
 //     cy.intercept(requestConfig).as(name);
 //   });
 
-//   callback();
-
-//   const aliasesToWait: string[] = [];
-
 //   names.forEach((name) => {
 //     aliasesToWait.push(`@${name}`);
 //   });
 
-//   cy.wait(aliasesToWait);
+//   callback();
+
+//   cy.wait(aliasesToWait, { responseTimeout: functionResponseTimeout, requestTimeout: functionRequestTimeout });
 // });
 
 Cypress.Commands.add(
@@ -212,6 +234,7 @@ Cypress.Commands.add(
     callback();
 
     names.forEach((name) => {
+      cy.log(name);
       const {  callConfig } = routes[name];
       cy.wait(`@${name}`, Object.assign({}, callConfig, options));
     });

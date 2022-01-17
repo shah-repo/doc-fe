@@ -237,11 +237,11 @@ context("Document Approval Matrix Flow", () => {
 
   context("Fills in Title and Description", () => {
     it(`type a title: ${DAMTitle}`, () => {
-      cy.drEnterDocumentTitle({ name: `${DAMTitle}{enter}` });
+      cy.drEnterDocumentTitle({ name: DAMTitle });
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Description" });
+      cy.drEnterDocumentDescriptionWithWait({ description: "Description" });
     });
   });
 
@@ -266,6 +266,8 @@ context("Document Approval Matrix Flow", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -307,8 +309,10 @@ context("Document Approval Matrix Flow", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -334,14 +338,18 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
+    // it("clicks on 'Save' button", () => {
+    //   cy.drClickCreateDocumentWithApiCallForForms();
+    // });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -482,11 +490,17 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it(`select '${DAMTitle}'`, () => {
+      cy.dlClearFilters();
       cy.get("#root").contains(DAMTitle).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Revise document", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
+        cy.drClickReviseDocument();
+      });
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
   });
 
@@ -506,6 +520,8 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       cy.drAddApprovalRole();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -524,8 +540,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0600");
-
       cy.drAddApprovalRole();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -589,8 +606,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
-
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 

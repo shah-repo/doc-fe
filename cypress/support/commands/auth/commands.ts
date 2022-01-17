@@ -72,7 +72,7 @@ Cypress.Commands.add("authEnterPassword", (params: { value: string }) => {
 });
 
 Cypress.Commands.add("authVisitLogin", () => {
-  cy.visit(CONFIG.FE_URL, { timeout: 20 * 1000 });
+  cy.visit(`${CONFIG.FE_URL}/login`, { timeout: 50000 });
 });
 
 Cypress.Commands.add("authSubmitLogin", () => {

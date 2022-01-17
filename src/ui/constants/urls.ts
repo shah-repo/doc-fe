@@ -32,6 +32,7 @@ export const RESET_PASSWORD_SUCCESSFUL_URL = "/reset_password_successful/";
 export const STATUS = "/status";
 export const MAINTENANCE = "/maintenance";
 export const USER_LOCKED = "/locked";
+export const EXPORTED_FILE_DOWNLOAD = "/exported_file_download";
 
 export const SUPPLIER_SURVEY_URL = "/supplier_survey/:token";
 
@@ -54,5 +55,7 @@ export const GROUP_MANAGEMENT_ROOT_URL = "/group_management";
 export const COMPANY_MINE_URL = "/company/mine";
 
 export const PAGE_DETAILS_MANAGEMENT_URL = "/page_details_management";
+
+export const ASYNC_TASKS_URL = "/async_tasks";
 
 export const COMPANY_EMAIL = "enlil-feedback@shifamed.com";

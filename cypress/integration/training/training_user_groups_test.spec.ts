@@ -809,7 +809,10 @@ context("Training user groups test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.wrapWithWaitOnApiCall(
+        CyRoutes.PatchDocRev, () => {
+          cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        });
     });
 
     it("Select Approver", () => {
@@ -817,11 +820,17 @@ context("Training user groups test", () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -832,21 +841,22 @@ context("Training user groups test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'Test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(1000);
+      cy.wait(2000);
       cy.get("#name").clear().arrowType("Test training title");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
         .should("contain", "Test training title");
-      cy.wait(1000);
+      cy.wait(2000);
     });
   });
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick().wait(2000);
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+    it(`Verify training notification ${releasedFormId}`, () => {
+      cy.contains(`${releasedFormId}`).should("exist").wait(1000);
+      cy.contains(`released form`).should("exist").wait(1000);
     });
 
     it("Logout user", () => {
@@ -865,12 +875,14 @@ context("Training user groups test", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.get("[class*='Layout-content']").should("not.contain", `TRAINING: ${releasedFormId} - Rev 1 released form`);
+      cy.get("[data-cy='dashboard.noPendingActions']").should("exist").wait(1000);
     });
 
     it("Logout user", () => {
@@ -897,12 +909,11 @@ context("Training user groups test", () => {
   });
 
   context("Open and complete Training", () => {
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    it(`Open assigned Training`, () => {
+      cy.contains(`${releasedFormId}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link).wait(2000);
+      });
     });
 
     it("Complete Training", () => {
@@ -916,9 +927,9 @@ context("Training user groups test", () => {
     });
 
     it(`${USERS[2].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7)
         .should("contain", completedDate);

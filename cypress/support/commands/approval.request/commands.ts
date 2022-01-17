@@ -8,6 +8,7 @@ import "moment-timezone";
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
+
 export { };
 
 declare global {
@@ -29,11 +30,13 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arApproveARNew(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
       arRejectComfirmationAR(): Chainable<Subject>;
+      arRejectComfirmationARNew(): Chainable<Subject>;
       arSelectFirstDocument(): Chainable<Subject>;
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
@@ -241,9 +244,11 @@ Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) =
   cy.get("[data-cy=\"field-title\"]").arrowType(params.title);
 });
 
-Cypress.Commands.add("arVerifySignatureIsNotMet", (params: {title: string }) => {
-  cy.get("button[aria-label=approve]").first().arrowClick();
-  cy.get("[data-cy=\"transition.action.password\"]").arrowType("wrongPassword");
+Cypress.Commands.add(`arVerifySignatureIsNotMet`, (params: {title: string }) => {
+  cy.get(`.MuiListItemText-dense`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+  cy.get(`[data-cy="transition.action.password"]`).arrowType("wrongPassword");
   cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
     cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   });
@@ -275,7 +280,7 @@ Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
 
 Cypress.Commands.add("arClickAddDocument", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"fb.add.document\"]").arrowClick();
+    cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
 });
@@ -292,7 +297,7 @@ Cypress.Commands.add("arCloseAR", () => {
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
-  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowType(params.name + "{downarrow}{enter}");
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowType(params.name + "{downarrow}{enter}").wait(500);
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
@@ -356,7 +361,6 @@ Cypress.Commands.add("arSaveApiCall", () => {
 
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
   cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
-  // cy.get("#HeaderInfo-status>span").contains(params.status);
 });
 
 Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
@@ -390,7 +394,20 @@ Cypress.Commands.add("arApproveAR", () => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
+});
 
+Cypress.Commands.add("arApproveARNew", () => {
+  cy.wrapWithWaitOnApiCalls(
+    [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+    });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
@@ -430,6 +447,13 @@ Cypress.Commands.add("arRejectComfirmationAR", () => {
   cy.get("[data-cy=\"reject.request\"]").arrowClick();
 });
 
+Cypress.Commands.add("arRejectComfirmationARNew", () => {
+  cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+  cy.get(`[data-cy="reject.request"]`).arrowClick();
+});
+
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARPreview,
@@ -437,6 +461,8 @@ Cypress.Commands.add("arSelectFirstDocument", () => {
     CyRoutes.GetAutocompleteOptions], () => {
     cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {

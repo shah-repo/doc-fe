@@ -1,13 +1,16 @@
-import { Datacenter, datadogRum } from "@datadog/browser-rum";
+import { datadogRum, RumInitConfiguration } from "@datadog/browser-rum";
 import Config from "./index";
 
 export function initializeDataDog() {
-  const dataDogConf = {
+  const dataDogConf: RumInitConfiguration = {
     applicationId: Config.DatadogApplicationId,
     clientToken: Config.DatadogClientToken,
-    datacenter: Datacenter.US,
-    sampleRate: 100,
+    service: "doc-fe",
+    sampleRate: Config.DatadogSampleRate,
     trackInteractions: true,
+    useCrossSiteSessionCookie: true,
+    allowedTracingOrigins: [Config.PublicUrl],
+    trackSessionAcrossSubdomains: true,
   };
   datadogRum.init(dataDogConf);
 }

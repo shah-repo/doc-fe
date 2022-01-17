@@ -14,6 +14,7 @@ declare global {
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
+      navigToNewDashboard(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
@@ -57,6 +58,14 @@ Cypress.Commands.add("navigToDashboard", () => {
     });
 });
 
+Cypress.Commands.add("navigToNewDashboard", () => {
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.GetDashboardFeed,
+    () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
+    });
+});
+
 Cypress.Commands.add("navigToDocTypeManagement", () => {
   cy.get("a[href=\"/document_type_management\"]").arrowClick();
 });
@@ -71,6 +80,7 @@ Cypress.Commands.add("navigToRecords", () => {
       ],
     });
   });
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToParts", () => {
@@ -173,6 +183,7 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+
 Cypress.Commands.add("navigToWorkOrders", () => {
   cy.navigToNestedItem({
     navigItems: [
@@ -209,7 +220,6 @@ Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[
     const [first, second, ...other] = params.navigItems;
     cy.get("body").then(($body) => {
       if ($body.find("[data-cy=\"navigation." + second + "\"]").length === 0) {
-
         cy.navigClickOnItem({ navigItem: first });
         cy.navigToNestedItem({ navigItems: [second, ...other] });
       } else {

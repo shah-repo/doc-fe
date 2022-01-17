@@ -1,8 +1,7 @@
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React from "react";
 import MyFeeds from "./my.feeds/MyFeeds.container";
 import Recents from "./recents/Recents.container";
-import TrainingStats from "./training.stats/TrainingStats";
 import Trainings from "./trainings/Trainings.container";
 
 interface TabPanelProps {
@@ -23,19 +22,12 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
     aria-labelledby={`scrollable-auto-tab-${index}`}
   >
     {value === index && (
-      <Grid container={true}>
-        <Grid item={true} md={isDashboardAdmin ? 8 : 12} sm={12}>
-          {value === 0 && <MyFeeds />}
-          {value === 1 && isDashboardAdmin && <Trainings />}
-          {((value === 2 && isDashboardAdmin) ||
+      <Box>
+        {value === 0 && <MyFeeds />}
+        {value === 1 && isDashboardAdmin && <Trainings />}
+        {((value === 2 && isDashboardAdmin) ||
             (value === 1 && !isDashboardAdmin)) && <Recents />}
-        </Grid>
-        {isDashboardAdmin && (
-          <Grid item={true} md={4} sm={12}>
-            <TrainingStats />
-          </Grid>
-        )}
-      </Grid>
+      </Box>
     )}
   </div>
 );

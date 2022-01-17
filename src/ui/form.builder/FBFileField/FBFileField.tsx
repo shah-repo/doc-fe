@@ -14,6 +14,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
   multiple = true,
   loading = false,
   disabled,
+  typeToAccept = "*",
 }) =>  (
 
   <Observer>
@@ -27,7 +28,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
         style={{ pointerEvents: (disabled || formState?.isBackdropOpen) ? "none" : "auto" }}
       >
         <input
-          accept="*"
+          accept={typeToAccept}
           type="file"
           id={`fb-attachment-field-${name}`}
           style={{ display: "none" }}

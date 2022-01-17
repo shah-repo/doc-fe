@@ -25,6 +25,8 @@ import {
   FBProvider,
   FBText,
 } from "..";
+import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -38,6 +40,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   getLot,
   getProcedureLocale,
   getProcedureValues,
+  isDateOverdue,
   mpiProcedureState,
   dialogState,
   isPreview,
@@ -137,45 +140,100 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                           <FBMapWrapper<Partial<FBMPIProcedureSelectValue>[]>
                             collection={mpiProcedureState?.partsSelected || []}
                           >
-                            {(selection: FBMPIProcedureSelectValue, index) => (
-                              <Box key={`fb-mpi-procedure-selection-${index}`}>
-                                {(selection.materialId === item.title || selection.equipmentId === item.title) && (
-                                  <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    bgcolor={Colors.light_blue}
-                                    borderColor={Colors.light_blue}
-                                    borderRadius={2}
-                                    border={0.5}
-                                    mr={1}
-                                    mb={1}
-                                    p={0.5}
-                                  >
-                                    <FBText
-                                      locale={`form.builder.mpi.part.selection.${type}`}
-                                      values={{
-                                        docId: selection.overrideDocId || "",
-                                        lotPart: selection.lotPart || "",
-                                        quantity: selection.quantity || 0,
-                                        unit: selection.unit || "",
-                                      }}
-                                      boxProps={{
-                                        color: Colors.black,
-                                        pr: 1,
-                                      }}
-                                    />
-                                    <IconButton
-                                      size="small"
-                                      style={{ fontSize: 11 }}
-                                      onClick={() => handleSelectionDelete?.(selection.refId)}
-                                      disabled={isReleased}
+                            {(selection: FBMPIProcedureSelectValue, index) => {
+                              const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
+                              const calOverdue = isDateOverdue?.(selection?.calDueDate);
+
+                              return (
+                                <Box key={`fb-mpi-procedure-selection-${index}`}>
+                                  {(selection.materialId === item.title || selection.equipmentId === item.title) && (
+                                    <>
+                                      <Box
+                                        display="flex"
+                                        flexDirection="row"
+                                        bgcolor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
+                                        borderColor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
+                                        borderRadius={2}
+                                        border={0.5}
+                                        mr={1}
+                                        mb={1}
+                                        p={0.5}
+                                        style={{ float: "left" }}
+                                      >
+                                        <FBText
+                                          locale={`form.builder.mpi.part.selection.${type}`}
+                                          values={{
+                                            docId: selection.overrideDocId || "",
+                                            lotPart: selection.lotPart || "",
+                                            quantity: selection.quantity || 0,
+                                            unit: selection.unit || "",
+                                          }}
+                                          boxProps={{
+                                            color: Colors.black,
+                                            fontWeight: type === "equipment" ? "bold" : "regular",
+                                            pr: 1,
+                                          }}
+                                        />
+                                        {(selection.pmDueDate !== "N/A") &&
+                                          <Box
+                                            color={pmOverdue ? Colors.error_red : Colors.dark_gray}
+                                            fontWeight={pmOverdue ? "bold" : "normal"}
+                                          >
+                                            <Box
+                                              display="inline-block"
+                                              bgcolor={Colors.black}
+                                              width={4}
+                                              height={4}
+                                              mr={1}
+                                              mb={0.25}
+                                            />
+                                            Next PM Due:
+                                            {getFormattedDateString(selection.pmDueDate, MomentFormats.BriefDate)}
+                                          </Box>
+                                        }
+                                        {(selection.calDueDate !== "N/A") &&
+                                          <Box
+                                            color={calOverdue ? Colors.error_red : Colors.dark_gray}
+                                            fontWeight={calOverdue ? "bold" : "normal"}
+                                            ml={1}
+                                          >
+                                            <Box
+                                              display="inline-block"
+                                              bgcolor={Colors.black}
+                                              width={4}
+                                              height={4}
+                                              mr={1}
+                                              mb={0.25}
+                                            />
+                                            Next Cal Due:
+                                            {getFormattedDateString(selection.calDueDate, MomentFormats.BriefDate)}
+                                          </Box>
+                                        }
+                                        <IconButton
+                                          size="small"
+                                          style={{ fontSize: 11 }}
+                                          onClick={() => handleSelectionDelete?.(selection.refId)}
+                                          disabled={isReleased}
+                                        >
+                                          <HighlightOffIcon fontSize="inherit" />
+                                        </IconButton>
+
+                                      </Box>
+                                      {(pmOverdue || calOverdue) &&
+                                    <Box
+                                      color={Colors.error_red}
+                                      fontWeight="bold"
+                                      display="flex"
+                                      alignItems="center"
+                                      mt={0.5}
                                     >
-                                      <HighlightOffIcon fontSize="inherit" />
-                                    </IconButton>
-                                  </Box>
-                                )}
-                              </Box>
-                            )}
+                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE
+                                    </Box>
+                                      }
+                                    </>
+                                  )}
+                                </Box>
+                              ); }}
                           </FBMapWrapper>
                         </Box>
                       )}

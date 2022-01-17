@@ -2,11 +2,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import AsyncTasksContainer from "../async.tasks/async.tasks.container";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
 import ChangeRequestListContainer from "../change.request/list/container";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
-import { CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
+import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardLayout from "../dashboard.new/Dashboard.layout";
 import DashboardContainer from "../dashboard/Dashboard.container";
 import DocumentRevisionContainer from "../document.revision/container";
@@ -29,7 +30,6 @@ import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
 
 type Props = WithStyles<typeof styles>;
-
 const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <RemoteValidatorsLoader />
   <PingServer />
@@ -38,11 +38,11 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <Navigation />
   <SocketsContainer />
   <WatermarkFooterContainer />
-  <main  className={window.location.pathname === "/dashboard" ? classes.newContent : classes.content}>
+  <main  className={window.location.pathname === "/" ? classes.newContent : classes.content}>
     <DataFetcherContainer />
     <Switch>
-      <Route path={HOME_URL} exact={true} component={DashboardContainer} />
-      <Route path={DASHBOARD_URL} exact={true} component={DashboardLayout} />
+      <Route path={DASHBOARD_URL} exact={true} component={DashboardContainer} />
+      <Route path={HOME_URL} exact={true} component={DashboardLayout} />
       <Route
         path={CHANGE_REQUEST_CREATE_URL}
         exact={true}
@@ -108,6 +108,10 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
       <Route
         path={PAGE_DETAILS_MANAGEMENT_URL}
         component={PageDetailsManagementContainer}
+      />
+      <Route
+        path={ASYNC_TASKS_URL}
+        component={AsyncTasksContainer}
       />
       <Redirect to={{ pathname: HOME_URL }} />
     </Switch>

@@ -10,6 +10,7 @@ export type FBMPIProcedureItemProps =
   handleSelectionDelete?: (refId?: string) => void;
   getProcedureLocale?: (item: FBProcedureItemConfig) => string;
   getProcedureValues?: (item: FBProcedureItemConfig) => any;
+  isDateOverdue?: (data?: string) => any;
   multiplier?: number;
   isOutput?: boolean;
   isSelectVisible?: boolean;

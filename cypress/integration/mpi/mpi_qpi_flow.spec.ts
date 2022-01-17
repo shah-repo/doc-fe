@@ -366,12 +366,12 @@ context("Mpi/Qpi flow", () => {
           it("While autosaving, fill step #1 description and check autosave", () => {
             cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
               req.reply((res) => {
-                res.setDelay(100);
-                res.setThrottle(1);
+                res.setDelay(10000);
+                res.setThrottle(10);
               });
             }).as("response");
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-            cy.wait("@response");
+            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
           });
 
           it("Delete attachment and check autosave", () => {
@@ -388,24 +388,24 @@ context("Mpi/Qpi flow", () => {
           it("While autosaving, add 'Equipment one' to step #1 and check autosave", () => {
             cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
               req.reply((res) => {
-                res.setDelay(100);
-                res.setThrottle(1);
+                res.setDelay(10000);
+                res.setThrottle(10);
               });
             }).as("response");
             cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-            cy.wait("@response");
+            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
           });
 
           it("While autosaving, delete Material and check for autosave", () => {
             cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
               req.reply((res) => {
-                res.setDelay(100);
-                res.setThrottle(1);
+                res.setDelay(10000);
+                res.setThrottle(10);
               });
             }).as("response");
             cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title\"]").parent().parent()
               .find("button").last().click();
-            cy.wait("@response");
+            cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
           });
         });
 
@@ -526,14 +526,17 @@ context("Mpi/Qpi flow", () => {
     });
 
     context("Approve document in review", () => {
-      it(`approve document`, () => {
-
-        cy.get("#root").contains("Approve").arrowClick();
+      it("approve document", () => {
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first()
+          .trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       });
 
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        cy.get(`[data-cy="transition.action.password"]`)
+          .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
@@ -646,9 +649,10 @@ context("Mpi/Qpi flow", () => {
     });
 
     context("Reject document in review", () => {
-      it(`Reject document`, () => {
-
-        cy.get("#root").contains("Reject").arrowClick();
+      it("Reject document", () => {
+        cy.get(`.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
       });
 
       it("Confirm password", () => {
@@ -838,14 +842,15 @@ context("Mpi/Qpi flow", () => {
     });
 
     context("Approve document in review", () => {
-      it(`approve document`, () => {
-
-        cy.get("#root").contains("Approve").arrowClick();
+      it("approve document", () => {
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       });
-
       it("Confirm password", () => {
-        cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+        cy.get(`[data-cy="transition.action.password"]`)
+          .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
           () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
@@ -958,9 +963,10 @@ context("Mpi/Qpi flow", () => {
     });
 
     context("Reject document in review", () => {
-      it(`Reject document`, () => {
-
-        cy.get("#root").contains("Reject").arrowClick();
+      it("Reject document", () => {
+        cy.get(`.MuiListItemText-dense`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+        cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
       });
 
       it("Confirm password", () => {
@@ -985,7 +991,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Pending Change");
+        cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Pending Change");
       });
     });
   });
