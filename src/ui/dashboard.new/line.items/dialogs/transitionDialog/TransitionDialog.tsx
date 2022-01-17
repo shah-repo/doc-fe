@@ -50,7 +50,6 @@ const TransitionDialog: React.FunctionComponent<Props> = ({
   transition,
   transitionDialog,
   hideLabel,
-  label,
   effectiveDateDialog,
 }) => {
   const renderPasswordForm = (props: FormikProps<any>) => (
