@@ -70,6 +70,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
     console.log("Ignoring 'Cannot read property 'data' of undefined' error");
     return false;
   }
+
+  if (err.message.includes("scheduledForDeletion")) {
+    // eslint-disable-next-line no-console
+    console.log("Cannot read properties of undefined (reading 'scheduledForDeletion')");
+    return false;
+  }
   return true;
 });
 

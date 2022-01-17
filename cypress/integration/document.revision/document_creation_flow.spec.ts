@@ -224,6 +224,8 @@ context("Document Creation Flow", () => {
               { name: "./test_image.jpg", type: "image/jpg" },
             ]
           );
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check three attachments are displayed: test.docx, image.jpg and test_image.jpg", () => {
