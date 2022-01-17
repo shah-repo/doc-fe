@@ -264,7 +264,9 @@ context("Document Operators Access Test", () => {
     it("reload page", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
         cy.reload();
+        cy.progressBarShouldAppear();
       });
+      cy.listLoadingElementShouldExist();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -301,6 +303,8 @@ context("Document Operators Access Test", () => {
         CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if Title input field is disabled", () => {

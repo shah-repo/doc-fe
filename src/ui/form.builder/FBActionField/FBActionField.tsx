@@ -12,12 +12,14 @@ const FBActionField: React.FunctionComponent<FBActionFieldProps> = ({
     <FBDialog />
     <FBMapWrapper<FBActionOptionProps[]> collection={options}>
       {(action: FBActionOptionProps, index) => (
-        <FBButton
-          key={`fb-action-option-${action.name}-${index}`}
-          label={action.actionLabel}
-          onClick={() => handleAction && handleAction(action)}
-          {...{ disabled }}
-        />
+        <>
+          {action && <FBButton
+            key={`fb-action-option-${action?.name}-${index}`}
+            label={action?.actionLabel}
+            onClick={() => handleAction && handleAction(action)}
+            {...{ disabled }}
+          />}
+        </>
       )}
     </FBMapWrapper>
   </FBProvider>
