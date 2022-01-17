@@ -510,15 +510,13 @@ context("Equipment maintenance and calibration", () => {
     });
 
 
-    context("Verify Maintenance History is changed to History", { retries: 3 }, () => {
+    context("Verify Maintenance History is changed to History", () => {
       it("Verify for pm", () => {
-        cy.reload();
         cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
         cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
       });
 
-      it("Verify for calibration", { retries: 3 }, () => {
-        cy.reload();
+      it("Verify for calibration", () => {
         cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
       });
     });
