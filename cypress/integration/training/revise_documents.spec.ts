@@ -738,11 +738,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
@@ -755,12 +751,12 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it(`Open and complete training for ${USERS[1]}`, () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+
+    it(`Open and complete training for ${USERS[1].name}`, () => {
+      cy.contains(`${releasedDoc1Id}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
       cy.trCompleteTraining();
     });
   });
@@ -771,9 +767,9 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
@@ -819,16 +815,10 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
     });
 
-    it("clear filers", () => {
-      cy.get("#docId").clear();
-      cy.get("#docRevTitle").clear();
-      cy.get("#userName").clear();
-    });
-
     it(`Training record for ${USERS[1].name}`, () => {
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(1).invoke("text")
@@ -837,9 +827,9 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[2].name}`, () => {
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(1000);
-      cy.get("#docRevTitle").clear().arrowType("released doc1").wait(1000);
-      cy.get("#docId").clear().arrowType(releasedDoc1Id).wait(1000);
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocRevTitle({ title: "released doc1" });
+      cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
         .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
       cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
@@ -851,8 +841,9 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
 
-    it("Verify training notification for doc with rev 2 should be present", () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 2 released doc1`).should("exist");
+    it(`Verify training notification for doc with rev 2 should be present`, () => {
+      cy.contains(`${releasedDoc1Id}`).should("exist");
+      cy.contains(`released doc1`).should("exist");
     });
   });
 
@@ -869,8 +860,9 @@ context("Revising Documents assigned as Training material", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Verify training notification for doc with rev 2 should be present", () => {
-      cy.contains(`TRAINING: ${releasedDoc1Id} - Rev 2 released doc1`).should("exist");
+    it(`Verify training notification for doc with rev 2 should be present`, () => {
+      cy.contains(`${releasedDoc1Id}`).should("exist");
+      cy.contains(`released doc1`).should("exist");
     });
   });
 });

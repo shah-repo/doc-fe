@@ -577,7 +577,8 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -586,6 +587,7 @@ Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 

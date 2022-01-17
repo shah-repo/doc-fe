@@ -607,21 +607,21 @@ context("Training notification test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToNewDashboard();
     });
 
     it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+      cy.contains(`${releasedFormId}`).should("exist");
+      cy.contains(`released form`).should("exist");
     });
   });
 
   context("Open assigned Training", () => {
-    it("Click on the Training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    it(`Click on the Training notification`, () => {
+      cy.contains(`${releasedFormId}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -666,10 +666,12 @@ context("Training notification test", () => {
     });
 
     it("Approve AR", () => {
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
+        [CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -688,13 +690,17 @@ context("Training notification test", () => {
   });
 
   context("Check new training notification", () => {
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 2 released form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.contains(`${releasedFormId}`).should("exist");
+      cy.contains(`released form`).should("exist");
     });
 
-    it("Click training notification and check doc with Approved status", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 2 released form`).arrowClick();
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+    it(`Click training notification and check doc with Approved status`, () => {
+      cy.contains(`${releasedFormId}`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
+      cy.get(`[data-cy=\"HeaderInfo-status\"]`).should("have.text", "Approved");
     });
   });
 });

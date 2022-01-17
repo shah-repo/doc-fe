@@ -5,6 +5,7 @@ import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
+
 export { };
 
 declare global {
@@ -50,6 +51,7 @@ declare global {
       poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
       poAMCheckForAlertMessage(): Chainable<Subject>;
       poRejectAR(params: {password: string}): Chainable<Subject>;
+      poRejectARNew(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
@@ -295,9 +297,17 @@ Cypress.Commands.add("poAMCheckForAlertMessage", () => {
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
-  cy.get("button[aria-label=reject]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowClick().arrowType(params.password);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("poRejectARNew", (params: {password: string}) => {
+  cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+  cy.get(`[data-cy="transition.action.password"]`).arrowClick().arrowType(params.password);
+  cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 

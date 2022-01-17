@@ -242,6 +242,7 @@ class FBFormState extends FBSchemaState {
   private parseRules = (rules: Dictionary<string>, values: Dictionary<string>): Dictionary<string> => {
     const parsedRules = {};
     map(rules, (value, key) => {
+      if (!isString(value)) { return; }
       const rulesArray = value?.split("|");
       const valuesArray: any = [];
       map(rulesArray, (val) => {
