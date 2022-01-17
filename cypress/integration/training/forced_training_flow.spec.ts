@@ -755,7 +755,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
