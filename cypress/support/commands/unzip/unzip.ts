@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
-
-const decompress = require("decompress");
-
-const unzip = ({ path, file }) => decompress(path + "/" + file, path + "/" + file.replace(".zip", ""));
+const unzipper = require("unzipper");
+const fs = require("fs");
+const unzip = ({ path, file }) => fs.createReadStream(path + "/" + file)
+  .pipe(unzipper.Extract({ path: path + "/" + file.replace(".zip", "") }));
 
 module.exports = {
   unzip,
