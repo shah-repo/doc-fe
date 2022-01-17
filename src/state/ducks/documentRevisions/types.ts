@@ -312,6 +312,7 @@ export interface FBDocumentRevisionProps {
   revisionStage?: string | number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
+  effectiveDate?: Date;
   renderHTML?: string;
   renderHTMLDefined?: boolean;
   status?: DocumentRevisionStatus;
