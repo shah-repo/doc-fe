@@ -148,8 +148,8 @@ context("Equipment maintenance and calibration", () => {
           req.reply((res) => {
             if (res.body) {
               const response = res.body;
-              pmSchemaFieldName = response.formTemplate.schema[3].name;
-              calibrationSchemaFieldName = response.formTemplate.schema[4].name;
+              pmSchemaFieldName = response.formTemplate.schema[4].name;
+              calibrationSchemaFieldName = response.formTemplate.schema[5].name;
             }
           });
         }).as("response");
@@ -326,13 +326,21 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
+    it("Click 'Submit for approval'", () => {
+      cy.pmSubmitForApproval();
+    });
 
-    it("Approve and release Bulk create form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Approve and release document", () => {
+      cy.ebApprove();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
@@ -502,13 +510,15 @@ context("Equipment maintenance and calibration", () => {
     });
 
 
-    context("Verify Maintenance History is changed to History", () => {
+    context("Verify Maintenance History is changed to History", { retries: 3 }, () => {
       it("Verify for pm", () => {
+        cy.reload();
         cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
         cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
       });
 
-      it("Verify for calibration", () => {
+      it("Verify for calibration", { retries: 3 }, () => {
+        cy.reload();
         cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
       });
     });
