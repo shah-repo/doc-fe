@@ -330,12 +330,14 @@ context("PO approval test", () => {
       cy.unClick();
     });
 
-    it("Add an Approval", () => {
-
+    it("Add an Approval and save", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
       });
+      cy.poSaveDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check approval icon if it's colored", () => {
@@ -402,7 +404,6 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();

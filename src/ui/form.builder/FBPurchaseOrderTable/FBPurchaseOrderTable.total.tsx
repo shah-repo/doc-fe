@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FormattedNumber } from "react-intl";
@@ -47,22 +48,29 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
     <TableRow>
       <FBTableCell label="form.builder.tax.rate" className="FBTotal-root" colSpan={3} />
       <FBTableCell className="FBTotal-root" align="right" colSpan={2}>
-        <FBTextField
-          name={`${name}.taxRate`}
-          gutter={false}
-          type="number"
-          size="small"
-          value={calculation?.taxRate}
-          inputProps={{
-            style: { textAlign: "right", padding: "5px" },
-            step: ".01",
-            min: "0",
-            onChange: handleTaxRateChange,
-            onBlur: reCalculateValueOnBlur,
-          }}
-          rules="min:0"
-          {...{ disabled }}
-        />
+        <Grid container>
+          <Grid item xs={11}>
+            <FBTextField
+              name={`${name}.taxRate`}
+              gutter={false}
+              type="number"
+              size="small"
+              value={calculation?.taxRate}
+              inputProps={{
+                style: { textAlign: "right", padding: "5px" },
+                step: ".01",
+                min: "0",
+                onChange: handleTaxRateChange,
+                onBlur: reCalculateValueOnBlur,
+              }}
+              rules="min:0"
+              {...{ disabled }}
+            />
+          </Grid>
+          <Grid item xs={1} style={{ paddingLeft: "8px" }}>
+            %
+          </Grid>
+        </Grid>
       </FBTableCell>
     </TableRow>
     <TableRow>

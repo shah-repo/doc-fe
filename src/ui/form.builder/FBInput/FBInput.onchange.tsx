@@ -158,6 +158,9 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === "number" && value !== "") {
           value = toNumber(value);
         }
+        if (type === "number" && value === "") {
+          value = null;
+        }
         setValue(value);
       }
 
