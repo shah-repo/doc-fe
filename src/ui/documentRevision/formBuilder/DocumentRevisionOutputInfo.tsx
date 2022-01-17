@@ -13,11 +13,17 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
   formDocument = {},
 }) => {
 
-  const { revision, subRevision, revisionStage, revisionChangeType, releasedAt } = formDocument || {};
+  const {
+    revision,
+    subRevision,
+    revisionStage,
+    revisionChangeType,
+    effectiveDate,
+  } = formDocument || {};
+
   const version = generateRevisionNumber(revision, revisionStage as number, subRevision, revisionChangeType);
 
   const docId = formDocument?.document?.docId;
-
   return (
     <Box textAlign="center" mb={8} mt={8}>
       <Box style={{ fontWeight: "bold" }} component="span">
@@ -27,7 +33,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
         {` ${docId}, `}
         <Text message="common.revision" />
         {` ${version}, `}
-        <Date value={releasedAt} />
+        <Date value={effectiveDate} />
       </Box>
     </Box>
   );
