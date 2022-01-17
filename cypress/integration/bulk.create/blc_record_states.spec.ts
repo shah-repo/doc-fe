@@ -734,6 +734,7 @@ context("Bulk create record headers", () => {
           "First Article Inspection",
           "Maintenance Record",
           "Equipment",
+          "Equipment Specification",
           "Suppliers",
           "PO Approval Matrix",
           "Purchase Order",
@@ -748,7 +749,7 @@ context("Bulk create record headers", () => {
           "Test Document Type",
           "Additional Document Type"];
         cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").should("have.length", 20);
+        cy.get("ul[role=listbox]>li").should("have.length", 21);
         cy.get("ul[role=listbox]>li").each(($document) => {
           expect($document.text()).to.be.oneOf(documentTypeList);
         });

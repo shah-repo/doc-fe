@@ -74,7 +74,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
   if (err.message.includes("scheduledForDeletion")) {
     // eslint-disable-next-line no-console
-    console.log("Cannot read properties of undefined (reading 'scheduledForDeletion')");
+    console.log("Ignoring 'Cannot read properties of undefined (reading 'scheduledForDeletion')'");
     return false;
   }
   return true;
