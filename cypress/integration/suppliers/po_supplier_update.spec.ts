@@ -733,6 +733,7 @@ context("Purchase Supplier Update", () => {
 
       it("Navigates to Purchase order page", () => {
         cy.navigToPurchaseOrder();
+        cy.wait(2000);
       });
 
       it("reload page", () => {
