@@ -1,9 +1,12 @@
+import moment from "moment";
+import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
+const currentDate = moment().tz("America/Los_Angeles").format("MMMM Do YYYY");
 let createdCompany;
 let loginResponse;
 let supplierFieldName;
@@ -1017,6 +1020,46 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentDescription({ description: "Test description" });
       });
 
+      it("Click on 'Add item' button", () => {
+        cy.poAddNewFieldItem();
+      });
+
+      it("Click on 'Service' select option", () => {
+        cy.poSelectOption({ optionName: "service" });
+      });
+
+      it("Enter ServiceID", () => {
+        cy.poEnterServiceID({ serviceId: "SRV123" });
+      });
+
+      it("Enter Description", () => {
+        cy.poEnterDescription({ description: "Description for SRV123" });
+      });
+
+      it("Enter Quantity Ordered", () => {
+        cy.poEnterQuantityOrdered({ quantity: "5" });
+      });
+
+      it("Select Units", () => {
+        cy.poSelectUnits();
+      });
+
+      it("Select GL code", () => {
+        cy.poSelectGLCode();
+      });
+
+      it("Enter number of Units", () => {
+        cy.poNumberOfUnits({ number: "2" });
+      });
+
+      it("Check Tax box", () => {
+        cy.poSelectTaxCheckbox();
+      });
+
+      it("Click on 'Add' inside PO dialog box", () => {
+        cy.poAddPOButtonClick();
+      });
+
       it("Select Supplier", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00002 - rev 3 - released supplier12{downarrow}{enter}");
       });
@@ -1024,6 +1067,13 @@ context("Purchase Supplier Update", () => {
       it("Add Required Date", () => {
         cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
         cy.get(".MuiPickersDay-daySelected").arrowClick();
+      });
+
+      it("Fill order Date", () => {
+        cy.xpath("//input[@name]/ ../div/button").last().arrowClick();
+        cy.xpath("//div[@class=\"MuiPickersCalendar-week\"]" +
+        "[last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
+          .click();
       });
 
       it("Add an Approval", () => {
@@ -1149,7 +1199,18 @@ context("Purchase Supplier Update", () => {
           }).then((response) => {
             const responseBody = response.body.toString();
             expect(responseBody)
-              .contains("Name: released supplier12");
+            .contains(`Purchase order: PO-00004`)
+            .and.contains(`Name: released supplier12`)
+            .and.contains(`Description: <p>released supplier</p>`)
+            .and.contains(`Name: SRV123`)
+            .and.contains(`Description: Description for SRV123`)
+            .and.contains(`Ordered: 5 each`)
+            .and.contains(`GL codes: code 1`)
+            .and.contains(`Total amount: 10`)
+            .and.contains(`Name: ${USERS[1].name}`)
+            .and.contains(`Date: ${currentDate}`)
+            .and.contains(`Tax Rate: 9.25`)
+            .and.contains(`Tax: 0.93`);
           });
         });
       });
@@ -1240,7 +1301,18 @@ context("Purchase Supplier Update", () => {
           }).then((response) => {
             const responseBody = response.body.toString();
             expect(responseBody)
-              .contains("Name: released supplier12");
+              .contains(`Purchase order: PO-00004`)
+              .and.contains(`Name: released supplier12`)
+              .and.contains(`Description: <p>released supplier</p>`)
+              .and.contains(`Name: SRV123`)
+              .and.contains(`Description: Description for SRV123`)
+              .and.contains(`Ordered: 5 each`)
+              .and.contains(`GL codes: code 1`)
+              .and.contains(`Total amount: 10`)
+              .and.contains(`Name: ${USERS[1].name}`)
+              .and.contains(`Date: ${currentDate}`)
+              .and.contains(`Tax Rate: 9.25`)
+              .and.contains(`Tax: 0.93`);
           });
         });
       });
