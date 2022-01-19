@@ -223,7 +223,7 @@ Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-contro
 
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form.builder.autocomplete\"]").arrowClick());
 
-Cypress.Commands.add("fbOpenValidation", () => cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick());
+Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick());
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
