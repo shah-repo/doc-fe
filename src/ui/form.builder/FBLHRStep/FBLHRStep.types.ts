@@ -20,6 +20,7 @@ export type FBLHRStepProps =
   stepLHRs?: Nullable<DocumentRevision>;
   isHovering: boolean;
   isDraft: boolean;
+  isPendingChange: boolean;
   ownerOfStartMPIAction?: string;
   ownerOfCompleteMPIAction?: string;
   materials: any;

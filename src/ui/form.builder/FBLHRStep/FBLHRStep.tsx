@@ -23,6 +23,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   setDisplayToMPI,
   isHovering,
   isDraft,
+  isPendingChange,
   disabled,
   ownerOfStartMPIAction,
   ownerOfCompleteMPIAction,
@@ -62,7 +63,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             withState
             shouldReloadOnInit
             withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
-            disabled={isOutput || !isDraft}
+            disabled={isOutput || !(isDraft || isPendingChange)}
             {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
               background: Colors.light_red,

@@ -6,7 +6,7 @@ import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBLHRStep = <T extends FBLHRStepProps>(
@@ -48,6 +48,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
+    const isPendingChange = isDocumentRevisionPendingChange(workspaceState?.document?.status);
+
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
 
@@ -241,6 +243,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       isHovering,
       openLHRs,
       isDraft,
+      isPendingChange,
       disabled,
       loading,
       ownerOfStartMPIAction,
