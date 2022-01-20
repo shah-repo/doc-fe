@@ -103,7 +103,7 @@ context("Field validations test", () => {
 
     context("Add Text Field 1", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Text field", () => {
@@ -141,7 +141,7 @@ context("Field validations test", () => {
 
     context("Add Checkbox", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Checkbox group field", () => {
@@ -163,7 +163,7 @@ context("Field validations test", () => {
 
     context("Add Text Field 2", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Text field", () => {
@@ -201,7 +201,7 @@ context("Field validations test", () => {
 
     context("Add Select field", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Select field", () => {
@@ -223,7 +223,7 @@ context("Field validations test", () => {
 
     context("Add Text Field 3", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Text field", () => {
@@ -257,7 +257,7 @@ context("Field validations test", () => {
 
     context("Add Autocomplete field", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Autocomplete field", () => {
@@ -279,7 +279,7 @@ context("Field validations test", () => {
 
     context("Add Text Field 4", () => {
       it("Click Add a Field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
       });
 
       it("Select Text field", () => {
@@ -308,6 +308,200 @@ context("Field validations test", () => {
 
       it("Save form", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Remove validations from text fields", () => {
+      context("Remove validation from text field 1", () => {
+        it("Click on Edit for Text field 1", () => {
+          cy.get(`[data-cy="edit-schema-item"]`).eq(1).arrowClick({ force: true });
+        });
+
+        it("Open validation tab", () => {
+          cy.fbOpenValidation();
+        });
+
+        it("Uncheck required if validator for Text field 1", () => {
+          cy.get(`[name="validators.required_if"]`).arrowClick();
+        });
+
+        it("Click add to save changes", () => {
+          cy.fbAddNewFieldButton();
+        });
+      });
+
+      context("Remove validation from text field 2", () => {
+        it("Click on Edit for Text field 2", () => {
+          cy.get(`[data-cy="edit-schema-item"]`).eq(3).arrowClick({ force: true });
+        });
+
+        it("Open validation tab", () => {
+          cy.fbOpenValidation();
+        });
+
+        it("Uncheck required if in validator for Text field 2", () => {
+          cy.get(`[name="validators.required_if_in"]`).arrowClick();
+        });
+
+        it("Click add to save changes", () => {
+          cy.fbAddNewFieldButton();
+        });
+      });
+
+      context("Remove validation from text field 3", () => {
+        it("Click on Edit for Text field 3", () => {
+          cy.get(`[data-cy="edit-schema-item"]`).eq(5).arrowClick({ force: true });
+        });
+
+        it("Open validation tab", () => {
+          cy.fbOpenValidation();
+        });
+
+        it("Uncheck required with validator for Text field 3", () => {
+          cy.get(`[name="validators.required_with"]`).arrowClick();
+        });
+
+        it("Click add to save changes", () => {
+          cy.fbAddNewFieldButton();
+        });
+      });
+
+      context("Remove validation from text field 4", () => {
+        it("Click on Edit for Text field 4", () => {
+          cy.get(`[data-cy="edit-schema-item"]`).eq(7).arrowClick({ force: true });
+        });
+
+        it("Open validation tab", () => {
+          cy.fbOpenValidation();
+        });
+
+        it("Uncheck required with validator for Text field 4", () => {
+          cy.get(`[name="validators.required_without"]`).arrowClick();
+        });
+
+        it("Click add to save changes", () => {
+          cy.fbAddNewFieldButton();
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+    });
+
+    context("Delete text fields", () => {
+      context("Delete text field 1", () => {
+        it("Click remove on text field 1", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(1).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete text field 2", () => {
+        it("Click remove on text field 2", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(2).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete text field 3", () => {
+        it("Click remove on text field 3", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(3).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete text field 4", () => {
+        it("Click remove on text field 4", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(4).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+    });
+
+    context("Delete radio button, checkbox, select and autocomplete fields", () => {
+      context("Delete radio button", () => {
+        it("Click remove on radio button", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(0).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete Checkbox", () => {
+        it("Click remove on Checkbox", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(0).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete Select field", () => {
+        it("Click remove on Select field", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(0).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      context("Delete Autocomplete", () => {
+        it("Click remove on Autocomplete field", () => {
+          cy.get(`[data-cy="remove-schema-item"]`).eq(0).arrowClick({ force: true });
+        });
+
+        it("Verify no error is present", () => {
+          cy.checkToastMessage({ exists: false });
+        });
+
+        it("Save form", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
       });
     });
   });
