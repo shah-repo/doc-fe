@@ -72,9 +72,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           />
         </Box>
         <FBButton
-          label="form.builder.start.mpi"
-          disabled={!isOutput || loading || Boolean(stepLHRs) || disabled}
-          onClick={startMpi}
+          label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
+          disabled={!isOutput || loading || disabled}
+          onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
           {...{ loading }}
         />
       </Box>
