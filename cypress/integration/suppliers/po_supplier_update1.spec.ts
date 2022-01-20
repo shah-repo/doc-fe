@@ -305,7 +305,7 @@ context("Purchase Supplier Update1", () => {
                   </ul>
                </div>
                <div>
-                  <strong>Total cost</strong>                                                                             
+                  <strong>Total cost</strong>
                   <ul>
                      <li>Total amount: {{documentRevision.formInput.${poFieldName}.totalAmount}}</li>
                   </ul>
@@ -318,7 +318,7 @@ context("Purchase Supplier Update1", () => {
                </ul>
               </div>
                <div>
-                  <strong>Approvals </strong>                                                                             
+                  <strong>Approvals </strong>
                   <ul>
                     {{#documentRevision.approvals}}
                      <li>Name: {{approver.user.name}}</li>
@@ -506,12 +506,14 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New Supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New Supplier12");
         cy.dlClearFilters();
       });
 
-      it("Open PO again - verify PO in Pending Approval is updated to the newly released version of the Supplier", () => {
+      it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
         cy.poVerifyStatus({ status: "Pending Approval" });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - New Supplier12");
@@ -583,8 +585,10 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New Supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New Supplier12");
       });
 
       it("Open released PO", () => {
@@ -654,8 +658,10 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New Supplier123");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New Supplier123");
         cy.dlClearFilters();
       });
 
