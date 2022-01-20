@@ -339,7 +339,7 @@ context("Purchase Supplier Update", () => {
                   </ul>
                </div>
                <div>
-                  <strong>Total cost</strong>                                                                             
+                  <strong>Total cost</strong>
                   <ul>
                      <li>Total amount: {{documentRevision.formInput.${poFieldName}.totalAmount}}</li>
                   </ul>
@@ -352,7 +352,7 @@ context("Purchase Supplier Update", () => {
                </ul>
               </div>
                <div>
-                  <strong>Approvals </strong>                                                                             
+                  <strong>Approvals </strong>
                   <ul>
                     {{#documentRevision.approvals}}
                      <li>Name: {{approver.user.name}}</li>
@@ -391,7 +391,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00001 - rev 1 - New suplier for PO{downarrow}{enter}");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]")
+          .arrowType("SUP-00001 - rev 1 - New suplier for PO{downarrow}{enter}");
       });
 
       it("clicks on 'Save' button", () => {
@@ -421,8 +422,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New suplier for PO");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New suplier for PO");
         cy.dlClearFilters();
       });
 
@@ -500,8 +503,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New suplier for PO1");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New suplier for PO1");
         cy.dlClearFilters();
       });
     });
@@ -582,8 +587,10 @@ context("Purchase Supplier Update", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New suplier for PO12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00001");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New suplier for PO12");
         cy.dlClearFilters();
       });
     });
@@ -602,7 +609,10 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00001 - rev 2 - New suplier for PO12{downarrow}{enter}");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]")
+          .arrowType("SUP-00001 - rev 2 - New suplier for PO12{downarrow}{enter}");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
@@ -685,12 +695,14 @@ context("Purchase Supplier Update", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00002" });
         cy.wait(2000);
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00002");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New suplier for PO123");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00002");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New suplier for PO123");
         cy.dlClearFilters();
       });
 
-      it("Open PO again - verify PO in Pending Approval is updated to the newly released version of the Supplier", () => {
+      it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
         cy.poVerifyStatus({ status: "Pending Approval" });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 3 - New suplier for PO123");
@@ -758,15 +770,18 @@ context("Purchase Supplier Update", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00002" });
         cy.wait(2000);
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00002");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "New suplier for PO1234");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00002");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "New suplier for PO1234");
         cy.dlClearFilters();
       });
 
-      it("Open PO again - verify PO in Pending Approval is updated to the newly released version of the Supplier", () => {
+      it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
         cy.poVerifyStatus({ status: "Pending Approval" });
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 4 - New suplier for PO1234");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]")
+          .should("have.value", "SUP-00001 - rev 4 - New suplier for PO1234");
       });
     });
   });
@@ -785,7 +800,10 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00002 - rev 1 - released supplier{downarrow}{enter}");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]")
+          .arrowType("SUP-00002 - rev 1 - released supplier{downarrow}{enter}");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
@@ -902,8 +920,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00003" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00003");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "released supplier1");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00003");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "released supplier1");
         cy.dlClearFilters();
       });
     });
@@ -1001,8 +1021,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00003" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00003");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "released supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00003");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "released supplier12");
         cy.dlClearFilters();
       });
     });
@@ -1061,7 +1083,10 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType("SUP-00002 - rev 3 - released supplier12{downarrow}{enter}");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]")
+          .arrowType("SUP-00002 - rev 3 - released supplier12{downarrow}{enter}");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
@@ -1118,8 +1143,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00004" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00004");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "released supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00004");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "released supplier12");
         cy.dlClearFilters();
       });
 
@@ -1174,8 +1201,10 @@ context("Purchase Supplier Update", () => {
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "PO-00004" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00004");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "released supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00004");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "released supplier12");
       });
 
       it("Open released PO", () => {
@@ -1199,18 +1228,18 @@ context("Purchase Supplier Update", () => {
           }).then((response) => {
             const responseBody = response.body.toString();
             expect(responseBody)
-            .contains(`Purchase order: PO-00004`)
-            .and.contains(`Name: released supplier12`)
-            .and.contains(`Description: <p>released supplier</p>`)
-            .and.contains(`Name: SRV123`)
-            .and.contains(`Description: Description for SRV123`)
-            .and.contains(`Ordered: 5 each`)
-            .and.contains(`GL codes: code 1`)
-            .and.contains(`Total amount: 10`)
-            .and.contains(`Name: ${USERS[1].name}`)
-            .and.contains(`Date: ${currentDate}`)
-            .and.contains(`Tax Rate: 9.25`)
-            .and.contains(`Tax: 0.93`);
+              .contains(`Purchase order: PO-00004`)
+              .and.contains(`Name: released supplier12`)
+              .and.contains(`Description: <p>released supplier</p>`)
+              .and.contains(`Name: SRV123`)
+              .and.contains(`Description: Description for SRV123`)
+              .and.contains(`Ordered: 5 each`)
+              .and.contains(`GL codes: code 1`)
+              .and.contains(`Total amount: 10`)
+              .and.contains(`Name: ${USERS[1].name}`)
+              .and.contains(`Date: ${currentDate}`)
+              .and.contains(`Tax Rate: 9.25`)
+              .and.contains(`Tax: 0.93`);
           });
         });
       });
@@ -1276,8 +1305,10 @@ context("Purchase Supplier Update", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00004" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).should("have.text", "PO-00004");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).should("have.text", "released supplier12");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
+          .should("have.text", "PO-00004");
+        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
+          .should("have.text", "released supplier12");
       });
 
       it("Open released PO", () => {
