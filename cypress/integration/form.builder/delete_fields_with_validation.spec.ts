@@ -88,7 +88,7 @@ context("Field validations test", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
       });
 
-      it("Add label Normal text field", () => {
+      it("Add label Radio buttons", () => {
         cy.fbEnterNameValue({ name: "label", value: "Radio buttons" });
       });
 
@@ -96,7 +96,7 @@ context("Field validations test", () => {
         cy.fbGroupOptions("option1", "option2");
       });
 
-      it("Click add to add text field to form", () => {
+      it("Click add to add Radio button group to form", () => {
         cy.fbAddNewFieldButton();
       });
     });
@@ -110,7 +110,7 @@ context("Field validations test", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Text field" });
       });
 
-      it("Add label Normal text field", () => {
+      it("Add label Text field 1", () => {
         cy.fbEnterNameValue({ name: "label", value: "Text field 1" });
       });
 
@@ -126,11 +126,188 @@ context("Field validations test", () => {
         cy.get(`[data-cy="validators.required_if.name"]`).arrowType(`Radio buttons{downarrow}{enter}`);
       });
 
-      it(`Type value as option1`, () => {
+      it(`Click value option1`, () => {
         cy.get("div[role=dialog] [value=option1]").arrowClick();
       });
-      it("Click add to add text field to form", () => {
+
+      it("Click add to add text field 1 to form", () => {
         cy.fbAddNewFieldButton();
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+    });
+
+    context("Add Checkbox", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Checkbox group field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      });
+
+      it("Add label Checkbox field", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox field" });
+      });
+
+      it("Add options to checkbox field", () => {
+        cy.fbGroupOptions("option1", "option2");
+      });
+
+      it("Click add to add Checkbox field to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    context("Add Text Field 2", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Text field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      });
+
+      it("Add label Text field 2", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Text field 2" });
+      });
+
+      it("Click on Validation tab", () => {
+        cy.fbOpenValidation();
+      });
+
+      it("Mark as 'Required If in'", () => {
+        cy.get(`[name="validators.required_if_in"]`).arrowClick();
+      });
+
+      it(`Select required if in Checkbox field`, () => {
+        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType(`Checkbox field{downarrow}{enter}`);
+      });
+
+      it(`Click value option1`, () => {
+        cy.get("div[role=dialog] [value=option1]").arrowClick();
+      });
+
+      it("Click add to add text field 2 to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Add Select field", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Select field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      });
+
+      it("Add label Select field", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Select field" });
+      });
+
+      it("Add options to Select field", () => {
+        cy.fbGroupOptions("option1", "option2");
+      });
+
+      it("Click add to add Select field to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    context("Add Text Field 3", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Text field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      });
+
+      it("Add label Text field 3", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Text field 3" });
+      });
+
+      it("Click on Validation tab", () => {
+        cy.fbOpenValidation();
+      });
+
+      it("Mark as 'Required with'", () => {
+        cy.get(`[name="validators.required_with"]`).arrowClick();
+      });
+
+      it(`Select required with Select field`, () => {
+        cy.get(`[data-cy="validators.required_with.name"]`).arrowType(`Select field{downarrow}{enter}`);
+      });
+
+      it("Click add to add Select field to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+    });
+
+    context("Add Autocomplete field", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Autocomplete field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      });
+
+      it("Add label Autocomplete field", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Autocomplete field" });
+      });
+
+      it("Select option Document revisions to Autocomplete field", () => {
+        cy.get("[data-cy=\"optionId\"]").arrowType("Document revisions{downarrow}{enter}");
+      });
+
+      it("Click add to add Autocomplete field to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+    });
+
+    context("Add Text Field 4", () => {
+      it("Click Add a Field", () => {
+        cy.fbAddNewFieldWhenHidden();
+      });
+
+      it("Select Text field", () => {
+        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      });
+
+      it("Add label Text field 4", () => {
+        cy.fbEnterNameValue({ name: "label", value: "Text field 4" });
+      });
+
+      it("Click on Validation tab", () => {
+        cy.fbOpenValidation();
+      });
+
+      it("Mark as 'Required without'", () => {
+        cy.get(`[name="validators.required_without"]`).arrowClick();
+      });
+
+      it(`Select Required without Autocomplete field`, () => {
+        cy.get(`[data-cy="validators.required_without.name"]`).arrowType(`Autocomplete field{downarrow}{enter}`);
+      });
+
+      it("Click add to add text field 4 to form", () => {
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
   });
