@@ -12,15 +12,14 @@ import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
-  name,
-  isOutput,
   startMpi,
   openLHRs,
+  setDisplayToLHRs,
+  name,
+  isOutput,
   lhrStepState,
   loading,
   stepLHRs,
-  setDisplayToLHRs,
-  setDisplayToMPI,
   isDraft,
   disabled,
   ownerOfStartMPIAction,
@@ -33,6 +32,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   label,
   gutter,
   autosave,
+  lhrBuildTypeExist,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -69,8 +69,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           />
         </Box>
         <FBButton
+          disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
           label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
-          disabled={!isOutput || loading || disabled}
           onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
           {...{ loading }}
         />

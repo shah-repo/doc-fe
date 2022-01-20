@@ -14,10 +14,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 ) => {
   const Comp = ({
     filterOptions,
+    startMpi,
     name = "",
     index,
     loading,
-    startMpi,
     stepLHRs,
     disabled,
     ownerOfStartMPIAction,
@@ -46,6 +46,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
+    const lhrBuildTypeExist = formState?.getFieldValue("lhr-build-type");
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
@@ -163,7 +164,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     const setDisplayToLHRs = () => {
       if (isOutput && stepLHRs) {
-        /*  lhrStepState.setIsHovering(false); */
         if (!lhrStepState.stepLHRs) { return; }
         FBAutocompleteAsyncStore.add(
           FBAutocompleteAsyncOption.mpiDocuments,
@@ -237,6 +237,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       equipment,
       isDocumentLHRT,
       stepIndex,
+      lhrBuildTypeExist,
     }); };
 
   Comp.displayName = "withFBLHRStep";

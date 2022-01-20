@@ -9,7 +9,6 @@ export type FBLHRStepProps =
 & Pick<FBAutocompleteProps, "filterOptions">
 & {
   startMpi(): void;
-  setDisplayToMPI(): void;
   setDisplayToLHRs(): void;
   openLHRs(docRev?: DocumentRevision): void;
   editorConfig: {
@@ -24,6 +23,7 @@ export type FBLHRStepProps =
   materials: any;
   equipment: any;
   isDocumentLHRT: boolean;
+  lhrBuildTypeExist: string;
 };
 
 export interface StartMpiBody {
