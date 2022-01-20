@@ -21,7 +21,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   stepLHRs,
   setDisplayToLHRs,
   setDisplayToMPI,
-  isHovering,
   isDraft,
   disabled,
   ownerOfStartMPIAction,
@@ -44,8 +43,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         alignItems="flex-start"
       >
         <Box
-          onMouseEnter={setDisplayToMPI}
-          onMouseLeave={setDisplayToLHRs}
           flexGrow={1}
           onClick={() => {
             if (isOutput && stepLHRs) {
@@ -61,7 +58,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             autosave
             withState
             shouldReloadOnInit
-            withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
+            withoutPrefixRoot={Boolean(stepLHRs)}
             disabled={isOutput || !isDraft}
             {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
