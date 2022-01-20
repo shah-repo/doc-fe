@@ -12,13 +12,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     onScroll,
     _documentRevisionFormState,
     document,
+    autosaveEnabled,
     ...props
   }: T) => {
 
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
-    _documentRevisionFormState?.setFormAutosave(_formState?.autosave || false);
+    _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
+    _formState?.setAutosave(autosaveEnabled);
 
     useEffect(() => {
       if (!document?.id) { return; }
@@ -43,6 +45,11 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       () => _formState?.mode,
       (mode) => _documentRevisionFormState?.setFormMode(mode || "none"),
       { fireImmediately: true }
+    );
+
+    SM.reaction(
+      () => _documentRevisionFormState?.loading,
+      (loading) => _formState?.setLoading(loading)
     );
 
     // MARK: @helpers
@@ -71,6 +78,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
             _documentRevisionFormState,
             _tabsState,
             _formState,
+            autosaveEnabled,
           }}
         />
       </SMProvider>

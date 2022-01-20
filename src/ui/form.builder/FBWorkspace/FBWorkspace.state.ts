@@ -16,6 +16,9 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public mode: FBWorkspaceMode = "none";
   @observable approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
+  // Buffer between _formState loading and documentRevApi loading until we switch
+  // everything to _formState
+  @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
   public changeRequest?: ChangeRequest;
@@ -176,6 +179,7 @@ class FBWorkspaceState extends FBSchemaState {
     if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
     if (!id) { return; }
+    this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     this.setDirty(true);
     let body = {};
@@ -214,6 +218,7 @@ class FBWorkspaceState extends FBSchemaState {
       this.omitAutosave = false;
       if (error) {
         this.documentRevApi.onError(error);
+        this.loading = false;
       } else {
         this.setDirty(false);
         this.setFormInputData(data);
@@ -226,6 +231,7 @@ class FBWorkspaceState extends FBSchemaState {
         }
         this.loadAudit = true;
         this.documentRevApi.onSuccess();
+        this.loading = false;
       }
     });
   };

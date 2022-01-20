@@ -2,6 +2,7 @@ import { action, computed, observable, set } from "mobx";
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from "../../..";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { toastError } from "../../../../ui/components/notifications";
 import { FBWorkspaceMode } from "../../../../ui/form.builder";
 import { FBEndpoint } from "../../../../ui/form.builder/defaults/FBEndpoint";
 
@@ -19,6 +20,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable releasedDocRev?: DocumentRevision;
   @observable forceRender?: any;
   @observable public disabledAction = false;
+  @observable public loading = false;
   @observable docInfo: DocumentInfo = {
     name: "",
     isQms: true,
@@ -107,13 +109,21 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     if (!this.formAutosave) { return; }
     const { id } = this.documentRevision || {};
     if (!id) { return; }
-    // const { formMode: mode } = this;
+    this.loading = true;
     SMStore.patch<{}, Partial<DocumentRevision>>({
       url: FBEndpoint.DocumentRevisionPatch,
       urlValues: { id },
       body: {
         [name]: value,
       },
+    }, (data, error) => {
+      if (error) {
+        toastError(error.message);
+        return;
+      }
+      const url = SMStore.templateUrl(FBEndpoint.DocumentRevisionPatch, { id });
+      SMStore.setData<DocumentRevision>(url, data as DocumentRevision);
+      this.loading = false;
     });
   };
 

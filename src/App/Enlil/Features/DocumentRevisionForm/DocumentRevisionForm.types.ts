@@ -79,6 +79,7 @@ export interface DocumentRevisionFormStateProps {
   formMode: SMFormStateProps["mode"];
   formAutosave: SMFormStateProps["autosave"];
   disabledAction: boolean;
+  loading: boolean;
 }
 
 export type DocumentRevisionFormHOCProps =

@@ -94,6 +94,13 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       }
     );
 
+    SM.reaction(
+      () => workspaceState?.loading,
+      (loading: boolean | undefined) => {
+        _formState?.setLoading(loading);
+      }
+    );
+
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
     snackbarState = FB.useRef<FBSnackbarState>(FBSnackbarState);
     workspaceState && (workspaceState.document = document);

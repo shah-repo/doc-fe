@@ -65,7 +65,6 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
         _textEditorState?.setEditorState(editorState);
       }
     );
-
     // MARK: @helpers
     // Creates editor state with initial value
     function htmlToEditorState(value?: string): EditorState {

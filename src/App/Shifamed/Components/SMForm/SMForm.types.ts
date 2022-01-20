@@ -24,6 +24,7 @@ export interface SMFormStateProps {
   setAutosave: (autosave: boolean) => void;
   getRules: () => Record<string, any>;
   setRule: (name: string, rules: string) => void;
+  setLoading: (loading?: boolean) => void;
   isLHRProductionBuild: boolean;
   Validator: any;
   values: Map<string, any>;
@@ -39,6 +40,7 @@ export interface SMFormStateProps {
   schema: FBSchemaProps[];
   autosave: boolean;
   render: boolean;
+  loading: boolean;
 }
 
 export type SMFormHOCProps = Pick<SMProviderProps, "_formState">;

@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import { filter, isEmpty, isEqual, map, omit } from "lodash";
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
+import { SM } from "../../../App";
 import { companySelectors } from "../../../state/ducks/company";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
@@ -15,6 +16,7 @@ export const FormContext = React.createContext({ submitOnChange: false });
 export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
+  const { _formState } = SM.useStores();
   const { workspaceState, formState, schemaState } = FB.useStores();
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   function isOutputSchema(): boolean {
@@ -28,7 +30,8 @@ export const useFormContext = () => {
 
   function setFBValue() {
     const values = formik.values as any;
-    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const workspaceSchema = _formState?.schema;
+    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
     switch (workspaceState?.getMode()) {
       case "design":
         formik.setFieldValue("formTemplate", {

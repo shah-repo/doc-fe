@@ -30,6 +30,10 @@ class SMFormState implements SMFormStateProps {
 
   // MARK: @observables
   /**
+   * @cfg {boolean} loading flag.
+   */
+  @observable public loading = false;
+  /**
    * @cfg {Record<input name, input value>} Form values.
    * Final values prepared for preserving.
    */
@@ -96,6 +100,10 @@ class SMFormState implements SMFormStateProps {
 
   @action public setValues = (values?: SMFormProps["values"]) => {
     map(values, (v, k) => this.values.set(k, v));
+  };
+
+  @action public setLoading = (loading?: boolean) => {
+    set(this, "loading", loading || false);
   };
 
   // MARK: @helpers
