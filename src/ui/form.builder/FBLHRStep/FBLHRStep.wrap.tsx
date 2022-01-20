@@ -14,12 +14,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 ) => {
   const Comp = ({
     filterOptions,
+    startMpi,
     name = "",
     index,
     loading,
-    startMpi,
     stepLHRs,
-    isHovering,
     disabled,
     ownerOfStartMPIAction,
     ownerOfCompleteMPIAction,
@@ -47,6 +46,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     const lhrStepState = FB.useRef(FBLHRStepState, stepLHRs);
     const schemaItem = workspaceState?.getSchemaItemAt(index);
     const isOutput = Boolean(workspaceState?.isOutput);
+    const lhrBuildTypeExist = formState?.getFieldValue("lhr-build-type");
     const isDraft = isDocumentRevisionInDraft(workspaceState?.document?.status);
     // TO DO: Find another way with BE to chechk if doc is LHRT
     isDocumentLHRT = workspaceState?.document?.document.documentType.documentTypeAcronym === "LHRT-";
@@ -57,11 +57,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @helpers
     React.useEffect(() => {
-      if (lhrStepState.stepLHRs) {
-        setDisplayToLHRs();
-      } else {
-        setDisplayToMPI();
+      if (!lhrStepState.stepLHRs) {
+        return;
       }
+      setDisplayToLHRs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -163,17 +162,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrStepState.getLHRsDocument(documentRevision.documentId);
     };
 
-    const setDisplayToMPI = () => {
-      if (isOutput && stepLHRs) {
-        lhrStepState.setIsHovering(true);
-        formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
-        formState?.getInputState(name)?.setRender();
-      }
-    };
-
     const setDisplayToLHRs = () => {
       if (isOutput && stepLHRs) {
-        lhrStepState.setIsHovering(false);
         if (!lhrStepState.stepLHRs) { return; }
         FBAutocompleteAsyncStore.add(
           FBAutocompleteAsyncOption.mpiDocuments,
@@ -222,7 +212,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     useObserver(() => {
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
-      isHovering = lhrStepState.isHovering;
       materials = lhrStepState?.materials;
       equipment = lhrStepState?.equipment;
     });
@@ -231,15 +220,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     return Component({
       ...(props as T),
       filterOptions,
+      startMpi,
+      setDisplayToLHRs,
+      openLHRs,
       name,
       isOutput,
-      startMpi,
       lhrStepState,
       stepLHRs,
-      setDisplayToMPI,
-      setDisplayToLHRs,
-      isHovering,
-      openLHRs,
       isDraft,
       disabled,
       loading,
@@ -250,6 +237,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       equipment,
       isDocumentLHRT,
       stepIndex,
+      lhrBuildTypeExist,
     }); };
 
   Comp.displayName = "withFBLHRStep";
