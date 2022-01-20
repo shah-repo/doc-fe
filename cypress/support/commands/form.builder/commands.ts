@@ -313,11 +313,11 @@ Cypress.Commands.add("fbVerifyElementClassByLabel", (params: { label: string; el
 });
 
 Cypress.Commands.add("fbVerifyElementContainText", (params: { name: string; label: string; text: string }) => {
-  cy.contains(params.label).parentsUntil("li").find(`[name^=\"${params.name}\"]`).should("contain", params.text);
+  cy.contains(params.label).parentsUntil("li").find(`[name^="${params.name}"]`).should("contain", params.text);
 });
 
 Cypress.Commands.add("fbVerifyElementNotContainText", (params: { name: string; label: string; text: string }) => {
-  cy.contains(params.label).parentsUntil("li").find(`[name^=\"${params.name}\"]`).should("not.contain", params.text);
+  cy.contains(params.label).parentsUntil("li").find(`[name^="${params.name}"]`).should("not.contain", params.text);
 });
 
 Cypress.Commands.add("fbEnterNameData", (params: { name: string; data: string }) => {
