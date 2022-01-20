@@ -212,6 +212,14 @@ context("Equipment maintenance test", () => {
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
                   },
+                  {
+                    index: 5,
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kycyk1n8",
+                    uniqueSchemaItem: true,
+                  },
                 ],
               },
 
@@ -437,82 +445,39 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    context("Approve and release equipment maintenance document", () => {
-      it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Submit for approval'", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Verify equipment status is 'In Review'", () => {
+      cy.arVerifyStatus({ status: "In Review" });
+    });
+
+    it("Approve AR", () => {
+      cy.ebApprove();
+    });
+
+    it("Check equipment status is 'Released'", () => {
+      cy.arVerifyStatus({ status: "Released" });
+    });
+
+    context("Navig to released 'Equipment maintenance document'", () => {
+      it("Navig to equipment", () => {
+        cy.navigToEquipment();
       });
 
-      it("Click Create a Approval Request button", () => {
-        cy.cmpClickCreateApprovalRequest();
-      });
-
-      it("Enter title AR title: ", () => {
-        cy.arEnterApprovalRequestTitle({ title: "Approval request for equipment document" });
-      });
-
-      it("Enter description 'AR from New form template for approval request'", () => {
-        cy.arEnterApprovalRequestDescription({ description: "equipment document AR" });
-      });
-
-      it("Add created document revision", () => {
-        cy.arClickAddDocument();
-        cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
-        cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-        cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-        cy.arClickAddBtnOnAddDocumentsDialog();
-      });
-
-      // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
-
-      it("Click Create Approval Request", () => {
-        cy.arClickCreateApprovalRequestAfterCompletingForm();
-      });
-
-      it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email, noWait: true });
-      });
-
-      it("Save AR", () => {
-        cy.arSaveApiCall();
-      });
-
-      it("Click 'Send To Review'", () => {
-        cy.arClickSendToReview();
-      });
-
-      it("Verify AR status is 'In Review'", () => {
-        cy.arVerifyStatus({ status: "In Review" });
-      });
-
-      it("Approve AR", () => {
-        cy.arApproveAR();
-      });
-
-      it("Check approval request status is 'Approved'", () => {
-        cy.arVerifyStatus({ status: "Approved" });
-      });
-
-      it("Close AR", () => {
-        cy.arCloseAR();
-      });
-
-      it("Check approval request status is 'Closed'", () => {
-        cy.arVerifyStatus({ status: "Closed" });
-      });
-
-      context("Navig to released 'Equipment maintenance document'", () => {
-        it("Navig to equipment", () => {
-          cy.navigToEquipment();
+      it("Select 'Equipment maintenance document'", () => {
+        SystemRequirement("REQ-2870");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
+          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
         });
-
-        it("Select 'Equipment maintenance document'", () => {
-          SystemRequirement("REQ-2870");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-            cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -884,6 +849,10 @@ context("Equipment maintenance test", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Save changes", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Change PM section", () => {
       cy.xpath("//div[contains(@data-cy, \"instructions\") and  starts-with(@data-cy, \"pm\")]/../div[2]")
         .type("UPDATED ").wait(500);
@@ -896,12 +865,17 @@ context("Equipment maintenance test", () => {
       cy.unClick();
     });
 
-    it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Approve and release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it("Click 'Submit for approval'", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve AR", () => {
+      cy.ebApprove();
     });
 
     context("Verify Maintenance History is changed to History", () => {
@@ -933,15 +907,15 @@ context("Equipment maintenance test", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Save changes", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add Section", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Section" });
       cy.fbEnterNameValue({ name: "label", value: "New section" });
       cy.fbAddNewFieldButton();
-    });
-
-    it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release", () => {
@@ -977,8 +951,17 @@ context("Equipment maintenance test", () => {
         cy.drClickUpgradeForm();
       });
 
-      it("Approve and release", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      it("Add approver", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click 'Submit for approval'", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve AR", () => {
+        cy.ebApprove();
         cy.url().then((url: any) => {
           equipmentURL = url;
         });

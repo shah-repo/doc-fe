@@ -1293,7 +1293,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 27 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {
@@ -1316,9 +1316,10 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Groups' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "groups", length: 8 });
+      cy.fbVerifyAutocompleteElementLength({ el: "groups", length: 9 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Async Tasks");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
@@ -1347,9 +1348,10 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Official Groups' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "official-groups", length: 8 });
+      cy.fbVerifyAutocompleteElementLength({ el: "official-groups", length: 9 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Async Tasks");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
