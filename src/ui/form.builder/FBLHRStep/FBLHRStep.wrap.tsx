@@ -19,7 +19,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     index,
     loading,
     stepLHRs,
-    isHovering,
     disabled,
     ownerOfStartMPIAction,
     ownerOfCompleteMPIAction,
@@ -58,11 +57,10 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @helpers
     React.useEffect(() => {
-      if (lhrStepState.stepLHRs) {
-        setDisplayToLHRs();
-      } else {
-        setDisplayToMPI();
+      if (!lhrStepState.stepLHRs) {
+        return;
       }
+      setDisplayToLHRs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -164,17 +162,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       lhrStepState.getLHRsDocument(documentRevision.documentId);
     };
 
-    const setDisplayToMPI = () => {
-      if (isOutput && stepLHRs) {
-        lhrStepState.setIsHovering(true);
-        formState?.setFieldValue(name, schemaItem?.editorConfig?.value);
-        formState?.getInputState(name)?.setRender();
-      }
-    };
-
     const setDisplayToLHRs = () => {
       if (isOutput && stepLHRs) {
-        lhrStepState.setIsHovering(false);
         if (!lhrStepState.stepLHRs) { return; }
         FBAutocompleteAsyncStore.add(
           FBAutocompleteAsyncOption.mpiDocuments,
@@ -223,7 +212,6 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     useObserver(() => {
       loading = lhrStepState?.startMpiApi?.loading || lhrStepState?.getDocumentApi?.loading;
       stepLHRs = lhrStepState.stepLHRs;
-      isHovering = lhrStepState.isHovering;
       materials = lhrStepState?.materials;
       equipment = lhrStepState?.equipment;
     });
@@ -233,14 +221,12 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       ...(props as T),
       filterOptions,
       startMpi,
-      setDisplayToMPI,
       setDisplayToLHRs,
       openLHRs,
       name,
       isOutput,
       lhrStepState,
       stepLHRs,
-      isHovering,
       isDraft,
       disabled,
       loading,

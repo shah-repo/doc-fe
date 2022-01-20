@@ -15,13 +15,11 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   startMpi,
   openLHRs,
   setDisplayToLHRs,
-  setDisplayToMPI,
   name,
   isOutput,
   lhrStepState,
   loading,
   stepLHRs,
-  isHovering,
   isDraft,
   disabled,
   ownerOfStartMPIAction,
@@ -45,8 +43,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         alignItems="flex-start"
       >
         <Box
-          onMouseEnter={setDisplayToMPI}
-          onMouseLeave={setDisplayToLHRs}
           flexGrow={1}
           onClick={() => {
             if (isOutput && stepLHRs) {
@@ -62,7 +58,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             autosave
             withState
             shouldReloadOnInit
-            withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
+            withoutPrefixRoot={Boolean(stepLHRs)}
             disabled={isOutput || !isDraft}
             {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
@@ -73,9 +69,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           />
         </Box>
         <FBButton
-          label="form.builder.start.mpi"
-          disabled={!isOutput || loading || Boolean(stepLHRs) || !lhrBuildTypeExist || disabled}
-          onClick={startMpi}
+          disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
+          label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
+          onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
           {...{ loading }}
         />
       </Box>
