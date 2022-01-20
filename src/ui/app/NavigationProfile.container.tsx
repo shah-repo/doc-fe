@@ -44,8 +44,6 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
   const initialColor = useSelector(authSelectors.getAvatarInitialColor);
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
-  // eslint-disable-next-line no-console
-  console.log("initialColor::", initialColor);
 
   /** Handles click on the Switch Company button. */
   const handleSwitchCompany = () => {
