@@ -44,7 +44,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { bookmarkState } = FB.useStores();
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
-    schema = _formState?.schema;
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
@@ -53,12 +52,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
 
     // Bridging to new context
-    SM.reaction(
-      () => _formState?.schema,
-      (schema: FBSchemaProps[] | undefined) => {
-        workspaceState?.setSchema(schema);
-      }
-    );
 
     SM.reaction(
       () => workspaceState?.schema,
@@ -182,7 +175,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       snackbarState,
       autosave,
       includeProcedureDiff,
-      _formState,
     });
   };
 

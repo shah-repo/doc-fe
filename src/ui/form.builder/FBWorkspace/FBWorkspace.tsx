@@ -5,7 +5,6 @@ import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBS
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
-  _formState,
   workspaceState,
   children,
   portalContainer,
@@ -34,16 +33,12 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       {includeProcedureDiff && (
                         <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
                       )}
-                      <Observer>
-                        {() => (
-                          <FBWorkspaceMemo
-                            {...{ includeTransport, workspaceState }}
-                            isStarter={workspaceState?.isStarter}
-                            mode={workspaceState?.mode}
-                            schema={_formState?.schema}
-                          />
-                        )}
-                      </Observer>
+                      <FBWorkspaceMemo
+                        {...{ includeTransport, workspaceState }}
+                        isStarter={workspaceState?.isStarter}
+                        mode={workspaceState?.mode}
+                        schema={workspaceState?.schema}
+                      />
                     </Portal>
                   )}
                   {!isPortal && (
@@ -51,16 +46,12 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                       {includeProcedureDiff && (
                         <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
                       )}
-                      <Observer>
-                        {() => (
-                          <FBWorkspaceMemo
-                            {...{ schema, includeTransport, workspaceState }}
-                            isStarter={workspaceState?.isStarter}
-                            mode={workspaceState?.mode}
-                            schema={_formState?.schema}
-                          />
-                        )}
-                      </Observer>
+                      <FBWorkspaceMemo
+                        {...{ schema, includeTransport, workspaceState }}
+                        isStarter={workspaceState?.isStarter}
+                        mode={workspaceState?.mode}
+                        schema={workspaceState?.schema}
+                      />
                     </>
                   )}
                 </>

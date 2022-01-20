@@ -111,7 +111,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                 />
               </Grid>
               {_formState?.mode !== "none" && (
-                <Box mt={5} paddingY={2} paddingX={5} height="calc(100vh - 220px)" overflow="auto">
+                <Box mt={5} paddingY={2} paddingX={5} height="calc(100vh - 70px)" overflow="auto">
                   <FBWorkspace
                     isPortal={false}
                     document={{
