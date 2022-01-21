@@ -323,6 +323,7 @@ export interface PageDetails {
 }
 
 export interface DocumentType {
+  hiddenForCreationForUsersWithoutTagsFormatted?: string;
   id: string;
   documentTypeAcronym: string;
   documentTypeName: string;

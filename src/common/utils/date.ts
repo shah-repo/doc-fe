@@ -36,3 +36,5 @@ export enum MomentFormats {
   Time = "hh:mm:ss A",
   AsyncTasksDefaultDateTimeFormatter = "YYYY-MM-DDTHH:mm:ss",
 }
+
+export const toValidateIfDate = (value) => moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
