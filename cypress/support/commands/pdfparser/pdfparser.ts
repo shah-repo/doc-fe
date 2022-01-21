@@ -1,7 +1,16 @@
-const fs = require("fs");
+
+import { readFileSync } from "fs";
+
 const pdf = require("pdf-parse");
 
-const pdfparser = ({ path, file }) => pdf(fs.readFileSync(path + "/" + file));
-module.exports = {
-  pdfparser,
-};
+export async function pdfparser({ path, file }) {
+  let returnValue = null;
+  const parser = await pdf(readFileSync(path + "/" + file))
+    .catch(function(error) {
+      cy.log(error);
+    });
+  if (parser) {
+    returnValue = parser;
+  }
+  return returnValue;
+}

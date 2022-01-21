@@ -140,19 +140,27 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
 });
 
 Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
-  cy.getCookies().then((cookies) => cy.task("unzipFile", {
-    path: params.directory,
-    cookies,
-    file: params.fileName,
-  }));
+  cy.getCookies().then((cookies) => {
+    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+      cy.task("unzipFile", {
+        path: params.directory,
+        cookies,
+        file: params.fileName,
+      });
+    });
+  });
 });
 
 Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
-  cy.getCookies().then((cookies) => cy.task("pdfparseFile", {
-    path: params.directory,
-    cookies,
-    file: params.fileName,
-  }));
+  cy.getCookies().then((cookies) => {
+    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+      cy.task("pdfparseFile", {
+        path: params.directory,
+        cookies,
+        file: params.fileName,
+      });
+    });
+  });
 });
 
 

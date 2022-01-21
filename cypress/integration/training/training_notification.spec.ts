@@ -4,6 +4,7 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -21,14 +22,15 @@ let cdata;
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
+let expId;
 
 const downloaddDirectory  = "cypress/downloads";
 
 const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
+let dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-const currentDate = moment().tz("America/Los_Angeles").format("YYYY MMM D");
-const currentDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Training notification test", () => {
   before(() => {
@@ -483,6 +485,7 @@ context("Training notification test", () => {
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.closeAllAlertMessages();
     });
 
     it("Click create document", () => {
@@ -765,6 +768,8 @@ context("Training notification test", () => {
 
   context("Verify email for pending training notification", () => {
     it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         wait_time_sec: 5,
@@ -773,11 +778,11 @@ context("Training notification test", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
-      cy.wait(20000);
+      cy.wait(30000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL: (https:\/\/.*)\s+/);
+          expect(emails[0].body.text).match(/Download URL: (https?:\/\/.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         }
         else {
@@ -803,8 +808,14 @@ context("Training notification test", () => {
       });
     });
 
-    it("Extract download link from gmail", () => {
-      expect(downloadUrl).contains("https://");
+    it("Extract pdf download url from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      expId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
+        .as("short_url");
+      cy.get("@short_url").then((response) => {
+        downloadUrl = response.body.url;
+      });
     });
 
     it("Download zip file containing pending training notification", () => {
@@ -819,7 +830,8 @@ context("Training notification test", () => {
 
     it("Verify file size of the downloaded zip file", () => {
       const zipfile = downloaddDirectory + "/" + downloadFile;
-      cy.readFile(`${zipfile}`).should("have.length.within", 500, 75500);
+      cy.readFile(`${zipfile}`).should("exist");
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -839,22 +851,25 @@ context("Training notification test", () => {
         cdata = content;
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`${USERS[1].name} TRAINED ON ${releasedFormId} REV 2`, "gi");
+
+        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`${trnId} ${USERS[1].name} trained on.*\\n${releasedFormId}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`TRN ID\\n${trnId}`, "gi");
-        expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 2`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1].name} \\| Trainee \\| Not Completed`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         expect(cdata.text).match(/Page 1 of 1/);
-        tmpRegex = new RegExp(`Print: ${currentDate}`, "gi");
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
       });
     });
@@ -915,8 +930,10 @@ context("Training notification test", () => {
     });
   });
 
-  context("Verify email for pending training notification", () => {
+  context("Verify email for completed training notification", () => {
     it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         wait_time_sec: 5,
@@ -925,11 +942,11 @@ context("Training notification test", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
-      cy.wait(20000);
+      cy.wait(30000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL: (https:\/\/.*)\s+/);
+          expect(emails[0].body.text).match(/Download URL: (https?:\/\/.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         }
         else {
@@ -955,13 +972,20 @@ context("Training notification test", () => {
       });
     });
 
-    it("Extract download link from gmail", () => {
-      expect(downloadUrl).contains("https://");
+    it("Extract download url from gmail", () => {
+      tmpRegex = new RegExp( "https?://", "gi" );
+      expect(downloadUrl).match(tmpRegex);
+      expect(downloadUrl).contains("exported_file_download");
+      expId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
+        .as("short_url");
+      cy.get("@short_url").then((response) => {
+        downloadUrl = response.body.url;
+      });
     });
 
-    it("Download zip file containing pending training notification", () => {
+    it("Download zip file containing completed training notification", () => {
       downloadFile  =  trnId + ".zip";
-
       cy.downloadFile({
         url: downloadUrl,
         directory: downloaddDirectory,
@@ -983,7 +1007,7 @@ context("Training notification test", () => {
         });
     });
 
-    it("Verify PDF file for pending training notification", () => {
+    it("Verify PDF file for completed training notification", () => {
       cy.pdfparseFile(
         {
           directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
@@ -992,22 +1016,25 @@ context("Training notification test", () => {
         cdata = content;
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`${USERS[1].name} TRAINED ON ${releasedFormId} REV 1`, "gi");
+
+        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`${trnId} ${USERS[1].name} trained on.*\\n${releasedFormId}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`TRN ID\\n${trnId}`, "gi");
-        expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 1`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1].name} \\| Trainee \\| ${currentDate1}`, "gi");
+
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1].name} \\| Trainee \\| ${docRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         expect(cdata.text).match(/Page 1 of 1/);
-        tmpRegex = new RegExp(`Print: ${currentDate}`, "gi");
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
       });
     });
