@@ -372,7 +372,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {
@@ -420,7 +420,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {

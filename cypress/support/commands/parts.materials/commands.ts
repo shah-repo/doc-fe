@@ -23,7 +23,6 @@ declare global {
       pmAddFreeTextEquipment(params: {equipment: string}): Chainable<Subject>;
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
-      pmAddApproverOnApprovalsList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
@@ -126,15 +125,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
-  });
-});
-
-Cypress.Commands.add("pmAddApproverOnApprovalsList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
-  cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
+  cy.get("[data-cy^=\"fb-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
   });

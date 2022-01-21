@@ -178,10 +178,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drEnterDocumentDescription({ description: "New Document description" });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {

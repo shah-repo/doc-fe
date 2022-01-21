@@ -146,8 +146,8 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     if (params.recordForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
     }
+    cy.progressBarShouldAppear();
   });
-  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
