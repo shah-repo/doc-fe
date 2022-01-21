@@ -21,6 +21,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   loading,
   stepLHRs,
   isDraft,
+  isPendingChange,
   disabled,
   ownerOfStartMPIAction,
   ownerOfCompleteMPIAction,
@@ -58,8 +59,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             autosave
             withState
             shouldReloadOnInit
+            disabled={isOutput || !(isDraft || isPendingChange)}
             withoutPrefixRoot={Boolean(stepLHRs)}
-            disabled={isOutput || !isDraft}
             {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
               background: Colors.light_red,
