@@ -72,6 +72,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
 
           mpiProcedureState?.setPartsSelected(partsSelected);
           id && dispatch(documentRevisionsActions.loadAudit(id));
+          id && dispatch(documentRevisionsActions.reload(id));
         }
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +84,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         (data?: DocumentRevision) => {
           if (!data) { return; }
           id && dispatch(documentRevisionsActions.loadAudit(id));
+          id && dispatch(documentRevisionsActions.reload(id));
         }
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
