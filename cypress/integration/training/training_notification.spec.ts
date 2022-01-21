@@ -636,8 +636,8 @@ context("Training notification test", () => {
 
   context("Open assigned Training", () => {
     it("Click on the Training notification", () => {
-      cy.contains(`${releasedFormId}`).then(($el) => {
-        const link = $el.attr("href");
+      cy.contains(`${releasedFormId}`).then((el) => {
+        const link = (el as any).attr("href");
         cy.visit(CONFIG.FE_URL + link);
       });
     });
@@ -718,8 +718,8 @@ context("Training notification test", () => {
     });
 
     it("Click training notification and check doc with Approved status", () => {
-      cy.contains(`${releasedFormId}`).then(($el) => {
-        const link = $el.attr("href");
+      cy.contains(`${releasedFormId}`).then((el) => {
+        const link = (el as any).attr("href");
         cy.visit(CONFIG.FE_URL + link);
       });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
@@ -772,8 +772,11 @@ context("Training notification test", () => {
       dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
@@ -814,7 +817,7 @@ context("Training notification test", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
         .as("short_url");
       cy.get("@short_url").then((response) => {
-        downloadUrl = response.body.url;
+        downloadUrl = (response as any).body.url;
       });
     });
 
@@ -864,7 +867,8 @@ context("Training notification test", () => {
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1].name} \\| Trainee \\| Not Completed`, "gi");
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1]
+          .name} \\| Trainee \\| Not Completed`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         expect(cdata.text).match(/Page 1 of 1/);
@@ -936,8 +940,11 @@ context("Training notification test", () => {
       dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
@@ -980,7 +987,7 @@ context("Training notification test", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
         .as("short_url");
       cy.get("@short_url").then((response) => {
-        downloadUrl = response.body.url;
+        downloadUrl = (response as any).body.url;
       });
     });
 
@@ -1029,7 +1036,8 @@ context("Training notification test", () => {
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1].name} \\| Trainee \\| ${docRelDate}`, "gi");
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
+          .name} \\| Trainee \\| ${docRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         expect(cdata.text).match(/Page 1 of 1/);

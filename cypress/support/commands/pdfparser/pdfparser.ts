@@ -1,7 +1,6 @@
 
 import { readFileSync } from "fs";
-
-const pdf = require("pdf-parse");
+import pdf from "pdf-parse";
 
 export async function pdfparser({ path, file }) {
   let returnValue = null;
