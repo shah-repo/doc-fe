@@ -12,6 +12,7 @@ import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
+import { ReactComponent as TrainingIcon } from "../../../assets/images/training.svg";
 import {
   RecentDocTypeGroups,
   RecentItems,
@@ -43,6 +44,8 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
         return <FMIcon height={30} width={30} />;
       case RecentDocTypeGroups.SUPPLIER:
         return <SOPIcon height={30} width={30} />;
+      case RecentDocTypeGroups.TRAINING_CURRICULUM:
+        return <TrainingIcon height={30} width={30} />;
       default:
         return <SOPIcon height={30} width={30} />;
     }
