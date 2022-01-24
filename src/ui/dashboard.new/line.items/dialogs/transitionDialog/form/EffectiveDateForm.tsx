@@ -4,6 +4,7 @@ import moment from "moment";
 import * as React from "react";
 import { ReactComponent as ScheduleIcon } from "../../../../../../assets/images/ScheduleIcon.svg";
 import {
+  getFormattedDateString,
   getStartOfDayDateString,
   MomentFormats,
   TIME_ZONE,
@@ -56,7 +57,7 @@ const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFi
         <Grid zeroMinWidth item={true}>
           <ScheduleIcon className={classes.ScheduleIcon} />
           <Text translation="transition.action.close.date.description" />
-          {moment(values.effectiveDate).tz(TIME_ZONE).format(MomentFormats.MonthDateYear)}
+          {getFormattedDateString(values.effectiveDate, MomentFormats.MonthDateYear)}
         </Grid>
         <Grid zeroMinWidth item={true}>
           <SubmitButton
