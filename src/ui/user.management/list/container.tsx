@@ -88,4 +88,5 @@ const UserManagementListContainer: React.FunctionComponent = () => {
   );
 };
 
-export default UserManagementListContainer;
+// export default UserManagementListContainer;
+UserManagementListContainer;
