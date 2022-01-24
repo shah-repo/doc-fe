@@ -46,20 +46,16 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openOverdue, setOpenOverdue] = React.useState(true);
-  // const [openDue, setOpenDue] = React.useState(false);
+  const [emailSuccess, setEmailSuccess] = React.useState(false);
 
   const handleClickOverdue = () => {
     setOpenOverdue(!openOverdue);
   };
 
-  // const handleClickDue = () => {
-  //   setOpenDue(!openDue);
-  // };
-
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
     setTimeout(() => {
-      handleApiAlertModelClose();
+      handleEmailSuccess();
     }, 2000);
   };
 
@@ -67,6 +63,9 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
     setApiAlertModel(false);
   };
 
+  const handleEmailSuccess = () => {
+    setEmailSuccess(true);
+  };
   const intl = useIntl();
   const sendDueTrainingEmail = useActionCreator(emailAllActions.sendDueTrainingEmail);
 
@@ -194,19 +193,16 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     {` `}({pendingTrainees?.length || 0})
                   </Typography>
                 </Grid>
-                {/* <Grid item>
+                { emailSuccess ? <Grid item>
                   <Typography
                     variant="h2"
                     component="h2"
-                    className={classes.lastseentitle}
+                    className={classes.lastsenttext}
                     noWrap
                   >
-                    <Text translation="email.last.sent" />:{" "}
-                    {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
+                    <Text translation="just.now" />
                   </Typography>
-                </Grid> */}
-
-                <Grid item>
+                </Grid> : <Grid item>
                   <Button
                     onClick={() => handleSendEmail()}
                     className={classes.emailbutton}
@@ -222,6 +218,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     {apiAlertModelbody}
                   </Modal>
                 </Grid>
+                }
               </Grid>
             }
           />

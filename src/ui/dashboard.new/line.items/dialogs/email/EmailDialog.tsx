@@ -57,6 +57,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openPending, setOpenPending] = React.useState(true);
   const [openApproved, setOpenApproved] = React.useState(false);
+  const [emailSuccess, setEmailSuccess] = React.useState(false);
 
   const handleClickPending = () => {
     setOpenPending(!openPending);
@@ -69,12 +70,16 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   const handleApiAlertModelOpen = () => {
     setApiAlertModel(true);
     setTimeout(() => {
-      handleEmailModelClose();
+      handleEmailSuccess();
     }, 2000);
   };
 
   const handleApiAlertModelClose = () => {
     setApiAlertModel(false);
+  };
+
+  const handleEmailSuccess = () => {
+    setEmailSuccess(true);
   };
 
   const intl = useIntl();
@@ -197,33 +202,33 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     {` `}({pendingApprovers?.length})
                   </Typography>
                 </Grid>
-                {/* <Grid item>
+                { emailSuccess ? <Grid item>
                   <Typography
                     variant="h2"
                     component="h2"
-                    className={classes.lastseentitle}
+                    className={classes.lastsenttext}
                     noWrap
                   >
-                    <Text translation="email.last.sent" />:{" "}
-                    {getFormattedDateString(timestamp, MomentFormats.BriefDate)}
+                    <Text translation="just.now" />
                   </Typography>
-                </Grid> */}
-                <Grid item>
-                  <Button
-                    onClick={() => handleSendEmail()}
-                    className={classes.emailbutton}
-                  >
-                    <Text translation="email.button.title" />
-                  </Button>
-                  <Modal
-                    open={apiAlertModelOpen}
-                    onClose={handleApiAlertModelClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                  >
-                    {apiAlertModelbody}
-                  </Modal>
-                </Grid>
+                </Grid> :
+                  <Grid item>
+                    <Button
+                      onClick={() => handleSendEmail()}
+                      className={classes.emailbutton}
+                    >
+                      <Text translation="email.button.title" />
+                    </Button>
+                    <Modal
+                      open={apiAlertModelOpen}
+                      onClose={handleApiAlertModelClose}
+                      aria-labelledby="simple-modal-title"
+                      aria-describedby="simple-modal-description"
+                    >
+                      {apiAlertModelbody}
+                    </Modal>
+                  </Grid>
+                }
               </Grid>
             }
           />
