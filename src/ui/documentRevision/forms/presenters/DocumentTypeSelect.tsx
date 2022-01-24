@@ -10,7 +10,7 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FB, FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
+import { FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
@@ -39,7 +39,6 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 }) => {
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
   const { _formState, _documentRevisionFormState } = SM.useStores() || {};
-  const { workspaceState } = FB.useStores();
   const formik = useFormikContext();
 
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
@@ -127,7 +126,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
-        workspaceState?.getSchema(),
+        _formState?.schema,
       ); }
     }
     if (!isCreateMaintenance) {

@@ -192,7 +192,10 @@ DocumentRevisionFormContainerProps
   } else if (pmForm) {
     mode = "form";
   }
-  _formState?.setMode(mode);
+
+  useEffect(() => {
+    _formState?.setMode(mode);
+  }, [mode]);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;

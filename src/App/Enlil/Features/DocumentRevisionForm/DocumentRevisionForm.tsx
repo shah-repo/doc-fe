@@ -52,16 +52,17 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         />
       }
       footer={<DocumentRevisionFooter />}
-      rightSidebar={(
-        <Observer>
-          {() => (
-            <>
-              {_documentRevisionFormState?.documentRevision && <DocumentRevisionSidebar />}
-            </>
-          )}
-        </Observer>
-
-      )}
+      {...(_formState?.mode === "form" || _formState?.mode === "formDesign") && {
+        rightSidebar: (
+          <Observer>
+            {() => (
+              <>
+                {_documentRevisionFormState?.documentRevision && <DocumentRevisionSidebar />}
+              </>
+            )}
+          </Observer>
+        ),
+      }}
     >
       <SMTemplate header={<DocumentRevisionFormHeader />}>
         <Observer>
