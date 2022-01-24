@@ -1110,7 +1110,7 @@
   "header.welcome.back": "Welcome Back",
   "training.on": "Training on",
   "assigned.users.count": "Assigned to {count} users.",
-  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
+  "approved.and.pending.count": "{approved} have approved and {pending} are pending.",
   "training.email.title": "Email Confirmation",
   "training.users.count": "{status} for {count} users.",
   "training.email.success.message": "EMAIL SENT TO ALL",

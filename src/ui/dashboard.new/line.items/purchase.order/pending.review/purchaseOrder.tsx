@@ -302,8 +302,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         <Text
                           translation="approved.and.pending.count"
                           values={{
-                            approved: size(docRevPendingApprovals),
-                            pending: size(docRevApprovedApprovals),
+                            approved: size(docRevApprovedApprovals),
+                            pending: size(docRevPendingApprovals),
                           }}
                         />
                       </Typography>
