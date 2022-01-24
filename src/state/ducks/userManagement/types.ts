@@ -32,6 +32,7 @@ export interface LoadCompanyGroup {
   parents: Group[];
   joinedParents: Group[];
   type?: GroupType;
+  inEdit?: boolean | string;
 }
 
 export interface EmployeeGroupsEditRequestBody {

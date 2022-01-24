@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { IotService } from "../../../common/utils/iot/mqttClient";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
-import { CR_TABLE_NAME } from "../../change.request/list/container";
+import { CR_TABLE_NAME } from "../../change.request/kendo/container";
 import useMqttSubscription from "../../hooks/useMqttSubscription";
 
 const ChangeRequestListSockets: React.FunctionComponent = () => {
