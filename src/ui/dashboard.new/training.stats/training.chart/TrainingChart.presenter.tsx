@@ -78,7 +78,6 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         let text = "";
         let subText = "";
         let color = "";
-        let data = {};
         if (tabValue === 0) {
           text = "" + totalCount;
           subText = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
@@ -104,11 +103,9 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           DoughnutChartOptions.series.data[1].itemStyle.color =
           Colors.gray;
         }
-        data = DoughnutChartOptions.series.data;
         DoughnutChartOptions.title.text = text;
         DoughnutChartOptions.title.subtext = subText;
         DoughnutChartOptions.title.subtextStyle.color = color;
-        DoughnutChartOptions.series.data = data as any[];
         DoughnutChartOptions.series.max = totalCount + 0.001;
         myChart?.setOption(DoughnutChartOptions);
       },
