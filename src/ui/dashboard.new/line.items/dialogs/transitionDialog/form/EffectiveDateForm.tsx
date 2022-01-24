@@ -5,6 +5,7 @@ import * as React from "react";
 import { ReactComponent as ScheduleIcon } from "../../../../../../assets/images/ScheduleIcon.svg";
 import {
   getStartOfDayDateString,
+  MomentFormats,
   TIME_ZONE,
 } from "../../../../../../common/utils/date";
 import { AsyncState } from "../../../../../../state/types";
@@ -23,43 +24,52 @@ interface EffectiveDateFormProps extends WithStyles<typeof styles> {
   asyncState: AsyncState;
   cancel: () => void;
 }
-const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps> = ({
+interface DateFieldProps {
+  values: {
+    effectiveDate: Date;
+  };
+}
+const EffectiveDateForm: React.FunctionComponent<EffectiveDateFormProps & DateFieldProps> = ({
   cancel,
   classes,
   asyncState,
-}) => (
-  <Form className={classes.form}>
-    <FormMessage asyncState={asyncState} />
-    <Box className={classes.pendingBox}>
-      <DatePickerStaticField
-        name="effectiveDate"
-        minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
-        value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
-        validate={validator(required)}
-      />
-    </Box>
-    <FormProgress asyncState={asyncState} />
-    <Grid
-      container
-      className={classes.closeLaterDiscription}
-      justify="space-between"
-    >
-      <Grid zeroMinWidth item={true}>
-        <ScheduleIcon className={classes.ScheduleIcon} />
-        <Text translation="transition.action.close.date.discription" />
-        {"10/28/2021"}
-      </Grid>
-      <Grid zeroMinWidth item={true}>
-        <SubmitButton
-          id="confirmEffectiveDate"
-          asyncState={asyncState}
-          label="transition.action.confirm.close.later"
-          fullWidth={false}
-          className={classes.closeLaterSubmitButton}
+  ...fieldProps
+}) => {
+  const { values } = fieldProps;
+  return (
+    <Form className={classes.form}>
+      <FormMessage asyncState={asyncState} />
+      <Box className={classes.pendingBox}>
+        <DatePickerStaticField
+          name="effectiveDate"
+          minDate={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          value={getStartOfDayDateString(moment().tz(TIME_ZONE).toISOString())}
+          validate={validator(required)}
         />
+      </Box>
+      <FormProgress asyncState={asyncState} />
+      <Grid
+        container
+        className={classes.closeLaterDiscription}
+        justify="space-between"
+      >
+        <Grid zeroMinWidth item={true}>
+          <ScheduleIcon className={classes.ScheduleIcon} />
+          <Text translation="transition.action.close.date.description" />
+          {moment(values.effectiveDate).tz(TIME_ZONE).format(MomentFormats.MonthDateYear)}
+        </Grid>
+        <Grid zeroMinWidth item={true}>
+          <SubmitButton
+            id="confirmEffectiveDate"
+            asyncState={asyncState}
+            label="transition.action.confirm.close.later"
+            fullWidth={false}
+            className={classes.closeLaterSubmitButton}
+          />
+        </Grid>
       </Grid>
-    </Grid>
-  </Form>
-);
+    </Form>
+  );
+};
 
 export default withStyles(styles)(EffectiveDateForm);
