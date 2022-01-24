@@ -16,9 +16,8 @@ export interface DocumentInfo {
 }
 
 export type DocumentRevisionFormProps =
-& Pick<SMProviderProps, "_formState">
+& Pick<SMProviderProps, "_formState" | "_documentRevisionFormState">
 & SMTabsHOCProps
-& DocumentRevisionFormHOCProps
 & Pick<BoxProps, "onScroll">
 & {
   onTabChange?: (event: any, newValue: number) => void;
@@ -82,6 +81,3 @@ export interface DocumentRevisionFormStateProps {
   loading: boolean;
   id?: string;
 }
-
-export type DocumentRevisionFormHOCProps =
-& Pick<SMProviderProps, "_documentRevisionFormState">;

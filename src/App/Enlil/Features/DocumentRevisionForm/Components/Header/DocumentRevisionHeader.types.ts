@@ -1,8 +1,8 @@
-import { DocumentRevisionFormHOCProps, DocumentRevisionFormProps } from "../../../../..";
+import { DocumentRevisionFormProps, SMProviderProps } from "../../../../..";
 
 export type DocumentRevisionHeaderProps =
 & Pick<DocumentRevisionFormProps, "bannerPortal" | "shouldShowUpgrade">
-& DocumentRevisionFormHOCProps
+& Pick<SMProviderProps, "_documentRevisionFormState">
 & {
   documentRevisionId?: string;
 };
