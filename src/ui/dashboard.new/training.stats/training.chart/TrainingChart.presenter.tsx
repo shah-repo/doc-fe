@@ -147,15 +147,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.setOption(DoughnutChartOptions);
       });
       myChart.on("mouseout", (e: any) => {
-        DoughnutChartOptions.series.data.map((data, index) => {
-          if (index === 1) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.latest_yellow_varient;
-          } else if (index === 0) {
-            DoughnutChartOptions.series.data[index].itemStyle.color =
-              Colors.latest_red_varient;
-          }
-        });
+        DoughnutChartOptions.series.data[0].itemStyle.color =
+        Colors.latest_red_varient;
+        DoughnutChartOptions.series.data[1].itemStyle.color =
+        Colors.latest_yellow_varient;
         updateChart(tabValue);
       });
       updateChart(tabValue);
