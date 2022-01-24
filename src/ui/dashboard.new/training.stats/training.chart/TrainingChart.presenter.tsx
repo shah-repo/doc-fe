@@ -78,19 +78,33 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         let text = "";
         let subText = "";
         let color = "";
+        let data = {};
         if (tabValue === 0) {
           text = "" + totalCount;
           subText = TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING;
           color = Colors.gray;
+          DoughnutChartOptions.series.data[0].itemStyle.color =
+          Colors.latest_red_varient;
+          DoughnutChartOptions.series.data[1].itemStyle.color =
+          Colors.latest_yellow_varient;
         } else if (tabValue === 2) {
           text = "" + dueInSeven;
           subText = TrainingStatusChartLabelTypes.DUE;
           color = Colors.latest_yellow_varient;
+          DoughnutChartOptions.series.data[0].itemStyle.color =
+          Colors.gray;
+          DoughnutChartOptions.series.data[1].itemStyle.color =
+          Colors.latest_yellow_varient;
         } else if (tabValue === 1) {
           text = "" + overdue;
           subText = TrainingStatusChartLabelTypes.OVERDUE;
           color = Colors.latest_red_varient;
+          DoughnutChartOptions.series.data[0].itemStyle.color =
+          Colors.latest_red_varient;
+          DoughnutChartOptions.series.data[1].itemStyle.color =
+          Colors.gray;
         }
+        data = DoughnutChartOptions.series.data;
         DoughnutChartOptions.title.text = text;
         DoughnutChartOptions.title.subtext = subText;
         DoughnutChartOptions.title.subtextStyle.color = color;
@@ -109,6 +123,20 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.resize();
       };
       myChart.on("mouseover", (evt: any) => {
+        DoughnutChartOptions.series.data.map((data, index) => {
+          if (index !== evt?.dataIndex) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.gray;
+          }
+          if (index === evt?.dataIndex && index === 0 ) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_red_varient;
+          }
+          if (index === evt?.dataIndex && index === 1 ) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_yellow_varient;
+          }
+        });
         DoughnutChartOptions.title.text = evt?.data?.value;
         DoughnutChartOptions.title.subtext = evt?.data?.name;
         if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
@@ -122,6 +150,15 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.setOption(DoughnutChartOptions);
       });
       myChart.on("mouseout", (e: any) => {
+        DoughnutChartOptions.series.data.map((data, index) => {
+          if (index === 1) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_yellow_varient;
+          } else if (index === 0) {
+            DoughnutChartOptions.series.data[index].itemStyle.color =
+              Colors.latest_red_varient;
+          }
+        });
         updateChart(tabValue);
       });
       updateChart(tabValue);
