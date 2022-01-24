@@ -37,6 +37,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   // MARK: @constructor
 
   // MARK: @computed
+  @computed public get id(): string | undefined {
+    return this.documentRevision?.id;
+  }
+
   @computed public get documentTypeId(): string {
     return this.documentType?.id || "";
   }

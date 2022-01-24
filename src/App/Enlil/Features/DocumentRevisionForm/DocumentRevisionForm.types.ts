@@ -70,9 +70,9 @@ export interface DocumentRevisionFormStateProps {
   releasedDocRev?: DocumentRevision;
   docInfo: DocumentInfo;
   forceRender?: any;
-  docId: string | undefined;
-  documentId: string | undefined;
-  documentType: Partial<DocumentType> | undefined;
+  docId?: string;
+  documentId?: string;
+  documentType?: Partial<DocumentType>;
   documentTypeAcronym: string;
   documentTypeId: string;
   scrollOffset: any;
@@ -80,6 +80,7 @@ export interface DocumentRevisionFormStateProps {
   formAutosave: SMFormStateProps["autosave"];
   disabledAction: boolean;
   loading: boolean;
+  id?: string;
 }
 
 export type DocumentRevisionFormHOCProps =

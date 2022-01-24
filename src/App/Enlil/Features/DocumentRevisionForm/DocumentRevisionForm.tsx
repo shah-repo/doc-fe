@@ -52,7 +52,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         />
       }
       footer={<DocumentRevisionFooter />}
-      {...(_formState?.mode === "form" || _formState?.mode === "formDesign") && {
+      {..._documentRevisionFormState?.id && {
         rightSidebar: (
           <Observer>
             {() => (
