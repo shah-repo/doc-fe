@@ -115,7 +115,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           <IconButton
             aria-label="close"
             className={classes.closemodel}
-            onClick={handleEmailModelClose}
+            onClick={handleApiAlertModelClose}
           >
             <ModelCloseIcon />
           </IconButton>
