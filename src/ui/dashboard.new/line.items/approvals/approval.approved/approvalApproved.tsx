@@ -18,7 +18,6 @@ import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/c
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
@@ -30,10 +29,12 @@ import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../common/DocIcon";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./approvalApproved.styles";
 
@@ -46,6 +47,7 @@ interface Props {
   arStatus: string;
   timestamp: string;
   docRevs: {
+    docTypeGroup: DocTypeGroups;
     documentRevisionId: string;
     documentId: string;
     docId: string;
@@ -325,7 +327,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
-                <PendingReviewItemIcon />
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
               <ListItemText
                 id={prItem.docId}

@@ -10,22 +10,24 @@ import { size } from "lodash";
 import React from "react";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../../assets/images/in_review_status_white.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../../common/DocIcon";
 import { HoverStyleChip } from "../../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
+import { DocTypeGroups } from "../../../common/types";
 import EmailModal from "../../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
 interface Props {
   id: string;
+  docTypeGroup: DocTypeGroups;
   docDocumentId: string;
   docId: string;
   docRevId?: string;
@@ -43,6 +45,7 @@ interface Props {
 }
 const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   id,
+  docTypeGroup,
   docDocumentId,
   docId,
   docRevId,
@@ -90,9 +93,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         button
         onMouseEnter={onMouseHoverListItem}
       >
-        <ListItemIcon>
-          <PendingReviewIcon height={30} width={30} />
-        </ListItemIcon>
+        <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
         <ListItemText
           primary={
             <>
@@ -256,11 +257,19 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={
+                  <Typography>
+                    <Text translation="common.pin" />
+                  </Typography>
+                }
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -271,11 +280,18 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         )}
         {pinned && (
           <div className={classes.actionIcons}>
-            <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-              <PinSolidIcon
-                onClick={handleUnPinClick}
-              />
-            </StyleTooltip></div>
+            <StyleTooltip
+              title={
+                <Typography>
+                  <Text translation="common.unpin" />
+                </Typography>
+              }
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          </div>
         )}
       </StyledListItem>
       <Modal
