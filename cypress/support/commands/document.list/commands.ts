@@ -108,7 +108,7 @@ Cypress.Commands.add("dlClearFilters", () => {
 });
 
 Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType }) => {
-  cy.get("div[aria-rowindex]").should("have.length", params.numberOfDoc);
+  cy.get("tr.k-master-row").should("have.length", params.numberOfDoc);
 });
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
@@ -246,7 +246,11 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
 });
 
 Cypress.Commands.add("dlVerifyDocCounter", (params: {docCounterNumber: integerType}) => {
-  cy.get("[data-cy=numberOfDocuments]").should("have.text", params.docCounterNumber);
+  cy.get("div.k-pager-info").then(($el) => {
+    const elementText = $el.text();
+    const numberOfItems = elementText[elementText.length - 7];
+    expect(parseInt(numberOfItems, 10)).to.be.equal(params.docCounterNumber);
+  });
 });
 
 Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string}) => {

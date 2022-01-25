@@ -48,6 +48,7 @@ declare global {
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
     }
@@ -125,6 +126,10 @@ Cypress.Commands.add("progressBarShouldAppear", () => {
 
 Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
+  cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("listLoadingElementShouldExist", () => {
