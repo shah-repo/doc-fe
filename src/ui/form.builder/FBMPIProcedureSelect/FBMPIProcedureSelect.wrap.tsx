@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import React from "react";
@@ -98,11 +98,23 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       const calDate = FB.calculateDateByType(option, "calibration" );
 
       return <Grid container>
-        <Grid item xs={3} >
-          {option.document.docId}
+        <Grid item xs={2} >
+          <Typography noWrap>
+            {`${option.document.docId} -`}
+          </Typography>
         </Grid>
-        <Grid item xs={9} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
+        <Grid item >
+          <Typography noWrap>
+            {`rev ${option.displayRevision}`}
+          </Typography>
+        </Grid>
+        <Grid item xs={5} >
+          <Typography noWrap>
+            {`- ${option.name}`}
+          </Typography>
+        </Grid>
+        <Grid item xs={4} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>} <br/>
           {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
