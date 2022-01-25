@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
@@ -23,6 +24,7 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
@@ -88,6 +90,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   pendingEmailSentAt,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -120,6 +123,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
@@ -128,9 +132,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setEmailModelopen(false);
   };
   const onClose = () => {
-    // eslint-disable-next-line no-console
-    console.log("CLOSED", lastEmailSent);
     handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
 
   return (
@@ -427,7 +432,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={pendingApprovers}
           setLastEmailSent={setLastEmailSent}
           approvedApprovers={approvedApprovers}
@@ -439,3 +444,4 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default PendingReviewPresenter;
+

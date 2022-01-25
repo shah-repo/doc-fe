@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
@@ -21,6 +22,7 @@ import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
@@ -135,6 +137,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -161,15 +164,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
   const onClose = () => {
-    // eslint-disable-next-line no-console
-    console.log("lastEmailSent ::", lastEmailSent);
     handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -543,7 +548,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={docRevPendingApprovals}
           setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
@@ -555,3 +560,4 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default PurchaseOrderItemPresenter;
+
