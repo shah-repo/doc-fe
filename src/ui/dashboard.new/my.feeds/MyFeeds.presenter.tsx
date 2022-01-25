@@ -292,6 +292,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>
@@ -369,6 +370,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>
@@ -559,6 +561,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>

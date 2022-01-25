@@ -4,7 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
@@ -36,6 +36,7 @@ interface Props {
   docRevPendingApprovals: any[];
   docRevApprovedApprovals: any[];
   hoverItemId: string;
+  pendingEmailSentAt: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
   pinLineItem: (id: string) => void;
@@ -56,10 +57,12 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);
@@ -82,6 +85,11 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    // eslint-disable-next-line no-console
+    console.log("CLOSED", lastEmailSent);
+    handleEmailModelClose();
   };
   return (
     <>
@@ -280,7 +288,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
@@ -288,7 +296,9 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
           id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={docRevPendingApprovals}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>

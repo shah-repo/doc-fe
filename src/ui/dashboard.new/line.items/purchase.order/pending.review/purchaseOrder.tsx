@@ -72,6 +72,7 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
+  pendingEmailSentAt: string;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
@@ -99,6 +100,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
   const PoItems: any = [
@@ -136,6 +138,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
@@ -162,6 +165,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    // eslint-disable-next-line no-console
+    console.log("lastEmailSent ::", lastEmailSent);
+    handleEmailModelClose();
   };
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -529,7 +537,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
@@ -537,7 +545,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={docRevPendingApprovals}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>

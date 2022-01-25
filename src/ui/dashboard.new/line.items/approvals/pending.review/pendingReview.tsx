@@ -69,6 +69,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  pendingEmailSentAt: string;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -84,11 +85,13 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -120,7 +123,14 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
+    // eslint-disable-next-line no-console
+    console.log("CLOSED", lastEmailSent);
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    // eslint-disable-next-line no-console
+    console.log("CLOSED", lastEmailSent);
+    handleEmailModelClose();
   };
 
   return (
@@ -411,15 +421,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        onClose={onClose}
       >
         <EmailModal
           id={id}
           handleEmailModelClose={handleEmailModelClose}
           pendingApprovers={pendingApprovers}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={approvedApprovers}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>

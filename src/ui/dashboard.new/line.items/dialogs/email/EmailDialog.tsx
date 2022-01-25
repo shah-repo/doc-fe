@@ -29,6 +29,7 @@ import { StyledListItem } from "./StyledListItem";
 interface EmailModalProps {
   id: string;
   handleEmailModelClose: () => void;
+  setLastEmailSent: (flag: boolean) => void;
   pendingApprovers: {
     userName: string;
     employeeId: string;
@@ -36,7 +37,7 @@ interface EmailModalProps {
     userInitialColor: string;
     approvalStatus: string;
   }[];
-  timestamp?: string;
+  pendingEmailSentAt?: string;
   approvedApprovers: {
     userName: string;
     employeeId: string;
@@ -49,8 +50,9 @@ interface EmailModalProps {
 const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   id,
   handleEmailModelClose,
+  setLastEmailSent,
   pendingApprovers,
-  timestamp,
+  pendingEmailSentAt,
   approvedApprovers,
 }) => {
   const classes = styles();
@@ -95,6 +97,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   });
 
   const handleSendEmail = () => {
+    setLastEmailSent(true);
     async.start(sendEmail, id, async);
   };
 
@@ -190,7 +193,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <Grid container justify="space-between" alignItems="center">
+              <Grid container direction="row" justify="space-between" alignItems="center">
                 <Grid item>
                   <Typography
                     variant="h2"
@@ -213,6 +216,15 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                   </Typography>
                 </Grid> :
                   <Grid item>
+                    {pendingEmailSentAt !== null && <Typography
+                      variant="inherit"
+                      component="inherit"
+                      className={classes.lastsenttext}
+                      noWrap
+                    >
+                      <Text translation="email.last.sent" /> :
+                      {getFormattedDateString(pendingEmailSentAt, MomentFormats.MonthDateYearAlt)}
+                    </Typography>}
                     <Button
                       onClick={() => handleSendEmail()}
                       className={classes.emailbutton}
