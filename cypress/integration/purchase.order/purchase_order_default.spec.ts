@@ -460,7 +460,7 @@ context("PO test with default enlil form", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "10" });
+          cy.poEnterQuantityOrdered({ quantity: "2" });
         });
 
         it("Select Units", () => {
@@ -478,7 +478,7 @@ context("PO test with default enlil form", () => {
 
         it("Enter number of Units", () => {
           SystemRequirement("REQ-1250");
-          cy.poNumberOfUnits({ number: "2" });
+          cy.poNumberOfUnits({ number: "10" });
         });
 
         it("Add Required Date", () => {
@@ -493,6 +493,90 @@ context("PO test with default enlil form", () => {
 
         it("Click on 'Add' inside PO dialog box", () => {
           cy.poAddPOButtonClick();
+        });
+      });
+
+      context("Edit the added item and Verify values", () => {
+        it("Click on added item", () => {
+          cy.get("[data-cy=\"poItems\"]").eq(0).arrowClick();
+        });
+
+        it("Edit Unit Price", () => {
+          cy.get("[name=\"unitPrice\"]").clear();
+          cy.poNumberOfUnits({ number: "9.56" });
+        });
+
+        it("Close dialog box", () => {
+          cy.get("[data-cy=\"dialog-close\"]").arrowClick();
+        });
+
+        it("Click Save button", () => {
+          cy.poSaveDocument();
+        });
+
+        it("Verify unit price and sum of item", () => {
+          cy.get("[data-cy=\"poItems\"]").eq(0).find("[data-cy=\"unitPrice\"]").should("have.text", "$10.00");
+          cy.get("[data-cy=\"poSum\"]").eq(0).should("have.text", "$20.00");
+        });
+
+        it("Verify Sub Total, Tax & Total", () => {
+          cy.poCheckAmount({ number: "$20.00" });
+          cy.poCheckTax({ number: "1.85" });
+          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$21.85");
+        });
+      });
+
+      context("Add one more item and verify values", () => {
+        it("Click on 'Add item' button to add item", () => {
+          cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        });
+
+        it("Click on 'Service' select option", () => {
+          cy.poSelectOption({ optionName: "service" });
+        });
+
+        it("Enter ServiceID", () => {
+          cy.poEnterServiceID({ serviceId: "SRV123" });
+        });
+
+        it("Enter Description", () => {
+          cy.poEnterDescription({ description: "Description for SRV123" });
+        });
+
+        it("Enter Quantity Ordered", () => {
+          cy.poEnterQuantityOrdered({ quantity: "6" });
+        });
+
+        it("Select Units", () => {
+          cy.poSelectUnits();
+        });
+
+        it("Select GL code", () => {
+          cy.poSelectGLCode();
+        });
+
+        it("Enter number of Units", () => {
+          cy.poNumberOfUnits({ number: "5" });
+        });
+
+        it("Add Required Date", () => {
+          cy.get("[name=\"date\"]").next().find("button").arrowClick();
+          cy.get(".MuiPickersDay-daySelected").arrowClick();
+        });
+
+        it("Click on 'Add' inside PO dialog box", () => {
+          cy.poAddPOButtonClick();
+        });
+
+        it("Verify unit price and sum of item", () => {
+          cy.get("[data-cy=\"poItems\"]").eq(1).find("[data-cy=\"unitPrice\"]").should("have.text", "$5.00");
+          cy.get("[data-cy=\"poSum\"]").eq(1).should("have.text", "$30.00");
+        });
+
+        it("Verify Sub Total, Tax & Total", () => {
+          cy.poCheckAmount({ number: "$50.00" });
+          cy.poCheckTax({ number: "1.85" });
+          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.85");
         });
       });
 
