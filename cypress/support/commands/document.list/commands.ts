@@ -257,7 +257,7 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
-    cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div").arrowClick();
+    cy.get(`[data-grid-row-index="0"]`).arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

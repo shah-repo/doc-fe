@@ -782,8 +782,7 @@ context("Repeat Training with Training Curriculum", () => {
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[2].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[2].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 });
