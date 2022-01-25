@@ -182,7 +182,7 @@ context("Autocomplete 'Official Groups' test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 9);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 10);
         });
       });
     });

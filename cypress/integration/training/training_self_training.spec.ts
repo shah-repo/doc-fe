@@ -674,9 +674,8 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is working", () => {
-      cy.get("button>span").contains("Send To Email").arrowClick();
       const currentDate = new Date();
-      cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
+      cy.get("button>span").contains("Send To Email").arrowClick();
       cy.imapVerifyLastEmailContains(
         {
           userEmail: USERS[1].email,

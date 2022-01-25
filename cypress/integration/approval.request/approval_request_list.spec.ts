@@ -340,7 +340,7 @@ context("Approval request landing page test", () => {
       });
 
       it("Navigate to Dashboard", () => {
-        cy.navigToNewDashboard();
+        cy.navigToDashboard();
       });
 
       it("Navigate back to approval request list", () => {

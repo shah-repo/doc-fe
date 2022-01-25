@@ -96,7 +96,7 @@ export const styles = makeStyles(() =>
     },
     truncateText: {
       textOverflow: "ellipsis",
-      overflow: "auto",
+      overflow: "hidden",
     },
     grayDot: {
       width: "4px",

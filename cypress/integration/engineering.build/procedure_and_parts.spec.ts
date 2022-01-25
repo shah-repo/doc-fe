@@ -195,8 +195,16 @@ context("Procedure and parts flow test", () => {
             outputDocumentTypes: [{
               id: equipmentDocumentType[0].id,
             }],
-            schema: [{
-            }],
+            schema: [
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kycyk1n8",
+                uniqueSchemaItem: true,
+                index: 0,
+              },
+            ],
           },
 
         },
@@ -582,63 +590,26 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
-      context("Create Approval Request for equipment document", () => {
-        it("Navigate to approval request list", () => {
-          cy.navigToApprovalRequestList();
+      context("Approve document", () => {
+        it("Add approver", () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.listLoadingElementShouldNotExist();
         });
 
-        it("Click Create a Approval Request button", () => {
-          cy.arClickCreateAnAR();
+        it("Click 'Submit for approval'", () => {
+          cy.pmSubmitForApproval();
         });
 
-        it("Enter title AR title: ", () => {
-          cy.arEnterApprovalRequestTitle({ title: "Approval request for equipment document" });
-        });
-
-        it("Enter description 'AR from New form template for approval request'", () => {
-          cy.arEnterApprovalRequestDescription({ description: "equipment document AR" });
-        });
-
-        it("Add created document revision", () => {
-          cy.arClickAddDocument();
-          cy.arChoseSpecificProposedDocument({ name: "EQ-00001" });
-          cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-          cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-          cy.arClickAddBtnOnAddDocumentsDialog();
-        });
-
-        // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
-
-        it("Click Create Approval Request", () => {
-          cy.arClickCreateApprovalRequestAfterCompletingForm();
-        });
-
-        it("Add first approver to approval request on approver list", () => {
-          cy.arAddApproverOnApproverList({ approver: USERS[1].email });
-        });
-
-        it("Click 'Send To Review'", () => {
-          cy.arClickSendToReview();
-        });
-
-        it("Verify AR status is 'In Review'", () => {
+        it("Verify equipment status is 'In Review'", () => {
           cy.arVerifyStatus({ status: "In Review" });
         });
 
         it("Approve AR", () => {
-          cy.arApproveAR();
+          cy.ebApprove();
         });
 
-        it("Check approval request status is 'Approved'", () => {
-          cy.arVerifyStatus({ status: "Approved" });
-        });
-
-        it("Close AR", () => {
-          cy.arCloseAR();
-        });
-
-        it("Check approval request status is 'Closed'", () => {
-          cy.arVerifyStatus({ status: "Closed" });
+        it("Check equipment status is 'Released'", () => {
+          cy.arVerifyStatus({ status: "Released" });
         });
       });
     });
@@ -730,7 +701,6 @@ context("Procedure and parts flow test", () => {
       });
     });
   });
-
 
   context("Create EB from created FORM document", () => {
     it("Click create new document from FORM", () => {

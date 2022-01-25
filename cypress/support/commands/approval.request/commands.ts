@@ -30,7 +30,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
-      arApproveARNew(): Chainable<Subject>;
+      arApproveARFromDashboard(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
@@ -45,7 +45,6 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
-      arCheckDashboardPONotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
       arInReview(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
@@ -81,10 +80,6 @@ Cypress.Commands.add("arClickCreateAnAR", () => {
 
 Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
   cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
-});
-
-Cypress.Commands.add("arCheckDashboardPONotificationExistance", (params: {shouldExist: boolean}) => {
-  cy.get("[data-cy=\"pendingActionsPO\"]").should(params.shouldExist ? "exist" : "not.exist");
 });
 
 Cypress.Commands.add("arPatchAR", (params: {
@@ -396,7 +391,7 @@ Cypress.Commands.add("arApproveAR", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("arApproveARNew", () => {
+Cypress.Commands.add("arApproveARFromDashboard", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
