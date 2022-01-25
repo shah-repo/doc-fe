@@ -214,7 +214,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                   >
                     <Text translation="just.now" />
                   </Typography>
-                </Grid> :
+                </Grid> : <>
                   <Grid item>
                     {pendingEmailSentAt !== null && <Typography
                       variant="inherit"
@@ -222,9 +222,9 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                       className={classes.lastsenttext}
                       noWrap
                     >
-                      <Text translation="email.last.sent" /> :
-                      {getFormattedDateString(pendingEmailSentAt, MomentFormats.MonthDateYearAlt)}
-                    </Typography>}
+                      <Text translation="email.last.sent" />:{" "}
+                      {getFormattedDateString(pendingEmailSentAt, MomentFormats.BriefDate)}
+                    </Typography>}</Grid> <Grid item>
                     <Button
                       onClick={() => handleSendEmail()}
                       className={classes.emailbutton}
@@ -239,7 +239,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     >
                       {apiAlertModelbody}
                     </Modal>
-                  </Grid>
+                  </Grid></>
                 }
               </Grid>
             }
