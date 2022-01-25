@@ -368,7 +368,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
-                {getDocIcon(prItem.docTypeGroup)}
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
               <ListItemText
                 id={prItem.docId}

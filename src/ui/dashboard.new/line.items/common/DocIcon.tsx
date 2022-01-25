@@ -9,21 +9,21 @@ import {
   DocTypeGroups,
 } from "./types";
 
-export const getDocIcon = (docTypeGroup: DocTypeGroups) => {
+export const getDocIcon = (docTypeGroup: DocTypeGroups, height = 30, width = 30 ) => {
   switch (docTypeGroup) {
     case DocTypeGroups.CHANGE_REQUEST:
-      return <ApprovalIcon height={30} width={30} />;
+      return <ApprovalIcon height={height} width={width} />;
     case DocTypeGroups.PO:
-      return <POIcon height={30} width={30} />;
+      return <POIcon height={height} width={width} />;
     case DocTypeGroups.PI:
-      return <MPIIcon height={30} width={30} />;
+      return <MPIIcon height={height} width={width} />;
     case DocTypeGroups.FORM:
-      return <FMIcon height={30} width={30} />;
+      return <FMIcon height={height} width={width} />;
     case DocTypeGroups.SUPPLIER:
-      return <SOPIcon height={30} width={30} />;
+      return <SOPIcon height={height} width={width} />;
     case DocTypeGroups.TRAINING_CURRICULUM:
-      return <TrainingIcon height={30} width={30} />;
+      return <TrainingIcon height={height} width={width} />;
     default:
-      return <SOPIcon height={30} width={30} />;
+      return <SOPIcon height={height} width={width} />;
   }
 };
