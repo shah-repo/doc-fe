@@ -127,8 +127,6 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
-    // eslint-disable-next-line no-console
-    console.log("CLOSED", lastEmailSent);
     setEmailModelopen(false);
   };
   const onClose = () => {
@@ -444,4 +442,3 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default PendingReviewPresenter;
-

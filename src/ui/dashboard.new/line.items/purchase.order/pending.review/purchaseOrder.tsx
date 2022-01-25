@@ -560,4 +560,3 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
 };
 
 export default PurchaseOrderItemPresenter;
-
