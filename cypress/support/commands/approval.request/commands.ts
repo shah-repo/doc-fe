@@ -447,9 +447,10 @@ Cypress.Commands.add("arRejectComfirmationARNew", () => {
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARPreview,
+    CyRoutes.SessionDetails,
     CyRoutes.GetRequiredApproversDocRev,
     CyRoutes.GetAutocompleteOptions], () => {
-    cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+    cy.get("tr.k-master-row").first().arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
