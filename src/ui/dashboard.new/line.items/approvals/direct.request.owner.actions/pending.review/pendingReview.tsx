@@ -8,12 +8,20 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { ReactComponent as FMIcon } from "../../../../../../assets/images/FM.svg";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../../assets/images/in_review_status_white.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../../assets/images/pending_approval.svg";
+import { ReactComponent as MPIIcon } from "../../../../../../assets/images/MPI.svg";
+import { ReactComponent as ApprovalIcon } from "../../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
+import { ReactComponent as POIcon } from "../../../../../../assets/images/PO.svg";
+import { ReactComponent as SOPIcon } from "../../../../../../assets/images/SOP.svg";
+import { ReactComponent as TrainingIcon } from "../../../../../../assets/images/training.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
+import {
+  RecentDocTypeGroups,
+} from "../../../../../../state/ducks/dashboard.new/recents/types";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
@@ -26,6 +34,7 @@ import { styles } from "./pendingReview.styles";
 
 interface Props {
   id: string;
+  docTypeGroup: RecentDocTypeGroups;
   docDocumentId: string;
   docId: string;
   docRevId?: string;
@@ -43,6 +52,7 @@ interface Props {
 }
 const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   id,
+  docTypeGroup,
   docDocumentId,
   docId,
   docRevId,
@@ -83,6 +93,24 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
   };
+  const getIcon = (docTypeGroup: RecentDocTypeGroups) => {
+    switch (docTypeGroup) {
+      case RecentDocTypeGroups.CHANGE_REQUEST:
+        return <ApprovalIcon height={30} width={30} />;
+      case RecentDocTypeGroups.PO:
+        return <POIcon height={30} width={30} />;
+      case RecentDocTypeGroups.PI:
+        return <MPIIcon height={30} width={30} />;
+      case RecentDocTypeGroups.FORM:
+        return <FMIcon height={30} width={30} />;
+      case RecentDocTypeGroups.SUPPLIER:
+        return <SOPIcon height={30} width={30} />;
+      case RecentDocTypeGroups.TRAINING_CURRICULUM:
+        return <TrainingIcon height={30} width={30} />;
+      default:
+        return <SOPIcon height={30} width={30} />;
+    }
+  };
   return (
     <>
       <StyledListItem
@@ -91,7 +119,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         onMouseEnter={onMouseHoverListItem}
       >
         <ListItemIcon>
-          <PendingReviewIcon height={30} width={30} />
+          <>{getIcon(docTypeGroup)}</>
         </ListItemIcon>
         <ListItemText
           primary={
