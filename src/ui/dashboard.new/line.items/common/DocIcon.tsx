@@ -6,22 +6,22 @@ import { ReactComponent as POIcon } from "../../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../../assets/images/SOP.svg";
 import { ReactComponent as TrainingIcon } from "../../../../assets/images/training.svg";
 import {
-  RecentDocTypeGroups,
-} from "../../../../state/ducks/dashboard.new/recents/types";
+  DocTypeGroups,
+} from "./types";
 
-export const getDocIcon = (docTypeGroup: RecentDocTypeGroups) => {
+export const getDocIcon = (docTypeGroup: DocTypeGroups) => {
   switch (docTypeGroup) {
-    case RecentDocTypeGroups.CHANGE_REQUEST:
+    case DocTypeGroups.CHANGE_REQUEST:
       return <ApprovalIcon height={30} width={30} />;
-    case RecentDocTypeGroups.PO:
+    case DocTypeGroups.PO:
       return <POIcon height={30} width={30} />;
-    case RecentDocTypeGroups.PI:
+    case DocTypeGroups.PI:
       return <MPIIcon height={30} width={30} />;
-    case RecentDocTypeGroups.FORM:
+    case DocTypeGroups.FORM:
       return <FMIcon height={30} width={30} />;
-    case RecentDocTypeGroups.SUPPLIER:
+    case DocTypeGroups.SUPPLIER:
       return <SOPIcon height={30} width={30} />;
-    case RecentDocTypeGroups.TRAINING_CURRICULUM:
+    case DocTypeGroups.TRAINING_CURRICULUM:
       return <TrainingIcon height={30} width={30} />;
     default:
       return <SOPIcon height={30} width={30} />;

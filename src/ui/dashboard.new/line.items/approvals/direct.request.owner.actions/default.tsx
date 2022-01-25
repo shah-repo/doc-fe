@@ -10,9 +10,6 @@ import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/image
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
-import {
-  RecentDocTypeGroups,
-} from "../../../../../state/ducks/dashboard.new/recents/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
@@ -21,11 +18,14 @@ import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import {
+  DocTypeGroups,
+} from "../../common/types";
 import { styles } from "./default.styles";
 
 interface Props {
   id: string;
-  docTypeGroup: RecentDocTypeGroups;
+  docTypeGroup: DocTypeGroups;
   docDocumentId: string;
   docId: string;
   docRevId?: string;
@@ -81,7 +81,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
           onMouseEnter={onMouseHoverListItem}
         >
           <ListItemIcon>
-            <>{getDocIcon(docTypeGroup)}</>
+            {getDocIcon(docTypeGroup)}
           </ListItemIcon>
           <ListItemText
             primary={
