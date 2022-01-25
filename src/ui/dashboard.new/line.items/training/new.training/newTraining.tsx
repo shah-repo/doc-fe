@@ -91,7 +91,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const pendingTraineesNames = pendingTrainees
     .map((trainee) => trainee.userName)
-    .join(",");
+    .join(", ");
   const setTrainingSearchCriteria = () => {
     const searchCriteria: TableSearchQueryType = {
       isCompleted: false,
