@@ -273,7 +273,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         {pendingApprovers !== undefined
                           ? pendingApprovers
                             .map((approver) => approver.userName)
-                            .join(",")
+                            .join(", ")
                           : ""}
                       </Typography>
                     </Link>

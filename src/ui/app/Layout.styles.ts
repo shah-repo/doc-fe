@@ -6,11 +6,9 @@ export default (theme: Theme) =>
   createStyles({
     newContent: {
       "position": "absolute",
-      "left": DRAWER_WIDTH + 50,
-      "top": 90,
+      "left": DRAWER_WIDTH,
       "bottom": 0,
-      "right": 50,
-      "borderRadius": 12,
+      "right": 0,
       "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
@@ -24,7 +22,7 @@ export default (theme: Theme) =>
       "bottom": 0,
       "right": 0,
       "overflow": "auto",
-      "backgroundColor": Colors.alabaster,
+      "backgroundColor": Colors.white,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",

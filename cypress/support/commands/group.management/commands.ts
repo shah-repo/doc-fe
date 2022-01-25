@@ -368,10 +368,9 @@ Cypress.Commands.add("grpAPICreateNewGroup", (params: {
 });
 
 Cypress.Commands.add("grpCheckForNumberOfGroupMembersDisplayed", () => {
-  const hasFifteenOrLess = new RegExp("^([^,]+,){0,14}[^,]+$");
-  const hasZero = new RegExp("");
+  const hasFifteenOrLess = new RegExp("^([^,]+,){0,14}[^,]+$|^(?![\s\S])");
   cy.get(".ReactVirtualized__Table__row > div:nth-child(2) > div > div > div").each((element) => {
-    expect(element.text()).to.match(hasFifteenOrLess || hasZero);
+    expect(element.text()).to.match(hasFifteenOrLess);
   });
 });
 

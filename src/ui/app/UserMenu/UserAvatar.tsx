@@ -6,29 +6,31 @@ import Colors from "../../layout/theme/utils/colors";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
-    avatar: {
+    avatar: ({ initialColor }) => ({
       width: "48px",
       height: "48px",
       borderRadius: "50%",
       margin: theme.spacing(0, 1, 0, 1),
       fontSize: "18px",
       color: Colors.white,
-      background: Colors.aqua_blue,
+      background: `${initialColor}`,
       fontWeight: 600,
       fontFamily: "Sora",
-    },
+    }),
   }));
 
 interface Props {
   avatar: Nullable<string>;
+  initialColor: string;
   name: string;
 }
 
 const UserAvatar: React.FunctionComponent<Props> = ({
   avatar,
+  initialColor,
   name,
 }) => {
-  const classes = styles();
+  const classes = styles({ initialColor });
 
   return (
     <Box>

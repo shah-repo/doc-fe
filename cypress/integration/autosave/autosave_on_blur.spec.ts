@@ -1074,7 +1074,11 @@ context("Autosave on blur", () => {
 
     it("Select Approval and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        });
         cy.unClick();
       });
     });
