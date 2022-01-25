@@ -53,7 +53,7 @@ export const styles = makeStyles((theme: Theme) =>
       /* AR AIR Color */
       color: Colors.latest_red_varient,
     },
-    lastseentitle: {
+    lastsenttext: {
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "normal",
