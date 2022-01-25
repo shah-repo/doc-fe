@@ -380,6 +380,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <DirectApprovalActionItem
                     key={index}
                     id={pendingAction.id}
+                    docTypeGroup={pendingAction.docTypeGroup}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}
