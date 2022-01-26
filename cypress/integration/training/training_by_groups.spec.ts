@@ -795,18 +795,9 @@ context("Training by Groups", () => {
     });
 
     it("Filter created training on Training Curriculums page", () => {
-      cy.trLandingPageDocId({ docId: "TC-00001" });
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TC-00001");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(2).invoke("text")
-        .should("contain", USERS[1].name);
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).invoke("text")
-        .should("contain", "Released");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Group1, Group2");
-      cy.dlClearFilters();
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title")
+        .and("contain", USERS[1].name).and("contain", "Released").and("contain", "Group1, Group2");
     });
   });
 
@@ -834,6 +825,12 @@ context("Training by Groups", () => {
 
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetRequiredApprovers,
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("change training title", () => {
@@ -851,9 +848,7 @@ context("Training by Groups", () => {
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers,
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -864,24 +859,17 @@ context("Training by Groups", () => {
       cy.navigToTrainingCurriculums();
       cy.reload();
       cy.trLandingPageOwner({ owner: USERS[2].name });
-      cy.trLandingPageDocId({ docId: "TC-00001" });
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TC-00001");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title update");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(2).invoke("text")
-        .should("contain", USERS[2].name);
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).invoke("text")
-        .should("contain", "Draft");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Group2, Group3");
-      cy.dlClearFilters();
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
+        .and("contain", USERS[2].name).and("contain", "Draft").and("contain", "Group2, Group3");
+      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Open training and released it", () => {
     it("open training", () => {
-      cy.get(".ReactVirtualized__Table__row").eq(0).arrowClick();
+      cy.get(`[data-grid-row-index="0"]`).arrowClick();
     });
 
     it("Select Approver", () => {
@@ -905,19 +893,10 @@ context("Training by Groups", () => {
   context("Verify updation of training data after released training", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
-      cy.trLandingPageDocId({ docId: "TC-00001" });
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
       cy.trLandingPageOwner({ owner: USERS[2].name });
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TC-00001");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title update");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(2).invoke("text")
-        .should("contain", USERS[2].name);
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3).invoke("text")
-        .should("contain", "Released");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Group2, Group3");
-      cy.dlClearFilters();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
+        .and("contain", USERS[2].name).and("contain", "Released").and("contain", "Group2, Group3");
     });
   });
 });

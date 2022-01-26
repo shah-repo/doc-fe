@@ -857,24 +857,21 @@ context("Forced training flow", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[1].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[3].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[3].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
     });
   });
 });
