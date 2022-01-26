@@ -152,9 +152,9 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 });
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
-  cy.get("#clearFilter").arrowClick();
+  cy.dlClearFilters();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+    cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
 
 });
@@ -790,7 +790,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
 
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {
@@ -805,7 +805,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
 
 Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {

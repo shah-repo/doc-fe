@@ -506,10 +506,8 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier12");
+        cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
+        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier12" });
         cy.dlClearFilters();
       });
 
@@ -585,10 +583,8 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier12");
+        cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
+        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier12" });
       });
 
       it("Open released PO", () => {
@@ -658,10 +654,8 @@ context("Purchase Supplier Update1", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier123");
+        cy.dlVerifyFilterByDocId({ docId: "PO-00001" });
+        cy.poListVerifyFilterBySupplier({ supplier: "New Supplier123" });
         cy.dlClearFilters();
       });
 

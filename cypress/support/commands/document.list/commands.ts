@@ -77,9 +77,7 @@ Cypress.Commands.add("dlVerifyEffectiveDateIsPresentOnFirstDocument", () => {
 });
 
 Cypress.Commands.add("dlClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("button[data-cy=clearFilter]").arrowClick();
-  });
+  cy.get("button[data-cy=clearFilter]").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
 });
 

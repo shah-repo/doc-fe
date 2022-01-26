@@ -30,7 +30,9 @@ Cypress.Commands.add("supCreateNew", () => {
 });
 
 Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+  cy.get("tr.k-master-row").contains(params.item).arrowClick();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
