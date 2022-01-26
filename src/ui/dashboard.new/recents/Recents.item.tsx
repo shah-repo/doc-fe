@@ -12,12 +12,15 @@ import { ReactComponent as MPIIcon } from "../../../assets/images/MPI.svg";
 import { ReactComponent as ApprovalIcon } from "../../../assets/images/pending_approval.svg";
 import { ReactComponent as POIcon } from "../../../assets/images/PO.svg";
 import { ReactComponent as SOPIcon } from "../../../assets/images/SOP.svg";
+import { ReactComponent as TrainingIcon } from "../../../assets/images/training.svg";
 import {
-  RecentDocTypeGroups,
   RecentItems,
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import {
+  DocTypeGroups,
+} from "../line.items/common/types";
 import { styles } from "./Recents.item.styles";
 import { StyledListItem } from "./StyledListItem";
 
@@ -31,18 +34,20 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   accessedAt,
 }) => {
   const classes = styles();
-  const getIcon = (docTypeGroup: RecentDocTypeGroups) => {
+  const getIcon = (docTypeGroup: DocTypeGroups) => {
     switch (docTypeGroup) {
-      case RecentDocTypeGroups.CHANGE_REQUEST:
+      case DocTypeGroups.CHANGE_REQUEST:
         return <ApprovalIcon height={30} width={30} />;
-      case RecentDocTypeGroups.PO:
+      case DocTypeGroups.PO:
         return <POIcon height={30} width={30} />;
-      case RecentDocTypeGroups.PI:
+      case DocTypeGroups.PI:
         return <MPIIcon height={30} width={30} />;
-      case RecentDocTypeGroups.FORM:
+      case DocTypeGroups.FORM:
         return <FMIcon height={30} width={30} />;
-      case RecentDocTypeGroups.SUPPLIER:
+      case DocTypeGroups.SUPPLIER:
         return <SOPIcon height={30} width={30} />;
+      case DocTypeGroups.TRAINING_CURRICULUM:
+        return <TrainingIcon height={30} width={30} />;
       default:
         return <SOPIcon height={30} width={30} />;
     }
@@ -61,7 +66,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             alignItems="center"
           >
             <Grid item={true}>
-              {docTypeGroup === RecentDocTypeGroups.CHANGE_REQUEST && (
+              {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -78,7 +83,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              {docTypeGroup !== RecentDocTypeGroups.CHANGE_REQUEST && (
+              {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"
@@ -97,7 +102,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
               )}
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
-              {docTypeGroup === RecentDocTypeGroups.CHANGE_REQUEST && (
+              {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={changeRequestEditPath(itemId)}
                   color="inherit"
@@ -114,7 +119,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                   </Typography>
                 </Link>
               )}
-              {docTypeGroup !== RecentDocTypeGroups.CHANGE_REQUEST && (
+              {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
                 <Link
                   href={documentVersionPath(docRevId || "", itemId)}
                   color="inherit"
