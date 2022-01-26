@@ -171,7 +171,7 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 
