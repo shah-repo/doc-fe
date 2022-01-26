@@ -833,7 +833,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select AR", () => {
-      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "In Review" });
+      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
