@@ -444,12 +444,10 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
-  cy.listLoadingElementShouldNotExist();
-  cy.get("[class=\"k-textbox\"]").eq(2).arrowType(params.title).wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
 
