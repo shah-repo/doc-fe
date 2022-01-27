@@ -114,21 +114,23 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
                     item={true}
                     className={classes.truncateText}
                   >
-                    <Link
-                      href={documentVersionPath(docRevId || "", docDocumentId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
+                    <StyleTooltip title={<Typography> {docRevName} </Typography>} placement="top">
+                      <Link
+                        href={documentVersionPath(docRevId || "", docDocumentId)}
+                        color="inherit"
+                        className={classes.link}
                       >
-                        {docRevName}
-                      </Typography>
-                    </Link>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          {docRevName}
+                        </Typography>
+                      </Link>
+                    </StyleTooltip>
                   </Grid>
                   <Grid item={true}>
                     <Typography

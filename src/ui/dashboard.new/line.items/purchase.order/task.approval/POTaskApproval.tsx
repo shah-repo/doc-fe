@@ -284,25 +284,27 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={
-                      docRevName
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={<Typography> {docRevName} </Typography>} placement="top">
+                    <Link
+                      href={
+                        docRevName
+                          ? documentVersionPath(docRevId || "", docDocumentId)
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid

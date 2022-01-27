@@ -132,21 +132,23 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Link>
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <Link
-                  href={documentVersionPath(docRevId, docDocumentId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={`${classes.typographyBold} ${classes.margin5}`}
-                    color="textSecondary"
-                    noWrap
+                <StyleTooltip title={<Typography> {docRevName} {docRevVersion} </Typography>} placement="top">
+                  <Link
+                    href={documentVersionPath(docRevId, docDocumentId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {docRevName} {docRevVersion}
-                  </Typography>
-                </Link>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={`${classes.typographyBold} ${classes.margin5}`}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docRevName} {docRevVersion}
+                    </Typography>
+                  </Link>
+                </StyleTooltip>
               </Grid>
               <Grid item={true}>
                 <Typography

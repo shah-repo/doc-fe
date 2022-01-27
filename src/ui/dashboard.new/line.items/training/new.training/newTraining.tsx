@@ -162,22 +162,24 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={TRAINING_URL}
-                    color="inherit"
-                    className={classes.link}
-                    onClick={setTrainingSearchCriteria}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={<Typography> {docRevName} {docRevVersion} </Typography>} placement="top">
+                    <Link
+                      href={TRAINING_URL}
+                      color="inherit"
+                      className={classes.link}
+                      onClick={setTrainingSearchCriteria}
                     >
-                      {docRevName} {docRevVersion}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName} {docRevVersion}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
