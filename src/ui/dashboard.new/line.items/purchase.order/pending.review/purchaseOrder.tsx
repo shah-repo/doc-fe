@@ -365,7 +365,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && (
               <StyleTooltip
@@ -399,7 +399,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {(!open || !hoverItem) && pinned && (
+        {pinned && (
           <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>

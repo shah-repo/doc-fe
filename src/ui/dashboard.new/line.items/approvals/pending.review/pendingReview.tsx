@@ -313,7 +313,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        { hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -334,7 +334,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!open && pinned && (
+        { pinned && (
           <StyleTooltip
             title={
               <Typography>
