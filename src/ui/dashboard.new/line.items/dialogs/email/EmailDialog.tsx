@@ -37,7 +37,7 @@ interface EmailModalProps {
     userInitialColor: string;
     approvalStatus: string;
   }[];
-  pendingEmailSentAt?: string;
+  pendingEmailSentAt?: Nullable<string>;
   approvedApprovers: {
     userName: string;
     employeeId: string;

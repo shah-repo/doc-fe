@@ -13,6 +13,7 @@ import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
+import { Nullable } from "../../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../../components/Text";
@@ -40,7 +41,7 @@ interface Props {
   docRevPendingApprovals: any[];
   docRevApprovedApprovals: any[];
   hoverItemId: string;
-  pendingEmailSentAt: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
   pinLineItem: (id: string) => void;

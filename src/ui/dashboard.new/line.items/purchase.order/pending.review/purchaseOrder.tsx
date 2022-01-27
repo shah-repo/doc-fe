@@ -75,7 +75,7 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
-  pendingEmailSentAt: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;

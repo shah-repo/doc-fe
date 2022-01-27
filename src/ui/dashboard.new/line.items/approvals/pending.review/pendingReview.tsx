@@ -73,7 +73,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
-  pendingEmailSentAt: string;
+  pendingEmailSentAt: Nullable<string>;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
