@@ -18,7 +18,6 @@ import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expan
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
-import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
@@ -29,10 +28,12 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../common/DocIcon";
 import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./pendingReview.styles";
 
@@ -58,6 +59,7 @@ interface Props {
     approvalStatus: string;
   }[];
   docRevs: {
+    docTypeGroup: DocTypeGroups;
     documentRevisionId: string;
     documentId: string;
     docId: string;
@@ -351,7 +353,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
-                <PendingReviewItemIcon />
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
               <ListItemText
                 id={prItem.docId}
