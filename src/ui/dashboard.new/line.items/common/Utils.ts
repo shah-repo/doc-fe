@@ -1,7 +1,6 @@
-import { isNumber } from "lodash";
 
 export const formatCurrency = (data: string) =>  {
-  if (isNumber(data)) {
+  if (data && !isNaN(+data)) {
     return (+data).toLocaleString();
   }
   return "";
