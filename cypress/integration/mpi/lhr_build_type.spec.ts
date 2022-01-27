@@ -1201,7 +1201,7 @@ context("LHR Build type flow", () => {
 
     it("Click 'START MPI'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
+        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1300,7 +1300,7 @@ context("LHR Build type flow", () => {
 
     it("Click 'START MPI'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
+        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1419,7 +1419,7 @@ context("LHR Build type flow", () => {
 
     it("Click 'START MPI'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
+        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -83,7 +83,7 @@ context("Autocomplete 'Official Groups' test", () => {
       });
 
       it("Select 'Official' radio button", () => {
-        cy.get("input[value=\"official\"]").arrowClick();
+        cy.grpSelectOfficial();
       });
 
       it("Enter Group Name " + groupName, () => {

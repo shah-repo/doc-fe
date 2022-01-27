@@ -83,7 +83,7 @@ context("Autocomplete 'Groups' test", () => {
       });
 
       it("Select 'Unofficial' radio button", () => {
-        cy.get("input[value=\"unofficial\"]").arrowClick();
+        cy.grpSelectUnofficial();
       });
 
       it("Enter Group Name " + groupName, () => {
@@ -145,7 +145,7 @@ context("Autocomplete 'Groups' test", () => {
             cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
-          it("Select 'Groupss' as options", () => {
+          it("Select 'Groups' as options", () => {
             cy.get("[data-cy=\"optionId\"]").arrowType("Groups{downarrow}{enter}");
           });
 
