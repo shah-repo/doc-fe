@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
+import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
@@ -8,6 +9,8 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import Text from "../../components/Text";
+import { StyleTooltip } from "../../dashboard.new/line.items/common/StyleTooltip";
 import Colors from "../../layout/theme/utils/colors";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
@@ -82,28 +85,52 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const isDateOverdue = (date) => {
+      if (!date) { return; }
+      const currentDate = getFormattedDateString(Date.now());
+      return moment(currentDate).isAfter(date);
+    };
+
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
+      const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
 
-      return Boolean(isLHRProductionBuild &&
-      option.document.documentType.equipmentEnforceProd &&
-      (pmDate || calDate));
+      return Boolean(isLHRProductionBuild && option.document.documentType.equipmentEnforceProd && isOverdue);
     };
 
     // eslint-disable-next-line react/display-name
     renderOptionWithDate = (option: any) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
+      const isDisabled = isLHRProductionBuild && option.document.documentType.equipmentEnforceProd;
 
       return <Grid container>
         <Grid item xs={3} >
           {option.document.docId}
         </Grid>
         <Grid item xs={9} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
-          {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
+          {pmDate &&
+            <StyleTooltip
+              disableHoverListener={!(isDisabled && isDateOverdue(pmDate))}
+              title={<Text translation="form.builder.out.of.maintenance" />}
+              placement="top"
+              arrow
+            >
+              <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>
+            </StyleTooltip>
+          }
+          {calDate &&
+            <StyleTooltip
+              disableHoverListener={!(isDisabled && isDateOverdue(calDate))}
+              title={<Text translation="form.builder.out.of.calibration" />}
+              placement="top"
+              arrow
+            >
+              <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>
+            </StyleTooltip>
+          }
         </Grid>
       </Grid>;
     };
