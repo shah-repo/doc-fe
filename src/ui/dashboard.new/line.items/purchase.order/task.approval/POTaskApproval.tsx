@@ -34,6 +34,7 @@ import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
 import { styles } from "./taskApproval.styles";
 
@@ -111,7 +112,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}}`,
     },
     {
       id: "id3",
