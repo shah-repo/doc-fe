@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
@@ -22,6 +23,7 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
@@ -71,6 +73,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  pendingEmailSentAt: Nullable<string>;
 }
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -86,11 +89,14 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -119,10 +125,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
 
   return (
@@ -300,7 +313,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        { hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -321,7 +334,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!open && pinned && (
+        { pinned && (
           <StyleTooltip
             title={
               <Typography>
@@ -413,15 +426,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        onClose={onClose}
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={pendingApprovers}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={approvedApprovers}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>
