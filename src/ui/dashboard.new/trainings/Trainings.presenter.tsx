@@ -47,6 +47,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                   docRevVersion={pendingAction.docRevVersion}
                   docDocumentId={pendingAction.docDocumentId}
                   trainingStatus={pendingAction.trainingStatus}
+                  pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                   timestamp={getFormattedDateString(
                     pendingAction.timestamp,
                     MomentFormats.BriefDateTime

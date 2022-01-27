@@ -1,4 +1,4 @@
-import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, IconButton, makeStyles, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
@@ -7,6 +7,15 @@ import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
+
+// Needed to enable hover on disabled options in FBAutocomplete
+export const useStyles = makeStyles({
+  "@global": {
+    ".MuiAutocomplete-option[aria-disabled=\"true\"]": {
+      "pointer-events": "auto",
+    },
+  },
+});
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -32,7 +41,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
 }) => {
 
   const { workspaceState } = FB.useStores();
-
   return (
     <>
       {includeQRScan && (
@@ -50,6 +58,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <Autocomplete
+
           {...{
             getOptionDisabled,
             getOptionLabel,

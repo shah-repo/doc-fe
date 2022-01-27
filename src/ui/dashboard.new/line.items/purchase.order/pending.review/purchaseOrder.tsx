@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
@@ -21,6 +22,7 @@ import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
@@ -73,6 +75,7 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
@@ -100,6 +103,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
   const PoItems: any = [
@@ -134,9 +138,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
@@ -159,10 +165,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -354,7 +367,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && (
               <StyleTooltip
@@ -388,7 +401,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {(!open || !hoverItem) && pinned && (
+        {pinned && (
           <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
@@ -532,15 +545,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={docRevPendingApprovals}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>
