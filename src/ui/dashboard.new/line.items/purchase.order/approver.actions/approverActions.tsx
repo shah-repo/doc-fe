@@ -38,6 +38,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -111,7 +112,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount && formatCurrency(purchaseOrderTotalAmount)}`,
     },
     {
       id: "id3",

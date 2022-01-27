@@ -32,6 +32,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -112,7 +113,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}`,
     },
     {
       id: "id3",

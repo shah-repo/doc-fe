@@ -7,21 +7,25 @@ import {
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
-import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../common/DocIcon";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import {
+  DocTypeGroups,
+} from "../../common/types";
 import { styles } from "./default.styles";
 
 interface Props {
   id: string;
+  docTypeGroup: DocTypeGroups;
   docDocumentId: string;
   docId: string;
   docRevId?: string;
@@ -38,6 +42,7 @@ interface Props {
 const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
   ({
     id,
+    docTypeGroup,
     docDocumentId,
     docId,
     docRevId,
@@ -76,7 +81,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<Props> =
           onMouseEnter={onMouseHoverListItem}
         >
           <ListItemIcon>
-            <PendingReviewIcon height={30} width={30} />
+            {getDocIcon(docTypeGroup)}
           </ListItemIcon>
           <ListItemText
             primary={
