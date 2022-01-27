@@ -8,7 +8,7 @@ export const styles = makeStyles(() =>
     },
     truncateText: {
       textOverflow: "ellipsis",
-      overflow: "auto",
+      overflow: "hidden",
       paddingTop: "1px",
       marginLeft: "5px",
       marginRight: "5px",

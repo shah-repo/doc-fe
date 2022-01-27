@@ -10,6 +10,18 @@ let loginResponse;
 let secondEmployee;
 
 context("File delete in Pending Change", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -106,7 +118,7 @@ context("File delete in Pending Change", () => {
       });
 
       it("Filters document by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: "test title", status: "In Review" });
+        cy.arFilterARListByNameAndStatus({ title: "test title", status: "IN_REVIEW" });
       });
 
       it("Withdraw Submission", () => {

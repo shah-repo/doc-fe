@@ -58,7 +58,7 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
   });
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
+    cy.get("tr.k-master-row").contains(params.title).arrowClick();
   });
 });
 

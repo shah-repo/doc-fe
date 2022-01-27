@@ -1,8 +1,9 @@
-import { Button } from "@material-ui/core";
+import { Button, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import { ActionCreator } from "redux";
 import { ApiAction } from "../../../state/types";
 import Text from "../../components/Text";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   shouldDisplayButton: boolean;
@@ -17,6 +18,23 @@ const EnableDropboxButton: React.FunctionComponent<Props> = ({
   enableDropboxAction,
   disabled,
 }) => {
+  const styles = makeStyles((theme: Theme) => ({
+    Button: {
+      borderRadius: 100,
+      marginRight: theme.spacing(1.825),
+      textTransform: "none",
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
+      fontFamily: "Sora",
+      fontSize: 12,
+      fontWeight: 600,
+      color: Colors.navy,
+      border: `1px solid ${Colors.navy}`,
+      backgroundColor: Colors.white,
+      marginTop: 0,
+    },
+  }));
+  const classes = styles();
 
   const enableDropbox = () => {
     dropboxAsync.start(enableDropboxAction, dropboxAsync);
@@ -29,7 +47,7 @@ const EnableDropboxButton: React.FunctionComponent<Props> = ({
   return (
     <Button
       variant="outlined"
-      color="primary"
+      className={classes.Button}
       onClick={enableDropbox}
       {...{ disabled }}
     >

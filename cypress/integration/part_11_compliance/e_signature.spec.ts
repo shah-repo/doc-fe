@@ -189,7 +189,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });
@@ -246,7 +245,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });
@@ -303,7 +301,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });

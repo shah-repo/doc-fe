@@ -39,6 +39,17 @@ const roleTwo = "Role Two";
 const roleThree = "Role Three";
 
 context("Document Approver Requirement on Document Approval Matrix", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {
@@ -479,12 +490,14 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Approve document in review", () => {
     it(`Approve document`, () => {
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
     });
 
     it("Confirm password", () => {
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -503,13 +516,15 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Approve document in review", () => {
     it(`Approve document`, () => {
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
     });
 
     it("Confirm password", () => {
       SystemRequirement("REQ-0910");
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove, () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew, () => {
         cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
       cy.checkToastMessage({ exists: false });
@@ -528,12 +543,14 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Approve document in review", () => {
     it(`Approve document`, () => {
-      cy.get("#root").contains("Approve").arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
     });
 
     it("Confirm password", () => {
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
+      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });

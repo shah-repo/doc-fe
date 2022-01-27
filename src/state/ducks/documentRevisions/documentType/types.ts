@@ -35,7 +35,6 @@ export enum DOC_TYPE_GROUP {
   NEW_COMPANY = "NEW_COMPANY",
   SEED_DOCUMENT = "SEED_DOCUMENT",
   LHR = "LHR",
-  LHRT = "LHRT",
   PI_INSTANCE = "PI_INSTANCE",
   TRAINING_CURRICULUM = "TRAINING_CURRICULUM",
   BULK_CREATE = "BULK_CREATE",
@@ -323,6 +322,7 @@ export interface PageDetails {
 }
 
 export interface DocumentType {
+  hiddenForCreationForUsersWithoutTagsFormatted?: string;
   id: string;
   documentTypeAcronym: string;
   documentTypeName: string;

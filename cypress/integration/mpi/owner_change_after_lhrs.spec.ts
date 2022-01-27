@@ -1147,9 +1147,8 @@ context("Change owner after starting LHRs", () => {
           contains: [
             `Hello <b>${USERS[1].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
         {
@@ -1157,9 +1156,8 @@ context("Change owner after starting LHRs", () => {
           contains: [
             `Hello <b>${USERS[3].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
       ];
@@ -1178,9 +1176,8 @@ context("Change owner after starting LHRs", () => {
           contains: [
             `Hello <b>${USERS[4].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
         {
@@ -1188,9 +1185,8 @@ context("Change owner after starting LHRs", () => {
           contains: [
             `Hello <b>${USERS[2].name},</b><br>`,
             "Part PRT-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
-            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev`,
-            "1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a href=`,
+            `${lhrs1DocUrl.substring(lhrs1DocUrl.length - 100)}">Step #1</a> (PI-00001 API MPI, Rev 1) has been released.`,
             companyId],
         },
       ];

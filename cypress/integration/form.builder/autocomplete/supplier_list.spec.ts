@@ -14,6 +14,18 @@ const supplierTitle = `Supplier${moment().format("X")}`;
 const supplierFormTitle = `Supplier Form${moment().format("X")}`;
 
 context("Autocomplete 'Supplier list' test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
