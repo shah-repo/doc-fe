@@ -143,6 +143,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                             {(selection: FBMPIProcedureSelectValue, index) => {
                               const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
                               const calOverdue = isDateOverdue?.(selection?.calDueDate);
+                              const eqOverdue = type === "equipment" && (pmOverdue || calOverdue);
 
                               return (
                                 <Box key={`fb-mpi-procedure-selection-${index}`}>
@@ -151,8 +152,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       <Box
                                         display="flex"
                                         flexDirection="row"
-                                        bgcolor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
-                                        borderColor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
+                                        bgcolor={ eqOverdue ? Colors.light_red : Colors.medium_gray}
+                                        borderColor={eqOverdue ? Colors.light_red : Colors.medium_gray}
                                         borderRadius={2}
                                         border={0.5}
                                         mr={1}
@@ -174,7 +175,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             pr: 1,
                                           }}
                                         />
-                                        {(selection.pmDueDate !== "N/A") &&
+                                        {(selection.pmDueDate !== "N/A") && type === "equipment" &&
                                           <Box
                                             color={pmOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={pmOverdue ? "bold" : "normal"}
@@ -191,7 +192,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             {getFormattedDateString(selection.pmDueDate, MomentFormats.BriefDate)}
                                           </Box>
                                         }
-                                        {(selection.calDueDate !== "N/A") &&
+                                        {(selection.calDueDate !== "N/A") && type === "equipment" &&
                                           <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={calOverdue ? "bold" : "normal"}
