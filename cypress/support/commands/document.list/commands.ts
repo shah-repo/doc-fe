@@ -169,11 +169,17 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "Select Item");
 });
 
+function getListItemNumber(text: string) {
+  const elementText = text;
+  const numberOfItems = elementText.match(/\d{1,2}/g);
+
+  return numberOfItems ? numberOfItems?.pop() : "error";
+}
+
 Cypress.Commands.add("dlVerifyDocCounter", (params: {docCounterNumber: integerType}) => {
   cy.get("div.k-pager-info").then(($el) => {
-    const elementText = $el.text();
-    const numberOfItems = elementText[elementText.length - 7];
-    expect(parseInt(numberOfItems, 10)).to.be.equal(params.docCounterNumber);
+    cy.wrap({ getListItemNumber }).invoke("getListItemNumber", $el.text())
+      .should("eq", params.docCounterNumber.toString());
   });
 });
 
