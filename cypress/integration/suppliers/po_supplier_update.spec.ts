@@ -434,6 +434,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00001" });
         cy.get("#Title-field input").clear().arrowType("1");
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
@@ -516,6 +517,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00001" });
         cy.drClickReviseDocument();
         cy.contains("Supplier name").should("be.visible");
@@ -637,6 +639,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00001" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("3");
@@ -709,6 +712,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00001" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("4");
@@ -819,6 +823,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("1");
@@ -918,6 +923,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("2");
@@ -1128,6 +1134,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("3");
@@ -1213,7 +1220,7 @@ context("Purchase Supplier Update", () => {
               .and.contains(`Name: ${USERS[1].name}`)
               .and.contains(`Date: ${currentDate}`)
               .and.contains(`Tax Rate: 9.25`)
-              .and.contains(`Tax: 0.93`);
+              .and.contains(`Tax: 0.925000`);
           });
         });
       });
@@ -1231,6 +1238,7 @@ context("Purchase Supplier Update", () => {
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
         cy.get("#Title-field input").clear().arrowType("4");
@@ -1315,7 +1323,7 @@ context("Purchase Supplier Update", () => {
               .and.contains(`Name: ${USERS[1].name}`)
               .and.contains(`Date: ${currentDate}`)
               .and.contains(`Tax Rate: 9.25`)
-              .and.contains(`Tax: 0.93`);
+              .and.contains(`Tax: 0.925000`);
           });
         });
       });

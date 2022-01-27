@@ -11,6 +11,7 @@ declare global {
       supCreateNew(): Chainable<Subject>;
       supClickOnSpecificSupplierFileFromList(params: {item: string}): Chainable<Subject>;
       supCheckForSuggestedForms(...list: string[]): Chainable<Subject>;
+      supFilterByDocTitle(params: {docTitle: string }): Chainable<Subject>;
     }
   }
 }
@@ -40,4 +41,8 @@ Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
+});
+
+Cypress.Commands.add("supFilterByDocTitle", (params: {docTitle: string }) => {
+  cy.get(`[aria-colindex="2"] input`).clear().arrowType(params.docTitle).wait(500);
 });
