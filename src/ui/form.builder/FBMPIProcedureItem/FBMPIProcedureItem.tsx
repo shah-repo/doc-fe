@@ -5,6 +5,7 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
@@ -26,7 +27,7 @@ import {
   FBText,
 } from "..";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -189,7 +190,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next PM Due:
-                                            {getFormattedDateString(selection.pmDueDate, MomentFormats.BriefDate)}
+                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         {(selection.calDueDate !== "N/A") && type === "equipment" &&
@@ -207,7 +208,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next Cal Due:
-                                            {getFormattedDateString(selection.calDueDate, MomentFormats.BriefDate)}
+                                            {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         <IconButton
