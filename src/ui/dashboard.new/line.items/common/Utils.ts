@@ -1,3 +1,1 @@
-export function formatCurrency(data: string) {
-  return (+data).toLocaleString();
-}
+export const formatCurrency = (data: string) =>  (+data).toLocaleString();
