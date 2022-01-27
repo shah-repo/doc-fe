@@ -112,7 +112,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}`,
     },
     {
       id: "id3",
