@@ -134,7 +134,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            <Text translation="common.sent" />:{" "}
+            <Text translation="common.sent" />:&nbsp;
             {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
@@ -211,7 +211,6 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                   </Grid>
                 ) : (
                   <>
-                    {" "}
                     <Grid item>
                       {pendingEmailSentAt !== null && (
                         <Typography
@@ -220,14 +219,14 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                           className={classes.lastsenttext}
                           noWrap
                         >
-                          <Text translation="email.last.sent" />:{" "}
+                          <Text translation="email.last.sent" />:&nbsp;
                           {getFormattedDateString(
                             pendingEmailSentAt,
                             MomentFormats.BriefDate
                           )}
                         </Typography>
                       )}
-                    </Grid>{" "}
+                    </Grid>
                     <Grid item>
                       <Button
                         onClick={() => handleSendEmail()}
