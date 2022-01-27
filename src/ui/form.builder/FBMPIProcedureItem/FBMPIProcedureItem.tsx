@@ -242,20 +242,23 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-
               {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
                 <Observer>
-                  {() => (
-                    <FBButton
-                      label="form.builder.select"
-                      style={{ margin: 0, padding: "4px" }}
-                      onClick={() => handleSelect?.({
-                        ...item,
-                        id: item.title,
-                        title: getItem?.(item.title) || "",
-                      })}
-                    />
-                  )}
+                  {() => {
+                    const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
+                      (selection)  =>
+                        selection.materialId === item.title || selection.equipmentId === item.title);
+                    return (
+                      <FBButton
+                        label={hasSelected ? "form.builder.change" : "form.builder.select"}
+                        style={{ margin: 0, padding: "4px" }}
+                        onClick={() => handleSelect?.({
+                          ...item,
+                          id: item.title,
+                          title: getItem?.(item.title) || "",
+                        })}
+                      />
+                    ); }}
                 </Observer>
               )}
               {!isPreview && (
