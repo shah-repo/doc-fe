@@ -203,7 +203,7 @@ Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => 
 });
 
 Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.itemValue).should("exist");
+  cy.get("tr.k-master-row").first().contains(params.itemValue).should("exist");
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
