@@ -123,7 +123,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 </StyleTooltip>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <StyleTooltip title={<Typography> 123 {docTitle} </Typography>} placement="top" interactive leaveDelay={60000}>
+                <StyleTooltip title={<Typography> {docTitle} </Typography>} placement="top">
                   <Link
                     href={documentVersionPath(docRevId || "", itemId)}
                     color="inherit"
