@@ -4,7 +4,7 @@ import { reaction } from "mobx";
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
+import { EQStatus, FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -91,13 +91,22 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       return moment(currentDate).isAfter(date);
     };
 
+    const isEqActive = (eqStatus) => {
+      if (eqStatus !== EQStatus.Inactive && eqStatus !== EQStatus.Retired) { return true; }
+      return false;
+    };
+
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
       const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
+      const equipmentEnforceProd = option.document.documentType.equipmentEnforceProd;
 
-      return Boolean(isLHRProductionBuild && option.document.documentType.equipmentEnforceProd && isOverdue);
+      if (!equipmentEnforceProd && !isEqActive(option.eqStatus)) {
+        return true;
+      }
+      return !isEqActive(option.eqStatus) || Boolean(isLHRProductionBuild && equipmentEnforceProd && isOverdue);
     };
 
     // eslint-disable-next-line react/display-name
