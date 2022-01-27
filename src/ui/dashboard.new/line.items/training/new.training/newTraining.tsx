@@ -25,7 +25,7 @@ import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
 import { StyledListItem } from "../../common/StyledListItem";
-import { StyledTooltip } from "../../common/StyledTooltip";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./newTraining.styles";
 
 interface Props {
@@ -236,7 +236,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyledTooltip
+                  <StyleTooltip
                     title={
                       <Typography color="inherit">
                         <Text
@@ -267,7 +267,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         {pendingTraineesNames}
                       </Typography>
                     </Link>
-                  </StyledTooltip>
+                  </StyleTooltip>
                 </Grid>
                 <Grid
                   item={true}
@@ -292,21 +292,21 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyledTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                 />
-              </StyledTooltip>
+              </StyleTooltip>
             )}
           </Box>
         )}
         {pinned && (
-          <StyledTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />
-          </StyledTooltip>
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Modal
