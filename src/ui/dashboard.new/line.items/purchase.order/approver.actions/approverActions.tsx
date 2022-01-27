@@ -363,7 +363,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        { hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
@@ -376,7 +376,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {!open && pinned && (
+        { pinned && (
           <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}

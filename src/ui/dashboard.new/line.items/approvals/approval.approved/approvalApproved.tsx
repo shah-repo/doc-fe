@@ -250,7 +250,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        { hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -289,23 +289,10 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
-                <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
-                  placement="top"
-                  arrow
-                >
-                  <PinSolidIcon onClick={handleUnPinClick} />
-                </StyleTooltip>
-              )}
             </span>
           </Box>
         )}
-        {!open && pinned && !hoverItem && (
+        { pinned && (
           <StyleTooltip
             title={
               <Typography>

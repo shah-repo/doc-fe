@@ -327,7 +327,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -406,7 +406,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        {!open && !hoverItem && pinned && (
+        { pinned && (
           <StyleTooltip
             title={
               <Typography>
