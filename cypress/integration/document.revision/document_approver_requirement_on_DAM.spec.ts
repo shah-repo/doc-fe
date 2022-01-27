@@ -39,6 +39,17 @@ const roleTwo = "Role Two";
 const roleThree = "Role Three";
 
 context("Document Approver Requirement on Document Approval Matrix", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {
