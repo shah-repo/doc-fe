@@ -83,23 +83,19 @@ context("Autocomplete 'Official Groups' test", () => {
       });
 
       it("Select 'Official' radio button", () => {
-        cy.get("input[value=\"official\"]").arrowClick();
+        cy.grpSelectOfficial();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").arrowType(groupName);
+        cy.grpEnterGroupName({ name: groupName });
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
+        cy.grpTypeMembers(USERS[3].name);
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").arrowClick();
-      });
-
-      it("Close dialog box", () => {
-        cy.get("#DialogContent-close").arrowClick();
+        cy.grpSaveGroup();
       });
     });
 

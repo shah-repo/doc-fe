@@ -136,9 +136,7 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDisplayStatus, () => {
-    cy.get("li").contains(params.status).arrowClick().wait(500);
-  });
+  cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
