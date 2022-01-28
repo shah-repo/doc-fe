@@ -127,11 +127,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save group", () => {
-      cy.grpAddGroup();
-    });
-
-    it("Close group dialog", () => {
-      cy.grpCloseGroupBtn();
+      cy.grpSaveGroup();
     });
   });
 
@@ -157,11 +153,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save group", () => {
-      cy.grpAddGroup();
-    });
-
-    it("Close group dialog", () => {
-      cy.grpCloseGroupBtn();
+      cy.grpSaveGroup();
     });
   });
 

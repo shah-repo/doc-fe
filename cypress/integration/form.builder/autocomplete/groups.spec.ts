@@ -83,23 +83,19 @@ context("Autocomplete 'Groups' test", () => {
       });
 
       it("Select 'Unofficial' radio button", () => {
-        cy.get("input[value=\"unofficial\"]").arrowClick();
+        cy.grpSelectUnofficial();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").arrowType(groupName);
+        cy.grpEnterGroupName({ name: groupName });
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
+        cy.grpTypeMembers(USERS[3].name);
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").arrowClick();
-      });
-
-      it("Close dialog box", () => {
-        cy.get("#DialogContent-close").arrowClick();
+        cy.grpSaveGroup();
       });
     });
 

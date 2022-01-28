@@ -293,15 +293,16 @@ context("Document Operators Access Test", () => {
   });
 
   context(`Open created document and check for operators restrictions`, () => {
-    it("Navigates to document list", () => {
+    it("Navigates to records", () => {
       cy.navigToRecords();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
         CyRoutes.DocRevPreview,
         CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -349,13 +350,13 @@ context("Document Operators Access Test", () => {
 
 
   context(`Fill textbox field with operator '${USERS[4].name}'`, () => {
-    it("Navigates to document list", () => {
+    it("Navigates to records", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
       });
     });
 
@@ -387,7 +388,7 @@ context("Document Operators Access Test", () => {
   });
 
   context("Submit for approval and approve as owner", () => {
-    it("Navigates to document list", () => {
+    it("Navigates to records", () => {
       cy.navigToRecords();
     });
 
@@ -437,13 +438,13 @@ context("Document Operators Access Test", () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: employeeLoginThird.id });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigates to records list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
+        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });
 
@@ -465,13 +466,13 @@ context("Document Operators Access Test", () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
 
-    it("Navigates to document list", () => {
+    it("Navigates to records list", () => {
       cy.navigToRecords();
     });
 
     it("Filter document by name and status, and select it", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "In Review" });
+        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
       });
     });
 

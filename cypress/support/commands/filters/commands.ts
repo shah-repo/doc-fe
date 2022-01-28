@@ -23,6 +23,7 @@ declare global {
       filterCheckNumberOfDisplayedRecords(params: { numberOfRecords: string }): Chainable<Subject>;
       filterGetFirstValueFromList(params: { value: string }): Chainable<Subject>;
       filterSupplierTitle(params: {name: string}): Chainable<Subject>;
+      filterEquipmentTitle(params: {name: string}): Chainable<Subject>;
       filterEquip(params: {docId: string; revision: string; eqState: string;
         title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
     }
@@ -150,4 +151,8 @@ Cypress.Commands.add("filterGetFirstValueFromList", (params: { value: string }) 
 
 Cypress.Commands.add("filterSupplierTitle", (params: {name: string}) => {
   cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.name);
+});
+
+Cypress.Commands.add("filterEquipmentTitle", (params: {name: string}) => {
+  cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.name);
 });

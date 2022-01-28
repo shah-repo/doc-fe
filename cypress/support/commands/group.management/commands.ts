@@ -43,7 +43,6 @@ declare global {
       grpTypeMembers(...names: string[]): Chainable<Subject>;
       grpAddParentGroups(...groups: string[]): Chainable<Subject>;
       grpCloseGroupBtn(): Chainable<Subject>;
-      grpAddGroup(): Chainable<Subject>;
       grpAPICreateNewGroup(params: {payload: any; employeeId: string;  sessionId: string}): Chainable<Subject>;
       grpCheckForNumberOfGroupMembersDisplayed(): Chainable;
       grpClearFilter(): Chainable;
@@ -292,27 +291,21 @@ Cypress.Commands.add("grpSelectUnofficial", () => {
 
 Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
   names.forEach((name) => {
-    cy.get(`#Group-members`).arrowClick();
+    cy.get(`td[role="gridcell"] input`).eq(1).arrowType(name);
+    cy.get("li.k-item").contains(name).arrowClick();
     cy.wait(500);
-    cy.get("div[id^=react-select]").contains(name).arrowClick();
-    cy.get("h4").contains("Members").click();
+    cy.landingPageLoadingElementShouldNotExist();
   });
 });
 
 Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
   groups.forEach((name) => {
-    cy.get(`#Group-addParentGroups`).arrowType(`${name}{enter}`);
+    cy.get(`td[role="gridcell"] input`).eq(4).arrowType(name);
+    cy.get("li.k-item").contains(name).arrowClick();
   });
 });
 
 Cypress.Commands.add("grpCloseGroupBtn", () => cy.get("[data-cy=\"DialogContent-close\"]").arrowClick());
-
-Cypress.Commands.add("grpAddGroup", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPost, () => {
-    cy.get("[data-cy=\"Group-createGroup\"]").arrowClick();
-  });
-  cy.checkToastMessage({ exists: false });
-});
 
 Cypress.Commands.add("grpAPICreateNewGroup", (params: {
   payload: any;
