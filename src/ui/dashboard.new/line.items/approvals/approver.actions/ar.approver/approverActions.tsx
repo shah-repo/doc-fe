@@ -8,7 +8,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
@@ -274,7 +274,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={arTitle} placement="top" arrow>
+                  <StyleTooltip title={arTitle} placement="top-start" arrow>
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"
