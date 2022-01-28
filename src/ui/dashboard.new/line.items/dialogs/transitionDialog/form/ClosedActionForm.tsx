@@ -48,7 +48,7 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
         &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true}>
-        <StyleTooltip title={<Typography> {title} </Typography>} placement="top">
+        <StyleTooltip title={title} placement="top">
           <Typography
             component="span"
             variant="caption"

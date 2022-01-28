@@ -1,6 +1,8 @@
 import {
-  Box, Grid,
-  Link, ListItemIcon,
+  Box,
+  Grid,
+  Link,
+  ListItemIcon,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -132,7 +134,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 </Link>
               </Grid>
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                <StyleTooltip title={<Typography> {docRevName} {docRevVersion} </Typography>} placement="top">
+                <StyleTooltip
+                  title={
+                    <>
+                      {docRevName} {docRevVersion}
+                    </>
+                  }
+                  placement="top"
+                >
                   <Link
                     href={documentVersionPath(docRevId, docDocumentId)}
                     color="inherit"
@@ -283,7 +292,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         <Box component="div" className={classes.actionIcons}>
           {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
           {pinHover && (
-            <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+            <StyleTooltip
+              title={<Text translation="common.pin" />}
+              placement="top"
+              arrow
+            >
               <PinSolidIcon
                 onClick={handlePinClick}
                 onMouseLeave={onMouseLeavePinIcon}
@@ -293,10 +306,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         </Box>
       )}
       {pinned && (
-        <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-          <PinSolidIcon
-            onClick={handleUnPinClick}
-          />
+        <StyleTooltip
+          title={<Text translation="common.unpin" />}
+          placement="top"
+          arrow
+        >
+          <PinSolidIcon onClick={handleUnPinClick} />
         </StyleTooltip>
       )}
     </StyledListItem>

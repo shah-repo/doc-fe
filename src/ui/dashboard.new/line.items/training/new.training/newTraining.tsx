@@ -1,9 +1,11 @@
 import {
-  Box, Grid,
+  Box,
+  Grid,
   Link,
   ListItemIcon,
   ListItemText,
-  Modal, Typography,
+  Modal,
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import moment from "moment";
@@ -150,9 +152,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    <Text
-                      translation="training.on"
-                    />
+                    <Text translation="training.on" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -174,7 +174,14 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {docRevName} {docRevVersion} </Typography>} placement="top">
+                  <StyleTooltip
+                    title={
+                      <>
+                        {docRevName} {docRevVersion}
+                      </>
+                    }
+                    placement="top"
+                  >
                     <Link
                       href={TRAINING_URL}
                       color="inherit"
@@ -252,13 +259,15 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <Typography color="inherit" className={classes.tooltip}>
                         <Text
                           translation="training.users.count"
                           values={{
-                            count: size(pendingTrainees), status: trainingStatus === TrainingStatus.OVERDUE
-                              ? TrainingStatus.OVERDUE
-                              : TrainingStatus.DUE_IN_7_DAYS,
+                            count: size(pendingTrainees),
+                            status:
+                              trainingStatus === TrainingStatus.OVERDUE
+                                ? TrainingStatus.OVERDUE
+                                : TrainingStatus.DUE_IN_7_DAYS,
                           }}
                         />
                       </Typography>
@@ -306,7 +315,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -316,10 +329,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>

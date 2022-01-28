@@ -92,5 +92,9 @@ export const styles = makeStyles(() =>
     margin7: {
       marginRight: "7px",
     },
+    tooltip: {
+      fontFamily: "Sora",
+      fontSize: "12px",
+    },
   })
 );

@@ -49,7 +49,6 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (pinnedItemId: string) => void;
-
 }
 const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   id,
@@ -135,7 +134,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   });
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const onReject = () => {
-    rejectDialogAsync.start(applyTransition, approvalId, "reject", rejectDialogAsync, null);
+    rejectDialogAsync.start(
+      applyTransition,
+      approvalId,
+      "reject",
+      rejectDialogAsync,
+      null
+    );
   };
 
   return (
@@ -211,7 +216,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {docRevName} </Typography>} placement="top">
+                  <StyleTooltip title={docRevName} placement="top">
                     <Link
                       href={
                         docRevName
@@ -270,7 +275,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {rejectHover && (
-                <StyleTooltip title="Reject" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.reject" />}
+                  placement="top"
+                  arrow
+                >
                   <RejectSolidIcon
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
@@ -287,7 +296,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {approveHover && (
-                <StyleTooltip title="Approve" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.approve" />}
+                  placement="top"
+                  arrow
+                >
                   <ApproveSolidIcon
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
@@ -301,11 +314,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
                 {pinHover && (
                   <StyleTooltip
-                    title={
-                      <Typography>
-                        <Text translation="common.pin" />
-                      </Typography>
-                    }
+                    title={<Text translation="common.pin" />}
                     placement="top"
                     arrow
                   >
@@ -320,11 +329,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             {pinned && (
               <span className={classes.actionIcon}>
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
@@ -337,13 +342,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        { pinned && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >

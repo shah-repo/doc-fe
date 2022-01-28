@@ -112,7 +112,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -284,7 +286,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {docRevName} </Typography>} placement="top">
+                  <StyleTooltip title={docRevName} placement="top">
                     <Link
                       href={
                         docRevName
@@ -343,7 +345,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {rejectHover && (
-                <StyleTooltip title="Reject" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.reject" />}
+                  placement="top"
+                  arrow
+                >
                   <RejectSolidIcon
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
@@ -360,7 +366,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {approveHover && (
-                <StyleTooltip title="Approve" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.approve" />}
+                  placement="top"
+                  arrow
+                >
                   <ApproveSolidIcon
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
@@ -375,11 +385,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
@@ -391,11 +397,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
@@ -408,13 +410,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        { pinned && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >

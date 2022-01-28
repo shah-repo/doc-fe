@@ -274,7 +274,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {arTitle} </Typography>} placement="top">
+                  <StyleTooltip title={arTitle} placement="top">
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"
@@ -315,11 +315,15 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -328,12 +332,14 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        { pinned && (
+        {pinned && (
           <Box component="div" className={classes.actionIcons}>
-            <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-              <PinSolidIcon
-                onClick={handleUnPinClick}
-              />
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
             </StyleTooltip>
           </Box>
         )}

@@ -175,7 +175,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {title} </Typography>} placement="top">
+                  <StyleTooltip title={title} placement="top">
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"
@@ -252,7 +252,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && (
+        {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -263,7 +263,11 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
               )}
               {closeHover && (
-                <StyleTooltip title="Close" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.close" />}
+                  placement="top"
+                  arrow
+                >
                   <CloseSolidIcon
                     onClick={handleCloseClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -277,11 +281,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
@@ -294,13 +294,9 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        { pinned && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >

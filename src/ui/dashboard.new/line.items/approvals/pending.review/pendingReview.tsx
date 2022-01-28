@@ -181,7 +181,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<Typography> {title} </Typography>} placement="top">
+                  <StyleTooltip title={title} placement="top">
                     <Link
                       href={changeRequestEditPath(id)}
                       color="inherit"
@@ -251,26 +251,23 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <>
-                        <Typography color="inherit">
-                          <Text
-                            translation="assigned.users.count"
-                            values={{
-                              count:
-                                size(pendingApprovers) +
-                                size(approvedApprovers),
-                            }}
-                          />
-                          <br />
-                          <Text
-                            translation="approved.and.pending.count"
-                            values={{
-                              approved: size(approvedApprovers),
-                              pending: size(pendingApprovers),
-                            }}
-                          />
-                        </Typography>
-                      </>
+                      <Typography color="inherit" className={classes.tooltip}>
+                        <Text
+                          translation="assigned.users.count"
+                          values={{
+                            count:
+                              size(pendingApprovers) + size(approvedApprovers),
+                          }}
+                        />
+                        <br />
+                        <Text
+                          translation="approved.and.pending.count"
+                          values={{
+                            approved: size(approvedApprovers),
+                            pending: size(pendingApprovers),
+                          }}
+                        />
+                      </Typography>
                     }
                     placement="top-start"
                   >
@@ -315,16 +312,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
+                title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
@@ -336,13 +329,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        { pinned && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >
