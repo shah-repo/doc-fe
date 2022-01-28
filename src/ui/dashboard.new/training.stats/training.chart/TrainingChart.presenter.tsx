@@ -21,7 +21,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     const totalCount = overdue + dueInSeven;
     const scaleNumber = scaleLinear()
       .domain([0, totalCount])
-      .range([1, 100]);
+      .range([1, 50]);
     const getScaledValue = (value: number) => {
       if (value === 0) { return 0; }
       return Math.floor(scaleNumber(value));
