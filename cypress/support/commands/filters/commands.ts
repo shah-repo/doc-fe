@@ -132,7 +132,8 @@ Cypress.Commands.add("filterPOVersion", (params: { version: string }) => {
 
 Cypress.Commands.add("filterClear", () => {
   cy.get("[id=\"clearFilter\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckNumberOfDisplayedRecords", (params: { numberOfRecords: string }) => {

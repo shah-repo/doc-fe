@@ -738,8 +738,9 @@ context("Equipment maintenance test", () => {
             cy.get("tr.k-master-row").last().should("have.text", "Active");
           });
 
-          it("Verify 'CAL DUE DATE'", { retries: 3 }, () => {
+          it("Verify 'CAL DUE DATE'", () => {
             SystemRequirement("REQ-2840", "REQ-2910");
+            cy.wait(30 * 1000);
             cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
               cy.reload();
             });
@@ -810,7 +811,7 @@ context("Equipment maintenance test", () => {
               });
           });
 
-          it("Check Calibration document existance", { retries: 3 }, () => {
+          it("Check Calibration document existance", () => {
             SystemRequirement("REQ-2900");
             cy.get("[data-cy=\"maintenanceHistory\"]")
               .eq(1)

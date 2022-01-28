@@ -867,7 +867,8 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
-    it("'One-Time training title' should be present with 'Developers' group", { retries: 2 }, () => {
+    it("'One-Time training title' should be present with 'Developers' group", () => {
+      cy.wait(30 * 1000);
       cy.navigToTrainingCurriculums();
       cy.trLandingPageName({ name: "One-Time training title" });
       cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
@@ -984,8 +985,9 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Verify trainings present on Training Curriculum page with no groups", () => {
-    it("'user training title' should be present with no group", { retries: 2 }, () => {
+    it("'user training title' should be present with no group", () => {
       cy.navigToDashboard();
+      cy.wait(30 * 1000);
       cy.navigToTrainingCurriculums();
       cy.get("button[data-cy=clearFilter]").arrowClick();
       cy.trLandingPageName({ name: "user training title" });

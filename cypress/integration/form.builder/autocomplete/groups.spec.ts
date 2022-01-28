@@ -141,7 +141,7 @@ context("Autocomplete 'Groups' test", () => {
             cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
-          it("Select 'Groupss' as options", () => {
+          it("Select 'Groups' as options", () => {
             cy.get("[data-cy=\"optionId\"]").arrowType("Groups{downarrow}{enter}");
           });
 
