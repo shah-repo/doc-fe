@@ -28,8 +28,6 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
     { value: "TIME_TRAVEL_COMPANY", text: "TIME_TRAVEL_COMPANY" },
     { value: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE", text: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE" },
     { value: "RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE", text: "RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE" },
-    { value: "SUPPLIER_IMPORT", text: "SUPPLIER_IMPORT" },
-    { value: "DEACTIVATE_PROD2_USERS", text: "DEACTIVATE_PROD2_USERS" },
     { value: "RECALC_COMPLIANCE_FOR_EQUIPMENTS", text: "RECALC_COMPLIANCE_FOR_EQUIPMENTS" },
     { value: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS", text: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS" },
     { value: "SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC", text: "SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC" },
@@ -37,6 +35,8 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
     { value: "TRAINING_RECORDS_REFRESH", text: "TRAINING_RECORDS_REFRESH"  },
     { value: "TRAINING_RECORDS_STATUS", text: "TRAINING_RECORDS_STATUS" },
     { value: "UPDATE_BILLS", text: "UPDATE_BILLS" },
+    { value: "DELETE_COMPANIES_SCHDEULED_FOR_DELETE", text: "DELETE_COMPANIES_SCHDEULED_FOR_DELETE" },
+    { value: "PRECALC_DOC_TYPE_FOR_COMPANY", text: "PRECALC_DOC_TYPE_FOR_COMPANY" },
   ];
   const [type, setType] = React.useState("");
   const [payload, setPayload] = React.useState("");
@@ -153,7 +153,6 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
         [
           SQS_TYPES.UPDATE_BILLS,
           SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
-          SQS_TYPES.DEACTIVATE_PROD2_USERS,
           SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
         ].includes(SQS_TYPES[type]) && (
         <EmptyForm {...{ handleEmptyFormSubmit }} key={type}/>
@@ -163,6 +162,8 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
           SQS_TYPES.TRAINING_RECORDS_STATUS,
           SQS_TYPES.TRAINING_RECORDS_REFRESH,
           SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS,
+          SQS_TYPES.DELETE_COMPANIES_SCHDEULED_FOR_DELETE,
+          SQS_TYPES.PRECALC_DOC_TYPE_FOR_COMPANY,
         ].includes(SQS_TYPES[type]) && (
         <DateForm {...{ handleDateFormSubmit }} key={type}/>
       )}
@@ -175,7 +176,6 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
       {type &&
         [
           SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE,
-          SQS_TYPES.SUPPLIER_IMPORT,
         ].includes(SQS_TYPES[type]) && (
         <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
       )}
