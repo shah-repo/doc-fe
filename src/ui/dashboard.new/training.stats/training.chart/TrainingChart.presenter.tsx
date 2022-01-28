@@ -1,10 +1,10 @@
 import { Box, Tab, Typography } from "@material-ui/core";
-import { scaleLinear } from "d3-scale";
 import * as echarts from "echarts";
 import React, { useCallback, useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import { linearScale } from "../../line.items/common/Utils";
 import { StyledTabs } from "../../StyledTabs";
 import DoughnutChartOptions from "./DoughnutChartOptions";
 import { styles } from "./TrainingChart.styles";
@@ -19,9 +19,7 @@ interface TrainingChartPresenterProps {
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
   ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
     const totalCount = overdue + dueInSeven;
-    const scaleNumber = scaleLinear()
-      .domain([0, totalCount])
-      .range([1, 50]);
+    const scaleNumber = linearScale([0, totalCount], [1, 50]);
     const getScaledValue = (value: number) => {
       if (value === 0) { return 0; }
       return Math.floor(scaleNumber(value));
@@ -117,9 +115,11 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         DoughnutChartOptions.series.max = getScaledValue(totalCount) + 0.001;
         myChart?.setOption(DoughnutChartOptions);
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [tabValue]
     );
     useEffect(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       myChart = echarts.init(
         document.getElementById("training-chart") as HTMLInputElement
       );
