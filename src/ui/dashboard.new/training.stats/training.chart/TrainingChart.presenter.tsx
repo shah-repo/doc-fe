@@ -17,6 +17,8 @@ interface TrainingChartPresenterProps {
 
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
   ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
+    overdue = 0;
+    dueInSeven = 0;
     const totalCount = overdue + dueInSeven;
     const data = [
       {

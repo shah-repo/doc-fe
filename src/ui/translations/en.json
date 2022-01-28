@@ -985,6 +985,7 @@
   "training.acknowledge.completion": "Acknowledge your training completion",
   "training.acknowledge.completion.link": "Click here to acknowledge training completion",
   "training.trn.id": "TRN ID",
+  "training.revision": "Rev",
   "training.doc.id.rev": "Doc ID Rev",
   "training.acknowladge.password": "Enter Password to Acknowledge",
   "training.acknowledge.statement": "I acknowledge I am trained on",

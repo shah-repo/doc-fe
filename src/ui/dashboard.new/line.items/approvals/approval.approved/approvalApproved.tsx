@@ -275,23 +275,37 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
-              )}
-              {pinHover && !pinned && (
+            {!pinned && (
+              <span className={classes.actionIcon}>
+                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+                {pinHover && (
+                  <StyleTooltip
+                    title={<Text translation="common.pin" />}
+                    placement="top"
+                    arrow
+                  >
+                    <PinSolidIcon
+                      onClick={handlePinClick}
+                      onMouseLeave={onMouseLeaveActionIcons}
+                    />
+                  </StyleTooltip>
+                )}
+              </span>
+            )}
+            {pinned && (
+              <span className={classes.actionIcon}>
                 <StyleTooltip
-                  title={<Text translation="common.pin" />}
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
                   <PinSolidIcon
-                    onClick={handlePinClick}
+                    onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
-              )}
-            </span>
+              </span>
+            )}
           </Box>
         )}
         {pinned && (

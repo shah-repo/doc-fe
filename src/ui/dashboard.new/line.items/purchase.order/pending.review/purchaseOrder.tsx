@@ -371,16 +371,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && (
-              <StyleTooltip
-                title={<Text translation="common.pin" />}
-                onMouseEnter={onMouseHoverPinIcon}
-                placement="top"
-                arrow
-              >
-                <PinIcon />
-              </StyleTooltip>
-            )}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
