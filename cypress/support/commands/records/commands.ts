@@ -38,24 +38,16 @@ Cypress.Commands.add("recFilterByTitle", (params: {revision: string }) => {
 });
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("#clearFilter").arrowClick();
-  });
+  cy.get("#clearFilter").arrowClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
-    cy.unClick();
-  });
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
+  cy.unClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
-    cy.get("li").contains(params.status).arrowClick().wait(500);
-    cy.unClick();
-  });
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.unClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("tr.k-master-row").contains(params.title).arrowClick();
-  });
+  cy.get("tr.k-master-row").contains(params.title).arrowClick();
 });
 
 Cypress.Commands.add("recCreateRecordFromLandingPage", () => {

@@ -13,9 +13,9 @@ let adminEmployee;
 
 const defaultLogo = "/ta_assets_company_logo.png";
 const defaultAvatar = "/ta_assets_company_avatar.png";
-const defaultDefaultBackground = "#4b5dc6";
+const defaultDefaultBackground = "#EEF3FF";
 const defaultPrimary = "#FFF";
-const defaultPrimaryContrastText = "#000000";
+const defaultPrimaryContrastText = "#FFFFFF";
 const defaultSecondary = "#FFF";
 const defaultSecondaryContrastText = "#FFFFFF";
 

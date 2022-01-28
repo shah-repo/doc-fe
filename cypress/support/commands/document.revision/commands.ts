@@ -454,14 +454,10 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#docId").arrowType(params.docId).wait(500);
-  });
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
