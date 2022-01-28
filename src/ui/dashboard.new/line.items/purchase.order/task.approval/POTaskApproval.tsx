@@ -347,7 +347,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
             {!downloadPdfHover && (
