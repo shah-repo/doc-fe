@@ -66,7 +66,7 @@ export const styles = makeStyles(() =>
       alignItems: "center",
       padding: "0px 10px",
       position: "absolute",
-      width: "112px",
+      width: "146px",
       height: "58px",
       right: "0px",
       top: "0px",

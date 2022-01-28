@@ -15,6 +15,7 @@ import { ReactComponent as ApproveIcon } from "../../../../../assets/images/appr
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
@@ -32,6 +33,7 @@ import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency } from "../../common/Utils";
@@ -97,6 +99,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
+  const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
@@ -150,24 +153,34 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     setRejected(!rejected);
   };
   const onMouseLeaveActionIcons = () => {
+    setDownloadPdfHover(false);
     setApproveHover(false);
     setRejectHover(false);
     setPinHover(false);
   };
   const onMouseHoverPinIcon = () => {
+    setDownloadPdfHover(false);
     setApproveHover(false);
     setRejectHover(false);
     setPinHover(true);
   };
   const onMouseHoverApproveIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(false);
     setRejectHover(false);
     setApproveHover(true);
   };
   const onMouseHoverRejectIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(false);
     setApproveHover(false);
     setRejectHover(true);
+  };
+  const onMouseHoverDownloadPdfIcon = () => {
+    setPinHover(false);
+    setApproveHover(false);
+    setRejectHover(false);
+    setDownloadPdfHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -337,7 +350,29 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             className={classes.actionIcons}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            <span>
+            {!downloadPdfHover && (
+              <span>
+                <DownloadPdfIcon
+                  data-cy="transition-download-pdf"
+                  onMouseEnter={onMouseHoverDownloadPdfIcon}
+                />
+              </span>
+            )}
+            {downloadPdfHover && (
+              <StyleTooltip
+                title={<Text translation="common.download.pdf" />}
+                placement="top"
+                arrow
+              >
+                <span onMouseLeave={onMouseLeaveActionIcons}>
+                  <DownloadHtmlPreview
+                    id={docRevId}
+                    data-cy="transition-download-pdf"
+                  />
+                </span>
+              </StyleTooltip>
+            )}
+            <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon
                   data-cy="transition-reject"
