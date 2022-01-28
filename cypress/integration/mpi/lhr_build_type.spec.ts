@@ -1200,11 +1200,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.mpiStartStep({ stepNumber: 1 });
 
       cy.url().then((url: any) => {
         startMpiUrl = url;
@@ -1299,11 +1295,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.mpiStartStep({ stepNumber: 1 });
 
       cy.url().then((url: any) => {
         startMpiUrl1 = url;
@@ -1418,11 +1410,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"form.builder.start.step\"]").eq(0).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.mpiStartStep({ stepNumber: 1 });
 
       cy.url().then((url: any) => {
         startMpiUrl2 = url;
