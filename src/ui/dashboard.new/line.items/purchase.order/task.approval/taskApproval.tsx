@@ -335,7 +335,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!hoverItem && pinned && (
+        { pinned && (
           <StyleTooltip
             title={
               <Typography>

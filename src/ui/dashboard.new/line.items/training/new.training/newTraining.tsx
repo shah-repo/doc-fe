@@ -16,6 +16,8 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as TrainingIcon } from "../../../../../assets/images/training.svg";
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
+import { trainingActions } from "../../../../../state/ducks/dashboard.new/training";
 import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
 import { TableSearchQueryType } from "../../../../components/table/types";
@@ -40,6 +42,7 @@ interface Props {
   timestamp: string;
   pendingTrainees: any;
   hoverItemId: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (arId: string | undefined) => void;
   pinned: boolean;
   pinLineItem: (id: string) => void;
@@ -56,6 +59,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   trainingStatus,
   timestamp,
   pendingTrainees,
+  pendingEmailSentAt,
   onMouseHoverItem,
   hoverItemId,
   pinned,
@@ -66,6 +70,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -84,10 +89,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const openDueModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(trainingActions.loadTrainingList());
+    }
   };
   const pendingTraineesNames = pendingTrainees
     .map((trainee) => trainee.userName)
@@ -175,7 +187,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {docRevName} {docRevVersion}
+                      {docRevName} &nbsp;<Text translation="training.revision" />&nbsp;{docRevVersion}
                     </Typography>
                   </Link>
                 </Grid>
@@ -311,15 +323,17 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         <TrainingEmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingTrainees={pendingTrainees}
+          setLastEmailSent={setLastEmailSent}
           isOverDue={trainingStatus === TrainingStatus.OVERDUE}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>
