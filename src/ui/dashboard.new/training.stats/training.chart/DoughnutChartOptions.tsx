@@ -47,6 +47,10 @@ const DoughnutChartOptions = {
     axisLabel: {
       show: false,
     },
+    itemStyle: {
+      borderColor: Colors.white,
+      borderWidth: 2,
+    },
     data: [
       {
         value: 0,
