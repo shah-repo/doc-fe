@@ -117,7 +117,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -224,21 +226,23 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top">
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -303,7 +307,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -320,7 +324,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                             pending: size(docRevPendingApprovals),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >
@@ -367,27 +371,10 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && (
-              <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
-                onMouseEnter={onMouseHoverPinIcon}
-                placement="top"
-                arrow
-              >
-                <PinIcon />
-              </StyleTooltip>
-            )}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
+                title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
@@ -400,7 +387,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
             <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}

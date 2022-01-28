@@ -1,9 +1,11 @@
 import {
-  Box, Grid,
+  Box,
+  Grid,
   Link,
   ListItemIcon,
   ListItemText,
-  Modal, Typography,
+  Modal,
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import moment from "moment";
@@ -27,7 +29,7 @@ import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
 import { StyledListItem } from "../../common/StyledListItem";
-import { StyledTooltip } from "../../common/StyledTooltip";
+import { StyleTooltip } from "../../common/StyleTooltip";
 import { styles } from "./newTraining.styles";
 
 interface Props {
@@ -150,9 +152,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     color="textPrimary"
                     noWrap
                   >
-                    <Text
-                      translation="training.on"
-                    />
+                    <Text translation="training.on" />
                   </Typography>
                 </Grid>
                 <Grid item={true}>
@@ -174,22 +174,35 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={TRAINING_URL}
-                    color="inherit"
-                    className={classes.link}
-                    onClick={setTrainingSearchCriteria}
+                  <StyleTooltip
+                    title={
+                      <>
+                        {docRevName}&nbsp;
+                        <Text translation="training.revision" />
+                        &nbsp;{docRevVersion}
+                      </>
+                    }
+                    placement="top"
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={TRAINING_URL}
+                      color="inherit"
+                      className={classes.link}
+                      onClick={setTrainingSearchCriteria}
                     >
-                      {docRevName} &nbsp;<Text translation="training.revision" />&nbsp;{docRevVersion}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}&nbsp;
+                        <Text translation="training.revision" />
+                        &nbsp;{docRevVersion}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -248,18 +261,20 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyledTooltip
+                  <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <>
                         <Text
                           translation="training.users.count"
                           values={{
-                            count: size(pendingTrainees), status: trainingStatus === TrainingStatus.OVERDUE
-                              ? TrainingStatus.OVERDUE
-                              : TrainingStatus.DUE_IN_7_DAYS,
+                            count: size(pendingTrainees),
+                            status:
+                              trainingStatus === TrainingStatus.OVERDUE
+                                ? TrainingStatus.OVERDUE
+                                : TrainingStatus.DUE_IN_7_DAYS,
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >
@@ -279,7 +294,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         {pendingTraineesNames}
                       </Typography>
                     </Link>
-                  </StyledTooltip>
+                  </StyleTooltip>
                 </Grid>
                 <Grid
                   item={true}
@@ -304,21 +319,27 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyledTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
                 />
-              </StyledTooltip>
+              </StyleTooltip>
             )}
           </Box>
         )}
         {pinned && (
-          <StyledTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
-          </StyledTooltip>
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
+          </StyleTooltip>
         )}
       </StyledListItem>
       <Modal

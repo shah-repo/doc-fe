@@ -11,6 +11,7 @@ import { AsyncState, AsyncStatus } from "../../../../../../state/types";
 import FormMessage from "../../../../../components/forms/FormMessage";
 import SubmitButton from "../../../../../components/forms/SubmitButton";
 import Text from "../../../../../components/Text";
+import { StyleTooltip } from "../../../common/StyleTooltip";
 import styles from "./ClosedActionForm.styles";
 
 interface ClosedActionFormProps extends WithStyles<typeof styles> {
@@ -47,14 +48,16 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
         &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true}>
-        <Typography
-          component="span"
-          variant="caption"
-          className={classes.typographyBold}
-          color="textSecondary"
-        >
-          {title}
-        </Typography>
+        <StyleTooltip title={title} placement="top">
+          <Typography
+            component="span"
+            variant="caption"
+            className={classes.typographyBold}
+            color="textSecondary"
+          >
+            {title}
+          </Typography>
+        </StyleTooltip>
         &nbsp;
       </Grid>
       <Grid zeroMinWidth item={true}>
