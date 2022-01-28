@@ -8,7 +8,7 @@ import {
   List,
   ListItemAvatar,
   ListItemText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
