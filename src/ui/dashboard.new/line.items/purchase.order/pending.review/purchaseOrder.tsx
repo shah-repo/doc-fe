@@ -307,7 +307,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit" className={classes.tooltip}>
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -324,7 +324,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                             pending: size(docRevPendingApprovals),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >

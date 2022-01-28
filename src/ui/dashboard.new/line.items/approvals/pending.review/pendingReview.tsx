@@ -251,7 +251,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit" className={classes.tooltip}>
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -267,7 +267,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                             pending: size(pendingApprovers),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >

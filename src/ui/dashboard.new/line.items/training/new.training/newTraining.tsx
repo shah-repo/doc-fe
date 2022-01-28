@@ -5,7 +5,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import moment from "moment";
@@ -263,7 +263,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <StyleTooltip
                     title={
-                      <Typography color="inherit" className={classes.tooltip}>
+                      <>
                         <Text
                           translation="training.users.count"
                           values={{
@@ -274,7 +274,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                                 : TrainingStatus.DUE_IN_7_DAYS,
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >
