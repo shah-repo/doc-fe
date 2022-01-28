@@ -142,7 +142,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       &nbsp;{docRevVersion}
                     </>
                   }
-                  placement="top"
+                  placement="top-start"
                   arrow
                 >
                   <Link

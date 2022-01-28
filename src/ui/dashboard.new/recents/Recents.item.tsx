@@ -104,7 +104,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <StyleTooltip title={docTitle} placement="top" arrow>
+                <StyleTooltip title={docTitle} placement="top-start" arrow>
                   <Link
                     href={changeRequestEditPath(itemId)}
                     color="inherit"

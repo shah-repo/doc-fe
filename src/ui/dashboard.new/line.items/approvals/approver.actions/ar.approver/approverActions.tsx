@@ -274,7 +274,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={arTitle} placement="top" arrow>
+                  <StyleTooltip title={arTitle} placement="top-start" arrow>
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"
