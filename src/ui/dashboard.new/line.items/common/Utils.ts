@@ -1,9 +1,9 @@
 
 export const formatCurrency = (data: string) =>  {
+  const language = "en";
   if (data && !isNaN(+data)) {
-    return (+data).toLocaleString(undefined, {
+    return (+data).toLocaleString(language, {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
     });
   }
   return "";
