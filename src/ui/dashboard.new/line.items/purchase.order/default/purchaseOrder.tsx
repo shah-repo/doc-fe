@@ -93,7 +93,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${formatCurrency(purchaseOrderTotalAmount)}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -167,7 +169,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
-                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -183,21 +189,27 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top">
+                    <Link
+                      href={
+                        docRevName
+                          ? documentVersionPath(docRevId || "", docDocumentId)
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -274,11 +286,15 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -287,11 +303,13 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {!open && pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+        {pinned && (
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>
@@ -300,7 +318,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -340,7 +363,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -367,7 +395,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography

@@ -4,6 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard.new/training.stats/types";
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
+import { linearScale } from "../../line.items/common/Utils";
 import { StyledTabs } from "../../StyledTabs";
 import DoughnutChartOptions from "./DoughnutChartOptions";
 import { styles } from "./TrainingChart.styles";
@@ -18,9 +19,14 @@ interface TrainingChartPresenterProps {
 const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProps> =
   ({ overdue, dueInSeven, tabValue, infoChangeTab }) => {
     const totalCount = overdue + dueInSeven;
+    const scaleNumber = linearScale([0, totalCount], [1, 50]);
+    const getScaledValue = (value: number) => {
+      if (value === 0) { return 0; }
+      return Math.floor(scaleNumber(value));
+    };
     const data = [
       {
-        value: overdue,
+        value: getScaledValue(overdue),
         name: TrainingStatusChartLabelTypes.OVERDUE,
         itemStyle: {
           color: Colors.latest_red_varient,
@@ -33,7 +39,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         },
       },
       {
-        value: dueInSeven === 0 ? dueInSeven : totalCount,
+        value: dueInSeven === 0 ? getScaledValue(dueInSeven) : getScaledValue(totalCount),
         name: TrainingStatusChartLabelTypes.DUE,
         itemStyle: {
           color: Colors.latest_yellow_varient,
@@ -70,7 +76,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     };
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
-    DoughnutChartOptions.series.max = totalCount + 0.001;
+    DoughnutChartOptions.series.max = getScaledValue(totalCount) + 0.001;
     let myChart;
     const classes = styles();
     const updateChart = useCallback(
@@ -106,12 +112,14 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         DoughnutChartOptions.title.text = text;
         DoughnutChartOptions.title.subtext = subText;
         DoughnutChartOptions.title.subtextStyle.color = color;
-        DoughnutChartOptions.series.max = totalCount + 0.001;
+        DoughnutChartOptions.series.max = getScaledValue(totalCount) + 0.001;
         myChart?.setOption(DoughnutChartOptions);
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [tabValue]
     );
     useEffect(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       myChart = echarts.init(
         document.getElementById("training-chart") as HTMLInputElement
       );
@@ -128,13 +136,14 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
           if (index === evt?.dataIndex && index === 0 ) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
               Colors.latest_red_varient;
+            DoughnutChartOptions.title.text = overdue.toString();
           }
           if (index === evt?.dataIndex && index === 1 ) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
               Colors.latest_yellow_varient;
+            DoughnutChartOptions.title.text = dueInSeven.toString();
           }
         });
-        DoughnutChartOptions.title.text = evt?.data?.value;
         DoughnutChartOptions.title.subtext = evt?.data?.name;
         if (evt.data?.name === TrainingStatusChartLabelTypes.OVERDUE) {
           DoughnutChartOptions.title.subtextStyle.color =
