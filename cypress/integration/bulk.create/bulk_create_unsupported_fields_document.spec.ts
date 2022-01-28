@@ -854,8 +854,9 @@ context("Bulk create unsupported fields for documents", () => {
   });
 
   context("Verify created documents", () => {
-    it("Navigate to records list and verify number of records", { retries: 2 }, () => {
+    it("Navigate to records list and verify number of records", () => {
       cy.navigToDashboard();
+      cy.wait(30 * 1000);
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.dlVerifyDocCounter({ docCounterNumber: 5 });

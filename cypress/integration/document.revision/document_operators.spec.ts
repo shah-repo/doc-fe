@@ -421,7 +421,7 @@ context("Document Operators Access Test", () => {
       cy.unClick();
     });
 
-    it("Confirm password", { retries: 3 }, () => {
+    it("Confirm password", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
