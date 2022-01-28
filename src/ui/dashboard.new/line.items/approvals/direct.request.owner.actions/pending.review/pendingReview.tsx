@@ -8,10 +8,13 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
 import { ReactComponent as InReviewWhiteIcon } from "../../../../../../assets/images/in_review_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
+import { Nullable } from "../../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
@@ -38,6 +41,7 @@ interface Props {
   docRevPendingApprovals: any[];
   docRevApprovedApprovals: any[];
   hoverItemId: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
   pinLineItem: (id: string) => void;
@@ -59,10 +63,13 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
     pinLineItem(id);
@@ -81,10 +88,17 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
   return (
     <>
@@ -116,21 +130,23 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top">
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -195,7 +211,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -212,7 +228,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                             pending: size(docRevPendingApprovals),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >
@@ -262,11 +278,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
+                title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
@@ -281,11 +293,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         {pinned && (
           <div className={classes.actionIcons}>
             <StyleTooltip
-              title={
-                <Typography>
-                  <Text translation="common.unpin" />
-                </Typography>
-              }
+              title={<Text translation="common.unpin" />}
               placement="top"
               arrow
             >
@@ -296,15 +304,17 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={docRevPendingApprovals}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>
