@@ -38,6 +38,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -111,7 +112,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount && formatCurrency(purchaseOrderTotalAmount)}`,
     },
     {
       id: "id3",
@@ -323,21 +324,23 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top">
+                    <Link
+                      href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid
@@ -362,11 +365,11 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        { hoverItem && !pinned && (
           <div className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip title={<Text translation="common.pin" />} placement="top" arrow>
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -375,8 +378,8 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {!open && pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+        { pinned && (
+          <StyleTooltip title={<Text translation="common.unpin" />} placement="top" arrow>
             <PinSolidIcon
               onClick={handleUnPinClick}
             />

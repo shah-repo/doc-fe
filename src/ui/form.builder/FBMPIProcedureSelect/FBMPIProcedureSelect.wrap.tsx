@@ -1,6 +1,7 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
+import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
@@ -82,14 +83,19 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const isDateOverdue = (date) => {
+      if (!date) { return; }
+      const currentDate = getFormattedDateString(Date.now());
+      return moment(currentDate).isAfter(date);
+    };
+
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
+      const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
 
-      return Boolean(isLHRProductionBuild &&
-      option.document.documentType.equipmentEnforceProd &&
-      (pmDate || calDate));
+      return Boolean(isLHRProductionBuild && option.document.documentType.equipmentEnforceProd && isOverdue);
     };
 
     // eslint-disable-next-line react/display-name
@@ -100,22 +106,26 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       return <Grid container>
         <Grid item xs={2} >
           <Typography noWrap>
-            {`${option.document.docId} -`}
+            {option.document.docId}<span> &#9642;</span>
           </Typography>
         </Grid>
         <Grid item >
           <Typography noWrap>
-            {`rev ${option.displayRevision}`}
+            {`rev ${option.displayRevision} `}
           </Typography>
         </Grid>
-        <Grid item xs={5} >
+        <Grid item xs={8} >
           <Typography noWrap>
             {`- ${option.name}`}
           </Typography>
         </Grid>
-        <Grid item xs={4} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>} <br/>
-          {calDate && <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
+        <Grid
+          item xs={12}
+          style={{ textAlign: "left", color: Colors.latest_red_varient, fontSize: "14px", paddingBottom: "4px" }}
+        >
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
+          {pmDate && calDate && <Box component="span" style={{ color: Colors.black }}>&#9642;</Box>}
+          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
     };

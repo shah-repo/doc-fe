@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
@@ -21,6 +22,7 @@ import { ReactComponent as POIcon } from "../../../../../assets/images/PO.svg";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
 import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
@@ -32,6 +34,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
 
@@ -72,6 +75,7 @@ interface Props {
   purchaseOrderTotalAmount: string;
   purchaseSupplierName: string;
   hoverItemId: string;
+  pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
@@ -99,6 +103,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
+  pendingEmailSentAt,
 }) => {
   const classes = styles();
   const PoItems: any = [
@@ -112,7 +117,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -133,9 +140,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       rtext: purchaseOrderAttachments || [],
     },
   ];
+  const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
   const handleClick = () => {
@@ -158,10 +167,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   };
   const openApproversModel = (e) => {
     e.stopPropagation();
+    setLastEmailSent(false);
     setEmailModelopen(true);
   };
   const handleEmailModelClose = () => {
     setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
   };
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -210,21 +226,23 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top">
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -289,7 +307,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -306,7 +324,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                             pending: size(docRevPendingApprovals),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
                   >
@@ -351,29 +369,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && (
-              <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
-                onMouseEnter={onMouseHoverPinIcon}
-                placement="top"
-                arrow
-              >
-                <PinIcon />
-              </StyleTooltip>
-            )}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
+                title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
@@ -385,8 +386,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </div>
         )}
-        {(!open || !hoverItem) && pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
+        {pinned && (
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
             <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
@@ -529,15 +534,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       </Collapse>
       <Modal
         open={emailModelopen}
-        onClose={handleEmailModelClose}
+        onClose={onClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         <EmailModal
           id={id}
-          handleEmailModelClose={handleEmailModelClose}
+          handleEmailModelClose={onClose}
           pendingApprovers={docRevPendingApprovals}
+          setLastEmailSent={setLastEmailSent}
           approvedApprovers={docRevApprovedApprovals}
+          pendingEmailSentAt={pendingEmailSentAt}
         />
       </Modal>
     </>
