@@ -175,7 +175,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={title} placement="top">
+                  <StyleTooltip title={title} placement="top" arrow>
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"

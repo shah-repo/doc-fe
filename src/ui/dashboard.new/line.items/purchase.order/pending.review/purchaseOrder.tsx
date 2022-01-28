@@ -226,7 +226,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top">
+                  <StyleTooltip title={docRevName} placement="top" arrow>
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -326,7 +326,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         />
                       </>
                     }
-                    placement="top-start"
+                    placement="top"
+                    arrow
                   >
                     <Link
                       href="#"

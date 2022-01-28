@@ -183,6 +183,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                       </>
                     }
                     placement="top"
+                    arrow
                   >
                     <Link
                       href={TRAINING_URL}
@@ -276,7 +277,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         />
                       </>
                     }
-                    placement="top-start"
+                    placement="top"
+                    arrow
                   >
                     <Link
                       href="#"

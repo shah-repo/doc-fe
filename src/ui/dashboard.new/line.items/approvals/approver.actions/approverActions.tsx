@@ -238,7 +238,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top">
+                  <StyleTooltip title={docRevName} placement="top" arrow>
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"

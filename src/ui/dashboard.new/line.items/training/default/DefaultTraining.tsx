@@ -143,6 +143,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     </>
                   }
                   placement="top"
+                  arrow
                 >
                   <Link
                     href={documentVersionPath(docRevId, docDocumentId)}
