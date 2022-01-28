@@ -30,12 +30,6 @@ export enum RevisionChangeType {
   AdministrativeChange = "ADMINISTRATIVE_CHANGE",
   Void = "VOID",
 }
-export interface TypeSpecificConfig {
-  eqProdEnforceConfig: {
-    date: string;
-    value: boolean;
-  };
-}
 
 export interface DocumentRevisionDocument {
   children: DocumentRevision[];
@@ -347,4 +341,11 @@ export interface UpdateFormFieldMapping {
 export interface UpdateFormRequestBody {
   mapping: UpdateFormFieldMapping[];
   formToBeUsed: Id;
+}
+
+interface TypeSpecificConfig {
+  eqProdEnforceConfig: {
+    date: string;
+    value: boolean;
+  };
 }
