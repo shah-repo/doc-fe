@@ -1,15 +1,15 @@
-import { Box, Button, Checkbox, Chip, FormControl, Grid, InputLabel, ListItemIcon, ListItemText, MenuItem, Select, TextField } from "@material-ui/core";
+import { Box, Button, Grid, TextField } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import * as Yup from "yup";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
-import { NEXT_TASK_TYPES, TimeTravelProps } from "../../types";
+import { TimeTravelSessionProps } from "../../types";
 import { styles } from "./time.travel.form.styles";
 
 interface Props {
-  handleTimeTravelFormSubmit: (values: TimeTravelProps) => void;
+  handleTimeTravelFormSubmit: (values: TimeTravelSessionProps) => void;
 }
 const RecentsPresenter: React.FunctionComponent<Props> = ({
   handleTimeTravelFormSubmit,
@@ -36,30 +36,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
       .matches(/^[0-9]+$/, "Should be greather than 0"),
   });
   const intl = useIntl();
-  const [selected, setSelected] = useState<string[]>([]);
-  const isAllSelected =
-  NEXT_TASK_TYPES.length > 0 && selected.length === NEXT_TASK_TYPES.length;
-  const handleChange = (event, setFieldValue) => {
-    let value = event.target.value;
-    if (value[value.length - 1] === "all") {
-      value = selected.length === NEXT_TASK_TYPES.length ? [] : NEXT_TASK_TYPES;
-      setSelected(value);
-      setFieldValue("nextTaskTypes", value);
-      return;
-    }
-    setSelected(value);
-    setFieldValue("nextTaskTypes", value);
-  };
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
 
   return (
     <Box mt={2} className={classes.root}>
@@ -71,7 +47,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
           hour: 0,
           minute: 0,
           second: 0,
-          nextTaskTypes: selected,
         }}
         validationSchema={DisplayingErrorMessagesSchema}
         onSubmit={(values) => {
@@ -176,54 +151,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                       </>
                     }
                   />
-                </Grid>
-                <Grid item={true} sm={4}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="mutiple-select-label">Next Task</InputLabel>
-                    <Select
-                      labelId="mutiple-select-label"
-                      multiple
-                      value={selected}
-                      onChange={(event) => handleChange(event, setFieldValue)}
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {(selected as string[]).map((value) => (
-                            <Chip key={value} label={value} className={classes.chip} />
-                          ))}
-                        </div>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      <MenuItem
-                        value="all"
-                        classes={{
-                          root: isAllSelected ? classes.selectedAll : "",
-                        }}
-                      >
-                        <ListItemIcon>
-                          <Checkbox
-                            classes={{ indeterminate: classes.indeterminateColor }}
-                            checked={isAllSelected}
-                            indeterminate={
-                              selected.length > 0 && selected.length < NEXT_TASK_TYPES.length
-                            }
-                          />
-                        </ListItemIcon>
-                        <ListItemText
-                          classes={{ primary: classes.selectAllText }}
-                          primary="Select All"
-                        />
-                      </MenuItem>
-                      {NEXT_TASK_TYPES.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          <ListItemIcon>
-                            <Checkbox checked={selected.includes(option)} />
-                          </ListItemIcon>
-                          <ListItemText primary={option} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
                 </Grid>
               </Grid>
             </Box>
