@@ -331,14 +331,43 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               <ListItemText
                 id={prItem.docId}
                 primary={
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
                   >
-                    {prItem.name}
-                  </Typography>
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                      <StyleTooltip title={<>
+                        <Text translation="common.revision" />
+                      &nbsp;{prItem.displayRevision} {prItem.name}
+                      </>} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="common.revision" />
+                      &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
                 }
               />
               <Box component="div">
