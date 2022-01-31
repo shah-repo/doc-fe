@@ -32,6 +32,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     const { id, document } = workspaceState || {};
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
+    const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
+    const enforceFlag = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
 
     React.useEffect(() => {
       dialogState?.setActions(
@@ -99,12 +101,15 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
       const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
-      const equipmentEnforceProd = option.document.documentType.equipmentEnforceProd;
 
-      if (!equipmentEnforceProd && !isEqActive(option.eqStatus)) {
+      if (!enforceFlag && !isEqActive(option.eqStatus)) {
         return true;
       }
-      return !isEqActive(option.eqStatus) || Boolean(isLHRProductionBuild && equipmentEnforceProd && isOverdue);
+
+      if (enforceFlag && Boolean(isLHRProductionBuild)) {
+        return !isEqActive(option.eqStatus) || isOverdue;
+      }
+      return !isEqActive(option.eqStatus);
     };
 
     // eslint-disable-next-line react/display-name
@@ -113,7 +118,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       const calDate = FB.calculateDateByType(option, "calibration" );
 
       return <Grid container>
-        <Grid item xs={2} >
+        <Grid item xs={2}>
           <Typography noWrap>
             {option.document.docId}<span> &#9642;</span>
           </Typography>
