@@ -5,6 +5,7 @@ import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { toastError } from "../../components/notifications";
+import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { toDocumentTypeBody, toDocumentTypeIntialValues } from "../transform";
@@ -25,6 +26,7 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   });
 
   const { id } = documentType;
+  const isLHR = checkIsDocumentLHR(documentType.groupOptions);
   const initialValues = toDocumentTypeIntialValues(documentType);
   const transitionLabel =  "common.delete";
   const disabled = Config.docTypeManagementEditDisabled;
@@ -45,7 +47,7 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
 
   const render = (props: FormikProps<any>) => (
     <DocumentTypeFormPresenter
-      {...{ handleTransition, transitionLabel, disabled }}
+      {...{ handleTransition, transitionLabel, disabled, isLHR }}
       {...props}
     />
   );
