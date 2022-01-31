@@ -104,25 +104,27 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={
-                      docRevName
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                    <Link
+                      href={
+                        docRevName
+                          ? documentVersionPath(docRevId || "", docDocumentId)
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -174,9 +176,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             onMouseLeave={onMouseLeaveActionIcons}
           >
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
               {pinHover && !pinned && (
-                <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.pin" />}
+                  placement="top"
+                  arrow
+                >
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -187,10 +195,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow >
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>
