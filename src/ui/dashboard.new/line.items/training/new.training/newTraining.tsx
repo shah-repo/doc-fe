@@ -184,6 +184,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     }
                     placement="top-start"
                     arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
                     <Link
                       href={TRAINING_URL}
@@ -279,6 +280,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     }
                     placement="top-start"
                     arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
                     <Link
                       href="#"

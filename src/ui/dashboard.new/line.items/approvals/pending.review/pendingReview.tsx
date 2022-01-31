@@ -181,7 +181,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={title} placement="top-start" arrow>
+                  <StyleTooltip title={title} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
                     <Link
                       href={changeRequestEditPath(id)}
                       color="inherit"
@@ -269,8 +269,9 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                         />
                       </>
                     }
-                    placement="top"
+                    placement="top-start"
                     arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
                     <Link
                       href="#"
