@@ -57,7 +57,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const renderPendingActions = () => (
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
+    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems
         .map((pendingAction, index) => {
           switch (pendingAction.type) {
@@ -136,6 +136,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <Divider />
                 </>
               );
+            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
               return (
                 <>
@@ -347,6 +348,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     <DirectApprovalActionPRItem
                       key={index}
                       id={pendingAction.id}
+                      docTypeGroup={pendingAction.docTypeGroup}
                       docDocumentId={pendingAction.docDocumentId}
                       docId={pendingAction.docId}
                       docRevId={pendingAction.docRevId}
@@ -378,6 +380,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <DirectApprovalActionItem
                     key={index}
                     id={pendingAction.id}
+                    docTypeGroup={pendingAction.docTypeGroup}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}
@@ -428,7 +431,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 </>
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
-            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
               return (
                 <>
                   <ARTaskApproval

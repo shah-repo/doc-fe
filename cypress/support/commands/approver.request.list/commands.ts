@@ -39,67 +39,48 @@ Cypress.Commands.add("alClearFilters", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
     cy.get("#clearFilter").arrowClick();
   });
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alFilterByArId", (params: {arId: string }) => {
-  cy.get("input[name=crId]").arrowType(params.arId).wait(500);
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.arId).wait(500);
 });
 
 Cypress.Commands.add("alVerifyFilterByArId", (params: {arId: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(1)>div>a>div>div")
-        .should("have.text", params.arId);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", params.arId);
 });
 
 Cypress.Commands.add("alFilterByTitle", (params: {title: string }) => {
-  cy.get("input[name=title]").arrowType(params.title).wait(500);
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
 });
 
 Cypress.Commands.add("alVerifyFilterByTitle", (params: {title: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>a>div>div")
-        .should("have.text", params.title);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", params.title);
 });
 
 Cypress.Commands.add("alFilterByOwner", (params: {owner: string }) => {
-  cy.get("input[name=owner]").arrowType(params.owner).wait(500);
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.owner).wait(500);
 });
 
 Cypress.Commands.add("alVerifyFilterByOwner", (params: {owner: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
-        .should("have.text", params.owner);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(2).find("span").eq(0).should("have.text", params.owner);
 });
 
 Cypress.Commands.add("alFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-state\"]").arrowClick();
-  cy.get("ul[role=listbox]>li").contains(params.status).arrowClick();
-  cy.get("div.MuiCircularProgress-root").should("not.exist");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("alVerifyFilterByStatus", (params: {status: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get(" div.ReactVirtualized__Table__rowColumn:nth-child(4)>div>div>div")
-        .should("have.text", params.status);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", params.status);
 });
 
 Cypress.Commands.add("alVerifyFilterClear", () => {
-  cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=title]").should("have.attr", "value", "");
-  cy.get("input[name=owner]").should("have.attr", "value", "");
-  cy.get("input[name=state]").should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select State");
 });
 
 Cypress.Commands.add("alVerifyDescriptionOnHover", (params: {description: string}) => {

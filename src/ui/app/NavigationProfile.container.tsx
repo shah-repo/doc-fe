@@ -41,6 +41,7 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
 
   const hasMultipleCompanies = useSelector(authSelectors.hasMultipleCompanies);
   const avatar = useSelector(authSelectors.currentEmployeeAvatar);
+  const initialColor = useSelector(authSelectors.getAvatarInitialColor);
   const email = useSelector(authSelectors.currentUserEmail);
   const name = useSelector(authSelectors.currentUserName);
 
@@ -72,6 +73,7 @@ const NavigationProfileContainer: React.FunctionComponent<Props> = ({
         closeUserProfile,
         showUserProfile,
         avatar,
+        initialColor,
         handleOpenMenu,
         handleCloseMenu,
         anchorEl,

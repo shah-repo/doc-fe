@@ -64,7 +64,7 @@ const ClosedActionForm: React.FunctionComponent<ClosedActionFormProps> = ({
           className={classes.typography}
           color="textPrimary"
         >
-          <Text translation="transition.action.cancel.discription" />
+          <Text translation="transition.action.cancel.description" />
         </Typography>
       </Grid>
     </Grid>

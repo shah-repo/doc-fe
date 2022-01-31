@@ -528,8 +528,8 @@
   "transition.action.pending_submission": "Pending submission",
   "transition.action.close.date": "Select effective date",
   "transition.action.close.title": "Close Approval Request",
-  "transition.action.cancel.discription": "will be closed. Would you like to close this?",
-  "transition.action.close.date.discription": "Secheduled to close on ",
+  "transition.action.cancel.description": "will be closed. Would you like to close this?",
+  "transition.action.close.date.description": "Scheduled to close on ",
   "transition.action.approve.title": "Approve Request",
   "transition.action.cancel.schedule.title": "Schedule Later",
   "transition.action.reject.title": "Reject Request",
@@ -1138,7 +1138,7 @@
   "header.welcome.back": "Welcome Back",
   "training.on": "Training on",
   "assigned.users.count": "Assigned to {count} users.",
-  "approved.and.pending.count": "{approved} have Approved and {pending} are Pending.",
+  "approved.and.pending.count": "{approved} have approved and {pending} are pending.",
   "training.email.title": "Email Confirmation",
   "training.users.count": "{status} for {count} users.",
   "training.email.success.message": "EMAIL SENT TO ALL",
@@ -1189,5 +1189,6 @@
   "documenttype.edit.config": "Edit Field config",
   "documenttype.view.config": "View Field config",
   "sm.general": "General",
-  "sm.overview": "Overview"
+  "sm.overview": "Overview",
+  "just.now": "Just now"
 }

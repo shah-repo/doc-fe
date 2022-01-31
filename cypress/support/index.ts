@@ -27,6 +27,7 @@ import "./commands/attachments/commands";
 import "./commands/auth/commands";
 import "./commands/company.replica/commands";
 import "./commands/company/commands";
+import "./commands/dashboard/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
 import "./commands/engineering.build/commands";
@@ -73,7 +74,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 
   if (err.message.includes("scheduledForDeletion")) {
     // eslint-disable-next-line no-console
-    console.log("Cannot read properties of undefined (reading 'scheduledForDeletion')");
+    console.log("Ignoring 'Cannot read properties of undefined (reading 'scheduledForDeletion')'");
     return false;
   }
   return true;

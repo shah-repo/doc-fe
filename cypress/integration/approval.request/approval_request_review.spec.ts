@@ -25,6 +25,18 @@ const dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Approval request form scenario", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -412,7 +424,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveARNew();
+        cy.arApproveARFromDashboard();
       });
     });
 
@@ -433,7 +445,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveARNew();
+        cy.arApproveARFromDashboard();
       });
     });
   });
@@ -470,7 +482,7 @@ context("Approval request form scenario", () => {
 
     it("Navigate to dashboard", () => {
       SystemRequirement("REQ-2200");
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify there is no dashboard notifications", () => {

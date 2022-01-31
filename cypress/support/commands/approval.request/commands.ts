@@ -30,7 +30,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
-      arApproveARNew(): Chainable<Subject>;
+      arApproveARFromDashboard(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
@@ -45,7 +45,6 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
-      arCheckDashboardPONotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
       arInReview(params: {arID: string; employeeId: string; sessionId: string}): Chainable<Subject>;
@@ -81,10 +80,6 @@ Cypress.Commands.add("arClickCreateAnAR", () => {
 
 Cypress.Commands.add("arCheckDashboardARNotificationExistance", (params: {shouldExist: boolean}) => {
   cy.get("[data-cy=\"pendingActionsAR\"]").should(params.shouldExist ? "exist" : "not.exist");
-});
-
-Cypress.Commands.add("arCheckDashboardPONotificationExistance", (params: {shouldExist: boolean}) => {
-  cy.get("[data-cy=\"pendingActionsPO\"]").should(params.shouldExist ? "exist" : "not.exist");
 });
 
 Cypress.Commands.add("arPatchAR", (params: {
@@ -368,20 +363,15 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
-    cy.get("#title").arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit, CyRoutes.SessionDetails], () => {
+    cy.get(".k-master-row").contains(params.title).arrowClick();
   });
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
-    cy.get("[id=\"mui-component-select-state\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.ArAudit,
-  ], () => {
-    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
-  });
 });
 
 Cypress.Commands.add("arApproveAR", () => {
@@ -396,7 +386,7 @@ Cypress.Commands.add("arApproveAR", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("arApproveARNew", () => {
+Cypress.Commands.add("arApproveARFromDashboard", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
@@ -457,9 +447,10 @@ Cypress.Commands.add("arRejectComfirmationARNew", () => {
 Cypress.Commands.add("arSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ARPreview,
+    CyRoutes.SessionDetails,
     CyRoutes.GetRequiredApproversDocRev,
     CyRoutes.GetAutocompleteOptions], () => {
-    cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+    cy.get("tr.k-master-row").first().arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
