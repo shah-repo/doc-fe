@@ -1,4 +1,5 @@
 import {
+  Box,
   Collapse,
   Grid,
   Link,
@@ -12,6 +13,7 @@ import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/app
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
@@ -25,6 +27,7 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -36,7 +39,7 @@ interface Props {
   id: string;
   docDocumentId: string;
   docId: string;
-  docRevId?: string;
+  docRevId: string;
   type: string;
   pinned: boolean;
   docRevName: string;
@@ -117,6 +120,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   ];
   const [pinHover, setPinHover] = React.useState(false);
+  const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
@@ -130,10 +134,16 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(true);
   };
-  const onMouseLeavePinIcon = () => {
+  const onMouseLeaveActionIcons = () => {
     setPinHover(false);
+    setDownloadPdfHover(false);
+  };
+  const onMouseHoverDownloadPdfIcon = () => {
+    setPinHover(false);
+    setDownloadPdfHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -286,22 +296,64 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && !pinned && (
-          <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-            {pinHover && (
+        {hoverItem && (
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
+            {!downloadPdfHover && (
+              <span>
+                <DownloadPdfIcon
+                  data-cy="transition-download-pdf"
+                  onMouseEnter={onMouseHoverDownloadPdfIcon}
+                />
+              </span>
+            )}
+            {downloadPdfHover && (
               <StyleTooltip
-                title={<Text translation="common.pin" />}
+                title={<Text translation="common.download.pdf" />}
                 placement="top"
                 arrow
               >
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
-                />
+                <span onMouseLeave={onMouseLeaveActionIcons}>
+                  <DownloadHtmlPreview
+                    id={docRevId}
+                    data-cy="transition-download-pdf"
+                  />
+                </span>
               </StyleTooltip>
             )}
-          </div>
+            <span className={classes.actionIcon}>
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
+              {pinHover && !pinned && (
+                <StyleTooltip
+                  title={<Text translation="common.pin" />}
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handlePinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+              {pinned && (
+                <StyleTooltip
+                  title={<Text translation="common.unpin" />}
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handleUnPinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+          </Box>
         )}
         {pinned && (
           <StyleTooltip

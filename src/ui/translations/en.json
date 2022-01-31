@@ -334,6 +334,7 @@
   "common.generate.pdf": "Generate PDF",
   "common.approve": "Approve",
   "common.reject": "Reject",
+  "common.download.pdf": "Download PDF",
   "common.total.amount": "Total amount",
   "common.line.items": "Line items",
   "common.undefined": "Undefined",
