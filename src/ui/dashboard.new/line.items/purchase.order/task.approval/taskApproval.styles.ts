@@ -66,12 +66,17 @@ export const styles = makeStyles(() =>
       alignItems: "center",
       padding: "0px 10px",
       position: "absolute",
-      width: "112px",
       height: "58px",
       right: "0px",
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+    },
+    poActionIconsWidth: {
+      width: "146px",
+    },
+    nonPoActionIconsWidth: {
+      width: "112px",
     },
     typography: {
       "fontSize": "14px",

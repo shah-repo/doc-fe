@@ -613,10 +613,7 @@ context("LHR Upgrade", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
@@ -699,7 +696,8 @@ context("LHR Upgrade", () => {
     it("LHR should hold first version of MPI", () => {
       SystemRequirement("REQ-3450");
       cy.get("[name=\"lhrstep-built-in\"]").trigger("mouseover");
-      cy.get("input[data-cy=\"lhrstep-built-in\"]").should("have.value", "PI-00002 - MPI document");
+      cy.get("input[data-cy=\"lhrstep-built-in\"]")
+        .should("have.value", "LHR-00004, Step #1 (PI-00002, MPI document, Rev 1)");
     });
   });
 });

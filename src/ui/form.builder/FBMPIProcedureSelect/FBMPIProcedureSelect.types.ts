@@ -27,3 +27,12 @@ export interface FBMPIProcedureSelectValue {
   pmDueDate?: string;
   calDueDate?: string;
 }
+
+export enum EQStatus {
+  NoInfo = "No Info",
+  Inactive = "Inactive",
+  Retired = "Retired",
+  Active = "Active",
+  ActiveCalibrated = "Active Calibrated",
+  ActiveNoCalRequired = "Active No Cal Required",
+}

@@ -498,8 +498,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Verify created docs", () => {
-      it("Navigate to document list and verify count", { retries: 2 }, () => {
+      it("Navigate to document list and verify count", () => {
         cy.navigToDashboard();
+        cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
         cy.dlVerifyDocCounter({ docCounterNumber: 9 });
@@ -626,8 +627,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Verify created docs", () => {
-      it("Navigate to document list and verify count", { retries: 2 }, () => {
+      it("Navigate to document list and verify count", () => {
         cy.navigToDashboard();
+        cy.wait(30 * 1000);
         cy.navigToDocumentList();
         cy.dlClearFilters();
         cy.dlVerifyDocCounter({ docCounterNumber: 11 });

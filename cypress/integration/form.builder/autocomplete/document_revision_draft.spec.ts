@@ -13,6 +13,18 @@ let secondEmployee;
 const documentRevisionTitle = `DocumentRevision${moment().format("X")}`;
 
 context("Autocomplete 'Document Revisions In Draft without Records' test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");

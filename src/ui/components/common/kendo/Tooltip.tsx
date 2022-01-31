@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
-import { StyledTooltip } from "../../../dashboard.new/line.items/common/StyledTooltip";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 import { styles } from "./Tooltip.styles";
 
 interface Props {
@@ -18,7 +18,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   return (
-    <StyledTooltip
+    <StyleTooltip
       interactive={true}
       enterDelay={1000}
       title={
@@ -33,7 +33,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
         {!childrenElement && <span className={customClass}>{data}</span>}
         {childrenElement && childrenElement}
       </span>
-    </StyledTooltip>
+    </StyleTooltip>
   );
 };
 

@@ -1262,7 +1262,8 @@ context("Receivable test with Page Details", () => {
       });
     });
 
-    it("Navig to receiving", { retries: 2 }, () => {
+    it("Navig to receiving", () => {
+      cy.wait(30 * 1000);
       cy.navigToReceivableList();
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
         cy.reload();

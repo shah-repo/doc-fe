@@ -45,65 +45,39 @@ declare global {
 }
 
 Cypress.Commands.add("dlVerifyDocIdIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(1)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(0).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyRevisionIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(1).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyTitleIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(2).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyTypeIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(4)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(3).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyOwnerIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(5)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(4).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyARIdIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(6)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(5).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyStatusIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(7)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(6).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlVerifyEffectiveDateIsPresentOnFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(8)>div>a>div>div").should("not.be.empty");
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(7).should("not.be.empty");
 });
 
 Cypress.Commands.add("dlClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("button[data-cy=clearFilter]").arrowClick();
-  });
+  cy.get("button[data-cy=clearFilter]").arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -112,144 +86,98 @@ Cypress.Commands.add("dlVerifyDocumentCount", (params: {numberOfDoc: integerType
 });
 
 Cypress.Commands.add("dlFilterByDocId", (params: {docId: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=docId]").arrowType(params.docId).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocId", (params: {docId: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(1)>div>a>div>div")
-        .should("have.text", params.docId);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", params.docId);
 });
 
 Cypress.Commands.add("dlFilterByRev", (params: {revision: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=displayRevision]").arrowType(params.revision).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>a>div>div")
-        .should("have.text", params.revision);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", params.revision);
 });
 
 Cypress.Commands.add("dlFilterByDocTitle", (params: {docTitle: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#name").arrowType(params.docTitle).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.docTitle).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
-        .should("have.text", params.docTitle);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", params.docTitle);
 });
 
 Cypress.Commands.add("dlFilterByType", (params: {type: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#mui-component-select-documentTypeId").arrowClick();
-    cy.get("ul[role=listbox]>li").contains(params.type).arrowClick().wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.type).arrowClick().wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByType", (params: {type: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(4)>div>a>div>div")
-        .should("have.text", params.type);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", params.type);
 });
 
 Cypress.Commands.add("dlFilterByOwner", (params: {owner: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=owner]").arrowType(params.owner).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByOwner", (params: {owner: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(5)>div>a>div>div")
-        .should("have.text", params.owner);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(4).find("span").eq(0).should("have.text", params.owner);
 });
 
 Cypress.Commands.add("dlFilterByArId", (params: {arId: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=crId]").arrowType(params.arId).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="6"] input`).arrowType(params.arId).wait(500);
 });
 
 Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(6)>div>a>div>div")
-        .should("have.text", params.arId);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", params.arId);
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDisplayStatus, () => {
-    cy.get("ul[role=listbox]>li").contains(params.status).arrowClick().wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(7)>div>div>div")
-        .should("have.text", params.status);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", params.status);
 });
 
 Cypress.Commands.add("dlFilterByEffectiveDate", (params: {effectiveDate: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#mui-component-select-effectiveDate").arrowClick();
-    cy.get("ul[role=listbox]>li").contains(params.effectiveDate).arrowClick().wait(500);
+    cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+    cy.get("li").contains(params.effectiveDate).arrowClick().wait(500);
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("dlVerifyFilterByEffectiveDate", (params: {effectiveDate: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(8)>div>a>div>div")
-        .should("have.text", params.effectiveDate);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", params.effectiveDate);
 });
 
 Cypress.Commands.add("dlVerifyFilterClear", () => {
-  cy.get("input[name=docId]").should("have.attr", "value", "");
-  cy.get("input[name=displayRevision]").should("have.attr", "value", "");
-  cy.get("input[name=name]").should("have.attr", "value", "");
-  cy.get("input[name=documentTypeId]").should("have.attr", "value", "");
-  cy.get("input[name=owner]").should("have.attr", "value", "");
-  cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=displayStatus]").should("have.attr", "value", "");
-  cy.get("input[name=effectiveDate]").should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select Type");
+  cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "Select State");
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "Select Item");
 });
+
+function getListItemNumber(text: string) {
+  const elementText = text;
+  const numberOfItems = elementText.match(/\d{1,2}/g);
+
+  return numberOfItems ? numberOfItems?.pop() : "error";
+}
 
 Cypress.Commands.add("dlVerifyDocCounter", (params: {docCounterNumber: integerType}) => {
   cy.get("div.k-pager-info").then(($el) => {
-    const elementText = $el.text();
-    const numberOfItems = elementText[elementText.length - 7];
-    expect(parseInt(numberOfItems, 10)).to.be.equal(params.docCounterNumber);
+    cy.wrap({ getListItemNumber }).invoke("getListItemNumber", $el.text())
+      .should("eq", params.docCounterNumber.toString());
   });
 });
 

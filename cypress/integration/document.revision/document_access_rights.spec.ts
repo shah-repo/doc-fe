@@ -32,6 +32,17 @@ const documentType = "Form";
 const outputDocumentType = "Component Specification";
 
 context("Document Access Rights", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
@@ -100,11 +111,7 @@ context("Document Access Rights", () => {
     });
 
     it("Save group", () => {
-      cy.grpAddGroup();
-    });
-
-    it("Close group dialog", () => {
-      cy.grpCloseGroupBtn();
+      cy.grpSaveGroup();
     });
   });
 

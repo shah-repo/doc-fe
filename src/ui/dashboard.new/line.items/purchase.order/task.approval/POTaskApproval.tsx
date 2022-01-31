@@ -15,6 +15,7 @@ import { ReactComponent as ApproveIcon } from "../../../../../assets/images/appr
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
@@ -32,8 +33,10 @@ import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
 import { styles } from "./taskApproval.styles";
 
@@ -96,6 +99,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
+  const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const [rejected, setRejected] = React.useState(false);
@@ -111,7 +115,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -147,24 +153,34 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     setRejected(!rejected);
   };
   const onMouseLeaveActionIcons = () => {
+    setDownloadPdfHover(false);
     setApproveHover(false);
     setRejectHover(false);
     setPinHover(false);
   };
   const onMouseHoverPinIcon = () => {
+    setDownloadPdfHover(false);
     setApproveHover(false);
     setRejectHover(false);
     setPinHover(true);
   };
   const onMouseHoverApproveIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(false);
     setRejectHover(false);
     setApproveHover(true);
   };
   const onMouseHoverRejectIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(false);
     setApproveHover(false);
     setRejectHover(true);
+  };
+  const onMouseHoverDownloadPdfIcon = () => {
+    setPinHover(false);
+    setApproveHover(false);
+    setRejectHover(false);
+    setDownloadPdfHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -283,25 +299,27 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={
-                      docRevName
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                    <Link
+                      href={
+                        docRevName
+                          ? documentVersionPath(docRevId || "", docDocumentId)
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid
@@ -326,13 +344,35 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {hoverItem && (
           <Box
             component="div"
-            className={classes.actionIcons}
+            className={`${classes.actionIcons} ${classes.poActionIconsWidth}`}
             onMouseLeave={onMouseLeaveActionIcons}
           >
-            <span>
+            {!downloadPdfHover && (
+              <span>
+                <DownloadPdfIcon
+                  data-cy="transition-download-pdf"
+                  onMouseEnter={onMouseHoverDownloadPdfIcon}
+                />
+              </span>
+            )}
+            {downloadPdfHover && (
+              <StyleTooltip
+                title={<Text translation="common.download.pdf" />}
+                placement="top"
+                arrow
+              >
+                <span onMouseLeave={onMouseLeaveActionIcons}>
+                  <DownloadHtmlPreview
+                    id={docRevId}
+                    data-cy="transition-download-pdf"
+                  />
+                </span>
+              </StyleTooltip>
+            )}
+            <span className={classes.actionIcon}>
               {!rejectHover && (
                 <RejectIcon
                   data-cy="transition-reject"
@@ -340,7 +380,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {rejectHover && (
-                <StyleTooltip title="Reject" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.reject" />}
+                  placement="top"
+                  arrow
+                >
                   <RejectSolidIcon
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
@@ -357,7 +401,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {approveHover && (
-                <StyleTooltip title="Approve" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.approve" />}
+                  placement="top"
+                  arrow
+                >
                   <ApproveSolidIcon
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
@@ -372,11 +420,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
@@ -388,11 +432,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
@@ -405,13 +445,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        {!open && !hoverItem && pinned && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >
