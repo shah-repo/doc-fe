@@ -960,7 +960,7 @@ context("Bulk create public, private and reserved record-ids", () => {
             "TPP-00010",
           ];
 
-          cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+          cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
             expect($document.text()).to.be.oneOf(recordIdsThatShouldBeOnRecordsList);
           });
         });
@@ -984,7 +984,7 @@ context("Bulk create public, private and reserved record-ids", () => {
             "TPUP-00008",
           ];
 
-          cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+          cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
             expect($document.text()).to.be.oneOf(recordIdsThatShouldBeOnRecordsList);
           });
         });

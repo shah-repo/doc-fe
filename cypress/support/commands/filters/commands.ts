@@ -26,6 +26,8 @@ declare global {
       filterEquipmentTitle(params: {name: string}): Chainable<Subject>;
       filterEquip(params: {docId: string; revision: string; eqState: string;
         title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
+      filterRecordState(params: {state: string}): Chainable<Subject>;
+      filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
     }
   }
 }
@@ -156,4 +158,16 @@ Cypress.Commands.add("filterSupplierTitle", (params: {name: string}) => {
 
 Cypress.Commands.add("filterEquipmentTitle", (params: {name: string}) => {
   cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.name);
+});
+
+Cypress.Commands.add("filterRecordState", (params: {state: string}) => {
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.state).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("filterRecordVerifyRevisionFilter", (params: {revision: string}) => {
+  cy.get(`td[role="gridcell"][data-grid-col-index="1"]`).each(($el) => {
+    expect($el.text()).to.equal(params.revision);
+  });
 });
