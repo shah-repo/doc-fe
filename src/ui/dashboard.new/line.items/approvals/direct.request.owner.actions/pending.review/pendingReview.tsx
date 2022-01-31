@@ -130,7 +130,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow>
+                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: { } }}>
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
