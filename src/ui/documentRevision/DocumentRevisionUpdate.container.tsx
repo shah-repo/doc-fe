@@ -102,6 +102,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
+      if (isEmpty(dataToSubmit) || (Object.keys(dataToSubmit).includes("formInput") && Object.keys(dataToSubmit).length === 1)) {
+        dispatch(companyActions.redlineConfig(false));
+        redlineDataToSubmit.redline = false;
+      }
       return handleSave( redlineDataToSubmit as DocumentRevisionEditRequestBody, helpers);
     }
 
