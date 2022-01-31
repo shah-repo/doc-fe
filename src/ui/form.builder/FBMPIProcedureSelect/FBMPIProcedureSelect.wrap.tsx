@@ -1,16 +1,14 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
+import { EQStatus, FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import { StyleTooltip } from "../../dashboard.new/line.items/common/StyleTooltip";
 import Colors from "../../layout/theme/utils/colors";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
@@ -91,46 +89,52 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       return moment(currentDate).isAfter(date);
     };
 
+    const isEqActive = (eqStatus) => {
+      if (eqStatus !== EQStatus.Inactive && eqStatus !== EQStatus.Retired) { return true; }
+      return false;
+    };
+
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
       const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
+      const equipmentEnforceProd = option.document.documentType.equipmentEnforceProd;
 
-      return Boolean(isLHRProductionBuild && option.document.documentType.equipmentEnforceProd && isOverdue);
+      if (!equipmentEnforceProd && !isEqActive(option.eqStatus)) {
+        return true;
+      }
+      return !isEqActive(option.eqStatus) || Boolean(isLHRProductionBuild && equipmentEnforceProd && isOverdue);
     };
 
     // eslint-disable-next-line react/display-name
     renderOptionWithDate = (option: any) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
-      const isDisabled = isLHRProductionBuild && option.document.documentType.equipmentEnforceProd;
 
       return <Grid container>
-        <Grid item xs={3} >
-          {option.document.docId}
+        <Grid item xs={2} >
+          <Typography noWrap>
+            {option.document.docId}<span> &#9642;</span>
+          </Typography>
         </Grid>
-        <Grid item xs={9} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
-          {pmDate &&
-            <StyleTooltip
-              disableHoverListener={!(isDisabled && isDateOverdue(pmDate))}
-              title={<Text translation="form.builder.out.of.maintenance" />}
-              placement="top"
-              arrow
-            >
-              <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>
-            </StyleTooltip>
-          }
-          {calDate &&
-            <StyleTooltip
-              disableHoverListener={!(isDisabled && isDateOverdue(calDate))}
-              title={<Text translation="form.builder.out.of.calibration" />}
-              placement="top"
-              arrow
-            >
-              <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>
-            </StyleTooltip>
-          }
+        <Grid item >
+          <Typography noWrap>
+            {`rev ${option.displayRevision} `}
+          </Typography>
+        </Grid>
+        <Grid item xs={8} >
+          <Typography noWrap>
+            {`- ${option.name}`}
+          </Typography>
+        </Grid>
+        <Grid
+          item xs={12}
+          style={{ textAlign: "left", color: Colors.latest_red_varient, fontSize: "14px", paddingBottom: "4px" }}
+        >
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
+          {pmDate && calDate && <Box component="span" style={{ color: Colors.black }}>&#9642;</Box>}
+          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
     };
