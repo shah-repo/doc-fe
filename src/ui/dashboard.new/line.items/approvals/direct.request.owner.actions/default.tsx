@@ -32,6 +32,7 @@ interface Props {
   type: string;
   docRevName: string;
   status: string;
+  displaystatus: string;
   timestamp: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
@@ -48,6 +49,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
   docId,
   docRevId,
   status,
+  displaystatus,
   docRevName,
   timestamp,
   hoverItemId,
@@ -109,7 +111,12 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={docRevName}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -153,7 +160,11 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             size="small"
                             color="primary"
                             icon={<ApprovedIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
+                            label={
+                              docTypeGroup === DocTypeGroups.PI_INSTANCE
+                                ? displaystatus
+                                : STATUS_TYPES_LABEL[status]
+                            }
                           />
                         )}
                         {hoverItem && (
@@ -161,7 +172,11 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             color="primary"
                             size="small"
                             icon={<ApprovedWhiteIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
+                            label={
+                              docTypeGroup === DocTypeGroups.PI_INSTANCE
+                                ? displaystatus
+                                : STATUS_TYPES_LABEL[status]
+                            }
                           />
                         )}
                       </Typography>
@@ -177,7 +192,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                       color="textSecondary"
                       noWrap
                     >
-                      {status}
+                      {docTypeGroup === DocTypeGroups.PI_INSTANCE
+                        ? displaystatus
+                        : status}
                     </Typography>
                   </Grid>
                 )}

@@ -37,6 +37,7 @@ interface Props {
   type: string;
   docRevName: string;
   status: string;
+  displaystatus: string;
   timestamp: string;
   docRevPendingApprovals: any[];
   docRevApprovedApprovals: any[];
@@ -54,6 +55,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   docId,
   docRevId,
   status,
+  displaystatus,
   docRevName,
   timestamp,
   hoverItemId,
@@ -173,7 +175,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
                       />
                     )}
                     {hoverItem && (
@@ -181,7 +183,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
                       />
                     )}
                   </Typography>
