@@ -24,6 +24,7 @@ interface Props {
   docDocumentId: string;
   type: ActionTypes;
   docRevName: string;
+  docRevVersion: string;
   docRevId: string;
   docRevOwnerId: string;
   equipmentInterval: number;
@@ -41,6 +42,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   type,
   docRevId,
   docRevName,
+  docRevVersion,
   timestamp,
   hoverItemId,
   equipmentInterval,
@@ -104,7 +106,10 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip title={<>
+                    <Text translation="common.revision" />
+                      &nbsp;{docRevVersion} {docRevName}
+                  </>} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
                     <Link
                       href={
                         docRevName
@@ -121,7 +126,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="common.revision" />
+                      &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
