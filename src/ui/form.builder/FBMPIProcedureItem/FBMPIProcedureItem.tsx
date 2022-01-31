@@ -5,6 +5,7 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
@@ -26,7 +27,7 @@ import {
   FBText,
 } from "..";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -143,6 +144,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                             {(selection: FBMPIProcedureSelectValue, index) => {
                               const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
                               const calOverdue = isDateOverdue?.(selection?.calDueDate);
+                              const eqOverdue = type === "equipment" && (pmOverdue || calOverdue);
 
                               return (
                                 <Box key={`fb-mpi-procedure-selection-${index}`}>
@@ -151,8 +153,8 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                       <Box
                                         display="flex"
                                         flexDirection="row"
-                                        bgcolor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
-                                        borderColor={(pmOverdue || calOverdue) ? Colors.light_red : Colors.medium_gray}
+                                        bgcolor={ eqOverdue ? Colors.light_red : Colors.medium_gray}
+                                        borderColor={eqOverdue ? Colors.light_red : Colors.medium_gray}
                                         borderRadius={2}
                                         border={0.5}
                                         mr={1}
@@ -174,7 +176,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             pr: 1,
                                           }}
                                         />
-                                        {(selection.pmDueDate !== "N/A") &&
+                                        {(selection.pmDueDate !== "N/A") && type === "equipment" &&
                                           <Box
                                             color={pmOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={pmOverdue ? "bold" : "normal"}
@@ -188,10 +190,10 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next PM Due:
-                                            {getFormattedDateString(selection.pmDueDate, MomentFormats.BriefDate)}
+                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                         }
-                                        {(selection.calDueDate !== "N/A") &&
+                                        {(selection.calDueDate !== "N/A") && type === "equipment" &&
                                           <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
                                             fontWeight={calOverdue ? "bold" : "normal"}
@@ -206,7 +208,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                               mb={0.25}
                                             />
                                             Next Cal Due:
-                                            {getFormattedDateString(selection.calDueDate, MomentFormats.BriefDate)}
+                                            {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         <IconButton
@@ -241,20 +243,23 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-
               {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
                 <Observer>
-                  {() => (
-                    <FBButton
-                      label="form.builder.select"
-                      style={{ margin: 0, padding: "4px" }}
-                      onClick={() => handleSelect?.({
-                        ...item,
-                        id: item.title,
-                        title: getItem?.(item.title) || "",
-                      })}
-                    />
-                  )}
+                  {() => {
+                    const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
+                      (selection)  =>
+                        selection.materialId === item.title || selection.equipmentId === item.title);
+                    return (
+                      <FBButton
+                        label={hasSelected ? "form.builder.change" : "form.builder.select"}
+                        style={{ margin: 0, padding: "4px" }}
+                        onClick={() => handleSelect?.({
+                          ...item,
+                          id: item.title,
+                          title: getItem?.(item.title) || "",
+                        })}
+                      />
+                    ); }}
                 </Observer>
               )}
               {!isPreview && (

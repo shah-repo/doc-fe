@@ -1,4 +1,5 @@
 import {
+  Box,
   Collapse,
   Grid,
   Link,
@@ -12,6 +13,7 @@ import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/app
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
@@ -25,17 +27,19 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { formatCurrency } from "../../common/Utils";
 import { styles } from "./purchaseOrder.styles";
 
 interface Props {
   id: string;
   docDocumentId: string;
   docId: string;
-  docRevId?: string;
+  docRevId: string;
   type: string;
   pinned: boolean;
   docRevName: string;
@@ -92,7 +96,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
       id: "id2",
       isRegular: true,
       ltext: "Total:",
-      rtext: `${purchaseOrderCurrency} ${purchaseOrderTotalAmount}`,
+      rtext: `${purchaseOrderCurrency} ${formatCurrency(
+        purchaseOrderTotalAmount
+      )}`,
     },
     {
       id: "id3",
@@ -114,6 +120,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     },
   ];
   const [pinHover, setPinHover] = React.useState(false);
+  const [downloadPdfHover, setDownloadPdfHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const downloadAction = useActionCreator(attachmentsActions.download);
   const hoverItem = hoverItemId === id;
@@ -127,10 +134,16 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
     unPinLineItem(id);
   };
   const onMouseHoverPinIcon = () => {
+    setDownloadPdfHover(false);
     setPinHover(true);
   };
-  const onMouseLeavePinIcon = () => {
+  const onMouseLeaveActionIcons = () => {
     setPinHover(false);
+    setDownloadPdfHover(false);
+  };
+  const onMouseHoverDownloadPdfIcon = () => {
+    setPinHover(false);
+    setDownloadPdfHover(true);
   };
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
@@ -166,7 +179,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               <Grid container={true} wrap="nowrap">
                 <Grid item={true}>
                   <Link
-                    href={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    href={
+                      docId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
+                    }
                     color="inherit"
                     className={classes.link}
                   >
@@ -182,21 +199,27 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={docRevName ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                    <Link
+                      href={
+                        docRevName
+                          ? documentVersionPath(docRevId || "", docDocumentId)
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -273,24 +296,72 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
-          <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
-            {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
+        {hoverItem && (
+          <Box
+            component="div"
+            className={classes.actionIcons}
+            onMouseLeave={onMouseLeaveActionIcons}
+          >
+            {!downloadPdfHover && (
+              <span>
+                <DownloadPdfIcon
+                  data-cy="transition-download-pdf"
+                  onMouseEnter={onMouseHoverDownloadPdfIcon}
                 />
+              </span>
+            )}
+            {downloadPdfHover && (
+              <StyleTooltip
+                title={<Text translation="common.download.pdf" />}
+                placement="top"
+                arrow
+              >
+                <span onMouseLeave={onMouseLeaveActionIcons}>
+                  <DownloadHtmlPreview
+                    id={docRevId}
+                    data-cy="transition-download-pdf"
+                  />
+                </span>
               </StyleTooltip>
             )}
-          </div>
+            <span className={classes.actionIcon}>
+              {!pinHover && !pinned && (
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+              )}
+              {pinHover && !pinned && (
+                <StyleTooltip
+                  title={<Text translation="common.pin" />}
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handlePinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+              {pinned && (
+                <StyleTooltip
+                  title={<Text translation="common.unpin" />}
+                  placement="top"
+                  arrow
+                >
+                  <PinSolidIcon
+                    onClick={handleUnPinClick}
+                    onMouseLeave={onMouseLeaveActionIcons}
+                  />
+                </StyleTooltip>
+              )}
+            </span>
+          </Box>
         )}
-        {!open && pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+        {pinned && (
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>
@@ -299,7 +370,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
           {PoItems.map((poItem, index) => {
             if (poItem.isSupplier) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -339,7 +415,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isRegular) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
@@ -366,7 +447,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             if (poItem.isAttachments) {
               return (
-                <StyledListItem key={index} button className={classes.nested} disableRipple>
+                <StyledListItem
+                  key={index}
+                  button
+                  className={classes.nested}
+                  disableRipple
+                >
                   <Grid container className={classes.gridContainer}>
                     <Grid item md={3} sm={6}>
                       <Typography
