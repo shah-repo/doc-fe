@@ -175,21 +175,23 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                  <StyleTooltip title={title} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                    <Link
+                      href={changeRequestEditPath(arChangeRequestId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {title}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -250,7 +252,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && (
+        {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -261,7 +263,11 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
               )}
               {closeHover && (
-                <StyleTooltip title="Close" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.close" />}
+                  placement="top"
+                  arrow
+                >
                   <CloseSolidIcon
                     onClick={handleCloseClick}
                     onMouseLeave={onMouseLeaveActionIcons}
@@ -269,49 +275,42 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
-              )}
-              {pinHover && !pinned && (
+            {!pinned && (
+              <span className={classes.actionIcon}>
+                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+                {pinHover && (
+                  <StyleTooltip
+                    title={<Text translation="common.pin" />}
+                    placement="top"
+                    arrow
+                  >
+                    <PinSolidIcon
+                      onClick={handlePinClick}
+                      onMouseLeave={onMouseLeaveActionIcons}
+                    />
+                  </StyleTooltip>
+                )}
+              </span>
+            )}
+            {pinned && (
+              <span className={classes.actionIcon}>
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
                   <PinSolidIcon
-                    onClick={handlePinClick}
+                    onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
                 </StyleTooltip>
-              )}
-              {pinned && (
-                <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
-                  placement="top"
-                  arrow
-                >
-                  <PinSolidIcon onClick={handleUnPinClick} />
-                </StyleTooltip>
-              )}
-            </span>
+              </span>
+            )}
           </Box>
         )}
-        {!open && pinned && !hoverItem && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >
