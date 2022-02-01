@@ -513,7 +513,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Verify doc-ids are correct for created doc", () => {
         const documetsWhichShouldBeOnList: string[] = ["TPP-00001", "TPP-00002", "TPP-00003", "TPP-00004"];
 
-        cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+        cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
         });
       });
@@ -642,7 +642,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Verify doc-ids are correct for created doc", () => {
         const documetsWhichShouldBeOnList: string[] = ["TPUP-00001", "TPUP-00003", "TPUP-00005", "TPUP-00006"];
 
-        cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+        cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
         });
       });

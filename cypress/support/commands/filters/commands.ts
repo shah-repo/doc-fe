@@ -1,7 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable max-classes-per-file */
-
-import { CyRoutes } from "../../routes";
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export { };
@@ -26,6 +23,8 @@ declare global {
       filterEquipmentTitle(params: {name: string}): Chainable<Subject>;
       filterEquip(params: {docId: string; revision: string; eqState: string;
         title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
+      filterRecordState(params: {state: string}): Chainable<Subject>;
+      filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
     }
   }
 }
@@ -64,55 +63,28 @@ Cypress.Commands.add("filterCheckIfPOFilterPersists", (params: {docId: string; v
 
 Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; eqState: string;
   title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"docId\"]").arrowType(params.docId).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.precalc.revision\"]").arrowType(params.revision).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id$=\"select-displayStatus\"]").arrowClick();
-    cy.get("ul[role=listbox]>li").contains(params.eqState).arrowClick().wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"name\"]").arrowType(params.title).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"owner\"]").arrowType(params.owner).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.get("[id=\"dynamicParams.precalc.cali_due_date\"]").arrowType(params.calDueDate).wait(500);
-  cy.listLoadingElementShouldNotExist();
-  cy.get("[id=\"dynamicParams.precalc.pm_due_date\"]").arrowType(params.pmDueDate).wait(500);
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.DocRevGet, () => {
-    cy.get("[id=\"dynamicParams.formInput.fb-default-eq-status\"]").arrowType(params.eqStatus).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`th[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
+  cy.get(`th[aria-colindex="2"] input`).arrowType(params.revision).wait(500);
+  cy.get(`th[aria-colindex="3"] span.k-input`).arrowClick();
+  cy.get("ul>li").contains(params.eqState).arrowClick().wait(500);
+  cy.get(`th[aria-colindex="4"] input`).arrowType(params.title).wait(500);
+  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="6"] input`).arrowType(params.calDueDate).wait(500);
+  cy.get(`th[aria-colindex="7"] input`).arrowType(params.pmDueDate).wait(500);
+  cy.get(`th[aria-colindex="8"] input`).arrowType(params.eqStatus).wait(500);
 });
 
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {
   cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.docId).wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.revision).wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.state).arrowClick().wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.title).wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.owner).wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="6"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.releasedDate).arrowClick().wait(500);
-  cy.listLoadingElementShouldNotExist();
   cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType(params.formId).wait(500);
-  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("filterCheckIfRecordsFilterPersists", (params: {docId: string; revision: string; state: string;
@@ -156,4 +128,16 @@ Cypress.Commands.add("filterSupplierTitle", (params: {name: string}) => {
 
 Cypress.Commands.add("filterEquipmentTitle", (params: {name: string}) => {
   cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.name);
+});
+
+Cypress.Commands.add("filterRecordState", (params: {state: string}) => {
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.state).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("filterRecordVerifyRevisionFilter", (params: {revision: string}) => {
+  cy.get(`td[role="gridcell"][data-grid-col-index="1"]`).each(($el) => {
+    expect($el.text()).to.equal(params.revision);
+  });
 });

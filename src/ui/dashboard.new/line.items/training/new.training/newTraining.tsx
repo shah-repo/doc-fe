@@ -22,9 +22,10 @@ import { Nullable } from "../../../../../state/ducks/common/types";
 import { trainingActions } from "../../../../../state/ducks/dashboard.new/training";
 import { TrainingStatus } from "../../../../../state/ducks/dashboard/types";
 import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
-import { TableSearchQueryType } from "../../../../components/table/types";
 import Text from "../../../../components/Text";
 import { TRAINING_URL } from "../../../../constants/urls";
+import { CompletedOnDateOptions } from "../../../../document.revision/utils/types";
+import { DateFields } from "../../../../training/kendo/types";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
@@ -107,24 +108,61 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
     .map((trainee) => trainee.userName)
     .join(", ");
   const setTrainingSearchCriteria = () => {
-    const searchCriteria: TableSearchQueryType = {
-      isCompleted: false,
-      docId,
-      docRevTitle: docRevName,
-      revision: docRevVersion,
-    };
+    let filterDate = {};
     if (trainingStatus === TrainingStatus.OVERDUE) {
-      searchCriteria.dueOnBefore = moment().endOf("day").toISOString();
+      filterDate = {
+        text: CompletedOnDateOptions.OVERDUE,
+        value: moment().endOf("day").toISOString(),
+        field: DateFields.DUE_ON,
+      };
     } else {
-      searchCriteria.dueOnAfter = moment().toISOString();
-      searchCriteria.dueOnBefore = moment()
-        .add(7, "d")
-        .startOf("day")
-        .toISOString();
+      filterDate = {
+        text: CompletedOnDateOptions.NEXT_WEEK,
+        value: moment().add(7, "d").startOf("day").toISOString(),
+        field: DateFields.DUE_ON,
+      };
     }
+    const filterKendoConfig = {
+      filter: {
+        logic: "and",
+        filters: [
+          {
+            field: "documentRevision.name",
+            operator: "contains",
+            value: docRevName,
+          },
+          {
+            field: "documentRevision.displayRevision",
+            operator: "contains",
+            value: docRevVersion,
+          },
+          {
+            field: "trainingPlan.document.docId",
+            operator: "contains",
+            value: docId,
+          },
+        ],
+      },
+      sort: [
+        {
+          field: "document.trId",
+          dir: "asc",
+        },
+      ],
+      skip: 0,
+      take: 25,
+      group: [],
+      customDueOnFilterDate: filterDate,
+    };
     dispatch(
       tableSearchActions.setSearchCriteria(
-        { queryDict: searchCriteria },
+        {
+          apiError: "",
+          scrollToIndex: 0,
+          forceUpdate: false,
+          kendoConfig: JSON.stringify(filterKendoConfig),
+          columnConfig: JSON.stringify([]),
+        },
         "training"
       )
     );
