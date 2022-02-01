@@ -15,11 +15,10 @@ import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.s
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
-import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
-import { getDocIcon } from "../../../common/DocIcon";
+import { getDocIcon, getStatusLabel } from "../../../common/DocIcon";
 import { HoverStyleChip } from "../../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../../common/StyledListItem";
@@ -188,7 +187,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                     {hoverItem && (
@@ -196,7 +195,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                   </Typography>

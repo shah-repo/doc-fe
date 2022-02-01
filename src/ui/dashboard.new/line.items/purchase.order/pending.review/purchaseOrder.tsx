@@ -25,19 +25,18 @@ import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getStatusLabel } from "../../common/DocIcon";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { DocTypeGroups } from "../../common/types";
 import { formatCurrency } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
@@ -297,7 +296,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                     {(hoverItem || open) && (
@@ -305,7 +304,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                   </Typography>
