@@ -16,7 +16,7 @@ declare global {
 }
 
 Cypress.Commands.add("dashVerifyListItemExistsOnDashboard", (params: { listItem: string}) => {
-  cy.get("[data-cy=dashboardFeedList]>div").should("contain.text", params.listItem);
+  cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).should("exist");
 });
 
 Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listItem: string}) => {
