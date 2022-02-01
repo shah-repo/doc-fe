@@ -44,6 +44,7 @@ interface Props {
   docRevOwnerInitialColor: string;
   docRevOwnerName: string;
   docRevName: string;
+  docRevVersion: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
@@ -59,6 +60,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   docRevOwnerName,
   timestamp,
   docRevName,
+  docRevVersion,
   docRevOwnerAvatar,
   docRevOwnerInitialColor,
   hoverItemId,
@@ -216,7 +218,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={
                         docRevName
@@ -233,7 +245,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>

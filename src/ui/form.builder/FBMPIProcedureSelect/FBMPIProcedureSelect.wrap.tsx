@@ -2,14 +2,15 @@ import { Box, Grid, Typography } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { EQStatus, FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
+import { EQStatus, FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import Colors from "../../layout/theme/utils/colors";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   Component: React.FunctionComponent<T>,
@@ -17,6 +18,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   const Comp = ({
     isOptionDisabled,
     renderOptionWithDate,
+    onChange,
     mpiProcedureSelectState,
     formState,
     initialValues,
@@ -30,6 +32,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
     const { id, document } = workspaceState || {};
+    const [selectedEQ, setEQ] = useState<FBSelectedEQ | undefined>();
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
     const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
@@ -146,6 +149,22 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       </Grid>;
     };
 
+    onChange = async () => {
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      const formValue = await formState?.getValues() as FBMPIProcedureSelectValue;
+      const { usedOverride } = formValue;
+      const id =  (usedOverride as DocumentRevision).id;
+
+      const item: any = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.releasedEquipment, id);
+      const pmDate = FB.calculateDateByType(item, "preventativeMaintenance" );
+      const calDate = FB.calculateDateByType(item, "calibration" );
+      setEQ({
+        status: item?.eqStatus,
+        pmDate,
+        calDate,
+      });
+    };
+
     function handleAdd() {
       if (!id) { return; }
       const formValue = formState?.getValues() as FBMPIProcedureSelectValue;
@@ -178,11 +197,13 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       ...(props as T),
       isOptionDisabled,
       renderOptionWithDate,
+      onChange,
       mpiProcedureSelectState,
       formState,
       initialValues,
       name,
       type,
+      selectedEQ,
     });
   };
 

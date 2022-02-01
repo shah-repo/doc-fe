@@ -27,11 +27,13 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getStatusLabel } from "../../common/DocIcon";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import { formatCurrency } from "../../common/Utils";
 import { styles } from "./purchaseOrder.styles";
 
@@ -43,6 +45,9 @@ interface Props {
   type: string;
   pinned: boolean;
   docRevName: string;
+  docTypeGroup: string;
+  displaystatus: string;
+  docRevVersion: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
   status: string;
@@ -69,6 +74,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   status,
   docRevName,
+  docRevVersion,
   purchaseOrderSupplierDocRevId,
   purchaseOrderSupplierDocId,
   timestamp,
@@ -80,6 +86,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
   pinned,
+  displaystatus,
+  docTypeGroup,
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
@@ -157,6 +165,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };
+
   return (
     <>
       <StyledListItem
@@ -199,7 +208,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={
                         docRevName
@@ -216,7 +235,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -246,7 +266,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           size="small"
                           color="primary"
                           icon={<ApprovedIcon />}
-                          label={STATUS_TYPES_LABEL[status]}
+                          label={getStatusLabel(docTypeGroup, status, displaystatus)}
                         />
                       )}
                       {(hoverItem || open) && (
@@ -254,7 +274,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           color="primary"
                           size="small"
                           icon={<ApprovedWhiteIcon />}
-                          label={STATUS_TYPES_LABEL[status]}
+                          label={getStatusLabel(docTypeGroup, status, displaystatus)}
                         />
                       )}
                     </Typography>
@@ -269,7 +289,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {status}
+                      {docTypeGroup === DocTypeGroups.PI_INSTANCE
+                        ? displaystatus
+                        : status}
                     </Typography>
                   </Grid>
                 )}

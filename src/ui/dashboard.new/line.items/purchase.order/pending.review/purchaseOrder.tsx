@@ -25,13 +25,13 @@ import { attachmentsActions } from "../../../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../../../state/ducks/attachments/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import { Attachment } from "../../../../change.request/form/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getStatusLabel } from "../../common/DocIcon";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
@@ -48,9 +48,12 @@ interface Props {
   docRevId: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
   status: string;
+  displaystatus: string;
+  docTypeGroup: string;
   timestamp: string;
   docRevPendingApprovals: {
     userName: string;
@@ -90,6 +93,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   status,
   docRevName,
+  docRevVersion,
   purchaseOrderSupplierDocRevId,
   purchaseOrderSupplierDocId,
   timestamp,
@@ -103,6 +107,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevPendingApprovals,
   docRevApprovedApprovals,
   pinned,
+  displaystatus,
+  docTypeGroup,
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
@@ -236,7 +242,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -249,7 +265,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -279,7 +296,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                     {(hoverItem || open) && (
@@ -287,7 +304,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                   </Typography>

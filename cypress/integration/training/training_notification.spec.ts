@@ -687,11 +687,11 @@ context("Training notification test", () => {
 
   context("Check new training notification", () => {
     it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form 2` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form Rev 2` });
     });
 
     it(`Click training notification and check doc with Approved status`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 2` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form Rev 2` });
       cy.get(`[data-cy=\"HeaderInfo-status\"]`).should("have.text", "Approved");
     });
   });

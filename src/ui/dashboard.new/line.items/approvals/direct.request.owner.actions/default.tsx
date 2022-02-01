@@ -15,7 +15,7 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
-import { getDocIcon } from "../../common/DocIcon";
+import { getDocIcon, getStatusLabel } from "../../common/DocIcon";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -31,7 +31,9 @@ interface Props {
   docRevId?: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   status: string;
+  displaystatus: string;
   timestamp: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
@@ -48,7 +50,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
   docId,
   docRevId,
   status,
+  displaystatus,
   docRevName,
+  docRevVersion,
   timestamp,
   hoverItemId,
   onMouseHoverItem,
@@ -109,7 +113,17 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -122,7 +136,8 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -153,7 +168,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             size="small"
                             color="primary"
                             icon={<ApprovedIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
+                            label={
+                              getStatusLabel(docTypeGroup, status, displaystatus)
+                            }
                           />
                         )}
                         {hoverItem && (
@@ -161,7 +178,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             color="primary"
                             size="small"
                             icon={<ApprovedWhiteIcon />}
-                            label={STATUS_TYPES_LABEL[status]}
+                            label={
+                              getStatusLabel(docTypeGroup, status, displaystatus)
+                            }
                           />
                         )}
                       </Typography>
@@ -177,7 +196,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                       color="textSecondary"
                       noWrap
                     >
-                      {status}
+                      {docTypeGroup === DocTypeGroups.PI_INSTANCE
+                        ? displaystatus
+                        : status}
                     </Typography>
                   </Grid>
                 )}
