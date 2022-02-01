@@ -37,6 +37,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import { formatCurrency } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import { styles } from "./purchaseOrder.styles";
@@ -52,6 +53,8 @@ interface Props {
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
   status: string;
+  displaystatus: string;
+  docTypeGroup: string;
   timestamp: string;
   docRevPendingApprovals: {
     userName: string;
@@ -105,6 +108,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevPendingApprovals,
   docRevApprovedApprovals,
   pinned,
+  displaystatus,
+  docTypeGroup,
   onMouseHoverItem,
   pinLineItem,
   unPinLineItem,
@@ -292,7 +297,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
                       />
                     )}
                     {(hoverItem || open) && (
@@ -300,7 +305,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={docTypeGroup === DocTypeGroups.PI_INSTANCE ? displaystatus : STATUS_TYPES_LABEL[status]}
                       />
                     )}
                   </Typography>

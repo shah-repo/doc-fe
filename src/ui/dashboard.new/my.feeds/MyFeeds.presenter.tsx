@@ -259,6 +259,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       docDocumentId={pendingAction.docDocumentId}
                       docId={pendingAction.docId}
                       docRevId={pendingAction.docRevId}
+                      docTypeGroup={pendingAction.docTypeGroup}
                       type={pendingAction.type}
                       timestamp={getFormattedDateString(
                         pendingAction.timestamp,
@@ -271,6 +272,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                         pendingAction.purchaseOrderSupplierDocId
                       }
                       status={pendingAction.docRevStatus}
+                      displaystatus={pendingAction.docRevDisplayStatus}
                       docRevName={pendingAction.docRevName}
                       docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
@@ -325,6 +327,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pendingAction.purchaseOrderSupplierDocId
                     }
                     status={pendingAction.docRevStatus}
+                    docTypeGroup={pendingAction.docTypeGroup}
+                    displaystatus={pendingAction.docRevDisplayStatus}
                     docRevName={pendingAction.docRevName}
                     docRevVersion={pendingAction?.docRevVersion}
                     purchaseOrderTotalAmount={
@@ -366,6 +370,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                         MomentFormats.BriefDateTime
                       )}
                       status={pendingAction.docRevStatus}
+                      displaystatus={pendingAction.docRevDisplayStatus}
                       docRevName={pendingAction.docRevName}
                       docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
@@ -391,6 +396,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     key={index}
                     id={pendingAction.id}
                     docTypeGroup={pendingAction.docTypeGroup}
+                    displaystatus={pendingAction.docRevDisplayStatus}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}

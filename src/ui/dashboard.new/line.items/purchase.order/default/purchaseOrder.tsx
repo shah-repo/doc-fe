@@ -32,6 +32,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import { formatCurrency } from "../../common/Utils";
 import { styles } from "./purchaseOrder.styles";
 
@@ -43,6 +44,8 @@ interface Props {
   type: string;
   pinned: boolean;
   docRevName: string;
+  docTypeGroup: string;
+  displaystatus: string;
   docRevVersion: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
@@ -82,6 +85,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   purchaseOrdeLineItemCount,
   purchaseOrderAttachments,
   pinned,
+  displaystatus,
+  docTypeGroup,
   onMouseHoverItem,
   unPinLineItem,
   pinLineItem,
@@ -259,7 +264,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           size="small"
                           color="primary"
                           icon={<ApprovedIcon />}
-                          label={STATUS_TYPES_LABEL[status]}
+                          label={
+                            docTypeGroup === DocTypeGroups.PI_INSTANCE
+                              ? displaystatus
+                              : STATUS_TYPES_LABEL[status]
+                          }
                         />
                       )}
                       {(hoverItem || open) && (
@@ -267,7 +276,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           color="primary"
                           size="small"
                           icon={<ApprovedWhiteIcon />}
-                          label={STATUS_TYPES_LABEL[status]}
+                          label={
+                            docTypeGroup === DocTypeGroups.PI_INSTANCE
+                              ? displaystatus
+                              : STATUS_TYPES_LABEL[status]
+                          }
                         />
                       )}
                     </Typography>
@@ -282,7 +295,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       color="textSecondary"
                       noWrap
                     >
-                      {status}
+                      {docTypeGroup === DocTypeGroups.PI_INSTANCE
+                        ? displaystatus
+                        : status}
                     </Typography>
                   </Grid>
                 )}
