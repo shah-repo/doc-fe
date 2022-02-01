@@ -130,33 +130,28 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
   const handleTimeTravelFormSubmit = (values: TimeTravelSessionProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify(values));
-    } else {
-      setPayload(JSON.stringify({
-        taskType: type,
-        timeTravel: values,
-      }));
     }
     openApproveDialog();
   };
   const handleTimeTravelCompany = (values: TimeTravelProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_COMPANY].includes(SQS_TYPES[type])) {
-      setPayload(JSON.stringify(values));
-    } else {
-      setPayload(JSON.stringify({
-        taskType: type,
-        timeTravel: values,
-      }));
+      setPayload(
+        JSON.stringify({
+          taskType: type,
+          timeTravel: values,
+        })
+      );
     }
     openApproveDialog();
   };
   const handleTimeTravelUser = (values: TimeTravelProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_USER].includes(SQS_TYPES[type])) {
-      setPayload(JSON.stringify(values));
-    } else {
-      setPayload(JSON.stringify({
-        taskType: type,
-        timeTravel: values,
-      }));
+      setPayload(
+        JSON.stringify({
+          taskType: type,
+          timeTravel: values,
+        })
+      );
     }
     openApproveDialog();
   };
