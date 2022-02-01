@@ -508,7 +508,7 @@ context("Bulk create approvals block/inline test", () => {
         });
 
         it("Filter approvals block records in WIP state", () => {
-          cy.recFilterByState({ state: "WIP" });
+          cy.filterRecordState({ state: "WIP" });
         });
 
         it("Verify WIP records number", () => {
@@ -516,15 +516,13 @@ context("Bulk create approvals block/inline test", () => {
         });
 
         it("Verify WIP records revision stage is alpha", () => {
-          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
-            expect($el.text()).to.equal("A");
-          });
+          cy.filterRecordVerifyRevisionFilter({ revision: "A" });
         });
       });
 
       context("Verify Voided records revision stage is alpha", () => {
         it("Filter approvals block records in WIP state", () => {
-          cy.recFilterByState({ state: "Voided" });
+          cy.filterRecordState({ state: "Voided" });
         });
 
         it("Verify WIP records number", () => {
@@ -532,9 +530,7 @@ context("Bulk create approvals block/inline test", () => {
         });
 
         it("Verify WIP records revision stage is alpha", () => {
-          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
-            expect($el.text()).to.equal("A");
-          });
+          cy.filterRecordVerifyRevisionFilter({ revision: "A" });
         });
       });
 
@@ -606,7 +602,7 @@ context("Bulk create approvals block/inline test", () => {
     });
 
     context("Verify approvals inline records data", () => {
-      context("Verify WIP records revision stage is alpha", () => {
+      context("Verify WIP records revision stage is numeric", () => {
         it("Navigate to records", () => {
           cy.navigToRecords();
         });
@@ -617,33 +613,29 @@ context("Bulk create approvals block/inline test", () => {
         });
 
         it("Filter approvals block records in WIP state", () => {
-          cy.recFilterByState({ state: "WIP" });
+          cy.filterRecordState({ state: "WIP" });
         });
 
         it("Verify WIP records number", () => {
           cy.dlVerifyDocCounter({ docCounterNumber: 2 });
         });
 
-        it("Verify WIP records revision stage is alpha", () => {
-          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
-            expect($el.text()).to.equal("1");
-          });
+        it("Verify WIP records revision stage is numeric", () => {
+          cy.filterRecordVerifyRevisionFilter({ revision: "1" });
         });
       });
 
-      context("Verify Voided records revision stage is alpha", () => {
+      context("Verify Voided records revision stage is numeric", () => {
         it("Filter approvals block records in WIP state", () => {
-          cy.recFilterByState({ state: "Voided" });
+          cy.filterRecordState({ state: "Voided" });
         });
 
         it("Verify WIP records number", () => {
           cy.dlVerifyDocCounter({ docCounterNumber: 2 });
         });
 
-        it("Verify WIP records revision stage is alpha", () => {
-          cy.get("div[aria-colindex=\"2\"]").each(($el) => {
-            expect($el.text()).to.equal("1");
-          });
+        it("Verify WIP records revision stage is numeric", () => {
+          cy.filterRecordVerifyRevisionFilter({ revision: "1" });
         });
       });
 

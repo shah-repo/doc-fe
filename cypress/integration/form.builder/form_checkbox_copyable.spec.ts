@@ -74,10 +74,6 @@ context("Copyable Checkbox test", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create a form", () => {
@@ -87,6 +83,10 @@ context("Copyable Checkbox test", () => {
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter document title 'eb-title'", () => {
