@@ -177,9 +177,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     title={
                       <>
-                        {docRevName}&nbsp;
-                        <Text translation="training.revision" />
-                        &nbsp;{docRevVersion}
+                        <Text translation="common.revision" />
+                      &nbsp;{docRevVersion} {docRevName}
                       </>
                     }
                     placement="top-start"
@@ -199,9 +198,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}&nbsp;
-                        <Text translation="training.revision" />
-                        &nbsp;{docRevVersion}
+                        <Text translation="common.revision" />
+                      &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
