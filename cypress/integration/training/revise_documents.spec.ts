@@ -753,7 +753,7 @@ context("Revising Documents assigned as Training material", () => {
 
 
     it(`Open and complete training for ${USERS[1].name}`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
   });
@@ -848,7 +848,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Verify training notification for doc with rev 2 should be present`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 2 released doc1` });
     });
   });
 
@@ -866,7 +866,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Verify training notification for doc with rev 2 should be present`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 2 released doc1` });
     });
   });
 });

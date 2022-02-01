@@ -771,13 +771,13 @@ context("Forced training flow", () => {
     it("Verify training notification", () => {
       cy.get(".MuiTypography-root.MuiListItemText-primary")
         .should("contain", "FM-00001").and("contain", "AR Form");
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001AR Form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001Rev 1 AR Form` });
     });
   });
 
   context("Complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001AR Form` });
+      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001Rev 1 AR Form` });
     });
 
     it("Click complete training button", () => {
