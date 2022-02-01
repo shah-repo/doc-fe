@@ -175,7 +175,12 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={title} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={title}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={changeRequestEditPath(arChangeRequestId)}
                       color="inherit"
@@ -348,11 +353,22 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         {prItem.docId}
                       </Typography>
                     </Grid>
-                    <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                      <StyleTooltip title={<>
-                        <Text translation="common.revision" />
-                      &nbsp;{prItem.displayRevision} {prItem.name}
-                      </>} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="common.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
                         <Typography
                           component="span"
                           variant="caption"
@@ -362,7 +378,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                         >
                           <>
                             <Text translation="common.revision" />
-                      &nbsp;{prItem.displayRevision} {prItem.name}
+                            &nbsp;{prItem.displayRevision} {prItem.name}
                           </>
                         </Typography>
                       </StyleTooltip>

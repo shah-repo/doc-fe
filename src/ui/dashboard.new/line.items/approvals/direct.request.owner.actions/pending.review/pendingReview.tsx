@@ -132,10 +132,17 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={<>
-                    <Text translation="common.revision" />
-                      &nbsp;{docRevVersion} {docRevName}
-                  </>} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="common.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -149,7 +156,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         noWrap
                       >
                         <Text translation="common.revision" />
-                      &nbsp;{docRevVersion} {docRevName}
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
