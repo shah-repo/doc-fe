@@ -78,6 +78,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevId={pendingAction.docRevId}
                     docRevOwnerId={pendingAction.docRevOwnerId}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     equipmentInterval={pendingAction.equipmentInterval}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -127,6 +128,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                     docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -156,6 +158,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                     docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -191,6 +194,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     }
                     status={pendingAction.approvalStatusChanged}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     purchaseOrderTotalAmount={
                       pendingAction.purchaseOrderTotalAmount
                     }
@@ -233,6 +237,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     )}
                     status={pendingAction.approvalStatusChanged}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -267,6 +272,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       }
                       status={pendingAction.docRevStatus}
                       docRevName={pendingAction.docRevName}
+                      docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
                         pendingAction.docRevPendingApprovals
                       }
@@ -320,6 +326,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     }
                     status={pendingAction.docRevStatus}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     purchaseOrderTotalAmount={
                       pendingAction.purchaseOrderTotalAmount
                     }
@@ -360,6 +367,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       )}
                       status={pendingAction.docRevStatus}
                       docRevName={pendingAction.docRevName}
+                      docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
                         pendingAction.docRevPendingApprovals
                       }
@@ -393,6 +401,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     )}
                     status={pendingAction.docRevStatus}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}

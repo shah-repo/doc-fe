@@ -48,6 +48,7 @@ interface Props {
   docRevId: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   purchaseOrderSupplierDocRevId: string;
   purchaseOrderSupplierDocId: string;
   status: string;
@@ -90,6 +91,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   status,
   docRevName,
+  docRevVersion,
   purchaseOrderSupplierDocRevId,
   purchaseOrderSupplierDocId,
   timestamp,
@@ -236,7 +238,17 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="common.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -249,7 +261,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <Text translation="common.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>

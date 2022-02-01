@@ -34,6 +34,7 @@ interface Props {
   docRevId?: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   status: string;
   timestamp: string;
   approverName: string;
@@ -52,6 +53,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   status,
   docRevName,
+  docRevVersion,
   approverName,
   approverAvatar,
   approverInitialColor,
@@ -238,7 +240,17 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip title={docRevName} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="common.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
                     <Link
                       href={documentVersionPath(docRevId || "", docDocumentId)}
                       color="inherit"
@@ -251,7 +263,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        {docRevName}
+                        <>
+                          <Text translation="common.revision" />
+                          &nbsp;{docRevVersion} {docRevName}
+                        </>
                       </Typography>
                     </Link>
                   </StyleTooltip>
