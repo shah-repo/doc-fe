@@ -27,6 +27,7 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getStatusLabel } from "../../common/DocIcon";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -164,6 +165,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };
+
   return (
     <>
       <StyledListItem
@@ -264,11 +266,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           size="small"
                           color="primary"
                           icon={<ApprovedIcon />}
-                          label={
-                            docTypeGroup === DocTypeGroups.PI_INSTANCE
-                              ? displaystatus
-                              : STATUS_TYPES_LABEL[status]
-                          }
+                          label={getStatusLabel(docTypeGroup, status, displaystatus)}
                         />
                       )}
                       {(hoverItem || open) && (
@@ -276,11 +274,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                           color="primary"
                           size="small"
                           icon={<ApprovedWhiteIcon />}
-                          label={
-                            docTypeGroup === DocTypeGroups.PI_INSTANCE
-                              ? displaystatus
-                              : STATUS_TYPES_LABEL[status]
-                          }
+                          label={getStatusLabel(docTypeGroup, status, displaystatus)}
                         />
                       )}
                     </Typography>

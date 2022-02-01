@@ -15,7 +15,7 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
-import { getDocIcon } from "../../common/DocIcon";
+import { getDocIcon, getStatusLabel } from "../../common/DocIcon";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
@@ -169,9 +169,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             color="primary"
                             icon={<ApprovedIcon />}
                             label={
-                              docTypeGroup === DocTypeGroups.PI_INSTANCE
-                                ? displaystatus
-                                : STATUS_TYPES_LABEL[status]
+                              getStatusLabel(docTypeGroup, status, displaystatus)
                             }
                           />
                         )}
@@ -181,9 +179,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                             size="small"
                             icon={<ApprovedWhiteIcon />}
                             label={
-                              docTypeGroup === DocTypeGroups.PI_INSTANCE
-                                ? displaystatus
-                                : STATUS_TYPES_LABEL[status]
+                              getStatusLabel(docTypeGroup, status, displaystatus)
                             }
                           />
                         )}
