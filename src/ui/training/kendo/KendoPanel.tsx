@@ -23,7 +23,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, isEmpty, map, pick } from "lodash";
+import { cloneDeep, find, findIndex, get, isEmpty, map, pick } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import qs from "query-string";
@@ -431,9 +431,12 @@ export function KendoPanel<T>({
     ? tableCriteria.queryDict
     : {};
 
+  const customDueOnFilterDate = get(initialKendoConfig, "customDueOnFilterDate");
   const initialDropdownConfig =
     dropdownFilterState.createdAt || defaultItem;
-  const initialDueDateSelectedOption = dropdownFilterState.dueOn || defaultItem;
+  const initialDueDateSelectedOption = customDueOnFilterDate
+    ? customDueOnFilterDate
+    : dropdownFilterState.dueOn || defaultItem;
   const initialCompletedOnSelectedOption =
     dropdownFilterState.completedAt || defaultItem;
 
