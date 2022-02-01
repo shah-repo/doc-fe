@@ -5,7 +5,6 @@ export const styles = makeStyles((theme) =>
   createStyles({
     root: {
       overflow: "auto",
-      height: "calc(100vh - 130px)",
     },
     error: {
       color: Colors.red,
