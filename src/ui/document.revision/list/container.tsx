@@ -92,4 +92,5 @@ const ListContainer: React.FunctionComponent<Props> = ({ history }) => {
   );
 };
 
-export default ListContainer;
+// export default ListContainer;
+ListContainer;

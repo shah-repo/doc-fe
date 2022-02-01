@@ -178,7 +178,8 @@ context("Group Landing Page Flow", () => {
       // SystemRequirement("REQ-2620");
       cy.grpCheckIfNameFilterIsSet({ name: GROUP_NAME });
       cy.grpCheckIfMembersFilterIsSet({ member: GROUP_MEMBER });
-      cy.grpCheckIfTypeFilterIsSet({ isOfficial: GROUP_TYPE === "Official" });
+      cy.log(GROUP_TYPE);
+      cy.grpCheckIfTypeFilterIsSet({ groupType: GROUP_TYPE });
     });
   });
 

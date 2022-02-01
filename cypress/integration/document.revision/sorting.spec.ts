@@ -1719,15 +1719,15 @@ context("Sorting test", () => {
 
     context("Sort 'Doc Id'", () => {
       it("Doc Id should be in descending order", () => {
-        cy.contains("DOC ID").eq(0).click();
-        cy.contains("DOC ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-          .should("be.exist");
+        // cy.contains("DOC ID").eq(0).click();
+        // cy.contains("DOC ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        //   .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
       });
 
       it("Doc Id should be in ascending order", () => {
         cy.contains("DOC ID").eq(0).click();
-        cy.contains("DOC ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        cy.contains("DOC ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
       });
@@ -1735,15 +1735,15 @@ context("Sorting test", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.contains("Revision").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Revision").eq(0).click();
+        // cy.contains("Revision").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
         cy.contains("Revision").eq(0).click();
-        cy.contains("Revision").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -1751,15 +1751,15 @@ context("Sorting test", () => {
 
     context("Sort 'Document title'", () => {
       it("Document title should be in ascending order", () => {
-        cy.contains("Document title").eq(0).click();
-        cy.contains("Document title").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Document title").eq(0).click();
+        // cy.contains("Document title").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("Document title should be in descending order", () => {
         cy.contains("Document title").eq(0).click();
-        cy.contains("Document title").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Document title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -1767,15 +1767,15 @@ context("Sorting test", () => {
 
     context("Sort 'Type'", () => {
       it("Type should be in ascending order", () => {
-        cy.contains("Type").eq(0).click();
-        cy.contains("Type").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Type").eq(0).click();
+        // cy.contains("Type").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Type should be in descending order", () => {
         cy.contains("Type").eq(0).click();
-        cy.contains("Type").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Type").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -1783,15 +1783,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.contains("Owner").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Owner").eq(0).click();
+        // cy.contains("Owner").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
 
       it("Owner should be in descending order", () => {
         cy.contains("Owner").eq(0).click();
-        cy.contains("Owner").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
@@ -1815,15 +1815,15 @@ context("Sorting test", () => {
 
     context("Sort 'Status'", () => {
       it("Status should be in ascending order", () => {
-        cy.contains("Status").eq(0).click();
-        cy.contains("Status").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Status").eq(0).click();
+        // cy.contains("Status").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("Status should be in descending order", () => {
         cy.contains("Status").eq(0).click();
-        cy.contains("Status").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -1831,15 +1831,15 @@ context("Sorting test", () => {
 
     context("Sort 'Effective Date'", () => {
       it("Effective Date should be in ascending order", () => {
-        cy.contains("Effective Date").eq(0).click();
-        cy.contains("Effective Date").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-          .should("be.exist");
+        // cy.contains("Effective Date").eq(0).click();
+        // cy.contains("Effective Date").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
+        //   .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("Effective Date should be in descending order", () => {
         cy.contains("Effective Date").eq(0).click();
-        cy.contains("Effective Date").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
+        cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });

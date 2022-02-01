@@ -1,7 +1,20 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
 
+:root {
+  --navy: #011FBB;
+  --almost_black: #080B11;
+  --alabaster: #F9FBFF;
+  --medium-grey: #7D7E81;
+  --water: #EEF3FF;
+  --soft-peach: #EBEDF2;
+  --zeron: #F5F8FF;
+  --white: #FFFFFF;
+  --font-family: "Sora";
+  --font_gray: #767B87;
+}
+
 body {
-  background-color: #FFF !important;
+  background-color: var(--white) !important;
 }
 
 .react-datepicker-wrapper,
@@ -17,4 +30,193 @@ body {
 
 .x-hellosign-embedded {
   z-index: 9999;
+}
+
+.k-link.k-state-selected {
+  background-color: var(--zeron) !important;
+  color: var(--navy) !important;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 15px;
+  border-color: var(--navy);
+  border-width: 1px;
+}
+
+.k-pager-numbers-wrap {
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--almost_black);
+}
+
+.k-grid-pager {
+  font-family: var(--font-family);
+  font-size: 12px;
+}
+
+.k-pager-numbers .k-link {
+  color: var(--almost_black);
+}
+
+.k-grid-header .k-link .k-icon {
+  color: var(--navy);
+}
+
+td[role="gridcell"] {
+  white-space: nowrap;
+}
+
+.k-pager-numbers .k-link:hover {
+  color: var(--navy);
+  background-color: var(--soft-peach);
+  border-radius: 15px;
+}
+
+.k-column-title {
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  overflow: hidden;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--almost_black);
+}
+
+.k-toolbar,
+.k-grid-header,
+.k-grouping-header,
+.k-grid-add-row,
+.k-grid-footer {
+  background: var(--water);
+  color: var(--almost_black);
+  border-style: none;
+}
+
+.k-grid tr.k-alt .k-grid-content-sticky,
+.k-grid tr.k-alt {
+  background: var(--white);
+}
+
+.k-grouping-header .k-indicator-container {
+  font-size: 12px;
+  color: var(--font_gray);
+}
+
+.k-grid tbody tr:hover td.k-grid-content-sticky,
+.k-grid tbody tr:hover td {
+  background-color: var(--soft-peach);
+}
+
+.k-grid .k-grid-container .k-grid-content table tbody tr td {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.k-indicator-container {
+  display: flex;
+}
+
+.k-button,
+.k-button-secondary,
+.k-dropdown .k-dropdown-wrap,
+.k-dropdowntree .k-dropdown-wrap {
+  background-color: var(--white);
+}
+
+.k-pager-wrap {
+  background-color: var(--water);
+}
+
+.k-dropdown .k-dropdown-wrap:hover {
+  background-color: var(--soft-peach);
+}
+
+.k-list .k-item.k-state-selected,
+.k-list-optionlabel.k-state-selected {
+  background-color: var(--navy);
+}
+
+.k-list .k-item:hover,
+.k-list .k-item.k-state-hover,
+.k-list-optionlabel:hover,
+.k-list-optionlabel.k-state-hover {
+  background-color: var(--soft-peach);
+}
+
+.k-list .k-item:hover.k-state-selected,
+.k-list .k-item.k-state-hover.k-state-selected,
+.k-list-optionlabel:hover.k-state-selected,
+.k-list-optionlabel.k-state-hover.k-state-selected {
+  background-color: var(--navy);
+}
+
+.k-popup {
+  font-family: var(--font-family);
+  font-size: "14px";
+}
+
+.k-master-row {
+  height: 50px;
+}
+
+.k-grid-header .k-header {
+  padding-bottom: 0;
+}
+
+
+.k-grid {
+  font-family: var(--font-family);
+  border-radius: "4px 4px 0px 0px";
+}
+
+.k-grid .k-grid-table tbody tr {
+  cursor: pointer;
+  height: 40px;
+}
+
+.k-grid.no-row-pointer .k-grid-table tbody tr {
+  cursor: default;
+}
+
+.k-grid .k-grid-table tbody th,
+.k-grid .k-grid-table tbody td {
+  border-width: 0 0 1px 0;
+}
+
+.k-grid .k-grid-header table thead th {
+  border-width: 0 1px 0 0;
+  border-color: var(--white);
+  border-style: solid;
+}
+
+.k-grouping-header .k-group-indicator {
+  border-radius: 15px;
+  border-color: var(--medium-grey);
+}
+
+.k-grid-header th.k-grid-header-sticky,
+.k-grid-header .k-header.k-grid-header-sticky {
+  background-color: var(--water);
+}
+
+.k-master-row .k-grid-content-sticky {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.k-grid-header .k-grid-filter:hover,
+.k-grid-header th.k-grid-header-sticky,
+.k-grid-header td.k-grid-header-sticky,
+.k-grid-header .k-grid-header-sticky.k-sorted {
+  background-color: var(--water);
+}
+
+.k-checkbox:checked,
+.k-checkbox.k-checked {
+  background-color: var(--navy);
+  border-color: var(--navy);
+}
+
+.k-textbox::selection,
+.k-textbox .k-input::selection {
+  background-color: var(--navy);
 }

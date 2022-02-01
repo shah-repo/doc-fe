@@ -243,7 +243,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     title={
                       <>
-                        <Text translation="common.revision" />
+                        <Text translation="dashboard.revision" />
                         &nbsp;{docRevVersion} {docRevName}
                       </>
                     }
@@ -264,7 +264,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         noWrap
                       >
                         <>
-                          <Text translation="common.revision" />
+                          <Text translation="dashboard.revision" />
                           &nbsp;{docRevVersion} {docRevName}
                         </>
                       </Typography>

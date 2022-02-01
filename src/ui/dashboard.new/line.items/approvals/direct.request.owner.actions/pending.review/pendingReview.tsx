@@ -137,7 +137,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                   <StyleTooltip
                     title={
                       <>
-                        <Text translation="common.revision" />
+                        <Text translation="dashboard.revision" />
                         &nbsp;{docRevVersion} {docRevName}
                       </>
                     }
@@ -157,7 +157,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         color="textSecondary"
                         noWrap
                       >
-                        <Text translation="common.revision" />
+                        <Text translation="dashboard.revision" />
                         &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>

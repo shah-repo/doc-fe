@@ -933,8 +933,9 @@ context("Bulk create public, private and reserved record-ids", () => {
     });
 
     context("Verify created record ids", () => {
-      it("Navigate to record list and verify count", { retries: 2 }, () => {
+      it("Navigate to record list and verify count", () => {
         cy.navigToDashboard();
+        cy.wait(30 * 1000);
         cy.navigToRecords();
         cy.dlClearFilters();
         cy.dlVerifyDocCounter({ docCounterNumber: 18 });

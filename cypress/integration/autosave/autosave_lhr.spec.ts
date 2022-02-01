@@ -604,10 +604,7 @@ context("Autosave LHR", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
