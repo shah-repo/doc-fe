@@ -1269,7 +1269,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select first Lot from the list", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+        cy.get("tr.k-master-row").first().arrowClick();
       });
     });
 

@@ -796,8 +796,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("4 records should be created", () => {
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row")
-        .should("have.length", 4);
+      cy.get("tbody>tr").should("have.length", 4);
     });
   });
 
@@ -837,11 +836,10 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7).invoke("text")
-        .should("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
 
     it("clear filters", () => {
@@ -864,6 +862,11 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Select document 'released doc3' to be trained on", () => {
@@ -877,9 +880,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview,
-        CyRoutes.DocRevPreview, CyRoutes.GetRequiredApprovers, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -907,29 +908,29 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Training record for doc1 should be as it is", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.trLandingPageUsername({ username: USERS[2].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
+        .and("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it("Training record for doc3", () => {
       cy.trLandingPageDocId({ docId: releasedDoc3Id });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc3Id).and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc3Id)
+        .and("contain", USERS[1].name).and("contain", "Pending");
       cy.trLandingPageUsername({ username: USERS[2].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc3Id).and("contain", USERS[2].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc3Id)
+        .and("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it("Training record for doc2", () => {
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
       cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc2Id).and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc2Id)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
   });
 

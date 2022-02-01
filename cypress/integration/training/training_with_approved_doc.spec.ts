@@ -615,9 +615,9 @@ context("Training notifications for documents with approved and released revisio
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageDocId({ docId: releasedDocId });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDocId).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
   });
 

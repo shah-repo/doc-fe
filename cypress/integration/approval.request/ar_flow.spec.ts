@@ -17,6 +17,18 @@ const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
 context("Approval request form", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -259,7 +271,7 @@ context("Approval request form", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
@@ -293,7 +305,7 @@ context("Approval request form", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
     });
 
     it("Close AR and confirm pop-up for effective date", () => {
@@ -361,13 +373,6 @@ context("Approval request form", () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-0740");
       cy.arVerifyStatus({ status: "Voided" });
     });
-
-    // it("Add 'Implementation Task' to AR", () => {
-    //   cy.fbClickAddNewHiddenBtn();
-    //   cy.fbSelectItemFromNewFieldList({ field: "Implementation Task" });
-    //   cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
-    //   cy.fbAddField();
-    // });
   });
 });
 

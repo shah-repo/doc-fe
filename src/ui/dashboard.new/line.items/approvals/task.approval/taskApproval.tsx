@@ -401,7 +401,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       <StyleTooltip
                         title={
                           <>
-                            <Text translation="common.revision" />
+                            <Text translation="dashboard.revision" />
                             &nbsp;{prItem.displayRevision} {prItem.name}
                           </>
                         }
@@ -417,7 +417,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                           noWrap
                         >
                           <>
-                            <Text translation="common.revision" />
+                            <Text translation="dashboard.revision" />
                             &nbsp;{prItem.displayRevision} {prItem.name}
                           </>
                         </Typography>

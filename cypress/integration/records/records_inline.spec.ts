@@ -348,14 +348,14 @@ context("Record inline Flow", () => {
 
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
-          cy.recFilterByRev({ revision: "Record Document Revision" });
+          cy.recFilterByTitle({ revision: "Record Document Revision" });
           cy.recFilterByStatus({ status: "Released" });
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.DocPreview,
             CyRoutes.GetRequiredApproversDocRev,
             CyRoutes.GetRequiredApproversDocRev,
           ], () => {
-            cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+            cy.get("tr.k-master-row").first().arrowClick();
           });
         });
 

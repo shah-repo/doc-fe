@@ -263,7 +263,7 @@ export const withFBApprovalAudit = <T extends FBApprovalAuditProps>(
         const desc = (description[type || ""] || description.default)();
         if (!desc) { return; }
         return {
-          ownerName: v[0].owner.user.name,
+          ownerName: v[0].ownerName || v[0].owner.user.name,
           formattedTime: getFormattedDateString(v[0].timestamp, MomentFormats.DateTimeAlt),
           description: desc,
           timestamp: v[0].timestamp,
