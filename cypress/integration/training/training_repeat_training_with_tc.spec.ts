@@ -729,13 +729,13 @@ context("Repeat Training with Training Curriculum", () => {
 
     it(`Verify training notification`, () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001" });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: "AR Form 1" });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "AR Form Rev 1" });
     });
   });
 
   context("Complete Training and verify expire on field", () => {
     it("Open assigned Training", () => {
-      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001AR Form 1" });
+      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001AR Form Rev 1" });
     });
 
     it("Click complete training button", () => {

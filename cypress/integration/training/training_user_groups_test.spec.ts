@@ -906,7 +906,7 @@ context("Training user groups test", () => {
 
   context("Open and complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form Rev 1` });
     });
 
     it("Complete Training", () => {
