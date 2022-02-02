@@ -15,27 +15,45 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   handleTimeTravelFormSubmit,
 }) => {
   const classes = styles();
+  const intl = useIntl();
   const DisplayingErrorMessagesSchema = Yup.object().shape({
     year: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
     month: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
     day: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
     hour: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
     minute: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
     second: Yup.string()
       .required()
-      .matches(/^[0-9]+$/, "Should be greather than 0"),
+      .matches(
+        /^[0-9]+$/,
+        intl.formatMessage({ id: "async.task.filed.error" })
+      ),
   });
-  const intl = useIntl();
 
   return (
     <Box mt={2} className={classes.root}>
@@ -50,9 +68,13 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         }}
         validationSchema={DisplayingErrorMessagesSchema}
         onSubmit={(values) => {
-          const isAllValuesAreEmpty = !Object.values(values).some((fieldValue) => +fieldValue > 0);
+          const isAllValuesAreEmpty = !Object.values(values).some(
+            (fieldValue) => +fieldValue > 0
+          );
           if (isAllValuesAreEmpty) {
-            toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
+            toastError(
+              intl.formatMessage({ id: "async.task.timetravel.error" })
+            );
           } else {
             handleTimeTravelFormSubmit(values);
           }
@@ -66,14 +88,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="year"
-                    label={<Text translation="async.tasks.year"/>}
+                    label={<Text translation="async.tasks.year" />}
                     defaultValue={initialValues.year}
-                    onChange={(event) => setFieldValue("year", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("year", +event.target.value)
+                    }
                     variant="outlined"
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.year}</span>
-                      </>
+                      <span className={classes.error}>{errors.year}</span>
                     }
                   />
                 </Grid>
@@ -81,14 +103,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="month"
-                    label={<Text translation="async.tasks.month"/>}
+                    label={<Text translation="async.tasks.month" />}
                     defaultValue={initialValues.month}
-                    onChange={(event) => setFieldValue("month", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("month", +event.target.value)
+                    }
                     variant="outlined"
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.month}</span>
-                      </>
+                      <span className={classes.error}>{errors.month}</span>
                     }
                   />
                 </Grid>
@@ -96,14 +118,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="day"
-                    label={<Text translation="async.tasks.day"/>}
+                    label={<Text translation="async.tasks.day" />}
                     defaultValue={initialValues.day}
-                    onChange={(event) => setFieldValue("day", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("day", +event.target.value)
+                    }
                     variant="outlined"
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.day}</span>
-                      </>
+                      <span className={classes.error}>{errors.day}</span>
                     }
                   />
                 </Grid>
@@ -111,14 +133,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="hour"
-                    label={<Text translation="async.tasks.hour"/>}
+                    label={<Text translation="async.tasks.hour" />}
                     defaultValue={initialValues.hour}
-                    onChange={(event) => setFieldValue("hour", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("hour", +event.target.value)
+                    }
                     variant="outlined"
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.hour}</span>
-                      </>
+                      <span className={classes.error}>{errors.hour}</span>
                     }
                   />
                 </Grid>
@@ -126,14 +148,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="minute"
-                    label={<Text translation="async.tasks.minute"/>}
+                    label={<Text translation="async.tasks.minute" />}
                     defaultValue={initialValues.minute}
-                    onChange={(event) => setFieldValue("minute", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("minute", +event.target.value)
+                    }
                     variant="outlined"
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.minute}</span>
-                      </>
+                      <span className={classes.error}>{errors.minute}</span>
                     }
                   />
                 </Grid>
@@ -141,14 +163,14 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
                   <TextField
                     type="number"
                     name="second"
-                    label={<Text translation="async.tasks.second"/>}
+                    label={<Text translation="async.tasks.second" />}
                     defaultValue={initialValues.second}
                     variant="outlined"
-                    onChange={(event) => setFieldValue("second", +event.target.value)}
+                    onChange={(event) =>
+                      setFieldValue("second", +event.target.value)
+                    }
                     helperText={
-                      <>
-                        <span className={classes.error}>{errors.second}</span>
-                      </>
+                      <span className={classes.error}>{errors.second}</span>
                     }
                   />
                 </Grid>

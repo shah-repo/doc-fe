@@ -11,16 +11,16 @@ export const styles = makeStyles((theme) =>
       color: Colors.red,
     },
     grid: {
-      marginTop: "4px",
+      marginTop: theme.spacing(4),
     },
     selectedAll: {
-      "backgroundColor": "rgba(0, 0, 0, 0.08)",
+      "backgroundColor": Colors.black, "opacity": 8,
       "&:hover": {
-        backgroundColor: "rgba(0, 0, 0, 0.08)",
+        backgroundColor: Colors.black, opacity: 8,
       },
     },
     indeterminateColor: {
-      color: "#f50057",
+      color: Colors.pink_red,
     },
     selectAllText: {
       fontWeight: 500,
@@ -30,7 +30,7 @@ export const styles = makeStyles((theme) =>
       flexWrap: "wrap",
     },
     chip: {
-      margin: 2,
+      margin: theme.spacing(2),
     },
     formControl: {
       margin: theme.spacing(1),
