@@ -30,7 +30,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
       arrow
     >
       <span>
-        {!childrenElement && <span className={customClass}>{data}</span>}
+        {!childrenElement && <span style={{ fontFamily: "Sora" }} className={customClass}>{data}</span>}
         {childrenElement && childrenElement}
       </span>
     </StyleTooltip>
