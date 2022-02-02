@@ -358,7 +358,7 @@ context("Test upgradability of old supplier form and record", () => {
       });
 
       it("Select old supplier document in DRAFT from supplier list", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Old draft supplier document" });
+        cy.supFilterByDocTitle({ docTitle: "Old draft supplier document" });
         cy.dlSelectFirstDocument();
       });
 
@@ -397,7 +397,7 @@ context("Test upgradability of old supplier form and record", () => {
 
         it("Select old supplier document in RELEASED from supplier list", () => {
           cy.dlClearFilters();
-          cy.dlFilterByDocTitle({ docTitle: "Old released supplier document" });
+          cy.supFilterByDocTitle({ docTitle: "Old released supplier document" });
           cy.dlSelectFirstDocument();
         });
 

@@ -45,6 +45,17 @@ const requiredDocTypeFieldSelector = `${requiredDocTypeFieldLabel.toLowerCase().
 const csDocTitle = "My CS Doc";
 
 context("Validators tests", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
 
   context("[API] Prepare company", () => {
     it("[API] Creates company", (done: any) => {

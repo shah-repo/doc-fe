@@ -535,13 +535,7 @@ context("Training notifications for documents with approved and released revisio
       cy.authLogout();
       cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApprove, CyRoutes.GetPendingActions, CyRoutes.ARPreview],
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.arApproveARFromDashboard();
       cy.authLogout();
       cy.authLogin({
         email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
@@ -638,12 +632,12 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).should("exist");
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 2 released form`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form Rev 2` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}released form Rev 1` });
     });
 
     it("Click training notification and check doc with Approved status", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 2 released form`).arrowClick();
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form Rev 2` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
     });
 
@@ -656,7 +650,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click training notification and check doc with Released status", () => {
-      cy.contains(`TRAINING: ${releasedDocId} - Rev 1 released form`).arrowClick();
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form Rev 1` });
       cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
     });
 
@@ -671,11 +665,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click on the Training notification", () => {
-      cy.contains(`TRAINING: ${releasedDocId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}released form Rev 1` });
     });
 
     it("Button 'Complete training' should be visible", () => {

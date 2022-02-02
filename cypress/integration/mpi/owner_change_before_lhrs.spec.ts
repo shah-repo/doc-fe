@@ -1004,11 +1004,7 @@ context("Change owner before starting LHRs", () => {
     context("Start LHRs", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Click on sidebar permission icon to add Operators", () => {

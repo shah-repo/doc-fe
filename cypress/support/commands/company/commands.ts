@@ -259,7 +259,7 @@ Cypress.Commands.add("cmpVerifyPrimaryContrastText", (params:  {color: string}) 
 });
 
 Cypress.Commands.add("cmpVerifyPrimaryColor", (params:  {color: string}) => {
-  cy.get('[data-cy="UserName"]').should("have.css", "color", HEX2RGB(params.color));
+  cy.get(`[data-cy="UserName"]`).should("have.css", "color", HEX2RGB(params.color));
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {

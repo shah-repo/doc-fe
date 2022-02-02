@@ -127,11 +127,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save group", () => {
-      cy.grpAddGroup();
-    });
-
-    it("Close group dialog", () => {
-      cy.grpCloseGroupBtn();
+      cy.grpSaveGroup();
     });
   });
 
@@ -157,11 +153,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save group", () => {
-      cy.grpAddGroup();
-    });
-
-    it("Close group dialog", () => {
-      cy.grpCloseGroupBtn();
+      cy.grpSaveGroup();
     });
   });
 
@@ -746,16 +738,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
-
-      cy.get("#root").contains("Approve").arrowClick();
-    });
-
-    it("Confirm password", () => {
-      cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApprove,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.arApproveARFromDashboard();
     });
   });
 

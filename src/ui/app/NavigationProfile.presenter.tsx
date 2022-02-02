@@ -22,6 +22,7 @@ interface Props extends WithStyles<typeof styles> {
   closeUserProfile: () => void;
   showUserProfile: boolean;
   avatar: Nullable<string>;
+  initialColor: string;
   handleOpenMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
   anchorEl: Nullable<HTMLElement>;
   handleCloseMenu: () => void;
@@ -34,6 +35,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
   closeUserProfile,
   showUserProfile,
   avatar,
+  initialColor,
   handleOpenMenu,
   handleCloseMenu,
   anchorEl,
@@ -55,7 +57,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
         <List style={{ width: "98%" }}>
           <ListItem style={{ padding: 0 }}>
             <ListItemAvatar>
-              <UserAvatar {...{ avatar, name }} />
+              <UserAvatar {...{ avatar, initialColor, name }} />
             </ListItemAvatar>
             <ListItemText
               primary={

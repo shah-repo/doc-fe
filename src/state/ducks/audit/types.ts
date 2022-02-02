@@ -43,6 +43,7 @@ export interface Audit {
   groupId: string;
   owner: Owner;
   ownerUser?: Owner;
+  ownerName?: string;
   ownerThirdParty?: Owner;
   fbSchemaItem?: FBSchemaProps;
   relatedEntity?: DocumentRevision;
