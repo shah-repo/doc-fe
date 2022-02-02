@@ -34,6 +34,18 @@ const THIRD_USER = USERS[4];
 const INDIVIDUAL_USER = USERS[14];
 
 context("Check DAM enforcement rules for document types", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({

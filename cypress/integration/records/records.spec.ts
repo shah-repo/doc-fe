@@ -301,11 +301,11 @@ context("Records flow", () => {
       it("Check for Landing page default columns", () => {
         SystemRequirement("REQ-2740");
         cy.filterCheckHeaderValues("ID",
-          "Revision", "State",
-          "Title",
-          "Owner",
-          "Released Date",
-          "Form ID");
+          "REVISION", "STATE",
+          "TITLE",
+          "OWNER",
+          "RELEASED DATE",
+          "FORM ID");
       });
     });
 
@@ -313,7 +313,7 @@ context("Records flow", () => {
       it("Enter all fields to check if all filter fields are working", () => {
         SystemRequirement("REQ-2750");
         cy.filterRecords({
-          docId: "RD-00004", revision: "A", state: "Released", title: "Approval", owner: USERS[2].name,
+          docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
           releasedDate: "Last 7 days", formId: "FM-00003",
         });
       });
@@ -328,7 +328,7 @@ context("Records flow", () => {
 
       it("Check if all filter values persist after changing landing page", () => {
         cy.filterCheckIfRecordsFilterPersists({
-          docId: "RD-00004", revision: "A", state: "Released", title: "Approval", owner: USERS[2].name,
+          docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
           releasedDate: "Last 7 days", formId: "FM-00003",
         });
       });

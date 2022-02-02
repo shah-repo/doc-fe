@@ -1,7 +1,7 @@
 import { Box, Chip, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { map, some } from "lodash";
+import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -104,6 +104,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentReferences]);
 
+  const [ModifiedOptions, setModifiedOptions] = useState(options);
+
+  const filterOptions = (event: any, inputVal: any) => {
+    const updatedOptions = options.filter(
+      (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
+    );
+    setModifiedOptions(updatedOptions);
+  };
+  const debounceFunction = debounce(filterOptions, 1000);
+
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
@@ -112,8 +122,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         </Typography>
       </Box>
       <Autocomplete
-        {...{ onChange, options, disabled }}
+        {...{ onChange, disabled }}
         value={value}
+        options={ModifiedOptions}
+        // disable filtering on client
+        filterOptions={(x) => x}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
             <Box width="100%" data-cy="referenceTo">
@@ -144,6 +157,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             />
           ))
         )}
+        onInputChange={debounceFunction}
         multiple
         disableClearable
       />

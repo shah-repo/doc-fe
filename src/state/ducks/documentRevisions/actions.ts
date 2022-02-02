@@ -1,4 +1,5 @@
 import axios from "axios";
+import { map, pick } from "lodash";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
@@ -33,7 +34,30 @@ const loadList = (states: DocumentRevisionStatus[] = []): ApiAction<DocumentRevi
     method: "get",
     asyncType: DOCUMENT_REVISION_LIST_ASYNC,
     onSuccess: (documentRevisions, dispatch) => {
-      dispatch(documentRevisionsList(documentRevisions));
+      const documentRevisionsFiltered = map(documentRevisions, (record) => pick(record, [
+        "displayStatus",
+        "precalc",
+        "id",
+        "docId",
+        "id",
+        "name",
+        "version",
+        "revision",
+        "revisionStage",
+        "revisionChangeType",
+        "name",
+        "description",
+        "displayRevision",
+        "owner",
+        "attachments",
+        "status",
+        "document",
+        "released",
+        "referenceTo",
+        "trainingRecords",
+      ])
+      );
+      dispatch(documentRevisionsList(documentRevisionsFiltered));
     },
   });
 };
@@ -447,3 +471,4 @@ export default {
   updateForm,
   getFormMappingTemplate,
 };
+

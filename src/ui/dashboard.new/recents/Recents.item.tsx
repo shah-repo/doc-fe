@@ -18,11 +18,12 @@ import {
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import { StyledListItem } from "../line.items/common/StyledListItem";
+import { StyleTooltip } from "../line.items/common/StyleTooltip";
 import {
   DocTypeGroups,
 } from "../line.items/common/types";
 import { styles } from "./Recents.item.styles";
-import { StyledListItem } from "./StyledListItem";
 
 const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
   itemId,
@@ -103,38 +104,42 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <Link
-                  href={changeRequestEditPath(itemId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                <StyleTooltip title={docTitle} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
+                  <Link
+                    href={changeRequestEditPath(itemId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {docTitle}
-                  </Typography>
-                </Link>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docTitle}
+                    </Typography>
+                  </Link>
+                </StyleTooltip>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <Link
-                  href={documentVersionPath(docRevId || "", itemId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.typographyBold}
-                    color="textSecondary"
-                    noWrap
+                <StyleTooltip title={docTitle} placement="top" arrow>
+                  <Link
+                    href={documentVersionPath(docRevId || "", itemId)}
+                    color="inherit"
+                    className={classes.link}
                   >
-                    {docTitle}
-                  </Typography>
-                </Link>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      className={classes.typographyBold}
+                      color="textSecondary"
+                      noWrap
+                    >
+                      {docTitle}
+                    </Typography>
+                  </Link>
+                </StyleTooltip>
               )}
             </Grid>
             <Grid

@@ -21,7 +21,7 @@ html {
 }
 
 body {
-  background-color: var(--alabaster) !important;
+  background-color: var(--white) !important;
 }
 
 .react-datepicker-wrapper,

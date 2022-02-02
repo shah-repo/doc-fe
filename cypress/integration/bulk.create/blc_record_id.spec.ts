@@ -933,8 +933,9 @@ context("Bulk create public, private and reserved record-ids", () => {
     });
 
     context("Verify created record ids", () => {
-      it("Navigate to record list and verify count", { retries: 2 }, () => {
+      it("Navigate to record list and verify count", () => {
         cy.navigToDashboard();
+        cy.wait(30 * 1000);
         cy.navigToRecords();
         cy.dlClearFilters();
         cy.dlVerifyDocCounter({ docCounterNumber: 18 });
@@ -959,7 +960,7 @@ context("Bulk create public, private and reserved record-ids", () => {
             "TPP-00010",
           ];
 
-          cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+          cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
             expect($document.text()).to.be.oneOf(recordIdsThatShouldBeOnRecordsList);
           });
         });
@@ -983,7 +984,7 @@ context("Bulk create public, private and reserved record-ids", () => {
             "TPUP-00008",
           ];
 
-          cy.get("div[aria-rowindex]>div[aria-colindex=\"1\"]").each(($document) => {
+          cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
             expect($document.text()).to.be.oneOf(recordIdsThatShouldBeOnRecordsList);
           });
         });

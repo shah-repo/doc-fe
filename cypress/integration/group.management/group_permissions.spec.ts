@@ -16,6 +16,18 @@ let adminLoginResponse;
 let thirdEmployee;
 
 context("Group Permissions Flow", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -178,7 +190,7 @@ context("Group Permissions Flow", () => {
 
     it("Assigns user to the group", () => {
       // SystemRequirement("REQ-2560");
-      cy.grpAssignUser({ name: USERS[2].name });
+      cy.grpAssignUserDialog({ name: USERS[2].name });
     });
 
     it("Saves the group", () => {
@@ -193,7 +205,7 @@ context("Group Permissions Flow", () => {
 
     it("Assigns user to the group", () => {
       // SystemRequirement("REQ-2560");
-      cy.grpAssignUser({ name: USERS[2].name });
+      cy.grpAssignUserDialog({ name: USERS[2].name });
     });
 
     it("Saves the group", () => {
@@ -207,7 +219,7 @@ context("Group Permissions Flow", () => {
     });
 
     it(`Remove permissions for  'Everyone' for ${USERS[3].name}`, () => {
-      cy.grpRemoveUser({ name: USERS[3].name });
+      cy.grpRemoveUserDialog({ name: USERS[3].name });
     });
 
     it("Saves the group", () => {
@@ -220,7 +232,7 @@ context("Group Permissions Flow", () => {
 
     it("Assigns user to the group", () => {
       SystemRequirement("REQ-2510");
-      cy.grpAssignUser({ name: USERS[3].name });
+      cy.grpAssignUserDialog({ name: USERS[3].name });
     });
 
     it("Saves the group", () => {
@@ -328,7 +340,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "Closed" });
+      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "CLOSED" });
     });
 
     it("Check if 'Change Owner' button exists on AR", () => {

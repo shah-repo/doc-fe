@@ -24,7 +24,7 @@ declare global {
       mpiAddMaterialParameterToStep(params: {numbOfStep: integer; material: string}): Chainable;
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
-      mpiStart(): Chainable;
+      mpiStartStep(params: {stepNumber: number}): Chainable;
     }
   }
 }
@@ -130,9 +130,9 @@ Cypress.Commands.add("mpiAddEquipmentParameterToStep", (params: {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("mpiStart", () => {
+Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
+    cy.get("[data-cy=\"form.builder.start.step\"]").eq(params.stepNumber - 1).arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

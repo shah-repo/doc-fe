@@ -69,7 +69,6 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
-
 }) => {
   const classes = styles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -144,21 +143,28 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
+                  <StyleTooltip
+                    title={title}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={changeRequestEditPath(arChangeRequestId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {title}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -220,11 +226,15 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {!open && hoverItem && !pinned && (
+        {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -233,11 +243,13 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!open && pinned && (
-          <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-            />
+        {pinned && (
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} />
           </StyleTooltip>
         )}
       </StyledListItem>
@@ -251,14 +263,54 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
               <ListItemText
                 id={prItem.docId}
                 primary={
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
                   >
-                    {prItem.name}
-                  </Typography>
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
                 }
               />
               <Box component="div">
