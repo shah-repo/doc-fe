@@ -51,7 +51,7 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
       name="editorConfig.filters.revisionStatus"
       key={`fb-editor-${type}-${index}`}
       multiple={true}
-      defaultValue={[DocumentRevisionStatus.Voided, DocumentRevisionStatus.Released]}
+      defaultValue={[DocumentRevisionStatus.Draft, DocumentRevisionStatus.Released]}
     />
     {children}
   </FBEditor>
