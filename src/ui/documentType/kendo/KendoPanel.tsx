@@ -382,7 +382,7 @@ export function KendoGrid<T>({
         key={index}
         field={column.field}
         width={setColumnWidth(column.width as number, gridWidth)}
-        minResizableWidth={100}
+        minResizableWidth={200}
         locked={column.locked}
         reorderable={column.reorderable}
         sortable={column.sortable}

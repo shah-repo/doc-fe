@@ -534,7 +534,7 @@ export function KendoPanel<T>({
       {...column}
       title={getTranslatedText(column.title).toUpperCase()}
       width={setColumnWidth(column.width as number, gridWidth)}
-      minResizableWidth={100}
+      minResizableWidth={200}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={
         filterCellMapping[column.field]
