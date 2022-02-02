@@ -231,21 +231,28 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
+                  <StyleTooltip
+                    title={title}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={changeRequestEditPath(arChangeRequestId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {title}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid
@@ -270,7 +277,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && !open && (
+        {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -284,7 +291,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {rejectHover && (
-                <StyleTooltip title="Reject" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.reject" />}
+                  placement="top"
+                  arrow
+                >
                   <RejectSolidIcon
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
@@ -301,7 +312,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {approveHover && (
-                <StyleTooltip title="Approve" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.approve" />}
+                  placement="top"
+                  arrow
+                >
                   <ApproveSolidIcon
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
@@ -316,11 +331,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
@@ -332,11 +343,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
@@ -349,13 +356,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        {!open && pinned && !hoverItem && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >
@@ -373,14 +376,54 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               <ListItemText
                 id={prItem.docId}
                 primary={
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
                   >
-                    {prItem.name}
-                  </Typography>
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
                 }
               />
               <Box component="div">

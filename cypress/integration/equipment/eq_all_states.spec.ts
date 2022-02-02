@@ -1140,7 +1140,7 @@ context("Equipment maintenance for checking History in all states", () => {
       });
 
       it("Filter DRAFT Numeric Equipment", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Equipment document DRAFT" });
+        cy.filterEquipmentTitle({ name: "Equipment document DRAFT" });
       });
 
       it("Select first Equipment on list", () => {

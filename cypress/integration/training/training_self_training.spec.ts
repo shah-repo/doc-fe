@@ -727,8 +727,7 @@ context("Self training test", () => {
 
     it("Check if next available TRN ID added", () => {
       cy.trLandingPagetrId({ trId: "TRN-00002" });
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TRN-00002");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TRN-00002");
       cy.trClearFilters();
     });
 

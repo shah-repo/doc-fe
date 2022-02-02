@@ -15,7 +15,6 @@ class FBLHRStepState {
   public equipmentApi = new FBAutocompleteAsyncState({ optionId: this.equipmentId });
   // MARK @config
   @observable public stepLHRs?: DocumentRevision;
-  @observable public isHovering = false;
   @observable public materials: any;
   @observable public equipment: any;
   @observable public editedParameters: any;
@@ -78,8 +77,6 @@ class FBLHRStepState {
   public setMaterials = (materials) => set(this, "materials", materials);
   public setEquipment = (equipment) => set(this, "equipment", equipment);
   public setEditedParameters = (editedParameters) => set(this, "editedParameters", editedParameters);
-
-  public setIsHovering = (isHovering: boolean) => set(this, "isHovering", isHovering);
 
   public startMpi = (fieldId: string, woId?: string, mpiId?: string, stepNumber?: number) => {
     if (!woId || !mpiId || isUndefined(stepNumber)) { return; }

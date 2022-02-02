@@ -1,3 +1,4 @@
+import { Nullable } from "../../common/types";
 import { TRAINING_LIST } from "./constants";
 
 interface User {
@@ -5,6 +6,7 @@ interface User {
   userName: string;
 }
 export interface Training {
+  pendingEmailSentAt: Nullable<string>;
   trainingStatus: string;
   docId: string;
   docDocumentId: string;

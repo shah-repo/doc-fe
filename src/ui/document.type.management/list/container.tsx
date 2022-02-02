@@ -77,7 +77,7 @@ function Row(props: { row: DocumentType }) {
 }
 
 
-export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
+const DocumentTypeManagementContainer: React.FunctionComponent = () => {
   const classes = styles();
   const dialog = useDialog();
   const exportDAMDialog = useDialog();
@@ -120,3 +120,5 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
 
   );
 };
+
+DocumentTypeManagementContainer;

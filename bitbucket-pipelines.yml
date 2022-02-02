@@ -70,90 +70,90 @@ definitions:
           - ./aws/bash_scripts/runTests.sh
 
     - step: &COMMON_RUN_CYPRESS
-          name: Cypress specs
-          image:
-            name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
-            aws:
-              access-key: $AWS_ACCESS_KEY_ID
-              secret-key: $AWS_SECRET_ACCESS_KEY
-          max-time: 50
-          size: 2x
-          services:
-            - sorry-cypress-director
-          caches:
-            - node
-          artifacts:
-            - test-results/**
-          script:
-            - source ./scripts/cypress/utils/variables_pipeline.sh
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+        name: Cypress specs
+        image:
+          name: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
+          aws:
+            access-key: $AWS_ACCESS_KEY_ID
+            secret-key: $AWS_SECRET_ACCESS_KEY
+        max-time: 50
+        size: 2x
+        services:
+          - sorry-cypress-director
+        caches:
+          - node
+        artifacts:
+          - test-results/**
+        script:
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_DEV
-          <<: *COMMON_RUN_CYPRESS
-          script:
-            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+        <<: *COMMON_RUN_CYPRESS
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEV"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_DEMO
-          <<: *COMMON_RUN_CYPRESS
-          script:
-            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEMO"
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+        <<: *COMMON_RUN_CYPRESS
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "DEMO"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_SANDBOX
-          <<: *COMMON_RUN_CYPRESS
-          script:
-            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+        <<: *COMMON_RUN_CYPRESS
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "SANDBOX"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SCHEDULED_CYPRESS_PROD
-          <<: *COMMON_RUN_CYPRESS
-          script:
-            - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+        <<: *COMMON_RUN_CYPRESS
+        script:
+          - source ./scripts/cypress/utils/variables_scheduled_pipeline.sh "PROD"
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &RUN_CYPRESS_VIDEO
         <<: *COMMON_RUN_CYPRESS
         max-time: 100
         name: Cypress specs with video
         artifacts:
-            - test-results/**
-            - zipped-test-results/**
+          - test-results/**
+          - zipped-test-results/**
         script:
-            - export CYPRESS_VIDEO="true" 
-            - source ./scripts/cypress/utils/variables_pipeline.sh
-            - echo $CYPRESS_BASE_URL
-            - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
-            - yarn install --frozen-lockfile
-            - ./scripts/cypress/utils/generate_requirements_json_file.sh
-            - ./scripts/cypress/utils/make_results_dir_pipeline.sh
-            - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
-            - ./scripts/cypress/utils/merge_reports_pipeline.sh
+          - export CYPRESS_VIDEO="true"
+          - source ./scripts/cypress/utils/variables_pipeline.sh
+          - echo $CYPRESS_BASE_URL
+          - ./scripts/cypress/utils/patch_director_port_in_cache_pipeline.sh
+          - yarn install --frozen-lockfile
+          - ./scripts/cypress/utils/generate_requirements_json_file.sh
+          - ./scripts/cypress/utils/make_results_dir_pipeline.sh
+          - ./scripts/cypress/utils/run_workers_in_parallel_pipeline.sh
+          - ./scripts/cypress/utils/merge_reports_pipeline.sh
 
     - step: &SLACK_CYPRESS_REPORT_SCHEDULED_DEV
         <<: *COMMON_RUN_CYPRESS
@@ -214,7 +214,7 @@ definitions:
           - ./scripts/cypress/utils/run_generate_info_report_pipeline.sh
           - ./scripts/cypress/utils/merge_reports_pipeline.sh
           - ./scripts/cypress/utils/slack_test_report_upload.sh
-        
+
     - step: &SLACK_CYPRESS_REPORT
         <<: *COMMON_RUN_CYPRESS
         name: Cypress upload reports
@@ -245,85 +245,85 @@ definitions:
           - ./scripts/cypress/utils/upload_video_reports.sh
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
+        - step:
+            <<: *COMMON_RUN_CYPRESS
             name: Cypress specs 1/5
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
+        - step:
+            <<: *COMMON_RUN_CYPRESS
             name: Cypress specs 2/5
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
+        - step:
+            <<: *COMMON_RUN_CYPRESS
             name: Cypress specs 3/5
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
+        - step:
+            <<: *COMMON_RUN_CYPRESS
             name: Cypress specs 4/5
-        - step: 
-            <<:  *COMMON_RUN_CYPRESS
+        - step:
+            <<: *COMMON_RUN_CYPRESS
             name: Cypress specs 5/5
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEV
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEV
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEV
             name: Cypress specs 1/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEV
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEV
             name: Cypress specs 2/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEV
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEV
             name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_DEMO
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEMO
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEMO
             name: Cypress specs 1/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEMO
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEMO
             name: Cypress specs 2/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_DEMO
+        - step:
+            <<: *SCHEDULED_CYPRESS_DEMO
             name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_SANDBOX
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_SANDBOX
+        - step:
+            <<: *SCHEDULED_CYPRESS_SANDBOX
             name: Cypress specs 1/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_SANDBOX
+        - step:
+            <<: *SCHEDULED_CYPRESS_SANDBOX
             name: Cypress specs 2/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_SANDBOX
+        - step:
+            <<: *SCHEDULED_CYPRESS_SANDBOX
             name: Cypress specs 3/3
 
     - parallel: &SCHEDULED_CYPRESS_IN_PARALLEL_PROD
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD
+        - step:
+            <<: *SCHEDULED_CYPRESS_PROD
             name: Cypress specs 1/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD
+        - step:
+            <<: *SCHEDULED_CYPRESS_PROD
             name: Cypress specs 2/3
-        - step: 
-            <<:  *SCHEDULED_CYPRESS_PROD
+        - step:
+            <<: *SCHEDULED_CYPRESS_PROD
             name: Cypress specs 3/3
 
     - parallel: &RUN_CYPRESS_IN_PARALLEL_VIDEO
-        - step: 
-            <<:  *RUN_CYPRESS_VIDEO
+        - step:
+            <<: *RUN_CYPRESS_VIDEO
             name: Cypress specs 1/5
-        - step: 
-            <<:  *RUN_CYPRESS_VIDEO
+        - step:
+            <<: *RUN_CYPRESS_VIDEO
             name: Cypress specs 2/5
-        - step: 
-            <<:  *RUN_CYPRESS_VIDEO
+        - step:
+            <<: *RUN_CYPRESS_VIDEO
             name: Cypress specs 3/5
-        - step: 
-            <<:  *RUN_CYPRESS_VIDEO
+        - step:
+            <<: *RUN_CYPRESS_VIDEO
             name: Cypress specs 4/5
-        - step: 
-            <<:  *RUN_CYPRESS_VIDEO
+        - step:
+            <<: *RUN_CYPRESS_VIDEO
             name: Cypress specs 5/5
 
     - step: &RUN_CYPRESS_SINGLE
-        <<:  *COMMON_RUN_CYPRESS
+        <<: *COMMON_RUN_CYPRESS
         name: Cypress specs 1/1
     #
     # DEV
@@ -356,7 +356,7 @@ definitions:
     - step: &DEPLOY_DEV2
         <<: *COMMON_DEPLOY
         name: Deploy to Dev2
-        deployment: Development
+        deployment: Development2
         script:
           - ./aws/bash_scripts/publish.sh "dev2"
     #
@@ -434,7 +434,7 @@ definitions:
 # Pipelines
 #
 pipelines:
-  custom: 
+  custom:
     run-cypress-on-dev-bbrun-single:
       - variables:
           - name: CYPRESS_FE_URL
@@ -444,8 +444,8 @@ pipelines:
           - name: CYPRESS_COMMIT_FE
           - name: CYPRESS_COMMIT_BE
           - name: CYPRESS_COMMIT_REMOTEJS
-      - step: 
-          <<:  *COMMON_RUN_CYPRESS
+      - step:
+          <<: *COMMON_RUN_CYPRESS
           name: Cypress specs local test
     run-cypress-parallel:
       - variables:
@@ -536,10 +536,10 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_SANDBOX
       - step: *DEPLOY_SANDBOX
-    
+
     run-parallel-cypress-on-dev:
       - parallel: *RUN_CYPRESS_IN_PARALLEL
-    
+
     run-single-cypress-on-dev:
       - step: *RUN_CYPRESS_SINGLE
 
@@ -557,6 +557,13 @@ pipelines:
           - step: *RUN_LINTER
           - step: *BUILD_DEV
       - step: *DEPLOY_DEV
+
+    dev2:
+      - parallel:
+          - step: *RUN_TESTS
+          - step: *RUN_LINTER
+          - step: *BUILD_DEV2
+      - step: *DEPLOY_DEV2
 
     demo:
       - parallel:

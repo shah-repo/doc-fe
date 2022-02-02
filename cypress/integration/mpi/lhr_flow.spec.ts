@@ -1733,11 +1733,7 @@ context("LHR flow", () => {
       context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           SystemRequirement("REQ-3210");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.mpiStartStep({ stepNumber: 1 });
         });
 
         it("Turn off autosave", () => {
@@ -2036,10 +2032,7 @@ context("LHR flow", () => {
     context("Complete LHRs #2 in LHR", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).arrowClick();
-        });
-
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
