@@ -15,7 +15,6 @@ import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/images/approved_status_white.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../../assets/images/expand.svg";
-import { ReactComponent as PendingReviewItemIcon } from "../../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../../assets/images/reject_status.svg";
@@ -28,12 +27,14 @@ import { changeRequestEditPath } from "../../../../../change.request/utils/paths
 import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../../common/DocIcon";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
+import { DocTypeGroups } from "../../../common/types";
 import { styles } from "./approverActions.styles";
 
 interface Props {
@@ -45,6 +46,7 @@ interface Props {
   approvalStatusChanged: string;
   timestamp: string;
   docRevs: {
+    docTypeGroup: DocTypeGroups;
     documentRevisionId: string;
     documentId: string;
     docId: string;
@@ -272,21 +274,28 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
+                  <StyleTooltip
+                    title={arTitle}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={changeRequestEditPath(arChangeRequestId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {arTitle}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {arTitle}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid
@@ -311,11 +320,15 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        { hoverItem && !!open && pinned && (
+        {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
-              <StyleTooltip title={<Typography><Text translation="common.pin" /></Typography>} placement="top" arrow>
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
@@ -324,12 +337,14 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
             )}
           </Box>
         )}
-        {!open && pinned && (
+        {pinned && (
           <Box component="div" className={classes.actionIcons}>
-            <StyleTooltip title={<Typography><Text translation="common.unpin" /></Typography>} placement="top" arrow>
-              <PinSolidIcon
-                onClick={handleUnPinClick}
-              />
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
             </StyleTooltip>
           </Box>
         )}
@@ -339,19 +354,59 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
-                <PendingReviewItemIcon />
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
               <ListItemText
                 id={prItem.docId}
                 primary={
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
                   >
-                    {prItem.name}
-                  </Typography>
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
                 }
               />
               <Box component="div">

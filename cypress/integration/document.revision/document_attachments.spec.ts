@@ -349,7 +349,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Draft" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "DRAFT" });
     });
 
     it("Add first approver to approval request on approver list", () => {
@@ -392,7 +392,7 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "In Review" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
@@ -423,7 +423,7 @@ context("Document Attachment Flow", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
     });
 
     it("Close AR", () => {

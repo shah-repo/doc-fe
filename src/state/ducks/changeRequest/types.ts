@@ -6,11 +6,11 @@ import { FBDocumentRevisionProps } from "../documentRevisions/types";
 import { CHANGE_REQUEST_AUDIT_SET, CHANGE_REQUEST_LIST, CHANGE_REQUEST_LIST_APPROVERS, CHANGE_REQUEST_SET } from "./constants";
 
 export enum ChangeRequestStatus {
-  Draft = "DRAFT",
-  InReview = "IN_REVIEW",
-  Implementation = "IMPLEMENTATION",
   Approved = "APPROVED",
   Closed = "CLOSED",
+  Draft = "DRAFT",
+  Implementation = "IMPLEMENTATION",
+  InReview = "IN_REVIEW",
   Voided = "VOIDED",
 }
 

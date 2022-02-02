@@ -179,4 +179,5 @@ const DocumentByTypeListContainer: React.FunctionComponent<Props> = ({
   );
 };
 
-export default DocumentByTypeListContainer;
+// export default DocumentByTypeListContainer;
+DocumentByTypeListContainer;

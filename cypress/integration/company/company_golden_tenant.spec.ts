@@ -1805,7 +1805,7 @@ context("Create company with golden tenant", () => {
     it("Check first AR", () => {
       cy.navigToApprovalRequestList();
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "Closed" });
+      cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "CLOSED" });
       cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(0).contains("AR Form");
       cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
         .should("have.value", "FM-00001 - rev 1 - AR Form");

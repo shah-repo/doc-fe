@@ -15,7 +15,7 @@ import GroupContentContainer from "./GroupContent.container";
 
 interface Props {
   isOpen: boolean;
-  closeDialog: () => void;
+  closeDialog: (flag?: boolean) => void;
   selectedGroup?: LoadCompanyGroup;
   title: any;
   isCreateMode?: boolean;
@@ -73,7 +73,9 @@ const AddGroup: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Dialog fullScreen={true} open={isOpen}>
+    <Dialog fullScreen={false} open={isOpen}  fullWidth
+      maxWidth="xl"
+    >
       <DialogTitle
         closeDialog={closeDialog}
         title={title}

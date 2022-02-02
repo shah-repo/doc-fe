@@ -16,7 +16,7 @@ interface Props {
   isCreateMode?: boolean;
   employees: GetEmployeeResponse[];
   handleTableRefresh: () => void;
-  closeDialog: () => void;
+  closeDialog: (flag?: boolean) => void;
   currentEmployeePermissions: Permission[];
   hasOfficialPermission: boolean;
 }
@@ -65,7 +65,7 @@ const GroupContentContainer: React.FunctionComponent<Props> = ({
   const editGroupAsync = useAsync({
     onSuccess: (response) => {
       handleTableRefresh();
-      closeDialog();
+      closeDialog(true);
     },
   });
 

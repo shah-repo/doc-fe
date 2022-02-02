@@ -474,7 +474,7 @@ context("Equipment maintenance test", () => {
       it("Select 'Equipment maintenance document'", () => {
         SystemRequirement("REQ-2870");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+          cy.get("tr.k-master-row").first().arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -552,7 +552,7 @@ context("Equipment maintenance test", () => {
         CyRoutes.DocPreview,
         CyRoutes.AvailableMaintenanceForms,
         CyRoutes.GetFieldLocks], () => {
-        cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+        cy.get("tr.k-master-row").first().arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -633,7 +633,7 @@ context("Equipment maintenance test", () => {
           CyRoutes.AvailableMaintenanceForms,
           CyRoutes.AvailableMaintenanceForms,
           CyRoutes.HistoryMaintenance], () => {
-          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+          cy.get("tr.k-master-row").first().arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -708,48 +708,50 @@ context("Equipment maintenance test", () => {
         context("Verify equipment landing page", () => {
           it("Verify 'ID' is EQ-00001", () => {
             SystemRequirement("REQ-2840");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(1)").last().should("have.text", "EQ-00001");
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="0"]`).should("have.text", "EQ-00001");
           });
 
           it("Verify 'REVISION' is '1'", () => {
             SystemRequirement("REQ-2840");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(2)").last().should("have.text", "1");
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="1"]`).should("have.text", "1");
           });
 
           it("Verify 'STATE' is 'Released'", () => {
             SystemRequirement("REQ-2840");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(3)").last().should("have.text", "Released");
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="2"]`).should("have.text", "Released");
           });
 
           it("Verify 'TITLE' is 'Equipment maintenance document'", () => {
             SystemRequirement("REQ-2840");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(4)")
-              .last()
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="3"]`)
               .should("have.text", "Equipment maintenance document");
           });
 
           it(`Verify 'EFT OWNER' is '${USERS[1].name}'`, () => {
             SystemRequirement("REQ-2840");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(5)").last().should("have.text", USERS[1].name);
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="4"]`)
+              .find("span").eq(0)
+              .should("have.text", USERS[1].name);
           });
 
           it("Verify 'EQ STATUS' is Active", () => {
             SystemRequirement("REQ-2840");
-            cy.get("div.ReactVirtualized__Table__rowColumn").last().should("have.text", "Active");
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="7"]`).should("have.text", "Active");
           });
 
-          it("Verify 'CAL DUE DATE'", { retries: 3 }, () => {
+          it("Verify 'CAL DUE DATE'", () => {
             SystemRequirement("REQ-2840", "REQ-2910");
+            cy.wait(30 * 1000);
             cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
               cy.reload();
             });
             cy.listLoadingElementShouldNotExist();
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(6)").should("contain.text", CAL_DUE_DATE);
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="5"]`).should("have.text", CAL_DUE_DATE);
           });
 
           it("Verify 'PM DUE DATE'", () => {
             SystemRequirement("REQ-2840", "REQ-2910");
-            cy.get("div[aria-rowindex=\"1\"]>div:nth-child(7)").should("contain.text", PM_DUE_DATE);
+            cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="6"]`).should("have.text", PM_DUE_DATE);
           });
 
           it("Verify equipment page filter", () => {
@@ -773,7 +775,7 @@ context("Equipment maintenance test", () => {
               CyRoutes.AvailableMaintenanceForms,
               CyRoutes.AvailableMaintenanceForms,
               CyRoutes.HistoryMaintenance], () => {
-              cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+              cy.get("tr.k-master-row").first().arrowClick();
             });
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
@@ -810,7 +812,7 @@ context("Equipment maintenance test", () => {
               });
           });
 
-          it("Check Calibration document existance", { retries: 3 }, () => {
+          it("Check Calibration document existance", () => {
             SystemRequirement("REQ-2900");
             cy.get("[data-cy=\"maintenanceHistory\"]")
               .eq(1)
@@ -933,7 +935,7 @@ context("Equipment maintenance test", () => {
           CyRoutes.DocPreview,
           CyRoutes.AvailableMaintenanceForms,
           CyRoutes.GetFieldLocks], () => {
-          cy.get("div.ReactVirtualized__Table__rowColumn").first().arrowClick();
+          cy.get("tr.k-master-row").first().arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

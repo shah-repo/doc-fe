@@ -13,6 +13,18 @@ let secondEmployee;
 const groupName = `Group ${moment().format("X")}`;
 
 context("Autocomplete 'Groups' test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -71,23 +83,19 @@ context("Autocomplete 'Groups' test", () => {
       });
 
       it("Select 'Unofficial' radio button", () => {
-        cy.get("input[value=\"unofficial\"]").arrowClick();
+        cy.grpSelectUnofficial();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").arrowType(groupName);
+        cy.grpEnterGroupName({ name: groupName });
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
+        cy.grpTypeMembers(USERS[3].name);
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").arrowClick();
-      });
-
-      it("Close dialog box", () => {
-        cy.get("#DialogContent-close").arrowClick();
+        cy.grpSaveGroup();
       });
     });
 
@@ -133,7 +141,7 @@ context("Autocomplete 'Groups' test", () => {
             cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
-          it("Select 'Groupss' as options", () => {
+          it("Select 'Groups' as options", () => {
             cy.get("[data-cy=\"optionId\"]").arrowType("Groups{downarrow}{enter}");
           });
 

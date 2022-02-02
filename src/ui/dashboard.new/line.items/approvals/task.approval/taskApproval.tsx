@@ -16,7 +16,6 @@ import { ReactComponent as ApproveIcon } from "../../../../../assets/images/appr
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
-import { ReactComponent as PendingReviewItemIcon } from "../../../../../assets/images/pending_review_nested.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
 import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
@@ -31,8 +30,10 @@ import Text from "../../../../components/Text";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../common/DocIcon";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import { styles } from "./taskApproval.styles";
 
@@ -41,6 +42,7 @@ interface Props {
   type: string;
   arId: string;
   docRevs: {
+    docTypeGroup: DocTypeGroups;
     documentRevisionId: string;
     documentId: string;
     docId: string;
@@ -229,21 +231,28 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
+                  <StyleTooltip
+                    title={title}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={changeRequestEditPath(arChangeRequestId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {title}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
               </Grid>
               <Grid
@@ -268,7 +277,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </>
           }
         />
-        {hoverItem && !open && (
+        {hoverItem && (
           <Box
             component="div"
             className={classes.actionIcons}
@@ -282,7 +291,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {rejectHover && (
-                <StyleTooltip title="Reject" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.reject" />}
+                  placement="top"
+                  arrow
+                >
                   <RejectSolidIcon
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
@@ -299,7 +312,11 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 />
               )}
               {approveHover && (
-                <StyleTooltip title="Approve" placement="top" arrow>
+                <StyleTooltip
+                  title={<Text translation="common.approve" />}
+                  placement="top"
+                  arrow
+                >
                   <ApproveSolidIcon
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
@@ -314,11 +331,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.pin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.pin" />}
                   placement="top"
                   arrow
                 >
@@ -330,11 +343,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               )}
               {pinned && (
                 <StyleTooltip
-                  title={
-                    <Typography>
-                      <Text translation="common.unpin" />
-                    </Typography>
-                  }
+                  title={<Text translation="common.unpin" />}
                   placement="top"
                   arrow
                 >
@@ -347,13 +356,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
             </span>
           </Box>
         )}
-        {!open && pinned && !hoverItem && (
+        {pinned && (
           <StyleTooltip
-            title={
-              <Typography>
-                <Text translation="common.unpin" />
-              </Typography>
-            }
+            title={<Text translation="common.unpin" />}
             placement="top"
             arrow
           >
@@ -366,19 +371,59 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           {docRevs.map((prItem, index) => (
             <StyledListItem button className={classes.nested} key={index}>
               <IconButton aria-label="listIcon">
-                <PendingReviewItemIcon />
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>
               <ListItemText
                 id={prItem.docId}
                 primary={
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
                   >
-                    {prItem.name}
-                  </Typography>
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
                 }
               />
               <Box component="div">
