@@ -17,11 +17,10 @@ import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
-import { FBSchemaProps, FBWorkspace } from "../../form.builder";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
 import useDescription from "../../hooks/docCustomization/useDescription";
@@ -29,7 +28,6 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
-import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
 import ChangeRequestLink from "./changeRequestLink";
@@ -76,11 +74,8 @@ const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  let { schema } = formTemplate || formDocument?.formTemplate || {};
-  schema = dataProp.schema || schema;
   const { docId } = formDocument?.document || {};
   const FBIsOutput = Boolean(docId && !isEmpty(docId));
-  const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
   const docDetails: Partial<DocumentRevision> = {
     docId: document.docId,
@@ -163,12 +158,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   );
 
   const contentRenderer = () => (
-    <Box className={classes.boxContainer}>
-      <SummaryHeader
-        documentRevision={dataProp}
-        canChangeOwnerShip={canChangeOwnerShip}
-        canShowCreateVersionButton={canShowCreateVersionButton}
-      />
+    <Box>
       <Grid
         container={true}
         className={classes.previewBox}
@@ -232,18 +222,6 @@ const Presenter: React.FunctionComponent<Props> = ({
         {renderTrainingControl}
         {renderSelfTaughtTraining}
       </Grid>
-
-      {FBIsActive && (
-        <Box px={5} mt={4} id="Presenter-FBWorkspace">
-          <FBWorkspace
-            document={dataProp}
-            initialValues={dataProp.formInput}
-            schema={schema as FBSchemaProps[]}
-            mode={checkIsDocumentForm(dataProp.document.documentType.groupOptions) ?
-              "formPreview" : "preview"}
-          />
-        </Box>
-      )}
       {isRecord && isInlineApproval && isFirstAlphaReleased &&
         isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
       {FBIsOutput && (

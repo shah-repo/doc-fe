@@ -11,6 +11,8 @@ export * from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/Document
 export { default as DocumentRevisionForm } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm";
 export { default as DocumentRevisionFormState } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.state";
 export * from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.types";
+export { default as DocumentRevisionSummary } from "./Enlil/Features/DocumentRevisionSummary/DocumentRevisionSummary";
+export * from "./Enlil/Features/DocumentRevisionSummary/DocumentRevisionSummary.types";
 export { default as SMStore } from "./Shifamed/API/SMStore";
 export * from "./Shifamed/API/SMStore.client";
 export * from "./Shifamed/API/SMStore.defaults";
