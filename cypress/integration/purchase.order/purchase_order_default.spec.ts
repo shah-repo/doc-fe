@@ -521,7 +521,7 @@ context("PO test with default enlil form", () => {
 
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$20.00" });
-          cy.poCheckTax({ number: "1.85" });
+          cy.poCheckTax({ number: "1.850000" });
           cy.get("[data-cy=\"poTotal\"]").should("have.text", "$21.85");
         });
       });
@@ -575,7 +575,7 @@ context("PO test with default enlil form", () => {
 
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$50.00" });
-          cy.poCheckTax({ number: "1.85" });
+          cy.poCheckTax({ number: "1.850000" });
           cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.85");
         });
       });
