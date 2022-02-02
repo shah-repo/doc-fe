@@ -1,6 +1,7 @@
 import { InputAdornment } from "@material-ui/core";
 import React from "react";
 import { FBAutocomplete, FBData, FBEditor, FBEditorLHRStepProps, FBTextField } from "..";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import { withFBEditorLHRStep } from "./FBEditorLHRStep.wrap";
 
@@ -42,7 +43,6 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
       key={`fb-editor-${type}-${index}`}
       multiple={true}
     />
-
     <FBAutocomplete
       label="common.revision.statuses"
       options={FBData.statusOptions}
@@ -51,6 +51,7 @@ const FBEditorLHRStep: React.FunctionComponent<FBEditorLHRStepProps> = ({
       name="editorConfig.filters.revisionStatus"
       key={`fb-editor-${type}-${index}`}
       multiple={true}
+      defaultValue={[DocumentRevisionStatus.Voided, DocumentRevisionStatus.Released]}
     />
     {children}
   </FBEditor>
