@@ -1,4 +1,4 @@
-import { FBAutocompleteProps, FBEditorLHRStepConfigFilter, FBInputProps, FBProcedureItemProps, FBProviderProps } from "..";
+import { FBAutocompleteProps, FBInputProps, FBProcedureItemProps, FBProviderProps } from "..";
 import { Nullable } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 
@@ -13,7 +13,6 @@ export type FBLHRStepProps =
   openLHRs(docRev?: DocumentRevision): void;
   editorConfig: {
     value: string;
-    filters?: FBEditorLHRStepConfigFilter;
   };
   isOutput: boolean;
   stepLHRs?: Nullable<DocumentRevision>;
