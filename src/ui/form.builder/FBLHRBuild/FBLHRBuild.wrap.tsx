@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { FB, FBLHRBuildOptions, FBLHRBuildProps, FBLHRBuildState } from "..";
 import { SMDialogAction } from "../../../App";
 import { withSMDialog } from "../../../App/Shifamed/Components/SMDialog/SMDialog.hoc";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBLHRBuild = <T extends FBLHRBuildProps>(
   Component: React.FunctionComponent<T>,
@@ -21,6 +22,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
+    const formContext = useFormContext();
+
     lhrBuildState = FB.useRef(FBLHRBuildState, {
       value: formState?.getFieldValue(name),
       disabled,
@@ -29,6 +32,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     useEffect(() => {
       const isOutput = workspaceState?.isOutput;
       const savedData = get(workspaceState?.document?.formInput, name);
+      formState?.validate();
+
       if (isOutput && savedData === FBLHRBuildOptions["R&D"]) {
         lhrBuildState?.setDisabled(true);
       }
@@ -37,7 +42,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
 
     // MARK: @helpers
     function save() {
-      workspaceState?.saveDocRev(formState?.getValues());
+      formContext.submitForm();
     }
 
     // MARK: @reactions

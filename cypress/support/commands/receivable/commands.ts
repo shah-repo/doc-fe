@@ -7,6 +7,7 @@ import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/doc
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 import { PurchaseOrderItem } from "../purchase.order/commands";
+
 export { };
 
 declare global {
@@ -66,20 +67,20 @@ Cypress.Commands.add("recCreateNew", () => {
 });
 
 Cypress.Commands.add("recVerifyStartingFilter", () => {
-  cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(4)>div")
+  cy.get("td[role=gridcell]:nth-child(4)")
     .each(($el) => {
       expect($el).to.have.text("DRAFT");
     });
 });
 
 Cypress.Commands.add("recClickOnFirstReceivableOnList", () => {
-  cy.get("div[aria-rowindex=1]>div[aria-colindex=1]").arrowClick();
+  cy.get("tr.k-master-row").first().arrowClick();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=docId]").arrowType(params.id);
-  });
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.id);
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
@@ -98,61 +99,40 @@ Cypress.Commands.add("recClickSaveBtn", () => {
 });
 
 Cypress.Commands.add("recVerifyFilterByReceivableId", (params: {recId: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(1)>div>a>div>div")
-        .should("have.text", params.recId);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", params.recId);
 });
 
 Cypress.Commands.add("recFilterByOwner", (params: {owner: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=owner]").arrowType(params.owner);
-  });
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.owner).wait(500);
 });
 
 Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
-        .should("have.text", params.owner);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(2).find("span").eq(0).should("have.text", params.owner);
 });
 
 Cypress.Commands.add("recFilterByState", (params: {state: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("ul[role=listbox]>li").contains(params.state).arrowClick();
-  });
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.state).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(4)>div")
-        .should("have.text", params.state);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", params.state);
 });
 
 Cypress.Commands.add("recFilterByARId", (params: {arId: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("input[name=crId]").arrowType(params.arId);
-  });
+  cy.get(`[aria-colindex="5"] input`).arrowType(params.arId).wait(500);
 });
 
 Cypress.Commands.add("recVerifyFilterByARId", (params: {arId: string }) => {
-  cy.get("div[aria-rowindex=1]")
-    .within(() => {
-      cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(5)>div>a>div>div")
-        .should("have.text", params.arId);
-    });
+  cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", params.arId);
 });
 
 Cypress.Commands.add("recVerifyFilterClear", () => {
-  cy.get("input[name=docId]").should("have.attr", "value", "");
-  cy.get("input[name=owner]").should("have.attr", "value", "");
-  cy.get("input[name=crId]").should("have.attr", "value", "");
-  cy.get("input[name=\"displayStatus\"").should("have.attr", "value", "");
+  cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select State");
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {

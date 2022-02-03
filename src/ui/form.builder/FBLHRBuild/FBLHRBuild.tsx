@@ -31,12 +31,14 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
     <Observer>
       {() => (
         <FBRadioGroup
+          name={name}
           type="lhrbuild"
-          {...props }
           controlValue={lhrBuildState?.value}
           disabled={lhrBuildState?.disabled}
           label="form.builder.build.type"
           options={lhrBuildState?.options}
+          rules="required"
+          {...props }
         />
       )}
     </Observer>

@@ -1,5 +1,13 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
+const commonButtonStyles = {
+  "margin": 0,
+  "boxShadow": "none",
+  "borderRadius": 100,
+  "fontFamily": "Sora",
+  "text-transform": "none",
+};
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -13,20 +21,41 @@ export const styles = makeStyles((theme: Theme) =>
     link: {
       textDecoration: "none",
     },
-    button: {
-      margin: "0px",
-      boxShadow: "none",
+    createButton: {
+      ...commonButtonStyles,
+      "background": Colors.navy,
+      "color": Colors.white,
+      "paddingRight": theme.spacing(2.5),
+      "paddingLeft": theme.spacing(2.5),
+      "&:hover": {
+        background: Colors.navy,
+      },
     },
     clearButton: {
       margin: "0px 16px 0px 0px",
       backgroundColor: theme.palette.common.white,
     },
     exportListbutton: {
-      margin: "0px",
-      boxShadow: "none",
+      ...commonButtonStyles,
+      marginRight: theme.spacing(1.825),
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
+      border: `1px solid ${Colors.navy}`,
+      backgroundColor: Colors.white,
+      color: Colors.navy,
     },
     iconSvg: {
-      fill: theme.palette.primary.main,
+      fill: Colors.navy,
+      marginRight: theme.spacing(0.625),
+    },
+    title: {
+      fontWeight: 700,
+      fontSize: 14,
+      color: Colors.almost_black,
+      textTransform: "uppercase",
+      fontFamily: "Sora",
+      marginTop: theme.spacing(1.25),
+      marginLeft: theme.spacing(0.625),
     },
   }),
 );

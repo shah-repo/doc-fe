@@ -62,7 +62,7 @@ Cypress.Commands.add("ebClickClone", () => {
 Cypress.Commands.add("ebSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get(".MuiTableCell-root a:nth-child(1)").first().arrowClick();
+    cy.get("tr.k-master-row").first().arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

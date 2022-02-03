@@ -33,11 +33,11 @@ Cypress.Commands.add("usrClickAddEmployee", () => {
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonEmail").arrowType(params.email);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(1).arrowType(params.email);
 });
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
-  cy.get("#AddEmployeeFormPresenter-commonName").arrowType(params.name);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name);
 });
 
 Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
@@ -53,8 +53,8 @@ Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
 });
 
 Cypress.Commands.add("usrClickSaveButton", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGetActive], () => {
-    cy.get("#AddEmployeeFormPresenter-submitForm").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+    cy.get("button>span>svg>path").eq(1).arrowClick();
   });
   cy.checkToastMessage({ exists: false });
 });

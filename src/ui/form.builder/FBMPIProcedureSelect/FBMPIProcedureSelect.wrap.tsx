@@ -1,17 +1,16 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { concat, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions } from "..";
+import { EQStatus, FB, FBAutocompleteAsyncOption, FBFormState, FBMPIProcedureSelectProps, FBMPIProcedureSelectState, FBMPIProcedureSelectValue, FBProcedureFormActions, FBSelectedEQ } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import { StyleTooltip } from "../../dashboard.new/line.items/common/StyleTooltip";
 import Colors from "../../layout/theme/utils/colors";
+import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   Component: React.FunctionComponent<T>,
@@ -19,6 +18,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
   const Comp = ({
     isOptionDisabled,
     renderOptionWithDate,
+    onChange,
     mpiProcedureSelectState,
     formState,
     initialValues,
@@ -32,8 +32,11 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
     formState = FB.useRef<FBFormState>(FBFormState, {});
     mpiProcedureSelectState = FB.useRef(FBMPIProcedureSelectState, initialValues?.id);
     const { id, document } = workspaceState || {};
+    const [selectedEQ, setEQ] = useState<FBSelectedEQ | undefined>();
     const isDocPIInstance = document?.document.documentType.group === DOC_TYPE_GROUP.PI_INSTANCE;
     const isLHRProductionBuild =  workspaceState?.isLHRProductionBuild || false;
+    const smartRefLHR = document?.smartReferencesTo?.find((item) => item.type === SmartReferenceType.HiddenPiInstance);
+    const enforceFlag = Boolean(smartRefLHR?.toDocRev?.document.typeSpecificConfig?.eqProdEnforceConfig.value);
 
     React.useEffect(() => {
       dialogState?.setActions(
@@ -91,48 +94,73 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       return moment(currentDate).isAfter(date);
     };
 
+    const isEqActive = (eqStatus) => {
+      if (eqStatus !== EQStatus.Inactive && eqStatus !== EQStatus.Retired) { return true; }
+      return false;
+    };
+
     // MARK: @helpers
     isOptionDisabled = (option) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
       const isOverdue =  isDateOverdue(pmDate) || isDateOverdue(calDate);
 
-      return Boolean(isLHRProductionBuild && option.document.documentType.equipmentEnforceProd && isOverdue);
+      if (!enforceFlag && !isEqActive(option.eqStatus)) {
+        return true;
+      }
+
+      if (enforceFlag && Boolean(isLHRProductionBuild)) {
+        return !isEqActive(option.eqStatus) || isOverdue;
+      }
+      return !isEqActive(option.eqStatus);
     };
 
     // eslint-disable-next-line react/display-name
     renderOptionWithDate = (option: any) => {
       const pmDate = FB.calculateDateByType(option, "preventativeMaintenance" );
       const calDate = FB.calculateDateByType(option, "calibration" );
-      const isDisabled = isLHRProductionBuild && option.document.documentType.equipmentEnforceProd;
 
       return <Grid container>
-        <Grid item xs={3} >
-          {option.document.docId}
+        <Grid item xs={2}>
+          <Typography noWrap>
+            {option.document.docId}<span> &#9642;</span>
+          </Typography>
         </Grid>
-        <Grid item xs={9} style={{ textAlign: "right", color: Colors.latest_red_varient, fontSize: "14px" }}>
-          {pmDate &&
-            <StyleTooltip
-              disableHoverListener={!(isDisabled && isDateOverdue(pmDate))}
-              title={<Text translation="form.builder.out.of.maintenance" />}
-              placement="top"
-              arrow
-            >
-              <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>
-            </StyleTooltip>
-          }
-          {calDate &&
-            <StyleTooltip
-              disableHoverListener={!(isDisabled && isDateOverdue(calDate))}
-              title={<Text translation="form.builder.out.of.calibration" />}
-              placement="top"
-              arrow
-            >
-              <span>Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>
-            </StyleTooltip>
-          }
+        <Grid item >
+          <Typography noWrap>
+            {`rev ${option.displayRevision} `}
+          </Typography>
+        </Grid>
+        <Grid item xs={8} >
+          <Typography noWrap>
+            {`- ${option.name}`}
+          </Typography>
+        </Grid>
+        <Grid
+          item xs={12}
+          style={{ textAlign: "left", color: Colors.latest_red_varient, fontSize: "14px", paddingBottom: "4px" }}
+        >
+          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
+          {pmDate && calDate && <Box component="span" style={{ color: Colors.black }}>&#9642;</Box>}
+          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
         </Grid>
       </Grid>;
+    };
+
+    onChange = async () => {
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      const formValue = await formState?.getValues() as FBMPIProcedureSelectValue;
+      const { usedOverride } = formValue;
+      const id =  (usedOverride as DocumentRevision).id;
+
+      const item: any = FBAutocompleteAsyncStore.getValue(FBAutocompleteAsyncOption.releasedEquipment, id);
+      const pmDate = FB.calculateDateByType(item, "preventativeMaintenance" );
+      const calDate = FB.calculateDateByType(item, "calibration" );
+      setEQ({
+        status: item?.eqStatus,
+        pmDate,
+        calDate,
+      });
     };
 
     function handleAdd() {
@@ -167,11 +195,13 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
       ...(props as T),
       isOptionDisabled,
       renderOptionWithDate,
+      onChange,
       mpiProcedureSelectState,
       formState,
       initialValues,
       name,
       type,
+      selectedEQ,
     });
   };
 

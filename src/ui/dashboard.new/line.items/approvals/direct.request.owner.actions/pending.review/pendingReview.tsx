@@ -15,11 +15,10 @@ import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.s
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
-import { STATUS_TYPES_LABEL } from "../../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
-import { getDocIcon } from "../../../common/DocIcon";
+import { getDocIcon, getStatusLabel } from "../../../common/DocIcon";
 import { HoverStyleChip } from "../../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../../common/NormalStyleChipPendingReview";
 import { StyledListItem } from "../../../common/StyledListItem";
@@ -36,7 +35,9 @@ interface Props {
   docRevId?: string;
   type: string;
   docRevName: string;
+  docRevVersion: string;
   status: string;
+  displaystatus: string;
   timestamp: string;
   docRevPendingApprovals: any[];
   docRevApprovedApprovals: any[];
@@ -54,7 +55,9 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   docId,
   docRevId,
   status,
+  displaystatus,
   docRevName,
+  docRevVersion,
   timestamp,
   hoverItemId,
   docRevPendingApprovals,
@@ -130,21 +133,34 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                   </Link>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
+                    <Link
+                      href={documentVersionPath(docRevId || "", docDocumentId)}
+                      color="inherit"
+                      className={classes.link}
                     >
-                      {docRevName}
-                    </Typography>
-                  </Link>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        <Text translation="dashboard.revision" />
+                        &nbsp;{docRevVersion} {docRevName}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -171,7 +187,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         size="small"
                         color="primary"
                         icon={<InReviewIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                     {hoverItem && (
@@ -179,7 +195,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                         color="primary"
                         size="small"
                         icon={<InReviewWhiteIcon />}
-                        label={STATUS_TYPES_LABEL[status]}
+                        label={getStatusLabel(docTypeGroup, status, displaystatus) }
                       />
                     )}
                   </Typography>
@@ -209,7 +225,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                 >
                   <StyleTooltip
                     title={
-                      <Typography color="inherit">
+                      <>
                         <Text
                           translation="assigned.users.count"
                           values={{
@@ -226,9 +242,11 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                             pending: size(docRevPendingApprovals),
                           }}
                         />
-                      </Typography>
+                      </>
                     }
                     placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
                   >
                     <Link
                       href="#"
@@ -276,11 +294,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
             {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
             {pinHover && (
               <StyleTooltip
-                title={
-                  <Typography>
-                    <Text translation="common.pin" />
-                  </Typography>
-                }
+                title={<Text translation="common.pin" />}
                 placement="top"
                 arrow
               >
@@ -295,11 +309,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         {pinned && (
           <div className={classes.actionIcons}>
             <StyleTooltip
-              title={
-                <Typography>
-                  <Text translation="common.unpin" />
-                </Typography>
-              }
+              title={<Text translation="common.unpin" />}
               placement="top"
               arrow
             >

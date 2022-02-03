@@ -258,7 +258,7 @@ const TimeTravelUser: React.FunctionComponent<Props> = ({
                         </ListItemIcon>
                         <ListItemText
                           classes={{ primary: classes.selectAllText }}
-                          primary={<Text translation={"option.select.all"} />}
+                          primary={<Text translation={"common.select.all"} />}
                         />
                       </MenuItem>
                       {NEXT_TASK_TYPES_USER.map((option) => (

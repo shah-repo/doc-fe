@@ -11,6 +11,18 @@ let loginResponse;
 let employeeLoginFirst;
 
 context("Copyable Checkbox test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -62,10 +74,6 @@ context("Copyable Checkbox test", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create a form", () => {
@@ -75,6 +83,10 @@ context("Copyable Checkbox test", () => {
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter document title 'eb-title'", () => {
