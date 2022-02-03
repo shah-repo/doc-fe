@@ -4,6 +4,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -14,6 +15,20 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let developersGroup;
+let releasedFormId;
+let emailsFromInbox;
+let cdata;
+let page1; let page2; let page3;
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+const downloaddDirectory  = "cypress/downloads";
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Repeat One Time Training with Training Curriculum", () => {
   before(() => {
@@ -639,6 +654,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.unClick();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -659,7 +675,35 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
     it("Select 'One-Time Training test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "One-Time Training test" });
-      cy.unClick();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Add Checkbox group", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
@@ -670,6 +714,223 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
+    });
+  });
+
+  context("Verify One-Time Training form title report", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "One-Time training form title");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.wait(1000);
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for training form notification", () => {
+
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+  context("Verify that zip file containing pdf downloaded", () => {
+
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+        .as("short_url");
+      cy.get("@short_url").then((response) => {
+        downloadUrl = (response as any).body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  =  `${releasedFormId}` + filetime + ".zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      const pdffile = downloaddDirectory + "/" + downloadFile.replace(".zip", "") + "/" +
+      `${releasedFormId}-1-One-Time-training-form-title.pdf`;
+      cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for training form", () => {
+      cy.pdfparseFile(
+        {
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${releasedFormId}-1-One-Time-training-form-title.pdf`,
+        }).then((content) => {
+        cdata = content;
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        page1 = page2 = page3 = "";
+
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            page1 = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            page2 = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            page3 = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for training form", () => {
+      const el = page1;
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/AR ID\nAR-00002/);
+
+        expect(el).match(/Description\nOne-Time training description/);
+
+        expect(el).match(/Output Document Type\nOne-Time Training test/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
+
+        expect(el).match(/Documents to Train on/);
+
+        expect(el)
+          .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for training form", () => {
+      const el = page2;
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Groups to Train/);
+
+        expect(el).match(/Users to Train \(if applicable\)/);
+
+        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+
+        expect(el).match(/TEXT FIELD\nAPPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for training form", () => {
+      const el = page3;
+      if (el.includes("Page 3 of 3")) {
+
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `AR-000021N\\/A \\(Numeric Release\\)${footerDate}\nReleased`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -692,15 +953,19 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Enter training title 'One-Time training title'", () => {
-      cy.drEnterDocumentTitle({ name: "One-Time training title" });
+      cy.drEnterDocumentTitle({ name: "One-Time training PDF EXPORT" });
     });
 
     it("Type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Description" });
+      cy.drEnterDocumentDescription({ description: "TEST EXPORT PDF" });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Select document to be trained on", () => {
@@ -716,6 +981,208 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
     });
 
+    it("Checkbox option 2 checked", () => {
+      cy.get(`input[type="checkbox"]`).eq(2).check();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Check doc Draft status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should("have.text", "One-Time training PDF EXPORT");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.wait(500);
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for draft training notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+
+    it("Download zip file containing training notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+        .as("short_url");
+      cy.get("@short_url").then((response) => {
+        downloadUrl = (response as any).body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content for draft document", () => {
+    it("Extract texts from PDF file content for draft document", () => {
+      cy.pdfparseFile({
+        directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+        fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
+      }).then((content) => {
+        cdata = content;
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        page1 = page2 = "";
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            page1 = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            page2 = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for draft document", () => {
+      const el = page1;
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new
+        RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nTEST EXPORT PDF/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
+
+        expect(el).match(/Documents to Train on/);
+
+        expect(el).match(/1 - released form/);
+
+        expect(el)
+          .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train\nNone/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
+      }
+    });
+    it("Verify page 2 for draft document", () => {
+      const el = page2;
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new
+        RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\n(.*)\n(.*)\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        expect(el).match(/APPROVALS\nNone/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 2/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Release the training document", () => {
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
@@ -736,6 +1203,201 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Click Approve", () => {
       cy.trApproveTraining();
     });
+
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "One-Time training PDF EXPORT");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.wait(500);
+      cy.go("back");
+      cy.wait(1000);
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for training released notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify PDF file downloaded", () => {
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+        .as("short_url");
+      cy.get("@short_url").then((response) => {
+        downloadUrl = (response as any).body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  = releasedFormId + filetime + "_rel.zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for released document", () => {
+      cy.pdfparseFile(
+        {
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
+        }).then((content) => {
+        cdata = content;
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        page1 = page2 = "";
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            page1 = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            page2 = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for released document", () => {
+      const el = page1;
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new
+        RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nTEST EXPORT PDF/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
+
+        expect(el).match(/Documents to Train on/);
+
+        expect(el).match(/1 - released form/);
+
+        expect(el)
+          .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train\nNone/);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
+      }
+    });
+    it("Verify page 2 for released document", () => {
+      const el = page2;
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new
+        RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        tmpRegex = new
+        RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 2/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
+      }
+    });
   });
 
   context("Check training notifications", () => {
@@ -752,8 +1414,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Complete Training and check if TR is updated", () => {
     it(`Open assigned Training`, () => {
-      cy.contains(`FM-00002`).then(($el) => {
-        const link = $el.attr("href");
+      cy.contains(`FM-00002`).then((el) => {
+        const link = (el as any).attr("href");
         cy.visit(CONFIG.FE_URL + link);
       });
     });
