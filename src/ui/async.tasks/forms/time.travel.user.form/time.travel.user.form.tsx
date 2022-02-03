@@ -18,32 +18,32 @@ const TimeTravelUser: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const intl = useIntl();
+  const initialValues = {
+    year: 0,
+    month: 0,
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    nextTaskTypes: [],
+  };
+  const handleSubmit = (values: TimeTravelProps) => {
+    const isAllValuesAreEmpty = !Object.values(values).some(
+      (fieldValue) => +fieldValue > 0
+    );
+    if (isAllValuesAreEmpty) {
+      toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
+    } else {
+      handleTimeTravelUser(values);
+    }
+  };
 
   return (
     <Box mt={2} className={classes.root}>
       <Formik
-        initialValues={{
-          year: 0,
-          month: 0,
-          day: 0,
-          hour: 0,
-          minute: 0,
-          second: 0,
-          nextTaskTypes: [],
-        }}
+        initialValues={initialValues}
         validationSchema={timeTravelValidator}
-        onSubmit={(values) => {
-          const isAllValuesAreEmpty = !Object.values(values).some(
-            (fieldValue) => +fieldValue > 0
-          );
-          if (isAllValuesAreEmpty) {
-            toastError(
-              intl.formatMessage({ id: "async.task.timetravel.error" })
-            );
-          } else {
-            handleTimeTravelUser(values);
-          }
-        }}
+        onSubmit={(values) => handleSubmit(values)}
       >
         {({ errors, setFieldValue, initialValues }) => (
           <Form>
