@@ -80,11 +80,13 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         value={materials}
         type={FBProcedureItemType.materials}
         lhrStepIndex={index}
+        {...{ isPendingChange }}
       />}
       {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
         value={equipment}
         type={FBProcedureItemType.equipment}
         lhrStepIndex={index}
+        {...{ isPendingChange }}
       />}
       {stepLHRs && (
         <Box display="flex" alignItems="center" mt={1} mb={4}>
