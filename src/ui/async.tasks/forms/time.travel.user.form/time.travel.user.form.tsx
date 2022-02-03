@@ -31,11 +31,11 @@ const TimeTravelUser: React.FunctionComponent<Props> = ({
     const isAllValuesAreEmpty = !Object.values(values).some(
       (fieldValue) => +fieldValue > 0
     );
-    if (isAllValuesAreEmpty) {
-      toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
-    } else {
+    if (!isAllValuesAreEmpty) {
       handleTimeTravelUser(values);
+      return;
     }
+    toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
   };
 
   return (

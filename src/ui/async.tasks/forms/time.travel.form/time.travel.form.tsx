@@ -30,11 +30,11 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
     const isAllValuesAreEmpty = !Object.values(values).some(
       (fieldValue) => +fieldValue > 0
     );
-    if (isAllValuesAreEmpty) {
-      toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
-    } else {
+    if (!isAllValuesAreEmpty) {
       handleTimeTravelFormSubmit(values);
+      return;
     }
+    toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
   };
 
   return (

@@ -7,7 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
-  Select
+  Select,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import Text from "../../components/Text";
@@ -16,7 +16,7 @@ import {
   AsyncProps,
   NEXT_TASK_TYPES,
   NEXT_TASK_TYPES_USER,
-  SQS_TYPES
+  SQS_TYPES,
 } from "../types";
 
 const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
@@ -59,7 +59,9 @@ const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
   return (
     <Grid item={true} sm={4}>
       <FormControl className={classes.formControl}>
-        <InputLabel id="mutiple-select-label">Next Task</InputLabel>
+        <InputLabel id="mutiple-select-label">
+          <Text translation={"async.task.next.task"} />
+        </InputLabel>
         <Select
           labelId="mutiple-select-label"
           multiple

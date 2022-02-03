@@ -28,12 +28,14 @@ const TimeTravelCompany: React.FunctionComponent<Props> = ({
     nextTaskTypes: [],
   };
   const handleSubmit = (values: TimeTravelProps) => {
-    const isAllValuesAreEmpty = !Object.values(values).some((fieldValue) => +fieldValue > 0);
-    if (isAllValuesAreEmpty) {
-      toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
-    } else {
+    const isAllValuesAreEmpty = !Object.values(values).some(
+      (fieldValue) => +fieldValue > 0
+    );
+    if (!isAllValuesAreEmpty) {
       handleTimeTravelCompany(values);
+      return;
     }
+    toastError(intl.formatMessage({ id: "async.task.timetravel.error" }));
   };
 
   return (
