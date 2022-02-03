@@ -5,6 +5,7 @@ enum Colors {
   background_white = "#F5F8FF",
   alabaster = "#F9FBFF",
   lily_white="#F8F9F9",
+  water="#EEF3FF",
   // black
   black = "#000",
   almost_black = "#080B11",

@@ -49,21 +49,19 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
         open={open}
         onClose={handleClose}
       >
-        <MenuItem>
+        <MenuItem className={classes.headerMenuItem}>
           <ListItemText
             primary={
-              <>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.columnsCus}
-                  color="textPrimary"
-                >
-                  <Text translation="common.column" />
-                </Typography>
-              </>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.columnsCus}
+                color="textPrimary"
+              >
+                <Text translation="common.column" />
+              </Typography>
             }
-          ></ListItemText>
+          />
         </MenuItem>
         {columnDefinition.map((item: KendoColumn) => (
           <MenuItem

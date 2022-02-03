@@ -413,7 +413,7 @@
   "common.pin": "Pin this item",
   "common.unpin": "Unpin this item",
   "common.sqs.task.failed": "Failed to execute task",
-  "common.column": "Columns",
+  "common.column": "Manage Columns",
   "common.column.hide": "Hide Column",
   "common.column.unlock": "Unfreeze Column",
   "common.column.lock": "Freeze Column",
