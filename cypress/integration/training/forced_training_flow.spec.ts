@@ -755,7 +755,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.contains("Submit for approval").arrowClick();
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
@@ -765,27 +765,23 @@ context("Forced training flow", () => {
 
   context("Check training notification", () => {
     it("Navigate to Dashboard", () => {
-      cy.wait(3000);
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
       cy.get(".MuiTypography-root.MuiListItemText-primary")
         .should("contain", "FM-00001").and("contain", "AR Form");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `FM-00001Rev 1 AR Form` });
     });
   });
 
   context("Complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.contains(`FM-00001`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: `FM-00001Rev 1 AR Form` });
     });
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
-      cy.wait(3000);
     });
   });
 
@@ -861,24 +857,21 @@ context("Forced training flow", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[1].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[1].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[2].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
 
     it(`${USERS[3].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form").wait(2000);
-      cy.get("#userName").clear().arrowType(USERS[3].name).wait(2000);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[3].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
     });
   });
 });

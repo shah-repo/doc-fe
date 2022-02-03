@@ -45,6 +45,7 @@ export interface DocumentRevisionDocument {
   };
   smartReferencesTo?: SmartReference[];
   smartReferencesFrom?: SmartReference[];
+  typeSpecificConfig?: TypeSpecificConfig;
 }
 
 export interface SecurityList {
@@ -312,6 +313,7 @@ export interface FBDocumentRevisionProps {
   revisionStage?: string | number;
   revisionChangeType?: RevisionChangeType;
   releasedAt?: string;
+  effectiveDate?: Date;
   renderHTML?: string;
   renderHTMLDefined?: boolean;
   status?: DocumentRevisionStatus;
@@ -339,4 +341,11 @@ export interface UpdateFormFieldMapping {
 export interface UpdateFormRequestBody {
   mapping: UpdateFormFieldMapping[];
   formToBeUsed: Id;
+}
+
+interface TypeSpecificConfig {
+  eqProdEnforceConfig: {
+    date: string;
+    value: boolean;
+  };
 }

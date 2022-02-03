@@ -1,0 +1,58 @@
+import { makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
+
+const KendoGridStyles = makeStyles((theme: Theme) => ({
+  root: {
+    padding: theme.spacing(0, 0.625, 1.25),
+  },
+  kGrid: {
+    height: "calc(100vh - 99px)",
+  },
+  exportListbutton: {
+    margin: 0,
+    boxShadow: "none",
+    borderRadius: 100,
+    marginRight: theme.spacing(1.875),
+    textTransform: "none",
+    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2.5),
+    fontFamily: "Sora",
+    fontSize: 12,
+    fontWeight: 600,
+    color: Colors.navy,
+    border: `1px solid ${Colors.navy}`,
+    backgroundColor: Colors.white,
+  },
+  iconSvg: {
+    fill: Colors.navy,
+    marginRight: 5,
+    height: theme.spacing(1.75),
+    width: theme.spacing(1.75),
+  },
+  dialogContent: {
+    padding: theme.spacing(3.125),
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: 14,
+    color: Colors.almost_black,
+    textTransform: "uppercase",
+    fontFamily: "Sora",
+    marginTop: theme.spacing(1.25),
+    marginLeft: theme.spacing(0.625),
+  },
+  gridClass: {
+    textAlign: "right",
+    marginBottom: theme.spacing(1.25),
+  },
+  leftAlign: {
+    textAlign: "left",
+  },
+  rightAlign: {
+    textAlign: "right",
+  },
+  errorClass: {
+    color: Colors.red,
+  },
+}));
+export default KendoGridStyles;

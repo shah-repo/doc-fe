@@ -22,7 +22,7 @@ let cdata;
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
-let expId;
+let fileId;
 
 const downloaddDirectory  = "cypress/downloads";
 
@@ -485,7 +485,6 @@ context("Training notification test", () => {
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
-      cy.closeAllAlertMessages();
     });
 
     it("Click create document", () => {
@@ -625,21 +624,17 @@ context("Training notification test", () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
-      cy.contains(`${releasedFormId}`).should("exist");
-      cy.contains(`released form`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });
 
   context("Open assigned Training", () => {
-    it("Click on the Training notification", () => {
-      cy.contains(`${releasedFormId}`).then((el) => {
-        const link = (el as any).attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+    it(`Click on the Training notification`, () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -712,17 +707,13 @@ context("Training notification test", () => {
   });
 
   context("Check pending training notification", () => {
-    it("Verify pending training notification", () => {
-      cy.contains(`${releasedFormId}`).should("exist");
-      cy.contains(`released form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
-      cy.contains(`${releasedFormId}`).then((el) => {
-        const link = (el as any).attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+    it(`Click training notification and check doc with Approved status`, () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
+      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Approved");
     });
 
     it("Navigate to Training Records", () => {
@@ -730,27 +721,22 @@ context("Training notification test", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(0)").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(0)")
-        .should("have.length", 1);
-      cy.get(".ReactVirtualized__Table__row:eq(0) .ReactVirtualized__Table__rowColumn:eq(0)").invoke("text")
-        .then(($el) => {
-          trnId = $el;
-        });
+      cy.trClearFilters();
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get("[data-grid-row-index]").should("have.length", 1);
+      cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
+        trnId = $el;
+      });
     });
 
     it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
-      cy.get(".ReactVirtualized__Table__row").first().contains(`${trnId}`).arrowClick();
+      cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
-
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
       cy.wait(500);
@@ -762,7 +748,6 @@ context("Training notification test", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
-      cy.closeAllAlertMessages();
     });
   });
 
@@ -781,11 +766,11 @@ context("Training notification test", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
-      cy.wait(30000);
+
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL: (https?:\/\/.*)\s+/);
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         }
         else {
@@ -811,29 +796,25 @@ context("Training notification test", () => {
       });
     });
 
-    it("Extract pdf download url from gmail", () => {
+    it("Download zip file containing pending training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
-      expId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
       cy.get("@short_url").then((response) => {
         downloadUrl = (response as any).body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  =  trnId + filetime + ".zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
       });
-    });
-
-    it("Download zip file containing pending training notification", () => {
-      downloadFile  =  trnId + ".zip";
-      cy.downloadFile({
-        url: downloadUrl,
-        directory: downloaddDirectory,
-        fileName: downloadFile,
-      });
-      cy.wait(10000);
     });
 
     it("Verify file size of the downloaded zip file", () => {
       const zipfile = downloaddDirectory + "/" + downloadFile;
-      cy.readFile(`${zipfile}`).should("exist");
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -875,6 +856,9 @@ context("Training notification test", () => {
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
       });
     });
   });
@@ -896,29 +880,21 @@ context("Training notification test", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.listLoadingElementShouldNotExist();
-
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").last().invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
-
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(1)").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row:eq(1)")
-        .should("have.length", 1);
-      cy.get(".ReactVirtualized__Table__row:eq(1) .ReactVirtualized__Table__rowColumn:eq(0)").invoke("text")
-        .then(($el) => {
-          trnId = $el;
-        });
+      cy.trClearFilters();
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.trLandingPageCompletedOn({ completed: "Last 7 days" });
+      cy.get("[data-grid-row-index]").should("have.length", 1);
+      cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
+        trnId = $el;
+      });
     });
 
     it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
-      cy.get(".ReactVirtualized__Table__row").last().contains(`${trnId}`).arrowClick();
+      cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
@@ -930,7 +906,6 @@ context("Training notification test", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
-      cy.closeAllAlertMessages();
     });
   });
 
@@ -949,11 +924,10 @@ context("Training notification test", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
-      cy.wait(30000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL: (https?:\/\/.*)\s+/);
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         }
         else {
@@ -979,31 +953,26 @@ context("Training notification test", () => {
       });
     });
 
-    it("Extract download url from gmail", () => {
-      tmpRegex = new RegExp( "https?://", "gi" );
-      expect(downloadUrl).match(tmpRegex);
+    it("Download zip file containing completed training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
-      expId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${expId}`)
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
       cy.get("@short_url").then((response) => {
         downloadUrl = (response as any).body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  =  trnId + filetime + ".zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
       });
-    });
-
-    it("Download zip file containing completed training notification", () => {
-      downloadFile  =  trnId + ".zip";
-      cy.downloadFile({
-        url: downloadUrl,
-        directory: downloaddDirectory,
-        fileName: downloadFile,
-      });
-      cy.wait(10000);
     });
 
     it("Verify file size of the downloaded zip file", () => {
       const zipfile = downloaddDirectory + "/" + downloadFile;
-      cy.readFile(`${zipfile}`).should("have.length.within", 500, 75500);
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -1044,6 +1013,9 @@ context("Training notification test", () => {
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(cdata.text).not.match(tmpRegex);
       });
     });
   });

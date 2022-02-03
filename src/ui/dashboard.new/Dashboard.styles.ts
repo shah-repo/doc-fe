@@ -8,6 +8,11 @@ export const styles = makeStyles((theme: Theme) =>
       boxShadow:
         "0px 0px 25px rgba(41, 41, 41, 0.2)",
       background: Colors.white,
+      marginRight: 50,
+      marginLeft: 50,
+      zIndex: 1,
+      position: "relative",
+      top: -14,
     },
     root: {
       width: "100%",

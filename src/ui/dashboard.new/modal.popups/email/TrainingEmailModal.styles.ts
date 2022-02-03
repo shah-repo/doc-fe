@@ -17,7 +17,7 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: "flex-start",
       padding: "15px 20px",
       position: "relative",
-      width: "450px",
+      width: "500px",
       top: "12.5%",
       left: "35.5%",
       background: Colors.sky_blue,
@@ -53,7 +53,7 @@ export const styles = makeStyles((theme: Theme) =>
       /* AR AIR Color */
       color: Colors.latest_red_varient,
     },
-    lastseentitle: {
+    lastsenttext: {
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: "normal",
@@ -119,7 +119,7 @@ export const styles = makeStyles((theme: Theme) =>
       top: "50%",
       transform: "translate(-50%, -50%)",
       position: "relative",
-      width: "450px",
+      width: "500px",
       height: "133px",
       background: Colors.sky_blue,
       borderRadius: "8px",
@@ -174,7 +174,7 @@ export const styles = makeStyles((theme: Theme) =>
       overflowY: "auto",
       top: "48px",
       left: "20px",
-      width: "410px",
+      width: "460px",
       border: `1px solid ${Colors.sky_blue}`,
       display: "flex",
       padding: "20px",

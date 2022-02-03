@@ -71,7 +71,7 @@ export const styles = makeStyles(() =>
     },
     truncateText: {
       textOverflow: "ellipsis",
-      overflow: "auto",
+      overflow: "hidden",
     },
     redDot: {
       width: "4px",

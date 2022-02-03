@@ -17,7 +17,7 @@ declare global {
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       equipClickCreateNew(): Chainable<Subject>;
-      recFilterByRev(params: {revision: string }): Chainable<Subject>;
+      recFilterByTitle(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
       recVerifyTitle(params: {title: string }): Chainable<Subject>;
       recVerifyTitleWIP(params: {title: string }): Chainable<Subject>;
@@ -29,37 +29,25 @@ declare global {
 }
 
 Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
-  cy.get("div[id=\"mui-component-select-displayStatus\"]").arrowClick();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("ul[role=listbox]>li").contains(params.status).arrowClick();
-  });
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
 });
 
-Cypress.Commands.add("recFilterByRev", (params: {revision: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("input[name=name]").arrowType(params.revision);
-  });
+Cypress.Commands.add("recFilterByTitle", (params: {revision: string }) => {
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.revision);
 });
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("#clearFilter").arrowClick();
-  });
+  cy.get("#clearFilter").arrowClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("#name").arrowType(params.title).wait(500);
-    cy.unClick();
-  });
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
+  cy.unClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-    cy.unClick();
-  });
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.unClick();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
-  });
+  cy.get("tr.k-master-row").contains(params.title).arrowClick();
 });
 
 Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
@@ -146,8 +134,8 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     if (params.recordForm) {
       cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
     }
+    cy.progressBarShouldAppear();
   });
-  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

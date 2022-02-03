@@ -32,7 +32,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
 }) => {
 
   const { workspaceState } = FB.useStores();
-
   return (
     <>
       {includeQRScan && (
@@ -50,6 +49,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
         <Autocomplete
+
           {...{
             getOptionDisabled,
             getOptionLabel,

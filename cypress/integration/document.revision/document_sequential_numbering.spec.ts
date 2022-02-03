@@ -11,6 +11,18 @@ let employeeLoginSecond;
 
 
 context("Document sequential numbering test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company - document types, start number, prefix of document", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440", "REQ-0460", "REQ-3610");

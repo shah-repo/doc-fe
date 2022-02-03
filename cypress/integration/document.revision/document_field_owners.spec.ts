@@ -178,10 +178,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Enters description 'New Document description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drEnterDocumentDescription({ description: "New Document description" });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -214,7 +211,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
     it("Check if Title input field is disabled", () => {
@@ -265,7 +262,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "New Document", status: "Draft" });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
     it("Fill value for FB textbox field", () => {

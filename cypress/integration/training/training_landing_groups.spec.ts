@@ -728,25 +728,16 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
     it("'test training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("test training title");
-      cy.unClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.unClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
-        .should("contain.text", "test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
-        .should("contain.text", "Developers");
+      cy.trLandingPageName({ name: "test training title" });
+      cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "test training title").and("contain", "Developers");
     });
   });
 
@@ -775,14 +766,9 @@ context("Groups on Training Curriculum landing page", () => {
   context("Verify trainings present on Training Curriculum page with Groups after released", () => {
     it("'test training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("test training title");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
+      cy.trLandingPageName({ name: "test training title" });
+      cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "test training title").and("contain", "Developers");
     });
   });
 
@@ -881,18 +867,12 @@ context("Groups on Training Curriculum landing page", () => {
   });
 
   context("Verify trainings present on Training Curriculum page with Groups", () => {
-    it("'One-Time training title' should be present with 'Developers' group", { retries: 2 }, () => {
+    it("'One-Time training title' should be present with 'Developers' group", () => {
+      cy.wait(30 * 1000);
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("One-Time training title");
-      cy.unClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.unClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
-        .should("contain.text", "One-Time training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4)
-        .should("contain.text", "Developers");
+      cy.trLandingPageName({ name: "One-Time training title" });
+      cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title").and("contain", "Developers");
     });
   });
 
@@ -921,15 +901,9 @@ context("Groups on Training Curriculum landing page", () => {
   context("Verify trainings present on Training Curriculum page with Groups after released", () => {
     it("'One-Time training title' should be present with 'Developers' group", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("One-Time training title");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.listLoadingElementShouldNotExist();
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "One-Time training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "Developers");
-      cy.get("#clearFilter").arrowClick();
+      cy.trLandingPageName({ name: "One-Time training title" });
+      cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title").and("contain", "Developers");
     });
   });
 
@@ -994,17 +968,11 @@ context("Groups on Training Curriculum landing page", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -1018,37 +986,31 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Verify trainings present on Training Curriculum page with no groups", () => {
     it("'user training title' should be present with no group", () => {
+      cy.navigToDashboard();
+      cy.wait(30 * 1000);
       cy.navigToTrainingCurriculums();
-      cy.get("[name^=dynamicParams]").clear();
-      cy.get("#name").clear().arrowType("user training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "user training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(4).invoke("text")
-        .should("contain", "N/A");
+      cy.get("button[data-cy=clearFilter]").arrowClick();
+      cy.trLandingPageName({ name: "user training title" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "user training title").and("contain", "N/A");
     });
   });
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
-      cy.trVerifyElementByColumnName({ el: "docId", name: "Training Curriculum ID" });
-      cy.trVerifyElementByColumnName({ el: "name", name: "Title" });
-      cy.trVerifyElementByColumnName({ el: "owner", name: "Owner" });
-      cy.trVerifyElementByColumnName({ el: "displayStatus", name: "State" });
-      cy.get("[name^=dynamicParams]").parent().parent().parent().parent().should("contain.text", "Group");
+      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
+      cy.trVerifyElementByColumnName({ name: "TITLE" });
+      cy.trVerifyElementByColumnName({ name: "OWNER" });
+      cy.trVerifyElementByColumnName({ name: "STATE" });
+      cy.trVerifyElementByColumnName({ name: "GROUP" });
     });
 
     it("Check filters on Training Curriculums page", () => {
-      cy.get("#name").clear().arrowType("test training title");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#docId").clear().arrowType("TC-00001");
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#owner").clear().arrowType(USERS[1].name);
-      cy.listLoadingElementShouldNotExist();
-      cy.get("#displayStatus").parent().arrowClick();
-      cy.get("li[data-value=Released]").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[name^=dynamicParams]").clear().arrowType("Developers");
-      cy.listLoadingElementShouldNotExist();
+      cy.trLandingPageName({ name: "test training title" });
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
+      cy.trLandingPageOwner({ owner: USERS[1].name });
+      cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+      cy.get("li").contains("Released").arrowClick().wait(500);
+      cy.trLandingPageDynamicParams({ dynamicParams: "Developers" });
     });
 
     it("Check export list button should be display", () => {

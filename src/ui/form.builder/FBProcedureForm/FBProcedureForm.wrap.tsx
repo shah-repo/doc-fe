@@ -2,10 +2,12 @@ import { filter, find, first, isEmpty, keyBy, lowerCase, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsyncOption, FBFormState, FBProcedureFormActions, FBProcedureFormFilterType, FBProcedureFormProps, FBProcedureFormState, FBProcedureItemConfig, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { toastError } from "../../components/notifications";
 import { checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -33,6 +35,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     ...props
   }: T) => {
     // MARK: @config
+    const intl = useIntl();
     const {
       procedureState,
       mpiProcedureState,
@@ -155,9 +158,15 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return handleCancel?.();
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
-      procedureState?.addItem(formValue, type, allSteps);
-      mpiProcedureState?.addItem(formValue, type, allSteps);
-      handleCancel?.();
+      if (!formValue.LHRTparameter && !FB.isUUID(formValue.title)) {
+        formState?.setFieldValue("title", "");
+        formState?.getInputState("title")?.setRender();
+        formState?.validate();
+        return toastError(intl.formatMessage({ id: "form.builder.lhrt.error.message" }));
+      } else {
+        mpiProcedureState?.addItem(formValue, type, allSteps);
+        handleCancel?.();
+      }
     }
 
     function handleCancel() {

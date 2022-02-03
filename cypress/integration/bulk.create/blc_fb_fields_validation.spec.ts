@@ -602,8 +602,9 @@ context("Test fb fields validation in BLC", () => {
   });
 
   context("Verify created records", () => {
-    it("Navigate to records list and verify number of records", { retries: 2 }, () => {
+    it("Navigate to records list and verify number of records", () => {
       cy.navigToDashboard();
+      cy.wait(30 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 9 });
     });

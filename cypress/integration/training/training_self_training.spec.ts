@@ -674,9 +674,8 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is working", () => {
-      cy.get("button>span").contains("Send To Email").arrowClick();
       const currentDate = new Date();
-      cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
+      cy.get("button>span").contains("Send To Email").arrowClick();
       cy.imapVerifyLastEmailContains(
         {
           userEmail: USERS[1].email,
@@ -727,9 +726,8 @@ context("Self training test", () => {
     });
 
     it("Check if next available TRN ID added", () => {
-      cy.get("#trId").clear().arrowType("TRN-00002");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TRN-00002");
+      cy.trLandingPagetrId({ trId: "TRN-00002" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TRN-00002");
       cy.trClearFilters();
     });
 

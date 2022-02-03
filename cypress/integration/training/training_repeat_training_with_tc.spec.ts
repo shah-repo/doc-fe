@@ -724,27 +724,21 @@ context("Repeat Training with Training Curriculum", () => {
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.wait(3000);
-      cy.navigToNewDashboard();
+      cy.navigToDashboard();
     });
 
     it(`Verify training notification`, () => {
-      cy.contains(`FM-00001`).should("exist");
-      cy.contains(`AR Form 1`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: "FM-00001Rev 1 AR Form" });
     });
   });
 
   context("Complete Training and verify expire on field", () => {
     it("Open assigned Training", () => {
-      cy.contains(`FM-00001`).then(($el) => {
-        const link = $el.attr("href");
-        cy.visit(CONFIG.FE_URL + link);
-      });
+      cy.dashGoToListItemFromDashboard({ listItem: "FM-00001Rev 1 AR Form" });
     });
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
-      cy.wait(3000);
     });
 
     it("Verify expire on is 1 day", () => {
@@ -785,10 +779,9 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("AR Form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "AR Form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 });

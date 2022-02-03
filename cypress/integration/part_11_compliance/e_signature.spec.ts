@@ -189,7 +189,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });
@@ -246,7 +245,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });
@@ -303,7 +301,6 @@ context("E-signature test", () => {
     });
 
     it("Logout user", () => {
-      cy.get("#AddEmployeeDialogPresenter-closeDialog").arrowClick();
       cy.authLogout();
     });
   });
@@ -422,7 +419,7 @@ context("E-signature test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to EB document", () => {
+    it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
       cy.wait(500);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });

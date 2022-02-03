@@ -152,9 +152,9 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 });
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
-  cy.get("#clearFilter").arrowClick();
+  cy.dlClearFilters();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+    cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
 
 });
@@ -444,30 +444,20 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#name").arrowType(params.title).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#docId").arrowType(params.docId).wait(500);
-  });
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
@@ -577,7 +567,8 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -586,6 +577,7 @@ Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -794,7 +786,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
 
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {
@@ -809,7 +801,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
 
 Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {

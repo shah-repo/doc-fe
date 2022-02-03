@@ -57,7 +57,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const renderPendingActions = () => (
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
+    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems
         .map((pendingAction, index) => {
           switch (pendingAction.type) {
@@ -78,6 +78,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevId={pendingAction.docRevId}
                     docRevOwnerId={pendingAction.docRevOwnerId}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     equipmentInterval={pendingAction.equipmentInterval}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
@@ -127,6 +128,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                     docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -136,6 +138,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <Divider />
                 </>
               );
+            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
               return (
                 <>
@@ -155,6 +158,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
                     docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -190,6 +194,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     }
                     status={pendingAction.approvalStatusChanged}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     purchaseOrderTotalAmount={
                       pendingAction.purchaseOrderTotalAmount
                     }
@@ -232,6 +237,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     )}
                     status={pendingAction.approvalStatusChanged}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -253,6 +259,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       docDocumentId={pendingAction.docDocumentId}
                       docId={pendingAction.docId}
                       docRevId={pendingAction.docRevId}
+                      docTypeGroup={pendingAction.docTypeGroup}
                       type={pendingAction.type}
                       timestamp={getFormattedDateString(
                         pendingAction.timestamp,
@@ -265,7 +272,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                         pendingAction.purchaseOrderSupplierDocId
                       }
                       status={pendingAction.docRevStatus}
+                      displaystatus={pendingAction.docRevDisplayStatus}
                       docRevName={pendingAction.docRevName}
+                      docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
                         pendingAction.docRevPendingApprovals
                       }
@@ -291,6 +300,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>
@@ -317,7 +327,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       pendingAction.purchaseOrderSupplierDocId
                     }
                     status={pendingAction.docRevStatus}
+                    docTypeGroup={pendingAction.docTypeGroup}
+                    displaystatus={pendingAction.docRevDisplayStatus}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     purchaseOrderTotalAmount={
                       pendingAction.purchaseOrderTotalAmount
                     }
@@ -347,6 +360,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     <DirectApprovalActionPRItem
                       key={index}
                       id={pendingAction.id}
+                      docTypeGroup={pendingAction.docTypeGroup}
                       docDocumentId={pendingAction.docDocumentId}
                       docId={pendingAction.docId}
                       docRevId={pendingAction.docRevId}
@@ -356,7 +370,9 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                         MomentFormats.BriefDateTime
                       )}
                       status={pendingAction.docRevStatus}
+                      displaystatus={pendingAction.docRevDisplayStatus}
                       docRevName={pendingAction.docRevName}
+                      docRevVersion={pendingAction?.docRevVersion}
                       docRevPendingApprovals={
                         pendingAction.docRevPendingApprovals
                       }
@@ -368,6 +384,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>
@@ -378,6 +395,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   <DirectApprovalActionItem
                     key={index}
                     id={pendingAction.id}
+                    docTypeGroup={pendingAction.docTypeGroup}
+                    displaystatus={pendingAction.docRevDisplayStatus}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}
@@ -388,6 +407,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     )}
                     status={pendingAction.docRevStatus}
                     docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction?.docRevVersion}
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
@@ -428,7 +448,6 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                 </>
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
-            case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
               return (
                 <>
                   <ARTaskApproval
@@ -559,6 +578,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                       unPinLineItem={unPinLineItem}
                       pinned={pendingAction.pinned}
                       hoverItemId={hoverItemId}
+                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     />
                     <Divider />
                   </>

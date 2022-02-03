@@ -9,22 +9,22 @@ export type FBLHRStepProps =
 & Pick<FBAutocompleteProps, "filterOptions">
 & {
   startMpi(): void;
-  setDisplayToMPI(): void;
   setDisplayToLHRs(): void;
-  openLHRs(): void;
+  openLHRs(docRev?: DocumentRevision): void;
   editorConfig: {
     value: string;
     filters?: FBEditorLHRStepConfigFilter;
   };
   isOutput: boolean;
   stepLHRs?: Nullable<DocumentRevision>;
-  isHovering: boolean;
   isDraft: boolean;
+  isPendingChange: boolean;
   ownerOfStartMPIAction?: string;
   ownerOfCompleteMPIAction?: string;
   materials: any;
   equipment: any;
   isDocumentLHRT: boolean;
+  lhrBuildTypeExist: string;
 };
 
 export interface StartMpiBody {

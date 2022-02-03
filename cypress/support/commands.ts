@@ -47,7 +47,12 @@ declare global {
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
+      progressBarShouldExist(): Chainable<Subject>;
+      progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldExist(): Chainable<Subject>;
+      listLoadingElementShouldAppear(): Chainable<Subject>;
     }
   }
 }
@@ -112,8 +117,30 @@ Cypress.Commands.add("progressBarShouldNotExist", () => {
   cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
+Cypress.Commands.add("progressBarShouldExist", () => {
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("progressBarShouldAppear", () => {
+  cy.progressBarShouldExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
+  cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldExist", () => {
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldAppear", () => {
+  cy.listLoadingElementShouldExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
