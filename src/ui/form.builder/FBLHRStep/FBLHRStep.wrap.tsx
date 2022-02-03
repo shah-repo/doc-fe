@@ -4,7 +4,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
-import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -188,22 +188,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       data: DocumentRevision[],
       state: FilterOptionsState,
     ) {
-      const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
       const { inputValue = "" } = state || {};
 
-      if (documentType.length === 0 && revisionStatus.length === 0) {
-        return data?.filter((docRev) => filterOutOption(docRev, inputValue));
-      }
-      const options = data?.filter((docRev) => {
-        const {
-          status = "",
-          document: { documentType: { id: docTypeId = "" } = {} } = {},
-        } = docRev || {};
-
-        return revisionStatus.includes(status) &&
-          documentType.includes(docTypeId) &&
-          filterOutOption(docRev, inputValue);
-      });
+      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft ||
+        docRev.status === DocumentRevisionStatus.Released) &&
+          filterOutOption(docRev, inputValue));
 
       return options;
     }
