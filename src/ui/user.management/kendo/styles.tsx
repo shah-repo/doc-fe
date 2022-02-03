@@ -3,17 +3,10 @@ import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme: Theme) => ({
   cRoot: {
-    width: "99%",
-    margin: theme.spacing(0.625),
-  },
-  root: {
-    textAlign: "right",
-    marginLeft: theme.spacing(0.625),
-    fontFamily: "Sora",
+    padding: theme.spacing(0, 2.5, 1.25, 2.5),
   },
   kGrid: {
-    width: "calc(100vw - 263px)",
-    height: "calc(100vh - 105px)",
+    height: "calc(100vh - 109px)",
   },
   groupCell: {
     whiteSpace: "pre-wrap",
@@ -29,7 +22,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     textTransform: "uppercase",
     fontFamily: "Sora",
     marginTop: theme.spacing(1.25),
-    marginLeft: theme.spacing(0.625),
   },
   errorClass: {
     color: Colors.red,

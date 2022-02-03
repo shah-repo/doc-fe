@@ -1,6 +1,4 @@
-import {
-  Box, Grid, Typography,
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -519,10 +517,10 @@ export function KendoPanel<T>({
           <AddEmployeeContainer addGroup={addNew} />
         </Grid>
       </Grid>
-      <Box className={classes.root}>
+      <>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </Box>
+      </>
     </>
   );
 }

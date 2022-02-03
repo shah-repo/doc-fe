@@ -67,7 +67,6 @@ export const styles = makeStyles((theme: Theme) =>
       textTransform: "uppercase",
       fontFamily: "Sora",
       marginTop: theme.spacing(1.25),
-      marginLeft: theme.spacing(0.625),
     },
   }),
 );

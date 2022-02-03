@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Box, Grid, Typography,
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -571,10 +569,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
         </Grid>
       </Grid>
-      <Box className={classes.root}>
+      <>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </Box>
+      </>
     </>
   );
 }

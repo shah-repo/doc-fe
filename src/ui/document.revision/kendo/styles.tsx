@@ -10,10 +10,10 @@ const commonButtonStyles = {
 };
 const KendoGridStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(0, 0.625, 1.25, 0.625),
+    padding: theme.spacing(0, 2.5, 1.25, 2.5),
   },
   kGrid: {
-    height: "calc(100vh - 99px)",
+    height: "calc(100vh - 109px)",
   },
   exportListbutton: {
     ...commonButtonStyles,
@@ -45,7 +45,6 @@ const KendoGridStyles = makeStyles((theme) => ({
     textTransform: "uppercase",
     fontFamily: "Sora",
     marginTop: theme.spacing(1.25),
-    marginLeft: theme.spacing(0.625),
   },
   gridExportCreate: {
     textAlign: "right",

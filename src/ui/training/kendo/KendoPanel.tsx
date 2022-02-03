@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
   Dialog, Grid,
 } from "@material-ui/core";
 import {
@@ -609,9 +608,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

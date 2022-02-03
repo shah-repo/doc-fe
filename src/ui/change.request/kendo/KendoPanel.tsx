@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -549,9 +549,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }
