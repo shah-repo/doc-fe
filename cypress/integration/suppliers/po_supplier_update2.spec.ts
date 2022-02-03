@@ -949,15 +949,6 @@ context("DAM approvals in LHR", () => {
         cy.drSetDocTypeId({ docId: "00006" });
       });
 
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-
-      it("Navigates to document list", () => {
-        cy.navigToDocumentList();
-        cy.recFilterByState({ state: "None" });
-      });
-
       it("Click create document after filling document", () => {
         cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
@@ -968,9 +959,7 @@ context("DAM approvals in LHR", () => {
             }
           });
         }).as("response");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
-          cy.contains("FM-00006").arrowClick();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.wait("@response");
@@ -1220,10 +1209,8 @@ context("DAM approvals in LHR", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier12");
+        cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+        cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "New Supplier12");
         cy.dlClearFilters();
       });
 
@@ -1311,11 +1298,8 @@ context("DAM approvals in LHR", () => {
       });
 
       it("verify the correct data are displayed in Supplier field", () => {
-        cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier12");
+        cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+        cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "New Supplier12");
       });
 
       it("Open released PO", () => {
@@ -1385,15 +1369,11 @@ context("DAM approvals in LHR", () => {
 
       it("verify the correct data are displayed in Supplier field", () => {
         cy.dlFilterByDocId({ docId: "PO-00001" });
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0)
-          .should("have.text", "PO-00001");
-        cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(3)
-          .should("have.text", "New Supplier123");
+        cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+        cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "New Supplier123");
         cy.dlClearFilters();
       });
-
     });
-
   });
 });
 
