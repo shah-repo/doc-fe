@@ -17,12 +17,14 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     dialogState,
     name = "",
     disabled,
+    buildValidationRules,
     ...props
   }: T) => {
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const formContext = useFormContext();
+    buildValidationRules = workspaceState?.isOutput ? "required" : null;
 
     lhrBuildState = FB.useRef(FBLHRBuildState, {
       value: formState?.getFieldValue(name),
@@ -95,6 +97,7 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
       onDialogActionClick,
       lhrBuildState,
       name,
+      buildValidationRules,
     });
   };
 
