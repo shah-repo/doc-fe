@@ -806,14 +806,14 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc2Id}released doc2` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc2Id}Rev 1 released doc2` });
     });
   });
 
   context("Complete trainings", () => {
     it("Open and complete second training", () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc2Id}released doc2` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc2Id}Rev 1 released doc2` });
       cy.trCompleteTraining();
     });
 
@@ -822,7 +822,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Open and complete first training", () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
   });
@@ -951,11 +951,11 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it(`Verify training notification for doc 2 should not present`, () => {
-      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${releasedDoc2Id}released doc2` });
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${releasedDoc2Id}Rev 1 released doc2` });
     });
 
     it(`Verify training notification for doc 3 should be present`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc3Id}released doc3` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc3Id}Rev 1 released doc3` });
     });
   });
 });

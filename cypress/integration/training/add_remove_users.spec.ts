@@ -757,7 +757,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Open and complete training for ${USERS[1].name}`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
 
@@ -771,7 +771,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Open and complete training for ${USERS[2].name}`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
 
@@ -1026,7 +1026,7 @@ context("Add/Remove users from Training Curriculum", () => {
       });
 
       it("Verify training notification should be present", () => {
-        cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}released doc1` });
+        cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       });
     });
   });
