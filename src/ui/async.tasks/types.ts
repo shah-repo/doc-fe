@@ -1,3 +1,5 @@
+import { FormikErrors } from "formik";
+
 export enum SQS_TYPES{
   TIME_TRAVEL_USER_SESSION = "TIME_TRAVEL_USER_SESSION",
   TIME_TRAVEL_USER = "TIME_TRAVEL_USER",
@@ -29,16 +31,7 @@ export interface TimeTravelProps {
   hour: number;
   minute: number;
   second: number;
-  nextTaskTypes: string[];
-}
-
-export interface TimeTravelSessionProps {
-  year: number;
-  month: number;
-  day: number;
-  hour: number;
-  minute: number;
-  second: number;
+  nextTaskTypes?: string[];
 }
 
 export const NEXT_TASK_TYPES = [
@@ -54,3 +47,14 @@ export const NEXT_TASK_TYPES = [
 export const NEXT_TASK_TYPES_USER = [
   "SEND_PASSWORD_EXPIRATION_EMAILS",
 ];
+
+export interface AsyncProps {
+  initialValues: TimeTravelProps;
+  setFieldValue: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) => void;
+  errors: FormikErrors<TimeTravelProps>;
+  type?: SQS_TYPES;
+}

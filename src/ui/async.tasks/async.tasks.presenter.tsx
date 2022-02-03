@@ -20,7 +20,7 @@ import TimeTravelCompany from "./forms/time.travel.company.form/time.travel.comp
 import TimeTravelForm from "./forms/time.travel.form/time.travel.form";
 import TimeTravelUser from "./forms/time.travel.user.form/time.travel.user.form";
 import UUIDBasedForm from "./forms/uuid.form/uuid.form";
-import { SQS_TYPES, TimeTravelProps, TimeTravelSessionProps } from "./types";
+import { SQS_TYPES, TimeTravelProps } from "./types";
 
 const AsyncTasksPresenter: React.FunctionComponent = () => {
   const classes = styles();
@@ -127,7 +127,7 @@ const AsyncTasksPresenter: React.FunctionComponent = () => {
     }));
     openApproveDialog();
   };
-  const handleTimeTravelFormSubmit = (values: TimeTravelSessionProps) => {
+  const handleTimeTravelFormSubmit = (values: TimeTravelProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify(values));
     }
