@@ -1212,8 +1212,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(500);
-      cy.go("back");
       cy.wait(1000);
     });
 
