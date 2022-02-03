@@ -13,6 +13,7 @@ import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_v
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
 import Text from "../../../components/Text";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 import { styles } from "./ColumnShowHideMenu.styles";
 import { KendoColumn } from "./types";
 
@@ -39,9 +40,15 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   };
   return (
     <FormControl variant="outlined">
-      <IconButton onClick={handleClick}>
-        <ViewGridIcon />
-      </IconButton>
+      <StyleTooltip
+        title={<Text translation="common.column" />}
+        placement="top"
+        arrow
+      >
+        <IconButton onClick={handleClick}>
+          <ViewGridIcon />
+        </IconButton>
+      </StyleTooltip>
       <Menu
         id="long-menu"
         anchorEl={anchorEl}
