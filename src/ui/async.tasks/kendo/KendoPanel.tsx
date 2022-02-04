@@ -53,8 +53,6 @@ export function KendoPanel<T>({
   queryUrl = "",
 }: KendoPanelProps<Partial<GetAsyncTaskResponse>>) {
   const intl = useIntl();
-  // eslint-disable-next-line no-console
-  console.log("Kendo Data ::", gridData);
   const getTranslatedText = (key: string) =>
     key ? intl.formatMessage({ id: key }) : "";
   const didMount = useDidMount();
