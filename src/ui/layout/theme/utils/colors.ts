@@ -4,6 +4,8 @@ enum Colors {
   white = "#FFF",
   background_white = "#F5F8FF",
   alabaster = "#F9FBFF",
+  lily_white="#F8F9F9",
+  water="#EEF3FF",
   // black
   black = "#000",
   almost_black = "#080B11",
@@ -19,6 +21,7 @@ enum Colors {
   mirage="#121B21",
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
+  grey_cloud = "#B4B4B4",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -32,6 +35,7 @@ enum Colors {
   light_gray_blue = "#CBD5E0",
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
+  steel_blue="#457AB5",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -49,10 +53,24 @@ enum Colors {
   green = "#16bd23",
   pale_green = "#f0f7d2",
   latest_green_varient = "#0DB78D",
+  olivine = "#9EB774",
+  carla="#E6FCD9",
+  light_forest_green="#4C9646",
+  light_forest_green_border="#509849",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
+  pink_red = "#f50057",
+  // orange
+  basket_ball_orange = "#F88961",
+  old_lace="#FEF8EE",
+  tawny="#B25F00",
+  ochre="#CE8723",
+  // cyan
+  light_cyan="#DCF4FD",
+  lochmara="#306AAC",
+  peri_winkle_blue="#8295FA"
 }
 
 export default Colors;

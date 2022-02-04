@@ -611,13 +611,13 @@ context("Training notification test", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });
 
   context("Open assigned Training", () => {
     it(`Click on the Training notification`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -687,11 +687,11 @@ context("Training notification test", () => {
 
   context("Check new training notification", () => {
     it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form 2` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
     });
 
     it(`Click training notification and check doc with Approved status`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form 2` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
       cy.get(`[data-cy=\"HeaderInfo-status\"]`).should("have.text", "Approved");
     });
   });

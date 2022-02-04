@@ -1391,7 +1391,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.mpiStart();
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Add an Approval", () => {
@@ -2005,7 +2005,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.mpiStart();
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
@@ -2274,7 +2274,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'START MPI'", () => {
-        cy.mpiStart();
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {

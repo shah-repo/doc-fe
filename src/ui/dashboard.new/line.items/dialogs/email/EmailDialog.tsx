@@ -16,7 +16,10 @@ import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
-import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
+import {
+  getFormattedDateString,
+  MomentFormats,
+} from "../../../../../common/utils/date";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../../state/ducks/email.all";
 import { toastError } from "../../../../components/notifications";
@@ -29,6 +32,7 @@ import { StyledListItem } from "./StyledListItem";
 interface EmailModalProps {
   id: string;
   handleEmailModelClose: () => void;
+  setLastEmailSent: (flag: boolean) => void;
   pendingApprovers: {
     userName: string;
     employeeId: string;
@@ -36,7 +40,7 @@ interface EmailModalProps {
     userInitialColor: string;
     approvalStatus: string;
   }[];
-  timestamp?: string;
+  pendingEmailSentAt?: Nullable<string>;
   approvedApprovers: {
     userName: string;
     employeeId: string;
@@ -49,8 +53,9 @@ interface EmailModalProps {
 const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   id,
   handleEmailModelClose,
+  setLastEmailSent,
   pendingApprovers,
-  timestamp,
+  pendingEmailSentAt,
   approvedApprovers,
 }) => {
   const classes = styles();
@@ -95,6 +100,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
   });
 
   const handleSendEmail = () => {
+    setLastEmailSent(true);
     async.start(sendEmail, id, async);
   };
 
@@ -145,7 +151,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            <Text translation="common.sent" />:{" "}
+            <Text translation="common.sent" />:&nbsp;
             {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
@@ -190,7 +196,12 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           )}
           <ListItemText
             primary={
-              <Grid container justify="space-between" alignItems="center">
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+              >
                 <Grid item>
                   <Typography
                     variant="h2"
@@ -202,33 +213,53 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     {` `}({pendingApprovers?.length})
                   </Typography>
                 </Grid>
-                { emailSuccess ? <Grid item>
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className={classes.lastsenttext}
-                    noWrap
-                  >
-                    <Text translation="just.now" />
-                  </Typography>
-                </Grid> :
+                {emailSuccess ? (
                   <Grid item>
-                    <Button
-                      onClick={() => handleSendEmail()}
-                      className={classes.emailbutton}
+                    <Typography
+                      variant="h2"
+                      component="h2"
+                      className={classes.lastsenttext}
+                      noWrap
                     >
-                      <Text translation="email.button.title" />
-                    </Button>
-                    <Modal
-                      open={apiAlertModelOpen}
-                      onClose={handleApiAlertModelClose}
-                      aria-labelledby="simple-modal-title"
-                      aria-describedby="simple-modal-description"
-                    >
-                      {apiAlertModelbody}
-                    </Modal>
+                      <Text translation="common.just.now" />
+                    </Typography>
                   </Grid>
-                }
+                ) : (
+                  <>
+                    <Grid item>
+                      {pendingEmailSentAt !== null && (
+                        <Typography
+                          variant="inherit"
+                          component="inherit"
+                          className={classes.lastsenttext}
+                          noWrap
+                        >
+                          <Text translation="email.last.sent" />:&nbsp;
+                          {getFormattedDateString(
+                            pendingEmailSentAt,
+                            MomentFormats.BriefDate
+                          )}
+                        </Typography>
+                      )}
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        onClick={() => handleSendEmail()}
+                        className={classes.emailbutton}
+                      >
+                        <Text translation="email.button.title" />
+                      </Button>
+                      <Modal
+                        open={apiAlertModelOpen}
+                        onClose={handleApiAlertModelClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                      >
+                        {apiAlertModelbody}
+                      </Modal>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             }
           />

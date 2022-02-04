@@ -19,6 +19,18 @@ const secondDocumentRevName = "Second document for testing";
 const currentDate = moment().tz("America/Los_Angeles").format("l");
 
 context("Document list test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -150,7 +162,7 @@ context("Document list test", () => {
 
     it("Verify default filter status", () => {
       SystemRequirement("REQ-0070");
-      cy.dlVerifyFilterByStatus({ status: "RELEASED" });
+      cy.dlVerifyFilterByStatus({ status: "Released" });
     });
   });
 
@@ -365,7 +377,7 @@ context("Document list test", () => {
 
       it("Verify filter by status", () => {
         SystemRequirement("REQ-0060");
-        cy.dlVerifyFilterByStatus({ status: "RELEASED" });
+        cy.dlVerifyFilterByStatus({ status: "Released" });
       });
 
       it("Verify document counter on document list", () => {
@@ -413,7 +425,7 @@ context("Document list test", () => {
 
       it("Verify filter by status", () => {
         SystemRequirement("REQ-0080");
-        cy.dlVerifyFilterByStatus({ status: "DRAFT" });
+        cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
 
       it("Verify filter by document title", () => {

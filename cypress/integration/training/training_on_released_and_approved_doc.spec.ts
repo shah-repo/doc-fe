@@ -761,18 +761,18 @@ context("Training for same document that was first released and then revised and
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocRevTitle({ title: "released document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[1].name)
+        .and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
 
     it(`Training record for ${USERS[2].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.trLandingPageDocRevTitle({ title: "released document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[2].name)
+        .and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
   });
 
@@ -833,7 +833,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select AR", () => {
-      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "In Review" });
+      cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
@@ -853,18 +853,18 @@ context("Training for same document that was first released and then revised and
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[1].name)
+        .and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
 
     it(`Training record for ${USERS[2].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[2].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").eq(0).invoke("text")
-        .should("contain", releasedDoc1Id).and("contain", USERS[2].name).and("contain", "Pending");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer .ReactVirtualized__Table__row").should("have.length", 1);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[2].name)
+        .and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
   });
 });

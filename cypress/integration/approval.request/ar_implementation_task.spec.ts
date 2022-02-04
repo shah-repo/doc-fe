@@ -18,6 +18,18 @@ const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
 context("Approval request implementation tasks", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -248,7 +260,6 @@ context("Approval request implementation tasks", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
       });
-      // cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
     });
 
     it("Check 'Implementation task' status is 'Done'", () => {
@@ -261,7 +272,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "Approved" });
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "APPROVED" });
     });
 
     it("Check approval request status is 'Approved'", () => {

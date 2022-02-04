@@ -7,6 +7,8 @@ const styles = () => ({
   },
   tooltip: {
     backgroundColor: Colors.black,
+    fontFamily: "Sora",
+    fontSize: "12px",
   },
   tooltipPlacementTop: {
     margin: "8px 0",

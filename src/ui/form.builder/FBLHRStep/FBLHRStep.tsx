@@ -12,17 +12,16 @@ import { withFBLHRStep } from "./FBLHRStep.wrap";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
-  name,
-  isOutput,
   startMpi,
   openLHRs,
+  setDisplayToLHRs,
+  name,
+  isOutput,
   lhrStepState,
   loading,
   stepLHRs,
-  setDisplayToLHRs,
-  setDisplayToMPI,
-  isHovering,
   isDraft,
+  isPendingChange,
   disabled,
   ownerOfStartMPIAction,
   ownerOfCompleteMPIAction,
@@ -34,6 +33,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   label,
   gutter,
   autosave,
+  lhrBuildTypeExist,
   ...props
 }) => (
   <FBProvider {...{ lhrStepState }}>
@@ -44,8 +44,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         alignItems="flex-start"
       >
         <Box
-          onMouseEnter={setDisplayToMPI}
-          onMouseLeave={setDisplayToLHRs}
           flexGrow={1}
           onClick={() => {
             if (isOutput && stepLHRs) {
@@ -61,8 +59,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             autosave
             withState
             shouldReloadOnInit
-            withoutPrefixRoot={(stepLHRs && !isHovering) as boolean}
-            disabled={isOutput || !isDraft}
+            disabled={isOutput || !(isDraft || isPendingChange)}
+            withoutPrefixRoot={Boolean(stepLHRs)}
             {...{ name, loading, filterOptions }}
             inputStyle={stepLHRs?.redline ? {
               background: Colors.light_red,
@@ -72,9 +70,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
           />
         </Box>
         <FBButton
-          label="form.builder.start.mpi"
-          disabled={!isOutput || loading || Boolean(stepLHRs) || disabled}
-          onClick={startMpi}
+          disabled={!isOutput || loading || !lhrBuildTypeExist || disabled}
+          label={ stepLHRs ? "form.builder.view.step" : "form.builder.start.step" }
+          onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi }
           {...{ loading }}
         />
       </Box>
@@ -82,11 +80,13 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         value={materials}
         type={FBProcedureItemType.materials}
         lhrStepIndex={index}
+        isPendingChange
       />}
       {isDocumentLHRT && !isEmpty(equipment) && <FBLHRStepProcedureItem
         value={equipment}
         type={FBProcedureItemType.equipment}
         lhrStepIndex={index}
+        isPendingChange
       />}
       {stepLHRs && (
         <Box display="flex" alignItems="center" mt={1} mb={4}>

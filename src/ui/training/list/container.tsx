@@ -43,4 +43,5 @@ const TrainingListContainer: React.FunctionComponent<Props> = () => {
   );
 };
 
-export default TrainingListContainer;
+// export default TrainingListContainer;
+TrainingListContainer;

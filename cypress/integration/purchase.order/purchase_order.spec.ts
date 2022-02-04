@@ -667,7 +667,7 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckTax({ number: "2.77" });
+      cy.poCheckTax({ number: "2.775000" });
     });
 
     it("Check Total value", () => {
@@ -1165,7 +1165,6 @@ context("PO test", () => {
       cy.cmpTurnOffAutosave();
     });
 
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -1234,30 +1233,26 @@ context("PO test", () => {
     it("Check for Landing page default columns", () => {
       SystemRequirement("REQ-1120");
       cy.filterCheckHeaderValues("PO #",
-        "Revision", "PO Status",
-        "Supplier",
-        "Part Number",
-        "Amount", "Requestor",
-        "Issue Date");
+        "REVISION", "PO STATUS",
+        "SUPPLIER",
+        "PART NUMBER",
+        "AMOUNT", "REQUESTOR",
+        "ISSUE DATE");
     });
   });
 
   context("Test the filter inside PO", () => {
     it("Enter version number '1' inside filter", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterPOVersion({ version: "1" });
-      });
+      cy.filterPOVersion({ version: "1" });
     });
 
     it("Check if item with right version is displayed", () => {
-      cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+      cy.poCheckForSpecificPOItemValue({ itemValue: "1.1" });
     });
 
     it("Clear filter", () => {
       SystemRequirement("REQ-1190");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterClear();
-      });
+      cy.filterClear();
     });
 
     it("Check if number of displayed filtered items is '2'", () => {
@@ -1268,7 +1263,7 @@ context("PO test", () => {
     it("Enter all fields to check if all filter fields are working", () => {
       SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
-        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "suplier",
+        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "New suplier for PO",
         partNumber: "PRT-00004 - 1", amount: "30.93", owner: USERS[1].name, issueDate: "N/A",
       });
     });
@@ -1289,7 +1284,7 @@ context("PO test", () => {
     it("Check if all filter values persist after changing landing page", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
-        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "suplier",
+        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "New suplier for PO",
         partNumber: "PRT-00004 - 1", amount: "30.93", owner: USERS[1].name, issueDate: "N/A",
       });
     });

@@ -50,7 +50,6 @@ const GroupContentPresenter: React.FunctionComponent<Props> = ({
       container={true}
       alignItems="center"
       direction="column"
-      style={{ marginTop: 90 }}
     >
       <Grid>
         <SharedContent

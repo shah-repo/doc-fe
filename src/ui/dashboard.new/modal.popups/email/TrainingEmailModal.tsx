@@ -20,6 +20,7 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../../common/utils/date";
+import { Nullable } from "../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../state/ducks/email.all";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
@@ -33,6 +34,8 @@ interface TrainingEmailModalProps {
   handleEmailModelClose: () => void;
   pendingTrainees?: any;
   timestamp?: string | undefined;
+  pendingEmailSentAt: Nullable<string>;
+  setLastEmailSent: (flag: boolean) => void;
   isOverDue?: boolean;
 }
 
@@ -41,7 +44,8 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   handleEmailModelClose,
   pendingTrainees,
   isOverDue,
-  timestamp,
+  pendingEmailSentAt,
+  setLastEmailSent,
 }) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
@@ -79,6 +83,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
   });
 
   const handleSendEmail = () => {
+    setLastEmailSent(true);
     async.start(sendDueTrainingEmail, id, async);
   };
 
@@ -129,7 +134,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
             id="simple-modal-title"
             className={classes.confmesgdate}
           >
-            <Text translation="common.sent" />:{" "}
+            <Text translation="common.sent" />:&nbsp;
             {getFormattedDateString(undefined, MomentFormats.BriefDate)}
           </Typography>
         </Grid>
@@ -193,32 +198,53 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     {` `}({pendingTrainees?.length || 0})
                   </Typography>
                 </Grid>
-                { emailSuccess ? <Grid item>
-                  <Typography
-                    variant="h2"
-                    component="h2"
-                    className={classes.lastsenttext}
-                    noWrap
-                  >
-                    <Text translation="just.now" />
-                  </Typography>
-                </Grid> : <Grid item>
-                  <Button
-                    onClick={() => handleSendEmail()}
-                    className={classes.emailbutton}
-                  >
-                    <Text translation="email.button.title" />
-                  </Button>
-                  <Modal
-                    open={apiAlertModelOpen}
-                    onClose={handleApiAlertModelClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                  >
-                    {apiAlertModelbody}
-                  </Modal>
-                </Grid>
-                }
+                {emailSuccess ? (
+                  <Grid item>
+                    <Typography
+                      variant="h2"
+                      component="h2"
+                      className={classes.lastsenttext}
+                      noWrap
+                    >
+                      <Text translation="common.just.now" />
+                    </Typography>
+                  </Grid>
+                ) : (
+                  <>
+                    <Grid item>
+                      {pendingEmailSentAt !== null && (
+                        <Typography
+                          variant="inherit"
+                          component="inherit"
+                          className={classes.lastsenttext}
+                          noWrap
+                        >
+                          <Text translation="email.last.sent" />:&nbsp;
+                          {getFormattedDateString(
+                            pendingEmailSentAt,
+                            MomentFormats.BriefDate
+                          )}
+                        </Typography>
+                      )}
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        onClick={() => handleSendEmail()}
+                        className={classes.emailbutton}
+                      >
+                        <Text translation="email.button.title" />
+                      </Button>
+                      <Modal
+                        open={apiAlertModelOpen}
+                        onClose={handleApiAlertModelClose}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                      >
+                        {apiAlertModelbody}
+                      </Modal>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             }
           />
