@@ -342,6 +342,7 @@ export function KendoPanel<T extends { id?: string }>({
       fieldsConfig: dataItem.fieldsConfig,
       defaultRevStage: dataItem.defaultRevStage,
       active: dataItem.active,
+      equipmentEnforceProd: dataItem.equipmentEnforceProd,
     };
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {
@@ -415,7 +416,8 @@ export function KendoPanel<T extends { id?: string }>({
   // While editing setting the new values to the dataItem
   const itemChange = ({ dataItem, field, value }: GridItemChangeEvent) => {
     // For Update
-    const isLHR = GroupWithGroupOptions[dataItem.group]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
+    const grp = typeof value === "boolean" ? dataItem.group : value;
+    const isLHR = GroupWithGroupOptions[grp]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
     let newData: DocumentType[] = [];
     if (dataItem.id) {
       newData = map(actualData, (item) => {
