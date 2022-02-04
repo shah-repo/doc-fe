@@ -40,11 +40,10 @@ const KendoGridStyles = makeStyles((theme) => ({
   },
   title: {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 24,
     color: Colors.almost_black,
     textTransform: "capitalize",
     fontFamily: "Sora",
-    marginTop: theme.spacing(1.25),
   },
   gridExportCreate: {
     textAlign: "right",
