@@ -9,7 +9,6 @@ import KendoPresenter from "./presenter";
 const AsyncTasksKendoContainer: React.FunctionComponent = () => {
   const TABLE_NAME = "asyncType";
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-  // const data = useSelector(getTableData(TABLE_NAME));
   const data = asyncTask;
 
   return (

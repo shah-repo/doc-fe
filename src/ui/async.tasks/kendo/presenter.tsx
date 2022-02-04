@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { AsyncTaskActions } from "../../../state/ducks/async.tasks";
@@ -32,6 +33,7 @@ import TimeTravelForm from "../forms/time.travel.form/time.travel.form";
 import UUIDBasedForm from "../forms/uuid.form/uuid.form";
 import { SQS_TYPES, TimeTravelProps } from "../types";
 import gridConfiguration from "./column.definition";
+import { dropDownOptions } from "./helper";
 import { KendoPanel } from "./KendoPanel";
 import KendoGridStyles from "./styles";
 
@@ -48,42 +50,14 @@ const AsyncTasksKendoPresenter: React.FunctionComponent<Props> = ({
 }) => {
   const classes = KendoGridStyles();
   const intl = useIntl();
-  const dropDownOptions = [
-    { value: "TIME_TRAVEL_USER_SESSION", text: "TIME_TRAVEL_USER_SESSION" },
-    { value: "TIME_TRAVEL_USER", text: "TIME_TRAVEL_USER" },
-    { value: "TIME_TRAVEL_COMPANY", text: "TIME_TRAVEL_COMPANY" },
-    {
-      value: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE",
-      text: "UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE",
-    },
-    {
-      value: "RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE",
-      text: "RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE",
-    },
-    { value: "SUPPLIER_IMPORT", text: "SUPPLIER_IMPORT" },
-    { value: "DEACTIVATE_PROD2_USERS", text: "DEACTIVATE_PROD2_USERS" },
-    {
-      value: "RECALC_COMPLIANCE_FOR_EQUIPMENTS",
-      text: "RECALC_COMPLIANCE_FOR_EQUIPMENTS",
-    },
-    {
-      value: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS",
-      text: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS",
-    },
-    {
-      value: "SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC",
-      text: "SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC",
-    },
-    {
-      value: "RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES",
-      text: "RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES",
-    },
-    { value: "TRAINING_RECORDS_REFRESH", text: "TRAINING_RECORDS_REFRESH" },
-    { value: "TRAINING_RECORDS_STATUS", text: "TRAINING_RECORDS_STATUS" },
-    { value: "UPDATE_BILLS", text: "UPDATE_BILLS" },
-  ];
   const [type, setType] = React.useState("");
   const [payload, setPayload] = React.useState("");
+  const EMPTY_TYPES = [
+    SQS_TYPES.UPDATE_BILLS,
+    SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
+    SQS_TYPES.DEACTIVATE_PROD2_USERS,
+    SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
+  ];
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setType(event.target.value as string);
   };
@@ -213,38 +187,26 @@ const AsyncTasksKendoPresenter: React.FunctionComponent<Props> = ({
             value={type}
             onChange={handleChange}
           >
-            {dropDownOptions
-              .sort((a, b) =>
-                a.text > b.text ? 1 : b.text > a.text ? -1 : 0
-              )
-              .map((data, index) => (
-                <MenuItem key={data.value} value={data.text}>
-                  {data.text}
-                </MenuItem>
-              ))}
+            {orderBy(dropDownOptions, ["text"], ["asc"]).map((data, index) => (
+              <MenuItem key={data.value} value={data.text}>
+                {data.text}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
-        {type &&
-            [
-              SQS_TYPES.UPDATE_BILLS,
-              SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
-              SQS_TYPES.DEACTIVATE_PROD2_USERS,
-              SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
-            ].includes(SQS_TYPES[type]) && (
+        {type && EMPTY_TYPES.includes(SQS_TYPES[type]) && (
           <EmptyForm {...{ handleEmptyFormSubmit }} key={type} />
         )}
         {type &&
-            [
-              SQS_TYPES.TRAINING_RECORDS_STATUS,
-              SQS_TYPES.TRAINING_RECORDS_REFRESH,
-              SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS,
-            ].includes(SQS_TYPES[type]) && (
+          [
+            SQS_TYPES.TRAINING_RECORDS_STATUS,
+            SQS_TYPES.TRAINING_RECORDS_REFRESH,
+            SQS_TYPES.SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS,
+          ].includes(SQS_TYPES[type]) && (
           <DateForm {...{ handleDateFormSubmit }} key={type} />
         )}
         {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
-          <PasswordExpirationForm
-            {...{ handlePasswordExpirationFormSubmit }}
-          />
+          <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
         )}
         {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
           <PasswordExpirationEmailSpecificForm
@@ -253,18 +215,18 @@ const AsyncTasksKendoPresenter: React.FunctionComponent<Props> = ({
           />
         )}
         {type &&
-            [
-              SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE,
-              SQS_TYPES.SUPPLIER_IMPORT,
-            ].includes(SQS_TYPES[type]) && (
+          [
+            SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE,
+            SQS_TYPES.SUPPLIER_IMPORT,
+          ].includes(SQS_TYPES[type]) && (
           <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type} />
         )}
         {type &&
-            [
-              SQS_TYPES.TIME_TRAVEL_COMPANY,
-              SQS_TYPES.TIME_TRAVEL_USER,
-              SQS_TYPES.TIME_TRAVEL_USER_SESSION,
-            ].includes(SQS_TYPES[type]) && (
+          [
+            SQS_TYPES.TIME_TRAVEL_COMPANY,
+            SQS_TYPES.TIME_TRAVEL_USER,
+            SQS_TYPES.TIME_TRAVEL_USER_SESSION,
+          ].includes(SQS_TYPES[type]) && (
           <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type} />
         )}
         <PasswordDialogueContainer

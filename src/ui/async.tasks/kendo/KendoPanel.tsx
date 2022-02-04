@@ -39,11 +39,8 @@ import {
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import useDidMount from "../../hooks/useDidMount";
-import { EmailCell } from "./cell.template/EmailCell";
-import { NameCell } from "./cell.template/NameCell";
-import { StatusCell } from "./cell.template/StatusCell";
+import { CommonCell } from "./cell.template/CommonCell";
 import { StatusDropDown } from "./cell.template/StatusDropDown";
-import { TaskTypeCell } from "./cell.template/TaskTypeCell";
 import KendoGridStyles from "./styles";
 
 let call: CancelTokenSource;
@@ -290,10 +287,10 @@ export function KendoPanel<T>({
   };
 
   const fieldToCellMapping = {
-    "taskType": TaskTypeCell,
-    "employee.user.name": NameCell,
-    "employee.user.email": EmailCell,
-    "status": StatusCell,
+    "taskType": CommonCell,
+    "employee.user.name": CommonCell,
+    "employee.user.email": CommonCell,
+    "status": CommonCell,
   };
 
   const columnRenderer = () =>
