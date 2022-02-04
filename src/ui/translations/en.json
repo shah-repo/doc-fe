@@ -386,6 +386,7 @@
   "common.qms": "Qms",
   "common.default.training": "Default Training",
   "common.equipmentEnforceProd": "Equipment Enforce Prod",
+  "common.equipmentEnforce": "Equipment Enforce",
   "common.starting.number": "Starting Number",
   "common.default.rev.stage": "Default Revision Stage",
   "common.hidden.message": "Users Without Tags",
