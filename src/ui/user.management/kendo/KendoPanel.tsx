@@ -122,11 +122,13 @@ export function KendoPanel<T>({
       queryApi();
     },
     onError: (error) => {
+      setIsLoading(false);
       toastError(error as string);
     },
   });
 
   const handleCreate = (values: AddUserManage) => {
+    setIsLoading(true);
     async.start(addEmployeeAction, values, async);
   };
 
