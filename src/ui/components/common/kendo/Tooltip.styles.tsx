@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from "@material-ui/core";
 export const styles = makeStyles(() =>
   createStyles({
     tooltip: {
-      maxHeight: "calc(100vh - 700px)",
+      maxHeight: "500px",
       minHeight: "18px",
       overflow: "auto",
       fontFamily: "Sora",
