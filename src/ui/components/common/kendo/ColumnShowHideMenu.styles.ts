@@ -5,8 +5,15 @@ export const styles = makeStyles(() =>
   createStyles({
     columnsCus: {
       fontFamily: "Sora",
-      fontWeight: "bold",
+      fontWeight: 600,
       fontSize: "14px",
+      color: Colors.almost_black,
+    },
+    menuItem: {
+      fontFamily: "Sora",
+      fontSize: "12px",
+      fontWeight: 400,
+      color: Colors.almost_black,
     },
     headerMenuItem: {
       "background": Colors.water,

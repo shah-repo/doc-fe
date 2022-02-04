@@ -78,7 +78,11 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
           >
             <ListItemText
               id={item.field}
-              primary={getTranslatedText(item.title).toUpperCase()}
+              primary={
+                <Typography className={classes.menuItem}>
+                  {getTranslatedText(item.title).toUpperCase()}
+                </Typography>
+              }
             />
             <Box flexGrow={1} mr={5}></Box>
             {item.show ? (
