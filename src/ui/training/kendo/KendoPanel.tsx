@@ -22,7 +22,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, get, isEmpty, map, pick } from "lodash";
+import { cloneDeep, find, findIndex, get, isEmpty, map, pick, startCase } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import qs from "query-string";
@@ -529,7 +529,7 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={startCase(getTranslatedText(column.title))}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}

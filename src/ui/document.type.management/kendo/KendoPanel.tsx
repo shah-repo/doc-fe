@@ -285,7 +285,7 @@ export function KendoPanel<T extends { id?: string }>({
     sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => (
       col.show && <GridColumn
         {...col}
-        title={getTranslatedText(col.title).toUpperCase()}
+        title={getTranslatedText(col.title)}
         key={index}
         cell={DTMCellTemplateMapping[col.cell || ""] || col.field === "" ? (props) => renderCol(props, col) : undefined}
         filterCell={FilterCellMapping[col.filterCell as string]}

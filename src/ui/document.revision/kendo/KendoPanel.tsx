@@ -532,7 +532,7 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={getTranslatedText(column.title)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}

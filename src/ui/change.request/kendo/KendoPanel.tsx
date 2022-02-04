@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, findIndex, isEmpty, map, pick } from "lodash";
+import { find, findIndex, isEmpty, map, pick, startCase } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -483,7 +483,7 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={startCase(getTranslatedText(column.title))}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}

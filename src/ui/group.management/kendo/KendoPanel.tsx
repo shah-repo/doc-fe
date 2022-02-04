@@ -20,7 +20,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, set, sortBy } from "lodash";
+import { find, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -453,7 +453,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       <GridColumn
         key={idx}
         {...column}
-        title={getTranslatedText(column.title).toUpperCase()}
+        title={startCase(getTranslatedText(column.title))}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
