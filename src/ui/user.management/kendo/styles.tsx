@@ -16,10 +16,10 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     fontFamily: "Sora",
   },
   title: {
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: 14,
     color: Colors.almost_black,
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     fontFamily: "Sora",
     marginTop: theme.spacing(1.25),
   },
@@ -28,7 +28,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   dropboxButton: {
     display: "flex",
-    marginBottom: theme.spacing(1.25),
   },
 }));
 

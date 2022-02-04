@@ -6,7 +6,7 @@ const commonButtonStyles = {
   "boxShadow": "none",
   "borderRadius": 100,
   "fontFamily": "Sora",
-  "text-transform": "none",
+  "text-transform": "capitalize",
 };
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,10 +61,10 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(0.625),
     },
     title: {
-      fontWeight: 700,
+      fontWeight: 600,
       fontSize: 14,
       color: Colors.almost_black,
-      textTransform: "uppercase",
+      textTransform: "capitalize",
       fontFamily: "Sora",
       marginTop: theme.spacing(1.25),
     },

@@ -526,7 +526,7 @@ export function KendoPanel<T extends { id?: string }>({
               <Text translation="documenttype.management" />
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item style={{ marginBottom: 8 }}>
             <Button
               onClick={exportDAMDialog.open}
               variant="outlined"

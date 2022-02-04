@@ -16,10 +16,10 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     top: 0,
   },
   title: {
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: 14,
     color: Colors.almost_black,
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     fontFamily: "Sora",
     marginTop: theme.spacing(1.25),
   },

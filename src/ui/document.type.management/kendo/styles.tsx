@@ -2,16 +2,17 @@ import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme: Theme) => ({
+  root: {
+    padding: theme.spacing(0, 2.5, 1.25, 2.5),
+  },
   kGrid: {
-    width: "calc(100vw - 255px)",
-    height: "calc(100vh - 110px)",
-    margin: theme.spacing(0.625),
+    height: "calc(100vh - 109px)",
   },
   exportBtn: {
     margin: 0,
     boxShadow: "none",
     borderRadius: 100,
-    marginRight: theme.spacing(1.875),
+    marginRight: theme.spacing(0.625),
     textTransform: "none",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
@@ -23,7 +24,8 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.white,
   },
   addBtn: {
-    "marginRight": theme.spacing(1.25),
+    "marginTop": 0,
+    "marginBottom": 0,
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.navy,
@@ -37,7 +39,8 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     },
   },
   disabledAddBtn: {
-    "marginRight": theme.spacing(1.25),
+    "marginTop": 0,
+    "marginBottom": 0,
     "boxShadow": "none",
     "borderRadius": 100,
     "background": Colors.white,
@@ -66,13 +69,12 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.white,
   },
   title: {
-    fontWeight: 700,
+    fontWeight: 600,
     fontSize: 14,
     color: Colors.almost_black,
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     fontFamily: "Sora",
     marginTop: theme.spacing(1.25),
-    marginLeft: theme.spacing(0.625),
   },
 }
 ));
