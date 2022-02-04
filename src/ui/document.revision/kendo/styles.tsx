@@ -6,14 +6,14 @@ const commonButtonStyles = {
   "boxShadow": "none",
   "borderRadius": 100,
   "fontFamily": "Sora",
-  "text-transform": "none",
+  "text-transform": "capitalize",
 };
 const KendoGridStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(0, 0.625, 1.25, 0.625),
+    padding: theme.spacing(0, 2.5, 1.25, 2.5),
   },
   kGrid: {
-    height: "calc(100vh - 99px)",
+    height: "calc(100vh - 109px)",
   },
   exportListbutton: {
     ...commonButtonStyles,
@@ -39,13 +39,11 @@ const KendoGridStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(0.625),
   },
   title: {
-    fontWeight: 700,
-    fontSize: 14,
+    fontWeight: 600,
+    fontSize: 24,
     color: Colors.almost_black,
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     fontFamily: "Sora",
-    marginTop: theme.spacing(1.25),
-    marginLeft: theme.spacing(0.625),
   },
   gridExportCreate: {
     textAlign: "right",

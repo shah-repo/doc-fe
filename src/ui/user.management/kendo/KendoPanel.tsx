@@ -1,6 +1,4 @@
-import {
-  Box, Grid, Typography,
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -17,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, sortBy } from "lodash";
+import { find, isEmpty, map, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -401,7 +399,7 @@ export function KendoPanel<T>({
       <GridColumn
         key={idx}
         {...column}
-        title={getTranslatedText(column.title).toUpperCase()}
+        title={startCase(getTranslatedText(column.title))}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
@@ -519,10 +517,10 @@ export function KendoPanel<T>({
           <AddEmployeeContainer addGroup={addNew} />
         </Grid>
       </Grid>
-      <Box className={classes.root}>
+      <>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </Box>
+      </>
     </>
   );
 }
