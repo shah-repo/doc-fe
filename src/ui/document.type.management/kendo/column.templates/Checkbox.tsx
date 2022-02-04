@@ -46,11 +46,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   if (rowType === "groupHeader") {
     return null;
   }
-  // eslint-disable-next-line no-console
-  console.log("Data Item ::", dataItem);
   const isLHR = dataItem.group === DOC_TYPE_GROUP.LHR;
-  // eslint-disable-next-line no-console
-  console.log("LHR ::", isLHR);
   return (
     <td colSpan={colSpan}
       style= {style}
@@ -61,7 +57,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
       <Checkbox
         value={dataValue}
         onChange={handleChange}
-        disabled={editMode ? false : isLHR ? false : true}/>
+        disabled={editMode ? field === "equipmentEnforceProd" ? isLHR ? false : true : false : true}/>
     </td>
   );
 };

@@ -137,8 +137,8 @@ const columns: KendoColumn[] = [{
   showColumnMenu: true,
   orderIndex: 11,
 }, {
-  field: "defaultTraining",
-  title: "common.training",
+  field: "equipmentEnforceProd",
+  title: "common.equipmentEnforce",
   cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
@@ -166,8 +166,8 @@ const columns: KendoColumn[] = [{
   showColumnMenu: false,
   orderIndex: 14,
 }, {
-  field: "equipmentEnforceProd",
-  title: "common.equipmentEnforce",
+  field: "fieldsConfig",
+  title: "common.fields.config",
   cell: DTMCellTemplates.FIELDS_CONFIG,
   show: true,
   filterable: false,
