@@ -2,6 +2,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -16,7 +18,6 @@ let initialArDocument;
 let group;
 let equipmentDocumentType;
 let partDocumentType;
-let equipmentDocument;
 let createdPartDocument;
 let MPIDocumentType;
 let createdMPIDocument;
@@ -31,6 +32,14 @@ let companyId;
 let lhrDocUrl;
 let thirdEmployee;
 let asyncTasksGroup;
+let formDocumentType;
+let createdEquipmentFormDocument;
+let maintenanceRecordDocumentType;
+let createdPMForm;
+let createdCalibrationForm;
+let createdEquipmentNumericRevision;
+let createdPMRecord;
+let createdCalibrationRecord;
 
 context("Verify Equipment Prod Enforce on LHR with owner", () => {
   before(() => {
@@ -278,6 +287,8 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
           MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
           LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record Test");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           companyId = createdCompany.id;
           done();
         });
@@ -293,7 +304,7 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       });
     });
 
-    it("[API]Create equipment one", () => {
+    it("[API]Create Equipment form", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -309,11 +320,11 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Equipment one</p>",
+              description: "<p>Maintenance and Calibration form</p>",
               document: {
-                docId: "ET-00003",
+                docId: "FM-00003",
                 documentType: {
-                  id: equipmentDocumentType[0].id,
+                  id: formDocumentType[0].id,
                 },
                 securityList: {
                   operators: [],
@@ -325,18 +336,118 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
                   ],
                 },
               },
-              name: "Equipment one",
+              name: "Maintenance and calibration form document",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: equipmentDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "fb-default-eq-status",
+                    type: "radiogroup",
+                    index: 0,
+                    label: "EQ Status",
+                    rules: "required",
+                    options: [
+                      {
+                        text: "Active",
+                        value: "Active",
+                      },
+                      {
+                        text: "Inactive",
+                        value: "Inactive",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "fb-primary-owner-eq",
+                    type: "autocomplete",
+                    index: 1,
+                    label: "Primary Owner",
+                    optionId: "13",
+                    placeholder: "Select employee as primary owner",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Primary Owner",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-coordinator-eq",
+                    type: "autocomplete",
+                    index: 2,
+                    label: "Coordinator",
+                    optionId: "13",
+                    placeholder: "Select employee as coordinator",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Coordinator",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    index: 3,
+                    type: "eqmaintenance",
+                    name: "pm-ki5wtk5l",
+                    editorConfig: {
+                      fields: [],
+                      type: "preventativeMaintenance",
+                    },
+                    editorProperties: [],
+                    label: "Preventative Maintenance",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "PM",
+                  },
+                  {
+                    index: 4,
+                    type: "eqmaintenance",
+                    name: "calibration-ki5wtyj0",
+                    editorConfig: {
+                      fields: [],
+                      type: "calibration",
+                    },
+                    editorProperties: [],
+                    label: "Calibration",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "Calibration",
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-kycyk1n8",
+                    uniqueSchemaItem: true,
+                    index: 5,
+                  },
+                ],
+              },
+
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
-            equipmentDocument = response;
+            createdEquipmentFormDocument = response;
             cy.drAPIApproveAndRelease({
-              documentId: equipmentDocument.id,
+              documentId: createdEquipmentFormDocument.id,
               payload: {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
@@ -345,9 +456,443 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-            });
+            }).then(() => done());
           });
         });
+      });
+    });
+
+    it("[API]Create PM form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>PM form</p>",
+          document: {
+            docId: "FM-00004",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Preventative Maintenance form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 4,
+                label: "Equipment Maintenance Section",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kybkhbpt",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration form", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Calibration form</p>",
+          document: {
+            docId: "FM-00005",
+            documentType: {
+              id: formDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Calibration form",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formTemplate: {
+            outputDocumentTypes: [{
+              id: maintenanceRecordDocumentType[0].id,
+            }],
+            schema: [
+              {
+                name: "fb-maintenance-details-section",
+                type: "section",
+                index: 0,
+                label: "Maintenance Details",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_id",
+                type: "autocomplete",
+                index: 1,
+                label: "Equipment",
+                rules: "required",
+                optionId: "20",
+                placeholder: "[Select revision here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "equipment_maintainer",
+                type: "autocomplete",
+                index: 2,
+                label: "Maintainer",
+                rules: "required",
+                optionId: "13",
+                placeholder: "[Select name here]",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-equipment_due_date",
+                type: "datepicker",
+                index: 3,
+                label: "Completion Date",
+                rules: "required",
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                name: "fb-requipment-maintenance-section",
+                type: "textfield",
+                index: 4,
+                label: "Equipment Maintenance Section",
+                rules: "required",
+                hidden: true,
+                applicableOn: [
+                  "ON_STATE_TO_IN_REVIEW",
+                ],
+                deleteDisabled: true,
+                validationMode: "default",
+                deleteInFormDisabled: true,
+              },
+              {
+                label: "form.builder.approvals",
+                type: "approvals",
+                deleteDisabled: true,
+                name: "fb-approvals-kybkhbpt",
+                uniqueSchemaItem: true,
+                index: 5,
+              },
+            ],
+          },
+
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationForm = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationForm.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Equipment document with Numeric revision", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document</p>",
+          document: {
+            docId: "EQ-00001",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment document",
+          formDocument: {
+            id: createdEquipmentFormDocument.id,
+          },
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formInput: {
+            "fb-default-eq-status": "Active",
+            "fb-primary-owner-eq": adminEmployee.id,
+            "fb-coordinator-eq": adminEmployee.id,
+            "pm-ki5wtk5l": {
+              requirements: "Yes",
+              preventativeForm: createdPMForm.documentId,
+              frequency: 10,
+              instructions: "<p>Instructions for preventative maintenance</p>",
+            },
+            "calibration-ki5wtyj0": {
+              requirements: "Yes",
+              preventativeForm: createdCalibrationForm.documentId,
+              frequency: 5,
+              instructions: "<p>Instructions for calibration</p>",
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdEquipmentNumericRevision = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdEquipmentNumericRevision.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create PM record for equipment in numeric version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdPMForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentNumericRevision.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentNumericRevision.id,
+          },
+          equipmentSection: "pm-ki5wtk5l",
+          description: "",
+          name: "Preventative maintenance document",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00001",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration record for equipment in numeric version", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdCalibrationForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentNumericRevision.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles"),
+          },
+          parentEquipment: {
+            id: createdEquipmentNumericRevision.id,
+          },
+          equipmentSection: "calibration-ki5wtyj0",
+          description: "",
+          name: "Calibration record",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00002",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
       });
     });
 
@@ -461,7 +1006,7 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
                   equipment: [
                     {
                       id: "kvasulmm",
-                      title: equipmentDocument.id,
+                      title: createdEquipmentNumericRevision.id,
                     },
                   ],
                 },
@@ -967,17 +1512,18 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       cy.navigToDocTypeManagement();
     });
 
-    it("Navigate to document type management", () => {
-      cy.navigToDocTypeManagement();
-    });
-
     it("Expand information for Equipment doc type", () => {
-      cy.get("th").contains("Equipment").eq(0).parent().find("button").arrowClick();
+      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record Test")
+        .eq(0).parent().find("button").eq(0).arrowClick();
     });
 
     it("Verify Equipment Enforce Prod is unchecked", () => {
       cy.get("[name=equipmentEnforceProd]").should("not.be.checked");
     });
+  });
+
+  context("Verify user can select EQ if due_date is past when Equipment Enforce Prod is unchecked", () => {
+
   });
 });
 
