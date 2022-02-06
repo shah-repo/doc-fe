@@ -1148,7 +1148,7 @@ context("Repeat Training with Training Curriculum", () => {
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}`);
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
@@ -1344,7 +1344,7 @@ context("Repeat Training with Training Curriculum", () => {
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}`);
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
