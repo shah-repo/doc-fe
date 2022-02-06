@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import {
   DataResult, process,
   State,
@@ -382,7 +382,7 @@ export function KendoGrid<T>({
         key={index}
         field={column.field}
         width={setColumnWidth(column.width as number, gridWidth)}
-        minResizableWidth={100}
+        minResizableWidth={200}
         locked={column.locked}
         reorderable={column.reorderable}
         sortable={column.sortable}
@@ -490,9 +490,9 @@ export function KendoGrid<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div style={{ color: "red" }}>{apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

@@ -140,6 +140,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
         if (!lhrStepIndex) { return; }
@@ -164,6 +165,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         formState?.validate();
         return toastError(intl.formatMessage({ id: "form.builder.lhrt.error.message" }));
       } else {
+        procedureState?.addItem(formValue, type, allSteps);
         mpiProcedureState?.addItem(formValue, type, allSteps);
         handleCancel?.();
       }

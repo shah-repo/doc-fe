@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, findIndex, isEmpty, map, pick } from "lodash";
+import { find, findIndex, isEmpty, map, pick, startCase } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -483,11 +483,11 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={startCase(getTranslatedText(column.title))}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
-      minResizableWidth={100}
+      minResizableWidth={200}
       headerCell={
         column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }
@@ -549,9 +549,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

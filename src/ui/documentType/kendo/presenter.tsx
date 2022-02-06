@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import { startCase } from "lodash";
 import moment from "moment";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -48,7 +49,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       ).isValid()
     ) {
       return {
-        label: column.label.toUpperCase(),
+        label: startCase(column.label),
         key: column.key,
       };
     }
@@ -58,7 +59,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: columnLabel.toUpperCase(),
+      label: startCase(columnLabel),
       key: column.key,
     };
   });
