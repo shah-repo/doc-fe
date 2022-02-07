@@ -201,7 +201,7 @@ export function KendoPanel<T>({
         data = data.map((el) => ({
           ...el,
           nextTaskTypes: el.nextTaskTypes
-            .sort()
+            ?.sort()
             .join(", "),
           status: el.status,
         }));
