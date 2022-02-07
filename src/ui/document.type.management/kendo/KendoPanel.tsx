@@ -562,7 +562,7 @@ export function KendoPanel<T extends { id?: string }>({
               filterable={true}
               reorderable={false}
               pageable={gridConfiguration.pagerSettings}
-              resizable={false}
+              resizable={true}
               groupable={true}
               total={resultState.total}
               cellRender={CellRender}

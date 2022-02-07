@@ -142,7 +142,7 @@ const columns: KendoColumn[] = [{
   cell: DTMCellTemplates.CHECKBOX_CELL,
   filter: "boolean",
   show: true,
-  width: "110px",
+  width: "125px",
   groupable: true,
   showColumnMenu: true,
   orderIndex: 12,
