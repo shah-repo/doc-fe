@@ -439,6 +439,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) { return false; }
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
@@ -446,10 +447,10 @@ export function KendoPanel<T>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
