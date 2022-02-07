@@ -6,6 +6,7 @@ import {
 } from "@progress/kendo-react-inputs";
 import { result, set } from "lodash";
 import React, { useEffect } from "react";
+import { DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import "./KendoStyles.css";
 
 export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
@@ -45,7 +46,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const isLHR = GroupWithGroupOptions[dataItem.group]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
   return (
     <td colSpan={colSpan}
       style= {style}
@@ -56,7 +57,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
       <Checkbox
         value={dataValue}
         onChange={handleChange}
-        disabled={editMode ? false : true}/>
+        disabled={editMode ? field === "equipmentEnforceProd" ? isLHR ? false : true : false : true}/>
     </td>
   );
 };

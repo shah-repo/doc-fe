@@ -341,6 +341,7 @@ export interface DocumentType {
   startingNumber?: string;
   category?: string;
   active?: boolean;
+  equipmentEnforceProd?: boolean;
 }
 
 interface DocumentForms {
