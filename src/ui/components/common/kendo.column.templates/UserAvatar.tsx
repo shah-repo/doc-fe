@@ -20,6 +20,7 @@ export const UserAvatar = ({
   const userDetails = userName ? get(dataItem, field ? field.replace(".name", "") : "") : undefined;
   const owner = userDetails ? userDetails.name : "";
   const avatar = userDetails ? userDetails.avatar : "";
+  const initialColor = userDetails ? userDetails.initialColor : "";
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
@@ -39,7 +40,7 @@ export const UserAvatar = ({
       <Box className={classes.avatar}>
         {avatar ?
           <Avatar className={classes.icon} alt={owner} src={avatar} /> :
-          <Avatar className={classes.icon}>
+          <Avatar className={classes.icon} style={{ backgroundColor: initialColor }}>
             {getInitalsFromName(owner)}
           </Avatar>
         }

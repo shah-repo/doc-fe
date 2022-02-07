@@ -10,11 +10,13 @@ export const styles = makeStyles(() =>
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
+      letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 600,
+      letterSpacing: 0,
     },
     margin5: {
       marginRight: "5px",
