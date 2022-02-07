@@ -103,7 +103,7 @@ export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
  * To hide the column title on mouse while resizing the grid
  */
 export const hideColumnTitleOnResize = () => {
-  const selector = document.querySelector(".k-drag-clue") as HTMLElement;
+  const selector = document.querySelector(".k-header.k-drag-clue") as HTMLElement;
   if (!isEmpty(selector)) {
     selector.style.display = "none";
   }
