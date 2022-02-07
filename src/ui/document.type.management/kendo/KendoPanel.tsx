@@ -285,7 +285,7 @@ export function KendoPanel<T extends { id?: string }>({
     sortBy(columnDefinitions, ["orderIndex"]).map((col: KendoColumn, index: number) => (
       col.show && <GridColumn
         {...col}
-        title={getTranslatedText(col.title).toUpperCase()}
+        title={getTranslatedText(col.title)}
         key={index}
         cell={DTMCellTemplateMapping[col.cell || ""] || col.field === "" ? (props) => renderCol(props, col) : undefined}
         filterCell={FilterCellMapping[col.filterCell as string]}
@@ -526,7 +526,7 @@ export function KendoPanel<T extends { id?: string }>({
               <Text translation="documenttype.management" />
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item style={{ marginBottom: 8 }}>
             <Button
               onClick={exportDAMDialog.open}
               variant="outlined"

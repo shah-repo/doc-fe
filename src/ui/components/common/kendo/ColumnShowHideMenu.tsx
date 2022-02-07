@@ -13,6 +13,7 @@ import { ReactComponent as ViewGridIcon } from "../../../../assets/images/grid_v
 import { ReactComponent as SolidIcon } from "../../../../assets/images/view.svg";
 import { ReactComponent as ViewChecked } from "../../../../assets/images/view_checked.svg";
 import Text from "../../../components/Text";
+import { StyleTooltip } from "../../../dashboard.new/line.items/common/StyleTooltip";
 import { styles } from "./ColumnShowHideMenu.styles";
 import { KendoColumn } from "./types";
 
@@ -39,9 +40,15 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
   };
   return (
     <FormControl variant="outlined">
-      <IconButton onClick={handleClick}>
-        <ViewGridIcon />
-      </IconButton>
+      <StyleTooltip
+        title={<Text translation="common.column" />}
+        placement="top"
+        arrow
+      >
+        <IconButton onClick={handleClick}>
+          <ViewGridIcon />
+        </IconButton>
+      </StyleTooltip>
       <Menu
         id="long-menu"
         anchorEl={anchorEl}
@@ -49,21 +56,19 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
         open={open}
         onClose={handleClose}
       >
-        <MenuItem>
+        <MenuItem className={classes.headerMenuItem}>
           <ListItemText
             primary={
-              <>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.columnsCus}
-                  color="textPrimary"
-                >
-                  <Text translation="common.column" />
-                </Typography>
-              </>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.columnsCus}
+                color="textPrimary"
+              >
+                <Text translation="common.column" />
+              </Typography>
             }
-          ></ListItemText>
+          />
         </MenuItem>
         {columnDefinition.map((item: KendoColumn) => (
           <MenuItem
@@ -73,7 +78,11 @@ const ColumnShowHideMenu: React.FunctionComponent<Props> = ({
           >
             <ListItemText
               id={item.field}
-              primary={getTranslatedText(item.title).toUpperCase()}
+              primary={
+                <Typography className={classes.menuItem}>
+                  {getTranslatedText(item.title).toUpperCase()}
+                </Typography>
+              }
             />
             <Box flexGrow={1} mr={5}></Box>
             {item.show ? (

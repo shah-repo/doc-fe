@@ -683,15 +683,7 @@ context("Training notification test", () => {
     });
 
     it("Approve AR", () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover").wait(1000);
-      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.arApproveARFromDashboard();
     });
 
     it("Logs user in", () => {
@@ -740,7 +732,7 @@ context("Training notification test", () => {
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
       cy.wait(500);
-      cy.go("back");
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
       cy.wait(1000);
     });
 
@@ -899,7 +891,7 @@ context("Training notification test", () => {
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
       cy.wait(500);
-      cy.go("back");
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
       cy.wait(1000);
     });
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {

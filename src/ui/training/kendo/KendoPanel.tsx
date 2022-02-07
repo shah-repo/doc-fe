@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
   Dialog, Grid,
 } from "@material-ui/core";
 import {
@@ -23,7 +22,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, get, isEmpty, map, pick } from "lodash";
+import { cloneDeep, find, findIndex, get, isEmpty, map, pick, startCase } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import qs from "query-string";
@@ -530,10 +529,10 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={startCase(getTranslatedText(column.title))}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       width={setColumnWidth(column.width as number, gridWidth)}
-      minResizableWidth={100}
+      minResizableWidth={200}
       filterCell={filterCellMapping(column.field)}
       headerCell={
         column.title ? (props) => <ColumnHeader {...props} /> : undefined
@@ -609,9 +608,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }
