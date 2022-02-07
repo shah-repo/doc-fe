@@ -46,6 +46,7 @@ import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell.template/CommandCell";
+import { DropdownFilterCell } from "./cell.template/DropdownFilterCell";
 import { EmailCell } from "./cell.template/EmailCell";
 import { GroupDropdown } from "./cell.template/GroupDropdown";
 import { GroupsCell } from "./cell.template/GroupsCell";
@@ -252,10 +253,13 @@ export function KendoPanel<T>({
           ...el,
           groupsOrg: el.groups,
           groups: el.groups
-            .map((e) => e.name.trimLeft().trimEnd())
+            .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el.user.confirmed,
+          status: el?.user?.confirmed && !el?.user?.locked
+            ? getTranslatedText("user.management.signed.up")
+            : el?.user?.locked ? getTranslatedText("reset.password") :
+              getTranslatedText("user.management.resend.signup.email"),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -362,27 +366,24 @@ export function KendoPanel<T>({
     />
   );
 
-  const SignUpBooleanFilterCell = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+  const SignUpFilterCell = (props: GridFilterCellProps) => (
+    <DropdownFilterCell
       {...props}
-      data={[{
-        text: getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
-        value: true,
-      }, {
-        text: getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
-        value: false,
-      }]}
-      defaultItem={{
-        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
-        value: getTranslatedText(TranslatedText[DisplayText.ALL]),
-      }}
+      data={[
+        getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
+        getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
+        getTranslatedText(TranslatedText[DisplayText.RESET_PASSWORD]),
+      ]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
     />
   );
 
   const filterCellMapping = {
     groups: GroupDropdown,
     active: BooleanFilterCell,
-    status: SignUpBooleanFilterCell,
+    status: SignUpFilterCell,
   };
 
   const fieldToCellMapping = {
