@@ -38,6 +38,7 @@ import {
 } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
+import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
 import { CommonCell } from "./cell.template/CommonCell";
 import { StatusDropDown } from "./cell.template/StatusDropDown";
@@ -289,6 +290,8 @@ export function KendoPanel<T>({
     "employee.user.name": CommonCell,
     "employee.user.email": CommonCell,
     "status": CommonCell,
+    "duration": CommonCell,
+    "nextTaskTypes": CommonCell,
   };
 
   const columnRenderer = () =>
@@ -389,7 +392,7 @@ export function KendoPanel<T>({
     <>
       <Grid container justify="space-between">
         <Grid item>
-          <Typography className={classes.title}>TASK HISTORY</Typography>
+          <Typography className={classes.title}><Text translation="async.task.table.history" /></Typography>
         </Grid>
       </Grid>
       <Box className={classes.root}>

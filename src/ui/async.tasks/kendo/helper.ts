@@ -32,3 +32,5 @@ export const dropDownOptions = [
   { value: "TRAINING_RECORDS_STATUS", text: "TRAINING_RECORDS_STATUS" },
   { value: "UPDATE_BILLS", text: "UPDATE_BILLS" },
 ];
+
+export const AsyncStatus = ["IN_PROGRESS", "REQUESTED", "COMPLETE"];
