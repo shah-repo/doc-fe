@@ -725,7 +725,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(1000);
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -997,7 +996,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(500);
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1212,7 +1210,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(1000);
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
