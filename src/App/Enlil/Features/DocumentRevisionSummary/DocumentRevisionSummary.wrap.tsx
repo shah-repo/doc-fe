@@ -1,5 +1,5 @@
 import { get, isUndefined } from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
@@ -16,7 +16,7 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
-    const { _tabsState } = SM.useStores();
+    const { _tabsState, _formState } = SM.useStores();
     _documentRevisionFormState?.setDocumentRevision(documentRevision);
     const { formInput, formTemplate, formDocument } = documentRevision || {};
     let { schema } = formTemplate || formDocument?.formTemplate || {};
@@ -25,6 +25,10 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     isFB = !isUndefined(formFB);
 
     // MARK: @state
+    useEffect(() => {
+      _formState?.setMode("preview");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // MARK: @reactions
 

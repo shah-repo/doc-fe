@@ -11,12 +11,16 @@ export * from "./Enlil/Features/DocumentRevisionForm/Components/Sidebar/Document
 export { default as DocumentRevisionForm } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm";
 export { default as DocumentRevisionFormState } from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.state";
 export * from "./Enlil/Features/DocumentRevisionForm/DocumentRevisionForm.types";
+export { default as DocumentRevisionSummaryHeader } from "./Enlil/Features/DocumentRevisionSummary/Components/SummaryHeader/DocumentRevisionSummaryHeader";
+export * from "./Enlil/Features/DocumentRevisionSummary/Components/SummaryHeader/DocumentRevisionSummaryHeader.types";
 export { default as DocumentRevisionSummary } from "./Enlil/Features/DocumentRevisionSummary/DocumentRevisionSummary";
 export * from "./Enlil/Features/DocumentRevisionSummary/DocumentRevisionSummary.types";
 export { default as SMStore } from "./Shifamed/API/SMStore";
 export * from "./Shifamed/API/SMStore.client";
 export * from "./Shifamed/API/SMStore.defaults";
 export * from "./Shifamed/API/SMStore.types";
+export { default as SMBox } from "./Shifamed/Components/SMBox/SMBox";
+export * from "./Shifamed/Components/SMBox/SMBox.types";
 export { default as SMButton } from "./Shifamed/Components/SMButton/SMButton";
 export * from "./Shifamed/Components/SMButton/SMButton.types";
 export { default as SMDialogState } from "./Shifamed/Components/SMDialog/SMDialog.state";

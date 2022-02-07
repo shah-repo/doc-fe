@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { flatten, isEmpty, omit, set } from "lodash";
+import { flatten, omit, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
@@ -11,26 +11,21 @@ import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentTyp
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
-import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
 import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
-import useDescription from "../../hooks/docCustomization/useDescription";
+import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
-import ChangeRequestLink from "./changeRequestLink";
 import ReferencedByContainer from "./referencedBy.container";
 import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
@@ -58,7 +53,6 @@ const Presenter: React.FunctionComponent<Props> = ({
     retrain,
     referenceTo,
     deprecatedAt,
-    description,
     trainingRecords,
     formTemplate,
     formDocument,
@@ -74,8 +68,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  const { docId } = formDocument?.document || {};
-  const FBIsOutput = Boolean(docId && !isEmpty(docId));
   const docTypeId = dataProp?.document?.documentType?.id;
   const docDetails: Partial<DocumentRevision> = {
     docId: document.docId,
@@ -84,9 +76,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-  const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(docTypeId);
-  const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(docTypeId);
-  const { isVisible: isCRLinkVisible } = useCRLink(docTypeId);
 
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
@@ -166,25 +155,11 @@ const Presenter: React.FunctionComponent<Props> = ({
         direction="column"
       >
         {
-          isCRLinkVisible &&
-          <ChangeRequestLink dataProp={dataProp} />
-        }
-        {
-          isTitleVisible &&
-          <CustomLabelTooltip {...{ tooltipConfig }}>
-            <SummaryField label={titleLabel} value={name} />
-          </CustomLabelTooltip>
-        }
-        {
           isTrainingVisible && !isRecord &&
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
           />
-        }
-        {
-          isDescriptionVisible &&
-          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
         }
         {formTemplate && (
           <SummaryField
@@ -224,9 +199,6 @@ const Presenter: React.FunctionComponent<Props> = ({
       </Grid>
       {isRecord && isInlineApproval && isFirstAlphaReleased &&
         isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
-      {FBIsOutput && (
-        <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-      )}
     </Box>
   );
 

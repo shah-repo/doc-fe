@@ -1,7 +1,7 @@
-import { Box, Tab, Tabs } from "@material-ui/core";
+import { Tab, Tabs } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React, { ReactNode } from "react";
-import { SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
+import { SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabsWrap } from "./SMTabs.wrap";
 
@@ -14,15 +14,16 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
 }) =>  (
   <Observer>
     {() => (
-      <Box {...boxProps}>
+      <SMBox {...boxProps}>
         <Tabs
           {...{ onChange }}
           value={_tabsState?.value}
           style={{
             position: "fixed",
-            zIndex: 1001,
+            zIndex: 1,
             backgroundColor: Colors.light_gray,
             width: "100%",
+            height: "48px",
           }}
         >
           {tabs.map((tab, index) => (
@@ -39,7 +40,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
             </SMTabPanel>
           )}
         </SMMap>
-      </Box>
+      </SMBox>
     )}
   </Observer>
 );

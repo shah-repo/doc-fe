@@ -25,7 +25,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <ListItem>
+    <ListItem style={{ padding: 0 }}>
       <Typography variant="h6">
         <Box>
           <Text translation="common.crid"/>

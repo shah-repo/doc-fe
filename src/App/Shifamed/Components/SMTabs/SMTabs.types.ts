@@ -1,5 +1,4 @@
-import { BoxProps } from "@material-ui/core";
-import { SMProviderProps } from "../../..";
+import { SMBoxProps, SMProviderProps } from "../../..";
 
 export type SMTabsProps =
 & SMTabsHOCProps
@@ -7,7 +6,7 @@ export type SMTabsProps =
   onChange: (event: any, newValue: number) => void;
   tabs: string[];
   children: React.ReactNode[];
-  boxProps?: BoxProps;
+  boxProps?: SMBoxProps;
 };
 
 export interface SMTabsStateProps {

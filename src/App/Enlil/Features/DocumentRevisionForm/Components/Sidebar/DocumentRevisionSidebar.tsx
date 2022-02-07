@@ -46,7 +46,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         height="100%"
         bgcolor="white"
         width={_documentRevisionSidebarState?.open ? 300 : 55}
-        borderColor={Colors.hint_gray}
+        borderColor={Colors.medium_gray}
         borderLeft={0.5}
         style={{
           transition: _documentRevisionSidebarState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
@@ -56,8 +56,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           display="flex"
           p={0.5}
           alignItems="center"
-          borderColor={Colors.hint_gray}
-          borderBottom={0.5}
         >
           <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
             {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
@@ -72,7 +70,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             </Typography>
           )}
         </Box>
-        <Box display="flex" p={0.5} height="100%">
+        <Box display="flex" p={0.5} height="100%" borderTop={1} borderColor={Colors.medium_gray}>
           <SidebarContainer
             sidebarList={[
               {

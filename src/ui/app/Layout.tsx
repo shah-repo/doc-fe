@@ -38,30 +38,30 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
   <SocketsContainer />
   <WatermarkFooterContainer />
   {SM.isNewLayout && (
-    <main style={{ height: "100vh" }}>
+    <main style={{ display: "flex", height: "100vh", maxHeight: "100vh", margin: 0 }}>
       <DataFetcherContainer />
-      <SMTemplate leftSidebar={<Navigation />}>
-        <SMTemplate
-          header={<HeaderContainer />}
-          footer={<WatermarkFooterContainer />}
-        >
-          <Switch>
-            <Route
-              path={DOCUMENT_REVISION_CREATE_URL}
-              exact
-              component={DocumentRevisionCreateContainer}
-            />
-            <Route
-              path={DOCUMENT_REVISION_CREATE_MAINTENANCE_URL}
-              exact
-              component={DocumentRevisionCreateContainer}
-            />
-            <Route
-              path={DOCUMENT_REVISION_ROOT_URL}
-              component={DocumentRevisionContainer}
-            />
-          </Switch>
-        </SMTemplate>
+      <SMTemplate
+        leftSidebar={<Navigation />}
+        header={<HeaderContainer />}
+        footer={<WatermarkFooterContainer />}
+        contentBoxProps={{ stretchY: "calc(100% - 40px)" }}
+      >
+        <Switch>
+          <Route
+            path={DOCUMENT_REVISION_CREATE_URL}
+            exact
+            component={DocumentRevisionCreateContainer}
+          />
+          <Route
+            path={DOCUMENT_REVISION_CREATE_MAINTENANCE_URL}
+            exact
+            component={DocumentRevisionCreateContainer}
+          />
+          <Route
+            path={DOCUMENT_REVISION_ROOT_URL}
+            component={DocumentRevisionContainer}
+          />
+        </Switch>
       </SMTemplate>
     </main>
   )}

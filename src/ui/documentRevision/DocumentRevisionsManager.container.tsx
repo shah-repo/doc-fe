@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { SMBox } from "../../App";
 import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
@@ -77,7 +78,7 @@ DocumentRevisionManagerContainerProps
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <div>
+      <SMBox stretchY="100%">
         {documentRevisionId && !isNewOutput && (
           <DocumentRevisionDisplayContainer
             documentRevisionId={documentRevisionId}
@@ -92,7 +93,7 @@ DocumentRevisionManagerContainerProps
             documentId={documentId}
           />
         )}
-      </div>
+      </SMBox>
     </FBProvider>
   );
 };

@@ -1,11 +1,10 @@
-import { Box, Grid } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
-import { styles } from "../../../../ui/documentRevision/forms/DocumentRevisionForm.styles";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
 
@@ -40,18 +39,23 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   schema,
   formInput,
   autosaveEnabled,
-}) => {
-  const classes = styles();
-  return (
-    <SMForm
-      values={formValues.values}
-      header= {
-        <DocumentRevisionHeader
-          {...{ bannerPortal, shouldShowUpgrade }}
-          documentRevisionId={documentRevision?.id}
-        />
-      }
-      footer={<DocumentRevisionFooter />}
+}) => (
+  <SMForm
+    templateBoxProps={{ stretchY: "100%" }}
+    contentBoxProps={{ stretchY: "calc(100% - 66px)" }}
+    headerBoxProps={{ maxHeight: "66px" }}
+    values={formValues.values}
+    header= {
+      <DocumentRevisionHeader
+        {...{ bannerPortal, shouldShowUpgrade }}
+        documentRevisionId={documentRevision?.id}
+      />
+    }
+  >
+    <SMTemplate
+      templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+      contentBoxProps={{ stretchY: "100%" }}
+      rightSidebarBoxProps={{ zIndex: 2 }}
       {..._documentRevisionFormState?.id && {
         rightSidebar: (
           <Observer>
@@ -64,71 +68,74 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         ),
       }}
     >
-      <SMTemplate header={<DocumentRevisionFormHeader />}>
+      <SMTemplate
+        templateBoxProps={{ stretchY: "100%", bgcolor: Colors.light_gray }}
+        footerBoxProps={{ maxHeight: "10%" }}
+        headerBoxProps={{ maxHeight: "70%" }}
+        contentBoxProps={{ minHeight: "20%" }}
+        footer={<DocumentRevisionFooter />}
+        header={<DocumentRevisionFormHeader />}
+
+      >
         <Observer>
           {() => (
             <SMTabs
               onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
               tabs={_formState?.mode === "none" ? ["sm.overview"] : ["sm.overview", "sm.general"]}
-              boxProps={{
-                height: "100%",
-                overflow: "auto",
-                onScroll,
-              }}
+              boxProps={{ stretchY: "100%" }}
             >
-              <Grid
-                item={true}
-                className={classes.container}
-                lg={type !== "newOutput" && isDisabled ? 12 : 7}
-                sm={type !== "newOutput" && isDisabled ? 12 : 10}
-                xs={12}
-              >
-                <DocumentRevisionFormPresenter
-                  {...formValues}
-                  releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                  {...{
-                    documentRevisions,
-                    documentRevision,
-                    availableReferences,
-                    showRevisionTypeChange,
-                    proposedDocId,
-                    setDocId,
-                    doNotPrompt,
-                    onDirtyFlagChange,
-                    documentTypesById,
-                    canChangeOwnerShip,
-                    type,
-                    isNewVersion,
-                    bannerPortal,
-                    showAdministrativeAndVoidChange,
-                    pmFormId,
-                    redlineActive,
-                    isOutput,
-                    lastSavedTimestamp,
-                    isDisabled,
-                    email,
-                    isOwner,
-                  }}
-                />
-              </Grid>
-              {_formState?.mode !== "none" && (
-                <Box mt={5} paddingY={2} paddingX={5} height="calc(100vh - 70px)" overflow="auto">
-                  <FBWorkspace
-                    isPortal={false}
-                    document={{
-                      ...formValues.values as unknown as DocumentRevision,
-                      ...documentRevision as unknown as DocumentRevision,
+              <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                <SMBox mt={8} px={8}>
+                  <DocumentRevisionFormPresenter
+                    {...formValues}
+                    releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                    {...{
+                      documentRevisions,
+                      documentRevision,
+                      availableReferences,
+                      showRevisionTypeChange,
+                      proposedDocId,
+                      setDocId,
+                      doNotPrompt,
+                      onDirtyFlagChange,
+                      documentTypesById,
+                      canChangeOwnerShip,
+                      type,
+                      isNewVersion,
+                      bannerPortal,
+                      showAdministrativeAndVoidChange,
+                      pmFormId,
+                      redlineActive,
+                      isOutput,
+                      lastSavedTimestamp,
+                      isDisabled,
+                      email,
+                      isOwner,
                     }}
-                    {... { schema, autosaveEnabled }}
-                    initialValues={formInput}
                   />
-                </Box>
+                </SMBox>
+              </SMBox>
+              {_formState?.mode !== "none" && (
+                <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                  <SMBox mt={8} px={8} stretchY="100%">
+                    <FBWorkspace
+                      isPortal={false}
+                      document={{
+                        ...formValues.values as unknown as DocumentRevision,
+                        ...documentRevision as unknown as DocumentRevision,
+                      }}
+                      {... { schema, autosaveEnabled }}
+                      initialValues={formInput}
+                    />
+                  </SMBox>
+                </SMBox>
               )}
             </SMTabs>
           )}
         </Observer>
       </SMTemplate>
-    </SMForm>
-  ); };
+    </SMTemplate>
+  </SMForm>
+);
 
 export default withSMTabs(withDocumentRevisionFormWrap(DocumentRevisionForm));

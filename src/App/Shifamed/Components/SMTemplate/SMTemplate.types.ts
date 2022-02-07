@@ -1,4 +1,4 @@
-import { BoxProps } from "@material-ui/core";
+import { SMBoxProps } from "../../..";
 
 export interface SMTemplateProps {
   /**
@@ -24,9 +24,25 @@ export interface SMTemplateProps {
   /**
    * @cfg {BoxProps} Box props for header container.
    */
-  headerBoxProps?: BoxProps;
+  headerBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for footer container.
+   */
+  footerBoxProps?: SMBoxProps;
   /**
    * @cfg {BoxProps} Box props for left container.
    */
-  leftSidebarBoxProps?: BoxProps;
+  leftSidebarBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for right container.
+   */
+  rightSidebarBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for content.
+   */
+  contentBoxProps?: SMBoxProps;
+  /**
+   * @cfg {BoxProps} Box props for template.
+   */
+  templateBoxProps?: SMBoxProps;
 }

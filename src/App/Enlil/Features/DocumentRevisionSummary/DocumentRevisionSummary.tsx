@@ -1,11 +1,13 @@
 import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionSidebar, DocumentRevisionSummaryProps, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFooter, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMForm, SMTabs, SMTemplate } from "../../..";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspace } from "../../../../ui/form.builder";
+import Colors from "../../../../ui/layout/theme/utils/colors";
+import { withSMForm } from "../../../Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
 
@@ -37,16 +39,17 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       ),
     }}
   >
-    <SMTemplate>
+    <SMTemplate header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}>
       <Observer>
         {() => (
           <SMTabs
             onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
             tabs={isFB ? ["sm.overview", "sm.general"] : ["sm.overview"]}
             boxProps={{
-              height: "calc(100vh - 70px)",
+              height: "calc(100vh - 170px)",
               overflow: "auto",
               onScroll,
+              bgcolor: Colors.light_gray,
             }}
           >
             <SummaryPresenter
@@ -72,4 +75,4 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   </SMForm>
 );
 
-export default withSMTabs(withDocumentRevisionSummaryWrap(DocumentRevisionSummary));
+export default withSMForm(withSMTabs(withDocumentRevisionSummaryWrap(DocumentRevisionSummary)));

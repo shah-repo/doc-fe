@@ -61,11 +61,18 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     onScroll = (ev) => {
       if (!_documentRevisionFormState) { return; }
-      const pageYOffset = get(ev.target, "scrollTop");
-      const isHeaderHidden = pageYOffset > 0;
-      if (isHeaderHidden !== _documentRevisionFormState.isHeaderHidden) {
-        _documentRevisionFormState.setIsHeaderHidden(isHeaderHidden);
-      }
+      const el = ev.target;
+      const pageYOffset = get(el, "scrollTop");
+
+      setTimeout(() => {
+        const elY = get(el, "scrollTop");
+        if (pageYOffset > 0 && pageYOffset < elY && !_documentRevisionFormState?.isHeaderHidden) {
+          _documentRevisionFormState?.setIsHeaderHidden(true);
+        }
+        if (pageYOffset === 0 && elY === 0 && _documentRevisionFormState?.isHeaderHidden) {
+          _documentRevisionFormState?.setIsHeaderHidden(false);
+        }
+      }, 250);
     };
 
     return (

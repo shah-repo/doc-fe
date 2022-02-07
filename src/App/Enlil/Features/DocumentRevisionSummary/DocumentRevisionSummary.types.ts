@@ -1,7 +1,8 @@
-import { DocumentRevisionFormProps, SMTabsHOCProps } from "../../..";
+import { DocumentRevisionFormProps, SMFormHOCProps, SMTabsHOCProps } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 
 export type DocumentRevisionSummaryProps =
+& SMFormHOCProps
 & SMTabsHOCProps
 & Pick<Partial<DocumentRevisionFormProps>,
 | "onTabChange"

@@ -42,7 +42,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
 
     const { _formState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    mode = _formState?.mode || mode;
+    mode = _formState?.mode;
     autosave = _formState?.autosave || false;
     workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,

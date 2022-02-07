@@ -1,55 +1,48 @@
-import { Box } from "@material-ui/core";
-import { Observer } from "mobx-react";
 import React from "react";
-import { SMTemplateProps } from "../../..";
+import { SMBox, SMTemplateProps } from "../../..";
 
 const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   header,
+  templateBoxProps,
   headerBoxProps,
+  footerBoxProps,
   leftSidebarBoxProps,
+  rightSidebarBoxProps,
+  contentBoxProps,
   leftSidebar,
   rightSidebar,
   footer,
   children,
 }) => (
-  <Box height="100vh" width="100%" overflow="hidden">
-    {header && (
-      <Observer>
-        {() => (
-          <Box width="100%" {...headerBoxProps}>
-            {header}
-          </Box>
-        )}
-      </Observer>
+  <SMBox display={"flex"} flexDirection="row" flex={1} {...templateBoxProps}>
+    {leftSidebar && (
+      <SMBox flex={1} {...leftSidebarBoxProps}>
+        {leftSidebar}
+      </SMBox>
     )}
-    <Box display="flex" flexDirection="row" minHeight="100%" height="100%">
-      {leftSidebar && (
-        <Box minHeight="100%" {...leftSidebarBoxProps}>
-          {leftSidebar}
-        </Box>
+    <SMBox display={"flex"} flexDirection={"column"} flex={5}>
+      {header && (
+        <SMBox {...headerBoxProps}>
+          {header}
+        </SMBox>
       )}
-      <Box flexGrow={1} minHeight="100%" width="100%">
-        {children}
-      </Box>
-      {rightSidebar && (
-        <Box minHeight="100%" zIndex={1002}>
-          {rightSidebar}
-        </Box>
+      <SMBox display="flex" {...contentBoxProps} >
+        <SMBox flex={1}>
+          {children}
+        </SMBox>
+      </SMBox>
+      {footer && (
+        <SMBox {...footerBoxProps}>
+          {footer}
+        </SMBox>
       )}
-    </Box>
-    {footer && (
-      <Box
-        width="100%"
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}>
-        {footer}
-      </Box>
+    </SMBox>
+    {rightSidebar && (
+      <SMBox {...rightSidebarBoxProps} flex={0}>
+        {rightSidebar}
+      </SMBox>
     )}
-  </Box>
+  </SMBox>
 );
 
 export default SMTemplate;

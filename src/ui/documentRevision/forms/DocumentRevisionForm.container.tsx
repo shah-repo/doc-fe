@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
@@ -25,7 +25,6 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
-import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
@@ -269,21 +268,20 @@ DocumentRevisionFormContainerProps
       <div ref={bannerPortal}
         style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
       />
-      <Grid style={{ background: Colors.light_gray }} >
-        {
-          type !== "newOutput" &&
+
+      {
+        type !== "newOutput" &&
           <Box ml={3}>
             <ChangeRequestLink dataProp={documentRevision} />
           </Box>
-        }
-        <Formik
-          initialValues={cleanInitialValues}
-          onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
-          enableReinitialize={true}
-        >
-          {render}
-        </Formik>
-      </Grid>
+      }
+      <Formik
+        initialValues={cleanInitialValues}
+        onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
+        enableReinitialize={true}
+      >
+        {render}
+      </Formik>
     </AsyncGate>
   );
 };
