@@ -222,7 +222,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                       className={classes.lastsenttext}
                       noWrap
                     >
-                      <Text translation="just.now" />
+                      <Text translation="common.just.now" />
                     </Typography>
                   </Grid>
                 ) : (

@@ -61,6 +61,7 @@ enum Colors {
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
+  pink_red = "#f50057",
   // orange
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",

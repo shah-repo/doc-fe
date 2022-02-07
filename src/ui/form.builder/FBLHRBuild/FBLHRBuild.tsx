@@ -10,6 +10,7 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
   onDialogActionClick,
   lhrBuildState,
   name,
+  buildValidationRules,
   ...props
 }) => (
   <>
@@ -31,12 +32,13 @@ const FBLHRBuild: React.FunctionComponent<FBLHRBuildProps> = ({
     <Observer>
       {() => (
         <FBRadioGroup
+          name={name}
           type="lhrbuild"
           controlValue={lhrBuildState?.value}
           disabled={lhrBuildState?.disabled}
           label="form.builder.build.type"
           options={lhrBuildState?.options}
-          rules="required"
+          rules={buildValidationRules}
           {...props }
         />
       )}

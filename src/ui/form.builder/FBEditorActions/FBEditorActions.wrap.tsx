@@ -103,9 +103,6 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
           materials: [],
         };
       }
-      if (type === "lhrstep" && !formValues.editorConfig?.filters) {
-        formValues.editorConfig = { filters: {} };
-      }
       // Have to set editorProperties here so it doesn't override manually set values
       if (!editorProperties) {
         formValues.editorProperties = COMMON_INITIAL_VALUES.editorProperties;

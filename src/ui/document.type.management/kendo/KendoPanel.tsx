@@ -19,7 +19,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
@@ -342,6 +342,7 @@ export function KendoPanel<T extends { id?: string }>({
       fieldsConfig: dataItem.fieldsConfig,
       defaultRevStage: dataItem.defaultRevStage,
       active: dataItem.active,
+      equipmentEnforceProd: dataItem.equipmentEnforceProd,
     };
     const emptyFields: string[] = gridCellValidation(newData);
     if (!isEmpty(emptyFields)) {
@@ -415,17 +416,25 @@ export function KendoPanel<T extends { id?: string }>({
   // While editing setting the new values to the dataItem
   const itemChange = ({ dataItem, field, value }: GridItemChangeEvent) => {
     // For Update
+    const grp = typeof value === "boolean" ? dataItem.group : value;
+    const isLHR = GroupWithGroupOptions[grp]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
     let newData: DocumentType[] = [];
     if (dataItem.id) {
       newData = map(actualData, (item) => {
         if (item.id === dataItem.id) {
           item = set(dataItem, field || "", value);
+          if (!isLHR) {
+            item.equipmentEnforceProd = false;
+          }
         }
         return item;
       });
     } else {
       // For New Record
       const updatedDataItem = set(dataItem, field || "", value);
+      if (!isLHR) {
+        updatedDataItem.equipmentEnforceProd = false;
+      }
       newData = [updatedDataItem, ...actualData];
     }
     const newDataState = processWithGroups(newData, dataState);
@@ -551,7 +560,7 @@ export function KendoPanel<T extends { id?: string }>({
               data={result}
               sortable={true}
               filterable={true}
-              reorderable={true}
+              reorderable={false}
               pageable={gridConfiguration.pagerSettings}
               resizable={true}
               groupable={true}
