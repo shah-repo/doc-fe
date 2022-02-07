@@ -4,7 +4,7 @@ import { KendoColumn, KendoGridConfiguration, PageState } from "../../components
 const columns: KendoColumn[] = [
   {
     field: "taskType",
-    title: "Task Type",
+    title: "async.task.type",
     show: true,
     filter: "text",
     groupable: false,
@@ -14,7 +14,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "createdAt",
-    title: "TimeStamp",
+    title: "async.tasks.timestamp",
     show: true,
     filter: "text",
     groupable: false,
@@ -24,7 +24,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "duration",
-    title: "Duration",
+    title: "async.task.duration",
     show: true,
     filter: "text",
     groupable: false,
@@ -34,7 +34,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "nextTaskTypes",
-    title: "Next Task Types",
+    title: "async.task.next.task.types",
     show: true,
     filter: "text",
     groupable: false,
@@ -44,7 +44,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "status",
-    title: "Status",
+    title: "async.task.status",
     show: true,
     filter: "text",
     groupable: false,
@@ -54,7 +54,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "employee.user.name",
-    title: "Employee Name",
+    title: "common.name",
     show: true,
     filter: "text",
     groupable: false,
@@ -64,7 +64,7 @@ const columns: KendoColumn[] = [
   },
   {
     field: "employee.user.email",
-    title: "Employee Email",
+    title: "common.email",
     show: true,
     filter: "text",
     groupable: false,

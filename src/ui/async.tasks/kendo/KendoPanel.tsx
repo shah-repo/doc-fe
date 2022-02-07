@@ -304,7 +304,7 @@ export function KendoPanel<T>({
       <GridColumn
         key={idx}
         {...column}
-        title={getTranslatedText(column.title).toUpperCase()}
+        title={getTranslatedText(column.title)}
         minResizableWidth={100}
         cell={
           fieldToCellMapping[column.field]
