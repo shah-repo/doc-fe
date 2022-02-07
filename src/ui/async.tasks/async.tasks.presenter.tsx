@@ -1,4 +1,5 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { AsyncTaskActions } from "../../state/ducks/async.tasks";
@@ -174,7 +175,7 @@ const AsyncTasksPresenter: React.FunctionComponent<Props> = ({
             className={classes.optionSelect}
             onChange={handleChange}
           >
-            {dropDownOptions.sort((a, b) => (a.text > b.text) ? 1 : ((b.text > a.text) ? -1 : 0)).map((data, index) => (
+            {orderBy(dropDownOptions, ["text"], ["asc"]).map((data, index) => (
               <MenuItem key={data.value} value={data.text}>
                 {data.text}
               </MenuItem>

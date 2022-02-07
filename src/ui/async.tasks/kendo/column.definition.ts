@@ -13,13 +13,23 @@ const columns: KendoColumn[] = [
     showColumnMenu: false,
   },
   {
+    field: "createdAt",
+    title: "TimeStamp",
+    show: true,
+    filter: "text",
+    groupable: false,
+    locked: false,
+    orderIndex: 2,
+    showColumnMenu: false,
+  },
+  {
     field: "duration",
     title: "Duration",
     show: true,
     filter: "text",
     groupable: false,
     locked: false,
-    orderIndex: 2,
+    orderIndex: 3,
     showColumnMenu: false,
   },
   {
@@ -29,7 +39,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     locked: false,
-    orderIndex: 8,
+    orderIndex: 4,
     showColumnMenu: false,
   },
   {
@@ -39,7 +49,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     locked: false,
-    orderIndex: 9,
+    orderIndex: 5,
     showColumnMenu: false,
   },
   {
@@ -49,7 +59,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     locked: false,
-    orderIndex: 10,
+    orderIndex: 6,
     showColumnMenu: false,
   },
   {
@@ -59,7 +69,7 @@ const columns: KendoColumn[] = [
     filter: "text",
     groupable: false,
     locked: false,
-    orderIndex: 11,
+    orderIndex: 7,
     showColumnMenu: false,
   },
 ];

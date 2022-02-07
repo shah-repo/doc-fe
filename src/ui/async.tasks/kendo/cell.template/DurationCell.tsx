@@ -1,10 +1,12 @@
 import { GridCellProps } from "@progress/kendo-react-grid";
 import { get } from "lodash";
+import moment from "moment";
 import React from "react";
+import { MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import KendoGridStyles from "../styles";
 
-export const CommonCell = ({
+export const DurationCell = ({
   dataItem,
   rowType,
   colSpan,
@@ -23,7 +25,19 @@ export const CommonCell = ({
       data-grid-col-index={columnIndex}
       className={classes.groupCell}
     >
-      <Tooltip data={get(dataItem, field as string)} />
+      {field === "duration" ? (
+        <Tooltip
+          data={moment
+            .duration(get(dataItem, field as string), "seconds")
+            .humanize()}
+        />
+      ) : (
+        <Tooltip
+          data={moment
+            .utc(get(dataItem, field as string))
+            .format(MomentFormats.DateTimeSeconds)}
+        />
+      )}
     </td>
   );
 };

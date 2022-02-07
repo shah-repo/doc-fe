@@ -1186,6 +1186,8 @@
   "async.task.field.error": "Should be greather than 0",
   "async.task.next.task": "Next Task",
   "async.task.table.history": "TASK HISTORY",
+  "async.task.select.task.type": "SELECT TASK TYPE",
+  "async.task.select.next.task": "SELECT NEXT TASK",
   "kendo.groupPanelEmpty": "Drag & drop column header to group",
   "exportFileDownload.preparing": "Your request is being processed ...",
   "exportFileDownload.expired": "Link expired!",

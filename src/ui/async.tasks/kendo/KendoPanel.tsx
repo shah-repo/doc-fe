@@ -28,6 +28,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
+import { CommonCell } from "../../components/common/kendo.column.templates/CommonCell";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { hideColumnTitleOnResize } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
@@ -40,8 +41,10 @@ import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
 import Text from "../../components/Text";
 import useDidMount from "../../hooks/useDidMount";
-import { CommonCell } from "./cell.template/CommonCell";
+import { DurationCell } from "./cell.template/DurationCell";
+import { NextTaskDropDown } from "./cell.template/NextTaskDropDown";
 import { StatusDropDown } from "./cell.template/StatusDropDown";
+import { TaskTypeDropDown } from "./cell.template/TaskTypeDropDown";
 import KendoGridStyles from "./styles";
 
 let call: CancelTokenSource;
@@ -198,7 +201,6 @@ export function KendoPanel<T>({
         data = data.map((el) => ({
           ...el,
           nextTaskTypes: el.nextTaskTypes
-            .map((e) => e.taskType)
             .sort()
             .join(", "),
           status: el.status,
@@ -283,14 +285,17 @@ export function KendoPanel<T>({
 
   const filterCellMapping = {
     status: StatusDropDown,
+    taskType: TaskTypeDropDown,
+    nextTaskTypes: NextTaskDropDown,
   };
 
   const fieldToCellMapping = {
+    "createdAt": DurationCell,
     "taskType": CommonCell,
     "employee.user.name": CommonCell,
     "employee.user.email": CommonCell,
     "status": CommonCell,
-    "duration": CommonCell,
+    "duration": DurationCell,
     "nextTaskTypes": CommonCell,
   };
 
