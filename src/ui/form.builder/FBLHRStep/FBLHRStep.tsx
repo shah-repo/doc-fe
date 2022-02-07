@@ -57,6 +57,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             optionId={FBAutocompleteAsyncOption.mpiDocuments}
             gutter={false}
             autosave
+            rules="required"
             withState
             shouldReloadOnInit
             disabled={isOutput || !(isDraft || isPendingChange)}
