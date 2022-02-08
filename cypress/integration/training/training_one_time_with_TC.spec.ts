@@ -654,7 +654,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
-      cy.unClick();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -675,6 +674,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
     it("Select 'One-Time Training test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "One-Time Training test" });
+      cy.unClick();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -724,7 +724,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -788,8 +788,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  `${releasedFormId}` + filetime + ".zip";
         cy.downloadFile({
@@ -995,7 +995,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1059,8 +1059,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
         cy.downloadFile({
@@ -1209,7 +1209,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1272,8 +1272,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  = releasedFormId + filetime + "_rel.zip";
         cy.downloadFile({
@@ -1409,8 +1409,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
   context("Complete Training and check if TR is updated", () => {
     it(`Open assigned Training`, () => {
-      cy.contains(`FM-00002`).then((el) => {
-        const link = (el as any).attr("href");
+      cy.contains(`FM-00002`).then(($el) => {
+        const link = $el.attr("href");
         cy.visit(CONFIG.FE_URL + link);
       });
     });
