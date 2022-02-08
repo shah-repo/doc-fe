@@ -29,7 +29,7 @@ export const Default = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Tooltip data={value} tooltipContent={tooltipContent} showTooltip={showTooltip} />
+      <Tooltip data={value} {...{ tooltipContent, showTooltip }}  />
     </td>
   );
 };
