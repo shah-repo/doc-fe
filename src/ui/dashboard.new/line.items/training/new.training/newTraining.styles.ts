@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../../../layout/theme/utils/colors";
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     inline: {
       display: "inline",
@@ -11,6 +11,9 @@ export const styles = makeStyles(() =>
     },
     link: {
       color: Colors.black,
+    },
+    actionIcon: {
+      paddingLeft: theme.spacing(1.25),
     },
     actionIcons: {
       /* Action Icons */
@@ -26,7 +29,7 @@ export const styles = makeStyles(() =>
       right: "0px",
       top: "0px",
       /* Highlight */
-      background: Colors.sky_blue,
+      // background: Colors.sky_blue,
     },
     typographyDueInfewDays: {
       fontFamily: "Sora",
@@ -64,6 +67,9 @@ export const styles = makeStyles(() =>
       fontSize: "14px",
       lineHeight: "15px",
       letterSpacing: 0,
+    },
+    marginRight: {
+      marginRight: theme.spacing(2.25),
     },
     timestampContainer: {
       fontFamily: "Sora",
