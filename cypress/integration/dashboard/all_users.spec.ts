@@ -680,38 +680,39 @@ context("All regular users on new dashboard", () => {
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
+      cy.contains("CLOSED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Releasing FM-00004, Purchase Order form")
         .and("contain.text", "CLOSED");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(1)
+      cy.contains("CLOSED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(1)
         .should("contain.text", currentDate);
 
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiAvatar-root").eq(0)
-        .should("have.text", "GR");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
+      cy.contains("APPROVED").parent().parent().parent().parent().parent().parent().parent()
+        .find(".MuiAvatar-root").eq(0).should("have.text", "GR");
+
+      cy.contains("APPROVED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Releasing FM-00004, Purchase Order form")
         .and("contain.text", "APPROVED")
         .and("contain.text", USERS[1].name);
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
+      cy.contains("APPROVED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(1)
         .should("contain.text", currentDate);
 
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(0)
+      cy.contains("AR-00002").parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00002")
         .and("contain.text", "For first equipment")
         .and("contain.text", "IN REVIEW")
         .and("contain.text", "pending approvals from");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(1)
+      cy.contains("AR-00002").parent().parent().parent().parent().find(".MuiGrid-container").eq(1)
         .should("contain.text", USERS[2].name)
         .and("contain.text", currentDate);
 
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(0)
+      cy.contains("AR-00001").parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Equipment form")
         .and("contain.text", "IN REVIEW")
         .and("contain.text", "pending approvals from");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(1)
+      cy.contains("AR-00001").parent().parent().parent().parent().find(".MuiGrid-container").eq(1)
         .should("contain.text", USERS[2].name)
         .and("contain.text", currentDate);
     });
@@ -972,6 +973,18 @@ context("All regular users on new dashboard", () => {
         .and("contain.text", "Description:New Purchase Order")
         .and("contain.text", "Line Items:1")
         .and("contain.text", "Attachments test_image.jpg");
+    });
+
+    it("Buttons for PO should be displayed", () => {
+      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+        .find("svg").should("have.length", 4);
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+        .find("[data-cy=\"transition-download-pdf\"]").should("exist");
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+        .find("[data-cy=\"transition-approve\"]").should("exist");
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+        .find("[data-cy=\"transition-reject\"]").should("exist");
     });
   });
 
