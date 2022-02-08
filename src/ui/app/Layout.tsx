@@ -17,6 +17,7 @@ import { DocumentTypeManagementContainer } from "../document.type.management/ken
 import DocumentRevisionCreateContainer from "../documentRevision/DocumentRevisionCreate.container";
 import DocumentTypeListContainer from "../documentType/kendo/container";
 import GroupManagementListContainer from "../group.management/kendo/container";
+import Colors from "../layout/theme/utils/colors";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
@@ -44,7 +45,9 @@ const Layout: React.FunctionComponent<Props> = ({ classes }) => <div>
         leftSidebar={<Navigation />}
         header={<HeaderContainer />}
         footer={<WatermarkFooterContainer />}
-        contentBoxProps={{ stretchY: "calc(100% - 40px)" }}
+        templateBoxProps={{ stretchY: "100%", bgcolor: Colors.light_gray }}
+        headerBoxProps={{ maxHeight: "20%" }}
+        contentBoxProps={{ minHeight: "80%" }}
       >
         <Switch>
           <Route
