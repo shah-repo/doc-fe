@@ -487,8 +487,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
+      cy.get("@short_url").then((response) => {
+        downloadUrl = (response as any).body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  `${releasedFormId}` + filetime + ".zip";
         cy.downloadFile({
@@ -759,8 +759,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
           .as("short_url");
-        cy.get("@short_url").then(($response) => {
-          downloadUrl = $response.body.url;
+        cy.get("@short_url").then((response) => {
+          downloadUrl = (response as any).body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
           downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
           cy.downloadFile({
@@ -983,8 +983,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
           .as("short_url");
-        cy.get("@short_url").then(($response) => {
-          downloadUrl = $response.body.url;
+        cy.get("@short_url").then((response) => {
+          downloadUrl = (response as any).body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
           downloadFile  = releasedFormId + filetime + "_rel.zip";
           cy.downloadFile({
@@ -1051,10 +1051,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/EXCEL FOR IMPORT/);
 
-          tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
+          tmpRegex = new
+          RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
+          tmpRegex = new
+          RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/MASS CREATE LOGS/);
