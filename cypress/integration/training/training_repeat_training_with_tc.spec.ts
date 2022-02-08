@@ -666,9 +666,15 @@ context("Repeat Training with Training Curriculum", () => {
     it("Add Radio Button group", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).contains("Add a Field").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.get("[data-cy=\"form.builder.radiogroup\"]").last().contains("Radio Button group").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      cy.get("[data-cy=\"form.builder.radiogroup\"]").contains("Radio Button group").arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "Radio BTN req" });
       cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
@@ -708,7 +714,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -771,8 +777,8 @@ context("Repeat Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  releasedFormId + filetime + "_rel.zip";
         cy.downloadFile({
@@ -998,7 +1004,7 @@ context("Repeat Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
   });
 
@@ -1055,8 +1061,8 @@ context("Repeat Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  releasedFormId + filetime + "_draft.zip";
         cy.downloadFile({
@@ -1194,7 +1200,7 @@ context("Repeat Training with Training Curriculum", () => {
         releasedFormId = x.text();
       });
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+      cy.sendToEmail();
     });
   });
 
@@ -1251,8 +1257,8 @@ context("Repeat Training with Training Curriculum", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  releasedFormId + filetime + "_rel.zip";
         cy.downloadFile({
