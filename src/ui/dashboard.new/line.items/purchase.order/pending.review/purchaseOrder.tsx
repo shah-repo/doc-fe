@@ -223,7 +223,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" alignItems="center">
                 <Grid item={true}>
                   <Link
                     href={documentVersionPath(docRevId || "", docDocumentId)}
