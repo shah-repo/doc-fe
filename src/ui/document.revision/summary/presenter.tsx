@@ -150,7 +150,6 @@ const Presenter: React.FunctionComponent<Props> = ({
     <Box>
       <Grid
         container={true}
-        className={classes.previewBox}
         spacing={4}
         direction="column"
       >

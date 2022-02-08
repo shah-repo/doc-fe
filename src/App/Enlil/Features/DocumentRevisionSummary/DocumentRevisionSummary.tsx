@@ -1,7 +1,6 @@
-import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFooter, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import { checkIsDocumentForm } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -21,6 +20,9 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   isFB,
 }) => (
   <SMForm
+    templateBoxProps={{ stretchY: "100%" }}
+    headerBoxProps={{ maxHeight: "30%" }}
+    contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
     values={documentRevision}
     header= {
       <SummaryHeader
@@ -28,49 +30,59 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         {...{ documentRevision, canChangeOwnerShip }}
       />
     }
-    footer={<DocumentRevisionFooter />}
-    {..._documentRevisionFormState?.id && {
-      rightSidebar: (
+  >
+    <SMTemplate
+      templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
+      contentBoxProps={{ stretchY: "100%" }}
+      rightSidebarBoxProps={{ zIndex: 2 }}
+      {..._documentRevisionFormState?.documentRevision && {
+        rightSidebar: (
+          <Observer>
+            {() => <DocumentRevisionSidebar />}
+          </Observer>
+        ),
+      }}
+    >
+      <SMTemplate
+        templateBoxProps={{ stretchY: "100%" }}
+        headerBoxProps={{ maxHeight: "80%" }}
+        contentBoxProps={{ minHeight: "20%", height: "100%" }}
+        footer={<DocumentRevisionFooter />}
+        header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}
+      >
         <Observer>
           {() => (
-            <>{_documentRevisionFormState?.documentRevision && <DocumentRevisionSidebar />}</>
+            <SMTabs
+              onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
+              tabs={isFB ? ["sm.overview", "sm.general"] : ["sm.overview"]}
+              boxProps={{ stretchY: "100%" }}
+            >
+              <SMBox stretchY="100%" overflow={"auto"} {...{ onScroll }}>
+                <SMBox mt={8} px={6} stretchY="100%">
+                  <SummaryPresenter
+                    dataProp={documentRevision}
+                    canChangeOwnerShip={canChangeOwnerShip}
+                    canShowCreateVersionButton={true}
+                  />
+                </SMBox>
+              </SMBox>
+              {isFB && (
+                <SMBox height="100%" overflow={"auto"} {...{ onScroll }}>
+                  <SMBox mt={8} px={6} stretchY="100%">
+                    <FBWorkspace
+                      document={documentRevision}
+                      initialValues={documentRevision.formInput}
+                      schema={schema}
+                      mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
+                        "formPreview" : "preview"}
+                    />
+                  </SMBox>
+                </SMBox>
+              )}
+            </SMTabs>
           )}
         </Observer>
-      ),
-    }}
-  >
-    <SMTemplate header={<DocumentRevisionSummaryHeader {...{ documentRevision }} />}>
-      <Observer>
-        {() => (
-          <SMTabs
-            onChange={(ev, newValue) => onTabChange?.(ev, newValue)}
-            tabs={isFB ? ["sm.overview", "sm.general"] : ["sm.overview"]}
-            boxProps={{
-              height: "calc(100vh - 170px)",
-              overflow: "auto",
-              onScroll,
-              bgcolor: Colors.light_gray,
-            }}
-          >
-            <SummaryPresenter
-              dataProp={documentRevision}
-              canChangeOwnerShip={canChangeOwnerShip}
-              canShowCreateVersionButton={true}
-            />
-            {isFB && (
-              <Box mt={5} paddingY={2} paddingX={5} height="calc(100vh - 70px)" overflow="auto">
-                <FBWorkspace
-                  document={documentRevision}
-                  initialValues={documentRevision.formInput}
-                  schema={schema}
-                  mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
-                    "formPreview" : "preview"}
-                />
-              </Box>
-            )}
-          </SMTabs>
-        )}
-      </Observer>
+      </SMTemplate>
     </SMTemplate>
   </SMForm>
 );

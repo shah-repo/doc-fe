@@ -3,7 +3,7 @@ import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionSidebarProps, SMText } from "../../../../..";
+import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
 import { ReactComponent as BadgeIcon } from "../../../../../../../src/assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../../../../../../src/assets/images/bookmark.svg";
 import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
@@ -54,7 +54,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
       >
         <Box
           display="flex"
-          p={0.5}
+          height={56}
           alignItems="center"
         >
           <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
@@ -70,7 +70,13 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             </Typography>
           )}
         </Box>
-        <Box display="flex" p={0.5} height="100%" borderTop={1} borderColor={Colors.medium_gray}>
+        <SMBox
+          display="flex"
+          p={0.5}
+          stretchY="calc(100% - 56px)"
+          borderTop={1}
+          borderColor={Colors.medium_gray}
+        >
           <SidebarContainer
             sidebarList={[
               {
@@ -187,7 +193,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             ]
             }
           />
-        </Box>
+        </SMBox>
       </Box>
     )}
   </Observer>

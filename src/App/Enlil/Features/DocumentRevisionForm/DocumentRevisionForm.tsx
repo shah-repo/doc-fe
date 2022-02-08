@@ -42,8 +42,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
 }) => (
   <SMForm
     templateBoxProps={{ stretchY: "100%" }}
-    contentBoxProps={{ minHeight: "70%" }}
     headerBoxProps={{ maxHeight: "30%" }}
+    contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
     values={formValues.values}
     header= {
       <DocumentRevisionHeader
@@ -56,26 +56,20 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
       contentBoxProps={{ stretchY: "100%" }}
       rightSidebarBoxProps={{ zIndex: 2 }}
-      {..._documentRevisionFormState?.id && {
+      {..._documentRevisionFormState?.documentRevision && {
         rightSidebar: (
           <Observer>
-            {() => (
-              <>
-                {_documentRevisionFormState?.documentRevision && <DocumentRevisionSidebar />}
-              </>
-            )}
+            {() => <DocumentRevisionSidebar />}
           </Observer>
         ),
       }}
     >
       <SMTemplate
         templateBoxProps={{ stretchY: "100%" }}
-        footerBoxProps={{ maxHeight: "10%" }}
         headerBoxProps={{ maxHeight: "80%" }}
-        contentBoxProps={{ minHeight: "10%" }}
+        contentBoxProps={{ minHeight: "20%", height: "100%" }}
         footer={<DocumentRevisionFooter />}
         header={<DocumentRevisionFormHeader />}
-
       >
         <Observer>
           {() => (

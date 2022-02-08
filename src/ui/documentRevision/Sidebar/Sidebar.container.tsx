@@ -9,7 +9,7 @@ interface SidebarContainerProps {
   setOpen?: (value: boolean) => void;
 }
 
-export const SidebarContainer: React.FunctionComponent<
+const SidebarContainer: React.FunctionComponent<
   SidebarContainerProps
 > = ({
   sidebarList,

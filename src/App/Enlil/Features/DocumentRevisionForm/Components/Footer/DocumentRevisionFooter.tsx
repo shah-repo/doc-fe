@@ -12,7 +12,7 @@ const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProp
   <Observer>
     {() => (
       <Box
-        py={2.5}
+        height={50}
         display={_documentRevisionFooterState?.hidden ? "none" : "flex"}
         justifyContent="center"
         alignItems="center"

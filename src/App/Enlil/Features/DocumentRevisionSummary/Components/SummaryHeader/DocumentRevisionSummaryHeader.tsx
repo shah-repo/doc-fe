@@ -23,7 +23,7 @@ const DocumentRevisionSummaryHeader: React.FunctionComponent<DocumentRevisionSum
   <Observer>
     {() => (
       <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-        <Box py={1} px={6}>
+        <Box py={3} px={6}>
           {isCRLinkVisible && <ChangeRequestLink dataProp={documentRevision} />}
           {isTitleVisible && (
             <CustomLabelTooltip {...{ tooltipConfig }}>
