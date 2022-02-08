@@ -487,7 +487,7 @@ export function KendoPanel<T>({
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
-      minResizableWidth={100}
+      minResizableWidth={200}
       headerCell={
         column.title ? (props) => <ColumnHeader {...props} /> : undefined
       }

@@ -90,7 +90,11 @@ const kendoConfigSchema = new schema.Object({ filter: filters, groups });
  */
 export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
   if (columnWidth < 100) {
-    return (gridWidth / 100) * columnWidth;
+    let width = (gridWidth / 100) * columnWidth;
+    if (width <= 200) {
+      width = 200;
+    }
+    return width;
   }
   return columnWidth;
 };

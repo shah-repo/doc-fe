@@ -32,6 +32,8 @@ export const withFBLHRBuild = <T extends FBLHRBuildProps>(
     useEffect(() => {
       const isOutput = workspaceState?.isOutput;
       const savedData = get(workspaceState?.document?.formInput, name);
+      formState?.validate();
+
       if (isOutput && savedData === FBLHRBuildOptions["R&D"]) {
         lhrBuildState?.setDisabled(true);
       }

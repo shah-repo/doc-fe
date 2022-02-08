@@ -852,7 +852,7 @@ context("Training user groups test", () => {
     });
 
     it(`Verify training notification ${releasedFormId}`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Logout user", () => {
@@ -906,7 +906,7 @@ context("Training user groups test", () => {
 
   context("Open and complete Training", () => {
     it(`Open assigned Training`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form Rev 1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Complete Training", () => {

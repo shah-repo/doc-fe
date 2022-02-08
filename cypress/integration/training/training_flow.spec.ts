@@ -1051,7 +1051,7 @@ context("Training Flow test", () => {
     });
 
     it("Verify training notification", () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form Rev 1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });
 
@@ -1068,7 +1068,7 @@ context("Training Flow test", () => {
           }
         });
       }).as("response");
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form Rev 1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
       cy.wait("@response");
     });
 
@@ -1175,7 +1175,7 @@ context("Training Flow test", () => {
     });
 
     it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}released form Rev 1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Open assigned Training and get training Id", () => {
@@ -1188,7 +1188,7 @@ context("Training Flow test", () => {
         });
       }).as("response");
 
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}released form Rev 1` });
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
 
       cy.wait("@response");
     });
