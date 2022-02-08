@@ -28,6 +28,7 @@ declare global {
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      sendToEmail(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -190,6 +191,11 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
   });
 });
 
+Cypress.Commands.add("sendToEmail", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PostExportRev, () => {
+    cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  });
+});
 
 Cypress.Commands.add("myCompanies", (token: string) => {
   cy.request({

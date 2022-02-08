@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import {
   DataResult, process,
   State,
@@ -490,9 +490,9 @@ export function KendoGrid<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div style={{ color: "red" }}>{apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

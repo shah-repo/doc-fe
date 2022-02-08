@@ -683,15 +683,7 @@ context("Training notification test", () => {
     });
 
     it("Approve AR", () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover").wait(1000);
-      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew, CyRoutes.GetPendingActions],
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.arApproveARFromDashboard();
     });
 
     it("Logs user in", () => {
@@ -738,10 +730,8 @@ context("Training notification test", () => {
       cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(500);
-      cy.go("back");
-      cy.wait(1000);
+      cy.sendToEmail();
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -801,8 +791,8 @@ context("Training notification test", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  trnId + filetime + ".zip";
         cy.downloadFile({
@@ -897,10 +887,8 @@ context("Training notification test", () => {
       cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-      cy.wait(500);
-      cy.go("back");
-      cy.wait(1000);
+      cy.sendToEmail();
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
       cy.checkToastMessageContains({
@@ -958,8 +946,8 @@ context("Training notification test", () => {
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
         downloadFile  =  trnId + filetime + ".zip";
         cy.downloadFile({

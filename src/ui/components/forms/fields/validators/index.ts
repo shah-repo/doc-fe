@@ -57,3 +57,24 @@ export const validator = (...validators: Validator[]): Validator => (value: any)
     }
   }
 };
+
+export const timeTravelValidator = Yup.object().shape({
+  year: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+  month: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+  day: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+  hour: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+  minute: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+  second: Yup.string()
+    .required("async.task.filed.error")
+    .matches(/^[0-9]+$/),
+});
