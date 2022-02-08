@@ -299,13 +299,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-        CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
     it("Check if Title input field is disabled", () => {
@@ -355,9 +349,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
-      });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
     it("Check field for first operator is not disabled", () => {
@@ -393,9 +385,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
-      });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
     });
 
     it("Add Owner as Approver on document", () => {
@@ -443,9 +433,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
-      });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
     });
 
     it("Approve record button click", () => {
@@ -471,9 +459,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Filter document by name and status, and select it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.DocRevPreview], () => {
-        cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
-      });
+      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "In Review" });
     });
 
     it("Approve record button click", () => {
