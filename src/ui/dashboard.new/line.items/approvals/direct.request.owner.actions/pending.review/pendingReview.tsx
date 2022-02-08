@@ -307,7 +307,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {pinned && (
-          <div className={classes.actionIcons}>
+          <div className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
               placement="top"
