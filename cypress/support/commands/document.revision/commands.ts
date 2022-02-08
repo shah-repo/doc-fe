@@ -497,10 +497,8 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
-    cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
