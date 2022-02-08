@@ -11,8 +11,11 @@ export const Default = ({
   className,
   columnIndex,
   cellRowClick,
+  showTooltip,
+  tooltipField = "",
 }: CustomGridCellProps) => {
   const value = get(dataItem, field || "");
+  const tooltipContent = get(dataItem, tooltipField || "");
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
@@ -26,7 +29,7 @@ export const Default = ({
       data-grid-col-index={columnIndex}
       onClick={cellClickEvent}
     >
-      <Tooltip data={value}/>
+      <Tooltip data={value} tooltipContent={tooltipContent} showTooltip={showTooltip} />
     </td>
   );
 };
