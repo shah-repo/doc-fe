@@ -1,7 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+import "moment-timezone";
+import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -17,6 +20,20 @@ let testPublicType;
 let formDocumentType;
 let createdDocumentForBulkCreation;
 let testDocumentTypeDocument;
+let releasedFormId;
+let emailsFromInbox;
+let cdata;
+let page1; let page2; let page3;
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+const downloaddDirectory  = "cypress/downloads";
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Bulk create public, private and reserved doc-ids", () => {
   before(() => {
@@ -400,6 +417,221 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
   });
 
+  context("Verify Bulk Create form title report", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "Bulk create form");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for bulk create form notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date();
+      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>"],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+  context("Verify that zip file containing pdf downloaded", () => {
+
+    it("Download zip file containing training form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+        .as("short_url");
+      cy.get("@short_url").then(($response) => {
+        downloadUrl = $response.body.url;
+        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+        downloadFile  =  `${releasedFormId}` + filetime + ".zip";
+        cy.downloadFile({
+          url: downloadUrl,
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = downloaddDirectory + "/" + downloadFile;
+      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: downloaddDirectory,
+          fileName: downloadFile,
+        });
+      const pdffile = downloaddDirectory + "/" + downloadFile.replace(".zip", "") + "/" +
+      `${releasedFormId}-1-Bulk-create-form.pdf`;
+      cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for bulk create form", () => {
+      cy.pdfparseFile(
+        {
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${releasedFormId}-1-Bulk-create-form.pdf`,
+        }).then((content) => {
+        cdata = content;
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        page1 = page2 = page3 = "";
+
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            page1 = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            page2 = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            page3 = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for bulk create form", () => {
+      const el = page1;
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/AR ID\nAR-00006/);
+
+        expect(el).match(/Description\nBulk create form description/);
+
+        expect(el).match(/Output Document Type\nBulk Create/);
+
+        expect(el).match(/Attachments\nNone/);
+
+        expect(el).match(/Select Form Document For Import/);
+
+        expect(el).match(/Select Output Document Type/);
+
+        expect(el).match(/EXCEL FOR IMPORT/);
+
+        tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Upload excel with data for import/);
+
+        expect(el).match(/MASS CREATE LOGS/);
+
+        expect(el).match(/Logs/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 for bulk create form", () => {
+      const el = page2;
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 for bulk create form", () => {
+      const el = page3;
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `AR-000061N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
+    });
+  });
+
+
   context("Test private pool document type", () => {
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
@@ -457,6 +689,191 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Check doc Draft status and click on Send To Email", () => {
+        cy.get("#HeaderInfo-status").should("have.text", "Draft");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
+        cy.get("#HeaderInfo-docId").then((x) => {
+          releasedFormId = x.text();
+        });
+        cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        cy.sendToEmail();
+      });
+
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
+
+    context("Verify email for draft bulk create notification", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>"],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify zip file downloaded", () => {
+      it("Download zip file containing training notification", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+          .as("short_url");
+        cy.get("@short_url").then(($response) => {
+          downloadUrl = $response.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: downloaddDirectory,
+            fileName: downloadFile,
+          });
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = downloaddDirectory + "/" + downloadFile;
+        cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      });
+
+      it("extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: downloaddDirectory,
+            fileName: downloadFile,
+          });
+      });
+    });
+
+    context("Verify PDF file content for draft document", () => {
+      it("Extract texts from PDF file content for draft document", () => {
+        cy.pdfparseFile({
+          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
+        }).then((content) => {
+          cdata = content;
+          expect(cdata.numpages).eq(2);
+          expect(cdata.text).match(/Page 1 of 2/);
+          expect(cdata.text).match(/Page 2 of 2/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          page1 = page2 = "";
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 2")) {
+              page1 = element;
+            }
+            if (element.includes("Page 2 of 2")) {
+              page2 = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for draft document", () => {
+        const el = page1;
+        if (el.includes("Page 1 of 2")) {
+          tmpRegex = new
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Description\nBulk Creation document description/);
+
+          expect(el).match(/Attachments\nNone/);
+
+          expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
+
+          expect(el).match(/Select Output Document Type\nTest Private Pool/);
+
+          expect(el).match(/EXCEL FOR IMPORT/);
+
+          tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
+
+          expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
+
+          expect(el).match(/Draft/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 2/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(cdata.text).not.match(tmpRegex);
+        }
+      });
+      it("Verify page 2 for draft document", () => {
+        const el = page2;
+        if (el.includes("Page 2 of 2")) {
+          tmpRegex = new
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Draft/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 2 of 2/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(cdata.text).not.match(tmpRegex);
+        }
+      });
+    });
+
+    context("Release the bulk create document", () => {
 
       it("Submit for approval", () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -494,6 +911,192 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Approve record", () => {
         cy.ebApprove();
+      });
+
+      it("Check doc Released status and click on Send To Email", () => {
+        cy.get("#HeaderInfo-status").should("have.text", "Released");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
+        cy.get("#HeaderInfo-docId").then((x) => {
+          releasedFormId = x.text();
+        });
+        cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        cy.sendToEmail();
+      });
+
+      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+      });
+    });
+
+    context("Verify email for training released notification", () => {
+      it("Get emails", () => {
+        dateAfterEmailShouldArrive = new Date();
+        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+
+        const getEmailSetting =  {
+          to: CONFIG.TEST_EMAIL,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          wait_time_sec: 5,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          max_wait_time_sec: 50,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
+          after: dateAfterEmailShouldArrive,
+          subject: `Export for document ${releasedFormId}`,
+        };
+
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+          if (emails) {
+            emailsFromInbox = emails;
+            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+          }
+          else {
+            assert.fail("No email found");
+          }
+        });
+      });
+
+      it("Verify the emails that should be received", () => {
+        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+          {
+            sentToUser: USERS[1].email,
+            contains: [`Hello <b>${USERS[1].name},</b>`,
+              "Your documents are ready for download.",
+              "<button type=\"button\">DOWNLOAD</button>"],
+          }];
+
+        cy.imapVerifyEmailsInList({
+          receivedEmails: emailsFromInbox,
+          emailsToTest: emailsThatShouldBeReceived,
+          getEmailsSincedate: dateAfterEmailShouldArrive,
+          assertNumberOfEmailsFoundInList: 1,
+        });
+      });
+    });
+
+    context("Verify PDF file downloaded", () => {
+      it("Extract download link from gmail", () => {
+        expect(downloadUrl).contains("exported_file_download");
+        fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
+          .as("short_url");
+        cy.get("@short_url").then(($response) => {
+          downloadUrl = $response.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  = releasedFormId + filetime + "_rel.zip";
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: downloaddDirectory,
+            fileName: downloadFile,
+          });
+        });
+      });
+
+      it("Verify file size of the downloaded zip file", () => {
+        const zipfile = downloaddDirectory + "/" + downloadFile;
+        cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      });
+
+      it("extract pdf file from zip file", () => {
+        cy.unzipFile(
+          {
+            directory: downloaddDirectory,
+            fileName: downloadFile,
+          });
+      });
+    });
+
+    context("Verify PDF file content", () => {
+      it("Extract texts from PDF file content for released document", () => {
+        cy.pdfparseFile(
+          {
+            directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+            fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
+          }).then((content) => {
+          cdata = content;
+          expect(cdata.numpages).eq(2);
+          expect(cdata.text).match(/Page 1 of 2/);
+          expect(cdata.text).match(/Page 2 of 2/);
+          tmpRegex = new RegExp( "\\n\\n");
+          const arr = cdata.text.split(tmpRegex);
+          page1 = page2 = "";
+          arr.forEach((element) => {
+            if (element.includes("Page 1 of 2")) {
+              page1 = element;
+            }
+            if (element.includes("Page 2 of 2")) {
+              page2 = element;
+            }
+          });
+        });
+      });
+
+      it("Verify page 1 for released document", () => {
+        const el = page1;
+        if (el.includes("Page 1 of 2")) {
+          tmpRegex = new
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Description\nBulk Creation document description/);
+
+          expect(el).match(/Attachments\nNone/);
+
+          expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
+
+          expect(el).match(/Select Output Document Type\nTest Private Pool/);
+
+          expect(el).match(/EXCEL FOR IMPORT/);
+
+          tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/MASS CREATE LOGS/);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 1 of 2/);
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(cdata.text).not.match(tmpRegex);
+        }
+      });
+      it("Verify page 2 for released document", () => {
+        const el = page2;
+        if (el.includes("Page 2 of 2")) {
+          tmpRegex = new
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/\(file\) Logs\nBulkProcessLogs.txt/);
+
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Released/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 2 of 2/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(cdata.text).not.match(tmpRegex);
+        }
       });
     });
 
