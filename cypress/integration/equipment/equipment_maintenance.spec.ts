@@ -185,7 +185,6 @@ context("Equipment maintenance test", () => {
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],
@@ -201,7 +200,6 @@ context("Equipment maintenance test", () => {
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
-                      fields: [],
                       type: "calibration",
                     },
                     editorProperties: [],
