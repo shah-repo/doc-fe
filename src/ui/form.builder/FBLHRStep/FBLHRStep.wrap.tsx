@@ -1,5 +1,5 @@
 import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { find, flattenDeep, lowerCase, omit } from "lodash";
+import { find, flattenDeep, isEmpty, lowerCase, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -191,7 +191,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
       const { inputValue = "" } = state || {};
 
-      if (documentType.length === 0 && revisionStatus.length === 0) {
+      if (isEmpty(documentType) && isEmpty(revisionStatus)) {
         return data?.filter((docRev) => filterOutOption(docRev, inputValue));
       }
       const options = data?.filter((docRev) => {
@@ -200,6 +200,14 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
           document: { documentType: { id: docTypeId = "" } = {} } = {},
         } = docRev || {};
 
+        if (isEmpty(documentType)) {
+          return revisionStatus.includes(status) &&
+          filterOutOption(docRev, inputValue);
+        }
+        if (isEmpty(revisionStatus)) {
+          return documentType.includes(docTypeId) &&
+          filterOutOption(docRev, inputValue);
+        }
         return revisionStatus.includes(status) &&
           documentType.includes(docTypeId) &&
           filterOutOption(docRev, inputValue);
