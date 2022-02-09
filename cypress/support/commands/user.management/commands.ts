@@ -13,6 +13,7 @@ declare global {
       usrGetInitials(params: {fullName: string}): Chainable;
       usrEnterEmail(params: {email: string}): Chainable;
       usrEnterName(params: {name: string}): Chainable;
+      usrClickEditUser(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
       usrCheckIfUserIsCreated(params: {email: string}): Chainable;
@@ -40,6 +41,11 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
   cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name);
 });
 
+Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").eq(1)
+    .arrowClick();
+});
+
 Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
   function getInitials(fullName) {
     const nameArr = fullName.split("");
@@ -64,13 +70,9 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 });
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#clearFilter").arrowClick();
-  });
-  cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-    cy.get("#email").arrowType(params.email);
-  });
-  cy.get("div.ReactVirtualized__Table__rowColumn:nth-child(2)>div>div>div").should("contain.text", params.email);
+  cy.get("#clearFilter").arrowClick();
+  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.get("tr.k-master-row").should("contain.text", params.email);
 });
 
 Cypress.Commands.add("authLoginWithInvalidPassword", (params: { email: string; password: string }) => {
