@@ -338,7 +338,7 @@ export interface DocumentType {
   privateNumberPool?: boolean;
   canRedLine?: boolean;
   needsSignature?: boolean;
-  startingNumber?: string;
+  startingNumber?: number;
   category?: string;
   active?: boolean;
   equipmentEnforceProd?: boolean;

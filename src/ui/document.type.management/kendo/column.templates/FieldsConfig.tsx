@@ -1,8 +1,9 @@
 import { GridCellProps } from "@progress/kendo-react-grid";
-import { get } from "lodash";
+import { get, set } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as FieldConfigIcon } from "../../../../assets/images/grid_field_config.svg";
+import Config from "../../../../config";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import checkIfJSONObject from "../helper";
@@ -37,7 +38,7 @@ export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
     if ((fieldConfigValue && typeof fieldConfigValue === "object") || (fieldConfigValue === "")) {
       onChange({
         dataIndex: 0,
-        dataItem,
+        dataItem: set(dataItem, field || "", fieldConfigValue),
         field,
         value: fieldConfigValue,
         syntheticEvent,
@@ -84,7 +85,7 @@ export const FieldsConfig: React.FunctionComponent<GridCellProps> = ({
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}
           item={formattedValue}
-          isEdit={isEdit}
+          isEdit={isEdit || !Config.docTypeManagementEditDisabled}
           fieldName={field}
           openForm={openForm}
         />
