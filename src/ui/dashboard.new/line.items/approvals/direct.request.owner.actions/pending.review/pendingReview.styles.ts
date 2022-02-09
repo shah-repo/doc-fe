@@ -1,7 +1,7 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../../../../layout/theme/utils/colors";
 
-export const styles = makeStyles(() =>
+export const styles = makeStyles((theme: Theme) =>
   createStyles({
     inline: {
       display: "inline",
@@ -51,6 +51,9 @@ export const styles = makeStyles(() =>
       top: "0px",
       /* Highlight */
       background: Colors.sky_blue,
+    },
+    actionIcon: {
+      paddingLeft: theme.spacing(1.25),
     },
     viewTooltipText: {
       fontFamily: "Sora",
