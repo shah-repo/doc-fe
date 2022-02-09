@@ -49,6 +49,7 @@ export const CommandCell = ({
   const asyncName = useAsync<GetEmployeeResponse[]>({
     onSuccess: (data: GetEmployeeResponse[] = []) => {
       if (data.length === 0) {
+        set(dataItem, "id", null);
         add(dataItem as UserManage);
         return;
       }
