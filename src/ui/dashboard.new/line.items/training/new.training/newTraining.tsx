@@ -216,7 +216,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     title={
                       <>
                         <Text translation="dashboard.revision" />
-                      &nbsp;{docRevVersion} {docRevName}
+                        &nbsp;{docRevVersion} {docRevName}
                       </>
                     }
                     placement="top-start"
@@ -237,7 +237,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         noWrap
                       >
                         <Text translation="dashboard.revision" />
-                      &nbsp;{docRevVersion} {docRevName}
+                        &nbsp;{docRevVersion} {docRevName}
                       </Typography>
                     </Link>
                   </StyleTooltip>
@@ -344,7 +344,11 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   <Typography
                     component="span"
                     variant="caption"
-                    className={pinned || hoverItem ?  `${classes.timestampContainer} ${classes.marginRight}` : classes.timestampContainer}
+                    className={
+                      pinned || hoverItem
+                        ? `${classes.timestampContainer} ${classes.marginRight}`
+                        : classes.timestampContainer
+                    }
                     color="textSecondary"
                     noWrap
                   >
