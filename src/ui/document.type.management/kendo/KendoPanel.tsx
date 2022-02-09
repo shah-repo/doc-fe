@@ -38,10 +38,8 @@ import useDialog from "../../hooks/useDialog";
 import ExportDAMDetails from "../export.dam.details/exportDAMDetails";
 import { toDocumentTypeBody } from "../transform";
 import { CommandCell } from "./column.templates/CommandCell";
-import { FieldsConfig } from "./column.templates/FieldsConfig";
 import { NewRowObject } from "./column.templates/NewRowObject";
-import { Schema } from "./column.templates/Schema";
-import { DTMCellTemplateMapping, DTMCellTemplates } from "./config";
+import { DTMCellTemplateMapping } from "./config";
 import { getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
 import KendoGridStyles from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
@@ -264,44 +262,8 @@ export function KendoPanel<T extends { id?: string }>({
     DropdownFilterCellTemplate,
     BooleanFilterCell,
   };
-  const onChangeSchema = (data) => {
-    if (!data.dataItem.inEdit && !Config.docTypeManagementEditDisabled) {
-      async.start(
-        updateDocumentTypeAction,
-        data.dataItem.id,
-        {
-          schema: data.value,
-        },
-        async
-      );
-    }
-  };
-  const onChangeFieldsConfig = (data) => {
-    if (!data.dataItem.inEdit && !Config.docTypeManagementEditDisabled) {
-      async.start(
-        updateDocumentTypeAction,
-        data.dataItem.id,
-        {
-          fieldsConfig: data.value,
-        },
-        async
-      );
-    }
-  };
-
 
   const renderCol = (props, col: KendoColumn) => {
-    if (col.cell === DTMCellTemplates.SCHEMA) {
-      return <Schema
-        {...props}
-        onChange={onChangeSchema}
-      />;
-    } else if (col.cell === DTMCellTemplates.FIELDS_CONFIG) {
-      return <FieldsConfig
-        {...props}
-        onChange={onChangeFieldsConfig}
-      />;
-    }
     const template = DTMCellTemplateMapping[col.cell || ""];
     if (template) {
       return template(props);

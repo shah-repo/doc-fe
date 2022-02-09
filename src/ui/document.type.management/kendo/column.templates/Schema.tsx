@@ -1,9 +1,8 @@
 import { GridCellProps } from "@progress/kendo-react-grid";
-import { get, set } from "lodash";
+import { get } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as SchemaIcon } from "../../../../assets/images/grid_schema.svg";
-import Config from "../../../../config";
 import { DisplayText, TranslatedText } from "../../../components/common/kendo/helpers";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 import checkIfJSONObject from "../helper";
@@ -38,7 +37,7 @@ export const Schema: React.FunctionComponent<GridCellProps> = ({
     if ((schemaValue && typeof schemaValue === "object") || (schemaValue === "")) {
       onChange({
         dataIndex: 0,
-        dataItem: set(dataItem, field || "", schemaValue),
+        dataItem,
         field,
         value: schemaValue,
         syntheticEvent,
@@ -84,7 +83,7 @@ export const Schema: React.FunctionComponent<GridCellProps> = ({
           cancelEdit={handleCancelEdit}
           addClick={onAddClick}
           item={formattedValue}
-          isEdit={isEdit || !Config.docTypeManagementEditDisabled}
+          isEdit={isEdit}
           fieldName={field}
           openForm={openForm}
         />
