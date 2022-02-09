@@ -98,6 +98,7 @@ const columns: KendoColumn[] = [{
 }, {
   field: "startingNumber",
   title: "common.starting.number",
+  filter: "numeric",
   show: true,
   width: "185px",
   groupable: false,
