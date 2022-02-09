@@ -301,11 +301,11 @@ context("Records flow", () => {
       it("Check for Landing page default columns", () => {
         SystemRequirement("REQ-2740");
         cy.filterCheckHeaderValues("ID",
-          "REVISION", "STATE",
-          "TITLE",
-          "OWNER",
-          "RELEASED DATE",
-          "FORM ID");
+          "Revision", "State",
+          "Title",
+          "Owner",
+          "Released Date",
+          "Form ID");
       });
     });
 
