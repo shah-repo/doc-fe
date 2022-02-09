@@ -17,6 +17,7 @@ export default makeStyles((theme: Theme) =>
       },
       "& svg": {
         stroke: Colors.white,
+        fontSize: "1.2rem",
       },
     },
     childLink: {

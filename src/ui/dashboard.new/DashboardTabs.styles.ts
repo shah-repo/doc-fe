@@ -13,7 +13,7 @@ export const styles = makeStyles(() =>
       fontFamily: "Sora",
       fontStyle: "normal",
       marginLeft: 10,
-      fontSize: "14px",
+      fontSize: "16px",
       fontWeight: 400,
       letterSpacing: "0.25px",
     },

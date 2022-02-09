@@ -100,9 +100,12 @@ export const styles = makeStyles((theme: Theme) =>
       right: "77.94%",
       top: "0%",
       bottom: "0%",
-      background: Colors.medium_light_shade_gray,
       width: "30px",
       height: "30px",
+      fontFamily: "Sora",
+      fontSize: 12,
+      fontWeight: 600,
+      color: Colors.white,
     },
     listitemtext: {
       position: "static",
