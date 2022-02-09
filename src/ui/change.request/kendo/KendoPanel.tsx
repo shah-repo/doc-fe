@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, findIndex, isEmpty, map, pick, startCase } from "lodash";
+import { compact, find, findIndex, isEmpty, map, pick, startCase } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -237,6 +237,7 @@ export function KendoPanel<T>({
         data = map(data, (record) =>
           pick(record, [
             ...map(gridConfiguration.columns, "field"),
+            ...compact(map(gridConfiguration.columns, "tooltipField")),
             "id",
             "crId",
             "owner.user.avatar",
@@ -486,7 +487,17 @@ export function KendoPanel<T>({
       key={index}
       {...column}
       title={startCase(getTranslatedText(column.title))}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
+      cell={(props) =>
+        RenderCustomCell(
+          {
+            ...props,
+            cellRowClick: onRowClick,
+            showTooltip: column.showTooltip,
+            tooltipField: column.tooltipField,
+          },
+          column.cell || ""
+        )
+      }
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}

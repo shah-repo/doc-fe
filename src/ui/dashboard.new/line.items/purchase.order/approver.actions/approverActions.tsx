@@ -212,7 +212,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" alignItems="center">
                 <Grid item={true}>
                   <Typography
                     component="span"
@@ -355,7 +355,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Link
                       href={
-                        docRevName
+                        docRevId
                           ? documentVersionPath(docRevId || "", docDocumentId)
                           : "#"
                       }

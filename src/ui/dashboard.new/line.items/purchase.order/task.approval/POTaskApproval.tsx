@@ -314,7 +314,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Link
                       href={
-                        docRevName
+                        docRevId
                           ? documentVersionPath(docRevId || "", docDocumentId)
                           : "#"
                       }
