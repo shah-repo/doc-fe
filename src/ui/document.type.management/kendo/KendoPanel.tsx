@@ -333,7 +333,7 @@ export function KendoPanel<T extends { id?: string }>({
       isQms: dataItem.isQms,
       needsSignature: dataItem.needsSignature,
       defaultTraining: dataItem.defaultTraining,
-      startingNumber: dataItem.startingNumber,
+      startingNumber: +dataItem.startingNumber,
       hiddenForCreationForUsersWithoutTags:
       dataItem.hiddenForCreationForUsersWithoutTagsFormatted,
       group: dataItem.group,
@@ -398,6 +398,10 @@ export function KendoPanel<T extends { id?: string }>({
       toastError(`${emptyFields.join(",")} is missing.`);
       return;
     } else {
+      const startingNumber = values?.startingNumber;
+      values.startingNumber = startingNumber
+        ? +startingNumber
+        : startingNumber;
       values.hiddenForCreationForUsersWithoutTags =
       values.hiddenForCreationForUsersWithoutTagsFormatted;
       delete values.inEdit;
