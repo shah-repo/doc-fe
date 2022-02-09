@@ -56,7 +56,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       templateBoxProps={{ stretchY: "100%", borderTop: 1, borderColor: Colors.medium_gray }}
       contentBoxProps={{ stretchY: "100%" }}
       rightSidebarBoxProps={{ zIndex: 2 }}
-      {..._documentRevisionFormState?.documentRevision && {
+      {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
         rightSidebar: (
           <Observer>
             {() => <DocumentRevisionSidebar />}
