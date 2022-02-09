@@ -301,7 +301,7 @@ context("Receivable list test", () => {
                             },
                           },
                           formInput: {
-                            "receivable-kdptzei2": createdPODocument.id,
+                            "receivable-kdptzei2": { id: createdPODocument.id },
                           },
                         },
                         employeeId: adminEmployee.id,
@@ -343,7 +343,7 @@ context("Receivable list test", () => {
                                 },
                               },
                               formInput: {
-                                "receivable-kdptzei2": createdPODocument.id,
+                                "receivable-kdptzei2": { id: createdPODocument.id },
                               },
                             },
                             employeeId: adminEmployee.id,

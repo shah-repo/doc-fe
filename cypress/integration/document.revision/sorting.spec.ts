@@ -987,7 +987,7 @@ context("Sorting test", () => {
                             },
                           },
                           formInput: {
-                            "receivable-kdptzei2": createdPODocument.id,
+                            "receivable-kdptzei2": { id: createdPODocument.id },
                           },
                         },
                         employeeId: adminEmployee.id,
@@ -1029,7 +1029,7 @@ context("Sorting test", () => {
                                 },
                               },
                               formInput: {
-                                "receivable-kdptzei2": createdPODocument.id,
+                                "receivable-kdptzei2": { id: createdPODocument.id },
                               },
                             },
                             employeeId: adminEmployee.id,
