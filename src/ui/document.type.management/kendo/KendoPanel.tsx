@@ -292,6 +292,7 @@ export function KendoPanel<T extends { id?: string }>({
         headerCell={
           col.title ? (props) => <ColumnHeader {...props} /> : undefined
         }
+        editor={col.filter ? col.filter : undefined}
         columnMenu={
           col.showColumnMenu
             ? (props) => (
