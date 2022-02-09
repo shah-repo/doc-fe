@@ -176,23 +176,6 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             pr: 1,
                                           }}
                                         />
-                                        {(selection.pmDueDate !== "N/A") && type === "equipment" &&
-                                          <Box
-                                            color={pmOverdue ? Colors.error_red : Colors.dark_gray}
-                                            fontWeight={pmOverdue ? "bold" : "normal"}
-                                          >
-                                            <Box
-                                              display="inline-block"
-                                              bgcolor={Colors.black}
-                                              width={4}
-                                              height={4}
-                                              mr={1}
-                                              mb={0.25}
-                                            />
-                                            Next PM Due:
-                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
-                                          </Box>
-                                        }
                                         {(selection.calDueDate !== "N/A") && type === "equipment" &&
                                           <Box
                                             color={calOverdue ? Colors.error_red : Colors.dark_gray}
@@ -209,6 +192,23 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                                             />
                                             Next Cal Due:
                                             {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
+                                          </Box>
+                                        }
+                                        {(selection.pmDueDate !== "N/A") && type === "equipment" &&
+                                          <Box
+                                            color={pmOverdue ? Colors.error_red : Colors.dark_gray}
+                                            fontWeight={pmOverdue ? "bold" : "normal"}
+                                          >
+                                            <Box
+                                              display="inline-block"
+                                              bgcolor={Colors.black}
+                                              width={4}
+                                              height={4}
+                                              mr={1}
+                                              mb={0.25}
+                                            />
+                                            Next PM Due:
+                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
                                           </Box>
                                         }
                                         <IconButton
