@@ -307,7 +307,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbEnterNameValue({ name: "rows", value: 2 });
           cy.fbAddNewFieldButton();
           cy.get(`[name^="fb-textfield"`).parent().trigger("mouseover");
         });
@@ -490,7 +490,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Text field" });
           cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
           cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
-          cy.fbEnterNameValue({ name: "rows", value: "2" });
+          cy.fbEnterNameValue({ name: "rows", value: 2 });
           cy.fbAddNewFieldButton();
         });
 
