@@ -107,10 +107,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             date: isDocumentRevisionReleased(stepLHRs.status)
               ? getFormattedDateString(stepLHRs?.releasedAt, MomentFormats.DateTime)
               : getFormattedDateString(stepLHRs?.createdAt, MomentFormats.DateTime),
-            // owner will be included in next release by new requirements
-            // owner: isDocumentRevisionReleased(stepLHRs.status)
-            //   ? ownerOfCompleteMPIAction
-            //   : ownerOfStartMPIAction,
           }}
         />
       </Box>
