@@ -17,6 +17,7 @@ declare global {
       grpSetMembersFilter(params: { member: string }): Chainable;
       grpSetTypeFilter(params: { type: string }): Chainable;
       grpFilterByName(params: { name: string }): Chainable;
+      grpClickEditGroupWithName(params: { name: string }): Chainable;
       grpFilterByMembers(params: { member: string }): Chainable;
       grpFilterByType(params: { type: string }): Chainable;
       grpCheckIfNameFilterIsEmpty(): Chainable;
@@ -272,6 +273,10 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
   cy.get(`[aria-colindex="2"] input`).arrowType(params.name).wait(500);
   cy.get("tr.k-master-row").first().find("td").last().find("button").arrowClick();
   cy.grpCloseDialog();
+});
+
+Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").arrowClick();
 });
 
 Cypress.Commands.add("grpSelectGroupWithoutClosingDialog", (params: {name: string}) => {

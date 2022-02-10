@@ -1523,21 +1523,16 @@ context("DAM approvals in LHR", () => {
         cy.usrClickSaveButton();
       });
 
-      it("Clicks on the close button", () => {
-        cy.usrClickCloseDialogButton();
-      });
-
       it("Navigates to Group management", () => {
         cy.grpNavigateToGroupManagement();
       });
 
       it("Select the 'R&D' group", function() {
-        cy.get(".ReactVirtualized__Table__rowColumn").contains("R&D").arrowClick();
-        cy.listLoadingElementShouldNotExist();
+        cy.grpClickEditGroupWithName({ name: "R&D" });
       });
 
       it("Assigns user to the group", () => {
-        cy.grpAssignUser({ name: USERS[4].name });
+        cy.grpAssignUserDialog({ name: USERS[4].name });
       });
 
       it("Saves the group", () => {

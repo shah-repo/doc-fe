@@ -24,6 +24,8 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 2,
+    showTooltip: true,
+    tooltipField: "description",
   },
   {
     field: "owner.user.name",
