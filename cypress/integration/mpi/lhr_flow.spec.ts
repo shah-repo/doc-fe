@@ -270,7 +270,7 @@ context("LHR flow", () => {
               {
                 documentTypeName: "LHR template",
                 documentTypeAcronym: "LHRT-",
-                group: "FORM",
+                group: "LHRT",
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
