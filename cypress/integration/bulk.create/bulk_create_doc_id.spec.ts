@@ -20,6 +20,7 @@ let testPublicType;
 let formDocumentType;
 let createdDocumentForBulkCreation;
 let testDocumentTypeDocument;
+let BLCdocumentType;
 let releasedFormId;
 let emailsFromInbox;
 let cdata;
@@ -86,18 +87,102 @@ context("Bulk create public, private and reserved doc-ids", () => {
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           testPrivateType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Private Pool");
           testPublicType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Public Pool");
+          BLCdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Bulk Create");
           done();
         });
       });
     });
 
-    context("[API]Create documents for bulk create", () => {
+    context("[API]Update BLC document type to have WIP status", () => {
       it("[API]Login first tester", (done: any) => {
         cy.authApiLogin({
           email: USERS[1].email,
         }).then((response) => {
           loginResponse = response;
           done();
+        });
+      });
+
+      it("Change fields config in BLC document type", () => {
+        cy.drUpdateDocumentTypeName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          id: BLCdocumentType[0].id,
+          payload: {
+            fieldsConfig: {
+              D: {
+                visible: false,
+                required: false,
+              },
+              E: {
+                label: "Record Type",
+                visible: false,
+                required: true,
+              },
+              F: {
+                label: "Record ID",
+                visible: false,
+                required: true,
+              },
+              G: {
+                visible: false,
+                required: false,
+              },
+              I: {
+                visible: false,
+              },
+              J: {
+                visible: false,
+              },
+              K: {
+                label: "Void",
+                visible: true,
+              },
+              L: {
+                label: "Correction",
+                visible: true,
+              },
+              N: {
+                label: "Approve and Release",
+                visible: true,
+              },
+              O: {
+                label: "Record History",
+                visible: true,
+              },
+              R: {
+                visible: false,
+              },
+              S: {
+                label: "Update Record",
+                visible: true,
+              },
+              A1: {
+                label: "WIP",
+                visible: true,
+              },
+              A2: {
+                label: "Voided",
+                visible: true,
+              },
+              A3: {
+                label: "Archive",
+                visible: true,
+              },
+              P1: {
+                label: "WIP",
+                visible: true,
+              },
+              P2: {
+                label: "Voided",
+                visible: true,
+              },
+              P3: {
+                label: "Archive",
+                visible: true,
+              },
+            },
+          },
         });
       });
 
@@ -390,8 +475,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drEnterDocumentTitle({ name: "Bulk create form" });
     });
 
-    it("Enter description 'Bulk create form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Bulk create form description" });
+    it("Enter description 'Export'", () => {
+      cy.drEnterDocumentDescription({ description: "Export" });
     });
 
     it("Select 'Form' document type from dropdown", () => {
@@ -554,7 +639,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/AR ID\nAR-00006/);
 
-        expect(el).match(/Description\nBulk create form description/);
+        expect(el).match(/Description\nExport/);
 
         expect(el).match(/Output Document Type\nBulk Create/);
 
@@ -646,10 +731,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
       });
 
-      it("Enter description 'Bulk Creation document description'", () => {
-        cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
-      });
-
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
@@ -689,8 +770,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
-      it("Check doc Draft status and click on Send To Email", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      it("Check doc WIP status and click on Send To Email", () => {
+        cy.get("#HeaderInfo-status").should("have.text", "WIP");
         cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
         cy.get("#HeaderInfo-docId").then((x) => {
           releasedFormId = x.text();
@@ -706,7 +787,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
     });
 
-    context("Verify email for draft bulk create notification", () => {
+    context("Verify email for WIP bulk create notification", () => {
       it("Get emails", () => {
         dateAfterEmailShouldArrive = new Date();
         dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
@@ -762,7 +843,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get("@short_url").then((response) => {
           downloadUrl = (response as any).body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
+          downloadFile  =  `${releasedFormId}` + filetime + "_WIP.zip";
           cy.downloadFile({
             url: downloadUrl,
             directory: downloaddDirectory,
@@ -785,8 +866,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
     });
 
-    context("Verify PDF file content for draft document", () => {
-      it("Extract texts from PDF file content for draft document", () => {
+    context("Verify PDF file content for WIP document", () => {
+      it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
           directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
           fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
@@ -809,14 +890,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
         });
       });
 
-      it("Verify page 1 for draft document", () => {
+      it("Verify page 1 for WIP document", () => {
         const el = page1;
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/Description\nBulk Creation document description/);
 
           expect(el).match(/Attachments\nNone/);
 
@@ -833,7 +912,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
 
-          expect(el).match(/Draft/);
+          expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -847,7 +926,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(cdata.text).not.match(tmpRegex);
         }
       });
-      it("Verify page 2 for draft document", () => {
+      it("Verify page 2 for WIP document", () => {
         const el = page2;
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
@@ -857,7 +936,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Draft/);
+          expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -1041,8 +1120,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Description\nBulk Creation document description/);
-
           expect(el).match(/Attachments\nNone/);
 
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
@@ -1146,10 +1223,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
     context("Fill Bulk creation document atributes", () => {
       it("Enter title 'Bulk Creation document'", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
-      });
-
-      it("Enter description 'Bulk Creation document description'", () => {
-        cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
