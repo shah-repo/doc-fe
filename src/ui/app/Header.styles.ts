@@ -38,9 +38,8 @@ export default (theme: Theme) =>
     },
     logo: {
       position: "absolute",
-      bottom: "-33px",
+      paddingTop: "40px",
       right: "20.42%",
-      top: "0px",
       left: "61%",
       backgroundRepeat: "no-repeat",
       backgroundImage: `url(${EnlilLogo})`,
