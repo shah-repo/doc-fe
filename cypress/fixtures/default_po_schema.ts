@@ -532,9 +532,7 @@ export const purchaseOrderDefaultSchema: any = [
     ],
     deleteDisabled: false,
     includeContext: true,
-    validationMode: [
-      "ValidationHidden",
-    ],
+    validationMode: "default",
     formValuesRules: {
       required_if: true,
       required_if0: "shipment-info-k7fagifj",
