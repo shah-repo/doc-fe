@@ -13,7 +13,7 @@ import {
   GridNoRecords,
   GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
+import { cloneDeep, each, find, isEmpty, map, orderBy, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -86,7 +86,7 @@ export function KendoPanel<T extends { id?: string }>({
   const exportDAMDialog = useDialog();
   const processWithGroups = (data: DocumentType[], dataState: State) => {
     const cloneDeepDataState = cloneDeep(dataState);
-    const newDataState = process(data, cloneDeepDataState);
+    const newDataState = process(orderBy(data, ["active"], ["desc"]), cloneDeepDataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
@@ -128,7 +128,8 @@ export function KendoPanel<T extends { id?: string }>({
       group: [],
       sort: [
         {
-          field: "documentTypeName",
+          field: "active",
+          dir: "desc",
         },
       ],
     };
