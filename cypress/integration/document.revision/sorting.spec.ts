@@ -1718,15 +1718,15 @@ context("Sorting test", () => {
 
     context("Sort 'Doc Id'", () => {
       it("Doc Id should be in ascending order", () => {
-        cy.contains("DOC ID").eq(0).click();
-        cy.contains("DOC ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.get("span").contains("Doc ID").eq(0).click();
+        cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
       });
 
       it("Doc Id should be in descending order", () => {
-        cy.contains("DOC ID").eq(0).click();
-        cy.contains("DOC ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.get("span").contains("Doc ID").eq(0).click();
+        cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
       });
@@ -1734,15 +1734,15 @@ context("Sorting test", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -1750,15 +1750,15 @@ context("Sorting test", () => {
 
     context("Sort 'Document title'", () => {
       it("Document title should be in ascending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Document title").eq(0).click();
+        cy.contains("Document title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("Document title should be in descending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Document title").eq(0).click();
+        cy.contains("Document title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -1766,15 +1766,15 @@ context("Sorting test", () => {
 
     context("Sort 'Type'", () => {
       it("Type should be in ascending order", () => {
-        cy.contains("TYPE").eq(0).click();
-        cy.contains("TYPE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Type").eq(0).click();
+        cy.contains("Type").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Type should be in descending order", () => {
-        cy.contains("TYPE").eq(0).click();
-        cy.contains("TYPE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Type").eq(0).click();
+        cy.contains("Type").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -1782,15 +1782,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
@@ -1814,15 +1814,15 @@ context("Sorting test", () => {
 
     context("Sort 'Status'", () => {
       it("Status should be in ascending order", () => {
-        cy.contains("STATUS").eq(0).click();
-        cy.contains("STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Status").eq(0).click();
+        cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("Status should be in descending order", () => {
-        cy.contains("STATUS").eq(0).click();
-        cy.contains("STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Status").eq(0).click();
+        cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -1830,15 +1830,15 @@ context("Sorting test", () => {
 
     context("Sort 'Effective Date'", () => {
       it("Effective Date should be in ascending order", () => {
-        cy.contains("EFFECTIVE DATE").eq(0).click();
-        cy.contains("EFFECTIVE DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Effective Date").eq(0).click();
+        cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("Effective Date should be in descending order", () => {
-        cy.contains("EFFECTIVE DATE").eq(0).click();
-        cy.contains("EFFECTIVE DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Effective Date").eq(0).click();
+        cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });
@@ -1884,15 +1884,15 @@ context("Sorting test", () => {
 
     context("Sort 'Group Type'", () => {
       it("Group Type should be in ascending order", () => {
-        cy.contains("GROUP TYPE").eq(0).click();
-        cy.contains("GROUP TYPE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Group Type").eq(0).click();
+        cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
       });
 
       it("Group Type should be in descending order", () => {
-        cy.contains("GROUP TYPE").eq(0).click();
-        cy.contains("GROUP TYPE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Group Type").eq(0).click();
+        cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
       });
@@ -1906,15 +1906,15 @@ context("Sorting test", () => {
 
     context("Sort 'Name'", () => {
       it("Name should be in ascending order", () => {
-        cy.contains("NAME").eq(0).click();
-        cy.contains("NAME").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Name").eq(0).click();
+        cy.contains("Name").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 6 });
       });
 
       it("Name should be in descending order", () => {
-        cy.contains("NAME").eq(0).click();
-        cy.contains("NAME").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Name").eq(0).click();
+        cy.contains("Name").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 6 });
       });
@@ -1922,15 +1922,15 @@ context("Sorting test", () => {
 
     context("Sort 'Email'", () => {
       it("Email should be in ascending order", () => {
-        cy.contains("EMAIL").eq(0).click();
-        cy.contains("EMAIL").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Email").eq(0).click();
+        cy.contains("Email").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 6 });
       });
 
       it("Email should be in descending order", () => {
-        cy.contains("EMAIL").eq(0).click();
-        cy.contains("EMAIL").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Email").eq(0).click();
+        cy.contains("Email").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 6 });
       });
@@ -1954,15 +1954,15 @@ context("Sorting test", () => {
 
     context("Sort 'Active'", () => {
       it("Active should be in ascending order", () => {
-        cy.contains("ACTIVE").eq(0).click();
-        cy.contains("ACTIVE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Active").eq(0).click();
+        cy.contains("Active").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 6 });
       });
 
       it("Active should be in descending order", () => {
-        cy.contains("ACTIVE").eq(0).click();
-        cy.contains("ACTIVE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Active").eq(0).click();
+        cy.contains("Active").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 6 });
       });
@@ -1970,15 +1970,15 @@ context("Sorting test", () => {
 
     context("Sort 'Signed up'", () => {
       it("Signed up should be in ascending order", () => {
-        cy.contains("SIGNED UP").eq(0).click();
-        cy.contains("SIGNED UP").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Signed Up").eq(0).click();
+        cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 6 });
       });
 
       it("Signed up should be in descending order", () => {
-        cy.contains("SIGNED UP").eq(0).click();
-        cy.contains("SIGNED UP").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Signed Up").eq(0).click();
+        cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 6 });
       });
@@ -2008,15 +2008,15 @@ context("Sorting test", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -2024,15 +2024,15 @@ context("Sorting test", () => {
 
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("State should be in descending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -2040,15 +2040,15 @@ context("Sorting test", () => {
 
     context("Sort 'Title'", () => {
       it("Title should be in ascending order", () => {
-        cy.contains("TITLE").eq(0).click();
-        cy.contains("TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Title").eq(0).click();
+        cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Title should be in descending order", () => {
-        cy.contains("TITLE").eq(0).click();
-        cy.contains("TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Title").eq(0).click();
+        cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -2056,15 +2056,15 @@ context("Sorting test", () => {
 
     context("Sort 'EFT Owner'", () => {
       it("EFT Owner should be in ascending order", () => {
-        cy.contains("EFT OWNER").eq(0).click();
-        cy.contains("EFT OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("EFT Owner").eq(0).click();
+        cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
 
       it("EFT Owner should be in descending order", () => {
-        cy.contains("EFT OWNER").eq(0).click();
-        cy.contains("EFT OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("EFT Owner").eq(0).click();
+        cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
@@ -2072,15 +2072,15 @@ context("Sorting test", () => {
 
     context("Sort 'Cal Due Date'", () => {
       it("Cal Due Date should be in ascending order", () => {
-        cy.contains("CAL DUE DATE").eq(0).click();
-        cy.contains("CAL DUE DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Cal Due Date").eq(0).click();
+        cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
       });
 
       it("Cal Due Date should be in descending order", () => {
-        cy.contains("CAL DUE DATE").eq(0).click();
-        cy.contains("CAL DUE DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Cal Due Date").eq(0).click();
+        cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
       });
@@ -2088,15 +2088,15 @@ context("Sorting test", () => {
 
     context("Sort 'PM Due Date'", () => {
       it("PM Due Date should be in ascending order", () => {
-        cy.contains("PM DUE DATE").eq(0).click();
-        cy.contains("PM DUE DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("PM Due Date").eq(0).click();
+        cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("PM Due Date should be in descending order", () => {
-        cy.contains("PM DUE DATE").eq(0).click();
-        cy.contains("PM DUE DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("PM Due Date").eq(0).click();
+        cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -2104,15 +2104,15 @@ context("Sorting test", () => {
 
     context("Sort 'EQ Status'", () => {
       it("EQ Status should be in ascending order", () => {
-        cy.contains("EQ STATUS").eq(0).click();
-        cy.contains("EQ STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("EQ Status").eq(0).click();
+        cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("EQ Status should be in descending order", () => {
-        cy.contains("EQ STATUS").eq(0).click();
-        cy.contains("EQ STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("EQ Status").eq(0).click();
+        cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });
@@ -2126,15 +2126,15 @@ context("Sorting test", () => {
 
     context("Sort 'Supplier ID'", () => {
       it("Supplier ID should be in ascending order", () => {
-        cy.contains("SUPPLIER ID").eq(0).click();
-        cy.contains("SUPPLIER ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Supplier ID").eq(0).click();
+        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
       });
 
       it("Supplier ID should be in descending order", () => {
-        cy.contains("SUPPLIER ID").eq(0).click();
-        cy.contains("SUPPLIER ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Supplier ID").eq(0).click();
+        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
       });
@@ -2142,15 +2142,15 @@ context("Sorting test", () => {
 
     context("Sort 'Supplier Name'", () => {
       it("Supplier Name should be in ascending order", () => {
-        cy.contains("SUPPLIER NAME").eq(0).click();
-        cy.contains("SUPPLIER NAME").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Supplier Name").eq(0).click();
+        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
       });
 
       it("Supplier Name should be in descending order", () => {
-        cy.contains("SUPPLIER NAME").eq(0).click();
-        cy.contains("SUPPLIER NAME").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Supplier Name").eq(0).click();
+        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
       });
@@ -2158,15 +2158,15 @@ context("Sorting test", () => {
 
     context("Sort 'Supplier Level'", () => {
       it("Supplier Level should be in ascending order", () => {
-        cy.contains("SUPPLIER LEVEL").eq(0).click();
-        cy.contains("SUPPLIER LEVEL").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Supplier Level").eq(0).click();
+        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
       });
 
       it("Supplier Level should be in descending order", () => {
-        cy.contains("SUPPLIER LEVEL").eq(0).click();
-        cy.contains("SUPPLIER LEVEL").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Supplier Level").eq(0).click();
+        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
       });
@@ -2174,16 +2174,16 @@ context("Sorting test", () => {
 
     context("Sort 'Supplier Status'", () => {
       it("Supplier Status should be in ascending order", () => {
-        cy.contains("SUPPLIER STATUS").eq(0).click();
-        cy.contains("SUPPLIER STATUS").eq(0).click();
-        cy.contains("SUPPLIER STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Supplier Status").eq(0).click();
+        cy.contains("Supplier Status").eq(0).click();
+        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 7 });
       });
 
       it("Supplier Status should be in descending order", () => {
-        cy.contains("SUPPLIER STATUS").eq(0).click();
-        cy.contains("SUPPLIER STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Supplier Status").eq(0).click();
+        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 7 });
       });
@@ -2191,15 +2191,15 @@ context("Sorting test", () => {
 
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
       });
 
       it("State should be in descending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
       });
@@ -2207,15 +2207,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
       });
@@ -2223,15 +2223,15 @@ context("Sorting test", () => {
 
     context("Sort 'Approval ID'", () => {
       it("Approval ID should be in ascending order", () => {
-        cy.contains("APPROVAL ID").eq(0).click();
-        cy.contains("APPROVAL ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Approval ID").eq(0).click();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
       });
 
       it("Approval ID should be in descending order", () => {
-        cy.contains("APPROVAL ID").eq(0).click();
-        cy.contains("APPROVAL ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Approval ID").eq(0).click();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
       });
@@ -2245,15 +2245,15 @@ context("Sorting test", () => {
 
     context("Sort 'Parts ID'", () => {
       it("Parts ID should be in ascending order", () => {
-        cy.contains("PARTS ID").eq(0).click();
-        cy.contains("PARTS ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Parts ID").eq(0).click();
+        cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 5 });
       });
 
       it("Parts ID should be in descending order", () => {
-        cy.contains("PARTS ID").eq(0).click();
-        cy.contains("PARTS ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Parts ID").eq(0).click();
+        cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 5 });
       });
@@ -2261,15 +2261,15 @@ context("Sorting test", () => {
 
     context("Sort 'Document Title'", () => {
       it("Document Title should be in ascending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Document Title").eq(0).click();
+        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 5 });
       });
 
       it("Document Title should be in descending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Document Title").eq(0).click();
+        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 5 });
       });
@@ -2277,15 +2277,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 5 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 5 });
       });
@@ -2293,15 +2293,15 @@ context("Sorting test", () => {
 
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 5 });
       });
 
       it("State should be in descending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 5 });
       });
@@ -2309,15 +2309,15 @@ context("Sorting test", () => {
 
     context("Sort 'Approval ID'", () => {
       it("Approval ID should be in ascending order", () => {
-        cy.contains("APPROVAL ID").eq(0).click();
-        cy.contains("APPROVAL ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Approval ID").eq(0).click();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 5 });
       });
 
       it("Approval ID should be in descending order", () => {
-        cy.contains("APPROVAL ID").eq(0).click();
-        cy.contains("APPROVAL ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Approval ID").eq(0).click();
+        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 5 });
       });
@@ -2347,15 +2347,15 @@ context("Sorting test", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -2363,15 +2363,15 @@ context("Sorting test", () => {
 
     context("Sort 'PO Status'", () => {
       it("PO Status should be in ascending order", () => {
-        cy.contains("PO STATUS").eq(0).click();
-        cy.contains("PO STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("PO Status").eq(0).click();
+        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("PO Status should be in descending order", () => {
-        cy.contains("PO STATUS").eq(0).click();
-        cy.contains("PO STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("PO Status").eq(0).click();
+        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -2379,15 +2379,15 @@ context("Sorting test", () => {
 
     context("Sort 'Supplier'", () => {
       it("Supplier should be in ascending order", () => {
-        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).click();
-        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Supplier should be in descending order", () => {
-        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).click();
-        cy.get("[aria-colindex]").contains("SUPPLIER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -2395,15 +2395,15 @@ context("Sorting test", () => {
 
     context("Sort 'Part Number'", () => {
       it("Part Number should be in ascending order", () => {
-        cy.contains("PART NUMBER").eq(0).click();
-        cy.contains("PART NUMBER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Part Number").eq(0).click();
+        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
 
       it("Part Number should be in descending order", () => {
-        cy.contains("PART NUMBER").eq(0).click();
-        cy.contains("PART NUMBER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Part Number").eq(0).click();
+        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
@@ -2411,15 +2411,15 @@ context("Sorting test", () => {
 
     context("Sort 'Amount'", () => {
       it("Amount should be in ascending order", () => {
-        cy.contains("AMOUNT").eq(0).click();
-        cy.contains("AMOUNT").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Amount").eq(0).click();
+        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
       });
 
       it("Amount should be in descending order", () => {
-        cy.contains("AMOUNT").eq(0).click();
-        cy.contains("AMOUNT").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Amount").eq(0).click();
+        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
       });
@@ -2427,15 +2427,15 @@ context("Sorting test", () => {
 
     context("Sort 'Requestor'", () => {
       it("Requestor should be in ascending order", () => {
-        cy.contains("REQUESTOR").eq(0).click();
-        cy.contains("REQUESTOR").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Requestor").eq(0).click();
+        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("Requestor should be in descending order", () => {
-        cy.contains("REQUESTOR").eq(0).click();
-        cy.contains("REQUESTOR").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Requestor").eq(0).click();
+        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -2443,15 +2443,15 @@ context("Sorting test", () => {
 
     context("Sort 'Issue Date'", () => {
       it("Issue Date should be in ascending order", () => {
-        cy.contains("ISSUE DATE").eq(0).click();
-        cy.contains("ISSUE DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Issue Date").eq(0).click();
+        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("Issue Date should be in descending order", () => {
-        cy.contains("ISSUE DATE").eq(0).click();
-        cy.contains("ISSUE DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Issue Date").eq(0).click();
+        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });
@@ -2465,15 +2465,15 @@ context("Sorting test", () => {
 
     context("Sort 'Receive ID'", () => {
       it("Receive ID should be in ascending order", () => {
-        cy.contains("RECEIVE ID").eq(0).click();
-        cy.contains("RECEIVE ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Receive ID").eq(0).click();
+        cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 5 });
       });
 
       it("Receive ID should be in descending order", () => {
-        cy.contains("RECEIVE ID").eq(0).click();
-        cy.contains("RECEIVE ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Receive ID").eq(0).click();
+        cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 5 });
       });
@@ -2481,15 +2481,15 @@ context("Sorting test", () => {
 
     context("Sort 'Document Title'", () => {
       it("Document Title should be in ascending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Document Title").eq(0).click();
+        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 5 });
       });
 
       it("Document Title should be in descending order", () => {
-        cy.contains("DOCUMENT TITLE").eq(0).click();
-        cy.contains("DOCUMENT TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Document Title").eq(0).click();
+        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 5 });
       });
@@ -2497,15 +2497,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 5 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 5 });
       });
@@ -2570,15 +2570,15 @@ context("Sorting test", () => {
 
     context("Sort 'AR Title'", () => {
       it("AR Title should be in ascending order", () => {
-        cy.contains("AR TITLE").eq(0).click();
-        cy.contains("AR TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("AR Title").eq(0).click();
+        cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 4 });
       });
 
       it("AR Title should be in descending order", () => {
-        cy.contains("AR TITLE").eq(0).click();
-        cy.contains("AR TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("AR Title").eq(0).click();
+        cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 4 });
       });
@@ -2586,15 +2586,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 4 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 4 });
       });
@@ -2603,15 +2603,15 @@ context("Sorting test", () => {
 
     context("Sort 'Status'", () => {
       it("Status should be in ascending order", () => {
-        cy.contains("STATUS").eq(0).click();
-        cy.contains("STATUS").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Status").eq(0).click();
+        cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 4 });
       });
 
       it("Status should be in descending order", () => {
-        cy.contains("STATUS").eq(0).click();
-        cy.contains("STATUS").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Status").eq(0).click();
+        cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 4 });
       });
@@ -2641,15 +2641,15 @@ context("Sorting test", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("REVISION").eq(0).click();
-        cy.contains("REVISION").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Revision").eq(0).click();
+        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
       });
@@ -2657,15 +2657,15 @@ context("Sorting test", () => {
 
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
       });
 
       it("State should be in descending order", () => {
-        cy.contains("STATE").eq(0).click();
-        cy.contains("STATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("State").eq(0).click();
+        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
       });
@@ -2674,15 +2674,15 @@ context("Sorting test", () => {
 
     context("Sort 'Title'", () => {
       it("Title should be in ascending order", () => {
-        cy.contains("TITLE").eq(0).click();
-        cy.contains("TITLE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Title").eq(0).click();
+        cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 7 });
       });
 
       it("Title should be in descending order", () => {
-        cy.contains("TITLE").eq(0).click();
-        cy.contains("TITLE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Title").eq(0).click();
+        cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 7 });
       });
@@ -2690,15 +2690,15 @@ context("Sorting test", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("OWNER").eq(0).click();
-        cy.contains("OWNER").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Owner").eq(0).click();
+        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
       });
@@ -2706,15 +2706,15 @@ context("Sorting test", () => {
 
     context("Sort 'Released Date'", () => {
       it("Released Date should be in ascending order", () => {
-        cy.contains("RELEASED DATE").eq(0).click();
-        cy.contains("RELEASED DATE").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Released Date").eq(0).click();
+        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
       });
 
       it("Released Date should be in descending order", () => {
-        cy.contains("RELEASED DATE").eq(0).click();
-        cy.contains("RELEASED DATE").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Released Date").eq(0).click();
+        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
       });
@@ -2722,15 +2722,15 @@ context("Sorting test", () => {
 
     context("Sort 'Form ID'", () => {
       it("Form ID should be in ascending order", () => {
-        cy.contains("FORM ID").eq(0).click();
-        cy.contains("FORM ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains("Form ID").eq(0).click();
+        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
       });
 
       it("Form ID should be in descending order", () => {
-        cy.contains("FORM ID").eq(0).click();
-        cy.contains("FORM ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains("Form ID").eq(0).click();
+        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
       });

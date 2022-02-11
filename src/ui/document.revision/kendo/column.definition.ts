@@ -35,6 +35,8 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 3,
+    showTooltip: true,
+    tooltipField: "description",
   },
   {
     field: "document.documentType.documentTypeAcronym",
@@ -46,6 +48,8 @@ const columns: KendoColumn[] = [
     groupable: true,
     showColumnMenu: true,
     orderIndex: 4,
+    showTooltip: true,
+    tooltipField: "document.documentType.documentTypeName",
   },
   {
     field: "owner.user.name",

@@ -534,7 +534,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is approved.", companyId],
+          contains: [
+            "Your request has been\r\n                                      approved!",
+            "AR-00002\r\n                                        Approval request from newly created form",
+            companyId,
+          ],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -549,7 +553,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is rejected.", companyId],
+          contains: [
+            "Your request has been\r\n                                      rejected!",
+            "AR-00002\r\n                                        Approval request from newly created form",
+            companyId,
+          ],
         },
       ];
       cy.imapVerifyEmailsInList({

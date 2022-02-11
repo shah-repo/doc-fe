@@ -3,17 +3,17 @@ import Colors from "../../layout/theme/utils/colors";
 
 const KendoGridStyles = makeStyles((theme: Theme) => ({
   root: {
-    padding: theme.spacing(0, 0.625, 1.25),
+    padding: theme.spacing(0, 2.5, 1.25, 2.5),
   },
   kGrid: {
-    height: "calc(100vh - 99px)",
+    height: "calc(100vh - 109px)",
   },
   exportListbutton: {
     margin: 0,
     boxShadow: "none",
     borderRadius: 100,
     marginRight: theme.spacing(1.875),
-    textTransform: "none",
+    textTransform: "capitalize",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
     fontFamily: "Sora",
@@ -33,13 +33,11 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3.125),
   },
   title: {
-    fontWeight: 700,
-    fontSize: 14,
+    fontWeight: 600,
+    fontSize: 24,
     color: Colors.almost_black,
-    textTransform: "uppercase",
+    textTransform: "capitalize",
     fontFamily: "Sora",
-    marginTop: theme.spacing(1.25),
-    marginLeft: theme.spacing(0.625),
   },
   gridClass: {
     textAlign: "right",
