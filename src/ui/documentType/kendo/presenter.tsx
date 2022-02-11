@@ -1,14 +1,20 @@
 import { Grid } from "@material-ui/core";
 import { startCase } from "lodash";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { docRevSch } from "../../../common/normalizrSchema";
-import { DocumentType, PageDetails } from "../../../state/ducks/documentRevisions/documentType/types";
+import {
+  DocumentType,
+  PageDetails,
+} from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { KendoColumn } from "../../components/common/kendo/types";
 import { TableColumnProps } from "../../components/table/column/types";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
+import {
+  TableDataProps,
+  TablePanelStateProps,
+} from "../../components/table/types";
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
 import { KendoGrid } from "./KendoPanel";
@@ -39,6 +45,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   tableCriteria,
 }) => {
   const classes = KendoGridStyles();
+  const [dataToBeExported, setDataToBeExported] = useState(providedData);
   const intl = useIntl();
   const headers = columns.map((column) => {
     if (
@@ -70,11 +77,17 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
     : {
       documentTypeId: documentType.id,
     };
+  const handleExportData = (
+    dataToBeExported: TableDataProps<DocumentRevision>
+  ) => {
+    setDataToBeExported(dataToBeExported);
+  };
+
   return (
     <Grid container={true} className={classes.root}>
       <CreateDocumentByType
         {...createDocumentProps}
-        {...{ isByCategory, headers, tableData: providedData }}
+        {...{ isByCategory, headers, tableData: dataToBeExported }}
         labelName={
           isByCategory
             ? documentCategory.addNewBtnLabel
@@ -89,10 +102,10 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           tableCriteria={tableCriteria}
           queryUrl={queryUrl}
           normalizrSchema={[docRevSch]}
+          exportDataChanges={handleExportData}
         />
       </Grid>
     </Grid>
-  ); }
-;
-
+  );
+};
 export default DocumentByTypeListPresenter;

@@ -92,6 +92,7 @@ export interface KendoPanelProps<T> {
   previewDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
   documentTypeOptions?: DocumentTypeOptions[];
   currentUserEmail?: string;
+  exportDataChanges?: (data: T[]) => void;
 }
 
 export interface CustomGridCellProps extends GridCellProps {
