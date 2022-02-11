@@ -78,9 +78,6 @@ context("User Creation Flow", () => {
   });
 
   context("Check if the user is created", () => {
-    it("Clicks on the close button", () => {
-      cy.usrClickCloseDialogButton();
-    });
     it("Checks if user is in the table", () => {
       SystemRequirement("REQ-2490", "REQ-4110");
       cy.usrCheckIfUserIsCreated({ email: USERS[10].email });
