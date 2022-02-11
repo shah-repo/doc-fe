@@ -12,6 +12,7 @@ declare global {
       usrClickAddEmployee(): Chainable;
       usrGetInitials(params: {fullName: string}): Chainable;
       usrEnterEmail(params: {email: string}): Chainable;
+      usrFilterByEmail(params: {email: string}): Chainable;
       usrEnterName(params: {name: string}): Chainable;
       usrClickEditUser(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
@@ -26,7 +27,11 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
     cy.get("[data-cy=\"navigation.userManagement\"]").arrowClick();
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("usrFilterByEmail", (params: {email: string }) => {
+  cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {

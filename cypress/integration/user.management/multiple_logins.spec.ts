@@ -191,7 +191,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("click reset password for user", () => {
-        cy.get("#email").arrowType(emailOfUserToSignUp);
+        cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
         cy.wait(10000);
       });
@@ -318,7 +318,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("click reset password for user", () => {
-        cy.get("#email").arrowType(emailOfAdminUserToSignUp);
+        cy.usrFilterByEmail({ email: emailOfAdminUserToSignUp });
         cy.contains("Reset Password").arrowClick();
         cy.wait(10000);
       });

@@ -292,3 +292,8 @@ td[role="gridcell"] {
   background: url("../../assets/images/hide.svg");
   background-repeat: no-repeat;
 }
+
+.k-grid-header thead tr th .k-icon.k-i-arrow-n,
+.k-grid-header thead tr th .k-icon.k-i-arrow-s {
+  color: var(--almost_black);
+}
