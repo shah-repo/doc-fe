@@ -76,6 +76,7 @@ export function KendoPanel<T>({
   tableName,
   tableCriteria,
   normalizrSchema,
+  exportDataChanges,
 }: KendoPanelProps<TrainingListData>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
@@ -224,6 +225,15 @@ export function KendoPanel<T>({
         const newDataState = processWithGroups(data, dataState);
         setDataState(dataState);
         setResultState(newDataState);
+        exportDataChanges &&
+            exportDataChanges(
+              process(data, {
+                skip: 0,
+                take: data.length,
+                sort: dataState.sort,
+                filter: dataState.filter,
+              }).data
+            );
         if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
@@ -385,6 +395,15 @@ export function KendoPanel<T>({
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
+      exportDataChanges &&
+            exportDataChanges(
+              process(gridData, {
+                skip: 0,
+                take: gridData.length,
+                sort: event.dataState.sort,
+                filter: event.dataState.filter,
+              }).data
+            );
       setKendoFilterStatus(tableCriteria);
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);

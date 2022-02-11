@@ -106,6 +106,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
     setDataToBeExported(dataToBeExported);
   };
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item xs>
