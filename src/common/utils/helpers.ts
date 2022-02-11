@@ -1,5 +1,5 @@
 import DOMPurify from "dompurify";
-import { cloneDeep } from "lodash";
+import { cloneDeep, get } from "lodash";
 import { useEffect } from "react";
 import striptags from "striptags";
 import Config from "../../config";
@@ -60,3 +60,10 @@ export function deleteCookie(name) {
       ";path=/" +
       ";expires=" + new Date().toUTCString();
 }
+
+export const sortStringsByKey = (key: string) => (a, b) => {
+  a = get(a, key).toLowerCase();
+  b = get(b, key).toLowerCase();
+  if ( a === b) { return 0; }
+  return a < b ? -1 : 1;
+};

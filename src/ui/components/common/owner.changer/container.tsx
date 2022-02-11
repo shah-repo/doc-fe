@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { userManagementActions } from "../../../../state/ducks/userManagement";
-import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
+import { companySelectors } from "../../../../state/ducks/company";
 import { ApplicationState } from "../../../../state/reducers";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -23,7 +22,6 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 
   const dialog = useDialog();
   const openDialog = () => {
-    getEmployees.reset();
     dialog.open();
   };
 
@@ -53,29 +51,15 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
     );
   };
 
-  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
-  const sortBy = (key) => (a, b) => {
-    a = a[key].toLowerCase();
-    b = b[key].toLowerCase();
-    if ( a === b) { return 0; }
-    return a < b ? -1 : 1;
-  };
-
-  const getEmployees = useAsync<GetEmployeeResponse[]>({
-    onSuccess: (data: GetEmployeeResponse[] = []) => {
-      const activeEmployees = data.filter((user) => user.active).map((employee) => ({
-        value: employee.id,
-        text: employee.user.name,
-      }));
-      setEmployees(activeEmployees.sort(sortBy("text")));
-    },
-  });
-
-
+  const companyEmployes = useSelector(companySelectors.getActiveEmployees);
   useEffect(() => {
-    getEmployees.start(getEmployeeAction, null, getEmployees);
+    const activeEmployees = companyEmployes.map((employee) => ({
+      value: employee.id as string,
+      text: employee.user?.name || "",
+    }));
+    setEmployees(activeEmployees);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [companyEmployes]);
 
   return (
     <OwnerChangerPresenter
