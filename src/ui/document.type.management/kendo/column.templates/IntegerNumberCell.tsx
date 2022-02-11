@@ -39,6 +39,9 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
         field,
         value: target.value,
       });
+      setTimeout(() => {
+        document.getElementById("k-input-dtm-sn")?.focus();
+      });
     }
   };
 
@@ -55,6 +58,7 @@ export const IntegerNumberCell: React.FunctionComponent<GridCellProps> = ({
     >
       {editMode ? (
         <NumericTextBox
+          id="k-input-dtm-sn"
           min={0}
           format="0"
           defaultValue={dataValue}
