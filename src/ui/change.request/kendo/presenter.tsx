@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { map, startCase } from "lodash";
-import { default as React } from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { stripTagsFromObject } from "../../../common/utils/helpers";
 import { CHANGE_REQUEST_ROOT_URL } from "../../../state/ducks/changeRequest/constants";
@@ -25,6 +25,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   data,
 }) => {
   const classes = KendoGridStyles();
+  const [dataToBeExported, setDataToBeExported] = useState(data);
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const headers = map(gridConfiguration.columns, (column) => ({
@@ -34,9 +35,13 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   const customDataSet = (data: ChangeRequest[]) =>
     data.map((cr) => stripTagsFromObject(cr));
 
+  const handleExportData = (dataToBeExported: ChangeRequest[]) => {
+    setDataToBeExported(dataToBeExported);
+  };
+
   return (
     <Grid container={true} className={classes.root}>
-      <FromListContainer {...{ headers, tableData: data }} />
+      <FromListContainer {...{ headers, tableData: dataToBeExported }} />
       <Grid item={true} xs={12}>
         <KendoPanel<ChangeRequest>
           gridConfiguration={gridConfiguration}
@@ -46,6 +51,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           queryUrl={CHANGE_REQUEST_ROOT_URL}
           customDataSet={customDataSet}
           currentUserEmail={currentUserEmail}
+          exportDataChanges={handleExportData}
         />
       </Grid>
     </Grid>
