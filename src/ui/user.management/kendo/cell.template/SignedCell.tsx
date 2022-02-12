@@ -60,7 +60,7 @@ export const SignedCell = ({
   }
   const getChildrenElement = (
     <span>
-      {dataItem?.user?.confirmed ? (
+      {dataItem?.user?.confirmed && !dataItem?.user?.locked ? (
         <Text translation="user.management.signed.up" />
       ) : (
         <Link
@@ -69,7 +69,8 @@ export const SignedCell = ({
           onClick={() => handleResendEmail(dataItem)}
         >
           <span className={classes.link}>
-            <Text translation="user.management.resend.signup.email" />
+            <Text translation={dataItem?.user?.locked ? "reset.password" :
+              "user.management.resend.signup.email"} />
           </span>
         </Link>
       )}
@@ -86,9 +87,10 @@ export const SignedCell = ({
       {!dataItem.inEdit && (
         <Tooltip
           data={
-            dataItem?.user?.confirmed
+            dataItem?.user?.confirmed && !dataItem?.user?.locked
               ? getTranslatedText("user.management.signed.up")
-              : getTranslatedText("user.management.resend.signup.email")
+              : dataItem?.user?.locked ? getTranslatedText("reset.password") :
+                getTranslatedText("user.management.resend.signup.email")
           }
           childrenElement={getChildrenElement}
         />

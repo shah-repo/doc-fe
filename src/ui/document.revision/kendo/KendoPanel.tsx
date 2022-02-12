@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
+import { compact, filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -239,6 +239,7 @@ export function KendoPanel<T>({
         data = map(data, (record) =>
           pick(record,  [
             ...map(gridConfiguration.columns, "field"),
+            ...compact(map(gridConfiguration.columns, "tooltipField")),
             "id",
             "document.docId",
             "document.id",
@@ -439,6 +440,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) { return false; }
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
@@ -446,10 +448,10 @@ export function KendoPanel<T>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
@@ -535,7 +537,17 @@ export function KendoPanel<T>({
       title={getTranslatedText(column.title)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
+      cell={(props) =>
+        RenderCustomCell(
+          {
+            ...props,
+            cellRowClick: onRowClick,
+            showTooltip: column.showTooltip,
+            tooltipField: column.tooltipField,
+          },
+          column.cell || ""
+        )
+      }
       filterCell={
         filterCellMapping[column.field]
           ? filterCellMapping[column.field]

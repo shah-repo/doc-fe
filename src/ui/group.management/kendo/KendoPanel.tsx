@@ -476,6 +476,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     )));
 
   const columnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (end) {
       let dataColumns: KendoColumn[] = gridConfiguration.columns;
       dataColumns = map(dataColumns, (column: KendoColumn) => {
@@ -483,9 +484,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         column.width = columnObject?.width;
         return column;
       });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
+      setTimeout(() => {
+        setColumnDefinitions(dataColumns);
+        updateDataColumnsState(dataColumns);
+      }, 100);
     }
     return false;
   };
