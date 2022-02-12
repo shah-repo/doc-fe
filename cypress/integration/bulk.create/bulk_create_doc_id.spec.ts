@@ -24,7 +24,7 @@ let BLCdocumentType;
 let releasedFormId;
 let emailsFromInbox;
 let cdata;
-let page1; let page2; let page3;
+const pages = [0, 1, 2];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -523,7 +523,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date();
       dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -575,7 +574,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.get("@short_url").then((response) => {
         downloadUrl = (response as any).body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}` + filetime + ".zip";
+        downloadFile  =  `${releasedFormId}${filetime}.zip`;
         cy.downloadFile({
           url: downloadUrl,
           directory: downloaddDirectory,
@@ -585,7 +584,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -595,8 +594,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
           directory: downloaddDirectory,
           fileName: downloadFile,
         });
-      const pdffile = downloaddDirectory + "/" + downloadFile.replace(".zip", "") + "/" +
-      `${releasedFormId}-1-Bulk-create-form.pdf`;
+      const pdffile = `${downloaddDirectory}/${downloadFile}`.replace(".zip", "") +
+      `/${releasedFormId}-1-Bulk-create-form.pdf`;
       cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
     });
   });
@@ -605,7 +604,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Extract texts from PDF file content for bulk create form", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-Bulk-create-form.pdf`,
         }).then((content) => {
         cdata = content;
@@ -615,24 +614,23 @@ context("Bulk create public, private and reserved doc-ids", () => {
         expect(cdata.text).match(/Page 3 of 3/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = page3 = "";
 
         arr.forEach((element) => {
           if (element.includes("Page 1 of 3")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 3")) {
-            page2 = element;
+            pages[1] = element;
           }
           if (element.includes("Page 3 of 3")) {
-            page3 = element;
+            pages[2] = element;
           }
         });
       });
     });
 
     it("Verify page 1 for bulk create form", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -673,7 +671,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify page 2 for bulk create form", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -693,7 +691,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify page 3 for bulk create form", () => {
-      const el = page3;
+      const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
@@ -727,7 +725,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-      it("Enter title 'Bulk Creation document'", () => {
+      it("Enter title Bulk Creation document", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
       });
 
@@ -843,7 +841,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get("@short_url").then((response) => {
           downloadUrl = (response as any).body.url;
           const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}` + filetime + "_WIP.zip";
+          downloadFile  =  `${releasedFormId}${filetime}_WIP.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: downloaddDirectory,
@@ -853,7 +851,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = downloaddDirectory + "/" + downloadFile;
+        const zipfile = `${downloaddDirectory}/${downloadFile}`;
         cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
       });
 
@@ -869,7 +867,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     context("Verify PDF file content for WIP document", () => {
       it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
         }).then((content) => {
           cdata = content;
@@ -878,20 +876,19 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(cdata.text).match(/Page 2 of 2/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
-          page1 = page2 = "";
           arr.forEach((element) => {
             if (element.includes("Page 1 of 2")) {
-              page1 = element;
+              pages[0] = element;
             }
             if (element.includes("Page 2 of 2")) {
-              page2 = element;
+              pages[1] = element;
             }
           });
         });
       });
 
       it("Verify page 1 for WIP document", () => {
-        const el = page1;
+        const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
@@ -927,7 +924,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         }
       });
       it("Verify page 2 for WIP document", () => {
-        const el = page2;
+        const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
@@ -1075,7 +1072,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = downloaddDirectory + "/" + downloadFile;
+        const zipfile = `${downloaddDirectory}/${downloadFile}`;
         cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
       });
 
@@ -1092,29 +1089,28 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Extract texts from PDF file content for released document", () => {
         cy.pdfparseFile(
           {
-            directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+            directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
             fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
-          }).then((content) => {
-          cdata = content;
+          }).then(($content) => {
+          cdata = $content;
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
           expect(cdata.text).match(/Page 2 of 2/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
-          page1 = page2 = "";
           arr.forEach((element) => {
             if (element.includes("Page 1 of 2")) {
-              page1 = element;
+              pages[0] = element;
             }
             if (element.includes("Page 2 of 2")) {
-              page2 = element;
+              pages[1] = element;
             }
           });
         });
       });
 
       it("Verify page 1 for released document", () => {
-        const el = page1;
+        const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
@@ -1152,7 +1148,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         }
       });
       it("Verify page 2 for released document", () => {
-        const el = page2;
+        const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
