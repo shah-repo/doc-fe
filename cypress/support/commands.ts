@@ -192,9 +192,7 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 });
 
 Cypress.Commands.add("sendToEmail", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.PostExportRev, () => {
-    cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
-  });
+  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
 });
 
 Cypress.Commands.add("myCompanies", (token: string) => {

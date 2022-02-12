@@ -349,6 +349,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) {
       return false;
     }
@@ -358,9 +359,10 @@ export function KendoPanel<T>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
 
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {

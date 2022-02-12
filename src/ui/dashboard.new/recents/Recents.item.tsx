@@ -123,7 +123,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
                 </StyleTooltip>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <StyleTooltip title={docTitle} placement="top" arrow>
+                <StyleTooltip title={docTitle} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
                   <Link
                     href={documentVersionPath(docRevId || "", itemId)}
                     color="inherit"

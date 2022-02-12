@@ -21,6 +21,7 @@ const Header: React.FunctionComponent<Props> = ({
 }) => (
   <AppBar position="fixed" color="primary" className={classes.appBar}>
     <Toolbar className={classes.toolbar}>
+      <div className={classes.logo}></div>
       <Grid
         container={true}
         alignItems="flex-end"

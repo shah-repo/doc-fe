@@ -114,7 +114,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap">
+              <Grid container={true} wrap="nowrap" alignItems="center">
                 <Grid item={true}>
                   <Link
                     href={documentVersionPath(docRevId || "", docDocumentId)}
@@ -307,7 +307,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {pinned && (
-          <div className={classes.actionIcons}>
+          <div className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
               placement="top"

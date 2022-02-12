@@ -103,7 +103,7 @@ export const setColumnWidth = (columnWidth: number, gridWidth: number) => {
  * To hide the column title on mouse while resizing the grid
  */
 export const hideColumnTitleOnResize = () => {
-  const selector = document.querySelector(".k-drag-clue") as HTMLElement;
+  const selector = document.querySelector(".k-header.k-drag-clue") as HTMLElement;
   if (!isEmpty(selector)) {
     selector.style.display = "none";
   }
@@ -126,11 +126,14 @@ export enum DisplayText {
   INEDIT,
   SELECT_GROUPS,
   RESEND_SIGNUP_EMAIL,
+  RESET_PASSWORD,
   SIGNEDUP,
   FIELD_CONFIG,
   SCHEMA,
   YES,
   NO,
+  SELECT_TASK_TYPE,
+  SELECT_NEXT_TASK,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -150,10 +153,13 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.SELECT_GROUPS]: "common.select.groups",
   [DisplayText.SIGNEDUP]: "user.management.signed.up",
   [DisplayText.RESEND_SIGNUP_EMAIL]: "user.management.resend.signup.email",
+  [DisplayText.RESET_PASSWORD]: "reset.password",
   [DisplayText.FIELD_CONFIG]: "form.builder.field.config",
   [DisplayText.SCHEMA]: "common.schema",
   [DisplayText.YES]: "common.true",
   [DisplayText.NO]: "common.false",
+  [DisplayText.SELECT_TASK_TYPE]: "async.task.select.task.type",
+  [DisplayText.SELECT_NEXT_TASK]: "async.task.select.next.task",
 };
 
 export enum statusClassMapping {
