@@ -5,7 +5,8 @@ export const styles = makeStyles((theme) =>
   createStyles({
     root: {
       overflow: "auto",
-      height: "calc(100vh - 130px)",
+      width: "99%",
+      margin: theme.spacing(0.625),
     },
     error: {
       color: Colors.red,
@@ -28,10 +29,18 @@ export const styles = makeStyles((theme) =>
     },
     chip: {
       margin: theme.spacing(0.25),
+      fontFamily: "Sora",
+      fontSize: 14,
     },
     formControl: {
       margin: theme.spacing(1),
-      width: 500,
+      minWidth: 400,
+      fontFamily: "Sora",
+      fontSize: 14,
+    },
+    optionSelect: {
+      fontFamily: "Sora",
+      fontSize: 14,
     },
   })
 );

@@ -312,13 +312,15 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
           </div>
         )}
         {pinned && (
-          <StyleTooltip
-            title={<Text translation="common.unpin" />}
-            placement="top"
-            arrow
-          >
-            <PinSolidIcon onClick={handleUnPinClick} />
-          </StyleTooltip>
+          <span className={classes.actionIcon}>
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          </span>
         )}
       </StyledListItem>
     </>

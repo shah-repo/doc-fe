@@ -16,10 +16,6 @@
     "value": "each"
   },
   {
-    "text": "form.builder.units.asNeeded",
-    "value": "as needed"
-  },
-  {
     "text": "form.builder.units.rolls",
     "value": "rolls"
   },
@@ -114,5 +110,9 @@
   {
     "text": "form.builder.units.milliliter",
     "value": "milliliter"
+  },
+  {
+    "text": "form.builder.units.asNeeded",
+    "value": "as needed"
   }
 ]

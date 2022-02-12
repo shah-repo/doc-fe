@@ -11,7 +11,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: 12,
       fontWeight: 600,
       color: Colors.white,
-      backgroundColor: Colors.grey_cloud,
     },
     avatar: {
       display: "flex",
