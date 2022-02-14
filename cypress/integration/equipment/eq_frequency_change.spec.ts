@@ -34,7 +34,7 @@ const eqPMSchemaName = "pm-ki5wtk5l";
 let eqLowerFrequencyURL;
 let eqHigherFrequencyURL;
 
-context("Equipment maintenance for checking History in all states", () => {
+context("Equipment due date calculation while changing frequency", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
