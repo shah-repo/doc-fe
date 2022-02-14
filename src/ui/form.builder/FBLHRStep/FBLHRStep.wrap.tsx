@@ -26,6 +26,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     equipment,
     isDocumentLHRT,
     stepIndex,
+    label,
     ...props
   }: T) => {
 
@@ -59,6 +60,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @helpers
     React.useEffect(() => {
+      formState?.setValidationAttributeName(name, label as string);
+      formState?.validate();
       if (!lhrStepState.stepLHRs) {
         return;
       }

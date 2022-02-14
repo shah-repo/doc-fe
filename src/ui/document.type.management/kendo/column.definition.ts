@@ -98,6 +98,8 @@ const columns: KendoColumn[] = [{
 }, {
   field: "startingNumber",
   title: "common.starting.number",
+  cell: DTMCellTemplates.INTEGER_NUMBER_CELL,
+  filter: "numeric",
   show: true,
   width: "185px",
   groupable: false,
