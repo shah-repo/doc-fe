@@ -18,7 +18,7 @@ let developersGroup;
 let releasedFormId;
 let emailsFromInbox;
 let cdata;
-let page1; let page2; let page3;
+const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -701,6 +701,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -770,7 +773,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -801,7 +805,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -811,8 +815,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           directory: downloaddDirectory,
           fileName: downloadFile,
         });
-      const pdffile = downloaddDirectory + "/" + downloadFile.replace(".zip", "") + "/" +
-      `${releasedFormId}-1-One-Time-training-form-title.pdf`;
+      const pdffile = `${downloaddDirectory}/${downloadFile}`.replace(".zip", "") +
+`/${releasedFormId}-1-One-Time-training-form-title.pdf`;
       cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
     });
   });
@@ -821,7 +825,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Extract texts from PDF file content for training form", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-One-Time-training-form-title.pdf`,
         }).then((content) => {
         cdata = content;
@@ -831,24 +835,23 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 3 of 3/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = page3 = "";
 
         arr.forEach((element) => {
           if (element.includes("Page 1 of 3")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 3")) {
-            page2 = element;
+            pages[1] = element;
           }
           if (element.includes("Page 3 of 3")) {
-            page3 = element;
+            pages[2] = element;
           }
         });
       });
     });
 
     it("Verify page 1 for training form", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
@@ -883,7 +886,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 2 for training form", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
@@ -909,7 +912,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 3 for training form", () => {
-      const el = page3;
+      const el = pages[2];
       if (el.includes("Page 3 of 3")) {
 
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -1040,7 +1043,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -1062,7 +1066,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.get("@short_url").then(($response) => {
         downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}` + filetime + "_draft.zip";
+        downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
         cy.downloadFile({
           url: downloadUrl,
           directory: downloaddDirectory,
@@ -1072,7 +1076,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -1088,7 +1092,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Verify PDF file content for draft document", () => {
     it("Extract texts from PDF file content for draft document", () => {
       cy.pdfparseFile({
-        directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+        directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
         fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
       }).then((content) => {
         cdata = content;
@@ -1097,20 +1101,19 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 2 of 2/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = "";
         arr.forEach((element) => {
           if (element.includes("Page 1 of 2")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 2")) {
-            page2 = element;
+            pages[1] = element;
           }
         });
       });
     });
 
     it("Verify page 1 for draft document", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
@@ -1151,7 +1154,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       }
     });
     it("Verify page 2 for draft document", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
@@ -1254,7 +1257,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -1285,7 +1289,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -1302,7 +1306,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Extract texts from PDF file content for released document", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
         }).then((content) => {
         cdata = content;
@@ -1311,20 +1315,19 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 2 of 2/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = "";
         arr.forEach((element) => {
           if (element.includes("Page 1 of 2")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 2")) {
-            page2 = element;
+            pages[1] = element;
           }
         });
       });
     });
 
     it("Verify page 1 for released document", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
@@ -1364,7 +1367,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       }
     });
     it("Verify page 2 for released document", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
