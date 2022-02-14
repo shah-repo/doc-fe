@@ -90,14 +90,14 @@ export const ColumnMenu = (props: CustomColumnMenuProps) => {
       {!columnDef?.disabled && (
         <GridColumnMenuItem
           {...props}
-          iconClass="k-i-preview .k-i-eye"
+          iconClass="k-i-preview .k-i-eye k-grid-menu-icon"
           onClick={() => onChange(props.column.field)}
           title={getTranslatedText(TranslatedText[DisplayText.HIDE_COLUMN])}
         />
       )}
       <GridColumnMenuItem
         {...props}
-        iconClass={columnDef?.locked ? "k-icon k-i-unlock" : "k-icon k-i-lock"}
+        iconClass={`k-icon k-grid-menu-icon ${columnDef?.locked ? "k-i-unlock" : "k-i-lock"}`}
         onClick={() => handleColumnLockToggle(props.column.field)}
         title={
           columnDef?.locked

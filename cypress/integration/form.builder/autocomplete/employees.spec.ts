@@ -101,9 +101,6 @@ context("Autocomplete 'Employees' test", () => {
       });
 
       context("Check if the user is created", () => {
-        it("Clicks on the close button", () => {
-          cy.usrClickCloseDialogButton();
-        });
         it("Checks if user is in the table", () => {
           cy.usrCheckIfUserIsCreated({ email: approverEmail });
         });
@@ -111,8 +108,9 @@ context("Autocomplete 'Employees' test", () => {
 
       context("Enable Hello Sign", () => {
         it("Click on created user", () => {
-          cy.contains(approverEmail).arrowClick();
+          cy.usrClickEditUser({ name: approverName });
         });
+
         it("Checks on 'Enable Hello Sign' button", () => {
           cy.contains("Enable Hello Sign").arrowClick();
         });

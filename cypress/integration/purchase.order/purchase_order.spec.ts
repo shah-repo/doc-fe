@@ -1233,11 +1233,11 @@ context("PO test", () => {
     it("Check for Landing page default columns", () => {
       SystemRequirement("REQ-1120");
       cy.filterCheckHeaderValues("PO #",
-        "REVISION", "PO STATUS",
-        "SUPPLIER",
-        "PART NUMBER",
-        "AMOUNT", "REQUESTOR",
-        "ISSUE DATE");
+        "Revision", "PO Status",
+        "Supplier",
+        "Part Number",
+        "Amount", "Requestor",
+        "Issue Date");
     });
   });
 

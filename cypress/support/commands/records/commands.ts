@@ -39,15 +39,16 @@ Cypress.Commands.add("recFilterByTitle", (params: {revision: string }) => {
 
 Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get("#clearFilter").arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
   cy.unClick();
-  cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.unClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").contains(params.title).arrowClick();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
