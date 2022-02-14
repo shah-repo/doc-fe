@@ -102,6 +102,8 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...e,
           docId: data.docId,
         }));
+      case FBAutocompleteAsyncOption.releasedParts:
+        return data.filter((item) => item.status === DocumentRevisionStatus.Released);
       case FBAutocompleteAsyncOption.preventativeMaintenaceForms:
       case FBAutocompleteAsyncOption.trainingDocuments:
         return data.map((option) => {
