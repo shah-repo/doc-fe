@@ -236,6 +236,11 @@ export function KendoGrid<T>({
             "id",
             "document.id",
             "owner.user.avatar",
+            "document.documentType.groupOptions",
+            "revision",
+            "revisionStage",
+            "subRevision",
+            "revisionChangeType",
           ])
         );
         dispatch(tableSearchActions.setData(data, tableName));
