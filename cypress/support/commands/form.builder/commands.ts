@@ -223,7 +223,7 @@ Cypress.Commands.add("fbSelectCustomControl", () => cy.get("[data-cy=\"fb-contro
 
 Cypress.Commands.add("fbSelectAutoComplete", () => cy.get("button[data-cy=\"form.builder.autocomplete\"]").arrowClick());
 
-Cypress.Commands.add("fbOpenValidation", () => cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick());
+Cypress.Commands.add("fbOpenValidation", () =>  cy.get("button[data-cy^=\"fb-editor-mode-validation\"]").arrowClick());
 
 Cypress.Commands.add("fbAddField", () => cy.get("[data-cy=\"fb-editor-actions-add\"]").arrowClick());
 
@@ -313,11 +313,11 @@ Cypress.Commands.add("fbVerifyElementClassByLabel", (params: { label: string; el
 });
 
 Cypress.Commands.add("fbVerifyElementContainText", (params: { name: string; label: string; text: string }) => {
-  cy.contains(params.label).parentsUntil("li").find(`[name^=\"${params.name}\"]`).should("contain", params.text);
+  cy.contains(params.label).parentsUntil("li").find(`[name^="${params.name}"]`).should("contain", params.text);
 });
 
 Cypress.Commands.add("fbVerifyElementNotContainText", (params: { name: string; label: string; text: string }) => {
-  cy.contains(params.label).parentsUntil("li").find(`[name^=\"${params.name}\"]`).should("not.contain", params.text);
+  cy.contains(params.label).parentsUntil("li").find(`[name^="${params.name}"]`).should("not.contain", params.text);
 });
 
 Cypress.Commands.add("fbEnterNameData", (params: { name: string; data: string }) => {
