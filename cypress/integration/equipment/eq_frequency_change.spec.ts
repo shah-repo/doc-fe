@@ -6,6 +6,7 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -29,6 +30,9 @@ let createdEquipmentDocument;
 let createdPMRecord;
 let createdCalibrationRecord;
 let group;
+const eqPMSchemaName = "pm-ki5wtk5l";
+let eqLowerFrequencyURL;
+let eqHigherFrequencyURL;
 
 context("Equipment maintenance for checking History in all states", () => {
   before(() => {
@@ -851,6 +855,375 @@ context("Equipment maintenance for checking History in all states", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Verify changing to lower frequency", () => {
+    it("Navig to equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Filter EQ-00001", () => {
+      cy.dlFilterByDocId({ docId: "EQ-00001" });
+    });
+
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    context("Verify due date before lowering frequency", () => {
+      it("Check PM due date calculation is 365 days from now", () => {
+        const PMComplianceDate = moment().tz("America/Los_Angeles")
+          .add(365, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(0).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+          });
+      });
+
+      it("Check calibration due date calculation is 365 days from now", () => {
+        const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+          .add(365, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(1).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          });
+      });
+    });
+
+    context("Lower frequency on EQ-00001", () => {
+      it("Click revise on maintenance record", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Click save to confirm revise", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Change frequency on PM from 365 to 60", () => {
+        cy.get(`input[name$="frequency"]`).eq(0).clear().arrowType("60");
+      });
+
+      it("Change frequency on Calibration from 365 to 60", () => {
+        cy.get(`input[name$="frequency"]`).eq(1).clear().arrowType("60");
+      });
+
+      it("Click add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click save to confirm revise", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve new revision of EQ", () => {
+        cy.ebApprove();
+        cy.url().then((url: any) => {
+          eqLowerFrequencyURL = url;
+        });
+      });
+    });
+
+    context("Create new PM for EQ-00001", () => {
+      it("Click 'NEW PM' on preventative maintenace section", () => {
+        cy.url().then((url: any) => {
+          const docIdFromUrl = url.split("/").pop();
+          // eslint-disable-next-line max-len
+          const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers,
+            CyRoutes.GetAutocompleteOptions], () => {
+            cy.visit(newPMUrl);
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter title 'Preventative maintenance after lowering frequency'", () => {
+        cy.drEnterDocumentTitle({ name: "Preventative maintenance after lowering frequency" });
+      });
+
+      it("Select document type 'Maintenance Record'", () => {
+        cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+      });
+
+      it("Select revision stage 'Numeric'", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+      });
+
+      it("Fill 'Completion Date'", () => {
+        const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+        cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (dayOfTheMonth.toString() === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve record", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+          cy.ebApprove();
+        });
+      });
+
+      it("Verify status is 'Released'", () => {
+        cy.drCheckDocumentStatus({ status: "Released" });
+      });
+    });
+
+    context("Navigate to EQ-00001 and verify due dates", () => {
+      it("Navigate to Equipment document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+          cy.visit(eqLowerFrequencyURL);
+        });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Check PM due date calculation is 60 days from now", () => {
+        const PMComplianceDate = moment().tz("America/Los_Angeles")
+          .add(60, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(0).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+          });
+      });
+
+      it("Check calibration due date calculation is 60 days from now", () => {
+        const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+          .add(60, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(1).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          });
+      });
+    });
+  });
+
+  context("Verify changing to increased frequency", () => {
+    it("Navig to equipment", () => {
+      cy.navigToEquipment();
+    });
+
+    it("Filter EQ-00002", () => {
+      cy.dlClearFilters();
+      cy.dlFilterByDocId({ docId: "EQ-00002" });
+    });
+
+    it("Select first Equipment on list", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    context("Verify due date before lowering frequency", () => {
+      it("Check PM due date calculation is 5 days from now", () => {
+        const PMComplianceDate = moment().tz("America/Los_Angeles")
+          .add(5, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(0).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+          });
+      });
+
+      it("Check calibration due date calculation is 20 days from now", () => {
+        const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+          .add(5, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(1).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+          });
+      });
+    });
+
+    context("Increase frequency on EQ-00002 and verify it updates on EQ", () => {
+      it("Click revise on maintenance record", () => {
+        cy.drClickReviseDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Click save to confirm revise", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Change frequency on PM from 5 to 20", () => {
+        cy.get(`input[name$="frequency"]`).eq(0).clear().arrowType("20");
+      });
+
+      it("Change frequency on Calibration from 5 to 20", () => {
+        cy.get(`input[name$="frequency"]`).eq(1).clear().arrowType("20");
+      });
+
+      it("Click add approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click save to confirm revise", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve new revision of EQ", () => {
+        cy.ebApprove();
+        cy.url().then((url: any) => {
+          eqHigherFrequencyURL = url;
+        });
+      });
+
+      context("Create new PM for EQ-00002", () => {
+        it("Click 'NEW PM' on preventative maintenace section", () => {
+          cy.url().then((url: any) => {
+            const docIdFromUrl = url.split("/").pop();
+            // eslint-disable-next-line max-len
+            const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+              CyRoutes.GetAvailableApprovers,
+              CyRoutes.GetAutocompleteOptions], () => {
+              cy.visit(newPMUrl);
+            });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Enter title 'Preventative maintenance after increasing frequency'", () => {
+          cy.drEnterDocumentTitle({ name: "Preventative maintenance after increasing frequency" });
+        });
+
+        it("Select document type 'Maintenance Record'", () => {
+          cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+        });
+
+        it("Select revision stage 'Numeric'", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it(`Select maintainer '${ADMIN_USER.name}'`, () => {
+          cy.listLoadingElementShouldNotExist();
+          cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
+          cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+        });
+
+        it("Fill 'Completion Date'", () => {
+          const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
+          cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+          cy.get("button.MuiPickersDay-day")
+            .not(".MuiPickersDay-hidden")
+            .each(($el) => {
+              const dayNumber = $el.text();
+              if (dayOfTheMonth.toString() === dayNumber) {
+                cy.wrap($el).arrowClick();
+              }
+            });
+        });
+
+        it("Create 'Preventative maintenance document'", () => {
+          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        });
+
+        it("Add an Approval", () => {
+          cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+        });
+
+        it("Submit for approval", () => {
+          cy.pmSubmitForApproval();
+        });
+
+        it("Approve record", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
+            cy.ebApprove();
+          });
+        });
+
+        it("Verify status is 'Released'", () => {
+          cy.drCheckDocumentStatus({ status: "Released" });
+        });
+      });
+
+      context("Navigate to EQ-00002 and verify due dates", () => {
+        it("Navigate to Equipment document", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+            cy.visit(eqHigherFrequencyURL);
+          });
+          cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Check PM due date calculation is 20 days from now", () => {
+          const PMComplianceDate = moment().tz("America/Los_Angeles")
+            .add(20, "days")
+            .format("ddd, MMMM D, YYYY");
+          cy.get("[data-cy=\"maintenance.status\"]")
+            .eq(0).then(($el) => {
+              const text = $el.text().replace(/\u00a0/g, "");
+              expect(text).to.contain(`PMDone - Due Date: ${PMComplianceDate}`);
+            });
+        });
+
+        it("Check calibration due date calculation is 20 days from now", () => {
+          const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+            .add(20, "days")
+            .format("ddd, MMMM D, YYYY");
+          cy.get("[data-cy=\"maintenance.status\"]")
+            .eq(1).then(($el) => {
+              const text = $el.text().replace(/\u00a0/g, "");
+              expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+            });
+        });
+      });
     });
   });
 });
