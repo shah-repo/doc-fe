@@ -72,6 +72,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
 
           mpiProcedureState?.setPartsSelected(partsSelected);
           id && dispatch(documentRevisionsActions.loadAudit(id));
+          id && dispatch(documentRevisionsActions.reload(id));
         }
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +84,7 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         (data?: DocumentRevision) => {
           if (!data) { return; }
           id && dispatch(documentRevisionsActions.loadAudit(id));
+          id && dispatch(documentRevisionsActions.reload(id));
         }
       );
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -140,9 +142,9 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
           item xs={12}
           style={{ textAlign: "left", color: Colors.latest_red_varient, fontSize: "14px", paddingBottom: "4px" }}
         >
-          {pmDate && <span>PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
+          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)} </span>}
           {pmDate && calDate && <Box component="span" style={{ color: Colors.black }}>&#9642;</Box>}
-          {calDate && <span> Cal Due: {getFormattedDateString(calDate, MomentFormats.BriefDate)}</span>}
+          {pmDate && <span> PM Due: {getFormattedDateString(pmDate, MomentFormats.BriefDate)} </span>}
         </Grid>
       </Grid>;
     };
