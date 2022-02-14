@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { companySelectors } from "../../../../state/ducks/company";
 import { ApplicationState } from "../../../../state/reducers";
@@ -21,7 +21,13 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
 }) => {
 
   const dialog = useDialog();
+  const companyEmployes = useSelector(companySelectors.getActiveEmployees);
   const openDialog = () => {
+    const activeEmployees = companyEmployes.map((employee) => ({
+      value: employee.id as string,
+      text: employee.user?.name || "",
+    }));
+    setEmployees(activeEmployees);
     dialog.open();
   };
 
@@ -50,16 +56,6 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
       asyncUpdateOwner,
     );
   };
-
-  const companyEmployes = useSelector(companySelectors.getActiveEmployees);
-  useEffect(() => {
-    const activeEmployees = companyEmployes.map((employee) => ({
-      value: employee.id as string,
-      text: employee.user?.name || "",
-    }));
-    setEmployees(activeEmployees);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companyEmployes]);
 
   return (
     <OwnerChangerPresenter
