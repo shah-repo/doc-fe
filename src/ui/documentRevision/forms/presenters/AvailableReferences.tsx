@@ -6,7 +6,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
-import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
 import ListBoxComponent from "../../../components/common/autocomplete/ListBoxComponent";
@@ -14,8 +14,11 @@ import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FB } from "../../../form.builder";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useGetAvailableReferences from "../../../hooks/useGetAvailableReferences";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
+import { DocumentRevisionFormValues } from "../types";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -48,6 +51,19 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const { submitForm } = useFormContext();
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
+  const [open, setOpen] = React.useState(false);
+  availableReferences = useGetAvailableReferences({} as DocumentRevisionFormValues);
+
+  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
+
+  useEffect(() => {
+    if (open) {
+      loadAction();
+    }
+  }, [open]);
+
+  // useGetAvailableReferences(initialValues)
 
   const onChange = (e, value) => {
     const {
@@ -107,6 +123,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
 
+  useEffect(() => {
+    if (loadAsyncState.status === "SUCCESS") {
+      console.log("API loaded completely:: ");
+      setModifiedOptions(options);
+    }
+  }, [loadAsyncState]);
+
   const filterOptions = (event: any, inputVal: any) => {
     const updatedOptions = options.filter(
       (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
@@ -162,6 +185,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         multiple
         disableClearable
         ListboxComponent={ListBoxComponent}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
       />
     </Field>
   ); };
