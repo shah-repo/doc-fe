@@ -70,9 +70,13 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     type={pendingAction.type}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime
+                    )}
                     dueOn={getFormattedDateString(
                       pendingAction.dueOn,
-                      MomentFormats.BriefDateTime
+                      MomentFormats.ShortBriefDate
                     )}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}

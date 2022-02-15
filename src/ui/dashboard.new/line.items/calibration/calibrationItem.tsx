@@ -29,6 +29,7 @@ interface Props {
   docRevOwnerId: string;
   equipmentInterval: number;
   dueOn?: string;
+  timestamp?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
@@ -44,6 +45,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   docRevName,
   docRevVersion,
   dueOn,
+  timestamp,
   hoverItemId,
   equipmentInterval,
   onMouseHoverItem,
@@ -159,6 +161,21 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     />
                   </Typography>
                 </Grid>
+                <Grid
+                  item={true}
+                  className={classes.grayDot}
+                ></Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.dueOn}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {dueOn}
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid
                 container={true}
@@ -175,7 +192,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     color="textSecondary"
                     noWrap
                   >
-                    {dueOn}
+                    {timestamp}
                   </Typography>
                 </Grid>
               </Grid>
