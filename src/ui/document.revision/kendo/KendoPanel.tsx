@@ -65,6 +65,7 @@ export function KendoPanel<T>({
   documentTypeOptions,
   tableCriteria,
   gridData,
+  exportDataChanges,
 }: KendoPanelProps<T>) {
   const intl = useIntl();
   const classes = KendoGridStyles();
@@ -232,6 +233,15 @@ export function KendoPanel<T>({
           const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
+          exportDataChanges &&
+            exportDataChanges(
+              process(data, {
+                skip: 0,
+                take: data.length,
+                sort: initialDataState.sort,
+                filter: initialDataState.filter,
+              }).data
+            );
           if (newDataState.total === 0) {
             setNoDataMessage(<NoDataFound />);
           }
@@ -483,6 +493,15 @@ export function KendoPanel<T>({
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
       setResultState(newDataState);
+      exportDataChanges &&
+        exportDataChanges(
+          process(gridData, {
+            skip: 0,
+            take: gridData.length,
+            sort: dataState.sort,
+            filter: dataState.filter,
+          }).data
+        );
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);
