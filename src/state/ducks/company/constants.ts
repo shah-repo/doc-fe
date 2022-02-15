@@ -149,4 +149,11 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
     icon: "/navigation_icons/receipt_list.svg",
     restrictedToUsersWithTags: [GroupTag.PAGE_DETAILS_MANAGEMENT],
   },
+  {
+    icon: "/navigation_icons/document-menu.svg",
+    label: "Async Tasks",
+    path: "/async_tasks",
+    type: "LINK",
+    restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
+  },
 ];

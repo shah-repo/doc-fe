@@ -1,0 +1,80 @@
+import { Divider, List } from "@material-ui/core";
+import React from "react";
+import { ActionCreator } from "redux";
+import { getHumanizedFormat } from "../../../common/utils/date";
+import {
+  RecentItems,
+  RecentTypes,
+} from "../../../state/ducks/dashboard.new/recents/types";
+import { ApiAction, AsyncState } from "../../../state/types";
+import AsyncGate from "../../components/AsyncGate";
+import Text from "../../components/Text";
+import RecentsItem from "./Recents.item";
+import { styles } from "./Recents.styles";
+
+interface Props {
+  loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
+  loadRecentsListAsyncState: AsyncState;
+  recents: RecentItems[];
+}
+
+const RecentsPresenter: React.FunctionComponent<Props> = ({
+  loadRecents,
+  loadRecentsListAsyncState,
+  recents,
+}) => {
+  const classes = styles();
+  const renderItems = () => (
+    <List className={classes.root}>
+      {recents.map((data, index) => {
+        switch (data.itemType) {
+          case RecentTypes.DOCUMENT:
+            return (
+              <>
+                <RecentsItem
+                  key={index}
+                  itemId={data.itemId}
+                  docId={data.docId}
+                  itemType={data.itemType}
+                  docTypeGroup={data.docTypeGroup}
+                  docRevId={data.docRevId}
+                  docTitle={data.docTitle}
+                  accessedAt={getHumanizedFormat(data.accessedAt)}
+                />
+                <Divider />
+              </>
+            );
+          case RecentTypes.CHANGE_REQUEST:
+            return (
+              <>
+                <RecentsItem
+                  key={index}
+                  itemId={data.itemId}
+                  docId={data.docId}
+                  itemType={data.itemType}
+                  docTypeGroup={data.docTypeGroup}
+                  docRevId={data.docRevId}
+                  docTitle={data.docTitle}
+                  accessedAt={getHumanizedFormat(data.accessedAt)}
+                />
+                <Divider />
+              </>
+            );
+          default:
+            return <Text key={index} translation="common.undefined" />;
+        }
+      })}
+    </List>
+  );
+
+  return (
+    <AsyncGate
+      asyncAction={loadRecents}
+      asyncState={loadRecentsListAsyncState}
+      startActionOnMount={true}
+    >
+      {renderItems()}
+    </AsyncGate>
+  );
+};
+export default RecentsPresenter;

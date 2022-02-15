@@ -5,6 +5,8 @@ import { ApplicationState } from "../../reducers";
 import { WHITE_LABEL_DEFAULT } from "./constants";
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
+const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
+const companyNameSelector = (state: ApplicationState) => state.company.companyMine.name;
 const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
@@ -37,6 +39,8 @@ export default {
   isDropboxEnabled,
   slackTeamId,
   getSelectedCompany,
+  companyIdSelector,
+  companyNameSelector,
   getCompanyMine,
   isHelloSignIntegrationEnabled,
   getNavigationItems,

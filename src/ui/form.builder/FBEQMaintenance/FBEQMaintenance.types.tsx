@@ -32,4 +32,5 @@ export interface AvailableMaintenanceForm {
   documentRevisions: DocumentRevision[];
   documentType: Partial<DocumentType>;
   id: string;
+  name: string;
 }

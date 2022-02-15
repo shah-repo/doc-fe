@@ -1,0 +1,114 @@
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
+
+export const styles = makeStyles((theme: Theme) =>
+  createStyles({
+    inline: {
+      display: "inline",
+    },
+    listItemIcon: {
+      paddingLeft: "10px",
+    },
+    link: {
+      color: Colors.black,
+    },
+    actionIcon: {
+      paddingLeft: theme.spacing(1.25),
+    },
+    actionIcons: {
+      /* Action Icons */
+      /* Auto Layout */
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "0px 10px",
+      position: "absolute",
+      width: "44px",
+      height: "62px",
+      right: "0px",
+      top: "0px",
+      /* Highlight */
+      // background: Colors.sky_blue,
+    },
+    typographyDueInfewDays: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "13px",
+      lineHeight: "16px",
+      color: Colors.latest_yellow_varient,
+    },
+    typographyOverdue: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "13px",
+      lineHeight: "16px",
+      color: Colors.latest_red_varient,
+      letterSpacing: 0,
+    },
+    typography: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 400,
+      letterSpacing: 0,
+    },
+    typographyBold: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+      letterSpacing: 0,
+    },
+    typographyStatus: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "14px",
+      lineHeight: "15px",
+      letterSpacing: 0,
+    },
+    marginRight: {
+      marginRight: theme.spacing(2.25),
+    },
+    timestampContainer: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "12px",
+      lineHeight: "22px",
+      color: Colors.font_gray,
+      letterSpacing: 0,
+    },
+    truncateText: {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    },
+    redDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      position: "relative",
+      background: Colors.latest_red_varient,
+    },
+    yellowDot: {
+      width: "4px",
+      height: "4px",
+      right: "4px",
+      position: "relative",
+      background: Colors.latest_yellow_varient,
+    },
+    grayDot: {
+      width: "4px",
+      height: "4px",
+      position: "relative",
+      background: Colors.font_gray,
+    },
+    margin5: {
+      marginRight: "5px",
+    },
+    margin7: {
+      marginRight: "7px",
+    },
+  })
+);

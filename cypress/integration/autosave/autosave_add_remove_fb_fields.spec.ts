@@ -11,6 +11,18 @@ let loginResponse;
 let employeeLogin;
 
 context("Autosave on add and remove FB fields", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -412,6 +424,7 @@ context("Autosave on add and remove FB fields", () => {
     it("Add Actions 'Action Button'", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
+      cy.get("input[value=\"SendEmailWithFormToFill\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
         cy.fbAddNewFieldButton();
       });

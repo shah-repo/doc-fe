@@ -13,10 +13,10 @@ let adminEmployee;
 
 const defaultLogo = "/ta_assets_company_logo.png";
 const defaultAvatar = "/ta_assets_company_avatar.png";
-const defaultDefaultBackground = "#4b5dc6";
-const defaultPrimary = "#eb5055";
-const defaultPrimaryContrastText = "#000000";
-const defaultSecondary = "#414b8b";
+const defaultDefaultBackground = "#EEF3FF";
+const defaultPrimary = "#FFF";
+const defaultPrimaryContrastText = "#FFFFFF";
+const defaultSecondary = "#FFF";
 const defaultSecondaryContrastText = "#FFFFFF";
 
 const replacedLogo = "/ta_assets_company_avatar.png";
@@ -221,20 +221,20 @@ context("Whitelabeling test", () => {
     });
 
     context("Verify replaced company colors", () => {
-      it("Verify 'primary' company color", () => {
-        cy.cmpVerifyPrimaryColor({ color: replacedPrimary });
+      it("Verify 'primary' company color should not change", () => {
+        cy.cmpVerifyPrimaryColor({ color: defaultPrimary });
       });
 
       it("Verify 'primaryContrastText' company color", () => {
         cy.cmpVerifyPrimaryContrastText({ color: replacedPrimaryContrastText });
       });
 
-      it("Verify 'secondary' company color", () => {
-        cy.cmpVerifySecondaryColor({ color: replacedSecondary });
+      it("Verify 'secondary' company color should not change", () => {
+        cy.cmpVerifySecondaryColor({ color: defaultSecondary });
       });
 
-      it("Verify 'secondaryContrastText' company color", () => {
-        cy.cmpVerifySecondaryContrastText({ color: replacedSecondaryContrastText });
+      it("Verify 'secondaryContrastText' company color should not change", () => {
+        cy.cmpVerifySecondaryContrastText({ color: defaultSecondaryContrastText });
       });
 
       it("Verify 'defaultBackground' company color", () => {

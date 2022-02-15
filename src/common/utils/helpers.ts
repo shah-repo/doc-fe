@@ -1,5 +1,6 @@
 import DOMPurify from "dompurify";
 import { cloneDeep } from "lodash";
+import { useEffect } from "react";
 import striptags from "striptags";
 import Config from "../../config";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
@@ -20,6 +21,24 @@ export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(
   return copy;
 };
 
+export function downloadURI(uri, name) {
+  const link = document.createElement("a");
+  link.setAttribute("download", name);
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+export const useDebouncedEffect = (effect, deps, delay) => {
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
+
+    return () => clearTimeout(handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps || [], delay]);
+};
+
 const translate = {
   nbsp: " ",
   amp: "&",
@@ -34,3 +53,10 @@ export const convertHtmlEntities = (html: string) => ( html.replace(translateRe,
 
 export const theme = Config.Theme;
 export const logo = "/logo_enlil_dark.svg";
+
+export function deleteCookie(name) {
+  document.cookie = name + "=" +
+      ";domain=" + window.location.hostname +
+      ";path=/" +
+      ";expires=" + new Date().toUTCString();
+}

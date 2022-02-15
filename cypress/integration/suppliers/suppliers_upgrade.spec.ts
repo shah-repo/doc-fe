@@ -358,7 +358,7 @@ context("Test upgradability of old supplier form and record", () => {
       });
 
       it("Select old supplier document in DRAFT from supplier list", () => {
-        cy.dlFilterByDocTitle({ docTitle: "Old draft supplier document" });
+        cy.supFilterByDocTitle({ docTitle: "Old draft supplier document" });
         cy.dlSelectFirstDocument();
       });
 
@@ -372,7 +372,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {
@@ -397,7 +397,7 @@ context("Test upgradability of old supplier form and record", () => {
 
         it("Select old supplier document in RELEASED from supplier list", () => {
           cy.dlClearFilters();
-          cy.dlFilterByDocTitle({ docTitle: "Old released supplier document" });
+          cy.supFilterByDocTitle({ docTitle: "Old released supplier document" });
           cy.dlSelectFirstDocument();
         });
 
@@ -420,7 +420,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {

@@ -25,6 +25,18 @@ const dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Approval request form scenario", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -332,20 +344,15 @@ context("Approval request form scenario", () => {
       });
 
       it("Rejecting request gives prompt", () => {
-        cy.arRejectComfirmationAR();
-      });
-
-      it("Verify message is shown if e-signature not met", () => {
-        SystemRequirement("REQ-0880");
-        cy.arVerifySignatureIsNotMet();
-        cy.closeAllAlertMessages();
+        cy.arRejectComfirmationARNew();
       });
 
       it("Reject AR from dashboard", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCR, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-          cy.poRejectAR({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCRNew, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
+          cy.poRejectARNew({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
         });
       });
+
     });
 
     context("Verify dashboard notification are not shown", () => {
@@ -417,7 +424,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveAR();
+        cy.arApproveARFromDashboard();
       });
     });
 
@@ -438,7 +445,7 @@ context("Approval request form scenario", () => {
 
       it("Accept Approval Request with password prompt", () => {
         SystemRequirement("REQ-0920");
-        cy.arApproveAR();
+        cy.arApproveARFromDashboard();
       });
     });
   });
@@ -527,7 +534,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is approved.", companyId],
+          contains: [
+            "Your request has been\r\n                                      approved!",
+            "AR-00002\r\n                                        Approval request from newly created form",
+            companyId,
+          ],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -542,7 +553,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[21].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is rejected.", companyId],
+          contains: [
+            "Your request has been\r\n                                      rejected!",
+            "AR-00002\r\n                                        Approval request from newly created form",
+            companyId,
+          ],
         },
       ];
       cy.imapVerifyEmailsInList({

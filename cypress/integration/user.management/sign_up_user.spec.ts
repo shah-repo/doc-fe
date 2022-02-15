@@ -3,6 +3,7 @@
 
 import faker from "faker";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -73,7 +74,6 @@ context("Sign up user flow", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
     });
   });
@@ -154,13 +154,15 @@ context("Sign up user flow", () => {
     });
 
     it("Click 'Update profile' and close dialog", () => {
-      cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchUsersMe, () => {
+        cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
+      });
       cy.get("#DialogContent-close").arrowClick();
     });
 
     it("Check avatar picture is present", () => {
       // if alt class exists then picture is uploaded
-      cy.get("[alt=UserProfile]").should("exist");
+      cy.get(`[alt="${nameOfUserToSignUp}"]`).should("exist");
     });
   });
 });

@@ -1,0 +1,486 @@
+import {
+  Box,
+  Collapse,
+  Grid,
+  IconButton,
+  Link,
+  List,
+  ListItemIcon,
+  ListItemText,
+  Modal,
+  Typography,
+} from "@material-ui/core";
+import { size } from "lodash";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
+import { ReactComponent as ExpandIcon } from "../../../../../assets/images/expand.svg";
+import { ReactComponent as InReviewWhiteIcon } from "../../../../../assets/images/in_review_status.svg";
+import { ReactComponent as InReviewIcon } from "../../../../../assets/images/in_review_status_white.svg";
+import { ReactComponent as PendingReviewIcon } from "../../../../../assets/images/pending_approval.svg";
+import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
+import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin_solid.svg";
+import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
+import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
+import { Nullable } from "../../../../../state/ducks/common/types";
+import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
+import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import Text from "../../../../components/Text";
+import Colors from "../../../../layout/theme/utils/colors";
+import { getDocIcon } from "../../common/DocIcon";
+import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
+import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
+import { StyledListItem } from "../../common/StyledListItem";
+import { StyleTooltip } from "../../common/StyleTooltip";
+import { DocTypeGroups } from "../../common/types";
+import EmailModal from "../../dialogs/email/EmailDialog";
+import { styles } from "./pendingReview.styles";
+
+interface Props {
+  id: string;
+  type: string;
+  title: string;
+  arId: string;
+  arStatus: string;
+  timestamp: string;
+  pendingApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  approvedApprovers: {
+    userName: string;
+    employeeId: string;
+    userAvatar: Nullable<string>;
+    userInitialColor: string;
+    approvalStatus: string;
+  }[];
+  docRevs: {
+    docTypeGroup: DocTypeGroups;
+    documentRevisionId: string;
+    documentId: string;
+    docId: string;
+    displayRevision: string;
+    name: string;
+    justificationOfChange: string;
+    descriptionOfChange: string;
+  }[];
+  hoverItemId: string;
+  onMouseHoverItem: (id: string) => void;
+  pinned: boolean;
+  pinLineItem: (id: string) => void;
+  unPinLineItem: (id: string) => void;
+  pendingEmailSentAt: Nullable<string>;
+}
+const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+  id,
+  arId,
+  timestamp,
+  docRevs,
+  title,
+  arStatus,
+  pendingApprovers,
+  approvedApprovers,
+  hoverItemId,
+  onMouseHoverItem,
+  pinned,
+  pinLineItem,
+  unPinLineItem,
+  pendingEmailSentAt,
+}) => {
+  const classes = styles();
+  const dispatch = useDispatch();
+  const [pinHover, setPinHover] = React.useState(false);
+  const [viewHoverItem, setViewHoverItem] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [lastEmailSent, setLastEmailSent] = React.useState(false);
+  const [emailModelopen, setEmailModelopen] = React.useState(false);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const handlePinClick = () => {
+    pinLineItem(id);
+  };
+  const handleUnPinClick = () => {
+    unPinLineItem(id);
+  };
+  const hoverItem = hoverItemId === id;
+  const onMouseHoverListItem = () => {
+    onMouseHoverItem(id);
+  };
+  const onMouseHoverPinIcon = () => {
+    setPinHover(true);
+  };
+  const onMouseLeavePinIcon = () => {
+    setPinHover(false);
+  };
+  const onMouseHoverViewIcon = (id: string) => {
+    setViewHoverItem(id);
+  };
+  const onMouseLeaveViewIcon = () => {
+    setViewHoverItem("");
+  };
+  const openApproversModel = (e) => {
+    e.stopPropagation();
+    setLastEmailSent(false);
+    setEmailModelopen(true);
+  };
+  const handleEmailModelClose = () => {
+    setEmailModelopen(false);
+  };
+  const onClose = () => {
+    handleEmailModelClose();
+    if (lastEmailSent) {
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+    }
+  };
+
+  return (
+    <>
+      <StyledListItem
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        button
+        onMouseEnter={onMouseHoverListItem}
+        className={classes.listItem}
+      >
+        {open ? (
+          <CollapseIcon className={classes.icon} onClick={handleClick} />
+        ) : (
+          <ExpandIcon className={classes.icon} onClick={handleClick} />
+        )}
+        <ListItemIcon>
+          <PendingReviewIcon height={30} width={30} />
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid item={true}>
+                  <Link
+                    href={changeRequestEditPath(id)}
+                    color="inherit"
+                    className={classes.link}
+                  >
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={`${classes.typography} ${classes.margin5}`}
+                      color="textPrimary"
+                      noWrap
+                    >
+                      {arId}
+                    </Typography>
+                  </Link>
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <StyleTooltip
+                    title={title}
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
+                    <Link
+                      href={changeRequestEditPath(id)}
+                      color="inherit"
+                      className={classes.link}
+                    >
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={`${classes.typographyBold} ${classes.margin5}`}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    onClick={openApproversModel}
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {!hoverItem && !open && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<InReviewWhiteIcon />}
+                        label={STATUS_TYPES_LABEL[arStatus]}
+                      />
+                    )}
+                    {(hoverItem || open) && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={<InReviewIcon />}
+                        label={STATUS_TYPES_LABEL[arStatus]}
+                      />
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.typography}
+                    color="textPrimary"
+                    noWrap
+                  >
+                    <Text translation="pending.approval" />
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container={true}
+                wrap="nowrap"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <Grid
+                  zeroMinWidth
+                  item={true}
+                  className={`${classes.truncateText} ${classes.margin7}`}
+                >
+                  <StyleTooltip
+                    title={
+                      <>
+                        <Text
+                          translation="assigned.users.count"
+                          values={{
+                            count:
+                              size(pendingApprovers) + size(approvedApprovers),
+                          }}
+                        />
+                        <br />
+                        <Text
+                          translation="approved.and.pending.count"
+                          values={{
+                            approved: size(approvedApprovers),
+                            pending: size(pendingApprovers),
+                          }}
+                        />
+                      </>
+                    }
+                    placement="top-start"
+                    arrow
+                    PopperProps={{ popperOptions: {} }}
+                  >
+                    <Link
+                      href="#"
+                      color="inherit"
+                      onClick={openApproversModel}
+                      className={classes.link}
+                    >
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        className={classes.typographyBold}
+                        color="textSecondary"
+                        noWrap
+                      >
+                        {pendingApprovers !== undefined
+                          ? pendingApprovers
+                            .map((approver) => approver.userName)
+                            .join(", ")
+                          : ""}
+                      </Typography>
+                    </Link>
+                  </StyleTooltip>
+                </Grid>
+                <Grid
+                  item={true}
+                  className={`${classes.grayDot} ${classes.margin5}`}
+                ></Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.timestampContainer}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {timestamp}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </>
+          }
+        />
+        {hoverItem && !pinned && (
+          <Box component="div" className={classes.actionIcons}>
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {pinHover && (
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeavePinIcon}
+                />
+              </StyleTooltip>
+            )}
+          </Box>
+        )}
+        {pinned && (
+          <span className={classes.actionIcon}>
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          </span>
+        )}
+      </StyledListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List dense disablePadding className={classes.collapsedList}>
+          {docRevs.map((prItem, index) => (
+            <StyledListItem button className={classes.nested} key={index}>
+              <IconButton aria-label="listIcon">
+                {getDocIcon(prItem.docTypeGroup, 20, 20)}
+              </IconButton>
+              <ListItemText
+                id={prItem.docId}
+                primary={
+                  <Grid
+                    container={true}
+                    wrap="nowrap"
+                    justify="flex-start"
+                    alignItems="center"
+                  >
+                    <Grid item={true}>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={`${classes.typography} ${classes.margin5}`}
+                        color="textPrimary"
+                        noWrap
+                      >
+                        {prItem.docId}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      zeroMinWidth
+                      item={true}
+                      className={classes.truncateText}
+                    >
+                      <StyleTooltip
+                        title={
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        }
+                        placement="top-start"
+                        arrow
+                        PopperProps={{ popperOptions: {} }}
+                      >
+                        <Typography
+                          component="span"
+                          variant="caption"
+                          className={`${classes.typographyBold} ${classes.margin5}`}
+                          color="textSecondary"
+                          noWrap
+                        >
+                          <>
+                            <Text translation="dashboard.revision" />
+                            &nbsp;{prItem.displayRevision} {prItem.name}
+                          </>
+                        </Typography>
+                      </StyleTooltip>
+                    </Grid>
+                  </Grid>
+                }
+              />
+              <Box component="div">
+                {viewHoverItem !== prItem.docId && (
+                  <ViewIcon
+                    onMouseEnter={() => onMouseHoverViewIcon(prItem.docId)}
+                  />
+                )}
+                {viewHoverItem === prItem.docId && (
+                  <StyleTooltip
+                    classes={{ tooltip: classes.customTooltipWidth }}
+                    title={
+                      <>
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.description.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.descriptionOfChange}
+                        </Typography>
+                        <br />
+                        <br />
+                        <Typography
+                          className={classes.viewTooltipText}
+                          component="span"
+                          variant="caption"
+                        >
+                          <Text translation="approval.tooltip.justification.change.title" />
+                        </Typography>
+                        <br />
+                        <Typography
+                          className={classes.typography}
+                          noWrap
+                          component="span"
+                        >
+                          {prItem.justificationOfChange}
+                        </Typography>
+                      </>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ViewSolidIcon onMouseLeave={onMouseLeaveViewIcon} />
+                  </StyleTooltip>
+                )}
+              </Box>
+            </StyledListItem>
+          ))}
+        </List>
+      </Collapse>
+      <Modal
+        open={emailModelopen}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        onClose={onClose}
+      >
+        <EmailModal
+          id={id}
+          handleEmailModelClose={onClose}
+          pendingApprovers={pendingApprovers}
+          setLastEmailSent={setLastEmailSent}
+          approvedApprovers={approvedApprovers}
+          pendingEmailSentAt={pendingEmailSentAt}
+        />
+      </Modal>
+    </>
+  );
+};
+
+export default PendingReviewPresenter;

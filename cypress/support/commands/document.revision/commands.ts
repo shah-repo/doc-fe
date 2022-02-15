@@ -13,6 +13,7 @@ declare global {
       drCreateDocumentRevision(params: { payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       drGetDocumentType(params: { employeeId: string; sessionId: string }): Chainable<Subject>;
       drEnterDocumentTitle(params: { name: string }): Chainable<Subject>;
+      drEnterDocumentTitleWithWait(params: { name: string }): Chainable<Subject>;
       drClearDocumentTitle(): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
       drEnterDocumentDescriptionWithWait(params: { description: string }): Chainable<Subject>;
@@ -151,9 +152,9 @@ Cypress.Commands.add("drUpdateDocumentTypeName", (params: { employeeId: string; 
 });
 
 Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) => {
-  cy.get("#clearFilter").arrowClick();
+  cy.dlClearFilters();
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+    cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
 
 });
@@ -220,6 +221,14 @@ Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
 
 Cypress.Commands.add("drClearDocumentTitle", () => {
   cy.get("[data-cy=\"field-name\"] svg").arrowClick();
+});
+
+Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+    cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+    cy.unClick();
+  });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("drEnterDocumentDescription", (params: { description: string }) => {
@@ -435,30 +444,20 @@ Cypress.Commands.add("drSetDocTypeId", (params: { docId: string }) => {
 
 Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.dlClearFilters();
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#name").arrowType(params.title).wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
-  cy.listLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
 
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("#docId").arrowType(params.docId).wait(500);
-  });
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get("[id=\"mui-component-select-displayStatus\"]").arrowClick();
-    cy.get("li[data-value]").contains(params.status).arrowClick().wait(500);
-  });
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
@@ -498,10 +497,8 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
-    cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -523,6 +520,7 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 });
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").arrowType(`${params.username}{downarrow}{enter}`, { force: true });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
@@ -567,7 +565,8 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -576,6 +575,7 @@ Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
     cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -753,7 +753,8 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   names.forEach((name) => {
     cy.get(`[data-cy="field-approvals"]`).arrowType(`${name}{enter}`);
   });
@@ -777,11 +778,13 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names:
       cy.checkToastMessage({ exists: false });
     }
   }
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {
@@ -796,7 +799,7 @@ Cypress.Commands.add("verifyDesSort", (params: {index: number; colLength: number
 
 Cypress.Commands.add("verifyAscSort", (params: {index: number; colLength: number}) => {
   const cellContents: string[] = [];
-  cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn")
+  cy.get("tr.k-master-row")
     .children()
     .each(($el, $index) => {
       if ($index % params.colLength === params.index) {

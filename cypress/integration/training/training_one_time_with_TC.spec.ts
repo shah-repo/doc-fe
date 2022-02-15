@@ -744,18 +744,18 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.navigToDashboard();
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: FM-00002 - Rev 1 released form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.contains(`FM-00002`).should("exist");
+      cy.contains(`released form`).should("exist");
     });
   });
 
   context("Complete Training and check if TR is updated", () => {
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: FM-00002`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    it(`Open assigned Training`, () => {
+      cy.contains(`FM-00002`).then(($el) => {
+        const link = $el.attr("href");
+        cy.visit(CONFIG.FE_URL + link);
+      });
     });
 
     it("Click complete training button", () => {
@@ -768,18 +768,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[1].name).and("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", completedDate);
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 });

@@ -667,7 +667,7 @@ context("PO test", () => {
 
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
-      cy.poCheckTax({ number: "2.77" });
+      cy.poCheckTax({ number: "2.775000" });
     });
 
     it("Check Total value", () => {
@@ -697,6 +697,7 @@ context("PO test", () => {
 
       it("Select Document Type 'Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get("[name=\"document.documentType.id\"]").arrowType("{downarrow}{enter}");
         });
       });
@@ -718,13 +719,13 @@ context("PO test", () => {
       it("While autosaving, select requestor", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
 
         cy.get("[data-cy^=\"requestor-\"]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-        cy.wait("@response", { responseTimeout: 30 * 1000 });
+        cy.wait("@response", { responseTimeout: 60 * 1000 });
       });
     });
 
@@ -744,14 +745,14 @@ context("PO test", () => {
       it("While autosaving, select order date", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
           req.reply((res) => {
-            res.setDelay(100);
-            res.setThrottle(1);
+            res.setDelay(10000);
+            res.setThrottle(10);
           });
         }).as("response");
 
         cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
         cy.get(".MuiPickersDay-daySelected").arrowClick();
-        cy.wait("@response", { responseTimeout: 30 * 1000 });
+        cy.wait("@response", { responseTimeout: 60 * 1000 });
       });
     });
 
@@ -1164,7 +1165,6 @@ context("PO test", () => {
       cy.cmpTurnOffAutosave();
     });
 
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -1243,20 +1243,16 @@ context("PO test", () => {
 
   context("Test the filter inside PO", () => {
     it("Enter version number '1' inside filter", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterPOVersion({ version: "1" });
-      });
+      cy.filterPOVersion({ version: "1" });
     });
 
     it("Check if item with right version is displayed", () => {
-      cy.poCheckForSpecificPOItemValue({ itemValue: "1" });
+      cy.poCheckForSpecificPOItemValue({ itemValue: "1.1" });
     });
 
     it("Clear filter", () => {
       SystemRequirement("REQ-1190");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevDocTypeCategory, () => {
-        cy.filterClear();
-      });
+      cy.filterClear();
     });
 
     it("Check if number of displayed filtered items is '2'", () => {
@@ -1267,7 +1263,7 @@ context("PO test", () => {
     it("Enter all fields to check if all filter fields are working", () => {
       SystemRequirement("REQ-1150", "REQ-3870");
       cy.filterPO({
-        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "suplier",
+        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "New suplier for PO",
         partNumber: "PRT-00004 - 1", amount: "30.93", owner: USERS[1].name, issueDate: "N/A",
       });
     });
@@ -1288,7 +1284,7 @@ context("PO test", () => {
     it("Check if all filter values persist after changing landing page", () => {
       SystemRequirement("REQ-1170");
       cy.filterCheckIfPOFilterPersists({
-        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "suplier",
+        docId: "POT-00001", version: "1.1", poStatus: "Closed", supplier: "New suplier for PO",
         partNumber: "PRT-00004 - 1", amount: "30.93", owner: USERS[1].name, issueDate: "N/A",
       });
     });

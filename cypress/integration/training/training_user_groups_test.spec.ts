@@ -841,21 +841,18 @@ context("Training user groups test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'Test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.wait(1000);
-      cy.get("#name").clear().arrowType("Test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1)
-        .should("contain", "Test training title");
-      cy.wait(1000);
+      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("Test training title");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "Test training title");
     });
   });
 
   context("Check training notifications", () => {
     it("Navigate to Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+    it(`Verify training notification ${releasedFormId}`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Logout user", () => {
@@ -881,7 +878,7 @@ context("Training user groups test", () => {
 
   context("Verify there is no notification on dashboard for training", () => {
     it("Check dashboard for training notification", () => {
-      cy.get("[data-cy='dashboard.noPendingActions']").should("exist");
+      cy.dashVerifyNoPendingActions();
     });
 
     it("Logout user", () => {
@@ -908,12 +905,8 @@ context("Training user groups test", () => {
   });
 
   context("Open and complete Training", () => {
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
+    it(`Open assigned Training`, () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
     it("Complete Training", () => {
@@ -927,12 +920,11 @@ context("Training user groups test", () => {
     });
 
     it(`${USERS[2].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7)
-        .should("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
   });
 });

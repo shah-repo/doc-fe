@@ -2,7 +2,7 @@ import { isEmpty, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBDialogState, FBForm, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
+import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
@@ -47,9 +47,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         maxWidth: "sm",
         title: "form.builder.add.item",
         content: (
-          <FBForm initialValues={item}>
-            <FBPurchaseOrderForm />
-          </FBForm>
+          <FBPurchaseOrderForm initialValues={item} />
         ),
         actions: <FBPurchaseOrderActions />,
       });

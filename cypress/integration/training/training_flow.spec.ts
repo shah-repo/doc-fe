@@ -1,6 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -864,11 +863,7 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -1008,25 +1003,23 @@ context("Training Flow test", () => {
   context("Verify trainings present on Training Curriculum page", () => {
     it("'test training title' should be present", () => {
       cy.navigToTrainingCurriculums();
-      cy.get("#name").clear().arrowType("test training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "test training title");
+      cy.trLandingPageName({ name: "test training title" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "test training title");
     });
 
     it("'One-Time training title' should be present", () => {
-      cy.get("#name").clear().arrowType("One-Time training title");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "One-Time training title");
+      cy.trLandingPageName({ name: "One-Time training title" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title");
     });
   });
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
-      cy.trVerifyElementByColumnName({ el: "docId", name: "Training Curriculum ID" });
-      cy.trVerifyElementByColumnName({ el: "name", name: "Title" });
-      cy.trVerifyElementByColumnName({ el: "owner", name: "Owner" });
-      cy.trVerifyElementByColumnName({ el: "displayStatus", name: "State" });
-      cy.get("[name^=dynamicParams]").parent().parent().parent().parent().should("contain.text", "Group");
+      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
+      cy.trVerifyElementByColumnName({ name: "TITLE" });
+      cy.trVerifyElementByColumnName({ name: "OWNER" });
+      cy.trVerifyElementByColumnName({ name: "STATE" });
+      cy.trVerifyElementByColumnName({ name: "GROUP" });
     });
   });
 
@@ -1036,42 +1029,34 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
     });
 
     it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[2].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
+        .and("contain", USERS[2].name).and("contain", "Pending");
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
     it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });
 
   context("Open and complete Training", () => {
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
-    });
-
-    it("Verify due of 30 days", () => {
+    it("Navigate to assigned training and verify due of 30 days", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1083,6 +1068,7 @@ context("Training Flow test", () => {
           }
         });
       }).as("response");
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
       cy.wait("@response");
     });
 
@@ -1098,14 +1084,13 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7).invoke("text")
-        .should("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
   });
 
@@ -1181,28 +1166,19 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
-      cy.get("#name").clear().arrowType("One-Time training title1");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(1).invoke("text")
-        .should("contain", "One-Time training title1");
+      cy.trLandingPageName({ name: "One-Time training title1" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title1");
     });
 
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboard();
     });
 
-    it("Verify training notification", () => {
-      cy.contains(`TRAINING: ${releasedFormId} - Rev 1 released form`).should("exist");
+    it(`Verify training notification`, () => {
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
-    it("Open assigned Training", () => {
-      cy.contains(`TRAINING: ${releasedFormId}`).parent().parent().parent()
-        .find(".MuiButton-containedSecondary").then(($el) => {
-          const link = $el.attr("href");
-          cy.visit(CONFIG.FE_URL + link);
-        });
-    });
-
-    it("Get training Id", () => {
+    it("Open assigned Training and get training Id", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -1211,6 +1187,9 @@ context("Training Flow test", () => {
           }
         });
       }).as("response");
+
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
+
       cy.wait("@response");
     });
 
@@ -1224,17 +1203,14 @@ context("Training Flow test", () => {
     });
 
     it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
-      cy.get("#docRevTitle").clear().arrowType("released form");
-      cy.get("#userName").clear().arrowType(USERS[1].name);
-      cy.get("#docId").clear().arrowType(releasedFormId);
-      cy.get("#trId").clear().arrowType(forceTrainingRecordId);
-      cy.get(".ReactVirtualized__Grid__innerScrollContainer").invoke("text")
-        .should("contain", releasedFormId).and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.trLandingPagetrId({ trId: forceTrainingRecordId });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId).and("contain", USERS[1].name)
+        .and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(7).invoke("text")
-        .should("contain", completedDate);
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", forceTrainingRecordId);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate).and("contain", forceTrainingRecordId);
     });
 
     it("Check if export button exist", () => {
@@ -1242,27 +1218,30 @@ context("Training Flow test", () => {
     });
 
     it("Check if assign date filter contains expected values in dropdown", () => {
-      cy.get("[id=mui-component-select-createdAtAfter]").arrowClick();
-      cy.get("li[data-value]>em").contains("None");
-      cy.get("li[data-value]>span").contains("Last 7 days");
-      cy.get("li[data-value]>span").contains("Last 14 days");
-      cy.get("li[data-value]>span").contains("Last 30 days").arrowClick();
+      cy.get(`[aria-colindex="6"] [class="k-input"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("li").contains("Last 7 days");
+      cy.get("li").contains("Last 14 days");
+      cy.get("li").contains("Last 30 days").arrowClick().wait(1000);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if due date filter contains expected values in dropdown", () => {
-      cy.get("[id=mui-component-select-dueOnBefore]").arrowClick();
-      cy.get("li[data-value]>em").contains("None");
-      cy.get("li[data-value]>span").contains("Due in 7 days");
-      cy.get("li[data-value]>span").contains("Overdue").arrowClick();
+      cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("li").contains("Due in 7 days");
+      cy.get("li").contains("Overdue").arrowClick().wait(1000);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if completed on filter contains expected values in dropdown", () => {
-      cy.get("[id=mui-component-select-completedAtAfter]").arrowClick();
-      cy.get("li[data-value]>em").contains("None");
-      cy.get("li[data-value]>span").contains("Last 7 days");
-      cy.get("li[data-value]>span").contains("Last 14 days");
-      cy.get("li[data-value]>span").contains("Last 30 days");
-      cy.get("li[data-value]>span").contains("Pending").arrowClick();
+      cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("li").contains("Last 7 days");
+      cy.get("li").contains("Last 14 days");
+      cy.get("li").contains("Last 30 days");
+      cy.get("li").contains("Pending").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filter", () => {

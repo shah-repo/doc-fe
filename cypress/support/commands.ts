@@ -26,6 +26,9 @@ declare global {
         text: string,
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
+      unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      pdfparseFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      sendToEmail(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -45,7 +48,12 @@ declare global {
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
+      progressBarShouldExist(): Chainable<Subject>;
+      progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
+      listLoadingElementShouldExist(): Chainable<Subject>;
+      listLoadingElementShouldAppear(): Chainable<Subject>;
     }
   }
 }
@@ -110,8 +118,30 @@ Cypress.Commands.add("progressBarShouldNotExist", () => {
   cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
+Cypress.Commands.add("progressBarShouldExist", () => {
+  cy.get("div.MuiLinearProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("progressBarShouldAppear", () => {
+  cy.progressBarShouldExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
+  cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldExist", () => {
+  cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("exist");
+});
+
+Cypress.Commands.add("listLoadingElementShouldAppear", () => {
+  cy.listLoadingElementShouldExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("createCompany", (params: { payload: ICreateCompanyBootstrap; sessionId: string }) => {
@@ -135,6 +165,34 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
     cookies,
     fileName: params.fileName,
   }));
+});
+
+Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => {
+    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+      cy.task("unzipFile", {
+        path: params.directory,
+        cookies,
+        file: params.fileName,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => {
+    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+      cy.task("pdfparseFile", {
+        path: params.directory,
+        cookies,
+        file: params.fileName,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("sendToEmail", () => {
+  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
 });
 
 Cypress.Commands.add("myCompanies", (token: string) => {

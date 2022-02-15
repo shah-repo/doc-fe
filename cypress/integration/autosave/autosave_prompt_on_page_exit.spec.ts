@@ -11,6 +11,18 @@ let loginResponse;
 let employeeLogin;
 
 context("Autosave on leaving page while data is still not saved", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -160,8 +172,8 @@ context("Autosave on leaving page while data is still not saved", () => {
     it("Click on navigation while document is being saved", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
@@ -173,7 +185,7 @@ context("Autosave on leaving page while data is still not saved", () => {
         expect(txt).to.equal("Are you sure you want to leave? You have unsaved changes.");
       });
 
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
   });
 

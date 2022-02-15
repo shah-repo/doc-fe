@@ -18,7 +18,7 @@ let equipmentDocumentType;
 let materialsDocumentType;
 let partDocumentType;
 let equipmentDocument;
-let materialsDocument;
+let partDocument;
 let createdPOFormDocument;
 let formDocumentType;
 let purchaseOrderDocumentType;
@@ -50,6 +50,18 @@ const approvalTitle = "Approval document";
 const approvalRoleName = "approval role 1";
 
 context("Autocomplete test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -386,9 +398,9 @@ context("Autocomplete test", () => {
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
       }).then((response) => {
-        materialsDocument = response;
+        partDocument = response;
         cy.drAPIApproveAndRelease({
-          documentId: materialsDocument.id,
+          documentId: partDocument.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -401,7 +413,7 @@ context("Autocomplete test", () => {
       });
     });
 
-    it("[API]Create part document", () => {
+    it("[API]Create part document", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -429,6 +441,19 @@ context("Autocomplete test", () => {
         },
         employeeId: adminEmployee.id as unknown as string,
         sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdMaintenanceRecordFormDocument = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdMaintenanceRecordFormDocument.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
       });
     });
 
@@ -1267,7 +1292,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Approval requests' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 9 });
+      cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 10 });
     });
 
     it("Verify count of 'Approvers' in the list", () => {
@@ -1280,7 +1305,7 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document types' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 27 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-types", length: 28 });
     });
 
     it("Verify count of 'Supplier list' in the list", () => {
@@ -1303,9 +1328,10 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Groups' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "groups", length: 8 });
+      cy.fbVerifyAutocompleteElementLength({ el: "groups", length: 9 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Async Tasks");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
@@ -1334,9 +1360,10 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Official Groups' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "official-groups", length: 8 });
+      cy.fbVerifyAutocompleteElementLength({ el: "official-groups", length: 9 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Owner as approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Everyone");
+      cy.get(".MuiAutocomplete-popper ul li").should("contain", "Async Tasks");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Can be approver");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "Company Admin");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "User Management");
@@ -1351,10 +1378,9 @@ context("Autocomplete test", () => {
     });
 
     it("Verify count of 'Document Revisions In Draft without Records' in the list", () => {
-      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-draft", length: 2 });
+      cy.fbVerifyAutocompleteElementLength({ el: "doc-revisions-draft", length: 1 });
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "CP-00001")
         .and("contain", "Clinical protocol document");
-      cy.get(".MuiAutocomplete-popper ul li").should("contain", partNo).and("contain", partTitle);
     });
 
     it("Verify count of 'Approval Roles' in the list", () => {

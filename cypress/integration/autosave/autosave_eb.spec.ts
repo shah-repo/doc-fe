@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -8,6 +10,11 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let employeeLoginFirst;
+let group;
+let partDocumentType;
+let createdPartDocument;
+let approvalRequestDocumentType;
+let initialArDocument;
 
 context("Autosave EB test", () => {
   before(() => {
@@ -40,10 +47,81 @@ context("Autosave EB test", () => {
         }).then((response) => {
           createdCompany = response;
           employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
     });
+
+    it("[API]Login first tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Create part document", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: employeeLoginFirst.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: employeeLoginFirst.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part document1</p>",
+              document: {
+                docId: "PRT-00001",
+                documentType: {
+                  id: partDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part document1",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: employeeLoginFirst.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: employeeLoginFirst.id } }],
+              },
+              employeeId: employeeLoginFirst.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
+        });
+      });
+    });
+
   });
 
   context("Login user", () => {
@@ -138,20 +216,20 @@ context("Autosave EB test", () => {
     it("While autosaving fill step #1 description and check autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
       cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("Add 'Material' to step #1 and check autosave", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
       });
-      cy.get("[data-cy=\"title\"]").arrowType("Material");
+      cy.get("[data-cy=\"title\"]").arrowType("Part document{downarrow}{enter}");
       cy.get("[data-cy=\"partLot\"]").arrowType("test");
       cy.get("[name=\"quantity\"]").arrowType("2");
       cy.get("[data-cy=\"unit\"]").arrowType("Day{downarrow}{enter}");
@@ -161,28 +239,27 @@ context("Autosave EB test", () => {
     it("While autosaving add 'Equipment' to step #1 and check autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
-
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Equipment");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("While autosaving, delete Material and check for autosave", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
-          res.setDelay(100);
-          res.setThrottle(1);
+          res.setDelay(10000);
+          res.setThrottle(10);
         });
       }).as("response");
 
       cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").parent()
         .find("button").last().arrowClick();
-      cy.wait("@response");
+      cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
     });
 
     it("Delete attachment and check autosave", () => {

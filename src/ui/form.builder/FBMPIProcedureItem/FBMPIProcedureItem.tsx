@@ -5,6 +5,7 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
+import moment from "moment";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
@@ -25,6 +26,8 @@ import {
   FBProvider,
   FBText,
 } from "..";
+import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
+import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
 import { withFBMPIProcedureItem } from "./FBMPIProcedureItem.wrap";
@@ -38,6 +41,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
   getLot,
   getProcedureLocale,
   getProcedureValues,
+  isDateOverdue,
   mpiProcedureState,
   dialogState,
   isPreview,
@@ -137,45 +141,102 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                           <FBMapWrapper<Partial<FBMPIProcedureSelectValue>[]>
                             collection={mpiProcedureState?.partsSelected || []}
                           >
-                            {(selection: FBMPIProcedureSelectValue, index) => (
-                              <Box key={`fb-mpi-procedure-selection-${index}`}>
-                                {(selection.materialId === item.title || selection.equipmentId === item.title) && (
-                                  <Box
-                                    display="flex"
-                                    flexDirection="row"
-                                    bgcolor={Colors.light_blue}
-                                    borderColor={Colors.light_blue}
-                                    borderRadius={2}
-                                    border={0.5}
-                                    mr={1}
-                                    mb={1}
-                                    p={0.5}
-                                  >
-                                    <FBText
-                                      locale={`form.builder.mpi.part.selection.${type}`}
-                                      values={{
-                                        docId: selection.overrideDocId || "",
-                                        lotPart: selection.lotPart || "",
-                                        quantity: selection.quantity || 0,
-                                        unit: selection.unit || "",
-                                      }}
-                                      boxProps={{
-                                        color: Colors.black,
-                                        pr: 1,
-                                      }}
-                                    />
-                                    <IconButton
-                                      size="small"
-                                      style={{ fontSize: 11 }}
-                                      onClick={() => handleSelectionDelete?.(selection.refId)}
-                                      disabled={isReleased}
+                            {(selection: FBMPIProcedureSelectValue, index) => {
+                              const pmOverdue = isDateOverdue?.(selection?.pmDueDate);
+                              const calOverdue = isDateOverdue?.(selection?.calDueDate);
+                              const eqOverdue = type === "equipment" && (pmOverdue || calOverdue);
+
+                              return (
+                                <Box key={`fb-mpi-procedure-selection-${index}`}>
+                                  {(selection.materialId === item.title || selection.equipmentId === item.title) && (
+                                    <>
+                                      <Box
+                                        display="flex"
+                                        flexDirection="row"
+                                        bgcolor={ eqOverdue ? Colors.light_red : Colors.medium_gray}
+                                        borderColor={eqOverdue ? Colors.light_red : Colors.medium_gray}
+                                        borderRadius={2}
+                                        border={0.5}
+                                        mr={1}
+                                        mb={1}
+                                        p={0.5}
+                                        style={{ float: "left" }}
+                                      >
+                                        <FBText
+                                          locale={`form.builder.mpi.part.selection.${type}`}
+                                          values={{
+                                            docId: selection.overrideDocId || "",
+                                            lotPart: selection.lotPart || "",
+                                            quantity: selection.quantity || 0,
+                                            unit: selection.unit || "",
+                                          }}
+                                          boxProps={{
+                                            color: Colors.black,
+                                            fontWeight: type === "equipment" ? "bold" : "regular",
+                                            pr: 1,
+                                          }}
+                                        />
+                                        {(selection.calDueDate !== "N/A") && type === "equipment" &&
+                                          <Box
+                                            color={calOverdue ? Colors.error_red : Colors.dark_gray}
+                                            fontWeight={calOverdue ? "bold" : "normal"}
+                                            ml={1}
+                                          >
+                                            <Box
+                                              display="inline-block"
+                                              bgcolor={Colors.black}
+                                              width={4}
+                                              height={4}
+                                              mr={1}
+                                              mb={0.25}
+                                            />
+                                            Next Cal Due: &nbsp;
+                                            {moment(selection.calDueDate).format(MomentFormats.BriefDate)}
+                                          </Box>
+                                        }
+                                        {(selection.pmDueDate !== "N/A") && type === "equipment" &&
+                                          <Box
+                                            color={pmOverdue ? Colors.error_red : Colors.dark_gray}
+                                            fontWeight={pmOverdue ? "bold" : "normal"}
+                                            ml={1}
+                                          >
+                                            <Box
+                                              display="inline-block"
+                                              bgcolor={Colors.black}
+                                              width={4}
+                                              height={4}
+                                              mr={1}
+                                              mb={0.25}
+                                            />
+                                            Next PM Due: &nbsp;
+                                            {moment(selection.pmDueDate).format(MomentFormats.BriefDate)}
+                                          </Box>
+                                        }
+                                        <IconButton
+                                          size="small"
+                                          style={{ fontSize: 11 }}
+                                          onClick={() => handleSelectionDelete?.(selection.refId)}
+                                          disabled={isReleased}
+                                        >
+                                          <HighlightOffIcon fontSize="inherit" />
+                                        </IconButton>
+
+                                      </Box>
+                                      {(pmOverdue || calOverdue) &&
+                                    <Box
+                                      color={Colors.error_red}
+                                      fontWeight="bold"
+                                      display="flex"
+                                      alignItems="center"
+                                      mt={0.5}
                                     >
-                                      <HighlightOffIcon fontSize="inherit" />
-                                    </IconButton>
-                                  </Box>
-                                )}
-                              </Box>
-                            )}
+                                      <WarningIcon width={14} height={14}/> &nbsp; OVERDUE
+                                    </Box>
+                                      }
+                                    </>
+                                  )}
+                                </Box>
+                              ); }}
                           </FBMapWrapper>
                         </Box>
                       )}
@@ -183,20 +244,23 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   )}
                 </Observer>
               </Box>
-
               {isSelectVisible && FB.isUUID(item.title) && !redlineActive && (
                 <Observer>
-                  {() => (
-                    <FBButton
-                      label="form.builder.select"
-                      style={{ margin: 0, padding: "4px" }}
-                      onClick={() => handleSelect?.({
-                        ...item,
-                        id: item.title,
-                        title: getItem?.(item.title) || "",
-                      })}
-                    />
-                  )}
+                  {() => {
+                    const hasSelected = mpiProcedureState?.partsSelected && mpiProcedureState?.partsSelected.find(
+                      (selection)  =>
+                        selection.materialId === item.title || selection.equipmentId === item.title);
+                    return (
+                      <FBButton
+                        label={hasSelected ? "form.builder.change" : "form.builder.select"}
+                        style={{ margin: 0, padding: "4px" }}
+                        onClick={() => handleSelect?.({
+                          ...item,
+                          id: item.title,
+                          title: getItem?.(item.title) || "",
+                        })}
+                      />
+                    ); }}
                 </Observer>
               )}
               {!isPreview && (

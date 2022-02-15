@@ -27,6 +27,7 @@ declare global {
         sessionId: string;
         payload: Partial<Company>;}): Chainable<Subject>;
       cmpUpdatePageDetails(params: {
+        id: string;
         employeeId: string;
         sessionId: string;
         payload: any;}): Chainable<Subject>;
@@ -147,13 +148,14 @@ Cypress.Commands.add("cmpUpdateCompany", (
 
 Cypress.Commands.add("cmpUpdatePageDetails", (
   params: {
+    id: string;
     employeeId: string;
     sessionId: string;
     payload: any;
   }) => {
   cy.request({
-    method: "POST",
-    url: `${CONFIG.BE_URL}/api/v1/page_details`,
+    method: "PATCH",
+    url: `${CONFIG.BE_URL}/api/v1/page_details/${params.id}`,
     body: params.payload,
     headers: {
       Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
@@ -257,7 +259,7 @@ Cypress.Commands.add("cmpVerifyPrimaryContrastText", (params:  {color: string}) 
 });
 
 Cypress.Commands.add("cmpVerifyPrimaryColor", (params:  {color: string}) => {
-  cy.get("[id=\"Header-userName\"]").should("have.css", "color", HEX2RGB(params.color));
+  cy.get(`[data-cy="UserName"]`).should("have.css", "color", HEX2RGB(params.color));
 });
 
 export function cmpFilterDocumentTypeIdByName(companyResponse: Company, documentTypeName: string) {
