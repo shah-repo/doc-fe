@@ -24,7 +24,7 @@ let BLCdocumentType;
 let releasedFormId;
 let emailsFromInbox;
 let cdata;
-const pages = [0, 1, 2];
+const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -487,6 +487,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
     it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
@@ -553,7 +557,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -641,7 +646,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/Output Document Type\nBulk Create/);
 
-        expect(el).match(/Attachments\nNone/);
+        expect(el).match(/Attachments\nimage.jpg/);
 
         expect(el).match(/Select Form Document For Import/);
 
@@ -651,12 +656,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Upload excel with data for import/);
-
-        expect(el).match(/MASS CREATE LOGS/);
-
-        expect(el).match(/Logs/);
 
         expect(el).match(/Released/);
 
@@ -675,6 +674,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/Upload excel with data for import/);
+
+        expect(el).match(/MASS CREATE LOGS/);
+
+        expect(el).match(/Logs/);
 
         expect(el).match(/APPROVALS\nApprovers/);
 
@@ -725,8 +730,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-      it("Enter title Bulk Creation document", () => {
-        cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
+      it("Enter title Bulk Creation document test", () => {
+        cy.drEnterDocumentTitle({ name: "Bulk Creation document test{enter}" });
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
@@ -746,12 +751,31 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get("ul[role=listbox]>li").contains("Test Private Pool").arrowClick();
       });
 
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Select 'yes' to have Document id column", () => {
         cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
-      it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      it("Add first Approver'", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Add second Approver'", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      });
+
+      it("Remove second Approver'", () => {
+        cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      });
+
+      it("check first approvers exists and second Approver removed", () => {
+        cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+          .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+        cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+          .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
       });
 
       it("Click save document", () => {
@@ -770,7 +794,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Check doc WIP status and click on Send To Email", () => {
         cy.get("#HeaderInfo-status").should("have.text", "WIP");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document test");
         cy.get("#HeaderInfo-docId").then((x) => {
           releasedFormId = x.text();
         });
@@ -820,7 +844,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
             sentToUser: USERS[1].email,
             contains: [`Hello <b>${USERS[1].name},</b>`,
               "Your documents are ready for download.",
-              "<button type=\"button\">DOWNLOAD</button>"],
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id,
+            ],
           }];
 
         cy.imapVerifyEmailsInList({
@@ -868,7 +894,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
           directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
-          fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
+          fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
         }).then((content) => {
           cdata = content;
           expect(cdata.numpages).eq(2);
@@ -891,10 +917,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Attachments\nNone/);
+          expect(el).match(/Attachments\nimage.jpg/);
 
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
 
@@ -904,10 +930,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
-
-          expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
-
-          expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
 
           expect(el).match(/WIP/);
 
@@ -927,8 +949,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
+          expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
+
+          expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
 
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
@@ -991,7 +1017,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Check doc Released status and click on Send To Email", () => {
         cy.get("#HeaderInfo-status").should("have.text", "Released");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document test");
         cy.get("#HeaderInfo-docId").then((x) => {
           releasedFormId = x.text();
         });
@@ -1041,7 +1067,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
             sentToUser: USERS[1].email,
             contains: [`Hello <b>${USERS[1].name},</b>`,
               "Your documents are ready for download.",
-              "<button type=\"button\">DOWNLOAD</button>"],
+              "<button type=\"button\">DOWNLOAD</button>",
+              createdCompany.id],
           }];
 
         cy.imapVerifyEmailsInList({
@@ -1090,7 +1117,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.pdfparseFile(
           {
             directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
-            fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
+            fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
           }).then(($content) => {
           cdata = $content;
           expect(cdata.numpages).eq(2);
@@ -1113,10 +1140,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Attachments\nNone/);
+          expect(el).match(/Attachments\nimage.jpg/);
 
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
 
@@ -1127,12 +1154,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
-
-          tmpRegex = new
-          RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
-          expect(el).match(tmpRegex);
-
-          expect(el).match(/MASS CREATE LOGS/);
 
           expect(el).match(/Released/);
 
@@ -1151,8 +1172,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
+          tmpRegex = new
+          RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/MASS CREATE LOGS/);
 
           expect(el).match(/\(file\) Logs\nBulkProcessLogs.txt/);
 
