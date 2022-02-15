@@ -356,7 +356,6 @@ context("Approval request form", () => {
   });
 
   context("Verify PDF file content", () => {
-
     it("Extract texts from PDF file content for Approval request form", () => {
       cy.pdfparseFile(
         {
@@ -525,7 +524,6 @@ context("Approval request form", () => {
   });
 
   context("Verify email for draft approval request notification", () => {
-
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date();
       dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
@@ -574,7 +572,6 @@ context("Approval request form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-
     it("Download zip file containing approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -609,7 +606,6 @@ context("Approval request form", () => {
   });
 
   context("Verify PDF file content for draft document", () => {
-
     it("Extract texts from PDF file content for draft document", () => {
       cy.pdfparseFile({
         directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
@@ -802,7 +798,6 @@ context("Approval request form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-
     it("Download zip file containing closed approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -836,7 +831,6 @@ context("Approval request form", () => {
   });
 
   context("Verify PDF file content for closed document", () => {
-
     it("Extract texts from PDF file content for closed document", () => {
       cy.pdfparseFile({
         directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
