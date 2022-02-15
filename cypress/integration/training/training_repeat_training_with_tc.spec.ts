@@ -18,7 +18,7 @@ let developersGroup;
 let releasedFormId;
 let emailsFromInbox;
 let cdata;
-let page1; let page2; let page3;
+const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -628,6 +628,26 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
+  context("Created document with training required", () => {
+    it("Form with Released status", () => {
+      cy.navigToDocumentList();
+      cy.cmpClickCreateNewDocument();
+      cy.drEnterDocumentTitle({ name: "released form" });
+      cy.drEnterDocumentDescription({ description: "test description" });
+      cy.drSelectDocumentType({ documentType: "Form" });
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.drClickTrainingRequired();
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+      cy.drCheckDocumentStatus({ status: "Released" });
+    });
+  });
+
+
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -637,11 +657,11 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter document title 'Test training form title'", () => {
-      cy.drEnterDocumentTitle({ name: "Test Form-Training Curriculum Refresh/Repeat" });
+    it("Enter document title 'Test Form-Training Curriculum Refresh-Repeat'", () => {
+      cy.drEnterDocumentTitle({ name: "Test Form-Training Curriculum Refresh-Repeat" });
     });
 
-    it("Enter document description 'Test training description'", () => {
+    it("Enter document description 'Test Refresh Repeat Print export'", () => {
       cy.drEnterDocumentDescription({ description: "Test Refresh Repeat Print export" });
     });
 
@@ -655,12 +675,15 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
+      cy.unClick();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Radio Button group", () => {
@@ -669,12 +692,7 @@ context("Repeat Training with Training Curriculum", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[data-cy=\"form.builder.radiogroup\"]").last().contains("Radio Button group").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
+      cy.get("button[data-cy=\"form.builder.radiogroup\"]").contains("Radio Button group").arrowClick();
       cy.fbEnterNameValue({ name: "label", value: "Radio BTN req" });
       cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
@@ -693,6 +711,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if"]`).first().check();
+      cy.get(`[data-cy="validators.required_if.name"]`).arrowType("Radio BTN req{downarrow}{enter}" );
+      cy.get(`input[type="checkbox"][value="2"]`).last().check();
       cy.fbAddNewFieldButton();
     });
 
@@ -710,7 +731,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Verify Refresh/Repeat Training form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
       cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Test Form-Training Curriculum Refresh/Repeat");
+      cy.get("#HeaderInfo-name").should("have.text", "Test Form-Training Curriculum Refresh-Repeat");
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
@@ -760,7 +781,8 @@ context("Repeat Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -780,7 +802,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("@short_url").then(($response) => {
         downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  releasedFormId + filetime + "_rel.zip";
+        downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
         cy.downloadFile({
           url: downloadUrl,
           directory: downloaddDirectory,
@@ -790,7 +812,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -807,7 +829,7 @@ context("Repeat Training with Training Curriculum", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-Test-Form-Training-Curriculum-Refresh-Repeat.pdf`,
         }).then((content) => {
         cdata = content;
@@ -817,32 +839,31 @@ context("Repeat Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 3 of 3/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = page3 = "";
         arr.forEach((element) => {
           if (element.includes("Page 1 of 3")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 3")) {
-            page2 = element;
+            pages[1] = element;
           }
           if (element.includes("Page 3 of 3")) {
-            page3 = element;
+            pages[2] = element;
           }
         });
       });
     });
 
     it("Verify page 1 of training form", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
-        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH/REPEAT`, "gi" );
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `AR ID\\nAR-00001`, "gi" );
+        tmpRegex = new RegExp( `AR ID\\nAR-00002`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Test Refresh Repeat Print export/);
+        expect(el).match(/Description\nTest Refresh Repeat Print export/);
 
         tmpRegex = new RegExp( `Output Document Type\\nTraining Curriculum test`, "gi" );
         expect(el).match(tmpRegex);
@@ -853,7 +874,7 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Documents to Train on/);
 
-        expect(el).match(/Refresh\/repeat training periodically\?/);
+        expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
 
         expect(el).match(/Training Frequency \(in days\)/);
 
@@ -870,10 +891,10 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify page 2 of training form", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
-        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH/REPEAT`, "gi" );
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/TRAINEES DETAILS/);
@@ -902,15 +923,15 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify page 3 of training form", () => {
-      const el = page3;
+      const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
-        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH/REPEAT`, "gi" );
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        tmpRegex = new RegExp( `AR-000011N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        tmpRegex = new RegExp( `AR-000021N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -949,7 +970,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.drEnterDocumentTitle({ name: "Training Curricula" });
     });
 
-    it("Enter description 'Training description'", () => {
+    it("Enter description 'test training curricula refresh / repeat'", () => {
       cy.drEnterDocumentDescription({ description: "test training curricula refresh / repeat" });
     });
 
@@ -991,6 +1012,10 @@ context("Repeat Training with Training Curriculum", () => {
     it("radio button group option 3 checked", () => {
       cy.get("[data-cy=\"Radio BTN req\"]").arrowClick();
       cy.get("label").contains("3").arrowClick();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -1043,7 +1068,8 @@ context("Repeat Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -1064,7 +1090,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("@short_url").then(($response) => {
         downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  releasedFormId + filetime + "_draft.zip";
+        downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
         cy.downloadFile({
           url: downloadUrl,
           directory: downloaddDirectory,
@@ -1074,7 +1100,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -1090,7 +1116,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
-        directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+        directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
       }).then((content) => {
         cdata = content;
@@ -1099,20 +1125,19 @@ context("Repeat Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 2 of 2/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = "";
         arr.forEach((element) => {
           if (element.includes("Page 1 of 2")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 2")) {
-            page2 = element;
+            pages[1] = element;
           }
         });
       });
     });
 
     it("Verify page 1 of draft document", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
@@ -1140,7 +1165,7 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 2/);
@@ -1148,7 +1173,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify page 2 of draft document", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
@@ -1165,14 +1190,16 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required`, "gi");
         expect(el).not.match(tmpRegex);
 
-        expect(el).match(/APPROVALS\nNone/);
+        tmpRegex = new
+        RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| DRAFT`);
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 2/);
@@ -1181,10 +1208,6 @@ context("Repeat Training with Training Curriculum", () => {
   });
 
   context("Submit for approval", () => {
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Click Submit for Approval", () => {
       cy.contains("Submit for approval").arrowClick();
     });
@@ -1239,7 +1262,8 @@ context("Repeat Training with Training Curriculum", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -1260,7 +1284,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("@short_url").then(($response) => {
         downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  releasedFormId + filetime + "_rel.zip";
+        downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
         cy.downloadFile({
           url: downloadUrl,
           directory: downloaddDirectory,
@@ -1270,7 +1294,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
+      const zipfile = `${downloaddDirectory}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
@@ -1286,7 +1310,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
-        directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+        directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
       }).then((content) => {
         cdata = content;
@@ -1295,20 +1319,19 @@ context("Repeat Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 2 of 2/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-        page1 = page2 = "";
         arr.forEach((element) => {
           if (element.includes("Page 1 of 2")) {
-            page1 = element;
+            pages[0] = element;
           }
           if (element.includes("Page 2 of 2")) {
-            page2 = element;
+            pages[1] = element;
           }
         });
       });
     });
 
     it("Verify page 1 of released document", () => {
-      const el = page1;
+      const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
@@ -1336,7 +1359,7 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 2/);
@@ -1344,7 +1367,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify page 2 of released document", () => {
-      const el = page2;
+      const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
         RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
@@ -1369,7 +1392,7 @@ context("Repeat Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 2/);
@@ -1440,4 +1463,5 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 });
+
 export { };
