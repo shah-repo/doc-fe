@@ -223,7 +223,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable && <ExportToEmail revisionId={documentRevision.id} canAccess={documentRevision.document.canAccess}/>}
+      {isExportable && <ExportToEmail
+        revisionId={documentRevision.id}
+        canAccess={documentRevision.document.canAccess}
+      />}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
