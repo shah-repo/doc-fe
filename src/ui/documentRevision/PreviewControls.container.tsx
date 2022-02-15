@@ -57,6 +57,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
+
   const formDocumentId = documentRevision.formDocument?.document?.id || "";
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const formDocuments: Document = useSelector((state: ApplicationState) =>
@@ -222,7 +223,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
+      {isExportable && <ExportToEmail revisionId={documentRevision.id} canAccess={documentRevision.document.canAccess}/>}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>
