@@ -738,11 +738,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify email for training form notification", () => {
-
     it("Get emails", () => {
       dateAfterEmailShouldArrive = new Date();
       dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -754,7 +752,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
-
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
@@ -785,13 +782,13 @@ context("Repeat One Time Training with Training Curriculum", () => {
       });
     });
   });
-  context("Verify that zip file containing pdf downloaded", () => {
 
+  context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).as("short_url");
       cy.get("@short_url").then(($response) => {
         downloadUrl = $response.body.url;
         const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
@@ -816,7 +813,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
           fileName: downloadFile,
         });
       const pdffile = `${downloaddDirectory}/${downloadFile}`.replace(".zip", "") +
-`/${releasedFormId}-1-One-Time-training-form-title.pdf`;
+      `/${releasedFormId}-1-One-Time-training-form-title.pdf`;
       cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
     });
   });
@@ -835,7 +832,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(cdata.text).match(/Page 3 of 3/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
-
         arr.forEach((element) => {
           if (element.includes("Page 1 of 3")) {
             pages[0] = element;
@@ -855,32 +851,20 @@ context("Repeat One Time Training with Training Curriculum", () => {
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/AR ID\nAR-00002/);
-
         expect(el).match(/Description\nOne-Time training description/);
-
         expect(el).match(/Output Document Type\nOne-Time Training test/);
-
         expect(el).match(/Attachments\nimage.jpg/);
-
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
-
         expect(el).match(/Documents to Train on/);
-
         expect(el)
           .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
-
         expect(el).match(/TRAINEES DETAILS/);
-
         expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 1 of 3/);
       }
     });
@@ -890,23 +874,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/Groups to Train/);
-
         expect(el).match(/Users to Train \(if applicable\)/);
-
         tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
-
+        expect(el).match(tmpRegex);
         expect(el).match(/TEXT FIELD\nAPPROVALS\nApprovers/);
-
         expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 2 of 3/);
       }
     });
@@ -914,23 +891,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify page 3 for training form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-
         tmpRegex = new RegExp( `AR-000021N\\/A \\(Numeric Release\\)${footerDate}\nReleased`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 3 of 3/);
       }
     });
@@ -1061,6 +1031,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Download zip file containing training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
       cy.get("@short_url").then(($response) => {
@@ -1118,37 +1089,23 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/Description\nTEST EXPORT PDF/);
-
         expect(el).match(/Attachments\nimage.jpg/);
-
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
-
         expect(el).match(/Documents to Train on/);
-
         expect(el).match(/1 - released form/);
-
         expect(el)
           .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
-
         expect(el).match(/TRAINEES DETAILS/);
-
         expect(el).match(/Groups to Train\nNone/);
-
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
-
         expect(el).match(/Draft/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 1 of 2/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       }
@@ -1159,24 +1116,16 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp( `Checkbox\n(.*)\n(.*)\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).not.match(/TEXT FIELD/);
-
         expect(el).match(/APPROVALS\nNone/);
-
         expect(el).match(/Draft/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 2 of 2/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       }
@@ -1274,6 +1223,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
         .as("short_url");
       cy.get("@short_url").then(($response) => {
@@ -1332,35 +1282,22 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).match(/Description\nTEST EXPORT PDF/);
-
         expect(el).match(/Attachments\nimage.jpg/);
-
         expect(el).match(/FORCED RETRAINING \/ ONE-TIME TRAINING/);
-
         expect(el).match(/Documents to Train on/);
-
         expect(el).match(/1 - released form/);
-
         expect(el)
           .match(/Force retraining \(everyone will be retrained regardless of their current status\)\n Yes/);
-
         expect(el).match(/TRAINEES DETAILS/);
-
         expect(el).match(/Groups to Train\nNone/);
-
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
-
         expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 1 of 2/);
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
@@ -1372,26 +1309,18 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
-
         expect(el).not.match(/TEXT FIELD/);
-
         tmpRegex = new
         RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
         expect(el).match(tmpRegex);
-
         expect(el).match(/Released/);
-
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
-
         expect(el).match(/Page 2 of 2/);
-
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       }
