@@ -15,6 +15,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     getOptionLabel,
     filterOptions,
     groupBy,
+    onFocus,
     optionLabelKey = "text",
     optionValueKey = "value",
     optionValueType = "key",
@@ -128,6 +129,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       omitFormValue,
       name,
       disabled,
+      onFocus,
       includeQRScan,
     });
   };
