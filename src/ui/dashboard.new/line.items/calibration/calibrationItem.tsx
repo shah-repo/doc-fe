@@ -161,10 +161,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     />
                   </Typography>
                 </Grid>
-                <Grid
-                  item={true}
-                  className={classes.grayDot}
-                ></Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
