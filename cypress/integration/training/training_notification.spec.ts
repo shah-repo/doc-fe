@@ -775,7 +775,8 @@ context("Training notification test", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
@@ -930,7 +931,8 @@ context("Training notification test", () => {
           sentToUser: USERS[1].email,
           contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>"],
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
         }];
 
       cy.imapVerifyEmailsInList({
