@@ -73,15 +73,12 @@ DocumentRevisionFormContainerProps
   lastSavedTimestamp,
 }) => {
   const bannerPortal = React.useRef(null);
-  // const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const [releasedDocRev, setReleasedDocRev] = useState<DocumentRevision>();
 
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
-
-  // const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>

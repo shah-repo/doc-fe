@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Chip, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
@@ -15,10 +16,8 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FB } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
-import useGetAvailableReferences from "../../../hooks/useGetAvailableReferences";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
-import { DocumentRevisionFormValues } from "../types";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -52,18 +51,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
   const [open, setOpen] = React.useState(false);
-  availableReferences = useGetAvailableReferences({} as DocumentRevisionFormValues);
 
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
-
-  useEffect(() => {
-    if (open) {
-      loadAction();
-    }
-  }, [open]);
-
-  // useGetAvailableReferences(initialValues)
 
   const onChange = (e, value) => {
     const {
@@ -118,17 +108,21 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     setValue(value);
     if (!workspaceState) { return; }
     workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentReferences]);
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
 
   useEffect(() => {
     if (loadAsyncState.status === "SUCCESS") {
-      console.log("API loaded completely:: ");
       setModifiedOptions(options);
     }
   }, [loadAsyncState]);
+
+  useEffect(() => {
+    if (open) {
+      loadAction();
+    }
+  }, [open]);
 
   const filterOptions = (event: any, inputVal: any) => {
     const updatedOptions = options.filter(
