@@ -9,6 +9,7 @@ import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import ListBoxComponent from "../../../components/common/autocomplete/ListBoxComponent";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
@@ -160,6 +161,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onInputChange={debounceFunction}
         multiple
         disableClearable
+        ListboxComponent={ListBoxComponent}
       />
     </Field>
   ); };
