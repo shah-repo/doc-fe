@@ -16,7 +16,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
   public constructor({ optionId, urlValues }: FBAutocompleteAsyncConstructor = {}) {
     super();
     this.urlValues = urlValues;
-    this.setOptionId(optionId);
+    this.setOptionId(optionId, false);
   }
 
   public setAdditionalData = (data?: any[]) => set(this, "additionalData", data);
@@ -59,9 +59,11 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
     return Array.from(map(id, (i) => options.get(i) || i));
   };
 
-  @action public setOptionId = (id?: string) => {
+  @action public setOptionId = (id?: string, triggerAPI?: boolean) => {
     set(this, "optionId", id);
-    this.load();
+    if (triggerAPI) {
+      this.load();
+    }
   };
 
   @action public load = (force = false) => {

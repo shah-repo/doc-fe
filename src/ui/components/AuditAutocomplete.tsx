@@ -31,7 +31,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
     loading = FBAutocompleteAsyncStore.loading.get(optionId);
   });
 
-  autocompleteState?.setOptionId(optionId);
+  autocompleteState?.setOptionId(optionId, true);
   const data = FBAutocompleteAsyncStore.data.get(optionId);
   if (data) {
     const { labelKey = "text", labelPrefixRoot = "" } =

@@ -19,4 +19,5 @@ export type FBAutocompleteProps =
    disabledOptions?: string[];
    groupByKey?: string;
    inputStyle?: any;
+   onFocus?: () => void;
  };

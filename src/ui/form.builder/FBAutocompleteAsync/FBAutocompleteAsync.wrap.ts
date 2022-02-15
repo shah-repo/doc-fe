@@ -13,6 +13,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
   const Comp = ({
     getOptionLabel,
     refresh,
+    onFocus,
     autocompleteAsyncState,
     optionValueType = "key",
     shouldReloadOnInit = false,
@@ -46,6 +47,12 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     } = autocompleteAsyncState?.optionConfig || {
       valueKey: props.optionValueKey,
       labelKey: props.optionLabelKey,
+    };
+
+    onFocus = () => {
+      // eslint-disable-next-line no-console
+      console.log("Loading Data In Parent ", optionId);
+      autocompleteAsyncState?.load(true);
     };
 
     // TODO: handle autocomplete default value from input wrap
@@ -102,6 +109,8 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
 
     useEffect(() => {
       if (shouldReloadOnInit) {
+        // eslint-disable-next-line no-console
+        console.log("Calling from UseEffect", shouldReloadOnInit, optionId);
         autocompleteAsyncState?.load(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -183,6 +192,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       freeSolo,
       multiple,
       urlValues,
+      onFocus,
       name,
       value,
     });
