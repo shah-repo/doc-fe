@@ -126,10 +126,10 @@ Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed}) => {
-  cy.get("#mui-component-select-completedAtAfter").arrowClick();
-  cy.get("ul[role=listbox] > li").contains(params.completed).arrowClick();
-  cy.listLoadingElementShouldNotExist();
+Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.completed).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageOwner", (params: {owner}) => {
