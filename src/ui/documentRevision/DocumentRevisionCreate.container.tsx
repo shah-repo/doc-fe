@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
+// import { documentTypeActions } from "../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
@@ -18,7 +18,7 @@ interface DispatchProps {
   setDocId: typeof documentsActions.setDocumentProposedId;
   loadDocumentProposedId: typeof documentsActions.loadDocumentProposedId;
   loadDocument: typeof documentRevisionsActions.loadDocument;
-  loadDocTypes: typeof documentTypeActions.loadList;
+  // loadDocTypes: typeof documentTypeActions.loadList;
 }
 
 interface OwnProps {
@@ -74,9 +74,10 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   proposedDocId,
   loadDocument,
   isNewVersion,
-  loadDocTypes,
+  // loadDocTypes,
   match,
 }) => {
+  // commented loadDocTypes API as part of mitigating upfront API's and updated with store available data
   const dispatch = useDispatch();
   const { pmFormId } = match.params;
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -149,10 +150,10 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
 
-  useEffect(() => {
+  /* useEffect(() => {
     loadDocTypes();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); */
 
   return (
     <DocumentRevisionForm
@@ -182,5 +183,5 @@ export default connect<StateProps, DispatchProps, OwnProps, ApplicationState>(ma
   setDocId: documentsActions.setDocumentProposedId,
   loadDocumentProposedId: documentsActions.loadDocumentProposedId,
   loadDocument: documentRevisionsActions.loadDocument,
-  loadDocTypes: documentTypeActions.loadList,
+  // loadDocTypes: documentTypeActions.loadList,
 })(DocumentRevisionCreateContainerWithRouter);

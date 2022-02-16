@@ -7,7 +7,7 @@ import {
   getTableData,
 } from "../../../common/utils/selectors";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
+// import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import documentTypeSelectors from "../../../state/ducks/documentRevisions/documentType/selectors";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -84,7 +84,8 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
         "Released" as DocumentRevisionStatus
       );
     }
-    dispatch(documentTypeActions.loadList());
+    // commented loadList API as part of mitigating upfront API's and updated with store available data
+    // dispatch(documentTypeActions.loadList());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const documentTypeOptions = useSelector(
