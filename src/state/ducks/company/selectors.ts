@@ -1,3 +1,4 @@
+import { chain, filter, find } from "lodash";
 import { createSelector } from "reselect";
 import Config from "../../../config";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
@@ -33,6 +34,14 @@ const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.co
 const getAutosaveEnabled = (state: ApplicationState) => state.company.autosaveConfig.autosaveEnabled;
 const getRedlineActive = (state: ApplicationState) => state.company.redlineConfig.redlineActive;
 
+const getNavigationTitle = (state: ApplicationState, category: string) => {
+  const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
+  const subMenuItem = filter(state.company.companyMine.navigation, { type: "MENU" });
+  const subMenuItems = chain(subMenuItem).map("menu").flatten().value();
+  const item = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  return item?.label;
+};
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
@@ -49,4 +58,5 @@ export default {
   getAllWhiteLabeling,
   getAutosaveEnabled,
   getRedlineActive,
+  getNavigationTitle,
 };
