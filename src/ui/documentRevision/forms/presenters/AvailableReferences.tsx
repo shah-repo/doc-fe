@@ -5,6 +5,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -48,6 +49,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const intl = useIntl();
   const { submitForm } = useFormContext();
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
@@ -117,11 +119,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   useEffect(() => {
     if (loadAsyncState.status === "SUCCESS") {
-      if (inputValue) {
-        filterOptions(null, inputValue);
-      } else {
-        setModifiedOptions(options);
-      }
+      filterOptions(null, inputValue);
     }
   }, [loadAsyncState]);
 
@@ -132,11 +130,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   }, [open]);
 
   const filterOptions = (event: any, inputVal: any) => {
-    setInputValue(inputVal);
-    const updatedOptions = options.filter(
-      (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
-    );
-    setModifiedOptions(updatedOptions);
+    if (inputVal && inputVal.length > 2) {
+      setInputValue(inputVal);
+      const updatedOptions = options.filter(
+        (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
+      );
+      setModifiedOptions(updatedOptions);
+    } else if (!inputVal) {
+      setInputValue(inputVal);
+      setModifiedOptions(options);
+    }
   };
   const debounceFunction = debounce(filterOptions, 1000);
 
@@ -157,6 +160,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           <Box display="flex">
             <Box width="100%" data-cy="referenceTo">
               <TextField
+                placeholder={intl.formatMessage({
+                  id: "common.search.label",
+                })}
                 {...params}
                 fullWidth
                 variant="outlined"
