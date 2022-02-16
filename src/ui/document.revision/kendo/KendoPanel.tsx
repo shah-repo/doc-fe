@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
+import { compact, filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
@@ -65,6 +65,7 @@ export function KendoPanel<T>({
   documentTypeOptions,
   tableCriteria,
   gridData,
+  exportDataChanges,
 }: KendoPanelProps<T>) {
   const intl = useIntl();
   const classes = KendoGridStyles();
@@ -232,6 +233,15 @@ export function KendoPanel<T>({
           const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
+          exportDataChanges &&
+            exportDataChanges(
+              process(data, {
+                skip: 0,
+                take: data.length,
+                sort: initialDataState.sort,
+                filter: initialDataState.filter,
+              }).data
+            );
           if (newDataState.total === 0) {
             setNoDataMessage(<NoDataFound />);
           }
@@ -239,6 +249,7 @@ export function KendoPanel<T>({
         data = map(data, (record) =>
           pick(record,  [
             ...map(gridConfiguration.columns, "field"),
+            ...compact(map(gridConfiguration.columns, "tooltipField")),
             "id",
             "document.docId",
             "document.id",
@@ -439,6 +450,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) { return false; }
     let dataColumns = columnDefinitions;
     dataColumns = map(dataColumns, (column) => {
@@ -446,10 +458,10 @@ export function KendoPanel<T>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
-
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
     let dataColumns = columnDefinitions;
@@ -481,6 +493,15 @@ export function KendoPanel<T>({
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
       setResultState(newDataState);
+      exportDataChanges &&
+        exportDataChanges(
+          process(gridData, {
+            skip: 0,
+            take: gridData.length,
+            sort: dataState.sort,
+            filter: dataState.filter,
+          }).data
+        );
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);
@@ -535,7 +556,17 @@ export function KendoPanel<T>({
       title={getTranslatedText(column.title)}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
+      cell={(props) =>
+        RenderCustomCell(
+          {
+            ...props,
+            cellRowClick: onRowClick,
+            showTooltip: column.showTooltip,
+            tooltipField: column.tooltipField,
+          },
+          column.cell || ""
+        )
+      }
       filterCell={
         filterCellMapping[column.field]
           ? filterCellMapping[column.field]

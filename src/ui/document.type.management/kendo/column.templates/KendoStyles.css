@@ -1,6 +1,12 @@
 /* For pop up window - schema, fieldConfig in document Type management grid  start here*/
 .gridTextAreaForm .k-textarea>.k-input {
   resize: none;
+  font-family: "Sora";
+  font-size: 14px;
+  font-weight: 400;
+}
+.gridTextAreaForm > .k-textarea::selection, .k-textarea .k-input::selection {
+  background-color: #011FBB;
 }
 .gridTextAreaForm .k-form-field  {
   margin-top: 0;

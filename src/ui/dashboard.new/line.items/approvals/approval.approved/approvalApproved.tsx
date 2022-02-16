@@ -314,16 +314,18 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip
-            title={<Text translation="common.unpin" />}
-            placement="top"
-            arrow
-          >
-            <PinSolidIcon
-              onClick={handleUnPinClick}
-              onMouseLeave={onMouseLeaveActionIcons}
-            />
-          </StyleTooltip>
+          <span className={classes.actionIcon}>
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon
+                onClick={handleUnPinClick}
+                onMouseLeave={onMouseLeaveActionIcons}
+              />
+            </StyleTooltip>
+          </span>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
