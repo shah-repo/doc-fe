@@ -24,7 +24,7 @@ let tmpRegex;
 let downloadFile;
 let fileId;
 
-const downloaddDirectory  = "cypress/downloads";
+const downloaddDirectory  = CONFIG.DOWNLOADS_DIR;
 
 const dateOffset = (5 * 1000);
 let dateAfterEmailShouldArrive = new Date();

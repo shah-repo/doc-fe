@@ -30,6 +30,11 @@ if [[ -z "${CYPRESS_VIDEOS_FOLDER}" ]]; then
   exit 1
 fi
 
+if [[ -z "${CYPRESS_DOWNLOADS_DIR}" ]]; then
+  echo "CYPRESS_DOWNLOADS_DIR not set, exiting"
+  exit 1
+fi
+
 if [[ -z "${COMPOSE_PROJECT_NAME}" ]]; then
   echo "COMPOSE_PROJECT_NAME not set, exiting"
   exit 1
@@ -86,6 +91,16 @@ do
     rm -rf $videoDir
     echo "--| deleting vides in $videoDir"
     done
+
+    downloadDir=${x/$CYPRESS_INTEGRATION_FOLDER/$CYPRESS_DOWNLOADS_DIR}
+
+    downloadDir=${downloadDir%\"}
+    downloadDir=${downloadDir#\"}
+    downloadDir="${downloadDir}/"
+    rm -rf $downloadDir
+    echo "--| deleting downloads in $downloadDir"
+    done
+
 
     echo "--| deleting  $i"
 
