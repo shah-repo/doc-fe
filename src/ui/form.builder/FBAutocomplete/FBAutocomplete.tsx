@@ -5,6 +5,7 @@ import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
@@ -62,6 +63,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             freeSolo,
             filterOptions,
           }}
+          ListboxComponent={ListBoxComponent}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">
