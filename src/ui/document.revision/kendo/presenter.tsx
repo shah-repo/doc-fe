@@ -2,6 +2,7 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import { isEmpty, map, set, startCase } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { docRevSch } from "../../../common/normalizrSchema";
 import {
@@ -132,14 +133,15 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           {...{ dialog, headers }}
           customFileName="DocumentList"
         />
-        <Button
-          className={classes.createDocButton}
-          id="ListPresenter-create"
-          data-cy="document.revision.create"
-          href={DOCUMENT_REVISION_CREATE_URL}
-        >
-          <Text translation="document.revision.create" />
-        </Button>
+        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} style={{ textDecoration: "none" }}>
+          <Button
+            className={classes.createDocButton}
+            id="ListPresenter-create"
+            data-cy="document.revision.create"
+          >
+            <Text translation="document.revision.create" />
+          </Button>
+        </RouterLink>
       </Grid>
       <Grid item={true} xs={12}>
         <KendoPanel<DocumentRevision>
