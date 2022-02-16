@@ -36,10 +36,13 @@ const getRedlineActive = (state: ApplicationState) => state.company.redlineConfi
 
 const getNavigationTitle = (state: ApplicationState, category: string) => {
   const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
-  const subMenuItem = filter(state.company.companyMine.navigation, { type: "MENU" });
-  const subMenuItems = chain(subMenuItem).map("menu").flatten().value();
-  const item = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
-  return item?.label;
+  const subMenuItems = chain(state.company.companyMine.navigation)
+    .filter({ type: "MENU" })
+    .map("menu")
+    .flatten()
+    .value();
+  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  return menuItem?.label;
 };
 
 export default {
