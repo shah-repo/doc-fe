@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, map, some } from "lodash";
@@ -10,6 +10,7 @@ import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../../state/types";
 import ListBoxComponent from "../../../components/common/autocomplete/ListBoxComponent";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
@@ -51,9 +52,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
   const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
 
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const onChange = (e, value) => {
     const {
@@ -114,7 +117,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   useEffect(() => {
     if (loadAsyncState.status === "SUCCESS") {
-      setModifiedOptions(options);
+      if (inputValue) {
+        filterOptions(null, inputValue);
+      } else {
+        setModifiedOptions(options);
+      }
     }
   }, [loadAsyncState]);
 
@@ -125,6 +132,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   }, [open]);
 
   const filterOptions = (event: any, inputVal: any) => {
+    setInputValue(inputVal);
     const updatedOptions = options.filter(
       (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
     );
@@ -154,6 +162,14 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 variant="outlined"
                 InputProps={{
                   ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      { open && loading && (
+                        <CircularProgress color="inherit" size={16} />
+                      )}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
                 }}
                 inputProps={{
                   ...params.inputProps,
@@ -186,6 +202,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onClose={() => {
           setOpen(false);
         }}
+        loading={ !options.length && loading }
       />
     </Field>
   ); };
