@@ -41,6 +41,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     if (flag) {
       setRefreshTable(true);
     }
+    setRefreshTable(false);
     editGroupsDialog.close();
   };
   return (

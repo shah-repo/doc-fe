@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { startCase } from "lodash";
+import { cloneDeep, has, map, startCase } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -80,7 +80,21 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>
   ) => {
-    setDataToBeExported(dataToBeExported);
+    let copyDate = cloneDeep(dataToBeExported);
+    copyDate = map(copyDate, (record: any) => {
+      if (has(record, "precalc.lhr_end_accepted_quantity")) {
+        if (record.precalc.lhr_end_accepted_quantity === -1) {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          record.precalc.lhr_end_accepted_quantity = "N/A";
+        }
+      }
+      if (has(record, "precalc.po_amount")) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        record.precalc.po_amount = record.precalc.po_amount_org;
+      }
+      return record;
+    });
+    setDataToBeExported(copyDate);
   };
 
   return (

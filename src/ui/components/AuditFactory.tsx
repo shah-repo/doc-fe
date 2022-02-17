@@ -9,6 +9,7 @@ import { Audit } from "../../state/ducks/audit/types";
 import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import { ApprovalStatus, Owner } from "../../state/ducks/common/types";
+import { Employee } from "../../state/ducks/company/types";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions/types";
 import { getAuditDefaultValue } from "../common/utils/audit";
@@ -111,7 +112,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = audit.ownerName;
         break;
       case "approvals.approver":
-        returnValue = audit.ownerName;
+        returnValue = (audit.nextValue as Employee).user?.name;
         break;
       case "tasks.assigned":
       case "owner":
