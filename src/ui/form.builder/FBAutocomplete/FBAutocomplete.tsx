@@ -15,6 +15,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   getOptionLabel,
   renderOption,
   filterOptions,
+  debounceFilterInput,
   groupBy,
   refresh,
   onFocus,
@@ -22,6 +23,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   freeSolo = false,
   multiple = false,
   options,
+  modifiedOptions,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",
@@ -57,12 +59,13 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderOption,
             filterSelectedOptions,
             groupBy,
-            options,
             multiple,
             defaultValue,
             freeSolo,
             filterOptions,
           }}
+          options={modifiedOptions}
+          onInputChange={debounceFilterInput}
           ListboxComponent={ListBoxComponent}
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
