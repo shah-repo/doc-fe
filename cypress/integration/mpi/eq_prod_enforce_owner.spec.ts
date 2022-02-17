@@ -8,6 +8,7 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -26,12 +27,6 @@ let LHRDocumentType;
 let createdLHRtDocument;
 let developersGroup;
 let secondEmployee;
-let lhrs1DocUrl;
-let emailsFromInbox;
-let companyId;
-let lhrDocUrl;
-let thirdEmployee;
-let asyncTasksGroup;
 let formDocumentType;
 let createdEquipmentFormDocument;
 let maintenanceRecordDocumentType;
@@ -40,6 +35,10 @@ let createdCalibrationForm;
 let createdEquipmentNumericRevision;
 let createdPMRecord;
 let createdCalibrationRecord;
+const calExpiredDueDate = moment().tz("America/Los_Angeles").subtract(5, "days").format("ll");
+const pmExpiredDueDate = moment().tz("America/Los_Angeles").subtract(1, "days").format("ll");
+const calDueDate = moment().tz("America/Los_Angeles").add(5, "days").format("ll");
+const pmDueDate = moment().tz("America/Los_Angeles").add(10, "days").format("ll");
 
 context("Verify Equipment Prod Enforce on LHR with owner", () => {
   before(() => {
@@ -68,116 +67,6 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Lot History Record Test",
-                documentTypeAcronym: "LHR-",
-                group: "LHR",
-                privateNumberPool: false,
-                needsSignature: true,
-                category: "Lhr",
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                  },
-                  D: {
-                    visible: false,
-                  },
-                  E: {
-                    visible: false,
-                  },
-                  U: {
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "lhr-selected-part",
-                    type: "partsselection",
-                    index: 0,
-                    label: "Part to be Manufactured",
-                    deleteDisabled: true,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "lhr_initial_quantity",
-                    type: "quantity",
-                    index: 1,
-                    label: "Initial Quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Initial Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-end-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "End Quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    outputDisabled: true,
-                    validationAttribute: "End Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-build-type",
-                    type: "radiogroup",
-                    index: 3,
-                    label: "Build Type",
-                    options: [
-                      {
-                        text: "R&D",
-                        value: "R&D",
-                      },
-                      {
-                        text: "Production",
-                        value: "Production",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Build Type",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-due-date",
-                    type: "datepicker",
-                    index: 4,
-                    label: "Due Date",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Due Date",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrstep-built-in",
-                    type: "lhrstep",
-                    index: 5,
-                    label: "LHR Step",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
               {
                 documentTypeName: "Manufacturing Process Instructions Test",
                 documentTypeAcronym: "PI-",
@@ -280,16 +169,14 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
-          LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record Test");
+          LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          companyId = createdCompany.id;
           done();
         });
       });
@@ -718,7 +605,7 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       });
     });
 
-    it("[API]Create Equipment document with Numeric revision", (done: any) => {
+    it("[API]Create Equipment document", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -782,7 +669,7 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       });
     });
 
-    it("[API]Create PM record for equipment in numeric version", (done: any) => {
+    it("[API]Create PM record for equipment", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           formDocument: {
@@ -839,7 +726,7 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       });
     });
 
-    it("[API]Create Calibration record for equipment in numeric version", (done: any) => {
+    it("[API]Create Calibration record for equipment", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           formDocument: {
@@ -895,6 +782,185 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
         }).then(() => done());
       });
     });
+
+    it("[API]Create Equipment document", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          attachments: [],
+          description: "<p>Equipment document with expired due date</p>",
+          document: {
+            docId: "EQ-00002",
+            documentType: {
+              id: equipmentDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "Equipment document expired due date",
+          formDocument: {
+            id: createdEquipmentFormDocument.id,
+          },
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formInput: {
+            "fb-default-eq-status": "Active",
+            "fb-primary-owner-eq": adminEmployee.id,
+            "fb-coordinator-eq": adminEmployee.id,
+            "pm-ki5wtk5l": {
+              requirements: "Yes",
+              preventativeForm: createdPMForm.documentId,
+              frequency: 10,
+              instructions: "<p>Instructions for preventative maintenance</p>",
+            },
+            "calibration-ki5wtyj0": {
+              requirements: "Yes",
+              preventativeForm: createdCalibrationForm.documentId,
+              frequency: 5,
+              instructions: "<p>Instructions for calibration</p>",
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdEquipmentNumericRevision = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdEquipmentNumericRevision.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create PM record for equipment", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdPMForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentNumericRevision.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles").subtract(11, "days"),
+          },
+          parentEquipment: {
+            id: createdEquipmentNumericRevision.id,
+          },
+          equipmentSection: "pm-ki5wtk5l",
+          description: "",
+          name: "Preventative maintenance document",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00003",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdPMRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdPMRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
+    it("[API]Create Calibration record for equipment", (done: any) => {
+      cy.drCreateDocumentRevision({
+        payload: {
+          formDocument: {
+            id: createdCalibrationForm.id,
+          },
+          formInput: {
+            "equipment_id": createdEquipmentNumericRevision.id,
+            "equipment_maintainer": adminEmployee.id,
+            "fb-approvals-kybkhbpt": [],
+            "fb-equipment_due_date": moment().tz("America/Los_Angeles").subtract(10, "days"),
+          },
+          parentEquipment: {
+            id: createdEquipmentNumericRevision.id,
+          },
+          equipmentSection: "calibration-ki5wtyj0",
+          description: "",
+          name: "Calibration record",
+          attachments: [],
+          referenceTo: [],
+          revisionStage: 1,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          retrain: false,
+          document: {
+            docId: "MR-00004",
+            securityList: {
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+              operators: [],
+            },
+            documentType: {
+              id: maintenanceRecordDocumentType[0].id,
+            },
+          },
+        },
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then((response) => {
+        createdCalibrationRecord = response;
+        cy.drAPIApproveAndRelease({
+          documentId: createdCalibrationRecord.id,
+          payload: {
+            effectiveDate: (new Date()).toISOString(),
+            documentType: { id: approvalRequestDocumentType[0].id },
+            formDocument: { id: initialArDocument[0].id },
+            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+          },
+          employeeId: adminEmployee.id,
+          sessionId: loginResponse.sessionId,
+        }).then(() => done());
+      });
+    });
+
 
     it("[API]Create part document", (done: any) => {
       cy.drCreateDocumentRevision({
@@ -1281,29 +1347,39 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       }).then(() => done());
     });
 
-    it("[API]Get group developers", (done: any) => {
-      cy.grpGetGroupByName({
-        groupName: "Async Tasks",
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-      }).then((response) => {
-        asyncTasksGroup = response;
-        done();
-      });
-    });
-
-    it("[API]Patch group developers", () => {
-      cy.grpPatchGroup({
-        groupId: asyncTasksGroup.body[0].id,
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
+    it("[API]Create LHR document 2", (done: any) => {
+      cy.drCreateDocumentRevision({
         payload: {
-          employees: [{ id: adminEmployee.id }],
+          attachments: [],
+          description: "<p>LHR created with API</p>",
+          document: {
+            docId: "LHR-00005",
+            documentType: {
+              id: LHRDocumentType[0].id,
+            },
+            securityList: {
+              operators: [],
+              securityEmployees: [],
+              securityGroups: [
+                {
+                  id: group.body[0].id,
+                },
+              ],
+            },
+          },
+          name: "API LHR document 2",
+          referenceTo: [],
+          retrain: false,
+          revisionChangeType: RevisionChangeType.NextRevision,
+          revisionStage: 1,
+          formDocument: { id: createdLHRtDocument.id },
         },
-      });
+        employeeId: adminEmployee.id as unknown as string,
+        sessionId: loginResponse.sessionId as unknown as string,
+      }).then(() => done());
     });
 
-    it("[API]Get group Async Tasks", (done: any) => {
+    it("[API]Get group Developers", (done: any) => {
       cy.grpGetGroupByName({
         groupName: "Developers",
         sessionId: loginResponse.sessionId,
@@ -1314,13 +1390,13 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
       });
     });
 
-    it("[API]Patch group Async Tasks", () => {
+    it("[API]Patch group Developers", () => {
       cy.grpPatchGroup({
         groupId: developersGroup.body[0].id,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
-          employees: [{ id: adminEmployee.id }],
+          employees: [{ id: adminEmployee.id }, { id: secondEmployee.id }],
           tags: [...developersGroup.body[0].tags,
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
@@ -1513,17 +1589,446 @@ context("Verify Equipment Prod Enforce on LHR with owner", () => {
     });
 
     it("Expand information for Equipment doc type", () => {
-      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record Test")
+      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record")
         .eq(0).parent().find("button").eq(0).arrowClick();
     });
 
     it("Verify Equipment Enforce Prod is unchecked", () => {
-      cy.get("[name=equipmentEnforceProd]").should("not.be.checked");
+      cy.get(` td[role="gridcell"][aria-colindex="2"]>input[value="Lot History Record"]`)
+        .parents("tr").find(`td[data-grid-col-index="12"] input`).should("not.be.checked");
     });
   });
 
-  context("Verify user can select EQ if due_date is past when Equipment Enforce Prod is unchecked", () => {
+  context("Verify user can select EQ if due date is past when Equipment Enforce Prod is unchecked", () => {
+    it("Navigate to LHR", () => {
+      cy.navigToLHR();
+    });
 
+    it("Enter LHR document 2", () => {
+      cy.dlSelectFirstDocument();
+    });
+
+    context("Fill LHR document and start LHRs", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter initial quantity", () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      });
+
+      it("Select 'Production' build type", () => {
+        cy.unClick();
+        cy.get(`[value="Production"]`).check();
+      });
+
+      it("Add 'Due Date'", () => {
+        cy.poAddDateRequired();
+      });
+
+      it("Save LHR", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click 'START MPI'", () => {
+        cy.mpiStartStep({ stepNumber: 1 });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+    });
+
+    context("Fill LHRs", () => {
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+    });
+
+    context("Verify equipment select dialog on LHRs", () => {
+      it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("[data-cy=\"form.builder.select\"]")
+            .eq(1)
+            .click({ force: true });
+        });
+      });
+
+      it("Open dropdown", () => {
+        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+      });
+
+      it("Verify list item should have cal and pm ", () => {
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").parents("li")
+          .should("have.text", `EQ-00001 ▪rev 1 - Equipment document Cal Due: ${calDueDate} ▪ PM Due: ${pmDueDate} `);
+      });
+
+      it("Select Equipment from dropdown", () => {
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").arrowClick();
+      });
+
+      it("Verify selected EQ information is displayed", () => {
+        cy.get("div[role=dialog]")
+          .should("have.text",
+            `SelectEquipment\u200bStatus:ActiveCalibration:Next: ${calDueDate}Preventative Maintenance:Next: ` +
+            `${pmDueDate}SaveCancel`);
+      });
+
+      it("Click save", () => {
+        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+      });
+
+      it("Verify dialog is closed", () => {
+        cy.get(`div[role=dialog]`).should("not.exist");
+      });
+
+      it("Verify selected equipment and its information", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).should("have.text", "EQ-00001");
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent().then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.be.equal(`EQ-00001Next Cal Due: ${calDueDate}Next PM Due: ${pmDueDate}`);
+        });
+      });
+
+      it("Verify background color is gray because it due is not expired", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
+          .should("have.css", "background-color", "rgb(212, 219, 225)");
+      });
+
+      it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
+        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
+        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
+      });
+
+      it("Click change button to switch to expired equipment", () => {
+        cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+      });
+
+      it("Select expired equipment", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00002").arrowClick();
+      });
+
+      it("Click save", () => {
+        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+      });
+
+      it("Verify selected equipment and its information", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).contains("EQ-00002")
+          .parent().parent().then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.be.equal(`EQ-00002Next Cal Due: ${calExpiredDueDate}Next PM Due: ${pmExpiredDueDate}`);
+          });
+      });
+
+      it("Verify background color is red because its due date is expired", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`)
+          .contains("EQ-00002").parent().parent()
+          .should("have.css", "background-color", "rgb(252, 222, 222)");
+      });
+
+      it("Verify OVERDUE text", () => {
+        cy.get("#c-warning")
+          .should("have.css", "color", "rgb(244, 67, 54)");
+      });
+    });
+
+    context("Finish LHRs", () => {
+      it("Add approver", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Save LHRs", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Complete step", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve step", () => {
+        cy.ebApprove();
+      });
+    });
+
+    context("Revise LHRs", () => {
+      it("Click Revise on LHRs #1", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+          cy.listLoadingElementShouldAppear();
+        });
+      });
+
+      it("Update step #1 description", () => {
+        cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
+        cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
+      });
+
+      it("Click save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      });
+
+      it("Click save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      it("Complete step", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve step", () => {
+        cy.ebApprove();
+      });
+    });
+  });
+
+  context("Verify operator can select EQ if due date is past when Equipment Enforce Prod is unchecked", () => {
+    it("Navigate to LHR", () => {
+      cy.navigToLHR();
+    });
+
+    it("Enter LHR document 1", () => {
+      cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
+      cy.dlSelectFirstDocument();
+    });
+
+    context("Fill LHR document and assign operator", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Enter initial quantity", () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      });
+
+      it("Select 'Production' build type", () => {
+        cy.unClick();
+        cy.get(`[value="Production"]`).check();
+      });
+
+      it("Add 'Due Date'", () => {
+        cy.poAddDateRequired();
+      });
+
+      it("Click on sidebar permission icon to add Operators", () => {
+        cy.get("[data-cy='permission-icon']").arrowClick();
+      });
+
+      it("Save LHR", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it(`Add operator ${USERS[2].name}`, () => {
+        cy.drAssignDocumentTo({ username: USERS[2].name });
+      });
+    });
+
+    context("Login operator and start LHRs", () => {
+      it("Logout current user", () => {
+        cy.authLogout();
+      });
+
+      it("Login operator", () => {
+        cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      });
+
+      it("Navigate to LHR", () => {
+        cy.navigToLHR();
+      });
+
+      it("Enter LHR document 1", () => {
+        cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
+        cy.dlSelectFirstDocument();
+      });
+
+      it("Click 'START MPI'", () => {
+        cy.mpiStartStep({ stepNumber: 1 });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+    });
+
+    context("Fill LHRs", () => {
+      it("Enter 'Start quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
+      });
+
+      it("Enter 'Accepted quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+      });
+
+      it("Enter 'Rejected quntity' for LHRs #1", () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+      });
+    });
+
+    context("Verify equipment select dialog on LHRs", () => {
+      it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("[data-cy=\"form.builder.select\"]")
+            .eq(1)
+            .click({ force: true });
+        });
+      });
+
+      it("Open dropdown", () => {
+        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+      });
+
+      it("Verify list item should have cal and pm ", () => {
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").parents("li")
+          .should("have.text", `EQ-00001 ▪rev 1 - Equipment document Cal Due: ${calDueDate} ▪ PM Due: ${pmDueDate} `);
+      });
+
+      it("Select Equipment from dropdown", () => {
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").arrowClick();
+      });
+
+      it("Verify selected EQ information is displayed", () => {
+        cy.get("div[role=dialog]")
+          .should("have.text",
+            `SelectEquipment\u200bStatus:ActiveCalibration:Next: ${calDueDate}Preventative Maintenance:Next: ` +
+            `${pmDueDate}SaveCancel`);
+      });
+
+      it("Click save", () => {
+        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+      });
+
+      it("Verify dialog is closed", () => {
+        cy.get(`div[role=dialog]`).should("not.exist");
+      });
+
+      it("Verify selected equipment and its information", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).should("have.text", "EQ-00001");
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent().then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.be.equal(`EQ-00001Next Cal Due: ${calDueDate}Next PM Due: ${pmDueDate}`);
+        });
+      });
+
+      it("Verify background color is gray because it due is not expired", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
+          .should("have.css", "background-color", "rgb(212, 219, 225)");
+      });
+
+      it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
+        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
+        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
+      });
+
+      it("Click change button to switch to expired equipment", () => {
+        cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+      });
+
+      it("Select expired equipment", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+        cy.get(`ul[id$="popup"]>li`).contains("EQ-00002").arrowClick();
+      });
+
+      it("Click save", () => {
+        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+      });
+
+      it("Verify selected equipment and its information", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).contains("EQ-00002")
+          .parent().parent().then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.be.equal(`EQ-00002Next Cal Due: ${calExpiredDueDate}Next PM Due: ${pmExpiredDueDate}`);
+          });
+      });
+
+      it("Verify background color is red because its due date is expired", () => {
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`)
+          .contains("EQ-00002").parent().parent()
+          .should("have.css", "background-color", "rgb(252, 222, 222)");
+      });
+
+      it("Verify OVERDUE text", () => {
+        cy.get("#c-warning")
+          .should("have.css", "color", "rgb(244, 67, 54)");
+      });
+    });
+
+    context("Finish LHRs", () => {
+      it("Add approver", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Save LHRs", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Complete step", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve step", () => {
+        cy.ebApprove();
+      });
+    });
+
+    context("Revise LHRs", () => {
+      it("Click Revise on LHRs #1", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+          cy.listLoadingElementShouldAppear();
+        });
+      });
+
+      it("Update step #1 description", () => {
+        cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
+        cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
+      });
+
+      it("Click save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+      });
+
+      it("Click save document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
+      it("Complete step", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Approve step", () => {
+        cy.ebApprove();
+      });
+    });
   });
 });
 

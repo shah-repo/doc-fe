@@ -17,6 +17,7 @@
 import "cypress-file-upload";
 import "cypress-localstorage-commands";
 import "cypress-promise/register";
+import "cypress-real-events/support";
 import "cypress-xpath";
 import "../../node_modules/cypress-movie/src/arrow";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
