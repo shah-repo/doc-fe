@@ -46,7 +46,7 @@ export const GroupsCell = ({
   React.useEffect(() => {
     setData(groupOptions);
     setResult(defaultGroups);
-  }, [groupOptions, defaultGroups]);
+  }, [groupOptions, defaultGroups, dataItem]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
     dataItem.groups = target.value.map((item) => ({
