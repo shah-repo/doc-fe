@@ -8,6 +8,7 @@ import { useIntl } from "react-intl";
 import { userManagementActions } from "../../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { toastError } from "../../../components/notifications";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { UserManage } from "../types";
@@ -59,6 +60,12 @@ export const CommandCell = ({
     },
   });
   const fetchUseInfo = () => {
+    const userName = get(dataItem, "name");
+    const userEmail = get(dataItem, "email");
+    if (!userEmail || !userName) {
+      toastError(intl.formatMessage({ id: "user.management.name.email.required" }));
+      return;
+    }
     asyncName.start(getEmployeeAction, { email: get(dataItem, "email") }, asyncName );
   };
 
