@@ -90,7 +90,6 @@ do
     videoDir="${videoDir}/"
     rm -rf $videoDir
     echo "--| deleting vides in $videoDir"
-    done
 
     downloadDir=${x/$CYPRESS_INTEGRATION_FOLDER/$CYPRESS_DOWNLOADS_DIR}
 
@@ -99,8 +98,8 @@ do
     downloadDir="${downloadDir}/"
     rm -rf $downloadDir
     echo "--| deleting downloads in $downloadDir"
-    done
 
+    done
 
     echo "--| deleting  $i"
 
