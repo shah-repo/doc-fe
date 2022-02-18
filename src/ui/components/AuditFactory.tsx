@@ -148,7 +148,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "approvals.status":
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
-          returnValue = audit.ownerName;
+          returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
         returnValue = (
@@ -157,7 +157,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             translation="changeRequest.audit.status.updated.by"
             values={{
               status: <Text translation={audit.nextValue as Translation} />,
-              name: audit.ownerName,
+              name: audit.owner?.user.name,
             }}
           />
         );
