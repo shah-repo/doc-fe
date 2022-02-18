@@ -956,6 +956,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
 
+          tmpRegex = new RegExp(`${USERS[2].name} \\- .*@.*`);
+          expect(el).not.match(tmpRegex);
+
+          expect(el).not.match(/REJECTED/);
+
           expect(el).match(/WIP/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
