@@ -23,10 +23,9 @@ let downloadUrl;
 let tmpRegex;
 let downloadFile;
 let fileId;
+let dateAfterEmailShouldArrive;
 
 const dateOffset = (5 * 1000);
-let dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
@@ -741,9 +740,7 @@ context("Training notification test", () => {
 
   context("Verify email for pending training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date();
-      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -790,16 +787,17 @@ context("Training notification test", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  trnId + filetime + ".zip";
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${trnId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
@@ -825,20 +823,28 @@ context("Training notification test", () => {
         cdata = content;
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 2`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1]
           .name} \\| Trainee \\| Not Completed`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         expect(cdata.text).match(/Page 1 of 1/);
+
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       });
@@ -892,9 +898,7 @@ context("Training notification test", () => {
 
   context("Verify email for completed training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date();
-      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -940,17 +944,18 @@ context("Training notification test", () => {
     it("Download zip file containing completed training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  trnId + filetime + ".zip";
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${trnId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
@@ -976,20 +981,28 @@ context("Training notification test", () => {
         cdata = content;
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 1`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
           .name} \\| Trainee \\| ${docRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         expect(cdata.text).match(/Page 1 of 1/);
+
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
+
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       });
