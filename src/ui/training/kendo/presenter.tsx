@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-import { isEmpty } from "lodash";
-import React from "react";
+import { isEmpty, startCase } from "lodash";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { docRevSch } from "../../../common/normalizrSchema";
@@ -32,19 +32,19 @@ const KendoGridList: React.FunctionComponent<Props> = ({
   columns,
 }) => {
   const classes = KendoGridStyles();
-
+  const [dataToBeExported, setDataToBeExported] = useState(gridData);
   const dialog = useDialog();
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
 
   const headers = columns.columns.map((e) => ({
-    label: getTranslatedText(e.title).toUpperCase(),
+    label: startCase(getTranslatedText(e.title)),
     key: e.field,
   }));
 
   const renderTableData = () => {
-    if (!isEmpty(gridData)) {
-      return gridData.map((e) => ({
+    if (!isEmpty(dataToBeExported)) {
+      return dataToBeExported.map((e) => ({
         trId: e.trId,
         docId: e.trainingPlan.document.docId,
         revision: e.documentRevision.displayRevision,
@@ -67,6 +67,9 @@ const KendoGridList: React.FunctionComponent<Props> = ({
   };
 
   const exportData = dialog.isOpen ? renderTableData() : [];
+  const handleExportData = (dataToBeExported: TableDataProps<TrainingListData>) => {
+    setDataToBeExported(dataToBeExported);
+  };
 
   return (
     <Grid container={true} className={classes.root}>
@@ -102,6 +105,7 @@ const KendoGridList: React.FunctionComponent<Props> = ({
           tableCriteria={tableCriteria}
           queryUrl={TRAINING_RECORD_ROOT_URL}
           normalizrSchema={[docRevSch]}
+          exportDataChanges={handleExportData}
         />
       </Grid>
     </Grid>

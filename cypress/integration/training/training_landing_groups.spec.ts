@@ -995,11 +995,11 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
-      cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
-      cy.trVerifyElementByColumnName({ name: "TITLE" });
-      cy.trVerifyElementByColumnName({ name: "OWNER" });
-      cy.trVerifyElementByColumnName({ name: "STATE" });
-      cy.trVerifyElementByColumnName({ name: "GROUP" });
+      cy.trVerifyElementByColumnName({ name: "Training Curriculum ID" });
+      cy.trVerifyElementByColumnName({ name: "Title" });
+      cy.trVerifyElementByColumnName({ name: "Owner" });
+      cy.trVerifyElementByColumnName({ name: "State" });
+      cy.trVerifyElementByColumnName({ name: "Group" });
     });
 
     it("Check filters on Training Curriculums page", () => {

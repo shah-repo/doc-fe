@@ -1,0 +1,335 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
+
+import "moment-timezone";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+let createdCompany;
+let loginResponse;
+let developersGroup;
+let adminSessionId;
+let adminEmployee;
+let employeeToDevs;
+
+context("Regular Records test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
+              {
+                documentTypeName: "Record Document",
+                documentTypeAcronym: "RD-",
+                category: "Record",
+                group: "RECORD",
+                isQms: true,
+              },
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeToDevs = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[2].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        adminSessionId = loginResponse.sessionId;
+        done();
+      });
+    });
+  });
+
+  context("[API]Add employee to developers group", () => {
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: adminSessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: employeeToDevs.id }],
+        },
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
+  context("Create Record with form", () => {
+    context("Start document creation flow", () => {
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Clicks on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enters title", () => {
+        cy.drEnterDocumentTitle({ name: "first record title" });
+      });
+
+      it("Enters description", () => {
+        cy.drEnterDocumentDescription({ description: "first record description" });
+      });
+
+      it("Selects 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Selects 'Record Document' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Record Document" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Verify approvals field is automatically added", () => {
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      });
+
+      context("Creates document and releases it", () => {
+        it("Click create document after filling document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+  });
+
+  context("Create new Record", () => {
+    it("Create new record button click", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enters title 'Record title'", () => {
+      cy.drEnterDocumentTitle({ name: "Record title" });
+    });
+
+    it("Enters description 'Record description'", () => {
+      cy.drEnterDocumentDescription({ description: "Record description" });
+    });
+
+    it("Save Record'", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+  });
+
+  context("Created Record appear in Recent tab", () => {
+    it("Goto dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Record should appear in Recent", () => {
+      cy.get("#scrollable-auto-tab-1").arrowClick();
+      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
+        .should("contain.text", "RD-00003")
+        .and("contain.text", "Record title");
+    });
+  });
+
+  context("Add approvers to Record", () => {
+    it("Open Record", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview], () => {
+        cy.contains("RD-00003").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add approver'", () => {
+      cy.contains("Approvals").should("exist");
+      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").should("exist");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[1].name + "{downarrow}{enter}");
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[2].name + "{downarrow}{enter}");
+      });
+    });
+
+    it("Save Record'", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        });
+    });
+
+    it("Submit for approval", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      });
+    });
+
+    it("Status is 'In Review'", () => {
+      cy.drCheckDocumentStatus({ status: "In Review" });
+    });
+  });
+
+  context("Check notifications on dashboard", () => {
+    it("Goto dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Owner should get a notification that Record is in review and pending approval from 2 users", () => {
+      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+        .should("contain.text", "RD-00003")
+        .and("contain.text", "Record title")
+        .and("contain.text", "IN REVIEW")
+        .and("contain.text", "pending approvals from");
+      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+        .find("span").eq(0)
+        .should("contain.text", `${USERS[1].name}`)
+        .and("contain.text", `${USERS[2].name}`);
+    });
+  });
+
+  context("User 2 approve the Record", () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[2].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Click approve for the Record", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostApprovalsApprove], () => {
+          cy.contains("needs your approval for").eq(0).trigger("mouseover");
+          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context("Check notifications on owner dashboard", () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[1].email,
+        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
+      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+        .should("contain.text", "RD-00003")
+        .and("contain.text", "Record title")
+        .and("contain.text", "IN REVIEW")
+        .and("contain.text", "pending approvals from");
+      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+        .find("span").eq(0)
+        .should("contain.text", `${USERS[1].name}`);
+    });
+
+    it("Click approve for the Record", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostApprovalsApprove], () => {
+          cy.contains("needs your approval for").trigger("mouseover");
+          cy.get("span > svg[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+          cy.get("span > svg[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
+          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Record notification should change to Released", () => {
+      cy.contains("RELEASED").parent().parent().parent().parent()
+        .should("contain.text", "RD-00003")
+        .and("contain.text", "Record title");
+    });
+  });
+});
+
+export { };
+

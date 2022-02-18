@@ -314,7 +314,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Link
                       href={
-                        docRevName
+                        docRevId
                           ? documentVersionPath(docRevId || "", docDocumentId)
                           : "#"
                       }
@@ -459,13 +459,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip
-            title={<Text translation="common.unpin" />}
-            placement="top"
-            arrow
-          >
-            <PinSolidIcon onClick={handleUnPinClick} />
-          </StyleTooltip>
+          <span className={classes.actionIcon}>
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          </span>
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

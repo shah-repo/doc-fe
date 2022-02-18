@@ -28,6 +28,7 @@ interface Props {
   docRevId: string;
   docRevOwnerId: string;
   equipmentInterval: number;
+  dueOn?: string;
   timestamp?: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
@@ -43,6 +44,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   docRevId,
   docRevName,
   docRevVersion,
+  dueOn,
   timestamp,
   hoverItemId,
   equipmentInterval,
@@ -119,7 +121,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   >
                     <Link
                       href={
-                        docRevName
+                        docRevId
                           ? documentVersionPath(docRevId || "", docDocumentId)
                           : "#"
                       }
@@ -157,6 +159,18 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                         noOfDays: equipmentInterval,
                       }}
                     />
+                  </Typography>
+                </Grid>
+                <Grid item={true} className={classes.grayDot}></Grid>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.dueOn}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {dueOn}
                   </Typography>
                 </Grid>
               </Grid>
@@ -208,13 +222,15 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
           </Box>
         )}
         {pinned && (
-          <StyleTooltip
-            title={<Text translation="common.unpin" />}
-            placement="top"
-            arrow
-          >
-            <PinSolidIcon onClick={handleUnPinClick} />
-          </StyleTooltip>
+          <span className={classes.actionIcon}>
+            <StyleTooltip
+              title={<Text translation="common.unpin" />}
+              placement="top"
+              arrow
+            >
+              <PinSolidIcon onClick={handleUnPinClick} />
+            </StyleTooltip>
+          </span>
         )}
       </StyledListItem>
     </>

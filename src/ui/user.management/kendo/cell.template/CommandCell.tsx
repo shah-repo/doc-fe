@@ -2,10 +2,15 @@ import { IconButton } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import EditIcon from "@material-ui/icons/Edit";
+import { get, set } from "lodash";
 import * as React from "react";
 import { useIntl } from "react-intl";
+import { userManagementActions } from "../../../../state/ducks/userManagement";
 import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/types";
 import Tooltip from "../../../components/common/kendo/Tooltip";
+import { toastError } from "../../../components/notifications";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
 import { UserManage } from "../types";
 import Commandstyles from "./CommandCell.styles";
 
@@ -41,6 +46,29 @@ export const CommandCell = ({
   const classes = Commandstyles();
   const inEdit = dataItem[editField];
 
+  const getEmployeeAction = useActionCreator(userManagementActions.getEmployee);
+  const asyncName = useAsync<GetEmployeeResponse[]>({
+    onSuccess: (data: GetEmployeeResponse[] = []) => {
+      if (data.length === 0) {
+        set(dataItem, "id", null);
+        add(dataItem as UserManage);
+        return;
+      }
+      set(dataItem, "name", data[0].user.name);
+      dataItem.id = data[0].user.id;
+      add(dataItem as UserManage);
+    },
+  });
+  const fetchUseInfo = () => {
+    const userName = get(dataItem, "name");
+    const userEmail = get(dataItem, "email");
+    if (!userEmail || !userName) {
+      toastError(intl.formatMessage({ id: "user.management.name.email.required" }));
+      return;
+    }
+    asyncName.start(getEmployeeAction, { email: get(dataItem, "email") }, asyncName );
+  };
+
   if (rowType === "groupHeader") {
     return null;
   }
@@ -60,7 +88,7 @@ export const CommandCell = ({
           <IconButton
             disableRipple={true}
             size="small"
-            onClick={() => add(dataItem as UserManage)}
+            onClick={() => fetchUseInfo()}
             className={classes.button}
           >
             <AddCircleOutlineIcon
@@ -110,3 +138,4 @@ export const CommandCell = ({
     </td>
   );
 };
+

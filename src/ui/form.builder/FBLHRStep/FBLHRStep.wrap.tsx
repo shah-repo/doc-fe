@@ -1,10 +1,10 @@
 import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { find, flattenDeep, isEmpty, lowerCase, omit } from "lodash";
+import { find, flattenDeep, lowerCase, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBLHRStepProps, FBLHRStepState } from "..";
-import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { getHighestRevision, getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
@@ -26,6 +26,7 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     equipment,
     isDocumentLHRT,
     stepIndex,
+    label,
     ...props
   }: T) => {
 
@@ -59,6 +60,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     // MARK: @helpers
     React.useEffect(() => {
+      formState?.setValidationAttributeName(name, label as string);
+      formState?.validate();
       if (!lhrStepState.stepLHRs) {
         return;
       }
@@ -188,30 +191,11 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       data: DocumentRevision[],
       state: FilterOptionsState,
     ) {
-      const { documentType = [], revisionStatus = [] } = props.editorConfig?.filters || {};
       const { inputValue = "" } = state || {};
 
-      if (isEmpty(documentType) && isEmpty(revisionStatus)) {
-        return data?.filter((docRev) => filterOutOption(docRev, inputValue));
-      }
-      const options = data?.filter((docRev) => {
-        const {
-          status = "",
-          document: { documentType: { id: docTypeId = "" } = {} } = {},
-        } = docRev || {};
-
-        if (isEmpty(documentType)) {
-          return revisionStatus.includes(status) &&
-          filterOutOption(docRev, inputValue);
-        }
-        if (isEmpty(revisionStatus)) {
-          return documentType.includes(docTypeId) &&
-          filterOutOption(docRev, inputValue);
-        }
-        return revisionStatus.includes(status) &&
-          documentType.includes(docTypeId) &&
-          filterOutOption(docRev, inputValue);
-      });
+      const options = data?.filter((docRev) => (docRev.status === DocumentRevisionStatus.Draft ||
+        docRev.status === DocumentRevisionStatus.Released) &&
+          filterOutOption(docRev, inputValue));
 
       return options;
     }

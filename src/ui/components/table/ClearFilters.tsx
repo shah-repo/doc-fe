@@ -14,8 +14,6 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       borderRadius: "100px", // TODO: Move in specific file for border radius
       textTransform: "none",
-      paddingLeft: 15,
-      paddingRight: 15,
       fontFamily: "Sora",
       fontSize: 12,
       fontWeight: 600,

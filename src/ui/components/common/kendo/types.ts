@@ -35,6 +35,8 @@ export interface KendoColumn {
   filterable?: boolean;
   disabled?: boolean;
   resizable?: boolean;
+  showTooltip?: boolean;
+  tooltipField?: string;
 }
 
 export interface DropdownFilterDefaultItem {
@@ -90,8 +92,11 @@ export interface KendoPanelProps<T> {
   previewDocumentRevision?: (documentRevisionId: string, documentId: string) => void;
   documentTypeOptions?: DocumentTypeOptions[];
   currentUserEmail?: string;
+  exportDataChanges?: (data: T[]) => void;
 }
 
 export interface CustomGridCellProps extends GridCellProps {
   cellRowClick?: ((dataItem: any) => void);
+  showTooltip?: boolean;
+  tooltipField?: string;
 }

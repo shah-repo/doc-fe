@@ -218,7 +218,6 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA,
     DOC_TYPE_GROUP_OPTION.EXPORTABLE,
     DOC_TYPE_GROUP_OPTION.ONLY_ON_OUTPUTS_DROPDOWN,
-    DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
   ],
   EQUIPMENT_SPECIFICATION: [
     DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
@@ -341,6 +340,7 @@ export interface DocumentType {
   startingNumber?: string;
   category?: string;
   active?: boolean;
+  equipmentEnforceProd?: boolean;
 }
 
 interface DocumentForms {

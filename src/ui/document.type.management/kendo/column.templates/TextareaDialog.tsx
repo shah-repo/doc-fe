@@ -29,7 +29,7 @@ const FormTextArea: React.FunctionComponent<FormAreaProps> = ({
 }) =>
   <FieldWrapper>
     <div className={"k-form-field-wrap"}>
-      <TextArea defaultValue={defaultVal}
+      <TextArea defaultValue={defaultVal} readOnly={!isEdit}
         rows={17}
         {...others} />
     </div>

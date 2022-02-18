@@ -159,7 +159,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         return handleCancel?.();
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
-      if (!formValue.LHRTparameter && !FB.isUUID(formValue.title)) {
+      if (isDocumentMPI && !formValue.LHRTparameter && !FB.isUUID(formValue.title)) {
         formState?.setFieldValue("title", "");
         formState?.getInputState("title")?.setRender();
         formState?.validate();

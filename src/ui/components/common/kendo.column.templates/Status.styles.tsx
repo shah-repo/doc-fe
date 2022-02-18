@@ -15,7 +15,6 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: "10px",
       lineHeight: "13px",
-      textTransform: "uppercase",
       alignItems: "center",
       justifyContent: "center",
       color: Colors.lochmara,
