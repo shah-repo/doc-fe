@@ -18,7 +18,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   debounceFilterInput,
   groupBy,
   refresh,
-  onFocus,
   filterSelectedOptions = false,
   freeSolo = false,
   multiple = false,
@@ -74,7 +73,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
                   {...params}
                   {...!params.InputProps.startAdornment && { placeholder }}
                   onChange={onInputChange}
-                  onFocus={onFocus}
                   fullWidth
                   variant="outlined"
                   InputProps={{

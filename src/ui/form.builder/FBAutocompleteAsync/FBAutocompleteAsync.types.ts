@@ -16,7 +16,6 @@ export type FBAutocompleteAsyncProps =
   urlValues?: Record<string, any>;
   withoutPrefixRoot?: boolean;
   withoutLabelKey?: boolean;
-  onFocus?: () => void;
 };
 
 export interface FBAutocompleteAsyncConfig  {
