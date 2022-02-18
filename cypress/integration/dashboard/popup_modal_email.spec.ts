@@ -25,7 +25,6 @@ let doateOfSendToAll;
 
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
-const approvalRequestFormName = "New Approval request form template";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
@@ -177,44 +176,6 @@ context("Approval request email popup modal", () => {
     });
   });
 
-  context("Create new AR form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on 'create a document'", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enter title 'New Approval request form template'", () => {
-      cy.drEnterDocumentTitle({ name: approvalRequestFormName });
-    });
-
-    it("Enter description 'New form template for approval request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
-    });
-
-    it("Click on 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    });
-  });
-
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
@@ -222,10 +183,6 @@ context("Approval request email popup modal", () => {
 
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
-    });
-
-    it("Choose newly AR Form template", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -345,7 +302,7 @@ context("Approval request email popup modal", () => {
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
             "I sent a request for approval on\r\n",
-            "AR-00002\r\n                                        Approval request from newly created form",
+            "AR-00001\r\n                                        Approval request from newly created form",
             "Thank you,",
           ],
         }];
@@ -440,7 +397,7 @@ context("Approval request email popup modal", () => {
       });
     });
 
-    it("Verify emails that should not be received", () => {
+    it("Verify the emails that should not be received", () => {
       const emailsThatShouldNotBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: SECOND_USER.email,
