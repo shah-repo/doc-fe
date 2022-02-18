@@ -40,7 +40,7 @@ const pmExpiredDueDate = moment().tz("America/Los_Angeles").subtract(1, "days").
 const calDueDate = moment().tz("America/Los_Angeles").add(5, "days").format("ll");
 const pmDueDate = moment().tz("America/Los_Angeles").add(10, "days").format("ll");
 
-context("Verify Equipment Prod Enforce on LHR with owner", () => {
+context("Verify Equipment Prod Enforce disabled on LHR with owner and operator", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
