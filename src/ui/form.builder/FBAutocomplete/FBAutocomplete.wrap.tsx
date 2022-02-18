@@ -67,12 +67,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       };
       return objectValue[optionValueType]();
     }
-    // console.log("Placeholder:: ", placeholder);
+
     if (placeholder && isTranslation(placeholder)) {
       placeholder = intl.formatMessage({ id: placeholder });
     }
-    const searchPlaceholder = intl.formatMessage({ id: "common.search.label" });
-    placeholder = placeholder ? `${placeholder} - ${searchPlaceholder}` : searchPlaceholder;
 
     (!optionId && options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
 
@@ -104,7 +102,6 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       formState?.setFieldValue(name, value, withState, omitFormValue);
       formState?.validate();
     };
-
 
     if (!filterOptions) {
       // disable filtering on client
