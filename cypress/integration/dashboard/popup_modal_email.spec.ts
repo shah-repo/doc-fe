@@ -176,7 +176,7 @@ context("Approval request email popup modal", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
+  context("Create approval request from existing form", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
