@@ -40,6 +40,15 @@ export const styles = makeStyles(() =>
       fontWeight: 600,
       letterSpacing: 0,
     },
+    dueOn: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "bold",
+      fontSize: "13px",
+      lineHeight: "16px",
+      color: Colors.font_gray,
+      letterSpacing: 0,
+    },
     timestampContainer: {
       fontFamily: "Sora",
       fontStyle: "normal",

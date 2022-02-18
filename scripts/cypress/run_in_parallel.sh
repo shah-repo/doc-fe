@@ -58,6 +58,7 @@ source ./scripts/cypress/utils/make_results_dir.sh
 
 ./scripts/cypress/utils/run_generate_info_report.sh
 
+export CYPRESS_DOWNLOADS_DIR=$DIR_DOWNLOADS
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 
