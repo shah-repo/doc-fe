@@ -30,7 +30,6 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
-const downloaddDirectory  = "cypress/downloads";
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -525,9 +524,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify email for bulk create form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date();
-      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -576,32 +573,32 @@ context("Bulk create public, private and reserved doc-ids", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
-      cy.get("@short_url").then((response) => {
-        downloadUrl = (response as any).body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}${filetime}.zip`;
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${downloaddDirectory}/${downloadFile}`;
+      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("unzip and extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
-      const pdffile = `${downloaddDirectory}/${downloadFile}`.replace(".zip", "") +
+      const pdffile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", "") +
       `/${releasedFormId}-1-Bulk-create-form.pdf`;
       cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
     });
@@ -611,7 +608,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Extract texts from PDF file content for bulk create form", () => {
       cy.pdfparseFile(
         {
-          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-Bulk-create-form.pdf`,
         }).then((content) => {
         cdata = content;
@@ -641,20 +638,32 @@ context("Bulk create public, private and reserved doc-ids", () => {
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/AR ID\nAR-00006/);
+
         expect(el).match(/Description\nExport/);
+
         expect(el).match(/Output Document Type\nBulk Create/);
+
         expect(el).match(/Attachments\nimage.jpg/);
+
         expect(el).match(/Select Form Document For Import/);
+
         expect(el).match(/Select Output Document Type/);
+
         expect(el).match(/EXCEL FOR IMPORT/);
+
         tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Released/);
+
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 1 of 3/);
       }
     });
@@ -664,15 +673,23 @@ context("Bulk create public, private and reserved doc-ids", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Upload excel with data for import/);
+
         expect(el).match(/MASS CREATE LOGS/);
+
         expect(el).match(/Logs/);
+
         expect(el).match(/APPROVALS\nApprovers/);
+
         expect(el).match(/Released/);
+
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 2 of 3/);
       }
     });
@@ -682,19 +699,24 @@ context("Bulk create public, private and reserved doc-ids", () => {
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
         tmpRegex = new RegExp( `AR-000061N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
         expect(el).match(tmpRegex);
+
         expect(el).match(/Released/);
+
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
+
         expect(el).match(/Page 3 of 3/);
       }
     });
   });
-
 
   context("Test private pool document type", () => {
     it("Turn off autosave", () => {
@@ -787,9 +809,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for WIP bulk create notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date();
-        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -839,28 +859,29 @@ context("Bulk create public, private and reserved doc-ids", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).as("short_url");
-        cy.get("@short_url").then((response) => {
-          downloadUrl = (response as any).body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${releasedFormId}${filetime}_WIP.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: downloaddDirectory,
-            fileName: downloadFile,
-          });
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  =  `${releasedFormId}${filetime}_WIP.zip`;
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
         });
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = `${downloaddDirectory}/${downloadFile}`;
+        const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
         cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
       });
 
       it("extract pdf file from zip file", () => {
         cy.unzipFile(
           {
-            directory: downloaddDirectory,
+            directory: CONFIG.DOWNLOADS_DIR,
             fileName: downloadFile,
           });
       });
@@ -869,7 +890,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     context("Verify PDF file content for WIP document", () => {
       it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
-          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
         }).then((content) => {
           cdata = content;
@@ -895,18 +916,28 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/Attachments\nimage.jpg/);
+
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
+
           expect(el).match(/Select Output Document Type\nTest Private Pool/);
+
           expect(el).match(/EXCEL FOR IMPORT/);
+
           tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/WIP/);
+
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           expect(el).match(/Page 1 of 2/);
+
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(cdata.text).not.match(tmpRegex);
         }
@@ -917,16 +948,24 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
+
           expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
+
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
+
           expect(el).match(/WIP/);
+
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           expect(el).match(/Page 2 of 2/);
+
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(cdata.text).not.match(tmpRegex);
         }
@@ -991,9 +1030,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for training released notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date();
-        dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           // eslint-disable-next-line @typescript-eslint/camelcase
@@ -1042,29 +1079,29 @@ context("Bulk create public, private and reserved doc-ids", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-          .as("short_url");
-        cy.get("@short_url").then((response) => {
-          downloadUrl = (response as any).body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  = releasedFormId + filetime + "_rel.zip";
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: downloaddDirectory,
-            fileName: downloadFile,
-          });
+        cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+          if (res.body !== "") {
+            downloadUrl = res.body.url;
+            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+            downloadFile  = releasedFormId + filetime + "_rel.zip";
+            cy.downloadFile({
+              url: downloadUrl,
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+          }
         });
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = `${downloaddDirectory}/${downloadFile}`;
+        const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
         cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
       });
 
       it("extract pdf file from zip file", () => {
         cy.unzipFile(
           {
-            directory: downloaddDirectory,
+            directory: CONFIG.DOWNLOADS_DIR,
             fileName: downloadFile,
           });
       });
@@ -1074,7 +1111,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Extract texts from PDF file content for released document", () => {
         cy.pdfparseFile(
           {
-            directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+            directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
             fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
           }).then(($content) => {
           cdata = $content;
@@ -1100,18 +1137,28 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/Attachments\nimage.jpg/);
+
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
+
           expect(el).match(/Select Output Document Type\nTest Private Pool/);
+
           expect(el).match(/EXCEL FOR IMPORT/);
+
           tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/Released/);
+
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           expect(el).match(/Page 1 of 2/);
+
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(cdata.text).not.match(tmpRegex);
         }
@@ -1122,19 +1169,28 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
+
           tmpRegex = new
           RegExp( `\\(file\\) Upload excel with data for import\\nprivateBulkNoExistDocId\\.xlsx`, "gi" );
           expect(el).match(tmpRegex);
+
           expect(el).match(/MASS CREATE LOGS/);
+
           expect(el).match(/\(file\) Logs\nBulkProcessLogs.txt/);
+
           tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
           expect(el).match(tmpRegex);
+
           expect(el).match(/Released/);
+
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
+
           expect(el).match(/Page 2 of 2/);
+
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(cdata.text).not.match(tmpRegex);
         }
