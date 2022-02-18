@@ -24,7 +24,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 
-const downloaddDirectory  = "cypress/downloads";
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -316,34 +315,33 @@ context("Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
-
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}${filetime}.zip`;
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${downloaddDirectory}/${downloadFile}`;
+      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("unzip and extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
 
-      const pdffile = `${downloaddDirectory}/${downloadFile}`.replace(".zip", "") +
+      const pdffile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", "") +
       `/${releasedFormId}-1-New-Approval-request-form-template.pdf`;
       cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
     });
@@ -353,7 +351,7 @@ context("Approval request form", () => {
     it("Extract texts from PDF file content for Approval request form", () => {
       cy.pdfparseFile(
         {
-          directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
           fileName: `${releasedFormId}-1-New-Approval-request-form-template.pdf`,
         }).then((content) => {
         cdata = content;
@@ -521,6 +519,7 @@ context("Approval request form", () => {
       cy.arSaveApiCall();
     });
   });
+
   context("Click Send To Review", () => {
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
@@ -644,28 +643,30 @@ context("Approval request form", () => {
     it("Download zip file containing approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${downloaddDirectory}/${downloadFile}`;
+      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
     });
@@ -674,7 +675,7 @@ context("Approval request form", () => {
   context("Verify PDF file content for draft document", () => {
     it("Extract texts from PDF file content for draft document", () => {
       cy.pdfparseFile({
-        directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
       }).then((content) => {
         cdata = content;
@@ -731,7 +732,6 @@ context("Approval request form", () => {
       }
     });
   });
-
 
   context("Add approvers to approval request on approver list", () => {
     it("Click 'Send To Review'", () => {
@@ -878,28 +878,29 @@ context("Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  `${releasedFormId}${filetime}_closed.zip`;
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_closed.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${downloaddDirectory}/${downloadFile}`;
+      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
       cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
     });
@@ -908,7 +909,7 @@ context("Approval request form", () => {
   context("Verify PDF file content for closed document", () => {
     it("Extract texts from PDF file content for closed document", () => {
       cy.pdfparseFile({
-        directory: `${downloaddDirectory}/${downloadFile}`.replace(".zip", ""),
+        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
       }).then((content) => {
         cdata = content;
