@@ -18,9 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { compact, find, findIndex, isEmpty, map, pick, startCase } from "lodash";
-import { denormalize } from "normalizr";
-import qs from "query-string";
+import { cloneDeep, find, findIndex, isEmpty, map, startCase } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -62,18 +60,12 @@ import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate
 import KendoGridStyles from "./styles";
 
 let call: CancelTokenSource;
-interface FilterObj {
-  value: string;
-  field: string;
-}
 
 export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   tableName,
-  gridData,
   tableCriteria,
   queryUrl = "",
-  customDataSet,
   normalizrSchema,
   currentUserEmail = "",
   exportDataChanges,
@@ -137,14 +129,14 @@ export function KendoPanel<T>({
       },
     };
   }
-  useEffect(() => {
-    if (!initialDataState.filter?.filters.length && defaultDDItem !== ChangeRequestStatus.InReview) {
-      setSearchStatus(
-        ChangeRequestStatus.InReview,
-      );
-    }
+  // useEffect(() => {
+  //   if (!initialDataState.filter?.filters.length && defaultDDItem !== ChangeRequestStatus.InReview) {
+  //     setSearchStatus(
+  //       ChangeRequestStatus.InReview,
+  //     );
+  //   }
 
-  }, [tableName]);
+  // }, [tableName]);
   const [dataState, setDataState] = useState<State>(initialDataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [defaultDDItem, setDefaultDDItem] = React.useState(defaultStatus);
@@ -173,31 +165,26 @@ export function KendoPanel<T>({
     }
   }, [tableCriteria.forceUpdate]);
 
-  const formatParams = () => {
-    const params: any = {};
-    const statusFilterObj = find(dataState.filter?.filters, {
-      field: "state",
-    }) as FilterObj;
-    if (statusFilterObj) {
-      params[statusFilterObj.field] = statusFilterObj.value;
-    }
-    params.dynamicParams = JSON.stringify(params.dynamicParams);
-    return params;
-  };
   const queryApi = () => {
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: "post",
       url: queryUrl,
-      params: formatParams(),
-      paramsSerializer: (params) => qs.stringify(params),
-      headers: {},
+      data: {
+        limit: dataState.take,
+        offset: dataState.skip,
+        filters: dataState.filter?.filters,
+        sort: dataState.sort,
+      },
       cancelToken: call.token,
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${
+          store.getState().auth.user.sessionId
+        }`,
+      },
     };
-    requestConfig.headers.Authorization = `bearer ${
-      store.getState().auth.user.employeeId
-    }:${store.getState().auth.user.sessionId}`;
+
     if (normalizrSchema) {
       requestConfig.headers["x-enlil-normalizr-response"] = true;
     }
@@ -218,42 +205,23 @@ export function KendoPanel<T>({
     );
     apiClient
       .request(requestConfig)
-      .then((resp) => {
-        if (normalizrSchema) {
-          const { entities, result } = resp.data;
-          resp.data = denormalize(result, normalizrSchema, entities);
-        }
-        return resp;
-      })
+      .then((resp) => resp)
       .then(({ data }) => {
-        if (customDataSet) {
-          data = customDataSet(data);
-          const newDataState = processWithGroups(data, initialDataState);
-          setDataState(initialDataState);
-          setResultState(newDataState);
-          exportDataChanges &&
+        const newDataState = processWithGroups(data.results, dataState);
+        newDataState.total = data.total;
+        setResultState(newDataState);
+        exportDataChanges &&
             exportDataChanges(
-              process(data, {
+              process(data.results, {
                 skip: 0,
-                take: data.length,
+                take: data.total,
                 sort: initialDataState.sort,
                 filter: initialDataState.filter,
               }).data
             );
-          if (newDataState.total === 0) {
-            setNoDataMessage(<NoDataFound />);
-          }
+        if (newDataState.total === 0) {
+          setNoDataMessage(<NoDataFound />);
         }
-        data = map(data, (record) =>
-          pick(record, [
-            ...map(gridConfiguration.columns, "field"),
-            ...compact(map(gridConfiguration.columns, "tooltipField")),
-            "id",
-            "crId",
-            "owner.user.avatar",
-          ])
-        );
-        dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
       })
@@ -295,12 +263,14 @@ export function KendoPanel<T>({
 
   // Kendo Helper Methods
   const processWithGroups = (data: T[], dataState: State) => {
-    const newDataState = process(data, dataState);
+    const dstate = cloneDeep(dataState);
+    dstate.skip = 0;
+    const newDataState = process(data, dstate);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialDataState)
+    processWithGroups([], initialDataState)
   );
   const result = setExpandedState({
     data: resultState.data,
@@ -439,29 +409,19 @@ export function KendoPanel<T>({
     }
     window.open(urlPath, "_self");
   };
+
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(gridData, dataState);
-
+      const newDataState = processWithGroups(result, dataState);
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
+      setFireAPI(true);
       setResultState(newDataState);
-      exportDataChanges &&
-            exportDataChanges(
-              process(gridData, {
-                skip: 0,
-                take: gridData.length,
-                sort: dataState.sort,
-                filter: dataState.filter,
-              }).data
-            );
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
-      if (!newDataState.total) {
-        setNoDataMessage(<NoDataFound />);
-      }
     },
-    [gridData]
+    []
   );
+  // const debounceFunction = debounce(onDataStateChange, 1000);
   const onExpandChange = useCallback(
     ({ dataItem, value }: GridExpandChangeEvent) => {
       const item = dataItem;

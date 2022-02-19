@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import {
   getTableCriteria,
-  getTableData,
 } from "../../../common/utils/selectors";
 import authSelectors from "../../../state/ducks/auth/selectors";
 import KendoGridList from "./presenter";
@@ -12,14 +11,12 @@ export const CR_TABLE_NAME = "changeRequests";
 const KendoContainer: React.FunctionComponent<RouteComponentProps> = ({ history }) => {
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const tableCriteria = useSelector(getTableCriteria(CR_TABLE_NAME));
-  const data = useSelector(getTableData(CR_TABLE_NAME));
 
   return (
     <KendoGridList
       currentUserEmail={currentUserEmail}
       tableName={CR_TABLE_NAME}
       tableCriteria={tableCriteria}
-      data={data}
     />
   );
 };
