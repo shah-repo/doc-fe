@@ -4,7 +4,6 @@ import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceCons
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { Id } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
@@ -31,10 +30,6 @@ class FBWorkspaceState extends FBSchemaState {
 
   @observable public isDirty = false;
 
-  // Hack because formik context from autosave & reference comp are not the same ref
-  // and we need to know the values from both FB and AvailableReferences to create
-  // new merged value
-  public referenceValue: Id[] = [];
   public omitAutosave = false;
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {

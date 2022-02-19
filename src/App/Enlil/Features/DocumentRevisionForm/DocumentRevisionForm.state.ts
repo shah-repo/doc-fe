@@ -1,9 +1,10 @@
 import { action, computed, observable, set } from "mobx";
 import { DocumentInfo, DocumentRevisionFormStateProps, SMStore } from "../../..";
-import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { Id } from "../../../../state/ducks/common/types";
+import { DocumentType, DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionDocument, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../../../ui/components/notifications";
-import { FBWorkspaceMode } from "../../../../ui/form.builder";
+import { FBInputType, FBSchemaProps, FBWorkspaceMode } from "../../../../ui/form.builder";
 import { FBEndpoint } from "../../../../ui/form.builder/defaults/FBEndpoint";
 
 export default class DocumentRevisionFormState implements DocumentRevisionFormStateProps {
@@ -12,6 +13,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   public scrollOffset = 0;
   public formMode: FBWorkspaceMode = "none";
   public formAutosave = false;
+  // Hack because formik context from autosave & reference comp are not the same ref
+  // and we need to know the values from both FB and AvailableReferences to create
+  // new merged value
+  public referenceValue: Id[] = [];
 
   // MARK: @observables
   @observable public documentRevision?: DocumentRevision;
@@ -21,6 +26,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable forceRender?: any;
   @observable public disabledAction = false;
   @observable public loading = false;
+  @observable public formSchema: FBSchemaProps[] = [];
   @observable docInfo: DocumentInfo = {
     name: "",
     isQms: true,
@@ -59,6 +65,14 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   @computed public get docId(): string | undefined {
     return this.documentRevision?.document.docId;
+  }
+
+  @computed public get document(): DocumentRevisionDocument | undefined {
+    return this.documentRevision?.document;
+  }
+
+  @computed public get schema(): FBSchemaProps[] {
+    return this.formSchema;
   }
 
   // MARK: @actions
@@ -106,6 +120,26 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   public setFormAutosave = (autosave: boolean) => {
     this.formAutosave = autosave;
   };
+
+  public setFBSchema = (schema?: FBSchemaProps[]) => {
+    set(this, "formSchema", schema);
+  };
+
+  public getFBNames = (byType?: FBInputType): string[] => {
+    if (!byType) { return []; }
+    return this.formSchema.reduce((names: string[], item) => {
+      if (item.deleted || item.type !== byType) { return names; }
+      if (item.name) {
+        names.push(item.name);
+      }
+      return names;
+    }, []);
+  };
+
+  public get isOutputSchema(): boolean {
+    const { documentType: { groupOptions = [] } = {} } = this.document ?? {};
+    return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
+  }
 
   // *TODO
   // Extend this to have one saving point for doc rev (static and fb)

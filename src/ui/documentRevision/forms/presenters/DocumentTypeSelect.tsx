@@ -126,7 +126,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
-        _formState?.schema,
+        _documentRevisionFormState?.schema,
       ); }
     }
     if (!isCreateMaintenance) {

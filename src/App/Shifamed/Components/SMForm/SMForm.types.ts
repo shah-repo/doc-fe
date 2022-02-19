@@ -1,5 +1,5 @@
 import { SMProviderProps, SMTemplateProps } from "../../..";
-import { FBSchemaProps, FBWorkspaceMode } from "../../../../ui/form.builder";
+import { FBWorkspaceMode } from "../../../../ui/form.builder";
 
 export type SMFormProps =
 & SMTemplateProps
@@ -37,7 +37,6 @@ export interface SMFormStateProps {
   mode: FBWorkspaceMode;
   isDirty: boolean;
   active: boolean;
-  schema: FBSchemaProps[];
   autosave: boolean;
   render: boolean;
   loading: boolean;

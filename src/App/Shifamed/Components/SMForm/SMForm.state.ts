@@ -3,7 +3,7 @@ import { action, computed, observable, set } from "mobx";
 import * as Validator from "validatorjs";
 import { SMFormProps, SMFormStateProps } from "../../..";
 import { SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
-import { FBLHRBuildOptions, FBSchemaProps, FBWorkspaceMode } from "../../../../ui/form.builder";
+import { FBLHRBuildOptions, FBWorkspaceMode } from "../../../../ui/form.builder";
 
 class SMFormState implements SMFormStateProps {
   @observable public render = false;
@@ -75,14 +75,6 @@ class SMFormState implements SMFormStateProps {
 
   @computed public get Validator(): any {
     return get(window, "EnlilRemoteValidators.validator") || Validator;
-  }
-
-  @computed public get schema(): FBSchemaProps[] {
-    let schema = this.values.get("formTemplate.schema") || [];
-    if (!schema) {
-      schema = this.values.get("schema");
-    }
-    return schema || [];
   }
 
   // MARK: @actions

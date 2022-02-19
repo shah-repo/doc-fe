@@ -40,7 +40,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     ...props
   }: T) => {
 
-    const { _formState } = SM.useStores();
+    const { _formState, _documentRevisionFormState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
@@ -56,13 +56,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     SM.reaction(
       () => workspaceState?.schema,
       (schema: FBSchemaProps[] | undefined) => {
-        if (workspaceState?.mode === "design") {
-          _formState?.setValue("formTemplate.schema", schema);
-          return;
-        }
-        if (workspaceState?.mode === "formDesign" && workspaceState.isOutputSchema) {
-          _formState?.setValue("schema", schema);
-        }
+        _documentRevisionFormState?.setFBSchema(schema);
       }
     );
 

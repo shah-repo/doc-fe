@@ -1,6 +1,7 @@
 import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { SMFormStateProps, SMProviderProps, SMTabsHOCProps } from "../../..";
+import { Id } from "../../../../state/ducks/common/types";
 import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../../state/ducks/documents";
@@ -80,4 +81,7 @@ export interface DocumentRevisionFormStateProps {
   disabledAction: boolean;
   loading: boolean;
   id?: string;
+  formSchema: FBSchemaProps[];
+  referenceValue: Id[];
+  schema: FBSchemaProps[];
 }

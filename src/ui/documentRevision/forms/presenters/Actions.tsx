@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useFormikContext } from "formik";
-import { isEqual, isUndefined, keys, omit } from "lodash";
+import { get, isEqual, isUndefined, keys, omit } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import { getFormattedDateString, MomentFormats } from "../../../../common/utils/
 import { companyActions, companySelectors } from "../../../../state/ducks/company";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import HeaderMenu from "../../../components/common/header/Menu";
 import OwnerChanger from "../../../components/common/owner.changer/container";
@@ -110,7 +110,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   function isOutputSchema(): boolean {
     const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
-    const workspaceSchema = _formState?.schema;
+    const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
     return (
       (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
@@ -119,12 +119,13 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   }
 
   function setFBValue() {
-    const workspaceSchema = _formState?.schema;
+    const workspaceSchema = _documentRevisionFormState?.schema;
     const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const values = get(formik, "values") as DocumentRevision;
     switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
-          outputDocumentTypes: (values.outputDocumentTypes || [])
+          outputDocumentTypes: (values?.outputDocumentTypes || [])
             .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
@@ -132,11 +133,11 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "form":
       case "formDesign":
         formik.setFieldValue("formDocument", {
-          id: values.formDocument?.id,
+          id: values?.formDocument?.id,
         });
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
-          keys(values.formInput).map((key) => {
+          keys(values?.formInput).map((key) => {
             newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
               ? "Void"
               : key === "equipment_id" ?  null : values?.formInput?.[key];

@@ -93,7 +93,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
-  const schema = _formState?.schema;
+  const schema = _documentRevisionFormState?.schema;
   const hasOutput = useMemo(() =>
     checkIsTypeHaveOutput(documentTypeById?.groupOptions)
     // eslint-disable-next-line react-hooks/exhaustive-deps

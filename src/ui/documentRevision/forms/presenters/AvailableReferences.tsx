@@ -5,6 +5,7 @@ import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { SM } from "../../../../App";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -12,7 +13,6 @@ import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../.
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
-import { FB } from "../../../form.builder";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 
@@ -45,7 +45,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   ...fieldProps
 }) => {
   const { submitForm } = useFormContext();
-  const { workspaceState } = FB.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
 
   const onChange = (e, value) => {
@@ -58,8 +58,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     }
     setFieldValue(name, value);
     setValue(value);
-    if (!workspaceState) { return; }
-    workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+    if (!_documentRevisionFormState) { return; }
+    _documentRevisionFormState.referenceValue = map(value, (obj) => ({ id: obj.value }));
     submitForm();
   };
 
@@ -99,8 +99,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   useEffect(() => {
     const value = defaultValue(documentReferences);
     setValue(value);
-    if (!workspaceState) { return; }
-    workspaceState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+    if (!_documentRevisionFormState) { return; }
+    _documentRevisionFormState.referenceValue = map(value, (obj) => ({ id: obj.value }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentReferences]);
 

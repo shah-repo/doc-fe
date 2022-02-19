@@ -36,7 +36,14 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       () => _formState?.values,
       () => {
         const documentRevision = _formState?.getValues() as DocumentRevision;
-        _documentRevisionFormState?.setDocumentRevision(documentRevision);
+        if (!_documentRevisionFormState) { return; }
+        _documentRevisionFormState.setDocumentRevision(documentRevision);
+        // Set the FB schema
+        let schema = get(documentRevision, "formTemplate.schema");
+        if (!schema) {
+          schema = get(documentRevision, "schema");
+        }
+        _documentRevisionFormState.formSchema = schema;
       },
       { fireImmediately: true }
     );
@@ -50,6 +57,19 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     SM.reaction(
       () => _documentRevisionFormState?.loading,
       (loading) => _formState?.setLoading(loading)
+    );
+
+    SM.reaction(
+      () => _documentRevisionFormState?.formSchema,
+      (schema) => {
+        if (_formState?.mode === "design") {
+          _formState?.setValue("formTemplate.schema", schema);
+          return;
+        }
+        if (_formState?.mode === "formDesign" && _documentRevisionFormState?.isOutputSchema) {
+          _formState?.setValue("schema", schema);
+        }
+      }
     );
 
     // MARK: @helpers

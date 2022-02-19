@@ -3,13 +3,13 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { ValueType } from "react-select";
+import { SM } from "../../../../App";
 import { Permission } from "../../../../state/ducks/auth/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import { requiredAtLeastOne, validator } from "../../../components/forms/fields/validators";
-import { FB } from "../../../form.builder";
 import useGetHasPermission from "../../../hooks/useGetHasPermission";
 import { checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
@@ -41,7 +41,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
 }) => {
   const classes = styles();
   const formik = useFormikContext();
-  const { workspaceState } = FB.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
 
   const disabled: boolean = (docRevId !== undefined) || isDisabled;
   const isdocRevStatusDraft =
@@ -73,9 +73,10 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
     const scheme = getFBSchemeByDocType(
       formValue,
       documentTypesById,
-      workspaceState?.getSchema(),
+      _documentRevisionFormState?.schema,
     );
-      workspaceState?.setSchema(scheme);
+
+    _documentRevisionFormState?.setFBSchema(scheme);
   };
 
   return (
