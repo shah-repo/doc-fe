@@ -717,6 +717,8 @@ context("Approval request form", () => {
         tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
         expect(el).not.match(tmpRegex);
 
+        expect(el).not.match(/REJECTED/);
+
         expect(el).match(/DRAFT/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
