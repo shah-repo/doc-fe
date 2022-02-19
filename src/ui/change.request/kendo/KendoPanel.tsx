@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -18,12 +18,13 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, findIndex, isEmpty, map, pick } from "lodash";
+import { compact, find, findIndex, isEmpty, map, pick, startCase } from "lodash";
 import { denormalize } from "normalizr";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -76,7 +77,9 @@ export function KendoPanel<T>({
   customDataSet,
   normalizrSchema,
   currentUserEmail = "",
+  exportDataChanges,
 }: KendoPanelProps<T>) {
+  const history = useHistory();
   const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -230,6 +233,15 @@ export function KendoPanel<T>({
           const newDataState = processWithGroups(data, initialDataState);
           setDataState(initialDataState);
           setResultState(newDataState);
+          exportDataChanges &&
+            exportDataChanges(
+              process(data, {
+                skip: 0,
+                take: data.length,
+                sort: initialDataState.sort,
+                filter: initialDataState.filter,
+              }).data
+            );
           if (newDataState.total === 0) {
             setNoDataMessage(<NoDataFound />);
           }
@@ -237,6 +249,7 @@ export function KendoPanel<T>({
         data = map(data, (record) =>
           pick(record, [
             ...map(gridConfiguration.columns, "field"),
+            ...compact(map(gridConfiguration.columns, "tooltipField")),
             "id",
             "crId",
             "owner.user.avatar",
@@ -388,6 +401,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (end) {
       let dataColumns = columnDefinitions;
       dataColumns = map(dataColumns, (column) => {
@@ -395,9 +409,10 @@ export function KendoPanel<T>({
         column.width = columnObject ? columnObject.width : column.width;
         return column;
       });
-      hideColumnTitleOnResize();
-      setColumnDefinitions(dataColumns);
-      updateDataColumnsState(dataColumns);
+      setTimeout(() => {
+        setColumnDefinitions(dataColumns);
+        updateDataColumnsState(dataColumns);
+      }, 100);
     }
     return false;
   };
@@ -424,7 +439,7 @@ export function KendoPanel<T>({
     if (canEdit(dataItem)) {
       urlPath = changeRequestEditPath(dataItem.id);
     }
-    window.open(urlPath, "_self");
+    history.push(urlPath);
   };
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
@@ -433,6 +448,15 @@ export function KendoPanel<T>({
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
       setResultState(newDataState);
+      exportDataChanges &&
+            exportDataChanges(
+              process(gridData, {
+                skip: 0,
+                take: gridData.length,
+                sort: dataState.sort,
+                filter: dataState.filter,
+              }).data
+            );
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);
@@ -483,8 +507,18 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
-      cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
+      title={startCase(getTranslatedText(column.title))}
+      cell={(props) =>
+        RenderCustomCell(
+          {
+            ...props,
+            cellRowClick: onRowClick,
+            showTooltip: column.showTooltip,
+            tooltipField: column.tooltipField,
+          },
+          column.cell || ""
+        )
+      }
       filterCell={filterCellMapping[column.field]}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}
@@ -549,9 +583,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

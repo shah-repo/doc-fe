@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -16,6 +17,7 @@ import { DocumentRevision, HeaderTableType } from "../../../state/ducks/document
 import { documentsActions } from "../../../state/ducks/documents";
 import { DocumentProposedId } from "../../../state/ducks/documents/types";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
@@ -115,11 +117,13 @@ export const useHandleCreateDoc = () => {
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
   documentTypeId,
-  categoryName,
+  categoryName = "",
   isByCategory,
   headers,
   tableData,
 }) => {
+
+  const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
 
@@ -303,7 +307,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   }
   return (
     <>
-      <Grid item xs ><Typography className={classes.title}>{categoryName}</Typography></Grid>
+      <Grid item xs ><Typography className={classes.title}>{title}</Typography></Grid>
       <Grid item={true} xs style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
           variant="outlined"

@@ -57,11 +57,13 @@ export const styles = makeStyles(() =>
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 400,
+      letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
       fontFamily: "Sora",
       fontWeight: 600,
+      letterSpacing: 0,
     },
     typographyStatus: {
       fontFamily: "Sora",
@@ -69,6 +71,7 @@ export const styles = makeStyles(() =>
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
+      letterSpacing: 0,
     },
     timestampContainer: {
       fontFamily: "Sora",
@@ -77,6 +80,7 @@ export const styles = makeStyles(() =>
       fontSize: "12px",
       lineHeight: "22px",
       color: Colors.font_gray,
+      letterSpacing: 0,
     },
     truncateText: {
       textOverflow: "ellipsis",

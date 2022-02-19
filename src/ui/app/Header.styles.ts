@@ -1,13 +1,15 @@
 import { createStyles, Theme } from "@material-ui/core";
+import EnlilLogo from "../../assets/images/enlil_logo.svg";
 import Colors from "../layout/theme/utils/colors";
 import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export default (theme: Theme) =>
   createStyles({
     appBar: {
-      backgroundColor: Colors.white,
+      background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
       marginLeft: DRAWER_WIDTH,
       fontSize: "1rem",
+      color: Colors.white,
     },
     welcomeText: {
       color: Colors.dark_gray,
@@ -33,5 +35,13 @@ export default (theme: Theme) =>
     },
     wrapContainer: {
       marginLeft: theme.spacing(2),
+    },
+    logo: {
+      position: "absolute",
+      paddingTop: "40px",
+      right: "20.42%",
+      left: "61%",
+      backgroundRepeat: "no-repeat",
+      backgroundImage: `url(${EnlilLogo})`,
     },
   });

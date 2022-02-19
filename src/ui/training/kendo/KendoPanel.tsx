@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Box,
   Dialog, Grid,
 } from "@material-ui/core";
 import {
@@ -23,7 +22,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, get, isEmpty, map, pick } from "lodash";
+import { cloneDeep, find, findIndex, get, isEmpty, map, pick, startCase } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import qs from "query-string";
@@ -77,6 +76,7 @@ export function KendoPanel<T>({
   tableName,
   tableCriteria,
   normalizrSchema,
+  exportDataChanges,
 }: KendoPanelProps<TrainingListData>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
@@ -225,6 +225,15 @@ export function KendoPanel<T>({
         const newDataState = processWithGroups(data, dataState);
         setDataState(dataState);
         setResultState(newDataState);
+        exportDataChanges &&
+            exportDataChanges(
+              process(data, {
+                skip: 0,
+                take: data.length,
+                sort: dataState.sort,
+                filter: dataState.filter,
+              }).data
+            );
         if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
@@ -350,6 +359,7 @@ export function KendoPanel<T>({
     );
   };
   const onColumnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) {
       return false;
     }
@@ -359,9 +369,10 @@ export function KendoPanel<T>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
 
   };
   const onColumnReorder = ({ columns }: GridColumnReorderEvent) => {
@@ -384,6 +395,15 @@ export function KendoPanel<T>({
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setResultState(newDataState);
+      exportDataChanges &&
+            exportDataChanges(
+              process(gridData, {
+                skip: 0,
+                take: gridData.length,
+                sort: event.dataState.sort,
+                filter: event.dataState.filter,
+              }).data
+            );
       setKendoFilterStatus(tableCriteria);
       if (!newDataState.total) {
         setNoDataMessage(<NoDataFound />);
@@ -530,7 +550,7 @@ export function KendoPanel<T>({
     <GridColumn
       key={index}
       {...column}
-      title={getTranslatedText(column.title).toUpperCase()}
+      title={startCase(getTranslatedText(column.title))}
       cell={(props) => RenderCustomCell({ ...props, cellRowClick: onRowClick }, column.cell || "")}
       width={setColumnWidth(column.width as number, gridWidth)}
       minResizableWidth={200}
@@ -609,9 +629,9 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
-    <Box className={classes.root}>
+    <>
       <div className={classes.errorClass}>{tableCriteria.apiError}</div>
       {renderBody()}
-    </Box>
+    </>
   );
 }

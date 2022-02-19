@@ -98,6 +98,8 @@ const columns: KendoColumn[] = [{
 }, {
   field: "startingNumber",
   title: "common.starting.number",
+  cell: DTMCellTemplates.INTEGER_NUMBER_CELL,
+  filter: "numeric",
   show: true,
   width: "185px",
   groupable: false,
@@ -137,13 +139,24 @@ const columns: KendoColumn[] = [{
   showColumnMenu: true,
   orderIndex: 11,
 }, {
+  field: "equipmentEnforceProd",
+  title: "common.equipmentEnforce",
+  cell: DTMCellTemplates.CHECKBOX_CELL,
+  filter: "boolean",
+  show: true,
+  width: "125px",
+  groupable: true,
+  showColumnMenu: true,
+  orderIndex: 12,
+},
+{
   field: "category",
   title: "form.builder.category", // In Wireframe its dd but not in existing. No datasource found
   show: true,
   width: "125px",
   groupable: true,
   showColumnMenu: true,
-  orderIndex: 12,
+  orderIndex: 13,
 }, {
   field: "schema",
   title: "common.schema",
@@ -153,7 +166,7 @@ const columns: KendoColumn[] = [{
   width: "110px",
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 13,
+  orderIndex: 14,
 }, {
   field: "fieldsConfig",
   title: "common.fields.config",
@@ -163,7 +176,7 @@ const columns: KendoColumn[] = [{
   width: "110px",
   groupable: false,
   showColumnMenu: false,
-  orderIndex: 14,
+  orderIndex: 15,
 }, {
   field: "",
   title: "",
@@ -175,7 +188,7 @@ const columns: KendoColumn[] = [{
   reorderable: false,
   resizable: false,
   showColumnMenu: false,
-  orderIndex: 15,
+  orderIndex: 16,
 }];
 
 const initialDataState: PageState = { skip: 0, take: 25, group: [] };

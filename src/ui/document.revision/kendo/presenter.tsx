@@ -1,7 +1,8 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-import { isEmpty, map, set } from "lodash";
-import React from "react";
+import { isEmpty, map, set, startCase } from "lodash";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { docRevSch } from "../../../common/normalizrSchema";
 import {
@@ -43,18 +44,18 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   previewDocumentRevision,
 }) => {
   const classes = KendoGridStyles();
-
+  const [dataToBeExported, setDataToBeExported] = useState(data);
   const dialog = useDialog();
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
   const headers = map(gridConfiguration.columns, (column) => ({
-    label: getTranslatedText(column.title).toUpperCase(),
+    label: startCase(getTranslatedText(column.title)),
     key: column.field,
   }));
 
   const renderTableData = () => {
-    if (!isEmpty(data)) {
-      return data.map((e) => ({
+    if (!isEmpty(dataToBeExported)) {
+      return dataToBeExported.map((e) => ({
         docId: e.document.docId,
         displayRevision: e.displayRevision,
         documentTitle: e.name,
@@ -103,6 +104,10 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
     return customData;
   };
 
+  const handleExportData = (dataToBeExported: DocumentRevision[]) => {
+    setDataToBeExported(dataToBeExported);
+  };
+
   return (
     <Grid container={true} className={classes.root}>
       <Grid item xs>
@@ -128,14 +133,15 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           {...{ dialog, headers }}
           customFileName="DocumentList"
         />
-        <Button
-          className={classes.createDocButton}
-          id="ListPresenter-create"
-          data-cy="document.revision.create"
-          href={DOCUMENT_REVISION_CREATE_URL}
-        >
-          <Text translation="document.revision.create" />
-        </Button>
+        <RouterLink to={DOCUMENT_REVISION_CREATE_URL} style={{ textDecoration: "none" }}>
+          <Button
+            className={classes.createDocButton}
+            id="ListPresenter-create"
+            data-cy="document.revision.create"
+          >
+            <Text translation="document.revision.create" />
+          </Button>
+        </RouterLink>
       </Grid>
       <Grid item={true} xs={12}>
         <KendoPanel<DocumentRevision>
@@ -150,6 +156,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           editDocumentRevision={editDocumentRevision}
           previewDocumentRevision={previewDocumentRevision}
           documentTypeOptions={documentTypeOptions}
+          exportDataChanges={handleExportData}
         />
       </Grid>
     </Grid>

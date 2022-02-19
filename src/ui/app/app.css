@@ -18,6 +18,8 @@ html {
   --white: #FFFFFF;
   --font-family: "Sora";
   --font_gray: #767B87;
+  --iron-gray: #D3D3E2;
+  --light-gray: #CCD4D9;
 }
 
 body {
@@ -185,7 +187,9 @@ td[role="gridcell"] {
 
 .k-grid {
   font-family: var(--font-family);
-  border-radius: "4px 4px 0px 0px";
+  color: var(--almost_black);
+  border-radius: 4px;
+  border: 1px solid var(--iron-gray);
 }
 
 .k-grid .k-grid-table tbody tr {
@@ -206,6 +210,8 @@ td[role="gridcell"] {
   border-width: 0 1px 0 0;
   border-color: var(--white);
   border-style: solid;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .k-grouping-header .k-group-indicator {
@@ -238,4 +244,75 @@ td[role="gridcell"] {
 .k-textbox::selection,
 .k-textbox .k-input::selection {
   background-color: var(--navy);
+}
+
+.k-toolbar.k-grid-toolbar {
+  padding-bottom: 0;
+}
+
+.k-grid .k-grid-toolbar {
+  border-radius: 4px 4px 0px 0px;
+  border-color: var(--iron-gray);
+}
+
+.k-grid .k-grid-pager {
+  border-radius: 0px 0px 4px 4px;
+  border-color: var(--iron-gray);
+}
+
+.k-grid-header.k-grid-draggable-header {
+  margin-right: 1px;
+}
+
+.k-grid-header .k-grid-filter {
+  bottom: -4px;
+}
+
+.k-toolbar.k-grid-toolbar,
+.k-grouping-header.k-grouping-header-flex {
+  padding-left: 15px;
+}
+
+.k-columnmenu-item {
+  height: 38px;
+  align-items: center;
+  display: flex;
+}
+
+.k-grid-columnmenu-popup {
+  border: 1px solid var(--light-gray);
+  border-radius: 4px;
+  box-shadow: 0px 10px 30px rgba(22, 34, 41, 0.04);
+}
+
+.k-popup.k-child-animation-container {
+  border-radius: 4px;
+}
+
+.k-columnmenu-item > .k-icon.k-grid-menu-icon  {
+  color: transparent;
+  height: 16px;
+  width: 18px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  margin-right: 10px;
+}
+.k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon  {
+  background: url("../../assets/images/freeze.svg");
+  background-repeat: no-repeat;
+}
+
+.k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon  {
+  background: url("../../assets/images/unfreeze.svg");
+  background-repeat: no-repeat;
+}
+
+.k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon  {
+  background: url("../../assets/images/hide.svg");
+  background-repeat: no-repeat;
+}
+
+.k-grid-header thead tr th .k-icon.k-i-arrow-n,
+.k-grid-header thead tr th .k-icon.k-i-arrow-s {
+  color: var(--almost_black);
 }

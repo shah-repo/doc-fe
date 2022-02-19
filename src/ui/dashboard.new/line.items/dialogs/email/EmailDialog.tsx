@@ -22,6 +22,7 @@ import {
 } from "../../../../../common/utils/date";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../../state/ducks/email.all";
+import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import useActionCreator from "../../../../hooks/useActionCreator";
@@ -221,7 +222,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                       className={classes.lastsenttext}
                       noWrap
                     >
-                      <Text translation="just.now" />
+                      <Text translation="common.just.now" />
                     </Typography>
                   </Grid>
                 ) : (
@@ -273,12 +274,12 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           <List dense disablePadding>
             {pendingApprovers.map((pending, index) => (
               <StyledListItem button key={index}>
-                <Avatar
-                  style={{ backgroundColor: `${pending.userInitialColor}` }}
-                  className={classes.listitemicon}
-                  alt={pending.userName}
-                  src={pending.userAvatar || "."}
-                />
+                {pending.userAvatar ?
+                  <Avatar className={classes.listitemicon} alt={pending.userName} src={pending.userAvatar} /> :
+                  <Avatar className={classes.listitemicon} style={{ backgroundColor: pending.userInitialColor }}>
+                    {getInitalsFromName(pending.userName)}
+                  </Avatar>
+                }
                 <ListItemText
                   id={pending.employeeId}
                   primary={

@@ -58,7 +58,6 @@ export const DropdownFilterTemplate = ({
         value={(value || defaultValue)}
         defaultItem={defaultItem}
         defaultValue={defaultValue}
-        style={{ textTransform: "uppercase" }}
       />
       <button
         className="k-button k-button-icon k-clear-button-visible"

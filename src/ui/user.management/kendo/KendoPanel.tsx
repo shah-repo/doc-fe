@@ -1,6 +1,4 @@
-import {
-  Box, Grid, Typography,
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -17,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, sortBy } from "lodash";
+import { find, isEmpty, map, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -48,6 +46,7 @@ import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
 import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell.template/CommandCell";
+import { DropdownFilterCell } from "./cell.template/DropdownFilterCell";
 import { EmailCell } from "./cell.template/EmailCell";
 import { GroupDropdown } from "./cell.template/GroupDropdown";
 import { GroupsCell } from "./cell.template/GroupsCell";
@@ -124,11 +123,13 @@ export function KendoPanel<T>({
       queryApi();
     },
     onError: (error) => {
+      setIsLoading(false);
       toastError(error as string);
     },
   });
 
   const handleCreate = (values: AddUserManage) => {
+    setIsLoading(true);
     async.start(addEmployeeAction, values, async);
   };
 
@@ -254,10 +255,13 @@ export function KendoPanel<T>({
           ...el,
           groupsOrg: el.groups,
           groups: el.groups
-            .map((e) => e.name.trimLeft().trimEnd())
+            .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el.user.confirmed,
+          status: el?.user?.confirmed && !el?.user?.locked
+            ? getTranslatedText("user.management.signed.up")
+            : el?.user?.locked ? getTranslatedText("reset.password") :
+              getTranslatedText("user.management.resend.signup.email"),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -364,27 +368,24 @@ export function KendoPanel<T>({
     />
   );
 
-  const SignUpBooleanFilterCell = (props: GridFilterCellProps) => (
-    <DropdownFilterTemplate
+  const SignUpFilterCell = (props: GridFilterCellProps) => (
+    <DropdownFilterCell
       {...props}
-      data={[{
-        text: getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
-        value: true,
-      }, {
-        text: getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
-        value: false,
-      }]}
-      defaultItem={{
-        text: getTranslatedText(TranslatedText[DisplayText.ALL]),
-        value: getTranslatedText(TranslatedText[DisplayText.ALL]),
-      }}
+      data={[
+        getTranslatedText(TranslatedText[DisplayText.SIGNEDUP]),
+        getTranslatedText(TranslatedText[DisplayText.RESEND_SIGNUP_EMAIL]),
+        getTranslatedText(TranslatedText[DisplayText.RESET_PASSWORD]),
+      ]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
     />
   );
 
   const filterCellMapping = {
     groups: GroupDropdown,
     active: BooleanFilterCell,
-    status: SignUpBooleanFilterCell,
+    status: SignUpFilterCell,
   };
 
   const fieldToCellMapping = {
@@ -401,7 +402,7 @@ export function KendoPanel<T>({
       <GridColumn
         key={idx}
         {...column}
-        title={getTranslatedText(column.title).toUpperCase()}
+        title={startCase(getTranslatedText(column.title))}
         minResizableWidth={100}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
@@ -424,6 +425,7 @@ export function KendoPanel<T>({
     )));
 
   const columnResize = ({ columns, end }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) { return false; }
     let dataColumns: KendoColumn[] = gridConfiguration.columns;
     dataColumns = map(dataColumns, (column: KendoColumn) => {
@@ -431,9 +433,10 @@ export function KendoPanel<T>({
       column.width = columnObject?.width;
       return column;
     });
-    hideColumnTitleOnResize();
-    setColumnDefinitions(dataColumns);
-    updateDataColumnsState(dataColumns);
+    setTimeout(() => {
+      setColumnDefinitions(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
   };
 
   const columnReorder = ({ columns }: GridColumnReorderEvent) => {
@@ -519,10 +522,10 @@ export function KendoPanel<T>({
           <AddEmployeeContainer addGroup={addNew} />
         </Grid>
       </Grid>
-      <Box className={classes.root}>
+      <>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </Box>
+      </>
     </>
   );
 }

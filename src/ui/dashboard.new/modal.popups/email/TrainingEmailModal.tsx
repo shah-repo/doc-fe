@@ -22,6 +22,7 @@ import {
 } from "../../../../common/utils/date";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../state/ducks/email.all";
+import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -206,7 +207,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                       className={classes.lastsenttext}
                       noWrap
                     >
-                      <Text translation="just.now" />
+                      <Text translation="common.just.now" />
                     </Typography>
                   </Grid>
                 ) : (
@@ -258,12 +259,12 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
           <List dense disablePadding>
             {pendingTrainees?.map((due, index) => (
               <StyledListItem button key={index}>
-                <Avatar
-                  style={{ backgroundColor: `${due.userInitialColor}` }}
-                  className={classes.listitemicon}
-                  alt={due.userName}
-                  src={due.userAvatar || "."}
-                />
+                {due.userAvatar ?
+                  <Avatar className={classes.listitemicon} alt={due.userName} src={due.userAvatar} /> :
+                  <Avatar className={classes.listitemicon} style={{ backgroundColor: due.userInitialColor }}>
+                    {getInitalsFromName(due.userName)}
+                  </Avatar>
+                }
                 <ListItemText
                   id={due.employeeId}
                   primary={

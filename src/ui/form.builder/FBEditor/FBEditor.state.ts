@@ -13,7 +13,6 @@ import FBEditorHyperlink from "../FBEditorHyperlink/FBEditorHyperlink";
 import FBEditorInlineApproval from "../FBEditorInlineApproval/FBEditorInlineApproval";
 import FBEditorInstructionsDocument from "../FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 import FBEditorLabel from "../FBEditorLabel/FBEditorLabel";
-import FBEditorLHRStep from "../FBEditorLHRStep/FBEditorLHRStep";
 import FBEditorMediaAlbum from "../FBEditorMediaAlbum/FBEditorMediaAlbum";
 import FBEditorOptionGroup from "../FBEditorOptionGroup/FBEditorOptionGroup";
 import FBEditorParagraph from "../FBEditorParagraph/FBEditorParagraph";
@@ -130,7 +129,7 @@ class FBEditorState {
     eqmaintenance: FBEditorEQMaintenance,
     textfieldwithrange: FBEditorTextFieldWithRange,
     supplier: FBEditorLabel,
-    lhrstep: FBEditorLHRStep,
+    lhrstep: FBEditorLabel,
     unitMeasures: FBEditorLabel,
   };
 

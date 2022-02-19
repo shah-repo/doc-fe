@@ -1,4 +1,4 @@
-import { each, sortBy } from "lodash";
+import { each, orderBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -25,7 +25,7 @@ export const DocumentTypeManagementContainer: React.FunctionComponent = () => {
     return <Redirect to={HOME_URL} />;
   }
 
-  const gridData = sortBy(documentTypes, "documentTypeName");
+  const gridData = orderBy(documentTypes, ["active"], ["desc"]);
   const gridConfig = gridConfiguration;
 
   return (
