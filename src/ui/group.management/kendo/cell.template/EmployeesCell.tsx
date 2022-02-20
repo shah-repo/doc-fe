@@ -3,7 +3,7 @@ import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react
 import { sortBy } from "lodash";
 import React from "react";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../../state/ducks/userManagement/types";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 import { toMembersOptions } from "../../utils/transform";
 
 interface LoadMemberGroupExt extends LoadCompanyGroup {
@@ -52,13 +52,14 @@ export const EmployeesCell = ({
 
   return (
     <td
+      id="kendo-expandable-column"
       colSpan={colSpan}
       style={style}
       role="gridcell"
       className={className}
       data-grid-col-index={columnIndex}
     >
-      {dataItem.inEdit ? (
+      {dataItem.inEdit ?
         <MultiSelect
           data={data}
           value={result}
@@ -68,9 +69,8 @@ export const EmployeesCell = ({
           dataItemKey="value"
           textField="label"
         />
-      ) : (
-        <Tooltip data={employeesData} />
-      )}
+        : <ExpandableTemplate items={employeesData.split(",")}  dataId={`${dataItem.id}-${columnIndex}`} />
+      }
     </td>
   );
 };
