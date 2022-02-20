@@ -456,7 +456,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
         key={idx}
         {...column}
         title={startCase(getTranslatedText(column.title))}
-        minResizableWidth={100}
+        minResizableWidth={200}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
         filterCell={

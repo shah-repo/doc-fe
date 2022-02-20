@@ -20,7 +20,7 @@ import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { AutoSizer } from "react-virtualized";
+import { AutoSizer, Size } from "react-virtualized";
 import * as generateUuid from "uuid/v4";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -33,7 +33,7 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -398,13 +398,13 @@ export function KendoPanel<T>({
     "": commandCell,
   };
 
-  const columnRenderer = () => (
+  const columnRenderer = (gridWidth: number) => (
     sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
         title={startCase(getTranslatedText(column.title))}
-        minResizableWidth={100}
+        minResizableWidth={200}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
         filterCell={
@@ -422,6 +422,7 @@ export function KendoPanel<T>({
             )
             : undefined
         }
+        width={setColumnWidth(column.width as number, gridWidth)}
       />
     )));
 
@@ -466,11 +467,12 @@ export function KendoPanel<T>({
     setResultState(processWithGroups(gridData, dataState));
   };
 
-  const tableRenderer = () => (
+  const tableRenderer = ({ width }: Size) => (
     <>
       <KendoGlobalization>
         <KendoGrid
           className={`${classes.kGrid} no-row-pointer`}
+          style={{ width: `${width}px` }}
           data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
@@ -499,7 +501,7 @@ export function KendoPanel<T>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {columnRenderer()}
+          {columnRenderer(width)}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
