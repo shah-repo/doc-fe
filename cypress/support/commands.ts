@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import path from "path";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -169,11 +170,11 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
 
 Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
   cy.getCookies().then((cookies) => {
-    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
       cy.task("unzipFile", {
-        path: params.directory,
+        directory: params.directory,
         cookies,
-        file: params.fileName,
+        fileName: params.fileName,
       });
     });
   });
@@ -181,11 +182,11 @@ Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string
 
 Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
   cy.getCookies().then((cookies) => {
-    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
       cy.task("pdfparseFile", {
-        path: params.directory,
+        directory: params.directory,
         cookies,
-        file: params.fileName,
+        fileName: params.fileName,
       });
     });
   });

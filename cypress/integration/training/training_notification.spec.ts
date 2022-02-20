@@ -3,6 +3,7 @@
 
 import moment from "moment";
 import "moment-timezone";
+import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -802,8 +803,8 @@ context("Training notification test", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -817,7 +818,7 @@ context("Training notification test", () => {
     it("Verify PDF file for pending training notification", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
         }).then((content) => {
         cdata = content;
@@ -960,8 +961,8 @@ context("Training notification test", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -975,7 +976,7 @@ context("Training notification test", () => {
     it("Verify PDF file for completed training notification", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
         }).then((content) => {
         cdata = content;
