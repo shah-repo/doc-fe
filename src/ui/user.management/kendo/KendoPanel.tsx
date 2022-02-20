@@ -20,6 +20,7 @@ import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import { AutoSizer } from "react-virtualized";
 import * as generateUuid from "uuid/v4";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -505,6 +506,7 @@ export function KendoPanel<T>({
       {isLoading && <Loader/>}
     </>
   );
+  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
     <>
       <Grid container justify="space-between">
@@ -524,7 +526,7 @@ export function KendoPanel<T>({
       </Grid>
       <>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
-        {tableRenderer()}
+        {renderBody()}
       </>
     </>
   );
