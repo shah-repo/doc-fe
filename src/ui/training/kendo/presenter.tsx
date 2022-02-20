@@ -72,48 +72,43 @@ const KendoGridList: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <>
-      <Grid container={true} className={classes.root}>
-        <Grid item xs>
-          <Typography className={classes.title}>
-            <Text translation="page.title.training" />
-          </Typography>
-        </Grid>
-        <Grid item className={classes.gridClass}>
-          <Button
-            variant="outlined"
-            className={classes.exportListbutton}
-            id="ListPresenter-export-list"
-            data-cy="document.revision.export.list"
-            onClick={dialog.open}
-          >
-            <Box display="flex">
-              <ExportIcon className={classes.iconSvg} />
-            </Box>
-            <Text translation="document.revision.export.list" />
-          </Button>
-          <ExportListDialog
-            data={exportData}
-            {...{ dialog, headers }}
-            customFileName="DocumentList"
-          />
-        </Grid>
-
+    <Grid container={true} className={classes.root}>
+      <Grid item xs>
+        <Typography className={classes.title}>
+          <Text translation="page.title.training" />
+        </Typography>
       </Grid>
-      <Grid container={true} className={classes.kGridRoot}>
-        <Grid item={true} xs={12}>
-          <KendoPanel
-            gridConfiguration={columns}
-            gridData={gridData}
-            tableName={tableName}
-            tableCriteria={tableCriteria}
-            queryUrl={TRAINING_RECORD_ROOT_URL}
-            normalizrSchema={[docRevSch]}
-            exportDataChanges={handleExportData}
-          />
-        </Grid>
+      <Grid item className={classes.gridClass}>
+        <Button
+          variant="outlined"
+          className={classes.exportListbutton}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={dialog.open}
+        >
+          <Box display="flex">
+            <ExportIcon className={classes.iconSvg} />
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>
+        <ExportListDialog
+          data={exportData}
+          {...{ dialog, headers }}
+          customFileName="DocumentList"
+        />
       </Grid>
-    </>
+      <Grid item={true} xs={12}>
+        <KendoPanel
+          gridConfiguration={columns}
+          gridData={gridData}
+          tableName={tableName}
+          tableCriteria={tableCriteria}
+          queryUrl={TRAINING_RECORD_ROOT_URL}
+          normalizrSchema={[docRevSch]}
+          exportDataChanges={handleExportData}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

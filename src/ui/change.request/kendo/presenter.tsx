@@ -40,11 +40,9 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   };
 
   return (
-    <>
-      <Grid container={true} className={classes.root}>
-        <FromListContainer {...{ headers, tableData: dataToBeExported }} />
-      </Grid>
-      <Grid container={true} className={classes.kGridRoot}>
+    <Grid container={true} className={classes.root}>
+      <FromListContainer {...{ headers, tableData: dataToBeExported }} />
+      <Grid item={true} xs={12}>
         <KendoPanel<ChangeRequest>
           gridConfiguration={gridConfiguration}
           tableName={tableName}
@@ -56,9 +54,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           exportDataChanges={handleExportData}
         />
       </Grid>
-    </>
-
-
+    </Grid>
   );
 };
 

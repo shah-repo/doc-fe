@@ -531,13 +531,13 @@ export function KendoPanel<T extends { id?: string }>({
     <>
       <Grid>
         {isLoading && <Loader />}
-        <Grid container justify="space-between" className={classes.toolbar}>
+        <Grid container justify="space-between">
           <Grid item>
             <Typography className={classes.title}>
               <Text translation="documenttype.management" />
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item style={{ marginBottom: 8 }}>
             <Button
               onClick={exportDAMDialog.open}
               variant="outlined"

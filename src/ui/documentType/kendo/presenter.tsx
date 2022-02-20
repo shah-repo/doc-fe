@@ -98,33 +98,28 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <>
-      <Grid container={true} className={classes.root}>
-        <CreateDocumentByType
-          {...createDocumentProps}
-          {...{ isByCategory, headers, tableData: dataToBeExported }}
-          labelName={
-            isByCategory
-              ? documentCategory.addNewBtnLabel
-              : documentType.documentTypeName
-          }
+    <Grid container={true} className={classes.root}>
+      <CreateDocumentByType
+        {...createDocumentProps}
+        {...{ isByCategory, headers, tableData: dataToBeExported }}
+        labelName={
+          isByCategory
+            ? documentCategory.addNewBtnLabel
+            : documentType.documentTypeName
+        }
+      />
+      <Grid item={true} xs={12}>
+        <KendoGrid<DocumentRevision>
+          dynamicColumns={dynamicColumns}
+          tableName={tableName}
+          gridData={providedData}
+          tableCriteria={tableCriteria}
+          queryUrl={queryUrl}
+          normalizrSchema={[docRevSch]}
+          exportDataChanges={handleExportData}
         />
-
       </Grid>
-      <Grid container={true} className={classes.kGridRoot}>
-        <Grid item={true} xs={12}>
-          <KendoGrid<DocumentRevision>
-            dynamicColumns={dynamicColumns}
-            tableName={tableName}
-            gridData={providedData}
-            tableCriteria={tableCriteria}
-            queryUrl={queryUrl}
-            normalizrSchema={[docRevSch]}
-            exportDataChanges={handleExportData}
-          />
-        </Grid>
-      </Grid>
-    </>
+    </Grid>
   );
 };
 export default DocumentByTypeListPresenter;

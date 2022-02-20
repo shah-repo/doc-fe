@@ -108,60 +108,56 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
   };
 
   return (
-    <>
-      <Grid container={true} className={classes.root}>
-        <Grid item xs>
-          <Typography className={classes.title}>
-            <Text translation="navigation.document.list"></Text>
-          </Typography>
-        </Grid>
-        <Grid item={true} className={classes.gridExportCreate}>
-          <Button
-            variant="outlined"
-            className={classes.exportListbutton}
-            id="ListPresenter-export-list"
-            data-cy="document.revision.export.list"
-            onClick={dialog.open}
-          >
-            <Box display="flex">
-              <ExportIcon className={classes.iconSvg} height={14} width={14} />
-            </Box>
-            <Text translation="document.revision.export.list" />
-          </Button>
-          <ExportListDialog
-            data={exportData}
-            {...{ dialog, headers }}
-            customFileName="DocumentList"
-          />
-          <Button
-            className={classes.createDocButton}
-            id="ListPresenter-create"
-            data-cy="document.revision.create"
-            href={DOCUMENT_REVISION_CREATE_URL}
-          >
-            <Text translation="document.revision.create" />
-          </Button>
-        </Grid>
+    <Grid container={true} className={classes.root}>
+      <Grid item xs>
+        <Typography className={classes.title}>
+          <Text translation="navigation.document.list"></Text>
+        </Typography>
       </Grid>
-      <Grid container={true} className={classes.kGridRoot}>
-        <Grid item={true} xs={12}>
-          <KendoPanel<DocumentRevision>
-            gridConfiguration={gridConfiguration}
-            tableName={tableName}
-            gridData={data}
-            tableCriteria={tableCriteria}
-            queryUrl={DOCUMENT_REVISION_ROOT_URL}
-            customDataSet={customDataSet}
-            normalizrSchema={[docRevSch]}
-            statuses={statuses}
-            editDocumentRevision={editDocumentRevision}
-            previewDocumentRevision={previewDocumentRevision}
-            documentTypeOptions={documentTypeOptions}
-            exportDataChanges={handleExportData}
-          />
-        </Grid>
+      <Grid item={true} className={classes.gridExportCreate}>
+        <Button
+          variant="outlined"
+          className={classes.exportListbutton}
+          id="ListPresenter-export-list"
+          data-cy="document.revision.export.list"
+          onClick={dialog.open}
+        >
+          <Box display="flex">
+            <ExportIcon className={classes.iconSvg} height={14} width={14} />
+          </Box>
+          <Text translation="document.revision.export.list" />
+        </Button>
+        <ExportListDialog
+          data={exportData}
+          {...{ dialog, headers }}
+          customFileName="DocumentList"
+        />
+        <Button
+          className={classes.createDocButton}
+          id="ListPresenter-create"
+          data-cy="document.revision.create"
+          href={DOCUMENT_REVISION_CREATE_URL}
+        >
+          <Text translation="document.revision.create" />
+        </Button>
       </Grid>
-    </>
+      <Grid item={true} xs={12}>
+        <KendoPanel<DocumentRevision>
+          gridConfiguration={gridConfiguration}
+          tableName={tableName}
+          gridData={data}
+          tableCriteria={tableCriteria}
+          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          customDataSet={customDataSet}
+          normalizrSchema={[docRevSch]}
+          statuses={statuses}
+          editDocumentRevision={editDocumentRevision}
+          previewDocumentRevision={previewDocumentRevision}
+          documentTypeOptions={documentTypeOptions}
+          exportDataChanges={handleExportData}
+        />
+      </Grid>
+    </Grid>
   );
 };
 
