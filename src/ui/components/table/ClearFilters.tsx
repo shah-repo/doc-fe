@@ -12,13 +12,14 @@ const styles = makeStyles((theme: Theme) =>
     clearButton: {
       margin: theme.spacing(0, 2, 0, 0),
       backgroundColor: Colors.white,
-      borderRadius: "100px", // TODO: Move in specific file for border radius
+      borderRadius: "200px", // TODO: Move in specific file for border radius
       textTransform: "none",
       fontFamily: "Sora",
       fontSize: 12,
       fontWeight: 600,
       color: Colors.navy,
       border: `1px solid ${Colors.navy}`,
+      letterSpacing: 0,
     },
   },
   ));

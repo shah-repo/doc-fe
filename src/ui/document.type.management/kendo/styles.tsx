@@ -59,19 +59,16 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     },
   },
   clearButton: {
-    marginLeft: theme.spacing(0.625),
-    boxShadow: "none",
-    borderRadius: 100,
-    marginRight: theme.spacing(1.875),
+    margin: theme.spacing(0, 2, 0, 0),
+    backgroundColor: Colors.white,
+    borderRadius: "200px", // TODO: Move in specific file for border radius
     textTransform: "none",
-    paddingRight: theme.spacing(2.5),
-    paddingLeft: theme.spacing(2.5),
     fontFamily: "Sora",
     fontSize: 12,
     fontWeight: 600,
     color: Colors.navy,
     border: `1px solid ${Colors.navy}`,
-    backgroundColor: Colors.white,
+    letterSpacing: 0,
   },
   title: {
     fontWeight: 600,
