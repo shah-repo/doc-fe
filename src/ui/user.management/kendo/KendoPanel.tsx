@@ -509,7 +509,7 @@ export function KendoPanel<T>({
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
     <>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" className={classes.toolbar}>
         <Grid item>
           <Typography className={classes.title}>
             <Text translation="navigation.user.management" />

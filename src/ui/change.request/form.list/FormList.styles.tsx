@@ -62,7 +62,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     title: {
       fontWeight: 600,
-      fontSize: 24,
+      fontSize: 16,
       color: Colors.almost_black,
       textTransform: "capitalize",
       fontFamily: "Sora",

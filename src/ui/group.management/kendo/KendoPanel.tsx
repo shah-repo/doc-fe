@@ -567,7 +567,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
 
   return (
     <>
-      <Grid container justify="space-between">
+      <Grid container justify="space-between" className={classes.toolbar}>
         <Grid item>
           <Typography className={classes.title}>
             <Text translation="navigation.group.management" />
