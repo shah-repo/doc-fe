@@ -47,6 +47,14 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState(providedData);
   const intl = useIntl();
+  const toTitleCase = (title) => {
+    const capitalized = title
+      .split(" ")
+      .map(
+        (word) => word.charAt(0).toUpperCase() + word.substring(1, word.length)
+      );
+    return capitalized.join(" ");
+  };
   const headers = columns.map((column) => {
     if (
       moment(
@@ -66,10 +74,11 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: startCase(columnLabel),
+      label: toTitleCase(columnLabel),
       key: column.key,
     };
   });
+
   const createDocumentProps = isByCategory
     ? {
       categoryName: documentCategory.category,
