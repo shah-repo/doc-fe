@@ -105,7 +105,7 @@ td#kendo-expandable-column[role="gridcell"] {
 
 .k-grouping-header .k-indicator-container {
   font-size: 12px;
-  color: var(--almost_black);
+  color: var(--font_gray);
 }
 
 .k-grid tbody tr:hover td.k-grid-content-sticky,
@@ -169,6 +169,7 @@ td#kendo-expandable-column[role="gridcell"] {
   padding-bottom: 0;
 }
 
+
 .k-grid {
   font-family: var(--font-family);
   color: var(--almost_black);
@@ -200,26 +201,7 @@ td#kendo-expandable-column[role="gridcell"] {
 
 .k-grouping-header .k-group-indicator {
   border-radius: 15px;
-  background-color: var(--white);
-  height: 30px;
-}
-
-.k-grouping-header .k-group-indicator .k-link {
-  font-weight: normal;
-  line-height: 20px;
-  font-style: normal;
-}
-
-.k-grouping-header .k-group-indicator .k-link .k-icon {
-  margin-right: 10px;
-  margin-left: 6px;
-  color: var(--font_gray);
-  font-weight: 900;
-}
-
-.k-grouping-header .k-group-indicator .k-flat {
-  margin-left: 10px;
-  margin-right: 6px;
+  border-color: var(--medium-grey);
 }
 
 .k-grid-header th.k-grid-header-sticky,
