@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -810,8 +811,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -827,7 +828,7 @@ context("Repeat Training with Training Curriculum", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-Test-Form-Training-Curriculum-Refresh-Repeat.pdf`,
         }).then((content) => {
         cdata = content;
@@ -1097,8 +1098,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -1113,7 +1114,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
-        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
       }).then((content) => {
         cdata = content;
@@ -1288,8 +1289,8 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -1304,7 +1305,7 @@ context("Repeat Training with Training Curriculum", () => {
   context("Verify PDF file content", () => {
     it("Extract texts from PDF file content", () => {
       cy.pdfparseFile({
-        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
       }).then((content) => {
         cdata = content;
