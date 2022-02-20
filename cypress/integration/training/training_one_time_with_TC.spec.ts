@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -801,8 +802,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("unzip and extract pdf file from zip file", () => {
@@ -811,9 +812,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
           directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
-      const pdffile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", "") +
-      `/${releasedFormId}-1-One-Time-training-form-title.pdf`;
-      cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-1-One-Time-training-form-title.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
   });
 
@@ -821,7 +822,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Extract texts from PDF file content for training form", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-One-Time-training-form-title.pdf`,
         }).then((content) => {
         cdata = content;
@@ -1069,8 +1070,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -1085,7 +1086,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Verify PDF file content for draft document", () => {
     it("Extract texts from PDF file content for draft document", () => {
       cy.pdfparseFile({
-        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
       }).then((content) => {
         cdata = content;
@@ -1282,8 +1283,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -1299,7 +1300,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Extract texts from PDF file content for released document", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
         }).then((content) => {
         cdata = content;
