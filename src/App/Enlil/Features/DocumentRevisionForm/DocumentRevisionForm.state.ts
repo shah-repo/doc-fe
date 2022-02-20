@@ -20,10 +20,10 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
 
   // MARK: @observables
   @observable public documentRevision?: DocumentRevision;
-  @observable revisionChangeType?: RevisionChangeType;
-  @observable createDocumentDisabled = false;
-  @observable releasedDocRev?: DocumentRevision;
-  @observable forceRender?: any;
+  @observable public revisionChangeType?: RevisionChangeType;
+  @observable public createDocumentDisabled = false;
+  @observable public releasedDocRev?: DocumentRevision;
+  @observable public forceRender?: any;
   @observable public disabledAction = false;
   @observable public loading = false;
   @observable public formSchema: FBSchemaProps[] = [];
