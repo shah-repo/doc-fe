@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 import "moment-timezone";
 import moment from "moment-timezone";
+import path from "path";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -588,8 +589,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("unzip and extract pdf file from zip file", () => {
@@ -598,9 +599,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
           directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
-      const pdffile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", "") +
-      `/${releasedFormId}-1-Bulk-create-form.pdf`;
-      cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-1-Bulk-create-form.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
   });
 
@@ -608,7 +609,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     it("Extract texts from PDF file content for bulk create form", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-Bulk-create-form.pdf`,
         }).then((content) => {
         cdata = content;
@@ -874,8 +875,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-        cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
       });
 
       it("extract pdf file from zip file", () => {
@@ -890,7 +891,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     context("Verify PDF file content for WIP document", () => {
       it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
         }).then((content) => {
           cdata = content;
@@ -1088,7 +1089,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
             const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  = releasedFormId + filetime + "_rel.zip";
+            downloadFile  = `${releasedFormId}${filetime}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1099,8 +1100,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-        cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+        const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+        cy.readFile(zipfile).its("length").should("be.gt", 500);
       });
 
       it("extract pdf file from zip file", () => {
@@ -1116,7 +1117,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Extract texts from PDF file content for released document", () => {
         cy.pdfparseFile(
           {
-            directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+            directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
           }).then(($content) => {
           cdata = $content;
