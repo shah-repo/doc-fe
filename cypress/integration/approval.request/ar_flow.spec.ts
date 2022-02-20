@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 import "moment-timezone";
 import moment from "moment-timezone";
+import path from "path";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -330,8 +331,8 @@ context("Approval request form", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("unzip and extract pdf file from zip file", () => {
@@ -341,9 +342,9 @@ context("Approval request form", () => {
           fileName: downloadFile,
         });
 
-      const pdffile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", "") +
-      `/${releasedFormId}-1-New-Approval-request-form-template.pdf`;
-      cy.readFile(`${pdffile}`).its("length").should("be.gt", 500);
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-1-New-Approval-request-form-template.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
   });
 
@@ -351,7 +352,7 @@ context("Approval request form", () => {
     it("Extract texts from PDF file content for Approval request form", () => {
       cy.pdfparseFile(
         {
-          directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-New-Approval-request-form-template.pdf`,
         }).then((content) => {
         cdata = content;
@@ -659,8 +660,8 @@ context("Approval request form", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -675,7 +676,7 @@ context("Approval request form", () => {
   context("Verify PDF file content for draft document", () => {
     it("Extract texts from PDF file content for draft document", () => {
       cy.pdfparseFile({
-        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
       }).then((content) => {
         cdata = content;
@@ -895,8 +896,8 @@ context("Approval request form", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
@@ -911,7 +912,7 @@ context("Approval request form", () => {
   context("Verify PDF file content for closed document", () => {
     it("Extract texts from PDF file content for closed document", () => {
       cy.pdfparseFile({
-        directory: `${CONFIG.DOWNLOADS_DIR}/${downloadFile}`.replace(".zip", ""),
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
       }).then((content) => {
         cdata = content;
