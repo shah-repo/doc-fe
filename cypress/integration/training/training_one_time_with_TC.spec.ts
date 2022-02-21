@@ -18,7 +18,6 @@ let secondEmployee;
 let developersGroup;
 let releasedFormId;
 let emailsFromInbox;
-let cdata;
 const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
@@ -824,8 +823,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-One-Time-training-form-title.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
         expect(cdata.text).match(/Page 2 of 3/);
@@ -1088,8 +1086,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
-      }).then((content) => {
-        cdata = content;
+      }).then((cdata) => {
         expect(cdata.numpages).eq(2);
         expect(cdata.text).match(/Page 1 of 2/);
         expect(cdata.text).match(/Page 2 of 2/);
@@ -1144,7 +1141,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Page 1 of 2/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
     it("Verify page 2 for draft document", () => {
@@ -1172,7 +1169,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Page 2 of 2/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
   });
@@ -1302,8 +1299,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-One-Time-training-PDF-EXPORT.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         expect(cdata.numpages).eq(2);
         expect(cdata.text).match(/Page 1 of 2/);
         expect(cdata.text).match(/Page 2 of 2/);
@@ -1357,7 +1353,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Page 1 of 2/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
     it("Verify page 2 for released document", () => {
@@ -1387,7 +1383,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).match(/Page 2 of 2/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
   });
