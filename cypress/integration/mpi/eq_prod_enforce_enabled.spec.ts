@@ -1700,6 +1700,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Verify Equipment Enforce Prod is unchecked", () => {
+      cy.get(`th[aria-colindex="2"] input`).arrowType("Lot History Record");
       cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record")
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("not.be.checked");
     });
@@ -1716,7 +1717,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Save document type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get(`input[value="Lot History Record"]`)
+        cy.get(`td input[value="Lot History Record"]`)
           .parents("tr").find("button").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
