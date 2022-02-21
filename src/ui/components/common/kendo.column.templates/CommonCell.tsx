@@ -17,9 +17,15 @@ export const CommonCell = ({
 }: CustomGridCellProps) => {
   const value = get(dataItem, field || "");
   const toCheckIfDate = toValidateIfDate(value);
-  const formattedValue = toCheckIfDate
+  let formattedValue = toCheckIfDate
     ? getFormattedDateString(value, MomentFormats.MonthDateYear)
     : value;
+  if (field === "precalc.lhr_end_accepted_quantity" && value === -1) {
+    formattedValue = "N/A";
+  }
+  if (field === "precalc.po_amount") {
+    formattedValue = get(dataItem, "precalc.po_amount_org");
+  }
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
