@@ -22,9 +22,9 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, get, isEmpty, map, pick, startCase } from "lodash";
-import moment from "moment";
+import { cloneDeep, find, findIndex, get, isEmpty, map, startCase } from "lodash";
 import "moment-timezone";
+import moment from "moment-timezone";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -61,6 +61,7 @@ import {
   trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
+// import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
@@ -179,17 +180,47 @@ export function KendoPanel<T>({
     call = axios.CancelToken.source();
 
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
-      url: queryUrl,
+      method: "post",
+      url: "training_record/search",
+      data: {
+        limit: dataState.take,
+        offset: dataState.skip,
+        filters: dataState.filter?.filters,
+        sort: dataState.sort,
+        schema: [
+          {
+            id: true,
+            trId: true,
+            trainingPlan: {
+              document: {
+                docId: true,
+              },
+              employee: {
+                user: {
+                  name: true,
+                },
+              },
+            },
+            documentRevision: {
+              displayRevision: true,
+              name: true,
+            },
+            createdAt: true,
+            dueOn: true,
+            completedAt: true,
+          },
+        ],
+      },
       params: formatParams(),
       paramsSerializer: (params) => qs.stringify(params),
-      headers: {},
+      headers: {
+        Authorization: `bearer ${store.getState().auth.user.employeeId}:${
+          store.getState().auth.user.sessionId
+        }`,
+      },
       cancelToken: call.token,
     };
 
-    requestConfig.headers.Authorization = `bearer ${
-      store.getState().auth.user.employeeId
-    }:${store.getState().auth.user.sessionId}`;
 
     if (normalizrSchema) {
       requestConfig.headers["x-enlil-normalizr-response"] = true;
@@ -222,14 +253,14 @@ export function KendoPanel<T>({
             ? el.trainingPlan.curriculumDocIds.join(", ")
             : "";
         });
-        const newDataState = processWithGroups(data, dataState);
+        const newDataState = processWithGroups(data.results, dataState);
         setDataState(dataState);
         setResultState(newDataState);
         exportDataChanges &&
             exportDataChanges(
-              process(data, {
+              process(data.results, {
                 skip: 0,
-                take: data.length,
+                take: data.total,
                 sort: dataState.sort,
                 filter: dataState.filter,
               }).data
@@ -237,14 +268,6 @@ export function KendoPanel<T>({
         if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
-        data = map(data, (record) =>
-          pick(record, [
-            ...map(gridConfiguration.columns, "field"),
-            "id",
-            "trId",
-            "owner.user.avatar",
-          ])
-        );
         dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
@@ -290,13 +313,16 @@ export function KendoPanel<T>({
 
   // Kendo Helper Methods
   const processWithGroups = (data: TrainingListData[], dataState: State) => {
-    const cloneDeepDataState = cloneDeep(dataState);
-    const newDataState = process(data, cloneDeepDataState);
+    // const cloneDeepDataState = cloneDeep(dataState);
+    // const newDataState = process(data, cloneDeepDataState);
+    const dstate = cloneDeep(dataState);
+    dstate.skip = 0;
+    const newDataState = process(data, dstate);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(gridData, initialKendoConfig)
+    processWithGroups([], initialKendoConfig)
   );
   const result = setExpandedState({
     data: resultState.data,
@@ -391,25 +417,26 @@ export function KendoPanel<T>({
   };
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(gridData, event.dataState);
+      const newDataState = processWithGroups(result, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
+      setFireAPI(true);
       setResultState(newDataState);
-      exportDataChanges &&
-            exportDataChanges(
-              process(gridData, {
-                skip: 0,
-                take: gridData.length,
-                sort: event.dataState.sort,
-                filter: event.dataState.filter,
-              }).data
-            );
+      // exportDataChanges &&
+      //       exportDataChanges(
+      //         process(gridData, {
+      //           skip: 0,
+      //           take: gridData.length,
+      //           sort: event.dataState.sort,
+      //           filter: event.dataState.filter,
+      //         }).data
+      //       );
       setKendoFilterStatus(tableCriteria);
-      if (!newDataState.total) {
-        setNoDataMessage(<NoDataFound />);
-      }
+      // if (!newDataState.total) {
+      //   setNoDataMessage(<NoDataFound />);
+      // }
     },
-    [gridData]
+    []
   );
   const onExpandChange = useCallback(
     ({ dataItem, value }: GridExpandChangeEvent) => {

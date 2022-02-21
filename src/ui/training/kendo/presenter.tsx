@@ -28,11 +28,11 @@ interface Props {
 const KendoGridList: React.FunctionComponent<Props> = ({
   tableName,
   tableCriteria,
-  gridData,
+  // gridData,
   columns,
 }) => {
   const classes = KendoGridStyles();
-  const [dataToBeExported, setDataToBeExported] = useState(gridData);
+  const [dataToBeExported, setDataToBeExported] = useState<TrainingListData[]>([]);
   const dialog = useDialog();
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
@@ -100,7 +100,7 @@ const KendoGridList: React.FunctionComponent<Props> = ({
       <Grid item={true} xs={12}>
         <KendoPanel
           gridConfiguration={columns}
-          gridData={gridData}
+          gridData={[]}
           tableName={tableName}
           tableCriteria={tableCriteria}
           queryUrl={TRAINING_RECORD_ROOT_URL}
