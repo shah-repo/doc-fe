@@ -18,7 +18,6 @@ let secondEmployee;
 let developersGroup;
 let releasedFormId;
 let emailsFromInbox;
-let cdata;
 const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
@@ -830,8 +829,7 @@ context("Repeat Training with Training Curriculum", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-Test-Form-Training-Curriculum-Refresh-Repeat.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
         expect(cdata.text).match(/Page 2 of 3/);
@@ -1116,8 +1114,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
-      }).then((content) => {
-        cdata = content;
+      }).then((cdata) => {
         expect(cdata.numpages).eq(2);
         expect(cdata.text).match(/Page 1 of 2/);
         expect(cdata.text).match(/Page 2 of 2/);
@@ -1307,8 +1304,7 @@ context("Repeat Training with Training Curriculum", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
-      }).then((content) => {
-        cdata = content;
+      }).then((cdata) => {
         expect(cdata.numpages).eq(2);
         expect(cdata.text).match(/Page 1 of 2/);
         expect(cdata.text).match(/Page 2 of 2/);
