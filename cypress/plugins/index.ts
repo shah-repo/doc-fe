@@ -1,6 +1,6 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
 import { rename, rmdirSync } from "fs";
-import { getEmail, getEmails } from "../support/commands/imap/imap";
+import { getEmail, getEmails, getEmailWithLongerOffset } from "../support/commands/imap/imap";
 import { pdfparser } from "../support/commands/pdfparser/pdfparser";
 import { unzip } from "../support/commands/unzip/unzip";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
@@ -38,6 +38,9 @@ export default (on, config) => {
     },
     gmailGetLastMail(email) {
       return getEmail(email);
+    },
+    getAllEmailWithLongerOffset(email) {
+      return getEmailWithLongerOffset(email);
     },
     gmailGetMails(params: {userEmail; options}) {
       return getEmails(params.userEmail, params.options);
