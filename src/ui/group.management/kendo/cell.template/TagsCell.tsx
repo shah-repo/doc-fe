@@ -1,6 +1,6 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { uniq } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
@@ -49,7 +49,7 @@ export const TagsCell = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const tagsList = isEmpty(tags) ? [] : tags.split(",");
   return (
     <td
       id="kendo-expandable-column"
@@ -68,7 +68,7 @@ export const TagsCell = ({
           onChange={updateTagField}
         />
       ) : (
-        <ExpandableTemplate items={tags.split(",")}  dataId={`${dataItem.id}-${columnIndex}`} />
+        <ExpandableTemplate items={tagsList}  dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );

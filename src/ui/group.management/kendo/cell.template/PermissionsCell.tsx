@@ -1,6 +1,6 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { sortBy } from "lodash";
+import { isEmpty, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
@@ -49,7 +49,7 @@ export const PermissionsCell = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const permissionsList = isEmpty(permissions) ? [] : permissions.split(",");
   return (
     <td
       id="kendo-expandable-column"
@@ -69,7 +69,7 @@ export const PermissionsCell = ({
           dataItemKey="value"
           textField="label"
         />
-      ) : <ExpandableTemplate items={permissions.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />}
+      ) : <ExpandableTemplate items={permissionsList} dataId={`${dataItem.id}-${columnIndex}`} />}
     </td>
   );
 };

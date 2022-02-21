@@ -1,6 +1,6 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { sortBy } from "lodash";
+import { isEmpty, sortBy } from "lodash";
 import React from "react";
 import { GetEmployeeResponse, LoadCompanyGroup } from "../../../../state/ducks/userManagement/types";
 import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
@@ -49,7 +49,7 @@ export const EmployeesCell = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const employeesList = isEmpty(employeesData) ? [] : employeesData.split(",");
   return (
     <td
       id="kendo-expandable-column"
@@ -69,7 +69,7 @@ export const EmployeesCell = ({
           dataItemKey="value"
           textField="label"
         />
-        : <ExpandableTemplate items={employeesData.split(",")}  dataId={`${dataItem.id}-${columnIndex}`} />
+        : <ExpandableTemplate items={employeesList}  dataId={`${dataItem.id}-${columnIndex}`} />
       }
     </td>
   );
