@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -1658,8 +1659,39 @@ context("Create company with golden tenant", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
     });
+    it("Verify default Background company color", () => {
+      cy.get("#navigation").should("have.css", "background-color", "rgb(18, 27, 33)");
+    });
+    it("Verify default company logo", () => {
+      const tmpRegex = new RegExp( `http[s]:\\/\\/.*\\/imaeg`, "gi" );
+      cy.get("img[alt=\"Company logo\"]").invoke("attr", "src").should("match", tmpRegex);
+    });
+    it("Dashboard", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(1).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(1)
+        .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Document Control", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(2).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(2)
+        .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Equipment", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Purchase orders", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Supplier Management", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Verify the profile dropdown", () => {
+      cy.get("[data-cy=\"header-userInitials\"]").eq(0).contains("GR").trigger("mousedown");
+    });
   });
-
   context("Check document existence inside company", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
