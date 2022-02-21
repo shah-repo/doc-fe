@@ -22,6 +22,7 @@ import { cloneDeep, compact, find, findIndex, isEmpty, map, startCase } from "lo
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -70,6 +71,7 @@ export function KendoPanel<T>({
   currentUserEmail = "",
   exportDataChanges,
 }: KendoPanelProps<T>) {
+  const history = useHistory();
   const intl = useIntl();
   const classes = KendoGridStyles();
   const didMount = useDidMount();
@@ -166,7 +168,10 @@ export function KendoPanel<T>({
   }, [tableCriteria.forceUpdate]);
 
   const queryApi = () => {
-    const schemaField = [...map(gridConfiguration.columns, "field"), ...compact(map(gridConfiguration.columns, "tooltipField"))];
+    const schemaField = [
+      ...map(gridConfiguration.columns, "field"),
+      ...compact(map(gridConfiguration.columns, "tooltipField")),
+    ];
     // TODO: Check if ID is required
     schemaField.push("id");
     call?.cancel();
@@ -411,16 +416,14 @@ export function KendoPanel<T>({
     if (canEdit(dataItem)) {
       urlPath = changeRequestEditPath(dataItem.id);
     }
-    window.open(urlPath, "_self");
+    history.push({ pathname: urlPath });
   };
 
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(result, dataState);
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
       setFireAPI(true);
-      setResultState(newDataState);
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
     },
     []
