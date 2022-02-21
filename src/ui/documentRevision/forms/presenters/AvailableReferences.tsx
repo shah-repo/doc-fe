@@ -5,7 +5,6 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import { debounce, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -49,7 +48,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
-  const intl = useIntl();
   const { submitForm } = useFormContext();
   const { workspaceState } = FB.useStores();
   const [value, setValue] = useState<any[]>([]);
@@ -160,9 +158,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           <Box display="flex">
             <Box width="100%" data-cy="referenceTo">
               <TextField
-                placeholder={intl.formatMessage({
-                  id: "common.search.label",
-                })}
                 {...params}
                 fullWidth
                 variant="outlined"
