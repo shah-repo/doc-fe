@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, compact, find, findIndex, isEmpty, map, startCase } from "lodash";
+import { cloneDeep, find, findIndex, isEmpty, map, startCase } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -33,6 +33,7 @@ import {
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -168,12 +169,13 @@ export function KendoPanel<T>({
   }, [tableCriteria.forceUpdate]);
 
   const queryApi = () => {
-    const schemaField = [
-      ...map(gridConfiguration.columns, "field"),
-      ...compact(map(gridConfiguration.columns, "tooltipField")),
-    ];
+    // const schemaField = [
+    //   ...map(gridConfiguration.columns, "field"),
+    //   ...compact(map(gridConfiguration.columns, "tooltipField")),
+    // ];
     // TODO: Check if ID is required
-    schemaField.push("id");
+    const schemaField = getSchemaFromColumns(gridConfiguration.columns);
+    schemaField[0].id = true;
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
