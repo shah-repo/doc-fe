@@ -85,7 +85,6 @@ do
     videoDir="${videoDir}/"
     rm -rf $videoDir
     echo "--| deleting vides in $videoDir"
-
     done
 
     echo "--| deleting  $i"
