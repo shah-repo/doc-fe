@@ -17,7 +17,6 @@ let clinicalProtocolDocumentType;
 let group;
 let releasedFormId;
 let emailsFromInbox;
-let cdata;
 const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
@@ -354,8 +353,7 @@ context("Approval request form", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-New-Approval-request-form-template.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
         expect(cdata.text).match(/Page 2 of 3/);
@@ -678,8 +676,7 @@ context("Approval request form", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
-      }).then((content) => {
-        cdata = content;
+      }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
         tmpRegex = new RegExp( "\\n\\n");
@@ -731,7 +728,7 @@ context("Approval request form", () => {
         expect(el).match(/Page 1 of 1/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
   });
@@ -914,8 +911,7 @@ context("Approval request form", () => {
       cy.pdfparseFile({
         directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
         fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
-      }).then((content) => {
-        cdata = content;
+      }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
         tmpRegex = new RegExp( "\\n\\n");
@@ -965,7 +961,7 @@ context("Approval request form", () => {
         expect(el).match(/Page 1 of 1/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
+        expect(el).not.match(tmpRegex);
       }
     });
   });
