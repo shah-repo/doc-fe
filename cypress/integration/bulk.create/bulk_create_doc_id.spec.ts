@@ -24,7 +24,6 @@ let testDocumentTypeDocument;
 let BLCdocumentType;
 let releasedFormId;
 let emailsFromInbox;
-let cdata;
 const pages = ["", "", ""];
 let downloadUrl;
 let tmpRegex;
@@ -611,8 +610,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-Bulk-create-form.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         expect(cdata.numpages).eq(3);
         expect(cdata.text).match(/Page 1 of 3/);
         expect(cdata.text).match(/Page 2 of 3/);
@@ -893,8 +891,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.pdfparseFile({
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
-        }).then((content) => {
-          cdata = content;
+        }).then((cdata) => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
           expect(cdata.text).match(/Page 2 of 2/);
@@ -940,7 +937,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(el).match(/Page 1 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(cdata.text).not.match(tmpRegex);
+          expect(el).not.match(tmpRegex);
         }
       });
       it("Verify page 2 for WIP document", () => {
@@ -973,7 +970,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(el).match(/Page 2 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(cdata.text).not.match(tmpRegex);
+          expect(el).not.match(tmpRegex);
         }
       });
     });
@@ -1119,8 +1116,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
-          }).then(($content) => {
-          cdata = $content;
+          }).then((cdata) => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
           expect(cdata.text).match(/Page 2 of 2/);
@@ -1166,7 +1162,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(el).match(/Page 1 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(cdata.text).not.match(tmpRegex);
+          expect(el).not.match(tmpRegex);
         }
       });
       it("Verify page 2 for released document", () => {
@@ -1198,7 +1194,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           expect(el).match(/Page 2 of 2/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-          expect(cdata.text).not.match(tmpRegex);
+          expect(el).not.match(tmpRegex);
         }
       });
     });
