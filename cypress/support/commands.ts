@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
 import path from "path";
+import { Result } from "pdf-parse";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -28,7 +29,7 @@ declare global {
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
-      pdfparseFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
       sendToEmail(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;

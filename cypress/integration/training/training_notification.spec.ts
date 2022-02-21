@@ -19,7 +19,6 @@ let developersGroup;
 let releasedFormId;
 let trnId;
 let emailsFromInbox;
-let cdata;
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -820,8 +819,7 @@ context("Training notification test", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
 
@@ -978,8 +976,7 @@ context("Training notification test", () => {
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
 
