@@ -24,6 +24,7 @@ let tmpRegex;
 let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
+let arId;
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -734,6 +735,9 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("#HeaderInfo-docId").then((x) => {
         releasedFormId = x.text();
       });
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+        arId = x.text();
+      });
       cy.sendToEmail();
     });
 
@@ -857,7 +861,7 @@ context("Repeat Training with Training Curriculum", () => {
         RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `AR ID\\nAR-00002`, "gi" );
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Description\nTest Refresh Repeat Print export/);
@@ -928,7 +932,7 @@ context("Repeat Training with Training Curriculum", () => {
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-        tmpRegex = new RegExp( `AR-000021N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
