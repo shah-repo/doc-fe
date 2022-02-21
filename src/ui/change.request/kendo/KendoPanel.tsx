@@ -18,7 +18,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, find, findIndex, isEmpty, map, startCase } from "lodash";
+import { cloneDeep, compact, find, findIndex, isEmpty, map, startCase } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -166,6 +166,9 @@ export function KendoPanel<T>({
   }, [tableCriteria.forceUpdate]);
 
   const queryApi = () => {
+    const schemaField = [...map(gridConfiguration.columns, "field"), ...compact(map(gridConfiguration.columns, "tooltipField"))];
+    // TODO: Check if ID is required
+    schemaField.push("id");
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
@@ -176,6 +179,7 @@ export function KendoPanel<T>({
         offset: dataState.skip,
         filters: dataState.filter?.filters,
         sort: dataState.sort,
+        schema: schemaField,
       },
       cancelToken: call.token,
       headers: {
