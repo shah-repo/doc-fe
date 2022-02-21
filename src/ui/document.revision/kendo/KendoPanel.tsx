@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { compact, filter, find, findIndex, isEmpty, map } from "lodash";
+import { cloneDeep, filter, find, findIndex, isEmpty, map } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -163,63 +163,70 @@ export function KendoPanel<T>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.forceUpdate]);
 
-  /*
   const formatParams = () => {
     const params: any = {};
     if (!tableCriteria.queryDict) {
       return;
     }
     Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
-      if (key.startsWith("dynamicParams")) {
-        set(params, key, value);
-      } else {
-        if (key === "effectiveDate") {
-          if (value.value) {
-            params[key] = value.value;
-          }
-        } else {
-          params[key] = value;
+      if (key === "effectiveDate") {
+        if (value.value) {
+          params[key] = value.value;
         }
+      } else {
+        params[key] = value;
       }
     });
-    params.dynamicParams = JSON.stringify(params.dynamicParams);
+    // params.dynamicParams = JSON.stringify(params.dynamicParams);
     return params;
   };
-  */
 
   const formatParamsToKendoGridPayload = () => {
     interface FilterObjKendo {
       field: string;
       operator: string;
       value: string | boolean;
-    } const kendoFilterObj: FilterObjKendo[] = [];
-    // const params = formatParams();
-    // console.log(params["status[]"]);
-    // const copyParams = cloneDeep(params);
-    // const createStatus: FilterObjKendo[] = map(copyParams["status[]"], (val) => ({
-    //   field: "status",
-    //   operator: "eq",
-    //   value: val,
-    // }));
-    // delete copyParams["status[]"];
-    // kendoFilterObj = map(copyParams, (val, key) => ({
-    //   field: key,
-    //   operator: "eq",
-    //   value: val  || "",
-    // }));
-    // kendoFilterObj.push(...createStatus);
+    }
+    let kendoFilterObj: FilterObjKendo[] = [];
+    const params = formatParams();
+    const copyParams = cloneDeep(params);
+    delete copyParams["status[]"];
+    kendoFilterObj = map(copyParams, (val, key) => ({
+      field: key,
+      operator: "eq",
+      value: val  || "",
+    }));
     return kendoFilterObj;
   };
 
+  const getSchema = (columns: KendoColumn[]) => {
+    console.log("debug :: columns :: ", columns);
+    return [{
+      id: true,
+      displayRevision: true,
+      displayStatus: true,
+      name: true,
+      effectiveDate: true,
+      owner: {
+        user: {
+          name: true,
+          avatar: true,
+        },
+      },
+      document: {
+        docId: true,
+        id: true,
+        documentType: {
+          documentTypeAcronym: true,
+          documentTypeName: true,
+        },
+      },
+      changeRequest: {
+      },
+    }]; };
   const queryApi = () => {
-    // formatting params to kendo grid payload
+    console.log("debug :: queryApi :: ");
     const queryPayload = formatParamsToKendoGridPayload();
-    const schemaField = [...map(gridConfiguration.columns, "field"), ...compact(map(gridConfiguration.columns, "tooltipField"))];
-    schemaField.push("id",
-      "document.docId",
-      "document.id",
-      "owner.user.avatar");
-
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
@@ -231,19 +238,15 @@ export function KendoPanel<T>({
         offset: dataState.skip,
         filters: queryPayload,
         sort: dataState.sort,
-        schema: schemaField,
+        schema: getSchema(gridConfiguration.columns),
       },
-      // params: formatParams(),
-      // paramsSerializer: (params) => qs.stringify(params),
       headers: {},
       cancelToken: call.token,
     };
+    console.log("debug :: requestConfig :: ", requestConfig);
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
-    // if (normalizrSchema) {
-    //   requestConfig.headers["x-enlil-normalizr-response"] = true;
-    // }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
@@ -261,16 +264,7 @@ export function KendoPanel<T>({
     );
     apiClient
       .request(requestConfig)
-      .then((resp) => resp)
-      //   if (normalizrSchema) {
-      //     const { entities, result } = resp.data;
-      //     resp.data = denormalize(result, normalizrSchema, entities);
-      //   }
-      //   return resp;
-      // })
       .then(({ data }) => {
-        // if (customDataSet) {
-        // data = customDataSet(data);
         const newDataState = processWithGroups(data.results, initialDataState);
         newDataState.total = data.total;
         setDataState(initialDataState);
@@ -341,7 +335,11 @@ export function KendoPanel<T>({
   };
   // Kendo Helper Methods
   const processWithGroups = (data: T[], dataState: State) => {
-    const newDataState = process(data, dataState);
+    const dataStateOne = cloneDeep(dataState);
+    dataStateOne.skip = 0;
+    const newDataState = process(data, dataStateOne);
+    console.log("debug :: newDataState :: ", newDataState);
+    console.log("debug :: dataState :: ", dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
@@ -369,7 +367,6 @@ export function KendoPanel<T>({
               ...tableCriteria.queryDict,
               "status[]": documentRevisionQueryStatus(),
               "displayStatus": statusFilterObj.value,
-              "documentTypeWithoutCategory": true,
             },
           },
           tableName
@@ -484,7 +481,6 @@ export function KendoPanel<T>({
           queryDict: {
             "status[]": status,
             displayStatus,
-            "documentTypeWithoutCategory": true,
           },
         },
         tableName
