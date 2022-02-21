@@ -167,6 +167,7 @@
     "cypress-movie": "^3.0.5",
     "cypress-multi-reporters": "^1.4.0",
     "cypress-promise": "^1.1.0",
+    "cypress-real-events": "^1.7.0",
     "cypress-xpath": "^1.6.0",
     "env-cmd": "^10.1.0",
     "enzyme": "3.11.0",
