@@ -39,6 +39,7 @@ export class ConfigEnv {
       ARROW_DURATION: Cypress.env("ARROW_DURATION"),
       TEST_EMAIL: Cypress.env("TEST_EMAIL"),
       DEFAULT_ENLIL_USER_PASSWORD: "Tester1!",
+      DOWNLOADS_DIR: Cypress.env("DOWNLOADS_DIR"),
     });
 
     const errors = validateSync(configEnv, {
@@ -103,6 +104,10 @@ export class ConfigEnv {
   @IsDefined()
   @IsString()
   SCREENSHOTS_DIR!: string;
+
+  @IsDefined()
+  @IsString()
+  DOWNLOADS_DIR!: string;
 
   @IsOptional()
   @IsString()

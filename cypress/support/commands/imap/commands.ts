@@ -24,6 +24,7 @@ declare global {
       imapVerifyNumberOfEmailsReceivedSince(params: {userEmail: string; emailCount: integer; date: Date}): Chainable;
       imapGetActivationLink(params: {userEmail: string}): Chainable;
       imapGetApprovalRequestLink(params: {userEmail: string }): Chainable;
+      imapGetRecordRequestLink(params: {userEmail: string }): Chainable;
       imapVerifyLastEmailContains(params: {userEmail: string; content: string; date: Date}): Chainable;
       imapVerifyEmailsInList(params: {
         receivedEmails: IMAPEmail[];
@@ -87,6 +88,15 @@ Cypress.Commands.add("imapGetActivationLink", (params: { userEmail: string}) => 
 Cypress.Commands.add("imapGetApprovalRequestLink", (params: { userEmail: string }) => {
   cy.imapGetEmailWithLongerOffset({ userEmail: params.userEmail }).should((emailText) => {
     const startingPosition = emailText.search("/change_request/");
+    const endingPosition = emailText.search("\" target");
+    const urlToAR = emailText.substring(startingPosition, endingPosition);
+    cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
+  });
+});
+
+Cypress.Commands.add("imapGetRecordRequestLink", (params: { userEmail: string }) => {
+  cy.imapGetEmailWithLongerOffset({ userEmail: params.userEmail }).should((emailText) => {
+    const startingPosition = emailText.search("/document_revision/");
     const endingPosition = emailText.search("\" target");
     const urlToAR = emailText.substring(startingPosition, endingPosition);
     cy.visit(CONFIG.FE_URL + decodeHTMLEntities(urlToAR));
