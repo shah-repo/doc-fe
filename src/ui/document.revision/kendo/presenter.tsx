@@ -9,7 +9,7 @@ import {
   MomentFormats,
 } from "../../../common/utils/date";
 import { stripTags } from "../../../common/utils/helpers";
-import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { removeLastCharacterIfNotAlphaNumeric } from "../../common/utils/helpers";
@@ -147,7 +147,7 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           tableName={tableName}
           gridData={data}
           tableCriteria={tableCriteria}
-          queryUrl={DOCUMENT_REVISION_ROOT_URL}
+          queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
           customDataSet={customDataSet}
           normalizrSchema={[docRevSch]}
           statuses={statuses}

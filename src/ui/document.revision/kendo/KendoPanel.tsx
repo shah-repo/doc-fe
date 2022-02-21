@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid, GridColumn, GridColumnReorderEvent,
@@ -11,10 +11,10 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, compact, filter, find, findIndex, isEmpty, map, set } from "lodash";
+import { compact, filter, find, findIndex, isEmpty, map } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,7 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
   DocumentRevision,
-  DocumentRevisionStatus
+  DocumentRevisionStatus,
 } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
@@ -45,7 +45,7 @@ import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
   documentRevisionEffectiveDateOption,
-  documentRevisionQueryStatus
+  documentRevisionQueryStatus,
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -163,6 +163,7 @@ export function KendoPanel<T>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.forceUpdate]);
 
+  /*
   const formatParams = () => {
     const params: any = {};
     if (!tableCriteria.queryDict) {
@@ -184,28 +185,29 @@ export function KendoPanel<T>({
     params.dynamicParams = JSON.stringify(params.dynamicParams);
     return params;
   };
+  */
 
   const formatParamsToKendoGridPayload = () => {
     interface FilterObjKendo {
       field: string;
       operator: string;
       value: string | boolean;
-    } let kendoFilterObj: FilterObjKendo[] = [];
-    const params = formatParams();
+    } const kendoFilterObj: FilterObjKendo[] = [];
+    // const params = formatParams();
     // console.log(params["status[]"]);
-    const copyParams = cloneDeep(params);
-    const createStatus: FilterObjKendo[] = map(copyParams["status[]"], (val) => ({
-      field: "status",
-      operator: "eq",
-      value: val,
-    }));
-    delete copyParams["status[]"];
-    kendoFilterObj = map(copyParams, (val, key) => ({
-      field: key,
-      operator: "eq",
-      value: val  || "",
-    }));
-    kendoFilterObj.push(...createStatus);
+    // const copyParams = cloneDeep(params);
+    // const createStatus: FilterObjKendo[] = map(copyParams["status[]"], (val) => ({
+    //   field: "status",
+    //   operator: "eq",
+    //   value: val,
+    // }));
+    // delete copyParams["status[]"];
+    // kendoFilterObj = map(copyParams, (val, key) => ({
+    //   field: key,
+    //   operator: "eq",
+    //   value: val  || "",
+    // }));
+    // kendoFilterObj.push(...createStatus);
     return kendoFilterObj;
   };
 
@@ -224,6 +226,7 @@ export function KendoPanel<T>({
       method: "post",
       url: queryUrl,
       data: {
+        documentTypeWithoutCategory: "true",
         limit: dataState.take,
         offset: dataState.skip,
         filters: queryPayload,
