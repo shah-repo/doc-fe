@@ -2,13 +2,14 @@ import { Box, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
-import { get, isEmpty } from "lodash";
+import { get, isEmpty, isNull } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { documentTypeActions, documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType, DocumentTypeById, DocumentTypeByIdForm, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -16,6 +17,7 @@ import { DocumentRevision, HeaderTableType } from "../../../state/ducks/document
 import { documentsActions } from "../../../state/ducks/documents";
 import { DocumentProposedId } from "../../../state/ducks/documents/types";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
@@ -23,8 +25,6 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -115,11 +115,13 @@ export const useHandleCreateDoc = () => {
 const CreateDocumentByType: React.FunctionComponent<Props> = ({
   labelName,
   documentTypeId,
-  categoryName,
+  categoryName = "",
   isByCategory,
   headers,
   tableData,
 }) => {
+
+  const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   const handleCreateDocument = useHandleCreateDoc();
   const classes = styles();
 
@@ -264,25 +266,13 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               return { [column.key]: get(e, "changeRequest.crId") || "" };
             case "status":
               return { [column.key]: get(e, "displayStatus") || "" };
-            case "precalc.revision": {
-              const versionNumber = generateRevisionNumber(
-                e?.revision,
-                e?.revisionStage,
-                e?.subRevision,
-                e?.revisionChangeType,
-                undefined,
-                checkIsDocumentRecord(e?.document?.documentType?.groupOptions)
-              );
-              return { [column.key]: versionNumber || "" };
-            }
-
             default:
               if (moment(columnValue, moment.ISO_8601, true).isValid()) {
                 return {
                   [column.key]: getFormattedDateString(columnValue, MomentFormats.MonthDateYear),
                 };
               } else {
-                return { [column.key]: columnValue };
+                return { [column.key]: isNull(columnValue) ? "" : columnValue };
               }
           }
         });
@@ -303,7 +293,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   }
   return (
     <>
-      <Grid item xs ><Typography className={classes.title}>{categoryName}</Typography></Grid>
+      <Grid item xs ><Typography className={classes.title}>{title}</Typography></Grid>
       <Grid item={true} xs style={{ textAlign: "right", marginBottom: 10 }}>
         <Button
           variant="outlined"

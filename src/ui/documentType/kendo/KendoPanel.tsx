@@ -22,6 +22,7 @@ import {
   cloneDeep,
   find,
   findIndex,
+  has,
   isEmpty,
   map,
   merge,
@@ -42,6 +43,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -214,6 +216,26 @@ export function KendoGrid<T>({
         if (customDataSet) {
           data = customDataSet(data);
         }
+        data = map(data, (record) => {
+          if (has(record, "precalc.po_amount")) {
+            let poAmountValue = record.precalc.po_amount;
+            if (poAmountValue === "N/A") {
+              poAmountValue = "-1";
+            }
+            poAmountValue = +poAmountValue.replace(/[^0-9.-]+/g, "");
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            record.precalc.po_amount_org = record.precalc.po_amount;
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            record.precalc.po_amount = poAmountValue;
+          }
+          if (has(record, "precalc.lhr_end_accepted_quantity")) {
+            if (record.precalc.lhr_end_accepted_quantity === "N/A") {
+              // eslint-disable-next-line @typescript-eslint/camelcase
+              record.precalc.lhr_end_accepted_quantity = -1;
+            }
+          }
+          return record;
+        });
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
         setResultState(newDataState);
@@ -241,6 +263,7 @@ export function KendoGrid<T>({
             "revisionStage",
             "subRevision",
             "revisionChangeType",
+            "precalc.po_amount_org",
           ])
         );
         dispatch(tableSearchActions.setData(data, tableName));
@@ -507,6 +530,7 @@ export function KendoGrid<T>({
       {isLoading && <Loader />}
       <KendoGlobalization>
         <Kgrid
+          cellRender={CellRender}
           className={classes.kGrid}
           style={{ width: `${width}px` }}
           data={result}
