@@ -1,10 +1,10 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { uniq } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 
 interface TagsCellProps {
   dataItem: any;
@@ -49,9 +49,10 @@ export const TagsCell = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const tagsList = isEmpty(tags) ? [] : tags.split(",");
   return (
     <td
+      id="kendo-expandable-column"
       colSpan={colSpan}
       style={style}
       role="gridcell"
@@ -67,7 +68,7 @@ export const TagsCell = ({
           onChange={updateTagField}
         />
       ) : (
-        <Tooltip data={tags} />
+        <ExpandableTemplate items={tagsList}  dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );
