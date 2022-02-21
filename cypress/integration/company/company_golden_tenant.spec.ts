@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-// eslint-disable-next-line spaced-comment
-/// <reference types="Cypress" />
+// / <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -1663,12 +1661,12 @@ context("Create company with golden tenant", () => {
       cy.get("#navigation").should("have.css", "background-color", "rgb(18, 27, 33)");
     });
     it("Verify default company logo", () => {
-      const tmpRegex = new RegExp( `http[s]:\\/\\/.*\\/imaeg`, "gi" );
+      const tmpRegex = new RegExp( `http[s]:\\/\\/.*\\/image`, "gi" );
       cy.get("img[alt=\"Company logo\"]").invoke("attr", "src").should("match", tmpRegex);
     });
     it("Dashboard", () => {
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(1).should("have.css", "background-color", "rgb(18, 27, 33)");
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(1)
+    //  cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3)
         .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
     it("Document Control", () => {
@@ -1677,16 +1675,44 @@ context("Create company with golden tenant", () => {
         .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
     it("Equipment", () => {
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(6).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(6)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
     it("Purchase orders", () => {
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(7).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(7)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
     it("Supplier Management", () => {
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
-      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(3).realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(8).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(8)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Receiving", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(9).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(9)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Inspection", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(10).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(10)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Manfacturing", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(11).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(11)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Group Management", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(12).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(12)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("User Management", () => {
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(13).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(`.MuiButtonBase-root.MuiListItem-root`).eq(13)
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
     it("Verify the profile dropdown", () => {
       cy.get("[data-cy=\"header-userInitials\"]").eq(0).contains("GR").trigger("mousedown");
