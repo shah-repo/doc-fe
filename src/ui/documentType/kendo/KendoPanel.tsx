@@ -19,19 +19,14 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig } from "axios";
 import {
-  cloneDeep,
-  find,
+  cloneDeep, find,
   findIndex,
-  has,
-  isEmpty,
+  has, isEmpty,
   map,
   merge,
   omit,
-  pick,
-  set,
-  without,
+  pick, without,
 } from "lodash";
-import { denormalize } from "normalizr";
 import qs from "query-string";
 import { ComponentType, default as React, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -43,6 +38,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { getSchemaFromColumns } from "../../common/utils/helpers";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
@@ -153,29 +149,23 @@ export function KendoGrid<T>({
     initialGridConfigurationColumns.map((o) => (o.groupable ? o.field : "")),
     ""
   );
-
-  const formatParams = () => {
-    const params: any = {};
-    if (!queryDict) {
-      return;
-    }
-    Object.entries(queryDict).forEach(([key, value]) => {
-      if (key.startsWith("dynamicParams")) {
-        set(params, key, value);
-      } else {
-        params[key] = value;
-      }
-    });
-    params.dynamicParams = JSON.stringify(params.dynamicParams);
-    return params;
-  };
-  const queryApi = () => {
+  const SchemaObj = getSchemaFromColumns(dynamicColumns);
+  const queryApi = (updatedDataState?) => {
+    const newDataState = updatedDataState ? updatedDataState : dataState;
     call?.cancel();
+    console.log("dataState IN API:::", newDataState);
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: "post",
       url: queryUrl,
-      params: formatParams(),
+      data: {
+        documentTypeCategory: tableName?.split("-")[1],
+        limit: newDataState.take,
+        offset: newDataState.skip,
+        filters: newDataState?.filter?.filters,
+        sort: newDataState.sort,
+        schema: SchemaObj,
+      },
       paramsSerializer: (params) => qs.stringify(params),
       headers: {},
       cancelToken: call.token,
@@ -184,20 +174,17 @@ export function KendoGrid<T>({
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
     if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
+      requestConfig.headers["x-enlil-normalizr-response"] = false;
     }
-    setDataState(initialDataState);
-    setResultState(processWithGroups([], initialDataState));
     setIsLoading(true);
     setNoDataMessage(<span />);
-    dispatch(tableSearchActions.setData([], tableName));
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           apiError: "",
           scrollToIndex: 0,
           forceUpdate: false,
-          kendoConfig: JSON.stringify(initialDataState),
+          kendoConfig: JSON.stringify(newDataState),
           columnConfig: JSON.stringify(configColumns),
         },
         tableName
@@ -205,18 +192,13 @@ export function KendoGrid<T>({
     );
     apiClient
       .request(requestConfig)
-      .then((resp) => {
-        if (normalizrSchema) {
-          const { entities, result } = resp.data;
-          resp.data = denormalize(result, normalizrSchema, entities);
-        }
-        return resp;
-      })
+      .then((resp) => resp)
       .then(({ data }) => {
+        let fetchedData = data.results;
         if (customDataSet) {
-          data = customDataSet(data);
+          fetchedData = customDataSet(fetchedData);
         }
-        data = map(data, (record) => {
+        fetchedData = map(fetchedData, (record) => {
           if (has(record, "precalc.po_amount")) {
             let poAmountValue = record.precalc.po_amount;
             if (poAmountValue === "N/A") {
@@ -236,37 +218,22 @@ export function KendoGrid<T>({
           }
           return record;
         });
-        const newDataState = processWithGroups(data, initialDataState);
-        setDataState(initialDataState);
-        setResultState(newDataState);
+        const newProcessedDataState = processWithGroups(fetchedData, newDataState);
+        newProcessedDataState.total = data.total;
+        setResultState(newProcessedDataState);
         exportDataChanges &&
           exportDataChanges(
-            process(data, {
+            process(fetchedData, {
               skip: 0,
-              take: data.length,
-              sort: initialDataState.sort,
-              filter: initialDataState.filter,
+              take: fetchedData.total,
+              sort: newDataState.sort,
+              filter: newDataState.filter,
             }).data
           );
         setIsLoading(false);
-        if (newDataState.total === 0) {
+        if (fetchedData.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
-        data = map(data, (record) =>
-          pick(record, [
-            ...map(dynamicColumns, "field"),
-            "id",
-            "document.id",
-            "owner.user.avatar",
-            "document.documentType.groupOptions",
-            "revision",
-            "revisionStage",
-            "subRevision",
-            "revisionChangeType",
-            "precalc.po_amount_org",
-          ])
-        );
-        dispatch(tableSearchActions.setData(data, tableName));
       })
       .catch((exception) => {
         if (axios.isCancel(exception)) {
@@ -321,8 +288,9 @@ export function KendoGrid<T>({
     ? JSON.parse(kendoConfigFromState)
     : { skip: 0, take: 25, group: [] };
   const processWithGroups = (data: T[], dataState: State) => {
-    const cloneDeepDataState = cloneDeep(dataState);
-    const newDataState = process(data, cloneDeepDataState);
+    const dstate = cloneDeep(dataState);
+    dstate.skip = 0;
+    const newDataState = process(data, dstate);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };
@@ -365,7 +333,6 @@ export function KendoGrid<T>({
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       tableCriteria.columnConfig = JSON.stringify(columnDefinitions);
       setDataState(dataState);
-      setResultState(newDataState);
       exportDataChanges &&
         exportDataChanges(
           process(gridData, {
@@ -375,6 +342,7 @@ export function KendoGrid<T>({
             filter: dataState.filter,
           }).data
         );
+      queryApi(dataState);
       dispatch(
         tableSearchActions.setSearchCriteria(
           {
@@ -485,6 +453,7 @@ export function KendoGrid<T>({
   const clearFilter = () => {
     if (dataState?.filter?.filters?.length) {
       dataState.filter.filters = [];
+      queryApi();
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       dispatch(
         tableSearchActions.setSearchCriteria(

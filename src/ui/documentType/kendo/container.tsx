@@ -8,7 +8,7 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria, getTableData } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DOCUMENT_REVISION_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -56,12 +56,13 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     ? `documentsByCategoryList-${categoryName}`
     : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
 
-  const docRevRootUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
-    ? `?documentTypeCategory=${categoryName}`
-    : `?documentTypeId=${documentType?.id}`);
+  // const docRevRootUrl = DOCUMENT_REVISION_ROOT_URL + (isByCategory
+  //   ? `?documentTypeCategory=${categoryName}`
+  //   : `?documentTypeId=${documentType?.id}`);
 
-  const queryUrl = documentRevisionQueryStatus().reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
-    `${docRevRootUrl}&`);
+  const queryUrl = DOCUMENT_REVISION_SEARCH_ROOT_URL;
+  // documentRevisionQueryStatus().reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
+  //   `${docRevRootUrl}&`);
 
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const providedData = useSelector(getTableData(TABLE_NAME));
