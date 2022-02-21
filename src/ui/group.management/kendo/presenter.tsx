@@ -46,7 +46,7 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
   };
   return (
     <Grid container={true} className={classes.cRoot}>
-      <Grid item={true}>
+      <Grid xs item={true}>
         <KendoPanel<LoadCompanyGroup>
           gridConfiguration={gridConfiguration}
           queryUrl={GROUPS_URL}
