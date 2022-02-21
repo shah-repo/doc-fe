@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid, GridColumn, GridColumnReorderEvent,
@@ -11,12 +11,10 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { compact, filter, find, findIndex, isEmpty, map, pick, set } from "lodash";
-import { denormalize } from "normalizr";
-import qs from "query-string";
+import { cloneDeep, compact, filter, find, findIndex, isEmpty, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -25,7 +23,7 @@ import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import {
   DocumentRevision,
-  DocumentRevisionStatus,
+  DocumentRevisionStatus
 } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
@@ -47,7 +45,7 @@ import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
   documentRevisionEffectiveDateOption,
-  documentRevisionQueryStatus,
+  documentRevisionQueryStatus
 } from "../utils/helpers";
 import { DropdownFilterTemplate } from "./filter.template/DropdownFilterTemplate";
 import KendoGridStyles from "./styles";
@@ -186,23 +184,63 @@ export function KendoPanel<T>({
     params.dynamicParams = JSON.stringify(params.dynamicParams);
     return params;
   };
+
+  const formatParamsToKendoGridPayload = () => {
+    interface FilterObjKendo {
+      field: string;
+      operator: string;
+      value: string | boolean;
+    } let kendoFilterObj: FilterObjKendo[] = [];
+    const params = formatParams();
+    // console.log(params["status[]"]);
+    const copyParams = cloneDeep(params);
+    const createStatus: FilterObjKendo[] = map(copyParams["status[]"], (val) => ({
+      field: "status",
+      operator: "eq",
+      value: val,
+    }));
+    delete copyParams["status[]"];
+    kendoFilterObj = map(copyParams, (val, key) => ({
+      field: key,
+      operator: "eq",
+      value: val  || "",
+    }));
+    kendoFilterObj.push(...createStatus);
+    return kendoFilterObj;
+  };
+
   const queryApi = () => {
+    // formatting params to kendo grid payload
+    const queryPayload = formatParamsToKendoGridPayload();
+    const schemaField = [...map(gridConfiguration.columns, "field"), ...compact(map(gridConfiguration.columns, "tooltipField"))];
+    schemaField.push("id",
+      "document.docId",
+      "document.id",
+      "owner.user.avatar");
+
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
-      method: "get",
+      method: "post",
       url: queryUrl,
-      params: formatParams(),
-      paramsSerializer: (params) => qs.stringify(params),
+      data: {
+        limit: dataState.take,
+        offset: dataState.skip,
+        filters: queryPayload,
+        sort: dataState.sort,
+        schema: schemaField,
+      },
+      // params: formatParams(),
+      // paramsSerializer: (params) => qs.stringify(params),
       headers: {},
       cancelToken: call.token,
     };
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
-    }
+    // if (normalizrSchema) {
+    //   requestConfig.headers["x-enlil-normalizr-response"] = true;
+    // }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
@@ -220,43 +258,44 @@ export function KendoPanel<T>({
     );
     apiClient
       .request(requestConfig)
-      .then((resp) => {
-        if (normalizrSchema) {
-          const { entities, result } = resp.data;
-          resp.data = denormalize(result, normalizrSchema, entities);
-        }
-        return resp;
-      })
+      .then((resp) => resp)
+      //   if (normalizrSchema) {
+      //     const { entities, result } = resp.data;
+      //     resp.data = denormalize(result, normalizrSchema, entities);
+      //   }
+      //   return resp;
+      // })
       .then(({ data }) => {
-        if (customDataSet) {
-          data = customDataSet(data);
-          const newDataState = processWithGroups(data, initialDataState);
-          setDataState(initialDataState);
-          setResultState(newDataState);
-          exportDataChanges &&
+        // if (customDataSet) {
+        // data = customDataSet(data);
+        const newDataState = processWithGroups(data.results, initialDataState);
+        newDataState.total = data.total;
+        setDataState(initialDataState);
+        setResultState(newDataState);
+        exportDataChanges &&
             exportDataChanges(
-              process(data, {
+              process(data.results, {
                 skip: 0,
-                take: data.length,
+                take: data.total,
                 sort: initialDataState.sort,
                 filter: initialDataState.filter,
               }).data
             );
-          if (newDataState.total === 0) {
-            setNoDataMessage(<NoDataFound />);
-          }
+        if (newDataState.total === 0) {
+          setNoDataMessage(<NoDataFound />);
         }
-        data = map(data, (record) =>
-          pick(record,  [
-            ...map(gridConfiguration.columns, "field"),
-            ...compact(map(gridConfiguration.columns, "tooltipField")),
-            "id",
-            "document.docId",
-            "document.id",
-            "owner.user.avatar",
-          ])
-        );
-        dispatch(tableSearchActions.setData(data, tableName));
+        // }
+        // data = map(data, (record) =>
+        //   pick(record,  [
+        //     ...map(gridConfiguration.columns, "field"),
+        //     ...compact(map(gridConfiguration.columns, "tooltipField")),
+        //     "id",
+        //     "document.docId",
+        //     "document.id",
+        //     "owner.user.avatar",
+        //   ])
+        // );
+        // dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
       })
@@ -489,26 +528,27 @@ export function KendoPanel<T>({
   };
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) =>  {
-      const newDataState = processWithGroups(gridData, dataState);
+      const newDataState = processWithGroups(result, dataState);
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
+      setFireAPI(true);
       setResultState(newDataState);
-      exportDataChanges &&
-        exportDataChanges(
-          process(gridData, {
-            skip: 0,
-            take: gridData.length,
-            sort: dataState.sort,
-            filter: dataState.filter,
-          }).data
-        );
+      // exportDataChanges &&
+      //   exportDataChanges(
+      //     process(gridData, {
+      //       skip: 0,
+      //       take: gridData.length,
+      //       sort: dataState.sort,
+      //       filter: dataState.filter,
+      //     }).data
+      //   );
       setKendoFilterStatus(JSON.stringify(dataState), tableCriteria);
-      if (!newDataState.total) {
-        setNoDataMessage(<NoDataFound />);
-      }
+      // if (!newDataState.total) {
+      //   setNoDataMessage(<NoDataFound />);
+      // }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [gridData]
+    []
   );
   const onExpandChange = useCallback(
     ({ dataItem, value }: GridExpandChangeEvent) => {
@@ -639,3 +679,5 @@ export function KendoPanel<T>({
     </>
   );
 }
+
+
