@@ -65,16 +65,16 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Create form for Equipment", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter title 'Equpment form'", () => {
@@ -172,6 +172,10 @@ context("Equipment maintenance and calibration", () => {
       cy.cmpClickCreateNewDocument();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title 'Preventative Maintenance form'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative Maintenance form" });
     });
@@ -214,6 +218,10 @@ context("Equipment maintenance and calibration", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter title 'Calibration form'", () => {
@@ -260,6 +268,10 @@ context("Equipment maintenance and calibration", () => {
       cy.equipClickCreateNew();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title 'Equipment document'", () => {
       cy.drEnterDocumentTitle({ name: "Equipment document" });
     });
@@ -295,7 +307,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType("10");
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType("365");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -317,7 +329,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType("5");
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType("365");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -499,6 +511,7 @@ context("Equipment maintenance and calibration", () => {
 
     it("Verify status is 'Released'", () => {
       cy.drCheckDocumentStatus({ status: "Released" });
+      cy.wait(10000);
     });
   });
 
@@ -519,6 +532,171 @@ context("Equipment maintenance and calibration", () => {
       it("Verify for calibration", () => {
         cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
       });
+    });
+  });
+
+  context("Verify Due date calculation", () => {
+    it("Check preventative maintenance due date calculation is 365 days from now", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(365, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+        });
+    });
+
+    it("Check calibration due date calculation is 365 days from now", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(365, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`CALDone - Due Date: ${calibrationComplianceDate}`);
+        });
+    });
+  });
+
+  context("Revise PM completion date to 10 days earlier", () => {
+    it("Navigate to records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Select PM document", () => {
+      cy.recFilterRecordListByNameAndStatus({ title: "Preventative maintenance", status: "Released" });
+    });
+
+    it("Click revise on maintenance record", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Change 'Completion Date' to 10 days prior", () => {
+      const completionDate = moment().tz("America/Los_Angeles").subtract(10, "days");
+      const month = completionDate.format("MMMM");
+      const day = completionDate.format("D");
+
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
+        }
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+    });
+
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+    });
+  });
+
+  context("Revise Calibration completion date to 10 days later", () => {
+    it("Navigate to records", () => {
+      cy.navigToRecords();
+    });
+
+    it("Select PM document", () => {
+      cy.recFilterRecordListByNameAndStatus({ title: "Calibration document", status: "Released" });
+    });
+
+    it("Click revise on maintenance record", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Change 'Completion Date' to 10 days later", () => {
+      const completionDate = moment().tz("America/Los_Angeles").add(10, "days");
+      const month = completionDate.format("MMMM");
+      const day = completionDate.format("D");
+
+      cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+    });
+
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve record", () => {
+      cy.ebApprove();
+      cy.wait(10000);
+    });
+  });
+
+  context("Verify Due date calculation", () => {
+    it("Navigate to Equipment document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+        cy.visit(equipmentURL);
+      });
+    });
+
+    it("Check preventative maintenance due date calculation is 365 days from completion date", () => {
+      const prevMaintenanceComplianceDate = moment().tz("America/Los_Angeles")
+        .add(355, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(0).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`PMDone - Due Date: ${prevMaintenanceComplianceDate}`);
+        });
+    });
+
+    it("Check calibration due date calculation is 365 days from completion date", () => {
+      const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+        .add(375, "days")
+        .format("ddd, MMMM D, YYYY");
+      cy.get("[data-cy=\"maintenance.status\"]")
+        .eq(1).then(($el) => {
+          const text = $el.text().replace(/\u00a0/g, "");
+          expect(text).to.contain(`CALDue - Due Date: ${calibrationComplianceDate}`);
+        });
     });
   });
 });
