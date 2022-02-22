@@ -293,6 +293,7 @@
   "common.send.to.email": "Send To Email",
   "common.send.to.email.success": "File will be sent to your email shortly.",
   "common.send.to.email.error": "Action is not available at the moment, please try again later.",
+  "common.send.to.email.no.access": "You do not have access to this document for sending it to your email.",
   "common.powered.by": "Powered by",
   "common.create.new": "Create new",
   "common.released": "Released",

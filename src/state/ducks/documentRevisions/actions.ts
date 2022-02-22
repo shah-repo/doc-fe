@@ -8,7 +8,7 @@ import { ApiAction, Handlers } from "../../types";
 import { Audit, AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
 import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FBDocumentRevisionProps, FinalizeAndReleaseRequest, SecurityList, UpdateFormRequestBody } from "./types";
 
@@ -379,6 +379,15 @@ const fetchAvailableForms = (
     handlers,
   });
 
+const fetchAvailableParts = (
+  handlers: Handlers,
+): ApiAction<DocumentRevision[]> =>
+  apiActionWithCallbacks({
+    url: DOCUMENT_REVISION_PARTS_URL,
+    method: "get",
+    handlers,
+  });
+
 const createFaiInspection = (
   data: CreateInspectionBody,
   handlers: Handlers,
@@ -470,5 +479,6 @@ export default {
   exportToEmail,
   updateForm,
   getFormMappingTemplate,
+  fetchAvailableParts,
 };
 

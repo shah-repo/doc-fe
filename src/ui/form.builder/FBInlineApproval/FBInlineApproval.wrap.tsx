@@ -233,8 +233,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
         inlineApprovalState?.documentApi.loading
       );
 
-      disabled = disabled
-        || loading
+      disabled = loading
         || !(isOutput && Boolean(id))
         || document?.status === "RELEASED"
         || document?.status === "VOIDED"

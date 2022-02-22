@@ -36,6 +36,7 @@ import qs from "query-string";
 import { ComponentType, default as React, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -86,6 +87,7 @@ export function KendoGrid<T>({
   normalizrSchema,
   exportDataChanges,
 }: KendoPanelProps<T> & CreateExport) {
+  const history = useHistory();
   const intl = useIntl();
   const getTranslatedText = (key: string) =>
     key ? intl.formatMessage({ id: key }) : "";
@@ -357,7 +359,7 @@ export function KendoGrid<T>({
     if (canEdit(dataItem)) {
       urlPath = documentEditPath(dataItem.id, dataItem.document.id);
     }
-    window.open(urlPath, "_self");
+    history.push(urlPath);
   };
   const onDataStateChange = React.useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
