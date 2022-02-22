@@ -116,15 +116,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const [ModifiedOptions, setModifiedOptions] = useState(options);
 
   useEffect(() => {
-    if (loadAsyncState.status === "SUCCESS") {
+    if (loadAsyncState.status === AsyncStatus.Success) {
       filterOptions(null, inputValue);
     }
   }, [loadAsyncState]);
 
   useEffect(() => {
-    if (open) {
-      loadAction();
+    if (!open) {
+      return;
     }
+    loadAction();
   }, [open]);
 
   const filterOptions = (event: any, inputVal: any) => {
@@ -203,7 +204,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onClose={() => {
           setOpen(false);
         }}
-        loading={ !options.length && loading }
+        loading={ loading }
       />
     </Field>
   ); };
