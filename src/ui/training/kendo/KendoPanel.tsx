@@ -105,7 +105,7 @@ export function KendoPanel<T>({
       skip: 0,
       take: 25,
       group: [],
-      sort: [{ field: "document.trId", dir: "asc" }],
+      sort: [{ field: "trId", dir: "asc" }],
       // Initial filter descriptor
       filter: {
         logic: "and",
@@ -142,35 +142,6 @@ export function KendoPanel<T>({
     const requestConfig: AxiosRequestConfig = {
       method: "post",
       url: queryUrl,
-      // data: {
-      //   limit: dataState.take,
-      //   offset: dataState.skip,
-      //   filters: dataState.filter?.filters,
-      //   sort: dataState.sort,
-      //   schema: [
-      //     {
-      //       id: true,
-      //       trId: true,
-      //       trainingPlan: {
-      //         document: {
-      //           docId: true,
-      //         },
-      //         employee: {
-      //           user: {
-      //             name: true,
-      //           },
-      //         },
-      //       },
-      //       documentRevision: {
-      //         displayRevision: true,
-      //         name: true,
-      //       },
-      //       createdAt: true,
-      //       dueOn: true,
-      //       completedAt: true,
-      //     },
-      //   ],
-      // },
       data: {
         limit: dataState.take,
         offset: dataState.skip,
@@ -185,10 +156,7 @@ export function KendoPanel<T>({
       },
       cancelToken: call.token,
     };
-
     setIsLoading(true);
-    dispatch(tableSearchActions.setData([], tableName));
-
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -206,7 +174,7 @@ export function KendoPanel<T>({
       .request(requestConfig)
       .then((resp) => resp)
       .then(({ data }) => {
-        data.forEach((el) => {
+        data.results.forEach((el) => {
           el.trainingPlan.curriculumDocIds = Array.isArray(
             el.trainingPlan.curriculumDocIds
           )
