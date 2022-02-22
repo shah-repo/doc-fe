@@ -7,12 +7,12 @@ const FBAutocompleteAsync: React.FunctionComponent<FBAutocompleteAsyncProps> = (
   defaultValue,
   forceNewRender,
   ...props
-}) =>  (
+}) => (
   <>
     {!options && !forceNewRender && <FBAutocomplete {...props} disabled={true} />}
     {!options && forceNewRender && <FBAutocomplete {...props} disabled={true} />}
     {options && !forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
-    {options && forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }}  />}
+    {options && forceNewRender && <FBAutocomplete {...props} {...{ options, defaultValue }} />}
   </>
 );
 
