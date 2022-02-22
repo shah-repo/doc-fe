@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, filter, find, findIndex, get, isEmpty, map } from "lodash";
+import { cloneDeep, filter, find, findIndex, isEmpty, map } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -165,9 +165,7 @@ export function KendoPanel<T>({
 
   const queryApi = () => {
     const queryPayload =
-      cloneDeep(dataState.filter?.filters || []).filter(
-        (data) => get(data, "field") !== "displayStatus"
-      ) as any;
+      cloneDeep(dataState.filter?.filters || []);
 
     Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
       if (key === "effectiveDate") {
