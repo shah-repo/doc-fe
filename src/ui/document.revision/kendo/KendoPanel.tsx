@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, each, filter, find, findIndex, isEmpty, map } from "lodash";
+import { cloneDeep, filter, find, findIndex, get, isEmpty, map } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -163,49 +163,24 @@ export function KendoPanel<T>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.forceUpdate]);
 
-  const formatParams = () => {
-    const params: any = {};
-    if (!tableCriteria.queryDict) {
-      return;
-    }
+  const queryApi = () => {
+    const queryPayload =
+      cloneDeep(dataState.filter?.filters || []).filter(
+        (data) => get(data, "field") !== "displayStatus"
+      ) as any;
+
     Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
       if (key === "effectiveDate") {
         if (value.value) {
-          params[key] = value.value;
+          queryPayload.push({
+            field: key,
+            operator: "gt",
+            value: value.value,
+          });
         }
-      } else {
-        params[key] = value;
       }
     });
-    // params.dynamicParams = JSON.stringify(params.dynamicParams);
-    return params;
-  };
 
-  const formatParamsToKendoGridPayload = () => {
-    interface FilterObjKendo {
-      field: string;
-      operator: string;
-      value: string | boolean;
-    }
-    const kendoFilterObj: FilterObjKendo[] = [];
-    const params = formatParams();
-    const copyParams = cloneDeep(params);
-    delete copyParams["status[]"];
-    each(copyParams, (val, key) => {
-      if (key === "displayStatus" && !val) {
-        return;
-      }
-      kendoFilterObj.push({
-        field: key,
-        operator: "eq",
-        value: val  || "",
-      });
-    });
-    return kendoFilterObj;
-  };
-
-  const queryApi = () => {
-    const queryPayload = formatParamsToKendoGridPayload();
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {
@@ -434,7 +409,6 @@ export function KendoPanel<T>({
     );
     setDataState(dataState);
     tableCriteria.kendoConfig = JSON.stringify(dataState);
-    setFireAPI(true);
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -447,6 +421,7 @@ export function KendoPanel<T>({
         tableName
       )
     );
+    setFireAPI(true);
   };
   const onColumnResize = ({ end, columns }: GridColumnResizeEvent) => {
     hideColumnTitleOnResize();

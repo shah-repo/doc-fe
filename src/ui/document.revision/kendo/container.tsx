@@ -86,9 +86,10 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
     dispatch(documentTypeActions.loadList());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-  const documentTypeOptions = useSelector(
+  let documentTypeOptions = useSelector(
     documentTypeSelectors.getDocumentTypeOptionsForDocumentList
   );
+  documentTypeOptions = documentTypeOptions.map((data) => ({ ...data, text: data.text + "-" }));
   return (
     <KendoGridList
       editDocumentRevision={edit}
