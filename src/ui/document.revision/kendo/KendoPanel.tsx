@@ -222,7 +222,7 @@ export function KendoPanel<T>({
     }:${store.getState().auth.user.sessionId}`;
     setIsLoading(true);
     setNoDataMessage(<span />);
-    dispatch(tableSearchActions.setData([], tableName));
+    // dispatch(tableSearchActions.setData([], tableName));
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -254,18 +254,6 @@ export function KendoPanel<T>({
         if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
-        // }
-        // data = map(data, (record) =>
-        //   pick(record,  [
-        //     ...map(gridConfiguration.columns, "field"),
-        //     ...compact(map(gridConfiguration.columns, "tooltipField")),
-        //     "id",
-        //     "document.docId",
-        //     "document.id",
-        //     "owner.user.avatar",
-        //   ])
-        // );
-        // dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
       })
@@ -498,11 +486,9 @@ export function KendoPanel<T>({
   };
   const onDataStateChange = useCallback(
     ({ dataState }: GridDataStateChangeEvent) =>  {
-      const newDataState = processWithGroups(result, dataState);
       tableCriteria.kendoConfig = JSON.stringify(dataState);
       setDataState(dataState);
       setFireAPI(true);
-      setResultState(newDataState);
       // exportDataChanges &&
       //   exportDataChanges(
       //     process(gridData, {
