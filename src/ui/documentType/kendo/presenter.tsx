@@ -3,7 +3,6 @@ import { cloneDeep, has, map, startCase } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { docRevSch } from "../../../common/normalizrSchema";
 import {
   DocumentType,
   PageDetails,
@@ -115,7 +114,6 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           gridData={providedData}
           tableCriteria={tableCriteria}
           queryUrl={queryUrl}
-          normalizrSchema={[docRevSch]}
           exportDataChanges={handleExportData}
         />
       </Grid>

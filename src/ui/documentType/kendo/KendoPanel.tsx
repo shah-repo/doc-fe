@@ -79,7 +79,6 @@ export function KendoGrid<T>({
   tableCriteria,
   queryUrl = "",
   customDataSet,
-  normalizrSchema,
   exportDataChanges,
 }: KendoPanelProps<T> & CreateExport) {
   const intl = useIntl();
@@ -173,9 +172,6 @@ export function KendoGrid<T>({
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = false;
-    }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(
