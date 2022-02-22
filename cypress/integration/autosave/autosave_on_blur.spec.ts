@@ -477,7 +477,7 @@ context("Autosave on blur", () => {
                           id: receivableDocumentType[0].id,
                         }],
                         schema: [{
-                          index: 0,
+                          index: 1,
                           type: "poreceive",
                           label: "Receivable",
                           name: "receivable-kdptzei2",
