@@ -498,7 +498,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 
 Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  cy.progressBarShouldAppear();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
