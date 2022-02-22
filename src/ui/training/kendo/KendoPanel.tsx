@@ -134,6 +134,30 @@ export function KendoPanel<T>({
   ]);
 
   const queryApi = () => {
+    const queryPayload =
+      cloneDeep(dataState.filter?.filters || []);
+
+    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
+      if (key === DateFields.CREATED_AT) {
+        queryPayload.push({
+          field: key,
+          operator: "gt",
+          value: value.value,
+        });
+      } else if (key === DateFields.DUE_ON) {
+        queryPayload.push({
+          field: key,
+          operator: "gt",
+          value: value.value,
+        });
+      } else if (key === DateFields.COMPLETED_AT) {
+        queryPayload.push({
+          field: key,
+          operator: "gt",
+          value: value.value,
+        });
+      }
+    });
     const schemaField = getSchemaFromColumns(gridConfiguration.columns);
     call?.cancel();
 
@@ -145,7 +169,7 @@ export function KendoPanel<T>({
       data: {
         limit: dataState.take,
         offset: dataState.skip,
-        filters: dataState.filter?.filters,
+        filters: queryPayload,
         sort: dataState.sort,
         schema: schemaField,
       },
@@ -222,15 +246,11 @@ export function KendoPanel<T>({
         }
 
         const errorMessage: string = responseMessage || exception.message;
-
         dispatch(
           tableSearchActions.setSearchCriteria(
             {
-              queryDict: {},
+              ...tableCriteria,
               apiError: "Error: " + errorMessage,
-              forceUpdate: false,
-              kendoConfig: JSON.stringify(initialKendoConfig),
-              columnConfig: JSON.stringify(columnDefinitions),
             },
             tableName
           )
@@ -286,7 +306,6 @@ export function KendoPanel<T>({
       setCompletedOnSelectedOption(updatedFilter);
     }
     setKendoDropdownFilter(updatedFilter);
-    setFireAPI(true);
   };
   const setSearchStatus = (state?: ChangeRequestStatus, isClearAll?: boolean) => {
     dataState.filter = {
@@ -426,6 +445,7 @@ export function KendoPanel<T>({
         tableName
       )
     );
+    setFireAPI(true);
   };
 
   // Clear Filter Button Click
