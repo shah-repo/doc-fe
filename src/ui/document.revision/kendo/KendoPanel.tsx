@@ -283,11 +283,8 @@ export function KendoPanel<T>({
         dispatch(
           tableSearchActions.setSearchCriteria(
             {
-              queryDict: {},
+              ...tableCriteria,
               apiError: "Error: " + errorMessage,
-              forceUpdate: false,
-              kendoConfig: JSON.stringify(initialDataState),
-              columnConfig: JSON.stringify(columnDefinitions),
             },
             tableName
           )
