@@ -3,7 +3,6 @@ import { isEmpty, map, set, startCase } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
-import { docRevSch } from "../../../common/normalizrSchema";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -149,7 +148,6 @@ const KendoGridList: React.FunctionComponent<KendoGridProps> = ({
           tableCriteria={tableCriteria}
           queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
           customDataSet={customDataSet}
-          normalizrSchema={[docRevSch]}
           statuses={statuses}
           editDocumentRevision={editDocumentRevision}
           previewDocumentRevision={previewDocumentRevision}

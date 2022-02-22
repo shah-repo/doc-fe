@@ -57,7 +57,6 @@ export function KendoPanel<T>({
   statuses = [],
   customDataSet,
   tableName,
-  normalizrSchema,
   editDocumentRevision,
   previewDocumentRevision,
   documentTypeOptions,
