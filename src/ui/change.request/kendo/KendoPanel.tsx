@@ -68,7 +68,6 @@ export function KendoPanel<T>({
   tableName,
   tableCriteria,
   queryUrl = "",
-  normalizrSchema,
   currentUserEmail = "",
   exportDataChanges,
 }: KendoPanelProps<T>) {
@@ -195,10 +194,6 @@ export function KendoPanel<T>({
         }`,
       },
     };
-
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
-    }
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
