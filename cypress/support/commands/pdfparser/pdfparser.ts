@@ -1,15 +1,17 @@
 
 import { readFileSync } from "fs";
+import path from "path";
 import pdf from "pdf-parse";
 
-export async function pdfparser({ path, file }) {
-  let returnValue = null;
-  const parser = await pdf(readFileSync(path + "/" + file))
+export async function pdfparser({ directory, fileName }) {
+  const parser = await pdf(readFileSync(path.join(directory, fileName)))
     .catch(function(error) {
       cy.log(error);
     });
   if (parser) {
-    returnValue = parser;
+    return (parser);
   }
-  return returnValue;
+  else {
+    return null;
+  }
 }

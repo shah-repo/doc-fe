@@ -68,3 +68,26 @@ export async function getEmails(email, options?) {
   return mails;
 }
 
+export async function getEmailWithLongerOffset(email) {
+  let returnValue = null;
+  const dateOffset = (300 * 1000);
+  const myDate = new Date();
+  myDate.setTime(myDate.getTime() - dateOffset);
+  const mail = await gmail.check_inbox(
+    path.resolve(__dirname, "../../../credentials/credentials.json"),
+    path.resolve(__dirname, "../../../credentials/gmail_token.json"),
+    {
+      to: email,
+      wait_time_sec: 5,
+      max_wait_time_sec: 40,
+      include_body: true,
+      after: myDate,
+    }
+  );
+  if (mail) {
+    returnValue = mail[0].body.html;
+  }
+
+  return returnValue;
+}
+

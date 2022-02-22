@@ -2,7 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
-import { get, isEmpty } from "lodash";
+import { get, isEmpty, isNull } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -25,8 +25,6 @@ import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
-import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useCreateDocumentByTypeButton } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -270,25 +268,13 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
               return { [column.key]: get(e, "changeRequest.crId") || "" };
             case "status":
               return { [column.key]: get(e, "displayStatus") || "" };
-            case "precalc.revision": {
-              const versionNumber = generateRevisionNumber(
-                e?.revision,
-                e?.revisionStage,
-                e?.subRevision,
-                e?.revisionChangeType,
-                undefined,
-                checkIsDocumentRecord(e?.document?.documentType?.groupOptions)
-              );
-              return { [column.key]: versionNumber || "" };
-            }
-
             default:
               if (moment(columnValue, moment.ISO_8601, true).isValid()) {
                 return {
                   [column.key]: getFormattedDateString(columnValue, MomentFormats.MonthDateYear),
                 };
               } else {
-                return { [column.key]: columnValue };
+                return { [column.key]: isNull(columnValue) ? "" : columnValue };
               }
           }
         });
