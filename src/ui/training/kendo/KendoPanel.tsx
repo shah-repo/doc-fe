@@ -24,13 +24,10 @@ import {
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, findIndex, get, isEmpty, map, startCase } from "lodash";
 import "moment-timezone";
-import moment from "moment-timezone";
-import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
-import { TIME_ZONE } from "../../../common/utils/date";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
@@ -42,6 +39,7 @@ import {
 } from "../../../state/ducks/training/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
@@ -60,8 +58,6 @@ import {
   dueDateOption,
   trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
-import { CompletedOnDateOptions } from "../../document.revision/utils/types";
-// import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
@@ -73,10 +69,8 @@ let call: CancelTokenSource;
 export function KendoPanel<T>({
   gridConfiguration = { columns: [], pagerSettings: {}, groupableFields: [] },
   queryUrl = "",
-  gridData,
   tableName,
   tableCriteria,
-  normalizrSchema,
   exportDataChanges,
 }: KendoPanelProps<TrainingListData>) {
   const intl = useIntl();
@@ -139,80 +133,51 @@ export function KendoPanel<T>({
     tableCriteria.queryDict,
   ]);
 
-  const formatParams = () => {
-    const params: any = {};
-    if (
-      defaultTrainingItem?.field === DateFields.CREATED_AT &&
-      defaultTrainingItem.value
-    ) {
-      params.createdAtAfter = defaultTrainingItem.value;
-    }
-    if (
-      dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption.text === CompletedOnDateOptions.NEXT_WEEK
-    ) {
-      params.dueOnAfter = moment().tz(TIME_ZONE).toISOString();
-      params.dueOnBefore = dueDateSelectedOption.value;
-      params.isCompleted = false;
-    }
-    if (
-      dueDateSelectedOption?.field === DateFields.DUE_ON &&
-      dueDateSelectedOption.text === CompletedOnDateOptions.OVERDUE
-    ) {
-      params.dueOnBefore = dueDateSelectedOption.value;
-      params.isCompleted = false;
-    }
-
-    if (
-      completedOnSelectedOption?.field === DateFields.COMPLETED_AT &&
-      completedOnSelectedOption.value
-    ) {
-      params.completedAtAfter = completedOnSelectedOption.value;
-    }
-
-    params.dynamicParams = JSON.stringify(params.dynamicParams);
-    return params;
-  };
-
   const queryApi = () => {
+    const schemaField = getSchemaFromColumns(gridConfiguration.columns);
     call?.cancel();
 
     call = axios.CancelToken.source();
 
     const requestConfig: AxiosRequestConfig = {
       method: "post",
-      url: "training_record/search",
+      url: queryUrl,
+      // data: {
+      //   limit: dataState.take,
+      //   offset: dataState.skip,
+      //   filters: dataState.filter?.filters,
+      //   sort: dataState.sort,
+      //   schema: [
+      //     {
+      //       id: true,
+      //       trId: true,
+      //       trainingPlan: {
+      //         document: {
+      //           docId: true,
+      //         },
+      //         employee: {
+      //           user: {
+      //             name: true,
+      //           },
+      //         },
+      //       },
+      //       documentRevision: {
+      //         displayRevision: true,
+      //         name: true,
+      //       },
+      //       createdAt: true,
+      //       dueOn: true,
+      //       completedAt: true,
+      //     },
+      //   ],
+      // },
       data: {
         limit: dataState.take,
         offset: dataState.skip,
         filters: dataState.filter?.filters,
         sort: dataState.sort,
-        schema: [
-          {
-            id: true,
-            trId: true,
-            trainingPlan: {
-              document: {
-                docId: true,
-              },
-              employee: {
-                user: {
-                  name: true,
-                },
-              },
-            },
-            documentRevision: {
-              displayRevision: true,
-              name: true,
-            },
-            createdAt: true,
-            dueOn: true,
-            completedAt: true,
-          },
-        ],
+        schema: schemaField,
       },
-      params: formatParams(),
-      paramsSerializer: (params) => qs.stringify(params),
       headers: {
         Authorization: `bearer ${store.getState().auth.user.employeeId}:${
           store.getState().auth.user.sessionId
@@ -220,11 +185,6 @@ export function KendoPanel<T>({
       },
       cancelToken: call.token,
     };
-
-
-    if (normalizrSchema) {
-      requestConfig.headers["x-enlil-normalizr-response"] = true;
-    }
 
     setIsLoading(true);
     dispatch(tableSearchActions.setData([], tableName));
@@ -254,7 +214,7 @@ export function KendoPanel<T>({
             : "";
         });
         const newDataState = processWithGroups(data.results, dataState);
-        setDataState(dataState);
+        newDataState.total = data.total;
         setResultState(newDataState);
         exportDataChanges &&
             exportDataChanges(
@@ -268,7 +228,6 @@ export function KendoPanel<T>({
         if (newDataState.total === 0) {
           setNoDataMessage(<NoDataFound />);
         }
-        dispatch(tableSearchActions.setData(data, tableName));
         setIsLoading(false);
         setFireAPI(false);
       })
@@ -417,24 +376,10 @@ export function KendoPanel<T>({
   };
   const onDataStateChange = useCallback(
     (event: GridDataStateChangeEvent) => {
-      const newDataState = processWithGroups(result, event.dataState);
       tableCriteria.kendoConfig = JSON.stringify(event.dataState);
       setDataState(event.dataState);
       setFireAPI(true);
-      setResultState(newDataState);
-      // exportDataChanges &&
-      //       exportDataChanges(
-      //         process(gridData, {
-      //           skip: 0,
-      //           take: gridData.length,
-      //           sort: event.dataState.sort,
-      //           filter: event.dataState.filter,
-      //         }).data
-      //       );
       setKendoFilterStatus(tableCriteria);
-      // if (!newDataState.total) {
-      //   setNoDataMessage(<NoDataFound />);
-      // }
     },
     []
   );

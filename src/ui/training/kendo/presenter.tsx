@@ -8,7 +8,7 @@ import {
   getFormattedDateString,
   MomentFormats,
 } from "../../../common/utils/date";
-import { TRAINING_RECORD_ROOT_URL } from "../../../state/ducks/training/constants";
+import { TRAINING_RECORD_ROOT_URL_SEARCH } from "../../../state/ducks/training/constants";
 import { TrainingListData } from "../../../state/ducks/training/types";
 import { KendoGridConfiguration, KendoGridCriteria } from "../../components/common/kendo/types";
 import { TableDataProps } from "../../components/table/types";
@@ -20,7 +20,6 @@ import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;
-  gridData: TableDataProps<TrainingListData>;
   columns: KendoGridConfiguration;
   tableCriteria: KendoGridCriteria;
 }
@@ -28,7 +27,6 @@ interface Props {
 const KendoGridList: React.FunctionComponent<Props> = ({
   tableName,
   tableCriteria,
-  // gridData,
   columns,
 }) => {
   const classes = KendoGridStyles();
@@ -103,7 +101,7 @@ const KendoGridList: React.FunctionComponent<Props> = ({
           gridData={[]}
           tableName={tableName}
           tableCriteria={tableCriteria}
-          queryUrl={TRAINING_RECORD_ROOT_URL}
+          queryUrl={TRAINING_RECORD_ROOT_URL_SEARCH}
           normalizrSchema={[docRevSch]}
           exportDataChanges={handleExportData}
         />

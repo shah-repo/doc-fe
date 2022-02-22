@@ -11,14 +11,12 @@ type Props = RouteComponentProps;
 
 const KendoContainer: React.FunctionComponent<Props> = () => {
   const TABLE_NAME = "training";
-  // const tableData = useSelector(getTableData(TABLE_NAME));
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
 
   return (
     <KendoGridList
       tableName={TABLE_NAME}
       columns={gridConfiguration}
-      gridData={[]}
       tableCriteria={tableCriteria}
     />
   );
