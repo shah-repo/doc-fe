@@ -14,7 +14,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { cloneDeep, filter, find, findIndex, isEmpty, map } from "lodash";
+import { cloneDeep, each, filter, find, findIndex, isEmpty, map } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -187,15 +187,20 @@ export function KendoPanel<T>({
       operator: string;
       value: string | boolean;
     }
-    let kendoFilterObj: FilterObjKendo[] = [];
+    const kendoFilterObj: FilterObjKendo[] = [];
     const params = formatParams();
     const copyParams = cloneDeep(params);
     delete copyParams["status[]"];
-    kendoFilterObj = map(copyParams, (val, key) => ({
-      field: key,
-      operator: "eq",
-      value: val  || "",
-    }));
+    each(copyParams, (val, key) => {
+      if (key === "displayStatus" && !val) {
+        return;
+      }
+      kendoFilterObj.push({
+        field: key,
+        operator: "eq",
+        value: val  || "",
+      });
+    });
     return kendoFilterObj;
   };
 
