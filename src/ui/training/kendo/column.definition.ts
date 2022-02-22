@@ -59,6 +59,7 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
     orderIndex: 5,
+    extraFields: ["trainingPlan.employee.user.avatar", "trainingPlan.employee.user.initialColor"],
   },
   {
     field: DateFields.CREATED_AT,

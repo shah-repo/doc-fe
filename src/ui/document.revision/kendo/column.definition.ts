@@ -13,6 +13,7 @@ const columns: KendoColumn[] = [
     groupable: false,
     showColumnMenu: true,
     orderIndex: 1,
+    extraFields: ["id", "document.id"],
   },
   {
     field: "displayRevision",
@@ -62,6 +63,7 @@ const columns: KendoColumn[] = [
     cell: KendoCellTemplates.USER_AVATAR,
     showColumnMenu: true,
     orderIndex: 5,
+    extraFields: ["owner.user.avatar", "owner.user.initialColor"],
   },
   {
     field: "changeRequest.crId",

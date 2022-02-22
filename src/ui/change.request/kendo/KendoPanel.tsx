@@ -168,13 +168,7 @@ export function KendoPanel<T>({
   }, [tableCriteria.forceUpdate]);
 
   const queryApi = () => {
-    // const schemaField = [
-    //   ...map(gridConfiguration.columns, "field"),
-    //   ...compact(map(gridConfiguration.columns, "tooltipField")),
-    // ];
-    // TODO: Check if ID is required
     const schemaField = getSchemaFromColumns(gridConfiguration.columns);
-    schemaField[0].id = true;
     call?.cancel();
     call = axios.CancelToken.source();
     const requestConfig: AxiosRequestConfig = {

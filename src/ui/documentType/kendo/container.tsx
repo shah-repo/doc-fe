@@ -139,7 +139,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       operator={"gt"}
     />
   );
-
+  const ownerFieldsMapping = {
+    "owner.user.name": ["owner.user.avatar", "owner.user.initialColor"],
+  };
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
     let filterCellTemplate: ((props: GridFilterCellProps) => JSX.Element) | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
@@ -174,6 +176,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       showColumnMenu: true,
       filterCell: filterCellTemplate,
       key: { index },
+      extraFields: ["id", "document.id", ...ownerFieldsMapping[upDateField] || []],
     };
   });
   return (

@@ -28,6 +28,7 @@ import {
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
+import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { DateDropdownFilterCell } from "../../components/common/kendo.column.templates/DateDropdownFilterCell";
 import { ColumnMenu } from "../../components/common/kendo.column.templates/kendo.column.menu.templates/ColumnMenu";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
@@ -198,33 +199,7 @@ export function KendoPanel<T>({
     return kendoFilterObj;
   };
 
-  const getSchema = (columns: KendoColumn[]) => {
-    console.log("debug :: columns :: ", columns);
-    return [{
-      id: true,
-      displayRevision: true,
-      displayStatus: true,
-      name: true,
-      effectiveDate: true,
-      owner: {
-        user: {
-          name: true,
-          avatar: true,
-        },
-      },
-      document: {
-        docId: true,
-        id: true,
-        documentType: {
-          documentTypeAcronym: true,
-          documentTypeName: true,
-        },
-      },
-      changeRequest: {
-      },
-    }]; };
   const queryApi = () => {
-    console.log("debug :: queryApi :: ");
     const queryPayload = formatParamsToKendoGridPayload();
     call?.cancel();
     call = axios.CancelToken.source();
@@ -237,12 +212,11 @@ export function KendoPanel<T>({
         offset: dataState.skip,
         filters: queryPayload,
         sort: dataState.sort,
-        schema: getSchema(gridConfiguration.columns),
+        schema: getSchemaFromColumns(gridConfiguration.columns),
       },
       headers: {},
       cancelToken: call.token,
     };
-    console.log("debug :: requestConfig :: ", requestConfig);
     requestConfig.headers.Authorization = `bearer ${
       store.getState().auth.user.employeeId
     }:${store.getState().auth.user.sessionId}`;
@@ -337,8 +311,6 @@ export function KendoPanel<T>({
     const dataStateOne = cloneDeep(dataState);
     dataStateOne.skip = 0;
     const newDataState = process(data, dataStateOne);
-    console.log("debug :: newDataState :: ", newDataState);
-    console.log("debug :: dataState :: ", dataState);
     setGroupIds({ data: newDataState.data, group: dataState.group });
     return newDataState;
   };

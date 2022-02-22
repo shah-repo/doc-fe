@@ -1,4 +1,5 @@
-import { each, indexOf } from "lodash";
+import { chain, set } from "lodash";
+import { KendoColumn } from "../../components/common/kendo/types";
 
 export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
   if (!text) {
@@ -12,38 +13,16 @@ export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
   return text;
 };
 
-
-const parseDotNotation = (dottedString, value, object) => {
-  let currentObj = object;
-  const objectProperties = dottedString.split(".");
-  let i;
-  const l = Math.max(1, objectProperties.length - 1);
-  let key;
-  for (i = 0; i < l; ++i) {
-    key = objectProperties[i];
-    currentObj[key] = currentObj[key] || {};
-    currentObj = currentObj[key];
-  }
-  currentObj[objectProperties[i]] = value;
-  delete object[dottedString];
-};
-
-const expandObject = (obj) => {
-  each(obj, (value, key) => {
-    if (indexOf(key, ".") !== -1) {
-      parseDotNotation(key, obj[key], obj);
-    }
-  });
-  return obj;
-};
-
-export const getSchemaFromColumns = (columns) => {
+export const getSchemaFromColumns = (columns: KendoColumn[]) => {
   const schemaObjFieldsObj = {};
-  each(columns, (column) => {
-    schemaObjFieldsObj[column.field] = true;
-    if (column.tooltipField) {
-      schemaObjFieldsObj[column.tooltipField] = true;
-    }
+  const fields = chain(columns)
+    .map((o) => [o.field, o.tooltipField, o.extraFields])
+    .flattenDeep()
+    .compact()
+    .sort()
+    .value();
+  fields.forEach((field) => {
+    set(schemaObjFieldsObj, field.toString(), true);
   });
-  return [expandObject(schemaObjFieldsObj)];
+  return [schemaObjFieldsObj];
 };

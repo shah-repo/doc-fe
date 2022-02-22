@@ -37,6 +37,7 @@ export interface KendoColumn {
   resizable?: boolean;
   showTooltip?: boolean;
   tooltipField?: string;
+  extraFields?: string[];
 }
 
 export interface DropdownFilterDefaultItem {
