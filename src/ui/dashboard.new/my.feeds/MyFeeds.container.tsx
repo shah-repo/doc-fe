@@ -25,10 +25,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const myFeedListPageInfo = useSelector(dashboardMyFeedsSelectors.myFeedListPageInfo);
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList({
-        offset: myFeedListPageInfo.offset,
-        limit: myFeedListPageInfo.limit,
-      }));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem

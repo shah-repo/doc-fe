@@ -606,7 +606,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             }
           })}
       </List>
-      <Button onClick={() => onLoadMoreData()} color="primary" disabled={feedItems.page_total === 1}>
+      <Button onClick={() => onLoadMoreData()} className={classes.loadButton} disabled={feedItems.page_total === 1}>
         <Text translation="dashboard.load.more" />
       </Button>
     </Box>
