@@ -156,7 +156,8 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -498,7 +499,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 
 Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  cy.progressBarShouldAppear();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

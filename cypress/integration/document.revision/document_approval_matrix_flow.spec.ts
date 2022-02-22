@@ -721,7 +721,6 @@ context("Document Approval Matrix Flow", () => {
   context("No validation error, submission is successful", () => {
     it("Check returned errors are empty", () => {
       SystemRequirement("REQ-0010");
-
       cy.checkToastMessage({ exists: false });
     });
   });
@@ -739,32 +738,6 @@ context("Document Approval Matrix Flow", () => {
   context("Approve document in review", () => {
     it(`approve document`, () => {
       cy.arApproveARFromDashboard();
-    });
-  });
-
-  context("Rename document type", () => {
-    let newDocTypes: any[] = [];
-
-    it("[API]Fetch Document Types", (done: any) => {
-      cy.drGetDocumentType({
-        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
-        employeeId: adminEmployee.id,
-      }).then((response: any) => {
-        newDocTypes = response || [];
-        done();
-      });
-    });
-
-    it(`change name '${docTypeOne}' to '${newDocTypeOne}'`, () => {
-    // SystemRequirement("REQ-0430");
-      cy.drUpdateDocumentTypeName({
-        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
-        employeeId: adminEmployee.id,
-        id: newDocTypes.find((el) => el.documentTypeName === docTypeOne).id,
-        payload: {
-          documentTypeName: newDocTypeOne,
-        },
-      });
     });
   });
 
@@ -789,21 +762,6 @@ context("Document Approval Matrix Flow", () => {
 
     it("Revise document", () => {
       cy.drClickReviseDocument();
-    });
-  });
-
-  context("Check edited document type is displayed", () => {
-    const documentTypes: string[] = [];
-    it("Approval Matrix document types", () => {
-      cy.get(`[data-cy="documentTypeApprovalMatrix"]`).each(($el) => {
-        documentTypes.push($el.get(0).innerText);
-      });
-    });
-
-    it(`find changed document type '${newDocTypeOne}'`, () => {
-      SystemRequirement("REQ-0530");
-      const exists = documentTypes.includes(newDocTypeOne);
-      cy.wrap(exists).should("eq", true);
     });
   });
 });
