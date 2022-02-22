@@ -1,6 +1,6 @@
 import { createFilterOptions } from "@material-ui/lab/Autocomplete";
 import { debounce, filter, find, get, includes, isEmpty, isObject, isString, isUndefined, map } from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBAutocompleteProps, FBOptionValueType } from "..";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -46,6 +46,10 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
     const intl = useIntl();
 
     const [modifiedOptions, setModifiedOptions] = useState(options);
+
+    useEffect(() => {
+      setModifiedOptions(options);
+    }, [options]);
 
     function getDefault() {
       function  sliceValue(value: any) {
@@ -131,6 +135,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       filterOptions,
       debounceFilterInput,
       groupBy,
+      groupByKey,
       options,
       modifiedOptions,
       defaultValue,

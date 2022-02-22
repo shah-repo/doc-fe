@@ -29,6 +29,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   placeholder,
   disabled,
   loading,
+  groupByKey,
   value,
   inputStyle = {},
   ...props
@@ -65,7 +66,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           }}
           options={modifiedOptions}
           onInputChange={debounceFilterInput}
-          ListboxComponent={ListBoxComponent}
+          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">
