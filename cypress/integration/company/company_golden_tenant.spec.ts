@@ -1675,7 +1675,7 @@ context("Create company with golden tenant", () => {
     it("Document Control", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(1).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(1)
-        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+        .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
 
     it("Equipment", () => {
@@ -1705,19 +1705,19 @@ context("Create company with golden tenant", () => {
     it("Manfacturing", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(6).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(6)
-        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+        .realHover().wait(1000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
 
     it("Group Management", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(7).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(7)
-        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+        .realHover().wait(1500).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
 
     it("User Management", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(8).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(8)
-        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+        .realHover().wait(2000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
 
     it("Verify the profile dropdown", () => {
@@ -1727,7 +1727,7 @@ context("Create company with golden tenant", () => {
     it("Training", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9)
-        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+        .realHover().wait(3000).should("have.css", "background-color", "rgb(50, 66, 78)");
     });
   });
 
