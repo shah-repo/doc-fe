@@ -8,7 +8,11 @@ const getLoadMyFeedsListAsyncInfo = (
   state: ApplicationState,
 ): AsyncState => state.dashboardNew.myFeeds.loadMyFeedsListAsyncInfo;
 
+const myFeedListPageInfo = (state: ApplicationState) =>
+  state.dashboardNew.myFeeds.myFeedListPageInfo;
+
 export default {
   getLoadMyFeedsListAsyncInfo,
   myFeedsList,
+  myFeedListPageInfo,
 };

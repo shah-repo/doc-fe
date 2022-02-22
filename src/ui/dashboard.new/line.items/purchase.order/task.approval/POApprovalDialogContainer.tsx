@@ -33,7 +33,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const async = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
     onError: (error) => {
       toastError(error as string);

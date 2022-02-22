@@ -25,7 +25,7 @@ const POApproveOrReject: React.FunctionComponent<Props> = ({
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
   const async = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
     onError: (error) => {
       toastError(error as string);

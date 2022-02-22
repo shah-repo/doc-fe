@@ -22,9 +22,13 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo
   );
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
+  const myFeedListPageInfo = useSelector(dashboardMyFeedsSelectors.myFeedListPageInfo);
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({
+        offset: myFeedListPageInfo.offset,
+        limit: myFeedListPageInfo.limit,
+      }));
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
@@ -37,12 +41,25 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const unPinLineItem = (pinnedItemId: string) => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
+
+  const async = useAsync();
+  const onPageChange = () => {
+    const updatedPageSize = {
+      offset: myFeedListPageInfo.offset + 25,
+      limit: myFeedListPageInfo.limit + 25,
+    };
+    async.start(loadMyFeeds, updatedPageSize);
+    dispatch(
+      dashboardMyFeedsActions.myFeedsListPageInfo(updatedPageSize)
+    );
+  };
   return (
     <MyFeedsLineItemPresenter
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem,
       }}
+      onLoadMoreData={onPageChange}
     />
   );
 };

@@ -100,7 +100,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     }
   };
   return (

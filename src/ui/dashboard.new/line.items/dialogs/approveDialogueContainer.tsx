@@ -51,7 +51,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       } else {
         transitionDialog.close();
       }
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
     onError: (error) => {
       transitionDialog.close();

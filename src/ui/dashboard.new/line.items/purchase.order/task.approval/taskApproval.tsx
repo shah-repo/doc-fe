@@ -6,7 +6,7 @@ import {
   Link,
   ListItemAvatar,
   ListItemText,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -128,7 +128,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
     onError: (error) => {
       toastError(error as string);
