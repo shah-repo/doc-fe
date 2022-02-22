@@ -264,7 +264,8 @@ export function KendoGrid<T>({
   };
   useEffect(() => {
     if (didMount) {
-      queryApi();
+      setDataState(initialDataState);
+      queryApi(initialDataState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryDict, didMount, tableName]);
