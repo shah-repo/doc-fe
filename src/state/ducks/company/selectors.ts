@@ -12,7 +12,6 @@ const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.t
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
   state.company.companyMine.helloSignIntegrationEnabled;
-const isDropboxEnabled = (state: ApplicationState) => state.company.companyMine.dropboxEnabled;
 
 const getWhiteLabeling = createSelector(
   getSelectedCompany,
@@ -48,7 +47,6 @@ const getNavigationTitle = (state: ApplicationState, category: string) => {
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
-  isDropboxEnabled,
   slackTeamId,
   getSelectedCompany,
   companyIdSelector,

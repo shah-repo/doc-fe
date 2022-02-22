@@ -26,9 +26,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   errorClass: {
     color: Colors.red,
   },
-  dropboxButton: {
-    display: "flex",
-  },
 }));
 
 export default KendoGridStyles;

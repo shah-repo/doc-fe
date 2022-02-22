@@ -44,7 +44,6 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
-import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell.template/CommandCell";
 import { DropdownFilterCell } from "./cell.template/DropdownFilterCell";
 import { EmailCell } from "./cell.template/EmailCell";
@@ -64,10 +63,6 @@ export function KendoPanel<T>({
   tableCriteria,
   queryUrl = "",
   onSelect,
-  hasDropboxPermission,
-  dropboxAsync,
-  enableDropboxAction,
-  isCompanyDropboxEnabled,
 }: UserManagementProps<Partial<GetEmployeeResponse>>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
@@ -513,12 +508,7 @@ export function KendoPanel<T>({
             <Text translation="navigation.user.management" />
           </Typography>
         </Grid>
-        <Grid item className={classes.dropboxButton}>
-          <EnableDropboxButton
-            shouldDisplayButton={hasDropboxPermission}
-            {...{ dropboxAsync, enableDropboxAction }}
-            disabled={Boolean(isCompanyDropboxEnabled)}
-          />
+        <Grid item>
           <AddEmployeeContainer addGroup={addNew} />
         </Grid>
       </Grid>
