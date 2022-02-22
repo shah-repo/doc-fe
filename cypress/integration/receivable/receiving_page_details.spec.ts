@@ -495,8 +495,7 @@ context("Receivable test with Page Details", () => {
                 outputDocumentTypes: [{
                   id: supplierDocumentType[0].id,
                 }],
-                schema: [{
-                }],
+                schema: [],
               },
 
             },
