@@ -10,6 +10,7 @@ import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
+import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
 import { StatusFilterTemplate } from "./filter.template/StatusFilterTemplate";
 import { KendoPanelProps } from "./interfaces";
 import { ProductsLoader } from "./ProductsLoader";
@@ -47,7 +48,7 @@ export function KendoPanel({
   };
 
   // Column Menu Filters
-  const StatusFilterTempalte = (props: GridFilterCellProps) => (
+  const StatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
       data={statuses as DocumentRevisionStatus[]}
@@ -56,8 +57,16 @@ export function KendoPanel({
       })}
     />
   );
-  const TypeFilterTemplate = (props: GridFilterCellProps) => (
+  const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+  const EffectiveDate = (props: GridFilterCellProps) => (
+    <EffectiveDateFilterTemplate
       {...props}
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
@@ -66,8 +75,9 @@ export function KendoPanel({
   );
 
   const filterCellMapping = {
-    "displayStatus": StatusFilterTempalte,
-    "document.documentType.documentTypeAcronym": TypeFilterTemplate,
+    "displayStatus": StatusFilter,
+    "document.documentType.documentTypeAcronym": TypeFilter,
+    "effectiveDate": EffectiveDate,
   };
 
   const renderKendoColumns = (
@@ -109,7 +119,14 @@ export function KendoPanel({
           {renderKendoColumns(width)}
         </Grid>
 
-        {dataState && <ProductsLoader dataState={dataState} onDataReceived={dataReceived} schema={schema} />}
+        {dataState && (
+          <ProductsLoader
+            dataState={dataState}
+            onDataReceived={dataReceived}
+            schema={schema}
+            tableName={tableName}
+          />
+        )}
       </KendoGlobalization>
     </>
   );

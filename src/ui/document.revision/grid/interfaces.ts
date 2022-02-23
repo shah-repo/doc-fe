@@ -41,6 +41,7 @@ export interface ProductsLoaderProps {
   dataState: State;
   onDataReceived: (products: DataResult) => void;
   schema: object;
+  tableName: string;
 }
 
 export interface KendoTableSearchQueryType {

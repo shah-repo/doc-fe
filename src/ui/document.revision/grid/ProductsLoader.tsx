@@ -1,24 +1,36 @@
 import { toODataString } from "@progress/kendo-data-query";
 import { AxiosRequestConfig } from "axios";
+import { filter, find } from "lodash";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import apiClient from "../../../state/apiClient";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { store } from "../../../state/store";
+import { documentRevisionEffectiveDateOption } from "../utils/helpers";
 import { ProductsLoaderProps } from "./interfaces";
 
-export const ProductsLoader = ({ dataState, onDataReceived, schema }: ProductsLoaderProps) => {
+export const ProductsLoader = ({ dataState, onDataReceived, schema, tableName }: ProductsLoaderProps) => {
+  const data = {
+    documentTypeWithoutCategory: "true",
+    limit: dataState.take,
+    offset: dataState.skip,
+    filters: dataState.filter?.filters,
+    sort: dataState.sort,
+    schema,
+  } as any;
+  const prepareExtraKeys = () => {
+    const effectiveDateOptions = documentRevisionEffectiveDateOption();
+    const field = find(data.filters, { field: "effectiveDate" });
+    if (field) {
+      data.effectiveDate = find(effectiveDateOptions, { text: field.value })?.value;
+      data.filters = filter(data.filters, (el) => el.field !== "effectiveDate");
+    }
+  };
+  prepareExtraKeys();
   const requestConfig: AxiosRequestConfig = {
     method: "post",
     url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
-    data: {
-      documentTypeWithoutCategory: "true",
-      limit: dataState.take,
-      offset: dataState.skip,
-      filters: dataState.filter?.filters,
-      sort: dataState.sort,
-      schema,
-    },
+    data,
     headers: {},
   };
   requestConfig.headers.Authorization = `bearer ${
