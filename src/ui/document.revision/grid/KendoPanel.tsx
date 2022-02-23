@@ -4,8 +4,10 @@ import {
 } from "@progress/kendo-react-grid";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
+import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -25,7 +27,7 @@ export function KendoPanel({
 }: KendoPanelProps) {
   console.log("debug :: KendoPanel");
   console.log("debug :: columns", columns);
-
+  const dispatch = useDispatch();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(tableCriteria.queryDict.dataState);
@@ -41,6 +43,17 @@ export function KendoPanel({
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
     setDataState(e.dataState);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            dataState: e.dataState,
+          },
+        },
+        tableName
+      )
+    );
   };
 
   const dataReceived = (products: DataResult) => {

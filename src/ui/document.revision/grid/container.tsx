@@ -39,6 +39,11 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       notGroupOptions
     );
 
+  useEffect(() => {
+    getStatuses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const setSearchStatus = (
     dataState: DataStateProps,
   ) => {
@@ -56,7 +61,6 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    getStatuses();
     if (isEmpty(tableCriteria.queryDict)) {
       const dataState: DataStateProps = {
         filter: {
@@ -65,7 +69,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
             {
               field: "displayStatus",
               operator: "eq",
-              value: "Released" as DocumentRevisionStatus,
+              value: "Released",
             },
           ],
         },
