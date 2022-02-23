@@ -23,6 +23,7 @@ import {
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { cloneDeep, find, findIndex, get, isEmpty, map, startCase } from "lodash";
+import moment from "moment";
 import "moment-timezone";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -52,12 +53,13 @@ import { DateFilterStateChangeProps, DropdownFilterDefaultItem, KendoColumn, Ken
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import {
   documentRevisionEffectiveDateOption,
   dueDateOption,
   trainingCompletedOnDateOption,
 } from "../../document.revision/utils/helpers";
+import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import useDialog from "../../hooks/useDialog";
 import useDidMount from "../../hooks/useDidMount";
 import TrainingDetails from "../details/TrainingDetails";
@@ -105,7 +107,8 @@ export function KendoPanel<T>({
       skip: 0,
       take: 25,
       group: [],
-      sort: [{ field: "trId", dir: "asc" }],
+      // sort: [{ field: "trId", dir: "asc" }],
+      sort: [],
       // Initial filter descriptor
       filter: {
         logic: "and",
@@ -136,26 +139,18 @@ export function KendoPanel<T>({
   const queryApi = () => {
     const queryPayload =
       cloneDeep(dataState.filter?.filters || []);
-
-    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
+    const queryDict: TableSearchQueryType = {};
+    tableCriteria.queryDict && Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
       if (key === DateFields.CREATED_AT) {
-        queryPayload.push({
-          field: key,
-          operator: "gt",
-          value: value.value,
-        });
+        queryDict.createdAtAfter = value.value;
       } else if (key === DateFields.DUE_ON) {
-        queryPayload.push({
-          field: key,
-          operator: "gt",
-          value: value.value,
-        });
+        queryDict.dueOnBefore = value.value;
+        if (value.text === CompletedOnDateOptions.NEXT_WEEK) {
+          queryDict.dueOnAfter = moment().toISOString();
+        }
+        queryDict.isCompleted = "false";
       } else if (key === DateFields.COMPLETED_AT) {
-        queryPayload.push({
-          field: key,
-          operator: "gt",
-          value: value.value,
-        });
+        queryDict.completedAtAfter = value.value;
       }
     });
     const schemaField = getSchemaFromColumns(gridConfiguration.columns);
@@ -167,6 +162,7 @@ export function KendoPanel<T>({
       method: "post",
       url: queryUrl,
       data: {
+        ...queryDict,
         limit: dataState.take,
         offset: dataState.skip,
         filters: queryPayload,
