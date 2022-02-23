@@ -258,7 +258,7 @@ context("Receivable list test", () => {
                           deleteDisabled: true,
                           name: "fb-approvals-kn7fbu5l",
                           uniqueSchemaItem: true,
-                          index: 0,
+                          index: 1,
                         }],
                       },
                     },
