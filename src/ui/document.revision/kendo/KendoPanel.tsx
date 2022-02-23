@@ -41,7 +41,7 @@ import { DateFilterStateChangeProps, KendoColumn, KendoPanelProps } from "../../
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import { TablePanelStateProps } from "../../components/table/types";
+import { TablePanelStateProps, TableSearchQueryType } from "../../components/table/types";
 import useDidMount from "../../hooks/useDidMount";
 import {
   canEditDocumentRevision,
@@ -166,16 +166,10 @@ export function KendoPanel<T>({
   const queryApi = () => {
     const queryPayload =
       cloneDeep(dataState.filter?.filters || []);
-
+    const queryDict: TableSearchQueryType = { documentTypeWithoutCategory: "true" };
     Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
       if (key === "effectiveDate") {
-        if (value.value) {
-          queryPayload.push({
-            field: key,
-            operator: "gt",
-            value: value.value,
-          });
-        }
+        queryDict[key] = value.value;
       }
     });
 
@@ -185,7 +179,7 @@ export function KendoPanel<T>({
       method: "post",
       url: queryUrl,
       data: {
-        documentTypeWithoutCategory: "true",
+        ...queryDict,
         limit: dataState.take,
         offset: dataState.skip,
         filters: queryPayload,
