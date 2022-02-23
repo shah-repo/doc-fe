@@ -140,16 +140,18 @@ export function KendoPanel<T>({
       cloneDeep(dataState.filter?.filters || []);
     const queryDict: TableSearchQueryType = {};
     tableCriteria.queryDict && Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
-      if (key === DateFields.CREATED_AT) {
-        queryDict.createdAtAfter = value.value;
-      } else if (key === DateFields.DUE_ON) {
-        queryDict.dueOnBefore = value.value;
-        if (value.text === CompletedOnDateOptions.NEXT_WEEK) {
-          queryDict.dueOnAfter = moment().toISOString();
+      if (value?.value) {
+        if (key === DateFields.CREATED_AT) {
+          queryDict.createdAtAfter = value.value;
+        } else if (key === DateFields.DUE_ON) {
+          queryDict.dueOnBefore = value.value;
+          if (value.text === CompletedOnDateOptions.NEXT_WEEK) {
+            queryDict.dueOnAfter = moment().toISOString();
+          }
+          queryDict.isCompleted = "false";
+        } else if (key === DateFields.COMPLETED_AT) {
+          queryDict.completedAtAfter = value.value;
         }
-        queryDict.isCompleted = "false";
-      } else if (key === DateFields.COMPLETED_AT) {
-        queryDict.completedAtAfter = value.value;
       }
     });
     const schemaField = getSchemaFromColumns(gridConfiguration.columns);
