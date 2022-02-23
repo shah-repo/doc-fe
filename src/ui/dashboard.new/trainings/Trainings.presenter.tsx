@@ -1,6 +1,7 @@
 import { Box, Button, Divider, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
+import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -69,9 +70,14 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
           }
         })}
       </List>
-      <Button onClick={() => onLoadMoreData()}className={classes.loadButton} variant="outlined" disabled={trainingItems.page_total === 1}>
-        <Text translation="dashboard.load.more"></Text>
-      </Button>
+      <Box style={{ float: "right" }}>
+        <Button onClick={() => onLoadMoreData()} className={classes.loadButton}  disabled={trainingItems.page_total === 1}>
+          <Text translation="dashboard.load.more"></Text>
+          <div style={{ marginRight: 10 }}></div>
+          <LoadMore />
+        </Button>
+      </Box>
+
     </Box>
   );
   const renderNoPendingActions = trainingItems.total === 0 && (
