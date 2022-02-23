@@ -329,6 +329,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/APPROVAL MATRIX/);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
 
         expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
@@ -523,6 +524,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         expect(el).match(/APPROVAL MATRIX/);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
 
         expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
@@ -1515,8 +1517,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${ARDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
 
         expect(el).match(/Role One/);
@@ -1678,8 +1682,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${ARDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
 
         expect(el).match(/Role One/);
@@ -1942,8 +1948,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         RegExp( `Description\n${ARDocument}`, "gi" );
         expect(el).match(tmpRegex);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
 
+        // eslint-disable-next-line max-len
         expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
 
         expect(el).match(/Role One/);
