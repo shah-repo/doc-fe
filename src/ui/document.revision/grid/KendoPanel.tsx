@@ -44,15 +44,10 @@ export function KendoPanel<T>() {
           data={products}
           onDataStateChange={dataStateChange}
         >
-          <Column field="ProductID" filter="numeric" title="Id" />
-          <Column field="ProductName" title="Name" />
-          <Column
-            field="UnitPrice"
-            filter="numeric"
-            format="{0:c}"
-            title="Price"
-          />
-          <Column field="UnitsInStock" filter="numeric" title="In stock" />
+          <Column field="document.docId" title="Doc ID" />
+          <Column field="displayRevision" title="Display Revision" />
+          <Column field="displayStatus" title="Status"/>
+          <Column field="owner.user.name" title="Owner" />
         </Grid>
 
         <ProductsLoader dataState={dataState} onDataReceived={dataReceived} />
