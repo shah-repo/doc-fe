@@ -18,7 +18,11 @@ const loadTrainingStatsList = (): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
-    method: "get",
+    data: {
+      offset: 0,
+      limit: 50,
+    },
+    method: "post",
     asyncType: TRAINING_STATS_LIST_ASYNC,
     onSuccess: (trainingStats, dispatch) => {
       dispatch(trainingStatsList(trainingStats));

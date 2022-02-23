@@ -1,4 +1,4 @@
-import { pick } from "lodash";
+import { get, pick } from "lodash";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { TrainingStatusTypes } from "./types";
@@ -6,18 +6,26 @@ import { TrainingStatusTypes } from "./types";
 const trainingStats = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStats;
 
-const overdueTrainingData = (state: ApplicationState) =>
-  state.dashboardNew.trainingStats.trainingStats.filter((item) => {
+const overdueTrainingData = (state: ApplicationState) => {
+  const results = get(state.dashboardNew.trainingStats.trainingStats, "results");
+  results.filter((item) => {
     // taking only required data of user
-    pick(item.user, ["name", "avatar", "initialColor"]);
+    item.user = pick(item.user, ["name", "avatar", "initialColor"]);
     return item.status === TrainingStatusTypes.OVERDUE;
   });
-const dueTrainingData = (state: ApplicationState) =>
-  state.dashboardNew.trainingStats.trainingStats.filter((item) => {
+  return results;
+};
+
+const dueTrainingData = (state: ApplicationState) => {
+  const results = get(state.dashboardNew.trainingStats.trainingStats, "results");
+  results.filter((item) => {
     // taking only required data of user
-    pick(item.user, ["name", "avatar", "initialColor"]);
+    item.user = pick(item.user, ["name", "avatar", "initialColor"]);
     return item.status === TrainingStatusTypes.DUE;
   });
+  return results;
+};
+
 
 const getLoadTrainingStatsListAsyncInfo = (
   state: ApplicationState
