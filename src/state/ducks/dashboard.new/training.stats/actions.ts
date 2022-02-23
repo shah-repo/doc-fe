@@ -17,13 +17,14 @@ const trainingStatsList = (
   payload: trainingStats,
 });
 
-const loadTrainingStatsList = (): ApiAction<TrainingStats[]> => {
+const loadTrainingStatsList = (payload): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
     data: {
       offset: 0,
       limit: 50,
+      filters: payload?.filters,
     },
     method: "post",
     asyncType: TRAINING_STATS_LIST_ASYNC,

@@ -13,16 +13,7 @@ import { styles } from "./TrainingStats.styles";
 
 const TrainingStatsContainer: React.FunctionComponent = () => {
   const classes = styles();
-
-  const loadTrainingStatsList = useActionCreator(
-    trainingStatsActions.loadTrainingStatsList
-  );
-
-  const loadTrainingStatsListAsyncInfo = useSelector(
-    trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
-  );
-
-  // Chart
+  // Training Chart
   const loadTrainingStatsChart = useActionCreator(
     trainingStatsActions.loadTrainingStatsChart
   );
@@ -43,14 +34,8 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
         startActionOnMount={true}>
         <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
       </AsyncGate>
-      <AsyncGate
-        asyncAction={loadTrainingStatsList}
-        asyncState={loadTrainingStatsListAsyncInfo}
-        startActionOnMount={true}
-      >
 
-        <TrainingLineItems tabValue={tabValue} />
-      </AsyncGate>
+      <TrainingLineItems tabValue={tabValue} />
     </Box>
   );
 };
