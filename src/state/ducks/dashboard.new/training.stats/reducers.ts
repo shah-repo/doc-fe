@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
-import { TRAINING_STATS_CHART, TRAINING_STATS_CHART_ASYNC, TRAINING_STATS_LIST, TRAINING_STATS_LIST_ASYNC } from "./constants";
-import { TrainingStatsChartAction, TrainingStatsChartState, TrainingStatsListAction, TrainingStatsState } from "./types";
+import { TRAINING_STATS_CHART, TRAINING_STATS_CHART_ASYNC, TRAINING_STATS_LIST, TRAINING_STATS_LIST_ASYNC, TRAINING_STAT_LIMIT, TRAINING_STAT_OFFSET, TRAINING_STAT_PAGEINFO } from "./constants";
+import { TrainingStatPageAction, TrainingStatPageInfo, TrainingStatsChartAction, TrainingStatsChartState, TrainingStatsListAction, TrainingStatsState } from "./types";
 
 type TrainingStats = TrainingStatsListAction;
 type TrainingStatsChart = TrainingStatsChartAction;
@@ -32,9 +32,24 @@ const trainingStatsChart = (
   }
 };
 
+const trainingStatPageInfo = (state: TrainingStatPageInfo = {
+  offset: TRAINING_STAT_OFFSET,
+  limit: TRAINING_STAT_LIMIT,
+},
+action: TrainingStatPageAction
+): TrainingStatPageInfo => {
+  switch (action.type) {
+    case TRAINING_STAT_PAGEINFO:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadTrainingStatsAsyncInfo: asyncReducer(TRAINING_STATS_LIST_ASYNC),
   trainingStats,
   loadTrainingStatsChartAsyncInfo: asyncReducer(TRAINING_STATS_CHART_ASYNC),
   trainingStatsChart,
+  trainingStatPageInfo,
 });

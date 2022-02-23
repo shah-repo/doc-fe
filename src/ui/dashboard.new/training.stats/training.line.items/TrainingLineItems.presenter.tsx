@@ -1,6 +1,7 @@
-import { Box, Divider, List } from "@material-ui/core";
+import { Box, Button, Divider, List } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
+import { ReactComponent as LoadMore } from "../../../../assets/images/load_more_arrow.svg";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
@@ -64,27 +65,29 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 interface TrainingLineItemsProps {
   tabValue: number;
+  onLoadMoreData: () => void;
 }
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
-  (props) => {
-    const overdueItems = useSelector(
-      trainingStatsSelectors.overdueTrainingData
-    );
-    const dueInSevenItems = useSelector(trainingStatsSelectors.dueTrainingData);
-    const all = overdueItems.concat(dueInSevenItems);
+  ({ tabValue, onLoadMoreData }) => {
+    const trainingLineItemData = useSelector(trainingStatsSelectors.trainingLineItemData);
+    const pageTotal = useSelector(trainingStatsSelectors.trainingDataPageSize);
     const classes = styles();
     return (
       <Box component="div" className={classes.root}>
-        <TabPanel value={props.tabValue} index={0} panelData={all}>
+        <TabPanel key={0} value={tabValue} index={0} panelData={trainingLineItemData}>
           <Text translation="training.stats.all" />
         </TabPanel>
-        <TabPanel value={props.tabValue} index={2} panelData={dueInSevenItems}>
+        <TabPanel key={2} value={tabValue} index={2} panelData={trainingLineItemData}>
           <Text translation="common.duein7days" />
         </TabPanel>
-        <TabPanel value={props.tabValue} index={1} panelData={overdueItems}>
+        <TabPanel key={1} value={tabValue} index={1} panelData={trainingLineItemData}>
           <Text translation="common.overdue" />
         </TabPanel>
+        <Button onClick={() => onLoadMoreData()} className={classes.loadMoreButton} disabled={pageTotal <= 1}>
+          <Text translation="dashboard.load.more"></Text>
+        </Button>
+        <LoadMore />
       </Box>
     );
   };

@@ -17,5 +17,19 @@ export const styles = makeStyles((theme: Theme) =>
     lineItemContent: {
       height: "100px",
     },
+    loadMoreButton: {
+      "position": "static",
+      "left": "0%",
+      "right": "18.54%",
+      "top": "0%",
+      "bottom": "0%",
+      "font-family": "Sora",
+      "font-weight": 600,
+      "letter-spacing": "0.5px",
+      "text-transform": "uppercase",
+      "color": " #011FBB",
+      "margin": "0px 5px 0 10px",
+      "padding": "1px",
+    },
   })
 );

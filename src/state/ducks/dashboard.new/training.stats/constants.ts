@@ -4,4 +4,7 @@ export const TRAINING_STATS_URL = "/training_record/due";
 export const TRAINING_STATS_CHART = "dashboard/TRAINING_STATS_CHART";
 export const TRAINING_STATS_CHART_ASYNC = "dashboard/TRAINING_STATS_CHART_ASYNC";
 export const TRAINING_STATS_CHART_URL = "/training_record/dueSummary";
+export const TRAINING_STAT_PAGEINFO = "dashboard/TRAINING_STAT_PAGEINFO";
+export const TRAINING_STAT_OFFSET = 0;
+export const TRAINING_STAT_LIMIT = 50;
 

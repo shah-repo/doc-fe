@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { apiAction } from "../../../factories";
 import { ApiAction } from "../../../types";
 import {
@@ -7,8 +8,16 @@ import {
   TRAINING_STATS_LIST,
   TRAINING_STATS_LIST_ASYNC,
   TRAINING_STATS_URL,
+  TRAINING_STAT_LIMIT,
+  TRAINING_STAT_OFFSET,
+  TRAINING_STAT_PAGEINFO,
 } from "./constants";
-import { TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
+import { TrainingStatPageAction, TrainingStatPageInfo, TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
+
+const trainingStatPageInfo = (recents: TrainingStatPageInfo): TrainingStatPageAction => ({
+  type: TRAINING_STAT_PAGEINFO,
+  payload: recents,
+});
 
 const trainingStatsList = (
   trainingStats: TrainingStats[]
@@ -21,11 +30,11 @@ const loadTrainingStatsList = (payload): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
-    data: {
-      offset: 0,
-      limit: 50,
-      filters: payload?.filters,
-    },
+    data: isEmpty(payload) ?  {
+      offset: TRAINING_STAT_OFFSET,
+      limit: TRAINING_STAT_LIMIT,
+      filters: [],
+    } : payload,
     method: "post",
     asyncType: TRAINING_STATS_LIST_ASYNC,
     onSuccess: (trainingStats, dispatch) => {
@@ -58,4 +67,5 @@ export default {
   loadTrainingStatsList,
   trainingStatsChart,
   loadTrainingStatsChart,
+  trainingStatPageInfo,
 };
