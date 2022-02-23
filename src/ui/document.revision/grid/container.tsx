@@ -7,12 +7,16 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { getSchemaFromColumns } from "../../common/utils/helpers";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { documentRevisionQueryStatus } from "../utils/helpers";
-import DocumentListPresenter from "./presenter";
+import gridConfiguration from "./column.definition";
+import { DataStateProps } from "./interfaces";
+import { DocumentListPresenter } from "./presenter";
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
+  const schema = getSchemaFromColumns(gridConfiguration.columns);
   const TABLE_NAME = "documentRevisions";
   const dispatch = useDispatch();
   const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
@@ -36,14 +40,14 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     );
 
   const setSearchStatus = (
-    displayStatus?: DocumentRevisionStatus
+    dataState: DataStateProps,
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
           queryDict: {
-            displayStatus,
+            dataState,
           },
         },
         TABLE_NAME
@@ -54,17 +58,38 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   useEffect(() => {
     getStatuses();
     if (isEmpty(tableCriteria.queryDict)) {
+      const dataState: DataStateProps = {
+        filter: {
+          logic: "and",
+          filters: [
+            {
+              field: "displayStatus",
+              operator: "eq",
+              value: "Released" as DocumentRevisionStatus,
+            },
+          ],
+        },
+        sort: [],
+        skip: 0,
+        take: 25,
+        group: [],
+      };
       setSearchStatus(
-        "Released" as DocumentRevisionStatus
+        dataState,
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict]);
 
-  console.log("debug :: DocumentListContainer");
   console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
-    <DocumentListPresenter statuses={statuses} tableName={TABLE_NAME} />
+    <DocumentListPresenter
+      statuses={statuses}
+      tableName={TABLE_NAME}
+      tableCriteria={tableCriteria}
+      schema={schema}
+      columns={gridConfiguration.columns}
+    />
   );
 };
 

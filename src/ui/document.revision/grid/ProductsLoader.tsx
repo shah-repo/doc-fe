@@ -1,19 +1,13 @@
-import { DataResult, State, toODataString } from "@progress/kendo-data-query";
+import { toODataString } from "@progress/kendo-data-query";
 import { AxiosRequestConfig } from "axios";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import apiClient from "../../../state/apiClient";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { store } from "../../../state/store";
-import { getSchemaFromColumns } from "../../common/utils/helpers";
-import gridConfiguration from "./column.definition";
+import { ProductsLoaderProps } from "./interfaces";
 
-interface ProductsLoaderProps {
-  dataState: State;
-  onDataReceived: (products: DataResult) => void;
-}
-
-export const ProductsLoader = ({ dataState, onDataReceived }: ProductsLoaderProps) => {
+export const ProductsLoader = ({ dataState, onDataReceived, schema }: ProductsLoaderProps) => {
   const requestConfig: AxiosRequestConfig = {
     method: "post",
     url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
@@ -21,9 +15,9 @@ export const ProductsLoader = ({ dataState, onDataReceived }: ProductsLoaderProp
       documentTypeWithoutCategory: "true",
       limit: dataState.take,
       offset: dataState.skip,
-      filters: dataState?.filter?.filters || [],
-      sort: dataState.sort || [],
-      schema: getSchemaFromColumns(gridConfiguration.columns),
+      filters: dataState.filter?.filters,
+      sort: dataState.sort,
+      schema,
     },
     headers: {},
   };

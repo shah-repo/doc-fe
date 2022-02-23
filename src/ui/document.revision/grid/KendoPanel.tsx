@@ -1,25 +1,41 @@
 import { DataResult, State } from "@progress/kendo-data-query";
 import {
-  Grid,
-  GridColumn as Column,
-  GridDataStateChangeEvent,
+  Grid, GridColumn as Column, GridDataStateChangeEvent, GridFilterCellProps,
 } from "@progress/kendo-react-grid";
-import React from "react";
+import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import { AutoSizer, Size } from "react-virtualized";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
+import { StatusFilterTemplate } from "./filter.template/StatusFilterTemplate";
+import { KendoPanelProps } from "./interfaces";
 import { ProductsLoader } from "./ProductsLoader";
 
-export function KendoPanel<T>() {
+
+export function KendoPanel({
+  tableName,
+  tableCriteria,
+  schema,
+  columns,
+  statuses,
+}: KendoPanelProps) {
   console.log("debug :: KendoPanel");
+  console.log("debug :: columns", columns);
+
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
+  const [dataState, setDataState] = React.useState<State>(tableCriteria.queryDict.dataState);
+
+  useEffect(() => {
+    setDataState(tableCriteria.queryDict.dataState);
+  }, [tableCriteria]);
 
   const [products, setProducts] = React.useState<DataResult>({
     data: [],
     total: 77,
-  });
-
-  const [dataState, setDataState] = React.useState<State>({
-    take: 10,
-    skip: 0,
   });
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
@@ -30,6 +46,52 @@ export function KendoPanel<T>() {
     setProducts(products);
   };
 
+  // Column Menu Filters
+  const StatusFilterTempalte = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={statuses as DocumentRevisionStatus[]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+  const TypeFilterTemplate = (props: GridFilterCellProps) => (
+    <DocumentTypeFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+
+  const filterCellMapping = {
+    "displayStatus": StatusFilterTempalte,
+    "document.documentType.documentTypeAcronym": TypeFilterTemplate,
+  };
+
+  const renderKendoColumns = (
+    gridWidth: number
+  ) => (
+    columns.map((column, index) => (
+      <Column
+        key={index}
+        {...column}
+        title={getTranslatedText(column.title)}
+        width={setColumnWidth(column.width as number, gridWidth)}
+        minResizableWidth={200}
+        headerCell={
+          column.title ? (props) => <ColumnHeader {...props} /> : undefined
+        }
+        cell={undefined}
+        filterCell={
+          filterCellMapping[column.field]
+            ? filterCellMapping[column.field]
+            : undefined
+        }
+        columnMenu={undefined}
+      />)
+    ));
 
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
@@ -44,13 +106,10 @@ export function KendoPanel<T>() {
           data={products}
           onDataStateChange={dataStateChange}
         >
-          <Column field="document.docId" title="Doc ID" />
-          <Column field="displayRevision" title="Display Revision" />
-          <Column field="displayStatus" title="Status"/>
-          <Column field="owner.user.name" title="Owner" />
+          {renderKendoColumns(width)}
         </Grid>
 
-        <ProductsLoader dataState={dataState} onDataReceived={dataReceived} />
+        {dataState && <ProductsLoader dataState={dataState} onDataReceived={dataReceived} schema={schema} />}
       </KendoGlobalization>
     </>
   );
@@ -62,5 +121,3 @@ export function KendoPanel<T>() {
     </>
   );
 }
-
-

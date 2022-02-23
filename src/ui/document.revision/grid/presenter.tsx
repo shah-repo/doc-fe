@@ -1,22 +1,23 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { KendoPresenterProps } from "./interfaces";
 import { KendoPanel } from "./KendoPanel";
 
-interface Props {
-  statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
-  tableName: string;
-}
-const DocumentListPresenter: React.FunctionComponent<Props> = (statuses, tableName) => {
-  console.log("debug :: DocumentListPresenter");
-  console.log("debug :: DocumentListPresenter :: statuses :: ", statuses);
+
+export function DocumentListPresenter({ statuses, tableName, tableCriteria, schema, columns }: KendoPresenterProps) {
+  // console.log("debug :: DocumentListPresenter");
+  // console.log("debug :: DocumentListPresenter :: statuses :: ", statuses);
   console.log("debug :: DocumentListPresenter :: tableName :: ", tableName);
   return (
     <Grid container={true}>
       <Grid item={true} xs={12}>
-        <KendoPanel />
+        <KendoPanel
+          tableName={tableName}
+          tableCriteria={tableCriteria}
+          schema={schema}
+          columns={columns}
+          statuses={statuses}
+        />
       </Grid>
     </Grid>
-  ); };
-
-export default DocumentListPresenter;
+  ); }
