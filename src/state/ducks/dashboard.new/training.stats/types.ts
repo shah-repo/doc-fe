@@ -1,5 +1,5 @@
 import { Nullable } from "../../common/types";
-import { TRAINING_STATS_LIST } from "./constants";
+import { TRAINING_STATS_CHART, TRAINING_STATS_LIST } from "./constants";
 
 export enum TrainingStatusTypes {
   OVERDUE = "OVERDUE",
@@ -43,3 +43,14 @@ export interface TrainingStatsListAction {
 }
 
 export type TrainingStatsState = TrainingStats[];
+
+export interface TrainingStatsChart {
+  DUE: 0; OVERDUE: 0;
+}
+
+export interface TrainingStatsChartAction {
+  type: typeof TRAINING_STATS_CHART;
+  payload: TrainingStatsChart;
+}
+
+export type TrainingStatsChartState = TrainingStatsChart;

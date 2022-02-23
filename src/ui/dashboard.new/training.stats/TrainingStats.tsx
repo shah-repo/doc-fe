@@ -22,6 +22,15 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
     trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
   );
 
+  // Chart
+  const loadTrainingStatsChart = useActionCreator(
+    trainingStatsActions.loadTrainingStatsChart
+  );
+
+  const loadTrainingStatsChartAsyncInfo = useSelector(
+    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo
+  );
+
   const [tabValue, setTabValue] = React.useState(0);
   const handleChildTabChange = (val: number) => {
     setTabValue(val);
@@ -29,11 +38,17 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
   return (
     <Box className={classes.outline} marginLeft={2} marginRight={2}>
       <AsyncGate
+        asyncAction={loadTrainingStatsChart}
+        asyncState={loadTrainingStatsChartAsyncInfo}
+        startActionOnMount={true}>
+        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+      </AsyncGate>
+      <AsyncGate
         asyncAction={loadTrainingStatsList}
         asyncState={loadTrainingStatsListAsyncInfo}
         startActionOnMount={true}
       >
-        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+
         <TrainingLineItems tabValue={tabValue} />
       </AsyncGate>
     </Box>

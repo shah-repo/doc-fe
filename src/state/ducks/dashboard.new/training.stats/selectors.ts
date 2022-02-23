@@ -26,6 +26,19 @@ const dueTrainingData = (state: ApplicationState) => {
   return results;
 };
 
+// Chart
+const trainingStatsChart = (state: ApplicationState) =>
+  state.dashboardNew.trainingStats.trainingStatsChart;
+
+const overdueTrainingChartData = (state: ApplicationState) =>
+  state.dashboardNew.trainingStats.trainingStatsChart[TrainingStatusTypes.OVERDUE];
+
+const dueTrainingChartData = (state: ApplicationState) =>
+  state.dashboardNew.trainingStats.trainingStatsChart[TrainingStatusTypes.DUE];
+
+const getLoadTrainingStatsChartAsyncInfo = (
+  state: ApplicationState
+): AsyncState => state.dashboardNew.trainingStats.loadTrainingStatsChartAsyncInfo;
 
 const getLoadTrainingStatsListAsyncInfo = (
   state: ApplicationState
@@ -36,4 +49,8 @@ export default {
   trainingStats,
   overdueTrainingData,
   dueTrainingData,
+  trainingStatsChart,
+  overdueTrainingChartData,
+  dueTrainingChartData,
+  getLoadTrainingStatsChartAsyncInfo,
 };
