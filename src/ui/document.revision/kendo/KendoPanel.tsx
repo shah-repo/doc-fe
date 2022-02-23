@@ -167,7 +167,7 @@ export function KendoPanel<T>({
     const queryPayload =
       cloneDeep(dataState.filter?.filters || []);
     const queryDict: TableSearchQueryType = { documentTypeWithoutCategory: "true" };
-    Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
+    tableCriteria.queryDict && Object.entries(tableCriteria.queryDict).forEach(([key, value]) => {
       if (key === "effectiveDate") {
         queryDict[key] = value.value;
       }
