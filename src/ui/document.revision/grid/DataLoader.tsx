@@ -32,21 +32,18 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
 
   const lastSuccess = React.useRef<string>("");
   const pending = React.useRef<string>("");
-
+  const odString = `${toODataString(updatedDataState)}&$table="${tableName}"`;
   const requestDataIfNeeded = () => {
-    if (
-      (pending.current ||
-      toODataString(updatedDataState) === lastSuccess.current)
-    ) {
+    if (pending.current || odString === lastSuccess.current) {
       return;
     }
-    pending.current = toODataString(updatedDataState);
+    pending.current = odString;
     apiClient
       .request(requestConfig)
       .then(({ data }) => {
         lastSuccess.current = pending.current;
         pending.current = "";
-        if (toODataString(updatedDataState) === lastSuccess.current) {
+        if (odString === lastSuccess.current) {
           onDataReceived.call(undefined, {
             data: data.results,
             total: data.total,
