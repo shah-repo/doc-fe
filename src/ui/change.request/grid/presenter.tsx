@@ -31,7 +31,6 @@ export function DocumentListPresenter({
             tableName={tableName}
             tableCriteria={tableCriteria}
             schema={schema}
-            columns={columns}
             exportDataChanges={handleExportData}
           />
         </Grid>

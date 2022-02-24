@@ -5,6 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
+import { KendoColumn } from "../../components/common/kendo/types";
 import gridConfiguration from "./column.definition";
 import { DataStateProps } from "./interfaces";
 import { DocumentListPresenter } from "./presenter";
@@ -18,6 +19,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const setSearchStatus = (
     dataState: DataStateProps,
+    columns: KendoColumn[]
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -26,6 +28,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           queryDict: {
             dataState,
           },
+          columnConfig: JSON.stringify(gridConfiguration.columns),
         },
         TABLE_NAME
       )
@@ -52,6 +55,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       };
       setSearchStatus(
         dataState,
+        gridConfiguration.columns
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

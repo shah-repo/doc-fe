@@ -33,7 +33,6 @@ export function DocumentListPresenter({
             tableName={tableName}
             tableCriteria={tableCriteria}
             schema={schema}
-            columns={columns}
             statuses={statuses}
             exportDataChanges={handleExportData}
           />

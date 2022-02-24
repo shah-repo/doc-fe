@@ -4,7 +4,7 @@ import {
   Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
 import { set } from "lodash";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
@@ -12,8 +12,10 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/d
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { KendoColumn as KendoColumnProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import ClearFilters from "../../components/table/ClearFilters";
+import useDidMount from "../../hooks/useDidMount";
 import { DataLoader } from "./DataLoader";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
 import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
@@ -25,20 +27,25 @@ export function KendoGrid({
   tableName,
   tableCriteria,
   schema,
-  columns,
   statuses = [],
 }: KendoGridProps<DocumentRevision>) {
+  const didMount = useDidMount();
   const classes = KendoGridStyles();
   console.log("debug :: KendoPanel");
-  console.log("debug :: columns", columns);
+  const [columns, setColumns] = useState<KendoColumnProps[]>([]);
   const dispatch = useDispatch();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(tableCriteria.queryDict.dataState);
 
   useEffect(() => {
-    setDataState(tableCriteria.queryDict.dataState);
-  }, [tableCriteria]);
+    if (didMount) {
+      setDataState(tableCriteria.queryDict.dataState);
+      if (tableCriteria.columnConfig) {
+        setColumns(JSON.parse(tableCriteria.columnConfig));
+      }
+    }
+  }, [didMount, tableCriteria]);
 
   const [products, setProducts] = React.useState<DataResult>({
     data: [],

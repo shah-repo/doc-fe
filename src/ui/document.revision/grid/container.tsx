@@ -8,6 +8,7 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/do
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
+import { KendoColumn } from "../../components/common/kendo/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { documentRevisionQueryStatus } from "../utils/helpers";
@@ -46,6 +47,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
 
   const setSearchStatus = (
     dataState: DataStateProps,
+    columns: KendoColumn[]
   ) => {
     dispatch(
       tableSearchActions.setSearchCriteria(
@@ -54,6 +56,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           queryDict: {
             dataState,
           },
+          columnConfig: JSON.stringify(columns),
         },
         TABLE_NAME
       )
@@ -80,6 +83,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       };
       setSearchStatus(
         dataState,
+        gridConfiguration.columns,
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
