@@ -24,7 +24,7 @@ let equipmentDocument;
 let materialsDocument;
 let releasedFormId;
 let emailsFromInbox;
-const pages = ["", "", ""];
+const pages = ["", "", "", ""];
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
@@ -394,12 +394,41 @@ context("Mpi/Qpi test", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
+        it("Add attachment to step #1", () => {
+          cy.contains("Step #1").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+            cy.elUploadAttachment({
+              fileName: "test_image.jpg",
+              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+            });
+          });
+        });
+
         it("Add 'Material one' to step #1", () => {
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
+        it("Add 'Material parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Add 'Equipment one' to step #1", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+
+        it("Add 'Equipment parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click save document", () => {
@@ -497,9 +526,15 @@ context("Mpi/Qpi test", () => {
             });
         });
 
-        it("Verify attached file length more than 500 bytes", () => {
+        it("Verify attached image.jpg file length more than 500 bytes", () => {
           const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
             downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+
+        it("Verify attached test_image.jpg file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "Step 1 - in", "test_image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
       });
@@ -511,21 +546,25 @@ context("Mpi/Qpi test", () => {
               directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
               fileName: `${releasedFormId}-1-MPI-document.pdf`,
             }).then((cdata) => {
-            expect(cdata.numpages).eq(3);
-            expect(cdata.text).match(/Page 1 of 3/);
-            expect(cdata.text).match(/Page 2 of 3/);
-            expect(cdata.text).match(/Page 3 of 3/);
+            expect(cdata.numpages).eq(4);
+            expect(cdata.text).match(/Page 1 of 4/);
+            expect(cdata.text).match(/Page 2 of 4/);
+            expect(cdata.text).match(/Page 3 of 4/);
+            expect(cdata.text).match(/Page 4 of 4/);
             tmpRegex = new RegExp( "\\n\\n");
             const arr = cdata.text.split(tmpRegex);
             arr.forEach((element) => {
-              if (element.includes("Page 1 of 3")) {
+              if (element.includes("Page 1 of 4")) {
                 pages[0] = element;
               }
-              if (element.includes("Page 2 of 3")) {
+              if (element.includes("Page 2 of 4")) {
                 pages[1] = element;
               }
-              if (element.includes("Page 3 of 3")) {
+              if (element.includes("Page 3 of 4")) {
                 pages[2] = element;
+              }
+              if (element.includes("Page 4 of 4")) {
+                pages[3] = element;
               }
             });
           });
@@ -533,7 +572,7 @@ context("Mpi/Qpi test", () => {
 
         it("Verify page 1 of MPI document", () => {
           const el = pages[0];
-          if (el.includes("Page 1 of 3")) {
+          if (el.includes("Page 1 of 4")) {
             tmpRegex = new
             RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
@@ -549,12 +588,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/STEP #1\nDescription of step one/);
 
-            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
-
-            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
-
-            expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -563,20 +596,27 @@ context("Mpi/Qpi test", () => {
             tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Page 1 of 3/);
+            expect(el).match(/Page 1 of 4/);
           }
         });
 
-        it("Verify page 2 of training form", () => {
+        it("Verify page 2 of MPI document", () => {
           const el = pages[1];
-          if (el.includes("Page 2 of 3")) {
+          if (el.includes("Page 2 of 4")) {
             tmpRegex = new
             RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
 
+            expect(el).match(/\(Step 1 - in\) Attachments\ntest_image.jpg/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+
             expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+
+            expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -586,13 +626,34 @@ context("Mpi/Qpi test", () => {
             tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Page 2 of 3/);
+            expect(el).match(/Page 2 of 4/);
           }
         });
 
-        it("Verify page 3 of training form", () => {
+        it("Verify page 3 of MPI document", () => {
           const el = pages[2];
-          if (el.includes("Page 3 of 3")) {
+          if (el.includes("Page 3 of 4")) {
+            tmpRegex = new
+            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/APPROVALS\nApprovers/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 3 of 4/);
+          }
+        });
+
+        it("Verify page 4 of MPI document", () => {
+          const el = pages[3];
+          if (el.includes("Page 4 of 4")) {
             tmpRegex = new
             RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
@@ -607,7 +668,7 @@ context("Mpi/Qpi test", () => {
             tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
             expect(el).match(tmpRegex);
 
-            expect(el).match(/Page 3 of 3/);
+            expect(el).match(/Page 4 of 4/);
           }
         });
       });
@@ -721,6 +782,12 @@ context("Mpi/Qpi test", () => {
         downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached test_image.jpg file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "Step 1 - in", "test_image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -730,21 +797,24 @@ context("Mpi/Qpi test", () => {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${releasedFormId}-1-MPI-document.pdf`,
         }).then((cdata) => {
-        expect(cdata.numpages).eq(3);
-        expect(cdata.text).match(/Page 1 of 3/);
-        expect(cdata.text).match(/Page 2 of 3/);
-        expect(cdata.text).match(/Page 3 of 3/);
+        expect(cdata.numpages).eq(4);
+        expect(cdata.text).match(/Page 1 of 4/);
+        expect(cdata.text).match(/Page 2 of 4/);
+        expect(cdata.text).match(/Page 3 of 4/);
         tmpRegex = new RegExp( "\\n\\n");
         const arr = cdata.text.split(tmpRegex);
         arr.forEach((element) => {
-          if (element.includes("Page 1 of 3")) {
+          if (element.includes("Page 1 of 4")) {
             pages[0] = element;
           }
-          if (element.includes("Page 2 of 3")) {
+          if (element.includes("Page 2 of 4")) {
             pages[1] = element;
           }
-          if (element.includes("Page 3 of 3")) {
+          if (element.includes("Page 3 of 4")) {
             pages[2] = element;
+          }
+          if (element.includes("Page 4 of 4")) {
+            pages[3] = element;
           }
         });
       });
@@ -752,7 +822,7 @@ context("Mpi/Qpi test", () => {
 
     it("Verify page 1 of MPI document", () => {
       const el = pages[0];
-      if (el.includes("Page 1 of 3")) {
+      if (el.includes("Page 1 of 4")) {
         tmpRegex = new
         RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
@@ -768,12 +838,6 @@ context("Mpi/Qpi test", () => {
 
         expect(el).match(/STEP #1\nDescription of step one/);
 
-        expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
-
-        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
-
-        expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -782,20 +846,26 @@ context("Mpi/Qpi test", () => {
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 1 of 3/);
+        expect(el).match(/Page 1 of 4/);
       }
     });
 
     it("Verify page 2 of MPI document", () => {
       const el = pages[1];
-      if (el.includes("Page 2 of 3")) {
+      if (el.includes("Page 2 of 4")) {
         tmpRegex = new
         RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
 
+        expect(el).match(/\(Step 1 - in\) Attachments\ntest_image.jpg/);
+
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
+
         expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -805,13 +875,34 @@ context("Mpi/Qpi test", () => {
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 2 of 3/);
+        expect(el).match(/Page 2 of 4/);
       }
     });
 
     it("Verify page 3 of MPI document", () => {
       const el = pages[2];
-      if (el.includes("Page 3 of 3")) {
+      if (el.includes("Page 3 of 4")) {
+        tmpRegex = new
+        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 4/);
+      }
+    });
+
+    it("Verify page 4 of MPI document", () => {
+      const el = pages[3];
+      if (el.includes("Page 4 of 4")) {
         tmpRegex = new
         RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
         expect(el).match(tmpRegex);
@@ -828,7 +919,7 @@ context("Mpi/Qpi test", () => {
         tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Page 3 of 3/);
+        expect(el).match(/Page 4 of 4/);
       }
     });
   });
@@ -904,12 +995,41 @@ context("Mpi/Qpi test", () => {
           cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
         });
 
+        it("Add attachment to step #1", () => {
+          cy.contains("Step #1").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+            cy.elUploadAttachment({
+              fileName: "test_image.jpg",
+              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
+            });
+          });
+        });
+
         it("Add 'Material one' to step #1", () => {
           cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
         });
 
+        it("Add 'Material parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Add 'Equipment one' to step #1", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+        });
+
+        it("Add 'Equipment parameter' to step #1", () => {
+          SystemRequirement("REQ-3620");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -1014,6 +1134,12 @@ context("Mpi/Qpi test", () => {
             downloadFile.replace(".zip", ""), "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
+
+        it("Verify attached test_image.jpg file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "Step 1 - in", "test_image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
       });
 
       context("Verify PDF file content", () => {
@@ -1061,12 +1187,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/STEP #1\nDescription of step one/);
 
-            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
-
-            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
-
-            expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
             expect(el).match(/Draft/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1085,6 +1205,12 @@ context("Mpi/Qpi test", () => {
             tmpRegex = new
             RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
+
+            expect(el).match(/\(Step 1 - in\) Attachments\ntest_image.jpg/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
 
             expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
@@ -1223,6 +1349,12 @@ context("Mpi/Qpi test", () => {
             downloadFile.replace(".zip", ""), "image.jpg");
           cy.readFile(attachedFile).its("length").should("be.gt", 500);
         });
+
+        it("Verify attached test_image.jpg file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "Step 1 - in", "test_image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
       });
 
       context("Verify PDF file content", () => {
@@ -1270,12 +1402,6 @@ context("Mpi/Qpi test", () => {
 
             expect(el).match(/STEP #1\nDescription of step one/);
 
-            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
-
-            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
-
-            expect(el).match(/Equipment\nET-00003 - Equipment one/);
-
             expect(el).match(/Released/);
 
             tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1294,6 +1420,12 @@ context("Mpi/Qpi test", () => {
             tmpRegex = new
             RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
             expect(el).match(tmpRegex);
+
+            expect(el).match(/\(Step 1 - in\) Attachments\ntest_image.jpg/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each\nA: Parameter for material two/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
 
             expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
 
@@ -1319,6 +1451,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
             tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
             expect(el).match(tmpRegex);
+
 
             expect(el).match(/Released/);
 
