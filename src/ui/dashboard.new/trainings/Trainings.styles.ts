@@ -1,5 +1,4 @@
 import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles(() =>
   createStyles({
@@ -13,18 +12,6 @@ export const styles = makeStyles(() =>
     },
     grid: {
       marginTop: 5,
-    },
-    loadButton: {
-      "position": "static",
-      "left": "0%",
-      "right": "18.54%",
-      "top": "0%",
-      "bottom": "0%",
-      "font-family": "Sora",
-      "font-weight": 600,
-      "letter-spacing": "0.5px",
-      "text-transform": "uppercase",
-      "color": Colors.navy,
     },
   })
 );

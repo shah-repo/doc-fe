@@ -1,7 +1,6 @@
-import { Box, Button, Divider, List, ListItemText, Typography } from "@material-ui/core";
+import { Divider, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -10,6 +9,7 @@ import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
+import { LoadMoreButton } from "../LoadMoreButton";
 import { styles } from "./Trainings.styles";
 
 interface Props {
@@ -70,17 +70,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
             return <Text key={index} translation="common.undefined" />;
         }
       })}
-      <Box style={{ float: "right" }}>
-        <Button
-          onClick={() => onLoadMoreData()}
-          className={classes.loadButton}
-          disabled={ overallLimit >= trainingItems.total }
-        >
-          <Text translation="dashboard.load.more"></Text>
-          <div style={{ marginRight: 10 }}></div>
-          <LoadMore />
-        </Button>
-      </Box>
+      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= trainingItems.total }/>
     </List>
 
   );
