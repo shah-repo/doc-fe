@@ -26,4 +26,5 @@ export interface KendoPresenterProps {
   tableCriteria: TablePanelStateProps;
   schema: object;
   columns: KendoColumn[];
+  onRowClick: ((dataItem: any) => void);
 }

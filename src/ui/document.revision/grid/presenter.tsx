@@ -15,6 +15,7 @@ export function DocumentListPresenter({
   tableCriteria,
   schema,
   columns,
+  onRowClick,
 }: KendoPresenterProps) {
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
@@ -35,6 +36,7 @@ export function DocumentListPresenter({
             schema={schema}
             statuses={statuses}
             exportDataChanges={handleExportData}
+            onRowClick={onRowClick}
           />
         </Grid>
       </Grid>

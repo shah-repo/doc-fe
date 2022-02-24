@@ -1,11 +1,15 @@
+import { GridRowClickEvent } from "@progress/kendo-react-grid";
 import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
+import { authSelectors } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
+import { canEditChangeRequest } from "../utils/helpers";
+import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import gridConfiguration from "./column.definition";
 import { DataStateProps } from "./interfaces";
 import { DocumentListPresenter } from "./presenter";
@@ -15,7 +19,8 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const TABLE_NAME = "changeRequests";
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-
+  const history = useHistory();
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
 
   const setSearchStatus = (
     dataState: DataStateProps,
@@ -61,6 +66,17 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict]);
 
+  const onRowClick = ({ dataItem }: GridRowClickEvent) => {
+    if (isEmpty(dataItem.id)) {
+      return false;
+    }
+    let urlPath = changeRequestPreviewPath(dataItem.id);
+    if (canEditChangeRequest({ dataProp: dataItem, currentUserEmail })) {
+      urlPath = changeRequestEditPath(dataItem.id);
+    }
+    history.push({ pathname: urlPath });
+  };
+
   console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
     <DocumentListPresenter
@@ -68,6 +84,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableCriteria={tableCriteria}
       schema={schema}
       columns={gridConfiguration.columns}
+      onRowClick={onRowClick}
     />
   );
 };

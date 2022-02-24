@@ -27,6 +27,7 @@ export interface KendoPresenterProps {
   tableCriteria: TablePanelStateProps;
   schema: object;
   columns: KendoColumn[];
+  onRowClick: ((dataItem: any) => void);
 }
 
 export interface KendoGridProps<T> {
@@ -35,6 +36,7 @@ export interface KendoGridProps<T> {
   schema: object;
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
   exportDataChanges?: (data: T[]) => void;
+  onRowClick: ((dataItem: any) => void);
 }
 
 export interface DataLoaderProps {

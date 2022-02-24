@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
@@ -140,7 +141,17 @@ export function KendoGrid<T extends any>({
         headerCell={
           column.title ? (props) => <ColumnHeader {...props} /> : undefined
         }
-        cell={undefined}
+        cell={(props) =>
+          RenderCustomCell(
+            {
+              ...props,
+              cellRowClick: onRowClick,
+              showTooltip: column.showTooltip,
+              tooltipField: column.tooltipField,
+            },
+            column.cell || ""
+          )
+        }
         filterCell={
           filterCellMapping[column.field]
             ? filterCellMapping[column.field]
