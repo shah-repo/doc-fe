@@ -58,6 +58,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
           onClick={() => onLoadMoreData()}
           className={classes.loadMoreButton}
           disabled={overallLimit >= totalTrainingData}
+          disableRipple
         >
           <Text translation="dashboard.load.more"></Text>
         </Button>

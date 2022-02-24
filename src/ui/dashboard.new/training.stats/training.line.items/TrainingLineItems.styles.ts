@@ -31,6 +31,9 @@ export const styles = makeStyles((theme: Theme) =>
       "color": Colors.navy,
       "margin": 0,
       "padding-bottom": 0,
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
     },
   })
 );
