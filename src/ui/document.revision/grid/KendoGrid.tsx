@@ -3,6 +3,7 @@ import { DataResult, State } from "@progress/kendo-data-query";
 import {
   Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
+import { set } from "lodash";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -119,7 +120,18 @@ export function KendoGrid({
       />)
     ));
   const clearFilter = () => {
-    console.log("debug Clear Filter");
+    set(dataState, "filter.filters", []);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          queryDict: {
+            dataState,
+          },
+        },
+        tableName
+      )
+    );
   };
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
