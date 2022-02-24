@@ -6,4 +6,9 @@ export const TRAINING_STATS_CHART_ASYNC = "dashboard/TRAINING_STATS_CHART_ASYNC"
 export const TRAINING_STATS_CHART_URL = "/training_record/dueSummary";
 export const TRAINING_STATS_INITIAL_OFFSET = 0;
 export const TRAINING_STATS_LIMIT = 50;
+export const TRAINING_STATS_INITIAL_PAYLOAD = {
+  offset: TRAINING_STATS_INITIAL_OFFSET,
+  limit: TRAINING_STATS_LIMIT,
+  filters: [],
+};
 

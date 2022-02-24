@@ -4,7 +4,7 @@ import { ApiAction } from "../../../types";
 import {
   TRAINING_STATS_CHART,
   TRAINING_STATS_CHART_ASYNC,
-  TRAINING_STATS_CHART_URL, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT, TRAINING_STATS_LIST,
+  TRAINING_STATS_CHART_URL, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_INITIAL_PAYLOAD, TRAINING_STATS_LIST,
   TRAINING_STATS_LIST_ASYNC,
   TRAINING_STATS_URL,
 } from "./constants";
@@ -20,12 +20,7 @@ const trainingStatsList = (
 
 const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
-  const payload = {
-    offset: TRAINING_STATS_INITIAL_OFFSET,
-    limit: TRAINING_STATS_LIMIT,
-    filters: [],
-  };
-  const finalPayload = isEmpty(queryPayload) ? payload : queryPayload;
+  const finalPayload = isEmpty(queryPayload) ? TRAINING_STATS_INITIAL_PAYLOAD : queryPayload;
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
     data: finalPayload,
