@@ -1,31 +1,26 @@
 import { isEmpty } from "lodash";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC, MY_FEEDS_PAGEINFO } from "./constants";
-import { MyFeedPageAction, MyFeedPageInfo, MyFeedsItems, MyFeedsListAction } from "./types";
+import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC } from "./constants";
+import { MyFeedsItems, MyFeedsListAction } from "./types";
 
-const myFeedsList = (recents: MyFeedsItems[]): MyFeedsListAction => ({
+const myFeedsList = (myFeeds: MyFeedsItems[]): MyFeedsListAction => ({
   type: MY_FEEDS_LIST,
-  payload: recents,
-});
-
-const myFeedsListPageInfo = (recents: MyFeedPageInfo): MyFeedPageAction => ({
-  type: MY_FEEDS_PAGEINFO,
-  payload: recents,
+  payload: myFeeds,
 });
 
 const loadMyFeedsList = (queryParams): ApiAction<MyFeedsItems[]> => {
   const params = {
-    offset: 0,
-    limit: 25,
+    offset: MY_FEEDS_INITIAL_OFFSET,
+    limit: MY_FEEDS_LIMIT,
   };
   return apiAction({
     url: DASHBOARD_MY_FEEDS_URL_SEARCH,
     method: "post",
-    data: !isEmpty(queryParams) ? queryParams : params,
+    data: isEmpty(queryParams) ? params : queryParams,
     asyncType: MY_FEEDS_LIST_ASYNC,
-    onSuccess: (recents, dispatch) => {
-      dispatch(myFeedsList(recents));
+    onSuccess: (myFeeds, dispatch) => {
+      dispatch(myFeedsList(myFeeds));
     },
   });
 };
@@ -56,5 +51,4 @@ export default {
   loadMyFeedsList,
   pinnedLineItem,
   unPinnedLineItem,
-  myFeedsListPageInfo,
 };

@@ -44,6 +44,7 @@ interface Props {
   loadMyFeedsListAsyncState: AsyncState;
   // TO DO:: Needs to add type definitions
   feedItems: any;
+  overallLimit: number;
   onLoadMoreData: () => void;
 }
 
@@ -51,6 +52,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,
+  overallLimit,
   pinLineItem,
   unPinLineItem,
   hoverItemId,
@@ -611,7 +613,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
         <Button
           onClick={() => onLoadMoreData()}
           className={classes.loadButton}
-          disabled={feedItems.page_total === 1}
+          disabled={ overallLimit >= feedItems.total }
         >
           <Text translation="dashboard.load.more"></Text>
           <div style={{ marginRight: 10 }}></div>

@@ -4,6 +4,7 @@ import {
   dashboardMyFeedsActions,
   dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
@@ -11,6 +12,8 @@ import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
   const [hoverItemId, setHoverItemId] = React.useState("");
+  const [offset, setOffset] = React.useState(MY_FEEDS_INITIAL_OFFSET);
+  const [overallLimit, setOverallLimit] = React.useState(MY_FEEDS_LIMIT);
   const onMouseHoverItem = (id: string) => {
     setHoverItemId(id);
   };
@@ -22,7 +25,6 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     dashboardMyFeedsSelectors.getLoadMyFeedsListAsyncInfo
   );
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
-  const myFeedListPageInfo = useSelector(dashboardMyFeedsSelectors.myFeedListPageInfo);
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
       dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
@@ -41,20 +43,20 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
 
   const async = useAsync();
   const onPageChange = () => {
+    const nextOffset = offset + MY_FEEDS_LIMIT;
+    setOffset(nextOffset);
+    setOverallLimit(overallLimit + MY_FEEDS_LIMIT);
     const updatedPageSize = {
-      offset: myFeedListPageInfo.offset + 25,
-      limit: myFeedListPageInfo.limit + 25,
+      offset: nextOffset,
+      limit: MY_FEEDS_LIMIT,
     };
     async.start(loadMyFeeds, updatedPageSize);
-    dispatch(
-      dashboardMyFeedsActions.myFeedsListPageInfo(updatedPageSize)
-    );
   };
   return (
     <MyFeedsLineItemPresenter
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
-        pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem,
+        pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
       }}
       onLoadMoreData={onPageChange}
     />
