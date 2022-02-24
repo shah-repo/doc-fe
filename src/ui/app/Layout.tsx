@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import AsyncTasksContainer from "../async.tasks/async.tasks.container";
 import ChangeRequestCreateContainer from "../change.request/ChangeRequestCreate.container";
 import ChangeRequestContainer from "../change.request/Container";
-import ChangeRequestListContainer from "../change.request/kendo/container";
+import ChangeRequestListContainer from "../change.request/grid/container";
 import WatermarkFooterContainer from "../components/watermarkFooter/container";
 import { ASYNC_TASKS_URL, CHANGE_REQUEST_CREATE_URL, CHANGE_REQUEST_LIST_URL, CHANGE_REQUEST_ROOT_URL, DASHBOARD_URL, DOCUMENT_BY_CATEGORY_LIST_URL, DOCUMENT_BY_TYPE_LIST_URL, DOCUMENT_REVISION_CREATE_MAINTENANCE_URL, DOCUMENT_REVISION_CREATE_URL, DOCUMENT_REVISION_LIST_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_TYPE_MANAGEMENT_URL, GROUP_MANAGEMENT_ROOT_URL, HOME_URL, PAGE_DETAILS_MANAGEMENT_URL, SLACK_ROOT_URL, TRAINING_DETAIL_URL, TRAINING_URL, USER_MANAGEMENT_ROOT_URL } from "../constants/urls";
 import DashboardLayout from "../dashboard.new/Dashboard.layout";

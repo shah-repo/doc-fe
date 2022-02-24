@@ -26,7 +26,7 @@ export function KendoGrid({
   tableCriteria,
   schema,
   columns,
-  statuses,
+  statuses = [],
 }: KendoGridProps<DocumentRevision>) {
   const classes = KendoGridStyles();
   console.log("debug :: KendoPanel");

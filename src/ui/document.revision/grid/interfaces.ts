@@ -34,7 +34,7 @@ export interface KendoGridProps<T> {
   tableCriteria: TablePanelStateProps;
   schema: object;
   columns: KendoColumn[];
-  statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
+  statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
   exportDataChanges?: (data: T[]) => void;
 }
 
