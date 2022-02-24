@@ -1,21 +1,26 @@
+import { Dialog } from "@material-ui/core";
 import { isEmpty } from "lodash";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
+import useDialog from "../../hooks/useDialog";
+import TrainingDetails from "../details/TrainingDetails";
 import gridConfiguration from "./column.definition";
 import { DataStateProps } from "./interfaces";
 import { TrainingListPresenter } from "./presenter";
+import KendoGridStyles from "./presenter.styles";
 
 const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const TABLE_NAME = "training";
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-
+  const classes = KendoGridStyles();
 
   const setSearchStatus = (
     dataState: DataStateProps,
@@ -55,14 +60,40 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict]);
 
+  const trainingDetailsDialog = useDialog();
+  const [training, setTraining] = useState<TrainingRecordQuery>(
+    DEFAULT_TRAINING_RECORD_QUERY
+  );
+
+  const onRowClick = (rowData: { dataItem: TrainingRecordQuery }) => {
+    trainingDetailsDialog.open();
+    setTraining(rowData.dataItem);
+  };
+
   console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
-    <TrainingListPresenter
-      tableName={TABLE_NAME}
-      tableCriteria={tableCriteria}
-      schema={schema}
-      columns={gridConfiguration.columns}
-    />
+    <>
+      <TrainingListPresenter
+        tableName={TABLE_NAME}
+        tableCriteria={tableCriteria}
+        schema={schema}
+        columns={gridConfiguration.columns}
+        onRowClick={onRowClick}
+      />
+      {trainingDetailsDialog.isOpen && (
+        <Dialog
+          open={trainingDetailsDialog.isOpen}
+          classes={{ paper: classes.dialogContent }}
+          fullWidth
+          maxWidth="md"
+        >
+          <TrainingDetails
+            dialog={trainingDetailsDialog}
+            training={training}
+          />
+        </Dialog>
+      )}
+    </>
   );
 };
 

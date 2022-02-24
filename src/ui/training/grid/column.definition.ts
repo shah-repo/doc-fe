@@ -15,6 +15,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     groupable: false,
     orderIndex: 1,
+    extraFields: ["id"],
   },
   {
     field: "trainingPlan.document.docId",
