@@ -156,6 +156,7 @@ export function KendoGrid<T extends any>({
     "completedAt": CompletedDate,
     "dueOn": DueOnDate,
     "createdAt": EffectiveDate,
+    "releasedAt": EffectiveDate,
   };
 
   const sortedColumnDefinitions = orderByLockedState(

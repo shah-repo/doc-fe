@@ -10,14 +10,69 @@ import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus, dueDa
 import { CompletedOnDateOptions } from "../utils/types";
 
 const TABLE_PAYLOAD_ITEMS_MAPPING = {
-  documentRevisions: {
+  "documentRevisions": {
     documentTypeWithoutCategory: "true",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Record": {
+    documentTypeCategory: "Record",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Equipment": {
+    documentTypeCategory: "Equipment",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Supplier": {
+    documentTypeCategory: "Supplier",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Purchase Order": {
+    documentTypeCategory: "Purchase Order",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Parts": {
+    documentTypeCategory: "Parts",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-EB": {
+    documentTypeCategory: "EB",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Lot": {
+    documentTypeCategory: "Lot",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Lhr": {
+    documentTypeCategory: "Lhr",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Receive": {
+    documentTypeCategory: "Receive",
+    status: documentRevisionQueryStatus(),
+  },
+  "documentsByCategoryList-Training Curriculums": {
+    documentTypeCategory: "Training Curriculums",
     status: documentRevisionQueryStatus(),
   },
 };
 export const getDefaultPayloadItems = (tableName: string) => TABLE_PAYLOAD_ITEMS_MAPPING[tableName] || {};
 export const getQueryURL = (tableName: string) => {
-  if (["documentRevisions"].includes(tableName)) {
+  const urls = [
+    "documentsByCategoryList-Record",
+    "documentsByCategoryList-Equipment",
+    "documentsByCategoryList-Supplier",
+    "documentsByCategoryList-Purchase Order",
+    "documentsByCategoryList-Parts",
+    "documentsByCategoryList-EB",
+    "documentsByCategoryList-Lot",
+    "documentsByCategoryList-Lhr",
+    "documentsByCategoryList-Receive",
+    "documentsByCategoryList-Training Curriculums",
+  ];
+  if (urls.includes(tableName)) {
+    return DOCUMENT_REVISION_SEARCH_ROOT_URL;
+  }
+  if (["documentRevisions"].includes(tableName) ) {
     return DOCUMENT_REVISION_SEARCH_ROOT_URL;
   }
   if (["changeRequests"].includes(tableName)) {
@@ -81,6 +136,15 @@ export const getDynamicPayloadItems = (tableName: string, payload) => {
           payload.filters,
           (el) => el.field !== DateFields.DUE_ON
         );
+      }
+      break;
+    case "documentsByCategoryList-Record":
+      // API is not working -- need to check this
+      const releasedData = find(payload.filters, { field: "releasedAt" });
+      if (releasedData) {
+        const effectiveDateOptions = documentRevisionEffectiveDateOption();
+        payload.releasedAt = find(effectiveDateOptions, { text: releasedData.value })?.value;
+        payload.filters = filter(payload.filters, (el) => el.field !== "releasedAt");
       }
       break;
     default:
