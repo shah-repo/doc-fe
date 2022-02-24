@@ -6,8 +6,9 @@ export const styles = makeStyles((theme) =>
       color: "red",
     },
     root: {
-      overflow: "auto",
-      height: "calc(100vh - 228px)",
+      "overflow": "auto",
+      "height": "calc(100vh - 185px)",
+      "padding-bottom": 0,
     },
     grid: {
       marginTop: 5,
@@ -23,7 +24,6 @@ export const styles = makeStyles((theme) =>
       "letter-spacing": "0.5px",
       "text-transform": "uppercase",
       "color": " #011FBB",
-      "margin": "0px 10px",
     },
   })
 );
