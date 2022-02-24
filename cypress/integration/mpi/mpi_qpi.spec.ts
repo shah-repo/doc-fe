@@ -35,7 +35,6 @@ let arId;
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Mpi/Qpi test", () => {
   before(() => {
