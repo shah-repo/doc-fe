@@ -84,7 +84,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
         <TabPanel key={1} value={tabValue} index={1} panelData={trainingLineItemData}>
           <Text translation="common.overdue" />
         </TabPanel>
-        <Button onClick={() => onLoadMoreData()} className={classes.loadMoreButton} disabled={pageTotal === 10}>
+        <Button onClick={() => onLoadMoreData()} className={classes.loadMoreButton} disabled={pageTotal <= 10}>
           <Text translation="dashboard.load.more"></Text>
         </Button>
         <LoadMore />

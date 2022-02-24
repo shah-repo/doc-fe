@@ -56,5 +56,4 @@ export default combineReducers({
   loadTrainingStatsChartAsyncInfo: asyncReducer(TRAINING_STATS_CHART_ASYNC),
   trainingStatsChart,
   trainingStatPageInfo,
-  // trainingStatsClear,
 });
