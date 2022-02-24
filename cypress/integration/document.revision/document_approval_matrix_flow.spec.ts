@@ -36,7 +36,6 @@ const DWOTSTitle = "Document Without Training & Signature Test";
 
 const docTypeOne = "Design Document";
 const docTypeTwo = "Clinical Document";
-const newDocTypeOne = "Edited Design Document";
 const docTypeOnePrefix = "DD";
 const docTypeTwoPrefix = "CD";
 const docTypeThreePrefix = "DWOTS";
