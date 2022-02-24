@@ -1,4 +1,4 @@
-import { MY_FEEDS_LIST, MY_FEEDS_PAGEINFO } from "./constants";
+import { MY_FEEDS_LIST } from "./constants";
 
 export enum ActionTypes {
   APPROVAL_REQ_OWNER = "APPROVAL_REQ_OWNER",
@@ -63,15 +63,6 @@ export interface MyFeedsItems {
   docTitle: string;
   docType: string;
   docRevId?: string;
-}
-
-export interface MyFeedPageAction {
-  type: typeof MY_FEEDS_PAGEINFO;
-  payload: MyFeedPageInfo;
-}
-export interface MyFeedPageInfo {
-  offset: number;
-  limit: number;
 }
 
 export interface MyFeedsListAction {
