@@ -27,7 +27,6 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
   );
 
-  // const trainingStatPageInfo = useSelector(trainingStatsSelectors.trainingStatPageInfo);
   // Create Payload on Tab Change
   const createTrainingLineItemsTabChangePayload = (tabValue: number) => {
     const currentDate = getCurrentDate(MomentFormats.YearMonthDate);
@@ -59,7 +58,6 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     setOverallLimit(TRAINING_STATS_LIMIT);
     payload.offset = TRAINING_STATS_INITIAL_OFFSET;
     async.start(loadTrainingStatsList, payload);
-    // dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabValue]);
 
@@ -69,7 +67,6 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     setOverallLimit(overallLimit + TRAINING_STATS_LIMIT);
     payload.offset = nextOffset;
     async.start(loadTrainingStatsList, payload);
-    // dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   };
 
   return (<AsyncGate

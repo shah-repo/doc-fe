@@ -19,9 +19,6 @@ const trainingStatsLineItemData = (state: ApplicationState) => {
 const totalTrainingStatsLineItemData = (state: ApplicationState) =>
   get(state.dashboardNew.trainingStats.trainingStats, "total");
 
-const trainingStatPageInfo = (state: ApplicationState) =>
-  state.dashboardNew.trainingStats.trainingStatPageInfo;
-
 // Chart
 const trainingStatsChart = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStatsChart;
@@ -49,5 +46,4 @@ export default {
   dueTrainingChartData,
   getLoadTrainingStatsChartAsyncInfo,
   totalTrainingStatsLineItemData,
-  trainingStatPageInfo,
 };
