@@ -17,13 +17,14 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const [offset, setOffset] = React.useState(TRAINING_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_LIMIT);
   const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
-  // const trainingListPageInfo = useSelector(trainingSelectors.trainingListPageInfo);
   const loadTrainingListAsyncInfo = useSelector(
     trainingSelectors.getLoadTrainingListAsyncInfo
   );
   const dispatch = useDispatch();
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
+      setOffset(TRAINING_INITIAL_OFFSET);
+      setOverallLimit(TRAINING_LIMIT);
       dispatch(trainingActions.loadTrainingList({}));
     },
   });
@@ -49,9 +50,6 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       limit: TRAINING_LIMIT,
     };
     async.start(loadTrainingList, updatedPageSize);
-    // dispatch(
-    //   trainingActions.trainingListPageInfo(updatedPageSize)
-    // );
   };
 
   return (

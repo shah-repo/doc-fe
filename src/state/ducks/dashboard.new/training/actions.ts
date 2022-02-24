@@ -10,7 +10,7 @@ const trainingList = (trainingStats: Training[], initialLoad = true): TrainingLi
   initialLoad,
 });
 
-const loadTrainingList = (queryParams): ApiAction<Training[]> => {
+const loadTrainingList = (queryPayload): ApiAction<Training[]> => {
   const payload = {
     offset: TRAINING_INITIAL_OFFSET,
     limit: TRAINING_LIMIT,
@@ -18,10 +18,10 @@ const loadTrainingList = (queryParams): ApiAction<Training[]> => {
   return apiAction({
     url: `${TRAINING_URL}`,
     method: "post",
-    data: isEmpty(queryParams) ? payload : queryParams,
+    data: isEmpty(queryPayload) ? payload : queryPayload,
     asyncType: TRAINING_LIST_ASYNC,
     onSuccess: (trainingItems, dispatch) => {
-      dispatch(trainingList(trainingItems, isEmpty(queryParams)));
+      dispatch(trainingList(trainingItems, isEmpty(queryPayload)));
     },
   });
 };
