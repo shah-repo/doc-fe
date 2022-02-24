@@ -1,8 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import "moment-timezone";
+import moment from "moment-timezone";
+import path from "path";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -18,6 +22,20 @@ let equipmentDocumentType;
 let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
+let releasedFormId;
+let emailsFromInbox;
+const pages = ["", "", ""];
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+let arId;
+
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Mpi/Qpi test", () => {
   before(() => {
@@ -335,6 +353,38 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Add Checkbox group", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.get("input[value^=\"visibility\"]").check();
+        cy.get(`input[name="validators.required_if_in"]`).check();
+        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -351,9 +401,7 @@ context("Mpi/Qpi test", () => {
         it("Add 'Equipment one' to step #1", () => {
           cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
         });
-      });
 
-      context("Release MPI", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
@@ -361,12 +409,427 @@ context("Mpi/Qpi test", () => {
           });
         });
 
+        it("Check doc Draft status and click on Send To Email", () => {
+          cy.get("#HeaderInfo-status").should("have.text", "Draft");
+          cy.get("#HeaderInfo-name").should("have.text", "MPI document");
+          cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
+            releasedFormId = x.text();
+          });
+          cy.sendToEmail();
+        });
+      });
+
+      context("Verify email for Draft MPI notification", () => {
+        it("Get emails", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            wait_time_sec: 5,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            max_wait_time_sec: 50,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            include_body: true,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${releasedFormId}`,
+          };
+
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+            if (emails) {
+              emailsFromInbox = emails;
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+            }
+            else {
+              assert.fail("No email found");
+            }
+          });
+        });
+
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[1].email,
+              contains: [`Hello <b>${USERS[1].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id],
+            }];
+
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
+          });
+        });
+      });
+
+      context("Verify PDF file downloaded", () => {
+        it("Extract download link from gmail", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+              downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
+            }
+          });
+        });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("extract pdf file from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+        });
+
+        it("Verify attached file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+      });
+
+      context("Verify PDF file content", () => {
+        it("Extract texts from PDF file content", () => {
+          cy.pdfparseFile(
+            {
+              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+              fileName: `${releasedFormId}-1-MPI-document.pdf`,
+            }).then((cdata) => {
+            expect(cdata.numpages).eq(3);
+            expect(cdata.text).match(/Page 1 of 3/);
+            expect(cdata.text).match(/Page 2 of 3/);
+            expect(cdata.text).match(/Page 3 of 3/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 3")) {
+                pages[0] = element;
+              }
+              if (element.includes("Page 2 of 3")) {
+                pages[1] = element;
+              }
+              if (element.includes("Page 3 of 3")) {
+                pages[2] = element;
+              }
+            });
+          });
+        });
+
+        it("Verify page 1 of MPI document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 3")) {
+            tmpRegex = new
+            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Description\nMPI document description/);
+
+            expect(el).match(/Attachments\nimage.jpg/);
+
+            expect(el).match(/PI PROCEDURE/);
+
+            expect(el).match(/STEP #1\nDescription of step one/);
+
+            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 3/);
+          }
+        });
+
+        it("Verify page 2 of training form", () => {
+          const el = pages[1];
+          if (el.includes("Page 2 of 3")) {
+            tmpRegex = new
+            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
+
+            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 2 of 3/);
+          }
+        });
+
+        it("Verify page 3 of training form", () => {
+          const el = pages[2];
+          if (el.includes("Page 3 of 3")) {
+            tmpRegex = new
+            RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 3 of 3/);
+          }
+        });
+      });
+
+      context("Release MPI", () => {
+        it("Upload attachment 'image.jpg'", () => {
+          cy.atchUploadAttachment({ fileName: "image.jpg" });
+        });
+
         it("Approve and release MPI document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           });
         });
+
+        it("Check MPI doc released status and click on Send To Email", () => {
+          cy.get("#HeaderInfo-status").should("have.text", "Released");
+          cy.get("#HeaderInfo-name").should("have.text", "MPI document");
+          cy.get("#HeaderInfo-docId").contains("MPI-").then((x) => {
+            releasedFormId = x.text();
+          });
+          cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+            arId = x.text();
+          });
+          cy.sendToEmail();
+        });
       });
+    });
+  });
+
+  context("Verify email for Released MPI notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify PDF file downloaded", () => {
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${releasedFormId}-1-MPI-document.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of MPI document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new
+        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nMPI document description/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/PI PROCEDURE/);
+
+        expect(el).match(/STEP #1\nDescription of step one/);
+
+        expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
+
+        expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
+
+        expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 of MPI document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new
+        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 of MPI document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new
+        RegExp( `Manufacturing Process Instructions Test\n${releasedFormId}, Revision 1\nMPI DOCUMENT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -400,6 +863,38 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Add Checkbox group", () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+        cy.get("input[value^=\"visibility\"]").check();
+        cy.get(`input[name="validators.required_if_in"]`).check();
+        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
@@ -418,7 +913,7 @@ context("Mpi/Qpi test", () => {
         });
       });
 
-      context("Release QPI document", () => {
+      context("Draft QPI document", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
@@ -426,8 +921,415 @@ context("Mpi/Qpi test", () => {
           });
         });
 
+        it("Check QPI doc Draft status and click on Send To Email", () => {
+          cy.get("#HeaderInfo-status").should("have.text", "Draft");
+          cy.get("#HeaderInfo-name").should("have.text", "QPI document");
+          cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
+            releasedFormId = x.text();
+          });
+          cy.sendToEmail();
+        });
+      });
+
+      context("Verify email for Draft QPI notification", () => {
+        it("Get emails", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            wait_time_sec: 5,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            max_wait_time_sec: 50,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            include_body: true,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${releasedFormId}`,
+          };
+
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+            if (emails) {
+              emailsFromInbox = emails;
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+            }
+            else {
+              assert.fail("No email found");
+            }
+          });
+        });
+
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[1].email,
+              contains: [`Hello <b>${USERS[1].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id],
+            }];
+
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
+          });
+        });
+      });
+
+      context("Verify PDF file downloaded", () => {
+        it("Extract download link from gmail", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+              downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
+            }
+          });
+        });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("extract pdf file from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+        });
+
+        it("Verify attached file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+      });
+
+      context("Verify PDF file content", () => {
+        it("Extract texts from PDF file content", () => {
+          cy.pdfparseFile(
+            {
+              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+              fileName: `${releasedFormId}-1-QPI-document.pdf`,
+            }).then((cdata) => {
+            expect(cdata.numpages).eq(3);
+            expect(cdata.text).match(/Page 1 of 3/);
+            expect(cdata.text).match(/Page 2 of 3/);
+            expect(cdata.text).match(/Page 3 of 3/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 3")) {
+                pages[0] = element;
+              }
+              if (element.includes("Page 2 of 3")) {
+                pages[1] = element;
+              }
+              if (element.includes("Page 3 of 3")) {
+                pages[2] = element;
+              }
+            });
+          });
+        });
+
+        it("Verify page 1 of QPI document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Description\nQPI document description/);
+
+            expect(el).match(/Attachments\nimage.jpg/);
+
+            expect(el).match(/PI PROCEDURE/);
+
+            expect(el).match(/STEP #1\nDescription of step one/);
+
+            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 3/);
+          }
+        });
+
+        it("Verify page 2 of QPI document", () => {
+          const el = pages[1];
+          if (el.includes("Page 2 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 2 of 3/);
+          }
+        });
+
+        it("Verify page 3 of QPI document", () => {
+          const el = pages[2];
+          if (el.includes("Page 3 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+            expect(el).match(/Draft/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 3 of 3/);
+          }
+        });
+      });
+
+      context("Release QPI document", () => {
         it("Approve and release QPI document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+
+        it("Check QPI doc released status and click on Send To Email", () => {
+          cy.get("#HeaderInfo-status").should("have.text", "Released");
+          cy.get("#HeaderInfo-name").should("have.text", "QPI document");
+          cy.get("#HeaderInfo-docId").contains("QPI-").then((x) => {
+            releasedFormId = x.text();
+          });
+          cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+            arId = x.text();
+          });
+          cy.sendToEmail();
+        });
+      });
+
+      context("Verify email for Released QPI notification", () => {
+        it("Get emails", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          const getEmailSetting =  {
+            to: CONFIG.TEST_EMAIL,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            wait_time_sec: 5,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            max_wait_time_sec: 50,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            include_body: true,
+            after: dateAfterEmailShouldArrive,
+            subject: `Export for document ${releasedFormId}`,
+          };
+
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+            if (emails) {
+              emailsFromInbox = emails;
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+            }
+            else {
+              assert.fail("No email found");
+            }
+          });
+        });
+
+        it("Verify the emails that should be received", () => {
+          const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+            {
+              sentToUser: USERS[1].email,
+              contains: [`Hello <b>${USERS[1].name},</b>`,
+                "Your documents are ready for download.",
+                "<button type=\"button\">DOWNLOAD</button>",
+                createdCompany.id],
+            }];
+
+          cy.imapVerifyEmailsInList({
+            receivedEmails: emailsFromInbox,
+            emailsToTest: emailsThatShouldBeReceived,
+            getEmailsSincedate: dateAfterEmailShouldArrive,
+            assertNumberOfEmailsFoundInList: 1,
+          });
+        });
+      });
+
+      context("Verify PDF file downloaded", () => {
+        it("Extract download link from gmail", () => {
+          expect(downloadUrl).contains("exported_file_download");
+          fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+          cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+            if (res.body !== "") {
+              downloadUrl = res.body.url;
+              const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+              downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+              cy.downloadFile({
+                url: downloadUrl,
+                directory: CONFIG.DOWNLOADS_DIR,
+                fileName: downloadFile,
+              });
+            }
+          });
+        });
+
+        it("Verify file size of the downloaded zip file", () => {
+          const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+          cy.readFile(zipfile).its("length").should("be.gt", 500);
+        });
+
+        it("extract pdf file from zip file", () => {
+          cy.unzipFile(
+            {
+              directory: CONFIG.DOWNLOADS_DIR,
+              fileName: downloadFile,
+            });
+        });
+
+        it("Verify attached file length more than 500 bytes", () => {
+          const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+            downloadFile.replace(".zip", ""), "image.jpg");
+          cy.readFile(attachedFile).its("length").should("be.gt", 500);
+        });
+      });
+
+      context("Verify PDF file content", () => {
+        it("Extract texts from PDF file content", () => {
+          cy.pdfparseFile(
+            {
+              directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+              fileName: `${releasedFormId}-1-QPI-document.pdf`,
+            }).then((cdata) => {
+            expect(cdata.numpages).eq(3);
+            expect(cdata.text).match(/Page 1 of 3/);
+            expect(cdata.text).match(/Page 2 of 3/);
+            expect(cdata.text).match(/Page 3 of 3/);
+            tmpRegex = new RegExp( "\\n\\n");
+            const arr = cdata.text.split(tmpRegex);
+            arr.forEach((element) => {
+              if (element.includes("Page 1 of 3")) {
+                pages[0] = element;
+              }
+              if (element.includes("Page 2 of 3")) {
+                pages[1] = element;
+              }
+              if (element.includes("Page 3 of 3")) {
+                pages[2] = element;
+              }
+            });
+          });
+        });
+
+        it("Verify page 1 of QPI document", () => {
+          const el = pages[0];
+          if (el.includes("Page 1 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Description\nQPI document description/);
+
+            expect(el).match(/Attachments\nimage.jpg/);
+
+            expect(el).match(/PI PROCEDURE/);
+
+            expect(el).match(/STEP #1\nDescription of step one/);
+
+            expect(el).match(/\(Step 1 - in\) Attachments\nNone/);
+
+            expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 3 each/);
+
+            expect(el).match(/Equipment\nET-00003 - Equipment one/);
+
+            expect(el).match(/Released/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 1 of 3/);
+          }
+        });
+
+        it("Verify page 2 of QPI document", () => {
+          const el = pages[1];
+          if (el.includes("Page 2 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+
+            expect(el).match(/Released/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 2 of 3/);
+          }
+        });
+
+        it("Verify page 3 of QPI document", () => {
+          const el = pages[2];
+          if (el.includes("Page 3 of 3")) {
+            tmpRegex = new
+            RegExp( `Quantity Process Instructions Test\n${releasedFormId}, Revision 1\nQPI DOCUMENT`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+            tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Released/);
+
+            tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+            expect(el).match(tmpRegex);
+
+            expect(el).match(/Page 3 of 3/);
+          }
         });
       });
     });
