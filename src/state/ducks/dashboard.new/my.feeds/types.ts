@@ -68,6 +68,7 @@ export interface MyFeedsItems {
 export interface MyFeedsListAction {
   type: typeof MY_FEEDS_LIST;
   payload: MyFeedsItems[];
+  initialLoad?: boolean;
 }
 
 export type MyFeedsState = MyFeedsItems[];

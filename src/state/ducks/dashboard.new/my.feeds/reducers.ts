@@ -1,4 +1,4 @@
-import { concat, get, isEmpty, set, uniqBy } from "lodash";
+import { get, isEmpty, set, unionBy } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
 import { MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC } from "./constants";
@@ -8,10 +8,10 @@ const myFeedsList = (
   state: MyFeedsState = [], action: MyFeedsListAction): MyFeedsState => {
   const actionResult = get(action.payload, "results");
   const stateResult = get(state, "results");
-  const combineResult = isEmpty(stateResult) ? actionResult :  uniqBy(concat(stateResult, actionResult), "id");
+  const combineResult = isEmpty(stateResult) ? actionResult : unionBy(stateResult, actionResult, "id");
   switch (action.type) {
     case MY_FEEDS_LIST:
-      return set(action.payload, "results", combineResult);
+      return action.initialLoad ? action.payload : set(action.payload, "results", combineResult);
     default:
       return state;
   }

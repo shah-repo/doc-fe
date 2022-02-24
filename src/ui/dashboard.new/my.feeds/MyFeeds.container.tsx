@@ -27,6 +27,8 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
+      setOffset(MY_FEEDS_INITIAL_OFFSET);
+      setOverallLimit(MY_FEEDS_LIMIT);
       dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
     },
   });
