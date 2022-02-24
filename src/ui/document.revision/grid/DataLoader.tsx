@@ -3,9 +3,8 @@ import { AxiosRequestConfig } from "axios";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import apiClient from "../../../state/apiClient";
-import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { store } from "../../../state/store";
-import { getDefaultPayloadItems, getDynamicPayloadItems } from "./DataLoader.util";
+import { getDefaultPayloadItems, getDynamicPayloadItems, getQueryURL } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
 export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
@@ -21,7 +20,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
   getDynamicPayloadItems(tableName, data);
   const requestConfig: AxiosRequestConfig = {
     method: "post",
-    url: DOCUMENT_REVISION_SEARCH_ROOT_URL,
+    url: getQueryURL(tableName),
     data,
     headers: {},
   };
