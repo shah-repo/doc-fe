@@ -1,6 +1,6 @@
 import { DataResult, State } from "@progress/kendo-data-query";
 import {
-  Grid, GridColumn as Column, GridDataStateChangeEvent, GridFilterCellProps,
+  Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps,
 } from "@progress/kendo-react-grid";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -98,7 +98,7 @@ export function KendoGrid({
     gridWidth: number
   ) => (
     columns.map((column, index) => (
-      <Column
+      <KendoColumn
         key={index}
         {...column}
         title={getTranslatedText(column.title)}
@@ -121,7 +121,7 @@ export function KendoGrid({
   const renderKendoGrid = ({ width }: Size) => (
     <>
       <KendoGlobalization>
-        <Grid
+        <KendoTable
           style={{ width: `${width}px` }}
           className={classes.grid}
           filterable={true}
@@ -132,7 +132,7 @@ export function KendoGrid({
           onDataStateChange={dataStateChange}
         >
           {renderKendoColumns(width)}
-        </Grid>
+        </KendoTable>
 
         {dataState && (
           <DataLoader
