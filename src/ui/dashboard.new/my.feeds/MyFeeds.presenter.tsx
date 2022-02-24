@@ -7,11 +7,11 @@ import React from "react";
 import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
-  MomentFormats
+  MomentFormats,
 } from "../../../common/utils/date";
 import {
   ActionTypes,
-  LINE_ITEMS_STATUS_TYPES
+  LINE_ITEMS_STATUS_TYPES,
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
