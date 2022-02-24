@@ -1,10 +1,10 @@
-import { Box, Button, Divider, List } from "@material-ui/core";
+import { Box, Divider, List } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import { ReactComponent as LoadMore } from "../../../../assets/images/load_more_arrow.svg";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
+import { LoadMoreButton } from "../../LoadMoreButton";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -37,6 +37,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
   const renderItems = () => (
     <List className={classes.listRoot}>
+
       {panelData.map((data, index) => (
         <>
           <TrainingItem
@@ -53,17 +54,9 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
           <Divider />
         </>
       ))}
-      {totalTrainingData > 0 && <Box style={{ float: "right" }}  >
-        <Button
-          onClick={() => onLoadMoreData()}
-          className={classes.loadMoreButton}
-          disabled={overallLimit >= totalTrainingData}
-          disableRipple
-        >
-          <Text translation="dashboard.load.more"></Text>
-        </Button>
-        <LoadMore />
-      </Box>}
+      {totalTrainingData > 0 &&
+        <LoadMoreButton onLoadMore={onLoadMoreData} />
+      }
     </List>
   );
 
