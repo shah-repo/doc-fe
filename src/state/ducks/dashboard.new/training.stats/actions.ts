@@ -11,10 +11,11 @@ import {
 import { TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
 
 const trainingStatsList = (
-  trainingStats: TrainingStats[]
+  trainingStats: TrainingStats[], initialLoad = true
 ): TrainingStatsListAction => ({
   type: TRAINING_STATS_LIST,
   payload: trainingStats,
+  initialLoad,
 });
 
 const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStats[]> => {
@@ -24,13 +25,14 @@ const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStats[]> => {
     limit: TRAINING_STATS_LIMIT,
     filters: [],
   };
+  const finalPayload = isEmpty(queryPayload) ? payload : queryPayload;
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
-    data: isEmpty(queryPayload) ? payload : queryPayload,
+    data: finalPayload,
     method: "post",
     asyncType: TRAINING_STATS_LIST_ASYNC,
     onSuccess: (trainingStats, dispatch) => {
-      dispatch(trainingStatsList(trainingStats));
+      dispatch(trainingStatsList(trainingStats, finalPayload.offset === TRAINING_STATS_INITIAL_OFFSET));
     },
   });
 };

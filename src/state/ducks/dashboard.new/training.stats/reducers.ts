@@ -16,7 +16,7 @@ const trainingStats = (
   const combineResult = isEmpty(stateResult) ? actionResult : unionBy(stateResult, actionResult, "id");
   switch (action.type) {
     case TRAINING_STATS_LIST:
-      return isEmpty(actionResult) ? action.payload : set(action.payload, "results", combineResult);
+      return action.initialLoad ? action.payload : set(action.payload, "results", combineResult);
     default:
       return state;
   }

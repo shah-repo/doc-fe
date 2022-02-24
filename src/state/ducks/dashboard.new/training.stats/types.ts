@@ -40,6 +40,7 @@ export interface TrainingStats {
 export interface TrainingStatsListAction {
   type: typeof TRAINING_STATS_LIST;
   payload: TrainingStats[];
+  initialLoad?: boolean;
 }
 
 export type TrainingStatsState = TrainingStats[];

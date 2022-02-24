@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getCurrentDate, MomentFormats } from "../../../../common/utils/date";
 import { trainingStatsActions, trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from "../../../../state/ducks/dashboard.new/training.stats/constants";
@@ -15,7 +15,6 @@ interface TrainingLineItemsProps {
 const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   tabValue,
 }) => {
-  const dispatch = useDispatch();
   const async = useAsync();
   const [offset, setOffset] = React.useState(TRAINING_STATS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_STATS_LIMIT);
@@ -53,7 +52,6 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   };
 
   useEffect(() => {
-    dispatch(trainingStatsActions.trainingStatsList([]));
     setOffset(TRAINING_STATS_INITIAL_OFFSET);
     setOverallLimit(TRAINING_STATS_LIMIT);
     payload.offset = TRAINING_STATS_INITIAL_OFFSET;
