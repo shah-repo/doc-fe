@@ -1,6 +1,7 @@
-import { Divider, List, ListItemText, Typography } from "@material-ui/core";
+import { Box, Button, Divider, List, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
+import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -14,11 +15,13 @@ import { styles } from "./Trainings.styles";
 interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  onLoadMoreData: () => void;
 }
 
 const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
+  onLoadMoreData,
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
@@ -28,47 +31,56 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItemId("");
   };
-  const trainingItems = useSelector(trainingSelectors.trainingList);
+  const trainingItems: any = useSelector(trainingSelectors.trainingList);
 
   const renderPendingActions = () => (
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
-      {trainingItems.map((pendingAction, index) => {
-        switch (pendingAction.type) {
-          case ActionTypes.TRAINING_STATUS_OWNER:
-            return (
-              <>
-                <NewTraining
-                  key={index}
-                  id={pendingAction.id}
-                  docId={pendingAction.docId}
-                  docRevId={pendingAction.docRevId}
-                  type={pendingAction.type}
-                  docRevName={pendingAction.docRevName}
-                  docRevVersion={pendingAction.docRevVersion}
-                  docDocumentId={pendingAction.docDocumentId}
-                  trainingStatus={pendingAction.trainingStatus}
-                  pendingEmailSentAt={pendingAction.pendingEmailSentAt}
-                  timestamp={getFormattedDateString(
-                    pendingAction.timestamp,
-                    MomentFormats.BriefDateTime
-                  )}
-                  pendingTrainees={pendingAction.pendingTrainees}
-                  hoverItemId={hoverItemId}
-                  onMouseHoverItem={onMouseHoverItem}
-                  pinLineItem={pinLineItem}
-                  unPinLineItem={unPinLineItem}
-                  pinned={pendingAction.pinned}
-                />
-                <Divider />
-              </>
-            );
-          default:
-            return <Text key={index} translation="common.undefined" />;
-        }
-      })}
-    </List>
+    <Box>
+      <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
+        {trainingItems.results.map((pendingAction, index) => {
+          switch (pendingAction.type) {
+            case ActionTypes.TRAINING_STATUS_OWNER:
+              return (
+                <div key={index}>
+                  <NewTraining
+                    id={pendingAction.id}
+                    docId={pendingAction.docId}
+                    docRevId={pendingAction.docRevId}
+                    type={pendingAction.type}
+                    docRevName={pendingAction.docRevName}
+                    docRevVersion={pendingAction.docRevVersion}
+                    docDocumentId={pendingAction.docDocumentId}
+                    trainingStatus={pendingAction.trainingStatus}
+                    pendingEmailSentAt={pendingAction.pendingEmailSentAt}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime
+                    )}
+                    pendingTrainees={pendingAction.pendingTrainees}
+                    hoverItemId={hoverItemId}
+                    onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pinned={pendingAction.pinned}
+                  />
+                  <Divider />
+                </div>
+              );
+            default:
+              return <Text key={index} translation="common.undefined" />;
+          }
+        })}
+      </List>
+      <Box style={{ float: "right" }}>
+        <Button onClick={() => onLoadMoreData()} className={classes.loadButton}  disabled={trainingItems.page_total === 1}>
+          <Text translation="dashboard.load.more"></Text>
+          <div style={{ marginRight: 10 }}></div>
+          <LoadMore />
+        </Button>
+      </Box>
+
+    </Box>
   );
-  const renderNoPendingActions = trainingItems.length === 0 && (
+  const renderNoPendingActions = trainingItems.total === 0 && (
     <List dense>
       <ListItemText
         primary={
@@ -85,7 +97,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {trainingItems.length > 0 && renderPendingActions()}
+      {trainingItems.total > 0 && renderPendingActions()}
       {renderNoPendingActions}
     </>
   );

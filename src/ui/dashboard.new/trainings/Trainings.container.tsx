@@ -14,13 +14,16 @@ import TrainingsLineItemPresenter from "./Trainings.presenter";
 
 const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
+  const trainingListPageInfo = useSelector(trainingSelectors.trainingListPageInfo);
   const loadTrainingListAsyncInfo = useSelector(
     trainingSelectors.getLoadTrainingListAsyncInfo
   );
   const dispatch = useDispatch();
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
-      dispatch(trainingActions.loadTrainingList());
+      dispatch(trainingActions.loadTrainingList({
+
+      }));
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
@@ -33,13 +36,27 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const unPinLineItem = (pinnedItemId: string) => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
+
+  const async = useAsync();
+
+  const onPageChange = () => {
+    const updatedPageSize = {
+      offset: trainingListPageInfo.offset + 25,
+      limit: trainingListPageInfo.limit,
+    };
+    async.start(loadTrainingList, updatedPageSize);
+    dispatch(
+      trainingActions.trainingListPageInfo(updatedPageSize)
+    );
+  };
+
   return (
     <AsyncGate
       asyncAction={loadTrainingList}
       asyncState={loadTrainingListAsyncInfo}
       startActionOnMount={true}
     >
-      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem }}/>
+      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem }} onLoadMoreData={onPageChange}/>
     </AsyncGate>
   );
 };
