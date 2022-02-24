@@ -2,13 +2,15 @@
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
+import { TABLE_NAME as TRAINING_TABLE_NAME } from "../../training/grid/container";
 import { DateFields } from "../../training/kendo/types";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../utils/helpers";
 import { CompletedOnDateOptions } from "../utils/types";
+import { TABLE_NAME as DOC_LIST_TABLE_NAME } from "./container";
 
 export const getDynamicPayloadItems = (tableName: string, payload) => {
   switch (tableName) {
-    case "documentRevisions":
+    case DOC_LIST_TABLE_NAME:
       const field = find(payload.filters, { field: "effectiveDate" });
       if (field && field.field === "effectiveDate") {
         const effectiveDateOptions = documentRevisionEffectiveDateOption();
@@ -16,7 +18,7 @@ export const getDynamicPayloadItems = (tableName: string, payload) => {
         payload.filters = filter(payload.filters, (el) => el.field !== "effectiveDate");
       }
       break;
-    case "training":
+    case TRAINING_TABLE_NAME:
       const createdAtField = find(payload.filters, {
         field: DateFields.CREATED_AT,
       });

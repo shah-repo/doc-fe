@@ -9,7 +9,6 @@ import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from "../../../sta
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
 import { TRAINING_RECORDS_SEARCH_URL } from "../../constants/urls";
-import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useDialog from "../../hooks/useDialog";
 import TrainingDetails from "../details/TrainingDetails";
 import gridConfiguration from "./column.definition";
@@ -17,9 +16,10 @@ import { DataStateProps } from "./interfaces";
 import { TrainingListPresenter } from "./presenter";
 import KendoGridStyles from "./presenter.styles";
 
+export const TABLE_NAME = "training";
+
 const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
-  const TABLE_NAME = "training";
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const classes = KendoGridStyles();
@@ -82,10 +82,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
         columns={gridConfiguration.columns}
         onRowClick={onRowClick}
         queryUrl={TRAINING_RECORDS_SEARCH_URL}
-        defaultPayloadData={{
-          documentTypeCategory: "Training Curriculums",
-          status: documentRevisionQueryStatus(),
-        }}
+        defaultPayloadData={{}}
       />
       {trainingDetailsDialog.isOpen && (
         <Dialog

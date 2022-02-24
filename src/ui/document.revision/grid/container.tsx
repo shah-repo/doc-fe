@@ -18,9 +18,10 @@ import gridConfiguration from "./column.definition";
 import { DataStateProps } from "./interfaces";
 import { DocumentListPresenter } from "./presenter";
 
+export const TABLE_NAME = "documentRevisions";
+
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
-  const TABLE_NAME = "documentRevisions";
   const dispatch = useDispatch();
   const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
