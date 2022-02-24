@@ -6,6 +6,7 @@ import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from "../../../..
 import AsyncGate from "../../../components/AsyncGate";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
+import useDidMount from "../../../hooks/useDidMount";
 import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
 
 interface TrainingLineItemsProps {
@@ -15,6 +16,7 @@ interface TrainingLineItemsProps {
 const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   tabValue,
 }) => {
+  const didMount = useDidMount();
   const async = useAsync();
   const [offset, setOffset] = React.useState(TRAINING_STATS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(TRAINING_STATS_LIMIT);
@@ -55,7 +57,9 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     setOffset(TRAINING_STATS_INITIAL_OFFSET);
     setOverallLimit(TRAINING_STATS_LIMIT);
     payload.offset = TRAINING_STATS_INITIAL_OFFSET;
-    async.start(loadTrainingStatsList, payload);
+    if (didMount) {
+      async.start(loadTrainingStatsList, payload);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabValue]);
 
