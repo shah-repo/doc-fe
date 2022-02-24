@@ -1,10 +1,9 @@
 /* eslint-disable max-len */
 /* eslint-disable react/react-in-jsx-scope */
-import { Box, Button, Divider } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -32,6 +31,7 @@ import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.rev
 import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApproval";
 import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
+import { LoadMoreButton } from "../LoadMoreButton";
 import { styles } from "./MyFeeds.styles";
 
 interface Props {
@@ -608,17 +608,8 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
               );
           }
         })}
-      <Box style={{ float: "right" }}>
-        <Button
-          onClick={() => onLoadMoreData()}
-          className={classes.loadButton}
-          disabled={ overallLimit >= feedItems.total }
-        >
-          <Text translation="dashboard.load.more"></Text>
-          <div style={{ marginRight: 10 }}></div>
-          <LoadMore />
-        </Button>
-      </Box>
+
+      <LoadMoreButton onLoadMore={onLoadMoreData}  disable={ overallLimit >= feedItems.total }/>
     </List>
 
   );
