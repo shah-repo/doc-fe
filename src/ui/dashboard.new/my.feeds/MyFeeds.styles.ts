@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme) =>
   createStyles({
@@ -23,7 +24,7 @@ export const styles = makeStyles((theme) =>
       "font-weight": 600,
       "letter-spacing": "0.5px",
       "text-transform": "uppercase",
-      "color": " #011FBB",
+      "color": Colors.navy,
     },
   })
 );
