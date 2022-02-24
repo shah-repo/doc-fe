@@ -37,7 +37,7 @@ export interface KendoPanelProps {
   statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
 }
 
-export interface ProductsLoaderProps {
+export interface DataLoaderProps {
   dataState: State;
   onDataReceived: (products: DataResult) => void;
   schema: object;

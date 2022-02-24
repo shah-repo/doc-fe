@@ -7,17 +7,19 @@ import apiClient from "../../../state/apiClient";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { store } from "../../../state/store";
 import { documentRevisionEffectiveDateOption } from "../utils/helpers";
-import { ProductsLoaderProps } from "./interfaces";
+import { getDefaultPayloadItems } from "./DataLoader.util";
+import { DataLoaderProps } from "./interfaces";
 
-export const ProductsLoader = ({ dataState, onDataReceived, schema, tableName }: ProductsLoaderProps) => {
+export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
+  const defaultPayloadItems = getDefaultPayloadItems(tableName);
   const data = {
-    documentTypeWithoutCategory: "true",
+    ...defaultPayloadItems,
     limit: dataState.take,
     offset: dataState.skip,
     filters: dataState.filter?.filters,
     sort: dataState.sort,
     schema,
-  } as any;
+  };
   const prepareExtraKeys = () => {
     const effectiveDateOptions = documentRevisionEffectiveDateOption();
     const field = find(data.filters, { field: "effectiveDate" });

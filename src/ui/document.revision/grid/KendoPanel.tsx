@@ -11,11 +11,11 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { DataLoader } from "./DataLoader";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
 import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
 import { StatusFilterTemplate } from "./filter.template/StatusFilterTemplate";
 import { KendoPanelProps } from "./interfaces";
-import { ProductsLoader } from "./ProductsLoader";
 
 
 export function KendoPanel({
@@ -133,7 +133,7 @@ export function KendoPanel({
         </Grid>
 
         {dataState && (
-          <ProductsLoader
+          <DataLoader
             dataState={dataState}
             onDataReceived={dataReceived}
             schema={schema}
