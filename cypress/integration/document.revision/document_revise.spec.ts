@@ -130,14 +130,14 @@ context("Document revise test", () => {
         });
       });
     });
+  });
 
+  context("Verify 'Administrative Change' is not shown on document list", () => {
     it("Navigate to created document", () => {
       cy.navigToDocumentList();
       cy.drClickOnSpecificDocFromList({ item: documentRevisionName });
     });
-  });
 
-  context("Verify 'Administrative Change' is not shown on document list", () => {
     it("Revise document with 'Administrative Change' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Administrative Change" });

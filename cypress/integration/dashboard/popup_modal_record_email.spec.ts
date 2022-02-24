@@ -251,6 +251,7 @@ context("Records email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        cy.wait(10000);
       });
     });
   });
