@@ -1,20 +1,22 @@
 import { toODataString } from "@progress/kendo-data-query";
 import { AxiosRequestConfig } from "axios";
+import { cloneDeep } from "lodash";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import apiClient from "../../../state/apiClient";
 import { store } from "../../../state/store";
-import { getDefaultPayloadItems, getDynamicPayloadItems, getQueryURL } from "./DataLoader.util";
+import { getDefaultPayloadItems, getDynamicPayloadItems, getQueryURL, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
 export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
+  const updatedDataState = updateDataState(cloneDeep(dataState));
   const defaultPayloadItems = getDefaultPayloadItems(tableName);
   let data = {
     ...defaultPayloadItems,
-    limit: dataState.take,
-    offset: dataState.skip,
-    filters: dataState.filter?.filters,
-    sort: dataState.sort,
+    limit: updatedDataState.take,
+    offset: updatedDataState.skip,
+    filters: updatedDataState.filter?.filters,
+    sort: updatedDataState.sort,
     schema,
   };
   data = getDynamicPayloadItems(tableName, data);
@@ -33,18 +35,18 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
 
   const requestDataIfNeeded = () => {
     if (
-      pending.current ||
-      toODataString(dataState) === lastSuccess.current
+      (pending.current ||
+      toODataString(updatedDataState) === lastSuccess.current)
     ) {
       return;
     }
-    pending.current = toODataString(dataState);
+    pending.current = toODataString(updatedDataState);
     apiClient
       .request(requestConfig)
       .then(({ data }) => {
         lastSuccess.current = pending.current;
         pending.current = "";
-        if (toODataString(dataState) === lastSuccess.current) {
+        if (toODataString(updatedDataState) === lastSuccess.current) {
           onDataReceived.call(undefined, {
             data: data.results,
             total: data.total,
@@ -54,7 +56,6 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
         }
       });
   };
-
   requestDataIfNeeded();
   return pending.current ? <LoadingPanel /> : null;
 };

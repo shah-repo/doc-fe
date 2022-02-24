@@ -1,10 +1,15 @@
 import { Grid } from "@material-ui/core";
-import { DataResult, State } from "@progress/kendo-data-query";
+import { DataResult, process, State } from "@progress/kendo-data-query";
+import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
-  Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps, GridToolbar,
+  Grid as KendoTable,
+  GridColumn as KendoColumn,
+  GridDataStateChangeEvent,
+  GridExpandChangeEvent,
+  GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
-import { findIndex, map, set } from "lodash";
-import React, { useEffect, useState } from "react";
+import { cloneDeep, findIndex, map, set } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
@@ -13,12 +18,13 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoColumn as KendoColumnProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import useDidMount from "../../hooks/useDidMount";
+import { ColumnMenu } from "./cell.templates/ColumnMenu";
 import { DataLoader } from "./DataLoader";
 import { CompletedDateFilterTemplate } from "./filter.template/CompletedDateFilterTemplate";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
@@ -33,6 +39,7 @@ export function KendoGrid<T extends any>({
   tableCriteria,
   schema,
   statuses = [],
+  onRowClick,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
@@ -42,6 +49,7 @@ export function KendoGrid<T extends any>({
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(tableCriteria?.queryDict?.dataState);
+  const [collapsedState, setCollapsedState] = useState<string[]>([]);
 
   useEffect(() => {
     if (didMount) {
@@ -57,8 +65,25 @@ export function KendoGrid<T extends any>({
     total: 77,
   });
 
+  const processWithGroups = (data, dataState: State) => {
+    const dataStateOne = cloneDeep(dataState);
+    if (dataStateOne) {
+      dataStateOne.skip = 0;
+      const processedData = process(data.data, dataStateOne);
+      setGroupIds({ data: processedData.data, group: dataStateOne.group });
+      return processedData;
+    }
+    return data;
+  };
+
+  const [resultState, setResultState] = useState<DataResult>(
+    processWithGroups(products, dataState)
+  );
+
   const dataStateChange = (e: GridDataStateChangeEvent) => {
     setDataState(e.dataState);
+    const groupedResultState = processWithGroups(products, e.dataState);
+    setResultState(groupedResultState);
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -74,6 +99,9 @@ export function KendoGrid<T extends any>({
 
   const dataReceived = (products: DataResult) => {
     setProducts(products);
+    const newDataState = processWithGroups(products, dataState);
+    newDataState.total = products.total;
+    setResultState(newDataState);
   };
 
   // Column Menu Filters
@@ -128,10 +156,15 @@ export function KendoGrid<T extends any>({
     "createdAt": EffectiveDate,
   };
 
+  const sortedColumnDefinitions = orderByLockedState(
+    columns,
+    []
+  );
+
   const renderKendoColumns = (
     gridWidth: number
   ) => (
-    columns.map((column, index) => (
+    sortedColumnDefinitions.map((column, index) => (
       column.show && <KendoColumn
         key={index}
         {...column}
@@ -157,7 +190,17 @@ export function KendoGrid<T extends any>({
             ? filterCellMapping[column.field]
             : undefined
         }
-        columnMenu={undefined}
+        columnMenu={
+          column.showColumnMenu
+            ? (props) => (
+              <ColumnMenu
+                {...props}
+                tableName={tableName}
+                columns={columns}
+              />
+            )
+            : undefined
+        }
       />)
     ));
   const clearFilter = () => {
@@ -197,6 +240,23 @@ export function KendoGrid<T extends any>({
       )
     );
   };
+  const onExpandChange = useCallback(
+    ({ dataItem, value }: GridExpandChangeEvent) => {
+      const item = dataItem;
+      if (item.groupId) {
+        const newCollapsedIds = !value
+          ? [...collapsedState, item.groupId]
+          : collapsedState.filter((groupId) => groupId !== item.groupId);
+        setCollapsedState(newCollapsedIds);
+      }
+    },
+    [collapsedState]
+  );
+  const result = setExpandedState({
+    data: resultState.data,
+    collapsedIds: collapsedState,
+  });
+
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
@@ -207,9 +267,13 @@ export function KendoGrid<T extends any>({
           filterable={true}
           sortable={true}
           pageable={true}
+          groupable={true}
           {...dataState}
-          data={products}
+          data={result}
+          total={products.total}
           onDataStateChange={dataStateChange}
+          onExpandChange={onExpandChange}
+          expandField="expanded"
         >
           <GridToolbar>
             <Grid container>

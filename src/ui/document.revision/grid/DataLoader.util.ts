@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
-import { filter, find } from "lodash";
+import { State } from "@progress/kendo-data-query";
+import { filter, find, map } from "lodash";
 import moment from "moment";
 import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
@@ -85,4 +86,20 @@ export const getDynamicPayloadItems = (tableName: string, payload) => {
     default:
   }
   return payload;
+};
+
+export const updateDataState = (dataState: State) => {
+  const groupList = dataState.group || [];
+  const groupFields = map(groupList, "field");
+  let sortList = dataState.sort;
+  sortList = filter(sortList, (sortObject) => !groupFields.includes(sortObject.field));
+  sortList.unshift(...groupList);
+  sortList = map(sortList, (o) => {
+    if (!o.dir) {
+      o.dir = "asc";
+    }
+    return o;
+  });
+  dataState.sort = sortList;
+  return dataState;
 };
