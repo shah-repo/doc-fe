@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { startCase } from "lodash";
+import { cloneDeep, has, map, startCase } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -47,6 +47,14 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState(providedData);
   const intl = useIntl();
+  const toTitleCase = (title) => {
+    const capitalized = title
+      .split(" ")
+      .map(
+        (word) => word.charAt(0).toUpperCase() + word.substring(1, word.length)
+      );
+    return capitalized.join(" ");
+  };
   const headers = columns.map((column) => {
     if (
       moment(
@@ -66,10 +74,11 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
       : column.label;
 
     return {
-      label: startCase(columnLabel),
+      label: toTitleCase(columnLabel),
       key: column.key,
     };
   });
+
   const createDocumentProps = isByCategory
     ? {
       categoryName: documentCategory.category,
@@ -80,7 +89,21 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   const handleExportData = (
     dataToBeExported: TableDataProps<DocumentRevision>
   ) => {
-    setDataToBeExported(dataToBeExported);
+    let copyDate = cloneDeep(dataToBeExported);
+    copyDate = map(copyDate, (record: any) => {
+      if (has(record, "precalc.lhr_end_accepted_quantity")) {
+        if (record.precalc.lhr_end_accepted_quantity === -1) {
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          record.precalc.lhr_end_accepted_quantity = "N/A";
+        }
+      }
+      if (has(record, "precalc.po_amount")) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        record.precalc.po_amount = record.precalc.po_amount_org;
+      }
+      return record;
+    });
+    setDataToBeExported(copyDate);
   };
 
   return (

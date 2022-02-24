@@ -266,7 +266,10 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             </Observer>
           )
         }
-        {isExportable && <ExportToEmail revisionId={documentRevision.id}/>}
+        {isExportable && <ExportToEmail
+          revisionId={documentRevision.id}
+          canAccess={documentRevision.document.canAccess}
+        />}
         <HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton

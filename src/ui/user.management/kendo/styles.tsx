@@ -7,7 +7,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   kGrid: {
     height: "calc(100vh - 109px)",
-    width: "calc(100vw - 280px)",
   },
   groupCell: {
     whiteSpace: "pre-wrap",
@@ -25,9 +24,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   errorClass: {
     color: Colors.red,
-  },
-  dropboxButton: {
-    display: "flex",
   },
 }));
 
