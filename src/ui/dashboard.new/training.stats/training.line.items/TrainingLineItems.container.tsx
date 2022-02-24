@@ -49,6 +49,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     offset: TRAINING_STAT_OFFSET,
     limit: TRAINING_STAT_LIMIT,
     filters: createTrainingLineItemsonTabChangePayload(tabValue),
+    // tabSwitch: false,
   };
   const updatedPageSize = {
     offset: payload.offset,
@@ -56,6 +57,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
   };
 
   useEffect(() => {
+    dispatch(trainingStatsActions.trainingStatsList([]));
     async.start(loadTrainingStatsList, payload);
     dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,7 +65,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
 
   const onLoadMoreData = () => {
     payload.offset = trainingStatPageInfo.offset + TRAINING_STAT_LIMIT;
-    payload.limit = trainingStatPageInfo.limit + TRAINING_STAT_LIMIT;
+    payload.limit = trainingStatPageInfo.limit;
     updatedPageSize.offset = payload.offset;
     updatedPageSize.limit =  payload.limit;
     async.start(loadTrainingStatsList, payload);

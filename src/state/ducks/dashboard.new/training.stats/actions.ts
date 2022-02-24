@@ -28,6 +28,9 @@ const trainingStatsList = (
 
 const loadTrainingStatsList = (payload): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
+  if (!isEmpty(payload)) {
+    delete payload.tabSwicth;
+  }
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
     data: isEmpty(payload) ?  {

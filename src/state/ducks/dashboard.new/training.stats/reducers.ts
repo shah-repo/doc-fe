@@ -1,3 +1,4 @@
+import { concat, get, isEmpty, set } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
 import { TRAINING_STATS_CHART, TRAINING_STATS_CHART_ASYNC, TRAINING_STATS_LIST, TRAINING_STATS_LIST_ASYNC, TRAINING_STAT_LIMIT, TRAINING_STAT_OFFSET, TRAINING_STAT_PAGEINFO } from "./constants";
@@ -10,9 +11,12 @@ const trainingStats = (
   state: TrainingStatsState = [],
   action: TrainingStats
 ): TrainingStatsState => {
+  const actionResult = get(action.payload, "results");
+  const stateResult = get(state, "results");
+  const combineResult = isEmpty(stateResult) ? actionResult :  concat(stateResult, actionResult);
   switch (action.type) {
     case TRAINING_STATS_LIST:
-      return action.payload;
+      return isEmpty(actionResult) ? action.payload : set(action.payload, "results", combineResult);
     default:
       return state;
   }
@@ -52,4 +56,5 @@ export default combineReducers({
   loadTrainingStatsChartAsyncInfo: asyncReducer(TRAINING_STATS_CHART_ASYNC),
   trainingStatsChart,
   trainingStatPageInfo,
+  // trainingStatsClear,
 });
