@@ -1,6 +1,7 @@
+import { Grid } from "@material-ui/core";
 import { DataResult, State } from "@progress/kendo-data-query";
 import {
-  Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps,
+  Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -11,6 +12,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import ClearFilters from "../../components/table/ClearFilters";
 import { DataLoader } from "./DataLoader";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
 import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
@@ -116,7 +118,9 @@ export function KendoGrid({
         columnMenu={undefined}
       />)
     ));
-
+  const clearFilter = () => {
+    console.log("debug Clear Filter");
+  };
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
@@ -131,6 +135,19 @@ export function KendoGrid({
           data={products}
           onDataStateChange={dataStateChange}
         >
+          <GridToolbar>
+            <Grid container>
+              <Grid item={true} xs={6} style={{ textAlign: "left" }}>
+                <ClearFilters {...{ clearFilter }} />
+              </Grid>
+              <Grid item={true} xs={6} style={{ textAlign: "right" }}>
+                {/* <ColumnShowHideMenu
+                  columnDefinition={sortedColumnDefinitions}
+                  onChange={onColumnShowHide}
+                /> */}
+              </Grid>
+            </Grid>
+          </GridToolbar>
           {renderKendoColumns(width)}
         </KendoTable>
 
