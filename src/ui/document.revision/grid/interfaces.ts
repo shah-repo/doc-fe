@@ -29,12 +29,13 @@ export interface KendoPresenterProps {
   columns: KendoColumn[];
 }
 
-export interface KendoGridProps {
+export interface KendoGridProps<T> {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   schema: object;
   columns: KendoColumn[];
   statuses: DocumentRevisionStatus | DocumentRevisionStatus[];
+  exportDataChanges?: (data: T[]) => void;
 }
 
 export interface DataLoaderProps {

@@ -1,12 +1,12 @@
-import { Box, Button, Grid } from "@material-ui/core";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
-import Text from "../../components/Text";
+import { Box, Grid } from "@material-ui/core";
+import React, { useState } from "react";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import CreateButton from "./CreateButton";
+import ExportButton from "./ExportButton";
 import GridTitle from "./GridTitle";
 import { KendoPresenterProps } from "./interfaces";
 import { KendoGrid } from "./KendoGrid";
-import styles from "./presenter.styles";
 
 
 export function DocumentListPresenter({
@@ -16,21 +16,17 @@ export function DocumentListPresenter({
   schema,
   columns,
 }: KendoPresenterProps) {
-  const classes = styles();
+  const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
+  const handleExportData = (dataToBeExported: DocumentRevision[]) => {
+    setDataToBeExported(dataToBeExported);
+  };
   return (
     <Box m={2}>
       <Grid container={true}>
         <GridTitle translation="navigation.document.list" />
         <Grid item={true}>
-          <RouterLink to={DOCUMENT_REVISION_CREATE_URL} style={{ textDecoration: "none" }}>
-            <Button
-              className={classes.createDocButton}
-              id="ListPresenter-create"
-              data-cy="document.revision.create"
-            >
-              <Text translation="document.revision.create" />
-            </Button>
-          </RouterLink>
+          <ExportButton columns={columns} gridData={dataToBeExported} />
+          <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
         </Grid>
         <Grid item={true} xs={12}>
           <KendoGrid
@@ -39,6 +35,7 @@ export function DocumentListPresenter({
             schema={schema}
             columns={columns}
             statuses={statuses}
+            exportDataChanges={handleExportData}
           />
         </Grid>
       </Grid>

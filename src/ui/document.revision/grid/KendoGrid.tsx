@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
@@ -27,7 +27,7 @@ export function KendoGrid({
   schema,
   columns,
   statuses,
-}: KendoGridProps) {
+}: KendoGridProps<DocumentRevision>) {
   const classes = KendoGridStyles();
   console.log("debug :: KendoPanel");
   console.log("debug :: columns", columns);
