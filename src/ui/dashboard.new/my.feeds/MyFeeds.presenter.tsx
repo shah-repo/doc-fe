@@ -4,6 +4,7 @@ import { Box, Button, Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { ReactComponent as LoadMore } from "../../../assets/images/load_more_arrow.svg";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -606,9 +607,17 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
             }
           })}
       </List>
-      <Button onClick={() => onLoadMoreData()} className={classes.loadButton} disabled={feedItems.page_total === 1}>
-        <Text translation="dashboard.load.more" />
-      </Button>
+      <Box style={{ float: "right" }}>
+        <Button
+          onClick={() => onLoadMoreData()}
+          className={classes.loadButton}
+          disabled={feedItems.page_total === 1}
+        >
+          <Text translation="dashboard.load.more"></Text>
+          <div style={{ marginRight: 10 }}></div>
+          <LoadMore />
+        </Button>
+      </Box>
     </Box>
   );
   const renderNoPendingActions = feedItems.total === 0 && (

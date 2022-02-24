@@ -71,13 +71,16 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
         })}
       </List>
       <Box style={{ float: "right" }}>
-        <Button onClick={() => onLoadMoreData()} className={classes.loadButton}  disabled={trainingItems.page_total === 1}>
+        <Button
+          onClick={() => onLoadMoreData()}
+          className={classes.loadButton}
+          disabled={trainingItems.page_total === 1}
+        >
           <Text translation="dashboard.load.more"></Text>
           <div style={{ marginRight: 10 }}></div>
           <LoadMore />
         </Button>
       </Box>
-
     </Box>
   );
   const renderNoPendingActions = trainingItems.total === 0 && (
