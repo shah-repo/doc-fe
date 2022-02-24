@@ -2,6 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import { documentRevisionQueryStatus } from "../utils/helpers";
 import CreateButton from "./CreateButton";
 import ExportButton from "./ExportButton";
 import GridTitle from "./GridTitle";
@@ -16,6 +17,7 @@ export function DocumentListPresenter({
   schema,
   columns,
   onRowClick,
+  queryUrl,
 }: KendoPresenterProps) {
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
@@ -37,6 +39,11 @@ export function DocumentListPresenter({
             statuses={statuses}
             exportDataChanges={handleExportData}
             onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={{
+              documentTypeWithoutCategory: "true",
+              status: documentRevisionQueryStatus(),
+            }}
           />
         </Grid>
       </Grid>

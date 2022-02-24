@@ -14,6 +14,8 @@ export function TrainingListPresenter({
   schema,
   columns,
   onRowClick,
+  queryUrl,
+  defaultPayloadData,
 }: KendoPresenterProps) {
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
@@ -34,6 +36,8 @@ export function TrainingListPresenter({
             schema={schema}
             exportDataChanges={handleExportData}
             onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={defaultPayloadData}
           />
         </Grid>
       </Grid>

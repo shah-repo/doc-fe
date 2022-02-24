@@ -4,6 +4,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import ExportButton from "../../document.revision/grid/ExportButton";
 import GridTitle from "../../document.revision/grid/GridTitle";
 import { KendoGrid } from "../../document.revision/grid/KendoGrid";
+import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { KendoPresenterProps } from "./interfaces";
 
 
@@ -15,6 +16,8 @@ export function DocumentTypePresenter({
   columns,
   title,
   onRowClick,
+  queryUrl,
+  documentTypeCategory,
 }: KendoPresenterProps) {
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
@@ -36,6 +39,12 @@ export function DocumentTypePresenter({
             statuses={statuses}
             exportDataChanges={handleExportData}
             onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={{
+              documentTypeCategory: "Record",
+              status: documentRevisionQueryStatus(),
+            }}
+            documentTypeCategory={documentTypeCategory}
           />
         </Grid>
       </Grid>

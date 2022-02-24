@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
@@ -110,6 +111,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       schema={schema}
       columns={gridConfiguration.columns}
       onRowClick={onRowClick}
+      queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
     />
   );
 };

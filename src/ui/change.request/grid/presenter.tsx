@@ -1,5 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
+import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import GridTitle from "../../document.revision/grid/GridTitle";
 import { KendoGrid } from "../../document.revision/grid/KendoGrid";
@@ -34,6 +35,8 @@ export function DocumentListPresenter({
             schema={schema}
             exportDataChanges={handleExportData}
             onRowClick={onRowClick}
+            queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
+            defaultPayloadData={{}}
           />
         </Grid>
       </Grid>

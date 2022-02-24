@@ -28,6 +28,7 @@ export interface KendoPresenterProps {
   schema: object;
   columns: KendoColumn[];
   onRowClick: ((dataItem: any) => void);
+  queryUrl: string;
 }
 
 export interface KendoGridProps<T> {
@@ -37,6 +38,9 @@ export interface KendoGridProps<T> {
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
   exportDataChanges?: (data: T[]) => void;
   onRowClick: ((dataItem: any) => void);
+  queryUrl: string;
+  defaultPayloadData: object;
+  documentTypeCategory?: string;
 }
 
 export interface DataLoaderProps {
@@ -44,6 +48,9 @@ export interface DataLoaderProps {
   onDataReceived: (products: DataResult) => void;
   schema: object;
   tableName: string;
+  queryUrl: string;
+  defaultPayloadData: object;
+  documentTypeCategory?: string;
 }
 
 export interface KendoTableSearchQueryType {

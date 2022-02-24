@@ -2,86 +2,10 @@
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
-import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
-import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { TRAINING_RECORDS_SEARCH_URL } from "../../constants/urls";
 import { DateFields } from "../../training/kendo/types";
-import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus, dueDateOption, trainingCompletedOnDateOption } from "../utils/helpers";
+import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../utils/helpers";
 import { CompletedOnDateOptions } from "../utils/types";
 
-const TABLE_PAYLOAD_ITEMS_MAPPING = {
-  "documentRevisions": {
-    documentTypeWithoutCategory: "true",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Record": {
-    documentTypeCategory: "Record",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Equipment": {
-    documentTypeCategory: "Equipment",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Supplier": {
-    documentTypeCategory: "Supplier",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Purchase Order": {
-    documentTypeCategory: "Purchase Order",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Parts": {
-    documentTypeCategory: "Parts",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-EB": {
-    documentTypeCategory: "EB",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Lot": {
-    documentTypeCategory: "Lot",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Lhr": {
-    documentTypeCategory: "Lhr",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Receive": {
-    documentTypeCategory: "Receive",
-    status: documentRevisionQueryStatus(),
-  },
-  "documentsByCategoryList-Training Curriculums": {
-    documentTypeCategory: "Training Curriculums",
-    status: documentRevisionQueryStatus(),
-  },
-};
-export const getDefaultPayloadItems = (tableName: string) => TABLE_PAYLOAD_ITEMS_MAPPING[tableName] || {};
-export const getQueryURL = (tableName: string) => {
-  const urls = [
-    "documentsByCategoryList-Record",
-    "documentsByCategoryList-Equipment",
-    "documentsByCategoryList-Supplier",
-    "documentsByCategoryList-Purchase Order",
-    "documentsByCategoryList-Parts",
-    "documentsByCategoryList-EB",
-    "documentsByCategoryList-Lot",
-    "documentsByCategoryList-Lhr",
-    "documentsByCategoryList-Receive",
-    "documentsByCategoryList-Training Curriculums",
-  ];
-  if (urls.includes(tableName)) {
-    return DOCUMENT_REVISION_SEARCH_ROOT_URL;
-  }
-  if (["documentRevisions"].includes(tableName) ) {
-    return DOCUMENT_REVISION_SEARCH_ROOT_URL;
-  }
-  if (["changeRequests"].includes(tableName)) {
-    return CHANGE_REQUEST_ROOT_URL_SEARCH;
-  }
-  if (["training"].includes(tableName)) {
-    return TRAINING_RECORDS_SEARCH_URL;
-  }
-};
 export const getDynamicPayloadItems = (tableName: string, payload) => {
   switch (tableName) {
     case "documentRevisions":

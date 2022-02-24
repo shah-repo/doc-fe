@@ -7,6 +7,7 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { PageDetailsColumn } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -210,6 +211,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       columns={kendoColumnDef as KendoColumn[]}
       onRowClick={onRowClick}
       title={title}
+      queryUrl={DOCUMENT_REVISION_SEARCH_ROOT_URL}
+      documentTypeCategory={isByCategory ? categoryName : documentType?.documentTypeAcronym}
     />
   );
 };

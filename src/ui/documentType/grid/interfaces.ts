@@ -28,4 +28,6 @@ export interface KendoPresenterProps {
   columns: KendoColumn[];
   onRowClick: ((dataItem: any) => void);
   title?: string;
+  queryUrl: string;
+  documentTypeCategory?: string;
 }

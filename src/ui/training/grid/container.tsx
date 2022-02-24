@@ -8,6 +8,8 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
+import { TRAINING_RECORDS_SEARCH_URL } from "../../constants/urls";
+import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import useDialog from "../../hooks/useDialog";
 import TrainingDetails from "../details/TrainingDetails";
 import gridConfiguration from "./column.definition";
@@ -79,6 +81,11 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
         schema={schema}
         columns={gridConfiguration.columns}
         onRowClick={onRowClick}
+        queryUrl={TRAINING_RECORDS_SEARCH_URL}
+        defaultPayloadData={{
+          documentTypeCategory: "Training Curriculums",
+          status: documentRevisionQueryStatus(),
+        }}
       />
       {trainingDetailsDialog.isOpen && (
         <Dialog

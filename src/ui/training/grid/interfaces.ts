@@ -27,6 +27,8 @@ export interface KendoPresenterProps {
   schema: object;
   columns: KendoColumn[];
   onRowClick: ((dataItem: any) => void);
+  queryUrl: string;
+  defaultPayloadData: object;
 }
 
 export enum DateFields {

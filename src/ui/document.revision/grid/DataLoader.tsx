@@ -5,24 +5,26 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import apiClient from "../../../state/apiClient";
 import { store } from "../../../state/store";
-import { getDefaultPayloadItems, getDynamicPayloadItems, getQueryURL, updateDataState } from "./DataLoader.util";
+import { getDynamicPayloadItems, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
-export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
+export const DataLoader = ({ dataState, onDataReceived, schema, tableName, queryUrl, defaultPayloadData, documentTypeCategory }: DataLoaderProps) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
-  const defaultPayloadItems = getDefaultPayloadItems(tableName);
   let data = {
-    ...defaultPayloadItems,
+    ...defaultPayloadData,
     limit: updatedDataState.take,
     offset: updatedDataState.skip,
     filters: updatedDataState.filter?.filters,
     sort: updatedDataState.sort,
     schema,
-  };
+  } as object;
+  if (documentTypeCategory) {
+    data = { ...data, documentTypeCategory };
+  }
   data = getDynamicPayloadItems(tableName, data);
   const requestConfig: AxiosRequestConfig = {
     method: "post",
-    url: getQueryURL(tableName),
+    url: queryUrl,
     data,
     headers: {},
   };

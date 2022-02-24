@@ -42,10 +42,12 @@ export function KendoGrid<T extends any>({
   schema,
   statuses = [],
   onRowClick,
+  queryUrl,
+  defaultPayloadData,
+  documentTypeCategory,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
-  console.log("debug :: KendoPanel");
   const [columns, setColumns] = useState<KendoColumnProps[]>([]);
   const dispatch = useDispatch();
   const intl = useIntl();
@@ -331,6 +333,9 @@ export function KendoGrid<T extends any>({
             onDataReceived={dataReceived}
             schema={schema}
             tableName={tableName}
+            queryUrl={queryUrl}
+            defaultPayloadData={defaultPayloadData}
+            documentTypeCategory={documentTypeCategory}
           />
         )}
       </KendoGlobalization>
