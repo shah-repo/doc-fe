@@ -102,14 +102,15 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
         >
           <Text translation="common.overdue" />
         </TabPanel>
-        <Button
+        { totalTrainingData > 0 && <Button
           onClick={() => onLoadMoreData()}
           className={classes.loadMoreButton}
           disabled={overallLimit >= totalTrainingData}
         >
           <Text translation="dashboard.load.more"></Text>
         </Button>
-        <LoadMore />
+        }
+        { totalTrainingData > 0 && <LoadMore /> }
       </Box>
     );
   };

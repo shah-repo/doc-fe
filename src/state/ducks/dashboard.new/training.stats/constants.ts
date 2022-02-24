@@ -5,5 +5,5 @@ export const TRAINING_STATS_CHART = "dashboard/TRAINING_STATS_CHART";
 export const TRAINING_STATS_CHART_ASYNC = "dashboard/TRAINING_STATS_CHART_ASYNC";
 export const TRAINING_STATS_CHART_URL = "/training_record/dueSummary";
 export const TRAINING_STATS_INITIAL_OFFSET = 0;
-export const TRAINING_STATS_LIMIT = 10;
+export const TRAINING_STATS_LIMIT = 50;
 
