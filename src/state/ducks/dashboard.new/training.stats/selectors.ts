@@ -6,7 +6,7 @@ import { TrainingStatusTypes } from "./types";
 const trainingStats = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStats;
 
-const trainingLineItemData = (state: ApplicationState) => {
+const trainingStatsLineItemData = (state: ApplicationState) => {
   const results = get(state.dashboardNew.trainingStats.trainingStats, "results");
   results.filter((item) => {
     // taking only required data of user
@@ -16,8 +16,8 @@ const trainingLineItemData = (state: ApplicationState) => {
   return results;
 };
 
-const trainingDataPageSize = (state: ApplicationState) =>
-  get(state.dashboardNew.trainingStats.trainingStats, "page_total");
+const totalTrainingStatsLineItemData = (state: ApplicationState) =>
+  get(state.dashboardNew.trainingStats.trainingStats, "total");
 
 const trainingStatPageInfo = (state: ApplicationState) =>
   state.dashboardNew.trainingStats.trainingStatPageInfo;
@@ -43,11 +43,11 @@ const getLoadTrainingStatsListAsyncInfo = (
 export default {
   getLoadTrainingStatsListAsyncInfo,
   trainingStats,
-  trainingLineItemData,
+  trainingStatsLineItemData,
   trainingStatsChart,
   overdueTrainingChartData,
   dueTrainingChartData,
   getLoadTrainingStatsChartAsyncInfo,
-  trainingDataPageSize,
+  totalTrainingStatsLineItemData,
   trainingStatPageInfo,
 };

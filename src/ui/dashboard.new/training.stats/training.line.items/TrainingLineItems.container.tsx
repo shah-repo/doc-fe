@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentDate, MomentFormats } from "../../../../common/utils/date";
 import { trainingStatsActions, trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
-import { TRAINING_STAT_LIMIT, TRAINING_STAT_OFFSET } from "../../../../state/ducks/dashboard.new/training.stats/constants";
+import { TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT } from "../../../../state/ducks/dashboard.new/training.stats/constants";
 import AsyncGate from "../../../components/AsyncGate";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -17,6 +17,8 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
 }) => {
   const dispatch = useDispatch();
   const async = useAsync();
+  const [offset, setOffset] = React.useState(TRAINING_STATS_INITIAL_OFFSET);
+  const [overallLimit, setOverallLimit] = React.useState(TRAINING_STATS_LIMIT);
   const loadTrainingStatsList = useActionCreator(
     trainingStatsActions.loadTrainingStatsList
   );
@@ -25,9 +27,9 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
   );
 
-  const trainingStatPageInfo = useSelector(trainingStatsSelectors.trainingStatPageInfo);
-  // Create Payload on click
-  const createTrainingLineItemsonTabChangePayload = (tabValue: number) => {
+  // const trainingStatPageInfo = useSelector(trainingStatsSelectors.trainingStatPageInfo);
+  // Create Payload on Tab Change
+  const createTrainingLineItemsTabChangePayload = (tabValue: number) => {
     const currentDate = getCurrentDate(MomentFormats.YearMonthDate);
     const filters = {
       field: "dueOn",
@@ -46,30 +48,25 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     }
   };
   const payload = {
-    offset: TRAINING_STAT_OFFSET,
-    limit: TRAINING_STAT_LIMIT,
-    filters: createTrainingLineItemsonTabChangePayload(tabValue),
-    // tabSwitch: false,
-  };
-  const updatedPageSize = {
-    offset: payload.offset,
-    limit: payload.limit,
+    offset,
+    limit: TRAINING_STATS_LIMIT,
+    filters: createTrainingLineItemsTabChangePayload(tabValue),
   };
 
   useEffect(() => {
     dispatch(trainingStatsActions.trainingStatsList([]));
     async.start(loadTrainingStatsList, payload);
-    dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
+    // dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabValue]);
 
   const onLoadMoreData = () => {
-    payload.offset = trainingStatPageInfo.offset + TRAINING_STAT_LIMIT;
-    payload.limit = trainingStatPageInfo.limit;
-    updatedPageSize.offset = payload.offset;
-    updatedPageSize.limit =  payload.limit;
+    const nextOffset = offset + TRAINING_STATS_LIMIT;
+    setOffset(nextOffset);
+    setOverallLimit(overallLimit + TRAINING_STATS_LIMIT);
+    payload.offset = nextOffset;
     async.start(loadTrainingStatsList, payload);
-    dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
+    // dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   };
 
   return (<AsyncGate
@@ -77,7 +74,7 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     asyncState={loadTrainingStatsListAsyncInfo}
     startActionOnMount={true}
   >
-    <TrainingLineItemsPresenter tabValue={tabValue} onLoadMoreData={onLoadMoreData} />
+    <TrainingLineItemsPresenter tabValue={tabValue} overallLimit={overallLimit} onLoadMoreData={onLoadMoreData} />
   </AsyncGate>);
 };
 

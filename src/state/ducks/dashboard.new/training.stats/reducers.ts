@@ -1,7 +1,7 @@
-import { concat, get, isEmpty, set } from "lodash";
+import { get, isEmpty, set, unionBy } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
-import { TRAINING_STATS_CHART, TRAINING_STATS_CHART_ASYNC, TRAINING_STATS_LIST, TRAINING_STATS_LIST_ASYNC, TRAINING_STAT_LIMIT, TRAINING_STAT_OFFSET, TRAINING_STAT_PAGEINFO } from "./constants";
+import { TRAINING_STATS_CHART, TRAINING_STATS_CHART_ASYNC, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT, TRAINING_STATS_LIST, TRAINING_STATS_LIST_ASYNC, TRAINING_STAT_PAGEINFO } from "./constants";
 import { TrainingStatPageAction, TrainingStatPageInfo, TrainingStatsChartAction, TrainingStatsChartState, TrainingStatsListAction, TrainingStatsState } from "./types";
 
 type TrainingStats = TrainingStatsListAction;
@@ -13,7 +13,7 @@ const trainingStats = (
 ): TrainingStatsState => {
   const actionResult = get(action.payload, "results");
   const stateResult = get(state, "results");
-  const combineResult = isEmpty(stateResult) ? actionResult :  concat(stateResult, actionResult);
+  const combineResult = isEmpty(stateResult) ? actionResult : unionBy(stateResult, actionResult, "id");
   switch (action.type) {
     case TRAINING_STATS_LIST:
       return isEmpty(actionResult) ? action.payload : set(action.payload, "results", combineResult);
@@ -37,8 +37,8 @@ const trainingStatsChart = (
 };
 
 const trainingStatPageInfo = (state: TrainingStatPageInfo = {
-  offset: TRAINING_STAT_OFFSET,
-  limit: TRAINING_STAT_LIMIT,
+  offset: TRAINING_STATS_INITIAL_OFFSET,
+  limit: TRAINING_STATS_LIMIT,
 },
 action: TrainingStatPageAction
 ): TrainingStatPageInfo => {

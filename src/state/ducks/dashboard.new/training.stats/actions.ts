@@ -4,13 +4,9 @@ import { ApiAction } from "../../../types";
 import {
   TRAINING_STATS_CHART,
   TRAINING_STATS_CHART_ASYNC,
-  TRAINING_STATS_CHART_URL,
-  TRAINING_STATS_LIST,
+  TRAINING_STATS_CHART_URL, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT, TRAINING_STATS_LIST,
   TRAINING_STATS_LIST_ASYNC,
-  TRAINING_STATS_URL,
-  TRAINING_STAT_LIMIT,
-  TRAINING_STAT_OFFSET,
-  TRAINING_STAT_PAGEINFO,
+  TRAINING_STATS_URL, TRAINING_STAT_PAGEINFO
 } from "./constants";
 import { TrainingStatPageAction, TrainingStatPageInfo, TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
 
@@ -26,18 +22,16 @@ const trainingStatsList = (
   payload: trainingStats,
 });
 
-const loadTrainingStatsList = (payload): ApiAction<TrainingStats[]> => {
+const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStats[]> => {
   const noOfDays = 7;
-  if (!isEmpty(payload)) {
-    delete payload.tabSwicth;
-  }
+  const payload = {
+    offset: TRAINING_STATS_INITIAL_OFFSET,
+    limit: TRAINING_STATS_LIMIT,
+    filters: [],
+  };
   return apiAction({
     url: `${TRAINING_STATS_URL}/${noOfDays}`,
-    data: isEmpty(payload) ?  {
-      offset: TRAINING_STAT_OFFSET,
-      limit: TRAINING_STAT_LIMIT,
-      filters: [],
-    } : payload,
+    data: isEmpty(queryPayload) ? payload : queryPayload,
     method: "post",
     asyncType: TRAINING_STATS_LIST_ASYNC,
     onSuccess: (trainingStats, dispatch) => {

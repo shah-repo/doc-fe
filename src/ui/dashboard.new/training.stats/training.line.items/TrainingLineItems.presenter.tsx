@@ -13,6 +13,7 @@ interface TabPanelProps {
   index: number;
   value: number;
   panelData: {
+    id: string;
     docTitle: string;
     user: { avatar: Nullable<string>; name: string; initialColor: string };
     docId: string;
@@ -35,6 +36,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         <>
           <TrainingItem
             key={index}
+            id={data.id}
             avatar={data.user.avatar}
             initialColor={data.user.initialColor}
             name={data.user.name.split(" ")[0]}
@@ -65,26 +67,46 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 interface TrainingLineItemsProps {
   tabValue: number;
+  overallLimit: number;
   onLoadMoreData: () => void;
 }
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
-  ({ tabValue, onLoadMoreData }) => {
-    const trainingLineItemData = useSelector(trainingStatsSelectors.trainingLineItemData);
-    const pageTotal = useSelector(trainingStatsSelectors.trainingDataPageSize);
+  ({ tabValue, overallLimit, onLoadMoreData }) => {
+    const trainingStatsLineItemData = useSelector(trainingStatsSelectors.trainingStatsLineItemData);
+    const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
     const classes = styles();
     return (
       <Box component="div" className={classes.root}>
-        <TabPanel key={0} value={tabValue} index={0} panelData={trainingLineItemData}>
+        <TabPanel
+          key={0}
+          value={tabValue}
+          index={0}
+          panelData={trainingStatsLineItemData}
+        >
           <Text translation="training.stats.all" />
         </TabPanel>
-        <TabPanel key={2} value={tabValue} index={2} panelData={trainingLineItemData}>
+        <TabPanel
+          key={2}
+          value={tabValue}
+          index={2}
+          panelData={trainingStatsLineItemData}
+        >
           <Text translation="common.duein7days" />
         </TabPanel>
-        <TabPanel key={1} value={tabValue} index={1} panelData={trainingLineItemData}>
+        <TabPanel
+          key={1}
+          value={tabValue}
+          index={1}
+          panelData={trainingStatsLineItemData}
+        >
           <Text translation="common.overdue" />
         </TabPanel>
-        <Button onClick={() => onLoadMoreData()} className={classes.loadMoreButton} disabled={pageTotal <= 10}>
+        <Button
+          onClick={() => onLoadMoreData()}
+          className={classes.loadMoreButton}
+          disabled={overallLimit >= totalTrainingData}
+        >
           <Text translation="dashboard.load.more"></Text>
         </Button>
         <LoadMore />
