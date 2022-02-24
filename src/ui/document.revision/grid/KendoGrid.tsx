@@ -15,16 +15,17 @@ import { DataLoader } from "./DataLoader";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
 import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
 import { StatusFilterTemplate } from "./filter.template/StatusFilterTemplate";
-import { KendoPanelProps } from "./interfaces";
+import { KendoGridProps } from "./interfaces";
+import KendoGridStyles from "./KendoGrid.styles";
 
-
-export function KendoPanel({
+export function KendoGrid({
   tableName,
   tableCriteria,
   schema,
   columns,
   statuses,
-}: KendoPanelProps) {
+}: KendoGridProps) {
+  const classes = KendoGridStyles();
   console.log("debug :: KendoPanel");
   console.log("debug :: columns", columns);
   const dispatch = useDispatch();
@@ -122,6 +123,7 @@ export function KendoPanel({
       <KendoGlobalization>
         <Grid
           style={{ width: `${width}px` }}
+          className={classes.grid}
           filterable={true}
           sortable={true}
           pageable={true}

@@ -1,23 +1,29 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React from "react";
 import { KendoPresenterProps } from "./interfaces";
-import { KendoPanel } from "./KendoPanel";
+import { KendoGrid } from "./KendoGrid";
 
 
-export function DocumentListPresenter({ statuses, tableName, tableCriteria, schema, columns }: KendoPresenterProps) {
-  // console.log("debug :: DocumentListPresenter");
-  // console.log("debug :: DocumentListPresenter :: statuses :: ", statuses);
-  console.log("debug :: DocumentListPresenter :: tableName :: ", tableName);
+export function DocumentListPresenter({
+  statuses,
+  tableName,
+  tableCriteria,
+  schema,
+  columns,
+}: KendoPresenterProps) {
   return (
-    <Grid container={true}>
-      <Grid item={true} xs={12}>
-        <KendoPanel
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-          schema={schema}
-          columns={columns}
-          statuses={statuses}
-        />
+    <Box m={2}>
+      <Grid container={true}>
+        <Grid item={true} xs={12}>
+          <KendoGrid
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            columns={columns}
+            statuses={statuses}
+          />
+        </Grid>
       </Grid>
-    </Grid>
-  ); }
+    </Box>
+  );
+}

@@ -29,7 +29,7 @@ export interface KendoPresenterProps {
   columns: KendoColumn[];
 }
 
-export interface KendoPanelProps {
+export interface KendoGridProps {
   tableName: string;
   tableCriteria: TablePanelStateProps;
   schema: object;
