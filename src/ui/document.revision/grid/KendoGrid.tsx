@@ -4,11 +4,13 @@ import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools"
 import {
   Grid as KendoTable,
   GridColumn as KendoColumn,
+  GridColumnReorderEvent,
+  GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
   GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
-import { cloneDeep, findIndex, map, set } from "lodash";
+import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -217,6 +219,18 @@ export function KendoGrid<T extends any>({
       )
     );
   };
+  const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
+    setColumns(dataColumns);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
   const onColumnShowHide = ({ field }) => {
     const isGrouped = findIndex(dataState.group, { field });
     if (isGrouped > -1) {
@@ -229,16 +243,7 @@ export function KendoGrid<T extends any>({
       }
       return column;
     });
-    setColumns(dataColumns);
-    dispatch(
-      tableSearchActions.setSearchCriteria(
-        {
-          ...tableCriteria,
-          columnConfig: JSON.stringify(dataColumns),
-        },
-        tableName
-      )
-    );
+    updateDataColumnsState(dataColumns);
   };
   const onExpandChange = useCallback(
     ({ dataItem, value }: GridExpandChangeEvent) => {
@@ -252,6 +257,30 @@ export function KendoGrid<T extends any>({
     },
     [collapsedState]
   );
+
+  const onColumnResize = ({ end, columns: cols }: GridColumnResizeEvent) => {
+    if (!end) { return false; }
+    let dataColumns = columns;
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(cols, { field: column.field });
+      column.width = columnObject ? columnObject.width : column.width;
+      return column;
+    });
+    setColumns(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
+  const onColumnReorder = ({ columns: cols }: GridColumnReorderEvent) => {
+    let dataColumns = columns;
+    dataColumns = map(dataColumns, (column) => {
+      const columnObject = find(cols, { field: column.field });
+      column.orderIndex = columnObject?.orderIndex;
+      return column;
+    });
+    setColumns(dataColumns);
+    updateDataColumnsState(dataColumns);
+  };
+
   const result = setExpandedState({
     data: resultState.data,
     collapsedIds: collapsedState,
@@ -268,12 +297,16 @@ export function KendoGrid<T extends any>({
           sortable={true}
           pageable={true}
           groupable={true}
+          reorderable={true}
+          resizable={true}
           {...dataState}
           data={result}
           total={products.total}
           onDataStateChange={dataStateChange}
           onExpandChange={onExpandChange}
           expandField="expanded"
+          onColumnResize={onColumnResize}
+          onColumnReorder={onColumnReorder}
         >
           <GridToolbar>
             <Grid container>
