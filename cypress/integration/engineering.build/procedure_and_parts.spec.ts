@@ -195,16 +195,7 @@ context("Procedure and parts flow test", () => {
             outputDocumentTypes: [{
               id: equipmentDocumentType[0].id,
             }],
-            schema: [
-              {
-                label: "form.builder.approvals",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-kycyk1n8",
-                uniqueSchemaItem: true,
-                index: 0,
-              },
-            ],
+            schema: [],
           },
 
         },
@@ -590,22 +581,9 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
-      context("Approve document", () => {
-        it("Add approver", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Click 'Submit for approval'", () => {
-          cy.pmSubmitForApproval();
-        });
-
-        it("Verify equipment status is 'In Review'", () => {
-          cy.arVerifyStatus({ status: "In Review" });
-        });
-
-        it("Approve AR", () => {
-          cy.ebApprove();
+      context("Approve equipment", () => {
+        it("Approve and release equipment", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
 
         it("Check equipment status is 'Released'", () => {

@@ -13,6 +13,7 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let developersGroup;
+let dateAfterEmailSouldArrive;
 
 
 context("Self training test", () => {
@@ -673,13 +674,18 @@ context("Self training test", () => {
       cy.get("button>span").should("contain.text", "Send To Email");
     });
 
+    it("Click 'Send To Email'", () => {
+      dateAfterEmailSouldArrive = new Date();
+      cy.sendToEmail();
+      cy.wait(5000);
+    });
+
     it("Check if 'Send To Email' button is working", () => {
-      const currentDate = new Date();
-      cy.get("button>span").contains("Send To Email").arrowClick();
       cy.imapVerifyLastEmailContains(
         {
           userEmail: USERS[1].email,
-          content: "Your documents are ready for download. Link will expire in 4 hours.", date: currentDate,
+          content: "Your documents are ready for download. Link will expire in 4 hours.",
+          date: dateAfterEmailSouldArrive,
         });
     });
   });
