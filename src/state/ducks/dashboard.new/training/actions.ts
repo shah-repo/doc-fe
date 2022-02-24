@@ -4,9 +4,10 @@ import { ApiAction } from "../../../types";
 import { TRAINING_INITIAL_OFFSET, TRAINING_LIMIT, TRAINING_LIST, TRAINING_LIST_ASYNC, TRAINING_URL } from "./constants";
 import { Training, TrainingListAction } from "./types";
 
-const trainingList = (trainingStats: Training[]): TrainingListAction => ({
+const trainingList = (trainingStats: Training[], initialLoad = true): TrainingListAction => ({
   type: TRAINING_LIST,
   payload: trainingStats,
+  initialLoad,
 });
 
 const loadTrainingList = (queryParams): ApiAction<Training[]> => {
@@ -20,7 +21,7 @@ const loadTrainingList = (queryParams): ApiAction<Training[]> => {
     data: isEmpty(queryParams) ? payload : queryParams,
     asyncType: TRAINING_LIST_ASYNC,
     onSuccess: (trainingItems, dispatch) => {
-      dispatch(trainingList(trainingItems));
+      dispatch(trainingList(trainingItems, isEmpty(queryParams)));
     },
   });
 };

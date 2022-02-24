@@ -4,14 +4,10 @@ import { AsyncState } from "../../../types";
 const trainingList = (state: ApplicationState) =>
   state.dashboardNew.training.training;
 
-const trainingListPageInfo = (state: ApplicationState) =>
-  state.dashboardNew.training.trainingListPageInfo;
-
 const getLoadTrainingListAsyncInfo = (state: ApplicationState): AsyncState =>
   state.dashboardNew.training.loadTrainingAsyncInfo;
 
 export default {
   getLoadTrainingListAsyncInfo,
   trainingList,
-  trainingListPageInfo,
 };

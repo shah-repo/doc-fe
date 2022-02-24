@@ -24,6 +24,7 @@ export interface Training {
 export interface TrainingListAction {
   type: typeof TRAINING_LIST;
   payload: Training[];
+  initialLoad?: boolean;
 }
 
 export type TrainingState = Training[];

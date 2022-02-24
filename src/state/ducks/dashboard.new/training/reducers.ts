@@ -1,4 +1,4 @@
-import { concat, get, isEmpty, set, uniqBy } from "lodash";
+import { get, isEmpty, set, unionBy } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
 import { TRAINING_LIST, TRAINING_LIST_ASYNC } from "./constants";
@@ -13,10 +13,10 @@ const training = (
 ): TrainingState => {
   const actionResult = get(action.payload, "results");
   const stateResult = get(state, "results");
-  const combineResult = isEmpty(stateResult) ? actionResult :  uniqBy(concat(stateResult, actionResult), "id");
+  const combineResult = isEmpty(stateResult) ? actionResult : unionBy(stateResult, actionResult, "id");
   switch (action.type) {
     case TRAINING_LIST:
-      return set(action.payload, "results", combineResult);
+      return action.initialLoad ? action.payload : set(action.payload, "results", combineResult);
     default:
       return state;
   }
