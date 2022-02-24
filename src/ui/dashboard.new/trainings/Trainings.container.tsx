@@ -42,7 +42,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const onPageChange = () => {
     const updatedPageSize = {
       offset: trainingListPageInfo.offset + 25,
-      limit: trainingListPageInfo.limit + 25,
+      limit: trainingListPageInfo.limit,
     };
     async.start(loadTrainingList, updatedPageSize);
     dispatch(
