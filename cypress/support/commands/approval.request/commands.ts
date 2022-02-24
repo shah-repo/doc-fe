@@ -390,7 +390,6 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
       cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
       cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
