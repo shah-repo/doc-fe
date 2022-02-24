@@ -7,23 +7,24 @@ import {
   trainingActions,
   trainingSelectors,
 } from "../../../state/ducks/dashboard.new/training";
+import { TRAINING_INITIAL_OFFSET, TRAINING_LIMIT } from "../../../state/ducks/dashboard.new/training/constants";
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import TrainingsLineItemPresenter from "./Trainings.presenter";
 
 const TrainingsLineItemsContainer: React.FunctionComponent = () => {
+  const [offset, setOffset] = React.useState(TRAINING_INITIAL_OFFSET);
+  const [overallLimit, setOverallLimit] = React.useState(TRAINING_LIMIT);
   const loadTrainingList = useActionCreator(trainingActions.loadTrainingList);
-  const trainingListPageInfo = useSelector(trainingSelectors.trainingListPageInfo);
+  // const trainingListPageInfo = useSelector(trainingSelectors.trainingListPageInfo);
   const loadTrainingListAsyncInfo = useSelector(
     trainingSelectors.getLoadTrainingListAsyncInfo
   );
   const dispatch = useDispatch();
   const pinnedOrUnPinnedAsync = useAsync({
     onSuccess: () => {
-      dispatch(trainingActions.loadTrainingList({
-
-      }));
+      dispatch(trainingActions.loadTrainingList({}));
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
@@ -40,14 +41,17 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
   const async = useAsync();
 
   const onPageChange = () => {
+    const nextOffset = offset + TRAINING_LIMIT;
+    setOffset(nextOffset);
+    setOverallLimit(overallLimit + TRAINING_LIMIT);
     const updatedPageSize = {
-      offset: trainingListPageInfo.offset + 25,
-      limit: trainingListPageInfo.limit,
+      offset: nextOffset,
+      limit: TRAINING_LIMIT,
     };
     async.start(loadTrainingList, updatedPageSize);
-    dispatch(
-      trainingActions.trainingListPageInfo(updatedPageSize)
-    );
+    // dispatch(
+    //   trainingActions.trainingListPageInfo(updatedPageSize)
+    // );
   };
 
   return (
@@ -56,7 +60,7 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       asyncState={loadTrainingListAsyncInfo}
       startActionOnMount={true}
     >
-      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem }} onLoadMoreData={onPageChange}/>
+      <TrainingsLineItemPresenter {...{ pinLineItem, unPinLineItem, overallLimit }} onLoadMoreData={onPageChange}/>
     </AsyncGate>
   );
 };

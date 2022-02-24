@@ -16,12 +16,14 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
   onLoadMoreData: () => void;
+  overallLimit: number;
 }
 
 const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
   onLoadMoreData,
+  overallLimit,
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
@@ -74,7 +76,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
         <Button
           onClick={() => onLoadMoreData()}
           className={classes.loadButton}
-          disabled={trainingItems.page_total === 1}
+          disabled={ overallLimit >= trainingItems.total }
         >
           <Text translation="dashboard.load.more"></Text>
           <div style={{ marginRight: 10 }}></div>
