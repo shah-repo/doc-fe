@@ -19,7 +19,7 @@ import GroupManagementListContainer from "../group.management/kendo/container";
 import { PageDetailsManagementContainer } from "../page.details.management/list/container";
 import RemoteValidatorsLoader from "../remoteValidators/RemoteValidators";
 import SlackContainer from "../slack/Container";
-import TrainingListContainer from "../training/kendo/container";
+import TrainingListContainer from "../training/grid/container";
 import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/kendo/container";
 import DataFetcherContainer from "./DataFetcher.container";

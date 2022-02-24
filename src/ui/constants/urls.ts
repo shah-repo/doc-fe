@@ -21,6 +21,7 @@ export const DOCUMENT_REVISION_NEW_VERSION_URL = `${DOCUMENT_REVISION_ROOT_URL}/
 export const DOCUMENT_REVISION_OUTPUT_URL = `${DOCUMENT_REVISION_ROOT_URL}/output_document/:documentRevisionId`;
 
 export const TRAINING_URL = "/training";
+export const TRAINING_RECORDS_SEARCH_URL = `/training_record/search`;
 export const TRAINING_DETAIL_URL = `${TRAINING_URL}/detail/:trainingId`;
 
 export const SIGNUP_URL = "/signup";

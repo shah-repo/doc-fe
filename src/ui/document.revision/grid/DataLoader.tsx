@@ -9,7 +9,7 @@ import { DataLoaderProps } from "./interfaces";
 
 export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
   const defaultPayloadItems = getDefaultPayloadItems(tableName);
-  const data = {
+  let data = {
     ...defaultPayloadItems,
     limit: dataState.take,
     offset: dataState.skip,
@@ -17,7 +17,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
     sort: dataState.sort,
     schema,
   };
-  getDynamicPayloadItems(tableName, data);
+  data = getDynamicPayloadItems(tableName, data);
   const requestConfig: AxiosRequestConfig = {
     method: "post",
     url: getQueryURL(tableName),

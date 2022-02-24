@@ -29,7 +29,7 @@ export function DocumentListPresenter({
           <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
         </Grid>
         <Grid item={true} xs={12}>
-          <KendoGrid
+          <KendoGrid<DocumentRevision>
             tableName={tableName}
             tableCriteria={tableCriteria}
             schema={schema}

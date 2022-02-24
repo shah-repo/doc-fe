@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
@@ -19,18 +19,20 @@ import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import useDidMount from "../../hooks/useDidMount";
 import { DataLoader } from "./DataLoader";
+import { CompletedDateFilterTemplate } from "./filter.template/CompletedDateFilterTemplate";
 import { DocumentTypeFilterTemplate } from "./filter.template/DocumentTypeFilterTemplate";
+import { DueOnDateFilterTemplate } from "./filter.template/DueOnDateFilterTemplate";
 import { EffectiveDateFilterTemplate } from "./filter.template/EffectiveDateFilterTemplate";
 import { StatusFilterTemplate } from "./filter.template/StatusFilterTemplate";
 import { KendoGridProps } from "./interfaces";
 import KendoGridStyles from "./KendoGrid.styles";
 
-export function KendoGrid({
+export function KendoGrid<T extends any>({
   tableName,
   tableCriteria,
   schema,
   statuses = [],
-}: KendoGridProps<DocumentRevision>) {
+}: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
   console.log("debug :: KendoPanel");
@@ -38,7 +40,7 @@ export function KendoGrid({
   const dispatch = useDispatch();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const [dataState, setDataState] = React.useState<State>(tableCriteria.queryDict.dataState);
+  const [dataState, setDataState] = React.useState<State>(tableCriteria?.queryDict?.dataState);
 
   useEffect(() => {
     if (didMount) {
@@ -99,11 +101,30 @@ export function KendoGrid({
       })}
     />
   );
+  const CompletedDate = (props: GridFilterCellProps) => (
+    <CompletedDateFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
+  const DueOnDate = (props: GridFilterCellProps) => (
+    <DueOnDateFilterTemplate
+      {...props}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
 
   const filterCellMapping = {
     "displayStatus": StatusFilter,
     "document.documentType.documentTypeAcronym": TypeFilter,
     "effectiveDate": EffectiveDate,
+    "completedAt": CompletedDate,
+    "dueOn": DueOnDate,
+    "createdAt": EffectiveDate,
   };
 
   const renderKendoColumns = (
