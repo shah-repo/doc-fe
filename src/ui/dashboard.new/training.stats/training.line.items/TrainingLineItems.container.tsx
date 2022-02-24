@@ -55,6 +55,9 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
 
   useEffect(() => {
     dispatch(trainingStatsActions.trainingStatsList([]));
+    setOffset(TRAINING_STATS_INITIAL_OFFSET);
+    setOverallLimit(TRAINING_STATS_LIMIT);
+    payload.offset = TRAINING_STATS_INITIAL_OFFSET;
     async.start(loadTrainingStatsList, payload);
     // dispatch(trainingStatsActions.trainingStatPageInfo(updatedPageSize));
   // eslint-disable-next-line react-hooks/exhaustive-deps

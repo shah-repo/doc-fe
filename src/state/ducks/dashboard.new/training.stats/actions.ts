@@ -6,7 +6,7 @@ import {
   TRAINING_STATS_CHART_ASYNC,
   TRAINING_STATS_CHART_URL, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_LIMIT, TRAINING_STATS_LIST,
   TRAINING_STATS_LIST_ASYNC,
-  TRAINING_STATS_URL, TRAINING_STAT_PAGEINFO
+  TRAINING_STATS_URL, TRAINING_STAT_PAGEINFO,
 } from "./constants";
 import { TrainingStatPageAction, TrainingStatPageInfo, TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
 
