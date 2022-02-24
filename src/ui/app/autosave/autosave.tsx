@@ -27,7 +27,7 @@ const AutosaveToggle: React.FunctionComponent<any> = (location) => {
         checked={autosaveEnabled}
         onChange={() => { dispatch(companyActions.autosaveConfig()); }}
       />}
-      style={isNewDashboard ? style : {}}
+      style={isNewDashboard ? style : { position: "absolute" }}
       label="Toggle Autosave"
     />
   );

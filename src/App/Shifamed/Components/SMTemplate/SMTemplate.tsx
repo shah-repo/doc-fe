@@ -16,7 +16,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
 }) => (
   <SMBox display={"flex"} flexDirection="row" flex={1} {...templateBoxProps}>
     {leftSidebar && (
-      <SMBox flex={1} {...leftSidebarBoxProps}>
+      <SMBox {...leftSidebarBoxProps}>
         {leftSidebar}
       </SMBox>
     )}
