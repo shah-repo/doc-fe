@@ -3,7 +3,7 @@ import { DataResult, State } from "@progress/kendo-data-query";
 import {
   Grid as KendoTable, GridColumn as KendoColumn, GridDataStateChangeEvent, GridFilterCellProps, GridToolbar,
 } from "@progress/kendo-react-grid";
-import { set } from "lodash";
+import { findIndex, map, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
@@ -11,9 +11,11 @@ import { AutoSizer, Size } from "react-virtualized";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoColumn as KendoColumnProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import useDidMount from "../../hooks/useDidMount";
 import { DataLoader } from "./DataLoader";
@@ -108,7 +110,7 @@ export function KendoGrid({
     gridWidth: number
   ) => (
     columns.map((column, index) => (
-      <KendoColumn
+      column.show && <KendoColumn
         key={index}
         {...column}
         title={getTranslatedText(column.title)}
@@ -140,6 +142,29 @@ export function KendoGrid({
       )
     );
   };
+  const onColumnShowHide = ({ field }) => {
+    const isGrouped = findIndex(dataState.group, { field });
+    if (isGrouped > -1) {
+      toastError(getTranslatedText("common.no.hide"));
+      return;
+    }
+    const dataColumns = map(columns, (column) => {
+      if (column.field === field) {
+        column.show = !column.show;
+      }
+      return column;
+    });
+    setColumns(dataColumns);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          columnConfig: JSON.stringify(dataColumns),
+        },
+        tableName
+      )
+    );
+  };
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
@@ -160,10 +185,10 @@ export function KendoGrid({
                 <ClearFilters {...{ clearFilter }} />
               </Grid>
               <Grid item={true} xs={6} style={{ textAlign: "right" }}>
-                {/* <ColumnShowHideMenu
-                  columnDefinition={sortedColumnDefinitions}
+                <ColumnShowHideMenu
+                  columnDefinition={columns}
                   onChange={onColumnShowHide}
-                /> */}
+                />
               </Grid>
             </Grid>
           </GridToolbar>
