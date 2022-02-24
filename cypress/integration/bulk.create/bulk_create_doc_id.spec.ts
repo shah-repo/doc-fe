@@ -494,6 +494,34 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
 
+    it("Add Checkbox group", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     context("Create and release form", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
@@ -602,6 +630,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
         `${releasedFormId}-1-Bulk-create-form.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
   });
 
   context("Verify PDF file content", () => {
@@ -679,6 +713,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/Logs/);
 
+        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/TEXT FIELD/);
+
         expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
@@ -750,6 +789,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Checkbox option 1 checked", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
       it("Select 'yes' to have Document id column", () => {
@@ -884,6 +927,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
             fileName: downloadFile,
           });
       });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
     });
 
     context("Verify PDF file content for WIP document", () => {
@@ -951,11 +1000,13 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/MASS CREATE LOGS\n\(file\) Logs\nNone/);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT`);
+          tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\n1 2 3`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`${USERS[2].name} \\- .*@.*`);
           expect(el).not.match(tmpRegex);
+
+          expect(el).not.match(/TEXT FIELD/);
 
           expect(el).not.match(/REJECTED/);
 
@@ -1108,6 +1159,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
             fileName: downloadFile,
           });
       });
+
+      it("Verify attached file length more than 500 bytes", () => {
+        const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+          downloadFile.replace(".zip", ""), "image.jpg");
+        cy.readFile(attachedFile).its("length").should("be.gt", 500);
+      });
     });
 
     context("Verify PDF file content", () => {
@@ -1117,17 +1174,21 @@ context("Bulk create public, private and reserved doc-ids", () => {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
             fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
           }).then((cdata) => {
-          expect(cdata.numpages).eq(2);
-          expect(cdata.text).match(/Page 1 of 2/);
-          expect(cdata.text).match(/Page 2 of 2/);
+          expect(cdata.numpages).eq(3);
+          expect(cdata.text).match(/Page 1 of 3/);
+          expect(cdata.text).match(/Page 2 of 3/);
+          expect(cdata.text).match(/Page 3 of 3/);
           tmpRegex = new RegExp( "\\n\\n");
           const arr = cdata.text.split(tmpRegex);
           arr.forEach((element) => {
-            if (element.includes("Page 1 of 2")) {
+            if (element.includes("Page 1 of 3")) {
               pages[0] = element;
             }
-            if (element.includes("Page 2 of 2")) {
+            if (element.includes("Page 2 of 3")) {
               pages[1] = element;
+            }
+            if (element.includes("Page 3 of 3")) {
+              pages[2] = element;
             }
           });
         });
@@ -1135,7 +1196,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Verify page 1 for released document", () => {
         const el = pages[0];
-        if (el.includes("Page 1 of 2")) {
+        if (el.includes("Page 1 of 3")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
@@ -1159,15 +1220,16 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 1 of 2/);
+          expect(el).match(/Page 1 of 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
         }
       });
+
       it("Verify page 2 for released document", () => {
         const el = pages[1];
-        if (el.includes("Page 2 of 2")) {
+        if (el.includes("Page 2 of 3")) {
           tmpRegex = new
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
           expect(el).match(tmpRegex);
@@ -1180,10 +1242,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/\(file\) Logs\nBulkProcessLogs.txt/);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          tmpRegex = new RegExp(`Checkbox\\n1 2 3`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Released/);
+
+          expect(el).not.match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -1191,7 +1255,35 @@ context("Bulk create public, private and reserved doc-ids", () => {
           tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Page 2 of 2/);
+          expect(el).match(/Page 2 of 3/);
+
+          tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+          expect(el).not.match(tmpRegex);
+        }
+      });
+
+      it("Verify page 2 for released document", () => {
+        const el = pages[1];
+        if (el.includes("Page 3 of 3")) {
+          tmpRegex = new
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          expect(el).match(tmpRegex);
+
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Released/);
+
+          expect(el).not.match(/TEXT FIELD/);
+
+          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          tmpRegex = new RegExp(`Form Info: FM-00004, Revision 1, ${footerDate}`, "gi");
+          expect(el).match(tmpRegex);
+
+          expect(el).match(/Page 3 of 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
