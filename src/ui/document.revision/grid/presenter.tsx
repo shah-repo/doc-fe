@@ -1,5 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import React from "react";
+import GridTitle from "./GridTitle";
 import { KendoPresenterProps } from "./interfaces";
 import { KendoGrid } from "./KendoGrid";
 
@@ -14,6 +15,7 @@ export function DocumentListPresenter({
   return (
     <Box m={2}>
       <Grid container={true}>
+        <GridTitle translation="navigation.document.list" />
         <Grid item={true} xs={12}>
           <KendoGrid
             tableName={tableName}
