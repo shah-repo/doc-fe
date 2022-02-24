@@ -504,7 +504,7 @@ context("E-signature test", () => {
     it("Approve AR and EB", () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
       cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
-      cy.get(`[data-cy=\"transition-approve"]`).first().arrowClick();
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed],
         () => {

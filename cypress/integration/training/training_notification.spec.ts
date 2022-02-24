@@ -728,13 +728,16 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.sendToEmail();
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+    });
+
+    it("Close training dialog", () => {
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
   });
 
@@ -885,13 +888,16 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.sendToEmail();
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+    });
+
+    it("Close training dialog", () => {
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
   });
 
