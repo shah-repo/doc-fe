@@ -20,6 +20,8 @@ interface TabPanelProps {
     status: string;
     dueOn: string;
   }[];
+  overallLimit: number;
+  onLoadMoreData: () => void;
 }
 
 const TabPanel: React.FunctionComponent<TabPanelProps> = ({
@@ -27,9 +29,12 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   value,
   index,
   panelData,
+  overallLimit,
+  onLoadMoreData,
   ...other
 }) => {
   const classes = styles();
+  const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
   const renderItems = () => (
     <List className={classes.listRoot}>
       {panelData.map((data, index) => (
@@ -48,6 +53,16 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
           <Divider />
         </>
       ))}
+      {totalTrainingData > 0 && <Box style={{ float: "right" }}  >
+        <Button
+          onClick={() => onLoadMoreData()}
+          className={classes.loadMoreButton}
+          disabled={overallLimit >= totalTrainingData}
+        >
+          <Text translation="dashboard.load.more"></Text>
+        </Button>
+        <LoadMore />
+      </Box>}
     </List>
   );
 
@@ -74,15 +89,16 @@ interface TrainingLineItemsProps {
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   ({ tabValue, overallLimit, onLoadMoreData }) => {
     const trainingStatsLineItemData = useSelector(trainingStatsSelectors.trainingStatsLineItemData);
-    const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
     const classes = styles();
     return (
-      <Box component="div" className={classes.root}>
+      <Box component="div" className={classes.root} >
         <TabPanel
           key={0}
           value={tabValue}
           index={0}
           panelData={trainingStatsLineItemData}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
         >
           <Text translation="training.stats.all" />
         </TabPanel>
@@ -91,6 +107,8 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           value={tabValue}
           index={2}
           panelData={trainingStatsLineItemData}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
         >
           <Text translation="common.duein7days" />
         </TabPanel>
@@ -99,18 +117,11 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           value={tabValue}
           index={1}
           panelData={trainingStatsLineItemData}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
         >
           <Text translation="common.overdue" />
         </TabPanel>
-        { totalTrainingData > 0 && <Button
-          onClick={() => onLoadMoreData()}
-          className={classes.loadMoreButton}
-          disabled={overallLimit >= totalTrainingData}
-        >
-          <Text translation="dashboard.load.more"></Text>
-        </Button>
-        }
-        { totalTrainingData > 0 && <LoadMore /> }
       </Box>
     );
   };

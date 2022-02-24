@@ -12,7 +12,7 @@ export const styles = makeStyles((theme: Theme) =>
       padding: "0px 5px",
       overflow: "auto",
       minHeight: "125px",
-      maxHeight: "calc(100vh - 421px)",
+      maxHeight: "calc(100vh - 419px)",
     },
     lineItemContent: {
       height: "100px",
@@ -28,8 +28,8 @@ export const styles = makeStyles((theme: Theme) =>
       "letter-spacing": "0.5px",
       "text-transform": "uppercase",
       "color": " #011FBB",
-      "margin": "0px 5px 0 10px",
-      "padding": "1px",
+      "margin": 0,
+      "padding-bottom": 0,
     },
   })
 );
