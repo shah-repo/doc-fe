@@ -9,68 +9,49 @@ import { CompletedOnDateOptions } from "../utils/types";
 import { TABLE_NAME as DOC_LIST_TABLE_NAME } from "./container";
 
 export const getDynamicPayloadItems = (tableName: string, payload) => {
+  const removeFieldFromFilters = (filters: any[], field: string) => {
+    filters = filter(filters, (filterObject) => filterObject.field !== field);
+    return filters;
+  };
   switch (tableName) {
     case DOC_LIST_TABLE_NAME:
       const field = find(payload.filters, { field: "effectiveDate" });
       if (field && field.field === "effectiveDate") {
         const effectiveDateOptions = documentRevisionEffectiveDateOption();
         payload.effectiveDate = find(effectiveDateOptions, { text: field.value })?.value;
-        payload.filters = filter(payload.filters, (el) => el.field !== "effectiveDate");
+        payload.filters = removeFieldFromFilters(payload.filters, "effectiveDate");
       }
       break;
     case TRAINING_TABLE_NAME:
-      const createdAtField = find(payload.filters, {
-        field: DateFields.CREATED_AT,
-      });
-      const completedAtField = find(payload.filters, {
-        field: DateFields.COMPLETED_AT,
-      });
+      const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
+      const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
-
       if (createdAtField) {
         const createdDateOptions = documentRevisionEffectiveDateOption();
-        payload.createdAtAfter = find(createdDateOptions, {
-          text: createdAtField.value,
-        })?.value;
-        payload.filters = filter(
-          payload.filters,
-          (el) => el.field !== DateFields.CREATED_AT
-        );
+        payload.createdAtAfter = find(createdDateOptions, { text: createdAtField.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, DateFields.CREATED_AT);
       }
-
       if (completedAtField) {
         const completedDateOptions = trainingCompletedOnDateOption();
-        payload.completedAtAfter = find(completedDateOptions, {
-          text: completedAtField.value,
-        })?.value;
-
-        payload.filters = filter(
-          payload.filters,
-          (el) => el.field !== DateFields.COMPLETED_AT
-        );
+        payload.completedAtAfter = find(completedDateOptions, { text: completedAtField.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, DateFields.COMPLETED_AT);
       }
       if (dueOnField) {
         const duOnOptions = dueDateOption();
-        payload.dueOnBefore = find(duOnOptions, {
-          text: dueOnField.value,
-        })?.value;
+        payload.dueOnBefore = find(duOnOptions, { text: dueOnField.value })?.value;
         if (dueOnField.value === CompletedOnDateOptions.NEXT_WEEK) {
           payload.dueOnAfter = moment().toISOString();
         }
         payload.isCompleted = "false";
-        payload.filters = filter(
-          payload.filters,
-          (el) => el.field !== DateFields.DUE_ON
-        );
+        payload.filters = removeFieldFromFilters(payload.filters, DateFields.DUE_ON);
       }
       break;
     case "documentsByCategoryList-Record":
-      // API is not working -- need to check this
       const releasedData = find(payload.filters, { field: "releasedAt" });
       if (releasedData) {
         const effectiveDateOptions = documentRevisionEffectiveDateOption();
-        payload.releasedAt = find(effectiveDateOptions, { text: releasedData.value })?.value;
-        payload.filters = filter(payload.filters, (el) => el.field !== "releasedAt");
+        payload.releasedAfter = find(effectiveDateOptions, { text: releasedData.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, "releasedAt");
       }
       break;
     default:
