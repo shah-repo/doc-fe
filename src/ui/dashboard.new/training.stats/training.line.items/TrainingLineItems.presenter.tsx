@@ -35,6 +35,8 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 }) => {
   const classes = styles();
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
+
+
   const renderItems = () => (
     <List className={classes.listRoot}>
 
@@ -55,7 +57,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         </>
       ))}
       {totalTrainingData > 0 &&
-        <LoadMoreButton onLoadMore={onLoadMoreData} />
+        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore${index}`} />
       }
     </List>
   );

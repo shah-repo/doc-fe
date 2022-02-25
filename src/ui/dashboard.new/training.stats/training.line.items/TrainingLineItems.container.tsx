@@ -7,6 +7,7 @@ import AsyncGate from "../../../components/AsyncGate";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDidMount from "../../../hooks/useDidMount";
+import { scrollToBottom } from "../../line.items/common/Utils";
 import TrainingLineItemsPresenter from "./TrainingLineItems.presenter";
 
 interface TrainingLineItemsProps {
@@ -62,13 +63,15 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabValue]);
-
   const onLoadMoreData = () => {
     const nextOffset = offset + TRAINING_STATS_LIMIT;
     setOffset(nextOffset);
     setOverallLimit(overallLimit + TRAINING_STATS_LIMIT);
     payload.offset = nextOffset;
     async.start(loadTrainingStatsList, payload);
+    setTimeout(() => {
+      scrollToBottom(`[id="trainingListBoxLoadMore${tabValue}"]`);
+    }, 1500);
   };
 
   return (<AsyncGate

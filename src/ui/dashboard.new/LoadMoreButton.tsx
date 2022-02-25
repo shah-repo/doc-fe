@@ -29,8 +29,9 @@ interface Props {
   onLoadMore: () => void;
   position?;
   label?: string;
+  id? : string;
 }
-export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = false, onLoadMore, position = "right", label = "dashboard.load.more" }) => {
+export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = false, onLoadMore, position = "right", label = "dashboard.load.more", id = "boxLoadMore" }) => {
   const classes = styles();
   return (
     <Box style={{ float: position }}>
@@ -39,6 +40,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
         className={classes.loadMoreButton}
         disableRipple
         disabled={disable}
+        id={id}
       >
         <Text message={label} />
       </Button>
