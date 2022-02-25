@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import { FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
@@ -32,6 +32,7 @@ import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
+import GridTitle from "../../document.revision/grid/GridTitle/presenter";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -531,29 +532,29 @@ export function KendoPanel<T extends { id?: string }>({
     <>
       <Grid>
         {isLoading && <Loader />}
-        <Grid container justify="space-between">
-          <Grid item>
-            <Typography className={classes.title}>
-              <Text translation="documenttype.management" />
-            </Typography>
-          </Grid>
-          <Grid item style={{ marginBottom: 8 }}>
-            <Button
-              onClick={exportDAMDialog.open}
-              variant="outlined"
-              className={classes.exportBtn}
-            >
-              <Text translation={"common.export.dam.details"} />
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={addNewRowObject}
-              className={ disabled ? classes.disabledAddBtn : classes.addBtn}
-              {...{ disabled }}
-            >
-              <Text translation={"common.add.document.type"} />
-            </Button>
-          </Grid>
+        <Grid item>
+          <Box mb={2}>
+            <Grid container={true}>
+              <GridTitle translation="documenttype.management" />
+              <Grid item>
+                <Button
+                  onClick={exportDAMDialog.open}
+                  variant="outlined"
+                  className={classes.exportBtn}
+                >
+                  <Text translation={"common.export.dam.details"} />
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={addNewRowObject}
+                  className={ disabled ? classes.disabledAddBtn : classes.addBtn}
+                  {...{ disabled }}
+                >
+                  <Text translation={"common.add.document.type"} />
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item={true}>
           <KendoGlobalization>

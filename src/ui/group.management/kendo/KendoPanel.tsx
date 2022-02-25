@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -50,7 +50,7 @@ import ClearFilters from "../../components/table/ClearFilters";
 import {
   TablePanelStateProps,
 } from "../../components/table/types";
-import Text from "../../components/Text";
+import GridTitle from "../../document.revision/grid/GridTitle/presenter";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
@@ -560,21 +560,19 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     </>
   );
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.group.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container={true}>
+          <GridTitle translation="navigation.group.management" />
+          <Grid item>
+            {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+          </Grid>
         </Grid>
-        <Grid item  style={{ marginBottom: 10 }}>
-          {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </>
-    </>
+      </Grid>
+    </Box>
   );
 }
