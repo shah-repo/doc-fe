@@ -29,7 +29,7 @@ import useDidMount from "../../hooks/useDidMount";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
-import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from "../common/kendo/helpers";
 import NoDataFound from "../common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
 import KendoGlobalization from "../KendoGlobalization";
@@ -324,7 +324,7 @@ export function KendoGrid<T extends any>({
           className={classes.grid}
           filterable={true}
           sortable={true}
-          pageable={true}
+          pageable={pagerSettings}
           groupable={true}
           reorderable={true}
           resizable={true}
