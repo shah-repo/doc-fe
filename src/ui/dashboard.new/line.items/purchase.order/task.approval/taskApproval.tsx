@@ -20,6 +20,7 @@ import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
@@ -128,7 +129,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList({}));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     },
     onError: (error) => {
       toastError(error as string);

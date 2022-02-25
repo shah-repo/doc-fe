@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC } from "./constants";
+import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC } from "./constants";
 import { MyFeedsItems, MyFeedsListAction } from "./types";
 
 const myFeedsList = (myFeeds: MyFeedsItems[], initialLoad = true): MyFeedsListAction => ({
@@ -10,21 +10,15 @@ const myFeedsList = (myFeeds: MyFeedsItems[], initialLoad = true): MyFeedsListAc
   initialLoad,
 });
 
-const loadMyFeedsList = (queryPayload): ApiAction<MyFeedsItems[]> => {
-  const payload = {
-    offset: MY_FEEDS_INITIAL_OFFSET,
-    limit: MY_FEEDS_LIMIT,
-  };
-  return apiAction({
-    url: DASHBOARD_MY_FEEDS_URL_SEARCH,
-    method: "post",
-    data: isEmpty(queryPayload) ? payload : queryPayload,
-    asyncType: MY_FEEDS_LIST_ASYNC,
-    onSuccess: (myFeeds, dispatch) => {
-      dispatch(myFeedsList(myFeeds, isEmpty(queryPayload)));
-    },
-  });
-};
+const loadMyFeedsList = (queryPayload): ApiAction<MyFeedsItems[]> => apiAction({
+  url: DASHBOARD_MY_FEEDS_URL_SEARCH,
+  method: "post",
+  data: isEmpty(queryPayload) ? MY_FEEDS_INITIAL_PAYLOAD : queryPayload,
+  asyncType: MY_FEEDS_LIST_ASYNC,
+  onSuccess: (myFeeds, dispatch) => {
+    dispatch(myFeedsList(myFeeds, isEmpty(queryPayload)));
+  },
+});
 
 
 const pinnedLineItem = (
