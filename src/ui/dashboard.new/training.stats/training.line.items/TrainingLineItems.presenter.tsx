@@ -34,7 +34,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   ...other
 }) => {
   const classes = styles();
-  const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
+  const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsList);
 
   const renderItems = () => (
     value === index && <List className={classes.listRoot}>
@@ -82,7 +82,7 @@ interface TrainingLineItemsProps {
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   ({ tabValue, overallLimit, onLoadMoreData }) => {
-    const trainingStatsLineItemData = useSelector(trainingStatsSelectors.trainingStatsLineItemData);
+    const trainingStatsList = useSelector(trainingStatsSelectors.trainingStatsList);
     const classes = styles();
     return (
       <Box component="div" className={classes.root} >
@@ -90,7 +90,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           key={0}
           value={tabValue}
           index={0}
-          panelData={trainingStatsLineItemData}
+          panelData={trainingStatsList}
           overallLimit={overallLimit}
           onLoadMoreData={onLoadMoreData}
         >
@@ -100,7 +100,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           key={1}
           value={tabValue}
           index={1}
-          panelData={trainingStatsLineItemData}
+          panelData={trainingStatsList}
           overallLimit={overallLimit}
           onLoadMoreData={onLoadMoreData}
         >
@@ -110,7 +110,7 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           key={2}
           value={tabValue}
           index={2}
-          panelData={trainingStatsLineItemData}
+          panelData={trainingStatsList}
           overallLimit={overallLimit}
           onLoadMoreData={onLoadMoreData}
         >

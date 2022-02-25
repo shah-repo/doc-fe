@@ -6,19 +6,20 @@ import {
   TRAINING_STATS_CHART_ASYNC,
   TRAINING_STATS_CHART_URL, TRAINING_STATS_INITIAL_OFFSET, TRAINING_STATS_INITIAL_PAYLOAD, TRAINING_STATS_LIST,
   TRAINING_STATS_LIST_ASYNC,
+  TRAINING_STATS_LIST_INITIAL_STATE,
   TRAINING_STATS_URL,
 } from "./constants";
-import { TrainingStats, TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction } from "./types";
+import { TrainingStatsChart, TrainingStatsChartAction, TrainingStatsListAction, TrainingStatsListApiResponse } from "./types";
 
 const trainingStatsList = (
-  trainingStats: TrainingStats[], initialLoad = true
+  trainingStats: TrainingStatsListApiResponse = TRAINING_STATS_LIST_INITIAL_STATE, initialLoad = true
 ): TrainingStatsListAction => ({
   type: TRAINING_STATS_LIST,
   payload: trainingStats,
   initialLoad,
 });
 
-const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStats[]> => {
+const loadTrainingStatsList = (queryPayload): ApiAction<TrainingStatsListApiResponse> => {
   const noOfDays = 7;
   const finalPayload = isEmpty(queryPayload) ? TRAINING_STATS_INITIAL_PAYLOAD : queryPayload;
   return apiAction({

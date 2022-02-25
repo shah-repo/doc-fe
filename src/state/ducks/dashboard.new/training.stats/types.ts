@@ -29,8 +29,15 @@ interface User {
   initialColor: string;
 }
 
+export interface TrainingStatsListApiResponse {
+  results: TrainingStats[];
+  page_total: number;
+  total: number;
+}
+
 export interface TrainingStats {
   user: User;
+  id: string;
   status: TrainingStatusTypes;
   dueOn: string;
   docTitle: string;
@@ -39,14 +46,15 @@ export interface TrainingStats {
 
 export interface TrainingStatsListAction {
   type: typeof TRAINING_STATS_LIST;
-  payload: TrainingStats[];
+  payload: TrainingStatsListApiResponse;
   initialLoad?: boolean;
 }
 
-export type TrainingStatsState = TrainingStats[];
+export type TrainingStatsState = TrainingStatsListApiResponse;
 
 export interface TrainingStatsChart {
-  DUE: 0; OVERDUE: 0;
+  DUE: number;
+  OVERDUE: number;
 }
 
 export interface TrainingStatsChartAction {

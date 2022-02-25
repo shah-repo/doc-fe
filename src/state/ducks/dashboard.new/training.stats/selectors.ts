@@ -1,23 +1,20 @@
-import { get, pick } from "lodash";
+import { pick, set } from "lodash";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
 import { TrainingStatusTypes } from "./types";
 
-const trainingStats = (state: ApplicationState) =>
-  state.dashboardNew.trainingStats.trainingStats;
-
-const trainingStatsLineItemData = (state: ApplicationState) => {
-  const results = get(state.dashboardNew.trainingStats.trainingStats, "results");
+const trainingStatsList = (state: ApplicationState) => {
+  const results = state.dashboardNew.trainingStats.trainingStatsList.results;
   results.filter((item) => {
     // taking only required data of user
-    item.user = pick(item.user, ["name", "avatar", "initialColor"]);
-    return item;
+    const userInfo = pick(item.user, ["name", "avatar", "initialColor"]);
+    return set(item, "user", userInfo);
   });
   return results;
 };
 
-const totalTrainingStatsLineItemData = (state: ApplicationState) =>
-  get(state.dashboardNew.trainingStats.trainingStats, "total");
+const totalTrainingStatsList = (state: ApplicationState) =>
+  state.dashboardNew.trainingStats.trainingStatsList.total;
 
 // Chart
 const trainingStatsChart = (state: ApplicationState) =>
@@ -39,11 +36,10 @@ const getLoadTrainingStatsListAsyncInfo = (
 
 export default {
   getLoadTrainingStatsListAsyncInfo,
-  trainingStats,
-  trainingStatsLineItemData,
+  trainingStatsList,
   trainingStatsChart,
   overdueTrainingChartData,
   dueTrainingChartData,
   getLoadTrainingStatsChartAsyncInfo,
-  totalTrainingStatsLineItemData,
+  totalTrainingStatsList,
 };
