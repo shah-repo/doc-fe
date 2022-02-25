@@ -44,7 +44,11 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters)) {
+    if (
+      isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters) &&
+      isEmpty(tableCriteria?.queryDict?.dataState?.sort) &&
+      isEmpty(tableCriteria?.queryDict?.dataState?.group)
+    ) {
       const dataState: DataStateProps = {
         filter: {
           logic: "and",
@@ -61,10 +65,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
         take: 25,
         group: [],
       };
-      setSearchStatus(
-        dataState,
-        gridConfiguration.columns
-      );
+      setSearchStatus(dataState, gridConfiguration.columns);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
