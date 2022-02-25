@@ -64,6 +64,7 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     color: Colors.navy,
     border: `1px solid ${Colors.navy}`,
     backgroundColor: Colors.white,
+    letterSpacing: 0,
   },
 }
 ));
