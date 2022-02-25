@@ -1,9 +1,9 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import ExportButton from "../../document.revision/grid/ExportButton";
+import { TrainingListData } from "../../../state/ducks/training/types";
 import GridTitle from "../../document.revision/grid/GridTitle";
 import { KendoGrid } from "../../document.revision/grid/KendoGrid";
+import ExportButton from "./ExportButton";
 import { KendoPresenterProps } from "./interfaces";
 
 
@@ -17,8 +17,8 @@ export function TrainingListPresenter({
   queryUrl,
   defaultPayloadData,
 }: KendoPresenterProps) {
-  const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
-  const handleExportData = (dataToBeExported: DocumentRevision[]) => {
+  const [dataToBeExported, setDataToBeExported] = useState<TrainingListData[]>([]);
+  const handleExportData = (dataToBeExported: TrainingListData[]) => {
     setDataToBeExported(dataToBeExported);
   };
   console.log("debug :: dataToBeExported :: ", dataToBeExported);
