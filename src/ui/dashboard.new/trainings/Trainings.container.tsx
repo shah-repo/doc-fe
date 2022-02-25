@@ -52,8 +52,8 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
     };
     async.start(loadTrainingList, updatedPageSize);
     setTimeout(() => {
-      scrollToBottom(`[id="trainingBoxLoadMore"]`);
-    }, 1500);
+      scrollToBottom("#trainingBoxLoadMore");
+    }, 2000);
   };
 
   return (

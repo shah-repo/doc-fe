@@ -55,8 +55,8 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     };
     async.start(loadMyFeeds, updatedPageSize);
     setTimeout(() => {
-      scrollToBottom(`[id="myFeedBoxLoadMore"]`);
-    }, 1500);
+      scrollToBottom("#myFeedBoxLoadMore");
+    }, 2000);
   };
   return (
     <MyFeedsLineItemPresenter
