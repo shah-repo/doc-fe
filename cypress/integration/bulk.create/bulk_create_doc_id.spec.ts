@@ -474,8 +474,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drEnterDocumentTitle({ name: "Bulk create form" });
     });
 
-    it("Enter description 'Export'", () => {
-      cy.drEnterDocumentDescription({ description: "Export" });
+    it("Enter description 'Bulk create form description'", () => {
+      cy.drEnterDocumentDescription({ description: "Bulk create form description" });
     });
 
     it("Select 'Form' document type from dropdown", () => {
@@ -674,7 +674,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/AR ID\nAR-00006/);
 
-        expect(el).match(/Description\nExport/);
+        expect(el).match(/Description\nBulk create form description/);
 
         expect(el).match(/Output Document Type\nBulk Create/);
 
@@ -766,8 +766,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-      it("Enter title Bulk Creation document test", () => {
-        cy.drEnterDocumentTitle({ name: "Bulk Creation document test{enter}" });
+
+      it("Enter title 'Bulk Creation document'", () => {
+        cy.drEnterDocumentTitle({ name: "Bulk Creation document{enter}" });
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
@@ -834,7 +835,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Check doc WIP status and click on Send To Email", () => {
         cy.get("#HeaderInfo-status").should("have.text", "WIP");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document test");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
         cy.get("#HeaderInfo-docId").then((x) => {
           releasedFormId = x.text();
         });
@@ -939,7 +940,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       it("Extract texts from PDF file content for WIP document", () => {
         cy.pdfparseFile({
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
+          fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
         }).then((cdata) => {
           expect(cdata.numpages).eq(2);
           expect(cdata.text).match(/Page 1 of 2/);
@@ -961,7 +962,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments\nimage.jpg/);
@@ -993,7 +994,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/\(file\) Upload excel with data for import\nprivateBulkExistDocId.xlsx/);
@@ -1067,7 +1068,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Check doc Released status and click on Send To Email", () => {
         cy.get("#HeaderInfo-status").should("have.text", "Released");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document test");
+        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
         cy.get("#HeaderInfo-docId").then((x) => {
           releasedFormId = x.text();
         });
@@ -1172,7 +1173,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.pdfparseFile(
           {
             directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-            fileName: `${releasedFormId}-A-Bulk-Creation-document-test.pdf`,
+            fileName: `${releasedFormId}-A-Bulk-Creation-document.pdf`,
           }).then((cdata) => {
           expect(cdata.numpages).eq(3);
           expect(cdata.text).match(/Page 1 of 3/);
@@ -1198,7 +1199,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments\nimage.jpg/);
@@ -1231,7 +1232,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
@@ -1262,15 +1263,15 @@ context("Bulk create public, private and reserved doc-ids", () => {
         }
       });
 
-      it("Verify page 2 for released document", () => {
-        const el = pages[1];
+      it("Verify page 3 for released document", () => {
+        const el = pages[2];
         if (el.includes("Page 3 of 3")) {
           tmpRegex = new
-          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT TEST`, "gi" );
+          RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
-          tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Released/);
@@ -1356,6 +1357,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
       it("Select 'yes' to have Document id column", () => {
         cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Checkbox option 1 checked", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).check();
       });
 
       it("Add approval", () => {
