@@ -2,6 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
+import Colors from "../../layout/theme/utils/colors";
 import { documentRevisionQueryStatus } from "../utils/helpers";
 import CreateButton from "./CreateButton/presenter";
 import ExportButton from "./ExportButton/presenter";
@@ -23,7 +24,7 @@ export function DocumentListPresenter({
     setDataToBeExported(dataToBeExported);
   };
   return (
-    <Box m={2}>
+    <Box p={2} style={{ background: Colors.background_white }}>
       <Grid container={true}>
         <Grid item xs>
           <Box mb={2}>

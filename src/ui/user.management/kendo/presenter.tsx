@@ -11,6 +11,7 @@ import { toastError } from "../../components/notifications";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import Colors from "../../layout/theme/utils/colors";
 import { DropboxResponse } from "../profile/dialog/DialogContent";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
@@ -53,7 +54,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box m={2}>
+    <Box p={2} style={{ background: Colors.background_white }}>
       <Grid container>
         <Grid item={true}>
           <KendoPanel<GetEmployeeResponse>
