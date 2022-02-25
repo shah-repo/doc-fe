@@ -1,9 +1,9 @@
-import { GridFilterCellProps } from "@progress/kendo-react-grid";
+import { GridFilterCellProps, GridRowClickEvent } from "@progress/kendo-react-grid";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import { Redirect, RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -19,7 +19,8 @@ import { DisplayText, TranslatedText } from "../../components/common/kendo/helpe
 import { KendoCellTemplates, KendoColumn } from "../../components/common/kendo/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { isTranslation } from "../../translations/types";
@@ -34,6 +35,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   match,
 }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { categoryName, docTypeId } = match.params;
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
   // const currentUsersName = useSelector(authSelectors.currentUserName);
@@ -196,11 +198,18 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   });
   const schema = getSchemaFromColumns(kendoColumnDef as KendoColumn[]);
 
-  const onRowClick = () => {
-    // eslint-disable-next-line no-console
-    console.log("onRowClick ");
+  // check if document is editable or readonly
+  const canEdit = (data: DocumentRevision) => canEditDocumentRevision(data);
+  const onRowClick = ({ dataItem }: GridRowClickEvent) => {
+    if (isEmpty(dataItem.id) || isEmpty(dataItem.document.id)) {
+      return false;
+    }
+    let urlPath = documentPreviewPath(dataItem.id, dataItem.document.id);
+    if (canEdit(dataItem)) {
+      urlPath = documentEditPath(dataItem.id, dataItem.document.id);
+    }
+    history.push(urlPath);
   };
-
   console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
     <DocumentTypePresenter
