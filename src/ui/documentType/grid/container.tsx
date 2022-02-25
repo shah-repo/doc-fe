@@ -24,10 +24,10 @@ import { documentEditPath, documentPreviewPath } from "../../document.revision/u
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { isTranslation } from "../../translations/types";
-import { DateDropdownFilterCell } from "../kendo/filter.templates/DateDropdownFilter";
-import { DropdownFilterCell } from "../kendo/filter.templates/DropdownFilter";
-import { columnSearchConfiguration, getStaticColumns } from "../kendo/helpers";
 import { RouteParams } from "../utils/types";
+import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
+import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
+import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import { DataStateProps } from "./interfaces";
 import { DocumentTypePresenter } from "./presenter";
 
