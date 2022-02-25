@@ -44,7 +44,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   };
 
   const async = useAsync();
-  const onPageChange = () => {
+  const onLoadMoreData = () => {
     const nextOffset = offset + MY_FEEDS_LIMIT;
     setOffset(nextOffset);
     setOverallLimit(overallLimit + MY_FEEDS_LIMIT);
@@ -60,7 +60,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
       }}
-      onLoadMoreData={onPageChange}
+      onLoadMoreData={onLoadMoreData}
     />
   );
 };
