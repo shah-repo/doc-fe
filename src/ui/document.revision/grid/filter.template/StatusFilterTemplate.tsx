@@ -12,6 +12,7 @@ import { DisplayText, TranslatedText } from "../../../components/common/kendo/he
 interface Props extends GridFilterCellProps {
   defaultItem: string;
   data: DocumentRevisionStatus[] | ChangeRequestStatus[];
+  onClearFilter?: (() => void);
 }
 
 export const StatusFilterTemplate = ({
@@ -19,6 +20,7 @@ export const StatusFilterTemplate = ({
   data,
   onChange,
   value,
+  onClearFilter,
 }: Props) => {
   const hasValue = (value: string) => value && value !== defaultItem;
   const intl = useIntl();
@@ -38,6 +40,7 @@ export const StatusFilterTemplate = ({
       operator: "",
       syntheticEvent: event,
     });
+    onClearFilter && onClearFilter();
   };
   return (
     <div className="k-filtercell">

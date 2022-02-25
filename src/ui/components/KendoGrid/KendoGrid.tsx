@@ -49,6 +49,7 @@ export function KendoGrid<T extends any>({
   defaultPayloadData,
   documentTypeCategory,
   exportDataChanges,
+  onClearFilter,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
@@ -167,6 +168,7 @@ export function KendoGrid<T extends any>({
       defaultItem={intl.formatMessage({
         id: TranslatedText[DisplayText.ALL],
       })}
+      onClearFilter={onClearFilter}
     />
   );
 
@@ -241,6 +243,7 @@ export function KendoGrid<T extends any>({
         tableName
       )
     );
+    onClearFilter && onClearFilter();
   };
   const updateDataColumnsState = (dataColumns: KendoColumnProps[]) => {
     setColumns(dataColumns);
