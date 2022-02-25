@@ -37,9 +37,8 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
 
 
-  const renderItems = () => (
+  const renderItems = (value) => (
     <List className={classes.listRoot}>
-
       {panelData.map((data, index) => (
         <>
           <TrainingItem
@@ -57,7 +56,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         </>
       ))}
       {totalTrainingData > 0 &&
-        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore${index}`} />
+        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore${value}`} />
       }
     </List>
   );
@@ -71,7 +70,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {renderItems()}
+      {renderItems(value)}
     </Box>
   );
 };
