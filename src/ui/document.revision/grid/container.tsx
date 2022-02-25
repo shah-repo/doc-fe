@@ -77,7 +77,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
             {
               field: "displayStatus",
               operator: "eq",
-              value: "Released",
+              value: "Released" as DocumentRevisionStatus,
             },
           ],
         },

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { authSelectors } from "../../../state/ducks/auth";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -51,7 +52,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
             {
               field: "state",
               operator: "eq",
-              value: "IN_REVIEW",
+              value: ChangeRequestStatus.InReview,
             },
           ],
         },

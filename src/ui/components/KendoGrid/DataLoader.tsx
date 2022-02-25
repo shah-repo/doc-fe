@@ -71,7 +71,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
               filter: data.filter,
               skip: data.offset,
               take: data.limit,
-              group: data.group,
+              group: dataState.group,
             }
           );
         } else {

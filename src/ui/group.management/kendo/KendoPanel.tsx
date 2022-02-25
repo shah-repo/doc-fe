@@ -566,7 +566,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box width="100%">
+    <Box>
       <Box mb={2}>
         <Grid container={true} alignItems="center">
           <Grid item xs>

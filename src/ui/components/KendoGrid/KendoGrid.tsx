@@ -67,9 +67,9 @@ export function KendoGrid<T extends any>({
     }
   }, [didMount, tableCriteria]);
 
-  const [products, setProducts] = React.useState<DataResult>({
+  const [records, setRecords] = React.useState<DataResult>({
     data: [],
-    total: 77,
+    total: 0,
   });
 
   const processWithGroups = (data, dataState: State) => {
@@ -84,12 +84,12 @@ export function KendoGrid<T extends any>({
   };
 
   const [resultState, setResultState] = useState<DataResult>(
-    processWithGroups(products, dataState)
+    processWithGroups(records, dataState)
   );
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
     setDataState(e.dataState);
-    const groupedResultState = processWithGroups(products, e.dataState);
+    const groupedResultState = processWithGroups(records, e.dataState);
     setResultState(groupedResultState);
     setNoDataMessage(<span />);
     dispatch(
@@ -105,13 +105,13 @@ export function KendoGrid<T extends any>({
     );
   };
 
-  const dataReceived = (products: DataResult, updatedDataState: State) => {
-    setProducts(products);
-    const newDataState = processWithGroups(products, updatedDataState);
-    newDataState.total = products.total;
+  const dataReceived = (data: DataResult, updatedDataState: State) => {
+    setRecords(data);
+    const newDataState = processWithGroups(data, updatedDataState);
+    newDataState.total = data.total;
     exportDataChanges(newDataState.data);
     setResultState(newDataState);
-    if (products.total === 0) {
+    if (data.total === 0) {
       setNoDataMessage(<NoDataFound />);
     }
   };
@@ -315,7 +315,7 @@ export function KendoGrid<T extends any>({
           resizable={true}
           {...dataState}
           data={result}
-          total={products.total}
+          total={records.total}
           onDataStateChange={dataStateChange}
           onExpandChange={onExpandChange}
           expandField="expanded"
