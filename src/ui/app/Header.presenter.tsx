@@ -50,7 +50,10 @@ const Header: React.FunctionComponent<Props> = ({
             label="Show customizable labels"
           />
           }
-          <AutosaveToggle/>
+          <Box position={"absolute"}>
+            <AutosaveToggle/>
+          </Box>
+
         </Grid>
       </Box>
     );
