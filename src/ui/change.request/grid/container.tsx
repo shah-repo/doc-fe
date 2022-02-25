@@ -44,7 +44,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict)) {
+    if (isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters)) {
       const dataState: DataStateProps = {
         filter: {
           logic: "and",
@@ -67,7 +67,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableCriteria.queryDict]);
+  }, []);
 
   const onRowClick = ({ dataItem }: GridRowClickEvent) => {
     if (isEmpty(dataItem.id)) {
