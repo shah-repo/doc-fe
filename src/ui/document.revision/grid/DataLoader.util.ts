@@ -47,11 +47,22 @@ export const getDynamicPayloadItems = (tableName: string, payload) => {
       }
       break;
     case "documentsByCategoryList-Record":
+    case "documentsByCategoryList-EB":
+    case "documentsByCategoryList-Receive":
+    case "documentsByCategoryList-Lhr":
       const releasedData = find(payload.filters, { field: "releasedAt" });
       if (releasedData) {
         const effectiveDateOptions = documentRevisionEffectiveDateOption();
         payload.releasedAfter = find(effectiveDateOptions, { text: releasedData.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, "releasedAt");
+      }
+      break;
+    case "documentsByCategoryList-Parts":
+      const partsField = find(payload.filters, { field: "effectiveDate" });
+      if (partsField) {
+        const effectiveDateOptions = documentRevisionEffectiveDateOption();
+        payload.effectiveDate = find(effectiveDateOptions, { text: partsField.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, "effectiveDate");
       }
       break;
     default:
