@@ -1,4 +1,4 @@
-import { Box, Typography } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
@@ -21,6 +21,7 @@ import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
@@ -295,40 +296,48 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   }
   return (
     <>
-      <Grid item xs ><Typography className={classes.title}>{title}</Typography></Grid>
-      <Grid item={true} xs style={{ textAlign: "right", marginBottom: 10 }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.exportListbutton}
-          id="ListPresenter-export-list"
-          data-cy="document.revision.export.list"
-          onClick={exportDialog.open}
-        >
-          <Box display="flex">
-            <ExportIcon className={classes.iconSvg} height={14} width={14}/>
-          </Box>
-          <Text translation="document.revision.export.list" />
-        </Button>
-        <ExportListDialog
-          {...{ headers, data  }}
-          dialog={exportDialog}
-          customFileName="DocumentList"
-        />
-        <CustomLabelTooltip {...{ tooltipConfig }}>
-          <Button
-            // variant="contained"
-            // color="primary"
-            className={classes.createButton}
-            onClick={handleAddButtonClick}
-            id="DocumentByTypeListPresenter-openDocRev"
-          >
-            <Text
-              message={buttonLabel}
-              values={{ name: labelName }}
-            />
-          </Button>
-        </CustomLabelTooltip>
+      <Grid item xs>
+        <Box mb={2}>
+          <Grid container={true} alignItems="center">
+            <Grid item xs>
+              <GridTitle title={title} />
+            </Grid>
+            <Grid item={true}>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.exportListbutton}
+                id="ListPresenter-export-list"
+                data-cy="document.revision.export.list"
+                onClick={exportDialog.open}
+              >
+                <Box display="flex">
+                  <ExportIcon className={classes.iconSvg} height={14} width={14}/>
+                </Box>
+                <Text translation="document.revision.export.list" />
+              </Button>
+              <ExportListDialog
+                {...{ headers, data  }}
+                dialog={exportDialog}
+                customFileName="DocumentList"
+              />
+              <CustomLabelTooltip {...{ tooltipConfig }}>
+                <Button
+                // variant="contained"
+                // color="primary"
+                  className={classes.createButton}
+                  onClick={handleAddButtonClick}
+                  id="DocumentByTypeListPresenter-openDocRev"
+                >
+                  <Text
+                    message={buttonLabel}
+                    values={{ name: labelName }}
+                  />
+                </Button>
+              </CustomLabelTooltip>
+            </Grid>
+          </Grid>
+        </Box>
       </Grid>
       {
         errorMessage && (

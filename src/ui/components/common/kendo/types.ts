@@ -14,7 +14,8 @@ export enum KendoCellTemplates {
   STATUS="Status",
   DATE_COMPLETED="DateCompleted",
   DATE_INFO="DateInfo",
-  COMMON_CELL="CommonCell"
+  COMMON_CELL="CommonCell",
+  DOCUMENT_TYPE="DocumentTypeCellTemplate"
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings;
@@ -37,26 +38,13 @@ export interface KendoColumn {
   resizable?: boolean;
   showTooltip?: boolean;
   tooltipField?: string;
-}
-
-export interface DropdownFilterDefaultItem {
-  text: string;
-  value: string;
+  extraFields?: string[];
 }
 export interface PageState {
   skip: number;
   take: number;
   group?: GroupDescriptor[];
 }
-
-export interface DateFilterStateChangeProps {
-  selectedItem?: {
-    text: string;
-    value: string;
-  };
-  parentField?: string;
-}
-
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
@@ -64,7 +52,7 @@ export interface KendoGridConfiguration {
   initialDataState? : PageState;
 }
 
-export interface KendoGridCriteria {
+interface KendoGridCriteria {
   queryDict: KendoTableSearchQueryType;
   apiError: string;
   forceUpdate: boolean;
@@ -72,7 +60,7 @@ export interface KendoGridCriteria {
   columnConfig?: string;
 }
 
-export interface DocumentTypeOptions{
+interface DocumentTypeOptions{
   text: string;
   value: string;
 }
