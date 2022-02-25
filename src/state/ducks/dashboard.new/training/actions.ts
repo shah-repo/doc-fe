@@ -10,15 +10,18 @@ const trainingList = (trainingStats: Training[], initialLoad = true): TrainingLi
   initialLoad,
 });
 
-const loadTrainingList = (queryPayload): ApiAction<Training[]> => apiAction({
-  url: `${TRAINING_URL}`,
-  method: "post",
-  data: isEmpty(queryPayload) ? TRAINING_INITIAL_PAYLOAD : queryPayload,
-  asyncType: TRAINING_LIST_ASYNC,
-  onSuccess: (trainingItems, dispatch) => {
-    dispatch(trainingList(trainingItems, isEmpty(queryPayload)));
-  },
-});
+const loadTrainingList = (queryPayload): ApiAction<Training[]> => {
+  const finalPayload = isEmpty(queryPayload) ? TRAINING_INITIAL_PAYLOAD : queryPayload;
+  apiAction({
+    url: `${TRAINING_URL}`,
+    method: "post",
+    data: finalPayload,
+    asyncType: TRAINING_LIST_ASYNC,
+    onSuccess: (trainingItems, dispatch) => {
+      dispatch(trainingList(trainingItems, finalPayload.offset === TRAINING_INITIAL_PAYLOAD.offset));
+    },
+  });
+};
 
 export default {
   trainingList,
