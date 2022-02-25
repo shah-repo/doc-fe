@@ -2,13 +2,13 @@ import { Box, Button } from "@material-ui/core";
 import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import Text from "../../components/Text";
-import useDialog from "../../hooks/useDialog";
-import ExportListDialog from "../list/ExportListDialog/ExportListDialog";
-import styles from "./ExportButton.styles";
+import { ReactComponent as ExportIcon } from "../../../../assets/images/export_data.svg";
+import { getFormattedDateString, MomentFormats } from "../../../../common/utils/date";
+import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
+import Text from "../../../components/Text";
+import useDialog from "../../../hooks/useDialog";
+import ExportListDialog from "../../list/ExportListDialog/ExportListDialog";
+import styles from "./styles";
 
 interface Props {
   gridData: DocumentRevision[];

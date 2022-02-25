@@ -1,8 +1,8 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import Text from "../../components/Text";
-import styles from "./CreateButton.styles";
+import Text from "../../../components/Text";
+import styles from "./styles";
 
 interface Props {
   url: string;

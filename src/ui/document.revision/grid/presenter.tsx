@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { documentRevisionQueryStatus } from "../utils/helpers";
-import CreateButton from "./CreateButton";
-import ExportButton from "./ExportButton";
-import GridTitle from "./GridTitle";
+import CreateButton from "./CreateButton/presenter";
+import ExportButton from "./ExportButton/presenter";
+import GridTitle from "./GridTitle/presenter";
 import { KendoPresenterProps } from "./interfaces";
 import { KendoGrid } from "./KendoGrid";
-
 
 export function DocumentListPresenter({
   statuses,

@@ -6,7 +6,7 @@ import { ReactComponent as ExportIcon } from "../../../assets/images/export_data
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TrainingListData } from "../../../state/ducks/training/types";
 import Text from "../../components/Text";
-import styles from "../../document.revision/grid/ExportButton.styles";
+import styles from "../../document.revision/grid/ExportButton/styles";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import useDialog from "../../hooks/useDialog";
 
