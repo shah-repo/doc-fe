@@ -562,8 +562,10 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   return (
     <Box>
       <Box mb={2}>
-        <Grid container={true}>
-          <GridTitle translation="navigation.group.management" />
+        <Grid container={true} alignItems="center">
+          <Grid item xs>
+            <GridTitle translation="navigation.group.management" />
+          </Grid>
           <Grid item>
             {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
           </Grid>

@@ -535,7 +535,9 @@ export function KendoPanel<T extends { id?: string }>({
         <Grid item>
           <Box mb={2}>
             <Grid container={true}>
-              <GridTitle translation="documenttype.management" />
+              <Grid item xs>
+                <GridTitle translation="documenttype.management" />
+              </Grid>
               <Grid item>
                 <Button
                   onClick={exportDAMDialog.open}

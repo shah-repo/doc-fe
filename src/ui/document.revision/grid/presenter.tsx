@@ -28,8 +28,10 @@ export function DocumentListPresenter({
       <Grid container={true}>
         <Grid item xs>
           <Box mb={2}>
-            <Grid container={true}>
-              <GridTitle translation="navigation.document.list" />
+            <Grid container={true} alignItems="center">
+              <Grid item xs>
+                <GridTitle translation="navigation.document.list" />
+              </Grid>
               <Grid item={true}>
                 <ExportButton columns={columns} gridData={dataToBeExported} />
                 <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />

@@ -33,8 +33,10 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
     <>
       <Grid item xs>
         <Box mb={2}>
-          <Grid container={true}>
-            <GridTitle translation="page.table.title.changeRequest"/>
+          <Grid container={true} alignItems="center">
+            <Grid item xs alignItems="center">
+              <GridTitle translation="page.table.title.changeRequest" />
+            </Grid>
             <Grid item={true}>
               <Button
                 variant="outlined"

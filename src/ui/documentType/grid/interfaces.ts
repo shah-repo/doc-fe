@@ -4,13 +4,13 @@ import { KendoColumn } from "../../components/common/kendo/types";
 import { TableColumnProps } from "../../components/table/column/types";
 import { TablePanelStateProps } from "../../components/table/types";
 
-export interface FilterList {
+interface FilterList {
   field: string;
   operator: string;
   value: any;
 }
 
-export interface FilterObject {
+interface FilterObject {
   logic: "and";
   filters: FilterList[];
 }

@@ -296,8 +296,10 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
     <>
       <Grid item xs>
         <Box mb={2}>
-          <Grid container={true}>
-            <GridTitle title={title} />
+          <Grid container={true} alignItems="center">
+            <Grid item xs>
+              <GridTitle title={title} />
+            </Grid>
             <Grid item={true}>
               <Button
                 variant="outlined"

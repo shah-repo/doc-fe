@@ -3,13 +3,13 @@ import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/t
 import { KendoColumn } from "../../components/common/kendo/types";
 import { TablePanelStateProps } from "../../components/table/types";
 
-export interface FilterList {
+interface FilterList {
   field: string;
   operator: string;
   value: any;
 }
 
-export interface FilterObject {
+interface FilterObject {
   logic: "and";
   filters: FilterList[];
 }
@@ -54,6 +54,3 @@ export interface DataLoaderProps {
   tableCriteria: TablePanelStateProps;
 }
 
-export interface KendoTableSearchQueryType {
-  [key: string]: any;
-}

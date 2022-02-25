@@ -7,7 +7,6 @@ import Colors from "../../layout/theme/utils/colors";
 import ExportButton from "./ExportButton";
 import { KendoPresenterProps } from "./interfaces";
 
-
 export function TrainingListPresenter({
   statuses,
   tableName,
@@ -22,13 +21,16 @@ export function TrainingListPresenter({
   const handleExportData = (dataToBeExported: TrainingListData[]) => {
     setDataToBeExported(dataToBeExported);
   };
+
   return (
     <Box p={2} style={{ background: Colors.background_white }}>
       <Grid container={true}>
         <Grid item xs>
           <Box mb={2}>
-            <Grid container={true}>
-              <GridTitle translation="page.title.training" />
+            <Grid container={true} alignItems="center">
+              <Grid item xs>
+                <GridTitle translation="page.title.training" />
+              </Grid>
               <Grid item={true}>
                 <ExportButton columns={columns} gridData={dataToBeExported} />
               </Grid>

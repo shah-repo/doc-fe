@@ -14,11 +14,12 @@ import gridConfiguration from "./column.definition";
 import { DataStateProps } from "./interfaces";
 import { DocumentListPresenter } from "./presenter";
 
+export const CR_TABLE_NAME = "changeRequests";
+
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const schema = getSchemaFromColumns(gridConfiguration.columns);
-  const TABLE_NAME = "changeRequests";
   const dispatch = useDispatch();
-  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(CR_TABLE_NAME));
   const history = useHistory();
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
 
@@ -36,7 +37,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
           },
           columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        TABLE_NAME
+        CR_TABLE_NAME
       )
     );
   };
@@ -78,10 +79,9 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     history.push({ pathname: urlPath });
   };
 
-  console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
     <DocumentListPresenter
-      tableName={TABLE_NAME}
+      tableName={CR_TABLE_NAME}
       tableCriteria={tableCriteria}
       schema={schema}
       columns={gridConfiguration.columns}

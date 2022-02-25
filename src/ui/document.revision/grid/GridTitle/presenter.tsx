@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { Translation } from "../../../translations/types";
@@ -13,9 +13,9 @@ const GridTitle: React.FunctionComponent<Props> = ({ translation, title = "" }) 
   const intl = useIntl();
   const gridTitle = translation ? intl.formatMessage({ id: translation }) : title;
   return (
-    <Grid item xs alignItems="center" style={{ display: "flex" }}>
+    <Box>
       <Typography className={classes.title}>{gridTitle}</Typography>
-    </Grid>
+    </Box>
   );
 };
 

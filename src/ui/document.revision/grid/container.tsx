@@ -104,7 +104,6 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     history.push(documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id));
   };
 
-  console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
     <DocumentListPresenter
       statuses={statuses}

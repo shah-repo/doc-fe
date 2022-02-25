@@ -40,25 +40,11 @@ export interface KendoColumn {
   tooltipField?: string;
   extraFields?: string[];
 }
-
-export interface DropdownFilterDefaultItem {
-  text: string;
-  value: string;
-}
 export interface PageState {
   skip: number;
   take: number;
   group?: GroupDescriptor[];
 }
-
-export interface DateFilterStateChangeProps {
-  selectedItem?: {
-    text: string;
-    value: string;
-  };
-  parentField?: string;
-}
-
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
@@ -66,7 +52,7 @@ export interface KendoGridConfiguration {
   initialDataState? : PageState;
 }
 
-export interface KendoGridCriteria {
+interface KendoGridCriteria {
   queryDict: KendoTableSearchQueryType;
   apiError: string;
   forceUpdate: boolean;
@@ -74,7 +60,7 @@ export interface KendoGridCriteria {
   columnConfig?: string;
 }
 
-export interface DocumentTypeOptions{
+interface DocumentTypeOptions{
   text: string;
   value: string;
 }

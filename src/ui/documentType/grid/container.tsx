@@ -210,7 +210,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     }
     history.push(urlPath);
   };
-  console.log("debug :: DocumentListContainer :: tableCriteria :: ", tableCriteria);
   return (
     <DocumentTypePresenter
       tableName={TABLE_NAME}

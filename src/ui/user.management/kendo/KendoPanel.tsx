@@ -508,7 +508,7 @@ export function KendoPanel<T>({
   return (
     <Box>
       <Box mb={2}>
-        <Grid container justify="space-between">
+        <Grid container justify="space-between" alignItems="center">
           <GridTitle translation="navigation.user.management" />
           <Grid item className={classes.dropboxButton}>
             <EnableDropboxButton
