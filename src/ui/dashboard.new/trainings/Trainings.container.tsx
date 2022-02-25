@@ -11,6 +11,7 @@ import { TRAINING_INITIAL_OFFSET, TRAINING_INITIAL_PAYLOAD, TRAINING_LIMIT } fro
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import { scrollToBottom } from "../line.items/common/Utils";
 import TrainingsLineItemPresenter from "./Trainings.presenter";
 
 const TrainingsLineItemsContainer: React.FunctionComponent = () => {
@@ -50,6 +51,9 @@ const TrainingsLineItemsContainer: React.FunctionComponent = () => {
       limit: TRAINING_LIMIT,
     };
     async.start(loadTrainingList, updatedPageSize);
+    setTimeout(() => {
+      scrollToBottom(`[id="trainingBoxLoadMore"]`);
+    }, 1500);
   };
 
   return (

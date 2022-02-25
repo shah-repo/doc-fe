@@ -70,7 +70,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
             return <Text key={index} translation="common.undefined" />;
         }
       })}
-      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= trainingItems.total }/>
+      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= trainingItems.total } id="trainingBoxLoadMore"/>
     </List>
 
   );

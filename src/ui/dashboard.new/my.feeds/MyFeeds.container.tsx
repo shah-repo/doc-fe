@@ -7,6 +7,7 @@ import {
 import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import { scrollToBottom } from "../line.items/common/Utils";
 import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
@@ -53,6 +54,9 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
       limit: MY_FEEDS_LIMIT,
     };
     async.start(loadMyFeeds, updatedPageSize);
+    setTimeout(() => {
+      scrollToBottom(`[id="myFeedBoxLoadMore"]`);
+    }, 1500);
   };
   return (
     <MyFeedsLineItemPresenter
