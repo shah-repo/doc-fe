@@ -4,7 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
