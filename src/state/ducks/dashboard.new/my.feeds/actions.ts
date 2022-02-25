@@ -10,15 +10,18 @@ const myFeedsList = (myFeeds: MyFeedsItems[], initialLoad = true): MyFeedsListAc
   initialLoad,
 });
 
-const loadMyFeedsList = (queryPayload): ApiAction<MyFeedsItems[]> => apiAction({
-  url: DASHBOARD_MY_FEEDS_URL_SEARCH,
-  method: "post",
-  data: isEmpty(queryPayload) ? MY_FEEDS_INITIAL_PAYLOAD : queryPayload,
-  asyncType: MY_FEEDS_LIST_ASYNC,
-  onSuccess: (myFeeds, dispatch) => {
-    dispatch(myFeedsList(myFeeds, isEmpty(queryPayload)));
-  },
-});
+const loadMyFeedsList = (queryPayload): ApiAction<MyFeedsItems[]> => {
+  const finalPayload = isEmpty(queryPayload) ? MY_FEEDS_INITIAL_PAYLOAD : queryPayload;
+  return apiAction({
+    url: DASHBOARD_MY_FEEDS_URL_SEARCH,
+    method: "post",
+    data: finalPayload,
+    asyncType: MY_FEEDS_LIST_ASYNC,
+    onSuccess: (myFeeds, dispatch) => {
+      dispatch(myFeedsList(myFeeds, finalPayload.offset === MY_FEEDS_INITIAL_PAYLOAD.offset));
+    },
+  });
+};
 
 
 const pinnedLineItem = (
