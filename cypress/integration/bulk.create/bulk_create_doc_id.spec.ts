@@ -597,7 +597,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing training form", () => {
+    it("Download zip file containing bulk create form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -898,7 +898,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Verify zip file downloaded", () => {
-      it("Download zip file containing training notification", () => {
+      it("Download zip file containing bulk create notification", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1083,7 +1083,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
     });
 
-    context("Verify email for training released notification", () => {
+    context("Verify email for bulk create released notification", () => {
       it("Get emails", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
