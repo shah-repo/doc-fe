@@ -1,6 +1,6 @@
 import { GridRowClickEvent } from "@progress/kendo-react-grid";
 import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
@@ -23,7 +23,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const tableCriteria = useSelector(getTableCriteria(CR_TABLE_NAME));
   const history = useHistory();
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
-  const [clear, setClear] = useState(false);
+
   const setSearchStatus = (
     dataState: DataStateProps,
     columns: KendoColumn[]
@@ -44,7 +44,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict) || (isEmpty(tableCriteria.queryDict?.dataState?.filter?.filters) && !clear)) {
+    if (isEmpty(tableCriteria.queryDict)) {
       const dataState: DataStateProps = {
         filter: {
           logic: "and",
@@ -80,9 +80,6 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     history.push({ pathname: urlPath });
   };
 
-  const onClearFilter = () => {
-    setClear(true);
-  };
   return (
     <DocumentListPresenter
       tableName={CR_TABLE_NAME}
@@ -90,7 +87,6 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       schema={schema}
       columns={gridConfiguration.columns}
       onRowClick={onRowClick}
-      onClearFilter={onClearFilter}
     />
   );
 };

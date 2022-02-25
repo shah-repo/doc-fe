@@ -50,7 +50,6 @@ export interface KendoGridProps<T> {
   queryUrl: string;
   defaultPayloadData: object;
   documentTypeCategory?: string;
-  onClearFilter?: (() => void);
 }
 
 export interface DataLoaderProps {

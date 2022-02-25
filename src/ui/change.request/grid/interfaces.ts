@@ -36,5 +36,4 @@ export interface KendoPresenterProps {
   schema: object;
   columns: KendoColumn[];
   onRowClick: ((dataItem: any) => void);
-  onClearFilter?: (() => void);
 }

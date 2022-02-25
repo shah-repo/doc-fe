@@ -17,7 +17,6 @@ export function DocumentListPresenter({
   schema,
   columns,
   onRowClick,
-  onClearFilter,
 }: KendoPresenterProps) {
   const [dataToBeExported, setDataToBeExported] = useState<ChangeRequest[]>([]);
   const handleExportData = (dataToBeExported: ChangeRequest[]) => {
@@ -42,7 +41,6 @@ export function DocumentListPresenter({
             onRowClick={onRowClick}
             queryUrl={CHANGE_REQUEST_ROOT_URL_SEARCH}
             defaultPayloadData={{}}
-            onClearFilter={onClearFilter}
           />
         </Grid>
       </Grid>
