@@ -15,8 +15,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { changeRequestStatusOption } from "../../change.request/utils/helpers";
 import { ColumnMenu } from "../../document.revision/grid/cell.templates/ColumnMenu";
 import { CompletedDateFilterTemplate } from "../../document.revision/grid/filter.template/CompletedDateFilterTemplate";
 import { DocumentTypeFilterTemplate } from "../../document.revision/grid/filter.template/DocumentTypeFilterTemplate";
@@ -158,6 +160,15 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+  const StateFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={map(changeRequestStatusOption(), "value") as ChangeRequestStatus[]}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
 
   const filterCellMapping = {
     "displayStatus": StatusFilter,
@@ -167,6 +178,7 @@ export function KendoGrid<T extends any>({
     "dueOn": DueOnDate,
     "createdAt": EffectiveDate,
     "releasedAt": EffectiveDate,
+    "state": StateFilter,
   };
 
   const sortedColumnDefinitions = orderByLockedState(
