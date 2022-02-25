@@ -11,8 +11,7 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       padding: "0px 5px",
       overflow: "auto",
-      minHeight: "125px",
-      maxHeight: "calc(100vh - 419px)",
+      height: "calc(100vh - 419px)",
     },
     lineItemContent: {
       height: "100px",

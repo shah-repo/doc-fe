@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   trainingStatsActions,
-  trainingStatsSelectors,
+  trainingStatsSelectors
 } from "../../../state/ducks/dashboard.new/training.stats";
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -27,14 +27,15 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
     setTabValue(val);
   };
   return (
-    <Box className={classes.outline} marginLeft={2} marginRight={2}>
-      <AsyncGate
-        asyncAction={loadTrainingStatsChart}
-        asyncState={loadTrainingStatsChartAsyncInfo}
-        startActionOnMount={true}>
-        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
-      </AsyncGate>
-
+    <Box marginLeft={2} marginRight={2}>
+      <Box className={classes.trainingChart}>
+        <AsyncGate
+          asyncAction={loadTrainingStatsChart}
+          asyncState={loadTrainingStatsChartAsyncInfo}
+          startActionOnMount={true}>
+          <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+        </AsyncGate>
+      </Box>
       <TrainingLineItems tabValue={tabValue} />
     </Box>
   );

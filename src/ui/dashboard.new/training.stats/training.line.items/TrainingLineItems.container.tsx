@@ -74,13 +74,19 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     }, 1500);
   };
 
-  return (<AsyncGate
-    asyncAction={loadTrainingStatsList}
-    asyncState={loadTrainingStatsListAsyncInfo}
-    startActionOnMount={true}
-  >
-    <TrainingLineItemsPresenter tabValue={tabValue} overallLimit={overallLimit} onLoadMoreData={onLoadMoreData} />
-  </AsyncGate>);
+  return (
+    <AsyncGate
+      asyncAction={loadTrainingStatsList}
+      asyncState={loadTrainingStatsListAsyncInfo}
+      startActionOnMount={true}
+    >
+      <TrainingLineItemsPresenter
+        tabValue={tabValue}
+        overallLimit={overallLimit}
+        onLoadMoreData={onLoadMoreData}
+      />
+    </AsyncGate>
+  );
 };
 
 export default TrainingLineItems;
