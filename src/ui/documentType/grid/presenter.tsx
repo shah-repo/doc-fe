@@ -1,5 +1,5 @@
 import { Box, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import ExportButton from "../../document.revision/grid/ExportButton";
 import GridTitle from "../../document.revision/grid/GridTitle";
@@ -19,11 +19,14 @@ export function DocumentTypePresenter({
   queryUrl,
   documentTypeCategory,
 }: KendoPresenterProps) {
+  const ref = useRef(tableName);
+  useEffect(() => {
+    ref.current = tableName;
+  }, [tableName]);
   const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
     setDataToBeExported(dataToBeExported);
   };
-  console.log("debug :: dataToBeExported :: ", dataToBeExported);
   return (
     <Box m={2}>
       <Grid container={true}>
@@ -32,7 +35,7 @@ export function DocumentTypePresenter({
           <ExportButton columns={columns} gridData={dataToBeExported} />
         </Grid>
         <Grid item={true} xs={12}>
-          <KendoGrid
+          {ref.current === tableName && <KendoGrid
             tableName={tableName}
             tableCriteria={tableCriteria}
             schema={schema}
@@ -45,7 +48,7 @@ export function DocumentTypePresenter({
               status: documentRevisionQueryStatus(),
             }}
             documentTypeCategory={documentTypeCategory}
-          />
+          />}
         </Grid>
       </Grid>
     </Box>
