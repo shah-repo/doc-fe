@@ -13,12 +13,21 @@ interface FilterObject {
   logic: "and";
   filters: FilterList[];
 }
+
+interface SortObject {
+  field: string;
+  dir: "asc" | "desc";
+}
+interface GroupObject {
+  field: string;
+  dir?: "asc" | "desc";
+}
 export interface DataStateProps {
   filter: FilterObject;
   take: number;
   skip: number;
-  sort: any[];
-  group: any[];
+  sort: SortObject[];
+  group: GroupObject[];
 }
 
 export interface KendoPresenterProps {
