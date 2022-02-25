@@ -13,6 +13,7 @@ const styles = makeStyles((theme) => ({
     ...commonButtonStyles,
     "paddingLeft": theme.spacing(2.5),
     "paddingRight": theme.spacing(2.5),
+    "marginLeft": theme.spacing(1.875),
     "background": Colors.navy,
     "color": Colors.white,
     "&:hover": {

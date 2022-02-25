@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -39,7 +39,7 @@ import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import Text from "../../components/Text";
+import GridTitle from "../../document.revision/grid/GridTitle/presenter";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
@@ -506,26 +506,24 @@ export function KendoPanel<T>({
     </>
   );
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.user.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container justify="space-between">
+          <GridTitle translation="navigation.user.management" />
+          <Grid item className={classes.dropboxButton}>
+            <EnableDropboxButton
+              shouldDisplayButton={hasDropboxPermission}
+              {...{ dropboxAsync, enableDropboxAction }}
+              disabled={Boolean(isCompanyDropboxEnabled)}
+            />
+            <AddEmployeeContainer addGroup={addNew} />
+          </Grid>
         </Grid>
-        <Grid item className={classes.dropboxButton}>
-          <EnableDropboxButton
-            shouldDisplayButton={hasDropboxPermission}
-            {...{ dropboxAsync, enableDropboxAction }}
-            disabled={Boolean(isCompanyDropboxEnabled)}
-          />
-          <AddEmployeeContainer addGroup={addNew} />
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {tableRenderer()}
-      </>
-    </>
+      </Grid>
+    </Box>
   );
 }

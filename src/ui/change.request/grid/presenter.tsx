@@ -27,7 +27,6 @@ export function DocumentListPresenter({
     label: startCase(getTranslatedText(column.title)),
     key: column.field,
   }));
-  console.log("debug :: dataToBeExported :: ", dataToBeExported);
   return (
     <Box m={2}>
       <Grid container={true}>

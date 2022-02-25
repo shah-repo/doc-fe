@@ -300,6 +300,7 @@ export function KendoGrid<T extends any>({
     collapsedIds: collapsedState,
   });
 
+  console.log("result :: ", result);
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>

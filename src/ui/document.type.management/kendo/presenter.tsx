@@ -4,7 +4,6 @@ import { DocumentType } from "../../../state/ducks/documentRevisions/documentTyp
 import { KendoGridConfiguration } from "../../components/common/kendo/types";
 import { TablePanelStateProps } from "../../components/table/types";
 import { KendoPanel } from "./KendoPanel";
-import KendoGridStyles from "./styles";
 
 interface DTMProps {
   gridData: DocumentType[];
@@ -18,16 +17,14 @@ export const DocumentTypeManagementPresenter: React.FunctionComponent<DTMProps> 
   tableName,
   tableCriteria,
   gridConfiguration,
-}) => {
-  const classes = KendoGridStyles();
-  return (
-    <Box className={classes.root}>
-      <KendoPanel
-        gridData={gridData}
-        gridConfiguration={gridConfiguration}
-        tableName={tableName}
-        tableCriteria={tableCriteria}
-      />
-    </Box>
+}) => (
+  <Box m={2}>
+    <KendoPanel
+      gridData={gridData}
+      gridConfiguration={gridConfiguration}
+      tableName={tableName}
+      tableCriteria={tableCriteria}
+    />
+  </Box>
 
-  ); };
+);

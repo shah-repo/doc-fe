@@ -21,13 +21,18 @@ export function TrainingListPresenter({
   const handleExportData = (dataToBeExported: TrainingListData[]) => {
     setDataToBeExported(dataToBeExported);
   };
-  console.log("debug :: dataToBeExported :: ", dataToBeExported);
   return (
     <Box m={2}>
       <Grid container={true}>
-        <GridTitle translation="page.title.training" />
-        <Grid item={true}>
-          <ExportButton columns={columns} gridData={dataToBeExported} />
+        <Grid item xs>
+          <Box mb={2}>
+            <Grid container={true}>
+              <GridTitle translation="page.title.training" />
+              <Grid item={true}>
+                <ExportButton columns={columns} gridData={dataToBeExported} />
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item={true} xs={12}>
           <KendoGrid

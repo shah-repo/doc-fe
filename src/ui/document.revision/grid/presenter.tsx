@@ -25,10 +25,16 @@ export function DocumentListPresenter({
   return (
     <Box m={2}>
       <Grid container={true}>
-        <GridTitle translation="navigation.document.list" />
-        <Grid item={true}>
-          <ExportButton columns={columns} gridData={dataToBeExported} />
-          <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
+        <Grid item xs>
+          <Box mb={2}>
+            <Grid container={true}>
+              <GridTitle translation="navigation.document.list" />
+              <Grid item={true}>
+                <ExportButton columns={columns} gridData={dataToBeExported} />
+                <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item={true} xs={12}>
           <KendoGrid<DocumentRevision>

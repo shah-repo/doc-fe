@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
@@ -16,7 +16,6 @@ import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
-import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;
@@ -29,7 +28,6 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   data,
   tableCriteria,
 }) => {
-  const classes = KendoGridStyles();
   const intl = useIntl();
   const [showUserProfile, setUserProfile] = useState(false);
   const [selectedEmployee, setEmployee] = useState<GetEmployeeResponse>(DEFAULT_SELECTED_EMPLOYEE);
@@ -55,27 +53,29 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Grid container className={classes.cRoot}>
-      <Grid item={true}>
-        <KendoPanel<GetEmployeeResponse>
-          gridConfiguration={gridConfiguration}
-          queryUrl={EMPLOYEES_URL}
-          gridData={data}
-          tableName={tableName}
-          hasDropboxPermission={hasDropboxPermission}
-          dropboxAsync={dropboxAsync}
-          enableDropboxAction={enableDropboxAction}
-          isCompanyDropboxEnabled={isCompanyDropboxEnabled}
-          onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}
-          tableCriteria={tableCriteria}
+    <Box m={2}>
+      <Grid container>
+        <Grid item={true}>
+          <KendoPanel<GetEmployeeResponse>
+            gridConfiguration={gridConfiguration}
+            queryUrl={EMPLOYEES_URL}
+            gridData={data}
+            tableName={tableName}
+            hasDropboxPermission={hasDropboxPermission}
+            dropboxAsync={dropboxAsync}
+            enableDropboxAction={enableDropboxAction}
+            isCompanyDropboxEnabled={isCompanyDropboxEnabled}
+            onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}
+            tableCriteria={tableCriteria}
+          />
+        </Grid>
+        <UserProfileAdminContainer
+          closeUserProfile={closeUserProfile}
+          showUserProfile={showUserProfile}
+          selectedEmployee={selectedEmployee}
         />
       </Grid>
-      <UserProfileAdminContainer
-        closeUserProfile={closeUserProfile}
-        showUserProfile={showUserProfile}
-        selectedEmployee={selectedEmployee}
-      />
-    </Grid>
+    </Box>
   );
 };
 

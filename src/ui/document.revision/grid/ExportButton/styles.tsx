@@ -13,7 +13,6 @@ const styles = makeStyles((theme) => ({
     ...commonButtonStyles,
     paddingLeft: theme.spacing(2.5),
     paddingRight: theme.spacing(2.5),
-    marginRight: theme.spacing(1.875),
     color: Colors.navy,
     border: `1px solid ${Colors.navy}`,
     backgroundColor: Colors.white,
