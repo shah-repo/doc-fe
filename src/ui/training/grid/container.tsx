@@ -30,6 +30,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
+          apiError: "",
           queryDict: {
             dataState,
           },

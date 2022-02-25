@@ -8,7 +8,7 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
-  GridFilterCellProps, GridToolbar,
+  GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -21,6 +21,7 @@ import { RenderCustomCell } from "../../components/common/kendo.column.templates
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
 import { DisplayText, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import { toastError } from "../../components/notifications";
@@ -52,6 +53,7 @@ export function KendoGrid<T extends any>({
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const [dataState, setDataState] = React.useState<State>(tableCriteria?.queryDict?.dataState);
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
+  const [noDataMessage, setNoDataMessage] = useState(<span />);
 
   useEffect(() => {
     if (didMount) {
@@ -86,6 +88,7 @@ export function KendoGrid<T extends any>({
     setDataState(e.dataState);
     const groupedResultState = processWithGroups(products, e.dataState);
     setResultState(groupedResultState);
+    setNoDataMessage(<span />);
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -104,6 +107,9 @@ export function KendoGrid<T extends any>({
     const newDataState = processWithGroups(products, dataState);
     newDataState.total = products.total;
     setResultState(newDataState);
+    if (products.total === 0) {
+      setNoDataMessage(<NoDataFound />);
+    }
   };
 
   // Column Menu Filters
@@ -322,6 +328,7 @@ export function KendoGrid<T extends any>({
             </Grid>
           </GridToolbar>
           {renderKendoColumns(width)}
+          <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoTable>
 
         {dataState && (
@@ -330,6 +337,7 @@ export function KendoGrid<T extends any>({
             onDataReceived={dataReceived}
             schema={schema}
             tableName={tableName}
+            tableCriteria={tableCriteria}
           />
         )}
       </KendoGlobalization>
@@ -338,7 +346,7 @@ export function KendoGrid<T extends any>({
   const renderBody = () => <AutoSizer>{renderKendoGrid}</AutoSizer>;
   return (
     <>
-      <div style={{ color: "red" }}>{""}</div>
+      <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
       {renderBody()}
     </>
   );

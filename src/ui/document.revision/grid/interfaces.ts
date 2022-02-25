@@ -44,6 +44,7 @@ export interface DataLoaderProps {
   onDataReceived: (products: DataResult) => void;
   schema: object;
   tableName: string;
+  tableCriteria: TablePanelStateProps;
 }
 
 export interface KendoTableSearchQueryType {

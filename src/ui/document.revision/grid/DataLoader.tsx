@@ -1,16 +1,21 @@
 import { toODataString } from "@progress/kendo-data-query";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { cloneDeep } from "lodash";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
+import { authActions } from "../../../state/ducks/auth";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getDefaultPayloadItems, getDynamicPayloadItems, getQueryURL, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
-export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: DataLoaderProps) => {
+export const DataLoader = ({ dataState, onDataReceived, schema, tableName, tableCriteria }: DataLoaderProps) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
   const defaultPayloadItems = getDefaultPayloadItems(tableName);
+  const dispatch = useDispatch();
   let data = {
     ...defaultPayloadItems,
     limit: updatedDataState.take,
@@ -41,6 +46,15 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
       return;
     }
     pending.current = toODataString(updatedDataState);
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          apiError: "",
+        },
+        tableName
+      )
+    );
     apiClient
       .request(requestConfig)
       .then(({ data }) => {
@@ -54,6 +68,38 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName }: Dat
         } else {
           requestDataIfNeeded();
         }
+      }).catch((exception) => {
+        if (axios.isCancel(exception)) {
+          return;
+        }
+        let responseMessage = "";
+        lastSuccess.current = pending.current;
+        pending.current = "";
+        const isUnauthorizedRequest = exception.response?.status === 401;
+
+        if (isUnauthorizedRequest) {
+          dispatch(authActions.logoutUser());
+          return;
+        }
+
+        if (exception.response) {
+          const {
+            data: { message },
+          } = exception.response as AsyncActionErrorResponse;
+          responseMessage = Array.isArray(message)
+            ? message.join("; ")
+            : message;
+        }
+
+        dispatch(
+          tableSearchActions.setSearchCriteria(
+            {
+              ...tableCriteria,
+              apiError: "Error: " + responseMessage || exception.message,
+            },
+            tableName
+          )
+        );
       });
   };
   requestDataIfNeeded();
