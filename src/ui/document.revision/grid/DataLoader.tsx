@@ -1,15 +1,20 @@
 import { toODataString } from "@progress/kendo-data-query";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { cloneDeep } from "lodash";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { useDispatch } from "react-redux";
 import apiClient from "../../../state/apiClient";
+import { authActions } from "../../../state/ducks/auth";
+import { tableSearchActions } from "../../../state/ducks/tableSearch";
+import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import { getDynamicPayloadItems, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
-export const DataLoader = ({ dataState, onDataReceived, schema, tableName, queryUrl, defaultPayloadData, documentTypeCategory }: DataLoaderProps) => {
+export const DataLoader = ({ dataState, onDataReceived, schema, tableName, queryUrl, defaultPayloadData, documentTypeCategory, tableCriteria }: DataLoaderProps) => {
   const updatedDataState = updateDataState(cloneDeep(dataState));
+  const dispatch = useDispatch();
   let data = {
     ...defaultPayloadData,
     limit: updatedDataState.take,
@@ -22,7 +27,6 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
     data = { ...data, documentTypeCategory };
   }
   data = getDynamicPayloadItems(tableName, data);
-  console.log("fetch :: data :: ", data);
   const requestConfig: AxiosRequestConfig = {
     method: "post",
     url: queryUrl,
@@ -41,6 +45,15 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
       return;
     }
     pending.current = odString;
+    dispatch(
+      tableSearchActions.setSearchCriteria(
+        {
+          ...tableCriteria,
+          apiError: "",
+        },
+        tableName
+      )
+    );
     apiClient
       .request(requestConfig)
       .then(({ data }) => {
@@ -54,6 +67,38 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
         } else {
           requestDataIfNeeded();
         }
+      }).catch((exception) => {
+        if (axios.isCancel(exception)) {
+          return;
+        }
+        let responseMessage = "";
+        lastSuccess.current = pending.current;
+        pending.current = "";
+        const isUnauthorizedRequest = exception.response?.status === 401;
+
+        if (isUnauthorizedRequest) {
+          dispatch(authActions.logoutUser());
+          return;
+        }
+
+        if (exception.response) {
+          const {
+            data: { message },
+          } = exception.response as AsyncActionErrorResponse;
+          responseMessage = Array.isArray(message)
+            ? message.join("; ")
+            : message;
+        }
+
+        dispatch(
+          tableSearchActions.setSearchCriteria(
+            {
+              ...tableCriteria,
+              apiError: "Error: " + responseMessage || exception.message,
+            },
+            tableName
+          )
+        );
       });
   };
   requestDataIfNeeded();

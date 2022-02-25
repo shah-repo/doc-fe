@@ -30,6 +30,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
+          apiError: "",
           queryDict: {
             dataState,
           },

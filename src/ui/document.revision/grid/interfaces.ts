@@ -51,6 +51,7 @@ export interface DataLoaderProps {
   queryUrl: string;
   defaultPayloadData: object;
   documentTypeCategory?: string;
+  tableCriteria: TablePanelStateProps;
 }
 
 export interface KendoTableSearchQueryType {
