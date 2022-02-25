@@ -20,7 +20,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { RenderCustomCell } from "../../components/common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../../components/common/kendo/ColumnShowHideMenu";
-import { DisplayText, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, orderByLockedState, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
@@ -270,6 +270,7 @@ export function KendoGrid<T extends any>({
   );
 
   const onColumnResize = ({ end, columns: cols }: GridColumnResizeEvent) => {
+    hideColumnTitleOnResize();
     if (!end) { return false; }
     let dataColumns = columns;
     dataColumns = map(dataColumns, (column) => {
@@ -277,8 +278,10 @@ export function KendoGrid<T extends any>({
       column.width = columnObject ? columnObject.width : column.width;
       return column;
     });
-    setColumns(dataColumns);
-    updateDataColumnsState(dataColumns);
+    setTimeout(() => {
+      setColumns(dataColumns);
+      updateDataColumnsState(dataColumns);
+    }, 100);
   };
 
   const onColumnReorder = ({ columns: cols }: GridColumnReorderEvent) => {
