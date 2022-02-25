@@ -56,7 +56,7 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <Grid container className={classes.cRoot}>
-      <Grid item={true}>
+      <Grid xs item={true}>
         <KendoPanel<GetEmployeeResponse>
           gridConfiguration={gridConfiguration}
           queryUrl={EMPLOYEES_URL}

@@ -8,10 +8,10 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
   cRoot: {
     padding: theme.spacing(0, 2.5, 1.25, 2.5),
+    width: "calc(100vw - 240px)",
   },
   kGrid: {
     height: "calc(100vh - 109px)",
-    width: "calc(100vw - 280px)",
   },
   loading: {
     top: 0,

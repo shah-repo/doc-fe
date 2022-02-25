@@ -15,7 +15,7 @@ import {
 } from "../../../../state/ducks/auth/types";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 import KendoGridStyles from "../styles";
 
 interface GroupOptions {
@@ -46,7 +46,7 @@ export const GroupsCell = ({
   React.useEffect(() => {
     setData(groupOptions);
     setResult(defaultGroups);
-  }, [groupOptions, defaultGroups, dataItem]);
+  }, [groupOptions, defaultGroups, dataItem.id]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
     dataItem.groups = target.value.map((item) => ({
@@ -67,6 +67,7 @@ export const GroupsCell = ({
 
   return (
     <td
+      id="kendo-expandable-column"
       colSpan={colSpan}
       role="gridcell"
       data-grid-col-index={columnIndex}
@@ -84,7 +85,7 @@ export const GroupsCell = ({
           defaultValue={defaultGroups}
         />
       ) : (
-        <Tooltip data={dataItem.groups} />
+        <ExpandableTemplate items={dataItem.groups.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );

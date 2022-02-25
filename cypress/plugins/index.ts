@@ -1,6 +1,7 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
-import { rename, rmdirSync } from "fs";
-import { getEmail, getEmails } from "../support/commands/imap/imap";
+import { rename, rmdirSync, writeFileSync } from "fs";
+import path from "path";
+import { getEmail, getEmails, getEmailWithLongerOffset } from "../support/commands/imap/imap";
 import { pdfparser } from "../support/commands/pdfparser/pdfparser";
 import { unzip } from "../support/commands/unzip/unzip";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
@@ -39,6 +40,9 @@ export default (on, config) => {
     gmailGetLastMail(email) {
       return getEmail(email);
     },
+    getAllEmailWithLongerOffset(email) {
+      return getEmailWithLongerOffset(email);
+    },
     gmailGetMails(params: {userEmail; options}) {
       return getEmails(params.userEmail, params.options);
     },
@@ -55,7 +59,7 @@ export default (on, config) => {
       return null;
     },
     generateEnvInfo(params: {CONFIG: any; envInfo: string}) {
-      fs.writeFileSync(path.resolve(params.CONFIG.JSON_REPORTS_FOLDER, "envInfo.json"), JSON.stringify(params.envInfo));
+      writeFileSync(path.resolve(params.CONFIG.JSON_REPORTS_FOLDER, "envInfo.json"), JSON.stringify(params.envInfo));
       return null;
     },
   });

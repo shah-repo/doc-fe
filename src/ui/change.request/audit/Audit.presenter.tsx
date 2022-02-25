@@ -27,7 +27,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <div className={classes.dateContainer} data-cy={`audit-${key}`}>
-            <div data-cy={`audit-owner-${key}`} className={classes.owner}>{change.ownerName}</div>
+            <div data-cy={`audit-owner-${key}`} className={classes.owner}>{change.owner?.user.name}</div>
             <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} />
           </div>
 

@@ -135,7 +135,7 @@ Cypress.Commands.add("grpNavigateToGroupManagement", () => {
 });
 
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {
-  cy.get(`td[role="gridcell"] input`).eq(3).arrowType(params.tag);
+  cy.get(`td[role="gridcell"] input`).eq(3).scrollIntoView().arrowType(params.tag);
   cy.get("li.k-item").contains(params.tag).arrowClick();
 });
 
@@ -305,7 +305,7 @@ Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
 
 Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
   groups.forEach((name) => {
-    cy.get(`td[role="gridcell"] input`).eq(4).arrowType(name);
+    cy.get(`td[role="gridcell"] input`).eq(4).scrollIntoView().arrowType(name);
     cy.get("li.k-item").contains(name).arrowClick();
   });
 });

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import path from "path";
+import { Result } from "pdf-parse";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -27,7 +29,7 @@ declare global {
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
-      pdfparseFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
       sendToEmail(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
@@ -169,11 +171,11 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
 
 Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
   cy.getCookies().then((cookies) => {
-    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
       cy.task("unzipFile", {
-        path: params.directory,
+        directory: params.directory,
         cookies,
-        file: params.fileName,
+        fileName: params.fileName,
       });
     });
   });
@@ -181,11 +183,11 @@ Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string
 
 Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
   cy.getCookies().then((cookies) => {
-    cy.readFile(params.directory + "/" + params.fileName).then(() => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
       cy.task("pdfparseFile", {
-        path: params.directory,
+        directory: params.directory,
         cookies,
-        file: params.fileName,
+        fileName: params.fileName,
       });
     });
   });
@@ -193,6 +195,7 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 
 Cypress.Commands.add("sendToEmail", () => {
   cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  cy.get("div.Toastify__toast-container").should("exist");
 });
 
 Cypress.Commands.add("myCompanies", (token: string) => {

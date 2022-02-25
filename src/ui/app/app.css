@@ -67,6 +67,10 @@ td[role="gridcell"] {
   white-space: nowrap;
 }
 
+td#kendo-expandable-column[role="gridcell"] {
+  white-space: normal;
+}
+
 .k-pager-numbers .k-link:hover {
   color: var(--navy);
   background-color: var(--soft-peach);

@@ -35,10 +35,7 @@ const CellRender = (td: ReactElement | null, {
     if (dataItem.field === "status") {
       children = (
         <>
-          {td.props.children?.props?.children}{" "}
-          {dataItem.value
-            ? formatMessageMap(DisplayText.SIGNEDUP)
-            : formatMessageMap(DisplayText.RESEND_SIGNUP_EMAIL)}
+          {td.props.children?.props?.children}
         </>
       );
     }
