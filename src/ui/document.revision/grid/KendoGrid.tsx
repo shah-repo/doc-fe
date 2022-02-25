@@ -105,9 +105,9 @@ export function KendoGrid<T extends any>({
     );
   };
 
-  const dataReceived = (products: DataResult) => {
+  const dataReceived = (products: DataResult, updatedDataState: State) => {
     setProducts(products);
-    const newDataState = processWithGroups(products, dataState);
+    const newDataState = processWithGroups(products, updatedDataState);
     newDataState.total = products.total;
     exportDataChanges(newDataState.data);
     setResultState(newDataState);

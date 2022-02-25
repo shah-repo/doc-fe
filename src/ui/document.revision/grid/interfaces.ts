@@ -45,7 +45,7 @@ export interface KendoGridProps<T> {
 
 export interface DataLoaderProps {
   dataState: State;
-  onDataReceived: (products: DataResult) => void;
+  onDataReceived: (products: DataResult, dataState: State) => void;
   schema: object;
   tableName: string;
   queryUrl: string;

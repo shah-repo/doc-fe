@@ -60,10 +60,20 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
         lastSuccess.current = pending.current;
         pending.current = "";
         if (odString === lastSuccess.current) {
-          onDataReceived.call(undefined, {
-            data: data.results,
-            total: data.total,
-          });
+          onDataReceived.call(
+            undefined,
+            {
+              data: data.results,
+              total: data.total,
+            },
+            {
+              sort: data.sort,
+              filter: data.filter,
+              skip: data.offset,
+              take: data.limit,
+              group: data.group,
+            }
+          );
         } else {
           requestDataIfNeeded();
         }
