@@ -2,11 +2,11 @@
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
+import { TABLE_NAME as DOC_LIST_TABLE_NAME } from "../../document.revision/grid/container";
+import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
+import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import { TABLE_NAME as TRAINING_TABLE_NAME } from "../../training/grid/container";
 import { DateFields } from "../../training/kendo/types";
-import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../utils/helpers";
-import { CompletedOnDateOptions } from "../utils/types";
-import { TABLE_NAME as DOC_LIST_TABLE_NAME } from "./container";
 
 export const getDynamicPayloadItems = (tableName: string, payload) => {
   const removeFieldFromFilters = (filters: any[], field: string) => {

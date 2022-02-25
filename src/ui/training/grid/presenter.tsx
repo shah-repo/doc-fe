@@ -1,8 +1,8 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { TrainingListData } from "../../../state/ducks/training/types";
-import GridTitle from "../../document.revision/grid/GridTitle/presenter";
-import { KendoGrid } from "../../document.revision/grid/KendoGrid";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import Colors from "../../layout/theme/utils/colors";
 import ExportButton from "./ExportButton";
 import { KendoPresenterProps } from "./interfaces";

@@ -1,14 +1,14 @@
 import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import { KendoPresenterProps } from "../../components/KendoGrid/interfaces";
+import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import Colors from "../../layout/theme/utils/colors";
 import { documentRevisionQueryStatus } from "../utils/helpers";
 import CreateButton from "./CreateButton/presenter";
 import ExportButton from "./ExportButton/presenter";
-import GridTitle from "./GridTitle/presenter";
-import { KendoPresenterProps } from "./interfaces";
-import { KendoGrid } from "./KendoGrid";
 
 export function DocumentListPresenter({
   statuses,

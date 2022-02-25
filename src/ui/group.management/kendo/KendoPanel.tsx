@@ -45,12 +45,12 @@ import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
   TablePanelStateProps,
 } from "../../components/table/types";
-import GridTitle from "../../document.revision/grid/GridTitle/presenter";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";

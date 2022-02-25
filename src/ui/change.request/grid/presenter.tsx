@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { KendoGrid } from "../../document.revision/grid/KendoGrid";
+import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import Colors from "../../layout/theme/utils/colors";
 import FromListContainer from "../form.list/FormList.container";
 import { KendoPresenterProps } from "./interfaces";
