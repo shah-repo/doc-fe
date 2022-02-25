@@ -47,6 +47,7 @@ const columns: KendoColumn[] = [
     locked: false,
     width: 12,
     groupable: true,
+    cell: KendoCellTemplates.DOCUMENT_TYPE,
     showColumnMenu: true,
     orderIndex: 4,
     showTooltip: true,
