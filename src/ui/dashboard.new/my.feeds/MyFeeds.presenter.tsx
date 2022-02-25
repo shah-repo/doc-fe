@@ -609,7 +609,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
           }
         })}
 
-      <LoadMoreButton onLoadMore={onLoadMoreData}  disable={ overallLimit >= feedItems.total } id="myFeedBoxLoadMore"/>
+      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= feedItems.total } id="myFeedBoxLoadMore"/>
     </List>
 
   );

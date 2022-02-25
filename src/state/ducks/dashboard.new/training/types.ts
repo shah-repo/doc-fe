@@ -20,11 +20,15 @@ export interface Training {
   pinned: boolean;
   pendingTrainees?: User[] | undefined;
 }
-
 export interface TrainingListAction {
   type: typeof TRAINING_LIST;
-  payload: Training[];
+  payload: TrainingListApiResponse;
   initialLoad?: boolean;
 }
+export interface TrainingListApiResponse {
+  results: Training[];
+  page_total: number;
+  total: number;
+}
 
-export type TrainingState = Training[];
+export type TrainingState = TrainingListApiResponse;

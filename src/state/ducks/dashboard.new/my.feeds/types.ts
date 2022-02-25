@@ -67,8 +67,13 @@ export interface MyFeedsItems {
 
 export interface MyFeedsListAction {
   type: typeof MY_FEEDS_LIST;
-  payload: MyFeedsItems[];
+  payload: MyFeedsListApiResponse;
   initialLoad?: boolean;
 }
 
-export type MyFeedsState = MyFeedsItems[];
+export interface MyFeedsListApiResponse {
+  results: MyFeedsItems[];
+  page_total: number;
+  total: number;
+}
+export type MyFeedsState = MyFeedsListApiResponse;
