@@ -208,6 +208,10 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       tableCriteria={tableCriteria}
       schema={schema}
       statuses={statuses}
+      isByCategory={isByCategory}
+      documentCategory={documentCategory}
+      documentType={documentType}
+      headerColumns={columnDef}
       columns={kendoColumnDef as KendoColumn[]}
       onRowClick={onRowClick}
       title={title}
