@@ -212,14 +212,6 @@ context("Equipment maintenance test", () => {
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
                   },
-                  {
-                    index: 5,
-                    label: "form.builder.approvals",
-                    type: "approvals",
-                    deleteDisabled: true,
-                    name: "fb-approvals-kycyk1n8",
-                    uniqueSchemaItem: true,
-                  },
                 ],
               },
 
@@ -445,21 +437,8 @@ context("Equipment maintenance test", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click 'Submit for approval'", () => {
-      cy.pmSubmitForApproval();
-    });
-
-    it("Verify equipment status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
-    });
-
-    it("Approve AR", () => {
-      cy.ebApprove();
+    it("Approve and release EQ", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Check equipment status is 'Released'", () => {
@@ -867,17 +846,12 @@ context("Equipment maintenance test", () => {
       cy.unClick();
     });
 
-    it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click 'Submit for approval'", () => {
-      cy.pmSubmitForApproval();
+    it("Save changes", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve AR", () => {
-      cy.ebApprove();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     context("Verify Maintenance History is changed to History", () => {
@@ -953,17 +927,8 @@ context("Equipment maintenance test", () => {
         cy.drClickUpgradeForm();
       });
 
-      it("Add approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Click 'Submit for approval'", () => {
-        cy.pmSubmitForApproval();
-      });
-
       it("Approve AR", () => {
-        cy.ebApprove();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.url().then((url: any) => {
           equipmentURL = url;
         });

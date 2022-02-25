@@ -7,7 +7,6 @@ import {
   TablePanelStateProps,
 } from "../../components/table/types";
 import useDialog from "../../hooks/useDialog";
-import Colors from "../../layout/theme/utils/colors";
 import AddGroup from "../add.group/Group";
 import GroupsDisplay from "../display.groups/GroupsDisplay";
 import gridConfiguration from "./column.definition";
@@ -44,9 +43,9 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     editGroupsDialog.close();
   };
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container={true}>
-        <Grid item={true}>
+        <Grid item={true} xs>
           <KendoPanel<LoadCompanyGroup>
             gridConfiguration={gridConfiguration}
             queryUrl={GROUPS_URL}

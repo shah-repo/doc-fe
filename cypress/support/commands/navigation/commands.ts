@@ -59,6 +59,7 @@ Cypress.Commands.add("navigToDashboard", () => {
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
   cy.get("a[href=\"/document_type_management\"]").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToRecords", () => {

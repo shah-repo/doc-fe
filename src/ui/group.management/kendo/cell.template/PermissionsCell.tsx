@@ -1,10 +1,10 @@
 import { filterBy } from "@progress/kendo-data-query";
 import { MultiSelect, MultiSelectFilterChangeEvent } from "@progress/kendo-react-dropdowns";
-import { sortBy } from "lodash";
+import { isEmpty, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../../state/ducks/auth";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 import { toOptions } from "../../utils/transform";
 
 interface PermissionCellProps {
@@ -49,9 +49,10 @@ export const PermissionsCell = ({
   if (rowType === "groupHeader") {
     return null;
   }
-
+  const permissionsList = isEmpty(permissions) ? [] : permissions.split(",");
   return (
     <td
+      id="kendo-expandable-column"
       colSpan={colSpan}
       style={style}
       role="gridcell"
@@ -68,9 +69,7 @@ export const PermissionsCell = ({
           dataItemKey="value"
           textField="label"
         />
-      ) : (
-        <Tooltip data={permissions} />
-      )}
+      ) : <ExpandableTemplate items={permissionsList} dataId={`${dataItem.id}-${columnIndex}`} />}
     </td>
   );
 };

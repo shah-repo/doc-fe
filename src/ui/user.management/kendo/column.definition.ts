@@ -41,6 +41,7 @@ const columns: KendoColumn[] = [
     locked: false,
     orderIndex: 4,
     showColumnMenu: false,
+    width: 500,
   },
   {
     field: "active",

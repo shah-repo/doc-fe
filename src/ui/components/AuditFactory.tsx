@@ -8,7 +8,7 @@ import { Attachment } from "../../state/ducks/attachments/types";
 import { Audit } from "../../state/ducks/audit/types";
 import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
-import { ApprovalStatus, Owner } from "../../state/ducks/common/types";
+import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common/types";
 import { Employee } from "../../state/ducks/company/types";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions/types";
@@ -109,7 +109,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       }
       case "approvals":
-        returnValue = audit.ownerName;
+        returnValue = (audit.nextValue as Approval).approver.user.name;
         break;
       case "approvals.approver":
         returnValue = (audit.nextValue as Employee).user?.name;
@@ -148,7 +148,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       case "approvals.status":
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
-          returnValue = audit.ownerName;
+          returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
         returnValue = (
@@ -157,7 +157,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             translation="changeRequest.audit.status.updated.by"
             values={{
               status: <Text translation={audit.nextValue as Translation} />,
-              name: audit.ownerName,
+              name: audit.owner?.user.name,
             }}
           />
         );
