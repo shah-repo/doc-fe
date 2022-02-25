@@ -70,8 +70,8 @@ const TrainingLineItems: React.FunctionComponent<TrainingLineItemsProps> = ({
     payload.offset = nextOffset;
     async.start(loadTrainingStatsList, payload);
     setTimeout(() => {
-      scrollToBottom(`[id="trainingListBoxLoadMore${tabValue}"]`);
-    }, 1500);
+      scrollToBottom("#trainingListBoxLoadMore");
+    }, 2000);
   };
 
   return (

@@ -36,9 +36,8 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   const classes = styles();
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsLineItemData);
 
-
-  const renderItems = (value) => (
-    <List className={classes.listRoot}>
+  const renderItems = () => (
+    value === index && <List className={classes.listRoot}>
       {panelData.map((data, index) => (
         <>
           <TrainingItem
@@ -56,7 +55,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
         </>
       ))}
       {totalTrainingData > 0 &&
-        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore${value}`} />
+        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore`} />
       }
     </List>
   );
@@ -70,7 +69,7 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {renderItems(value)}
+      {renderItems()}
     </Box>
   );
 };
@@ -98,16 +97,6 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           <Text translation="training.stats.all" />
         </TabPanel>
         <TabPanel
-          key={2}
-          value={tabValue}
-          index={2}
-          panelData={trainingStatsLineItemData}
-          overallLimit={overallLimit}
-          onLoadMoreData={onLoadMoreData}
-        >
-          <Text translation="common.duein7days" />
-        </TabPanel>
-        <TabPanel
           key={1}
           value={tabValue}
           index={1}
@@ -116,6 +105,16 @@ const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps
           onLoadMoreData={onLoadMoreData}
         >
           <Text translation="common.overdue" />
+        </TabPanel>
+        <TabPanel
+          key={2}
+          value={tabValue}
+          index={2}
+          panelData={trainingStatsLineItemData}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
+        >
+          <Text translation="common.duein7days" />
         </TabPanel>
       </Box>
     );
