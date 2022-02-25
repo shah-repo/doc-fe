@@ -36,7 +36,7 @@ export interface KendoGridProps<T> {
   tableCriteria: TablePanelStateProps;
   schema: object;
   statuses?: DocumentRevisionStatus | DocumentRevisionStatus[];
-  exportDataChanges?: (data: T[]) => void;
+  exportDataChanges: (data: T[]) => void;
   onRowClick: ((dataItem: any) => void);
   queryUrl: string;
   defaultPayloadData: object;

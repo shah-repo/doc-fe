@@ -1,9 +1,11 @@
 import { Box, Grid } from "@material-ui/core";
+import { map, startCase } from "lodash";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
-import GridTitle from "../../document.revision/grid/GridTitle";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { KendoGrid } from "../../document.revision/grid/KendoGrid";
+import FromListContainer from "../form.list/FormList.container";
 import { KendoPresenterProps } from "./interfaces";
 
 
@@ -15,19 +17,21 @@ export function DocumentListPresenter({
   columns,
   onRowClick,
 }: KendoPresenterProps) {
-  const [dataToBeExported, setDataToBeExported] = useState<DocumentRevision[]>([]);
-  const handleExportData = (dataToBeExported: DocumentRevision[]) => {
+  const [dataToBeExported, setDataToBeExported] = useState<ChangeRequest[]>([]);
+  const handleExportData = (dataToBeExported: ChangeRequest[]) => {
     setDataToBeExported(dataToBeExported);
   };
+  const intl = useIntl();
+  const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
+  const headers = map(columns, (column) => ({
+    label: startCase(getTranslatedText(column.title)),
+    key: column.field,
+  }));
   console.log("debug :: dataToBeExported :: ", dataToBeExported);
   return (
     <Box m={2}>
       <Grid container={true}>
-        <GridTitle translation="page.table.title.changeRequest" />
-        {/* <Grid item={true}>
-          <ExportButton columns={columns} gridData={dataToBeExported} />
-          <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
-        </Grid> */}
+        <FromListContainer {...{ headers, tableData: dataToBeExported }} />
         <Grid item={true} xs={12}>
           <KendoGrid
             tableName={tableName}

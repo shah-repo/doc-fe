@@ -45,6 +45,7 @@ export function KendoGrid<T extends any>({
   queryUrl,
   defaultPayloadData,
   documentTypeCategory,
+  exportDataChanges,
 }: KendoGridProps<T>) {
   const didMount = useDidMount();
   const classes = KendoGridStyles();
@@ -105,6 +106,7 @@ export function KendoGrid<T extends any>({
     setProducts(products);
     const newDataState = processWithGroups(products, dataState);
     newDataState.total = products.total;
+    exportDataChanges(newDataState.data);
     setResultState(newDataState);
   };
 
