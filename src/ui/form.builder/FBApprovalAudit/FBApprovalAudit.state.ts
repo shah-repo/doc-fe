@@ -35,6 +35,7 @@ class FBApprovalAuditState extends FBRequest<FBAuditData[], any> {
     "procedure",
     "mpiprocedure",
     "lhrstep",
+    "lhrbuild",
   ];
 
   public autocompleteApi = new FBAutocompleteAsyncState();
