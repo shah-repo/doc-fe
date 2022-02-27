@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoTable,
@@ -13,7 +13,7 @@ import {
   GridExpandChangeEvent,
   GridFilterCellProps,
   GridNoRecords,
-  GridToolbar
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -40,7 +40,7 @@ import {
   orderByLockedState,
   pagerSettings,
   setColumnWidth,
-  TranslatedText
+  TranslatedText,
 } from "../common/kendo/helpers";
 import NoDataFound from "../common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
