@@ -2,27 +2,35 @@
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
-import { TABLE_NAME as DOC_LIST_TABLE_NAME } from "../../document.revision/grid/container";
+import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { TRAINING_RECORDS_SEARCH_URL } from "../../../state/ducks/training/constants";
 import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
-import { TABLE_NAME as TRAINING_TABLE_NAME } from "../../training/grid/container";
 import { DateFields } from "../../training/kendo/types";
 
-export const getDynamicPayloadItems = (tableName: string, payload) => {
+export const getDynamicPayloadItems = (queryUrl, payload) => {
   const removeFieldFromFilters = (filters: any[], field: string) => {
     filters = filter(filters, (filterObject) => filterObject.field !== field);
     return filters;
   };
-  switch (tableName) {
-    case DOC_LIST_TABLE_NAME:
-      const field = find(payload.filters, { field: "effectiveDate" });
-      if (field && field.field === "effectiveDate") {
+  switch (queryUrl) {
+    case DOCUMENT_REVISION_SEARCH_ROOT_URL:
+      // Special handling in payload for effectiveDate
+      const effectiveDateFiel = find(payload.filters, { field: "effectiveDate" });
+      if (effectiveDateFiel && effectiveDateFiel.field === "effectiveDate") {
         const effectiveDateOptions = documentRevisionEffectiveDateOption();
-        payload.effectiveDate = find(effectiveDateOptions, { text: field.value })?.value;
+        payload.effectiveDate = find(effectiveDateOptions, { text: effectiveDateFiel.value })?.value;
         payload.filters = removeFieldFromFilters(payload.filters, "effectiveDate");
       }
+      // Special handling in payload for releasedAt
+      const releasedAtFeild = find(payload.filters, { field: "releasedAt" });
+      if (releasedAtFeild) {
+        const effectiveDateOptions = documentRevisionEffectiveDateOption();
+        payload.releasedAfter = find(effectiveDateOptions, { text: releasedAtFeild.value })?.value;
+        payload.filters = removeFieldFromFilters(payload.filters, "releasedAt");
+      }
       break;
-    case TRAINING_TABLE_NAME:
+    case TRAINING_RECORDS_SEARCH_URL:
       const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
       const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
@@ -44,25 +52,6 @@ export const getDynamicPayloadItems = (tableName: string, payload) => {
         }
         payload.isCompleted = "false";
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.DUE_ON);
-      }
-      break;
-    case "documentsByCategoryList-Record":
-    case "documentsByCategoryList-EB":
-    case "documentsByCategoryList-Receive":
-    case "documentsByCategoryList-Lhr":
-      const releasedData = find(payload.filters, { field: "releasedAt" });
-      if (releasedData) {
-        const effectiveDateOptions = documentRevisionEffectiveDateOption();
-        payload.releasedAfter = find(effectiveDateOptions, { text: releasedData.value })?.value;
-        payload.filters = removeFieldFromFilters(payload.filters, "releasedAt");
-      }
-      break;
-    case "documentsByCategoryList-Parts":
-      const partsField = find(payload.filters, { field: "effectiveDate" });
-      if (partsField) {
-        const effectiveDateOptions = documentRevisionEffectiveDateOption();
-        payload.effectiveDate = find(effectiveDateOptions, { text: partsField.value })?.value;
-        payload.filters = removeFieldFromFilters(payload.filters, "effectiveDate");
       }
       break;
     default:
