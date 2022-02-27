@@ -1,4 +1,4 @@
-import { GridFilterCellProps, GridRowClickEvent } from "@progress/kendo-react-grid";
+import { GridRowClickEvent } from "@progress/kendo-react-grid";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -15,18 +15,16 @@ import { pageDetailsSelectors } from "../../../state/ducks/pageDetails";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
-import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn } from "../../components/common/kendo/types";
+import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
-import { canEditDocumentRevision, documentRevisionEffectiveDateOption, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
+import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
 import { documentEditPath, documentPreviewPath } from "../../document.revision/utils/paths";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { isTranslation } from "../../translations/types";
 import { RouteParams } from "../utils/types";
-import { DateDropdownFilterCell } from "./filter.templates/DateDropdownFilter";
-import { DropdownFilterCell } from "./filter.templates/DropdownFilter";
 import { columnSearchConfiguration, getStaticColumns } from "./helpers";
 import { DataStateProps } from "./interfaces";
 import { DocumentTypePresenter } from "./presenter";
@@ -80,7 +78,8 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
           // version is a hack need to insert inside configuration 20.19
           label: column.label === "Version" as string ? "common.revision" : column.label,
           searchOptions,
-        }; },
+        };
+      },
     );
   const staticColumns: TableColumnProps<DocumentRevision>[] = getStaticColumns(
     isByCategory,
@@ -93,7 +92,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     getStatuses();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryName]);
 
 
@@ -133,45 +132,25 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
         kendoColumnDef as KendoColumn[]
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict, categoryName]);
 
-  const DisplayStatusFilterCell = (props: GridFilterCellProps) => (
-    <DropdownFilterCell
-      {...props}
-      data={statuses}
-      defaultItem={intl.formatMessage({
-        id: TranslatedText[DisplayText.SELECT_STATE],
-      })}
-    />
-  );
-  const RealeaseDateFilterCell = (props: GridFilterCellProps) => (
-    <DateDropdownFilterCell
-      {...props}
-      data={documentRevisionEffectiveDateOption()}
-      defaultItem={{
-        text: intl.formatMessage({ id: TranslatedText[DisplayText.NONE] }),
-        value: "none",
-      }}
-      operator={"gt"}
-    />
-  );
   const ownerFieldsMapping = {
     "owner.user.name": ["owner.user.avatar", "owner.user.initialColor"],
   };
   const kendoColumnDef = columnDef.map((columnDetails, index) => {
-    let filterCellTemplate: ((props: GridFilterCellProps) => JSX.Element) | undefined;
+    let filterCellTemplate: string | undefined;
     let dynamicCellTemplate: KendoCellTemplates;
     let dynamicCellGroupable = true;
-    let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key :  columnDetails.key;
+    let upDateField = !columns.length ? columnDetails.searchOptions?.dataKey || columnDetails.key : columnDetails.key;
     if (columnDetails.searchOptions?.dateFilter) {
-      filterCellTemplate = RealeaseDateFilterCell;
+      filterCellTemplate = KendoGridFilterCell.RELEASED_AT;
       dynamicCellTemplate = KendoCellTemplates.DATE_INFO;
       dynamicCellGroupable = false;
     } else if (columnDetails.searchOptions?.ownerTemplate) {
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
     } else if (columnDetails.searchOptions?.statusTemplate) {
-      filterCellTemplate = DisplayStatusFilterCell;
+      filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;
       upDateField = "displayStatus";
     } else {

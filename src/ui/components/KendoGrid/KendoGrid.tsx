@@ -1,6 +1,9 @@
 import { Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
-import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
+import {
+  setExpandedState,
+  setGroupIds
+} from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoTable,
   GridColumn as KendoColumn,
@@ -8,7 +11,9 @@ import {
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
-  GridFilterCellProps, GridNoRecords, GridToolbar,
+  GridFilterCellProps,
+  GridNoRecords,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import { cloneDeep, find, findIndex, map, set } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
@@ -29,14 +34,21 @@ import useDidMount from "../../hooks/useDidMount";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
-import { DisplayText, hideColumnTitleOnResize, orderByLockedState, pagerSettings, setColumnWidth, TranslatedText } from "../common/kendo/helpers";
+import {
+  DisplayText,
+  hideColumnTitleOnResize,
+  orderByLockedState,
+  pagerSettings,
+  setColumnWidth,
+  TranslatedText
+} from "../common/kendo/helpers";
 import NoDataFound from "../common/kendo/NoDataFound";
 import { KendoColumn as KendoColumnProps } from "../common/kendo/types";
 import KendoGlobalization from "../KendoGlobalization";
 import { toastError } from "../notifications";
 import ClearFilters from "../table/ClearFilters";
 import { DataLoader } from "./DataLoader";
-import { KendoGridProps } from "./interfaces";
+import { KendoGridFilterCell, KendoGridProps } from "./interfaces";
 import KendoGridStyles from "./KendoGrid.styles";
 
 export function KendoGrid<T extends any>({
@@ -56,7 +68,9 @@ export function KendoGrid<T extends any>({
   const dispatch = useDispatch();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
-  const [dataState, setDataState] = React.useState<State>(tableCriteria?.queryDict?.dataState);
+  const [dataState, setDataState] = React.useState<State>(
+    tableCriteria?.queryDict?.dataState
+  );
   const [collapsedState, setCollapsedState] = useState<string[]>([]);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
 
@@ -171,63 +185,61 @@ export function KendoGrid<T extends any>({
   );
 
   const filterCellMapping = {
-    "displayStatus": StatusFilter,
-    "document.documentType.documentTypeAcronym": TypeFilter,
-    "effectiveDate": EffectiveDate,
-    "completedAt": CompletedDate,
-    "dueOn": DueOnDate,
-    "createdAt": EffectiveDate,
-    "releasedAt": EffectiveDate,
-    "state": StateFilter,
+    [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
+    [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
+    [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
+    [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,
+    [KendoGridFilterCell.DUE_ON]: DueOnDate,
+    [KendoGridFilterCell.CREATED_AT]: EffectiveDate,
+    [KendoGridFilterCell.RELEASED_AT]: EffectiveDate,
+    [KendoGridFilterCell.STATE]: StateFilter,
   };
 
-  const sortedColumnDefinitions = orderByLockedState(
-    columns,
-    []
-  );
+  const sortedColumnDefinitions = orderByLockedState(columns, []);
 
-  const renderKendoColumns = (
-    gridWidth: number
-  ) => (
-    sortedColumnDefinitions.map((column, index) => (
-      column.show && <KendoColumn
-        key={index}
-        {...column}
-        title={getTranslatedText(column.title)}
-        width={setColumnWidth(column.width as number, gridWidth)}
-        minResizableWidth={200}
-        headerCell={
-          column.title ? (props) => <ColumnHeader {...props} /> : undefined
-        }
-        cell={(props) =>
-          RenderCustomCell(
-            {
-              ...props,
-              cellRowClick: onRowClick,
-              showTooltip: column.showTooltip,
-              tooltipField: column.tooltipField,
-            },
-            column.cell || ""
-          )
-        }
-        filterCell={
-          filterCellMapping[column.field]
-            ? filterCellMapping[column.field]
-            : undefined
-        }
-        columnMenu={
-          column.showColumnMenu
-            ? (props) => (
-              <ColumnMenu
-                {...props}
-                tableName={tableName}
-                columns={columns}
-              />
-            )
-            : undefined
-        }
-      />)
-    ));
+  const renderKendoColumns = (gridWidth: number) =>
+    sortedColumnDefinitions.map(
+      (column, index) =>
+        column.show && (
+          <KendoColumn
+            key={index}
+            {...column}
+            title={getTranslatedText(column.title)}
+            width={setColumnWidth(column.width as number, gridWidth)}
+            minResizableWidth={200}
+            headerCell={
+              column.title ? (props) => <ColumnHeader {...props} /> : undefined
+            }
+            cell={(props) =>
+              RenderCustomCell(
+                {
+                  ...props,
+                  cellRowClick: onRowClick,
+                  showTooltip: column.showTooltip,
+                  tooltipField: column.tooltipField,
+                },
+                column.cell || ""
+              )
+            }
+            filterCell={
+              filterCellMapping[column.filterCell as string]
+                ? filterCellMapping[column.filterCell as string]
+                : undefined
+            }
+            columnMenu={
+              column.showColumnMenu
+                ? (props) => (
+                  <ColumnMenu
+                    {...props}
+                    tableName={tableName}
+                    columns={columns}
+                  />
+                )
+                : undefined
+            }
+          />
+        )
+    );
   const clearFilter = () => {
     set(dataState, "filter.filters", []);
     dispatch(
@@ -283,7 +295,9 @@ export function KendoGrid<T extends any>({
 
   const onColumnResize = ({ end, columns: cols }: GridColumnResizeEvent) => {
     hideColumnTitleOnResize();
-    if (!end) { return false; }
+    if (!end) {
+      return false;
+    }
     let dataColumns = columns;
     dataColumns = map(dataColumns, (column) => {
       const columnObject = find(cols, { field: column.field });

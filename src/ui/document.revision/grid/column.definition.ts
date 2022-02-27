@@ -1,6 +1,7 @@
 import { chain } from "lodash";
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
+import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 
 const columns: KendoColumn[] = [
   {
@@ -85,6 +86,7 @@ const columns: KendoColumn[] = [
     width: 14,
     groupable: true,
     cell: KendoCellTemplates.STATUS,
+    filterCell: KendoGridFilterCell.DISPLAY_STATUS,
     showColumnMenu: true,
     orderIndex: 7,
   },
@@ -96,6 +98,7 @@ const columns: KendoColumn[] = [
     width: 12,
     groupable: false,
     cell: KendoCellTemplates.DATE_INFO,
+    filterCell: KendoGridFilterCell.EFFECTIVE_DATE,
     showColumnMenu: true,
     orderIndex: 8,
   },

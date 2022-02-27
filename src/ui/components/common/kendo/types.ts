@@ -4,6 +4,8 @@ import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSetti
 import { schema } from "normalizr";
 import { ComponentType } from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
+import { DTMCellTemplates } from "../../../document.type.management/kendo/config";
+import { KendoGridFilterCell } from "../../KendoGrid/interfaces";
 
 interface KendoTableSearchQueryType {
   [key: string]: any;
@@ -26,7 +28,7 @@ export interface KendoColumn {
   format?: string;
   filter?: "boolean" | "numeric" | "text" | "date" ;
   groupable?: boolean;
-  filterCell?: ComponentType<GridFilterCellProps> | string;
+  filterCell?: ComponentType<GridFilterCellProps> | KendoGridFilterCell | DTMCellTemplates;
   cell?: string;
   locked?: boolean;
   width?: number | string;
