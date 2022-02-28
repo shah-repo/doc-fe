@@ -36,29 +36,34 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   const classes = styles();
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsList);
 
-  const renderItems = () => (
-    value === index && <List className={classes.listRoot}>
-      {panelData.map((data, index) => (
-        <>
-          <TrainingItem
-            key={index}
-            id={data.id}
-            avatar={data.user.avatar}
-            initialColor={data.user.initialColor}
-            name={data.user.name.split(" ")[0]}
-            status={data.status}
-            documentId={data.docId}
-            title={data.docTitle}
-            date={data.dueOn}
+  const renderItems = () =>
+    value === index && (
+      <List className={classes.listRoot}>
+        {panelData.map((data, index) => (
+          <>
+            <TrainingItem
+              key={index}
+              id={data.id}
+              avatar={data.user.avatar}
+              initialColor={data.user.initialColor}
+              name={data.user.name.split(" ")[0]}
+              status={data.status}
+              documentId={data.docId}
+              title={data.docTitle}
+              date={data.dueOn}
+            />
+            <Divider />
+          </>
+        ))}
+        {totalTrainingData > 0 && (
+          <LoadMoreButton
+            onLoadMore={onLoadMoreData}
+            disable={overallLimit >= totalTrainingData}
+            id={`trainingListBoxLoadMore`}
           />
-          <Divider />
-        </>
-      ))}
-      {totalTrainingData > 0 &&
-        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore`} />
-      }
-    </List>
-  );
+        )}
+      </List>
+    );
 
   return (
     <Box
