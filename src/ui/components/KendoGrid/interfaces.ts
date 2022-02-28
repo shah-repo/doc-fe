@@ -63,3 +63,13 @@ export interface DataLoaderProps {
   tableCriteria: TablePanelStateProps;
 }
 
+export enum KendoGridFilterCell {
+  DISPLAY_STATUS="displayStatus",
+  DOCUMENT_TYPE_ACRONYM= "document.documentType.documentTypeAcronym",
+  EFFECTIVE_DATE="effectiveDate",
+  COMPLETED_AT="completedAt",
+  DUE_ON= "dueOn",
+  CREATED_AT= "createdAt",
+  RELEASED_AT = "releasedAt",
+  STATE = "state"
+}

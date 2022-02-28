@@ -1,6 +1,7 @@
 import { chain } from "lodash";
 import { pagerSettings } from "../../components/common/kendo/helpers";
 import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
+import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 import { DateFields } from "./interfaces";
 
 
@@ -73,6 +74,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 6,
     cell: KendoCellTemplates.DATE_INFO,
+    filterCell: KendoGridFilterCell.CREATED_AT,
   },
   {
     field: DateFields.DUE_ON,
@@ -85,6 +87,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 7,
     cell: KendoCellTemplates.DATE_INFO,
+    filterCell: KendoGridFilterCell.DUE_ON,
   },
   {
     field: DateFields.COMPLETED_AT,
@@ -97,6 +100,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 8,
     cell: KendoCellTemplates.DATE_COMPLETED,
+    filterCell: KendoGridFilterCell.COMPLETED_AT,
   },
   {
     field: "trainingPlan.curriculumDocIds",
