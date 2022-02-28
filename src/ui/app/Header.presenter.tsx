@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { SM } from "../../App";
 import EnlilLogo from "../../assets/images/enlil_logo.svg";
+import Colors from "../layout/theme/utils/colors";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
 
@@ -23,9 +24,11 @@ const Header: React.FunctionComponent<Props> = ({
   if (SM.isNewLayout) {
     return  (
       <Box
-        height={40}
+        height={48}
         fontSize="1rem"
         style={{
+          fontSize: "1rem",
+          color: Colors.white,
           background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
         }}
       >

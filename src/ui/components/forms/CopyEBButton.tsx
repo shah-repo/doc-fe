@@ -1,4 +1,3 @@
-import { Button } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import * as React from "react";
 import { useHistory } from "react-router-dom";
@@ -6,6 +5,7 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import { documentVersionPath } from "../../document.revision/utils/paths";
+import { StyledButton } from "../../documentRevision/forms/presenters/StyledListButton";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 
@@ -33,14 +33,13 @@ const CloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
     );
   };
   return (
-    <Button
-      variant="contained"
-      color="secondary"
+    <StyledButton
+      color="primary"
       data-cy="CloneEBButton"
       onClick={cloneAction}
     >
       <Text translation="documentRevision.clone.eb" />
-    </Button>
+    </StyledButton>
   );
 };
 

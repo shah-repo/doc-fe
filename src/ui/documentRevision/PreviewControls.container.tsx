@@ -23,6 +23,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
+import { StyledButton } from "./forms/presenters/StyledListButton";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
@@ -128,14 +129,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          <Button
-            color="secondary"
-            variant="outlined"
+          <StyledButton
+            color="primary"
             onClick={cloneDocument}
             id="PreviewControlsContainer-revise"
             data-cy="updateRecord" >
             <Text message={reviseLabel} />
-          </Button>
+          </StyledButton>
         </CustomLabelTooltip>
       );
     }
@@ -148,15 +148,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
-        <Button
-          color="secondary"
-          variant="outlined"
+        <StyledButton
+          color="primary"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={"common.create.new"} />
-        </Button>
+        </StyledButton>
       );
     }
   };

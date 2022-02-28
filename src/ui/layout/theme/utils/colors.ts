@@ -36,6 +36,7 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  dodger_blue="#4D88FF",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -45,6 +46,7 @@ enum Colors {
   opal_red = "#f05a5c",
   latest_red_varient = "#EC2B00",
   trinary_red = "#F14822",
+  mandy = "#EB4770",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
@@ -62,6 +64,7 @@ enum Colors {
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
   pink_red = "#f50057",
+  school_bus_yellow = "#EFA20B",
   // orange
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",

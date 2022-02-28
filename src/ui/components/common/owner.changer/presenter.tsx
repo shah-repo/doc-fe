@@ -1,9 +1,12 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
+import { Box, Dialog, DialogContent, DialogTitle, FormControl, IconButton, ListItemText, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
+import { ReactComponent as ChangeOwnerIcon } from "../../../../assets/images/change_owner_avatar.svg";
 import { Owner } from "../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../state/types";
+import { StyledMenuListIcon } from "../../../documentRevision/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../documentRevision/forms/presenters/StyledMenuListItem";
 import SelectField, { SelectOption } from "../../forms/fields/Select";
 import { FormContext } from "../../forms/FormContext";
 import FormMessage from "../../forms/FormMessage";
@@ -88,14 +91,25 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <Fragment>
-      <Button
+      <StyledMenuListItem  button>
+        <StyledMenuListIcon>
+          <ChangeOwnerIcon />
+        </StyledMenuListIcon>
+        <ListItemText
+          id="OwnerChangerPresenter-changeOwner"
+          data-cy="changeOwner"
+          primary={<Text translation="change.owner" />}
+          onClick={openDialog}
+        />
+      </StyledMenuListItem>
+      {/* <Button
         color="secondary"
         variant="outlined"
         onClick={openDialog}
         id="OwnerChangerPresenter-changeOwner"
         data-cy="changeOwner" >
         <Text translation="change.owner" />
-      </Button>
+      </Button> */}
       {dialogRenderer()}
     </Fragment>
   );

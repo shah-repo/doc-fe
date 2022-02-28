@@ -3,6 +3,46 @@ import Colors from "../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
+    chip: {
+      display: "flex",
+      flexDirection: "row",
+      padding: "0px !important",
+      borderRadius: 3,
+      marginLeft: "12px",
+      background: Colors.white,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "10px",
+      lineHeight: "13px",
+      textTransform: "uppercase",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+    },
+    GREEN_STATUS: {
+      color: Colors.light_forest_green,
+    },
+    PENDING_STATUS: {
+      color: Colors.school_bus_yellow,
+    },
+    GRAY_STATUS: {
+      color: Colors.mandy,
+    },
+    undefined: {
+      color: Colors.dodger_blue,
+    },
+    groupSection: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+      color: Colors.white,
+    },
+    icon: {
+      margin: theme.spacing(1),
+    },
     statusDefault: {
       color: Colors.white,
       background: Colors.dark_gray,
@@ -24,8 +64,20 @@ export const styles = makeStyles((theme: Theme) =>
       background: Colors.medium_red,
     },
     id: {
-      fontWeight: "bold",
-      marginRight: theme.spacing(2),
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "18px",
+      color: Colors.white,
+    },
+    whiteDot: {
+      width: "4px",
+      height: "4px",
+      marginLeft: "5px",
+      marginRight: "5px",
+      position: "relative",
+      background: Colors.white,
     },
     itemWrap: {
       alignSelf: "center",

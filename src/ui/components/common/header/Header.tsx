@@ -3,11 +3,29 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 import { SM } from "../../../../App";
+import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { DRAWER_WIDTH } from "../../../app/NavigationLink.styles";
 import Colors from "../../../layout/theme/utils/colors";
+import { statusClassMapping } from "../kendo/helpers";
 
 const styles = makeStyles((theme: Theme) =>
   createStyles({
+    headerSection: {
+      height: "64px",
+      borderRadius: "6px",
+    },
+    GREEN_STATUS: {
+      background: Colors.light_forest_green,
+    },
+    PENDING_STATUS: {
+      background: Colors.school_bus_yellow,
+    },
+    GRAY_STATUS: {
+      background: Colors.mandy,
+    },
+    undefined: {
+      background: Colors.dodger_blue,
+    },
     appbar: {
       backgroundColor: Colors.white,
       position: "fixed",
@@ -21,8 +39,11 @@ const styles = makeStyles((theme: Theme) =>
     },
   },
   ));
-
-const Header: React.FunctionComponent = ({ children }) => {
+interface Props{
+  status?: DocumentRevisionStatus;
+  displayStatus?: DocumentRevisionStatus;
+}
+const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
 
   if (SM.isNewLayout) {
@@ -35,7 +56,9 @@ const Header: React.FunctionComponent = ({ children }) => {
         py={1}
         px={2}
       >
-        <Grid container={true}>
+        <Grid container={true} className={`${classes.headerSection} ${
+          classes[statusClassMapping[displayStatus || status || ""]]
+        }`}>
           {children}
         </Grid>
       </Box>
