@@ -146,6 +146,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
 
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
+    setErrorMessage(undefined);
     setForms([]);
   };
 
@@ -338,17 +339,17 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             </Grid>
           </Grid>
         </Box>
+        {
+          errorMessage && (
+            <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
+              <Text
+                message={errorMessage}
+                values={{ name: isByCategory ? selectedTypeLabel : labelName }}
+              />
+            </div>
+          )
+        }
       </Grid>
-      {
-        errorMessage && (
-          <div style={{ color: "red" }} id="DocumentByTypeListPresenter-showError">
-            <Text
-              message={errorMessage}
-              values={{ name: isByCategory ? selectedTypeLabel : labelName }}
-            />
-          </div>
-        )
-      }
       {
         <FormContext.Provider value={{ submitOnChange: false }}>
           <Formik initialValues={initialValues} onSubmit={handleDocTypeSelection}>
