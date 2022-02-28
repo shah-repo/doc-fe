@@ -5,7 +5,7 @@ interface User {
   employeeId: string;
   userName: string;
 }
-export interface Training {
+interface Training {
   pendingEmailSentAt: Nullable<string>;
   trainingStatus: string;
   docId: string;

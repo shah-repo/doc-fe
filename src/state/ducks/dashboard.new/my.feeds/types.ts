@@ -55,7 +55,7 @@ export enum STATUS_TYPES_LABEL {
   CLOSED = "CLOSED",
 }
 
-export interface MyFeedsItems {
+interface MyFeedsItems {
   accessedAt: string;
   itemType: string;
   itemId: string;
