@@ -105,6 +105,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add Group One", () => {
     it("Open 'Add Group' dialog", () => {
+      cy.wait(1500);
       cy.grpClickAddGroup();
     });
 
@@ -131,6 +132,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add Group Two", () => {
     it("Open 'Add Group' dialog", () => {
+      cy.wait(1500);
       cy.grpClickAddGroup();
     });
 
@@ -337,9 +339,9 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Approve & Release Document", () => {
-    // it("clicks on 'Save' button", () => {
-    //   cy.drClickCreateDocumentWithApiCallForForms();
-    // });
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();

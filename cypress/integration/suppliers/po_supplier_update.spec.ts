@@ -470,15 +470,18 @@ context("Purchase Supplier Update", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
+      it("Select first PO", () => {
+        cy.dlSelectFirstDocument();
       });
 
-      it("Open PO again - verify PO in Draft is updated to the newly released version of the Supplier", () => {
-        cy.dlSelectFirstDocument();
+      it("Verify PO status", () => {
         cy.poVerifyStatus({ status: "Draft" });
+      });
+
+      it("Check PO supplier", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 1 - New suplier for PO1");
       });
+
 
       it("Click on 'Purchase Order' on sidebar", () => {
         cy.navigToPurchaseOrder();
@@ -527,10 +530,11 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.contains("Supplier name").should("be.visible");
         cy.get("#Title-field input").clear().arrowType("2");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
@@ -563,9 +567,6 @@ context("Purchase Supplier Update", () => {
       it("Open PO again - verify PO in Draft is updated to the newly released version of the Supplier", () => {
         cy.dlSelectFirstDocument();
         cy.poVerifyStatus({ status: "Draft" });
-        cy.reload();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 2 - New suplier for PO12");
       });
 
@@ -616,12 +617,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[2].name });
       });
 
       it("clicks on 'Save' button", () => {
@@ -643,8 +639,10 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("3");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
@@ -705,8 +703,10 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("4");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
@@ -775,8 +775,6 @@ context("Purchase Supplier Update", () => {
       it("Select Supplier", () => {
         cy.get("[data-cy^=\"po-supplier-built-in\"]")
           .arrowType("SUP-00002 - rev 1 - released supplier{downarrow}{enter}");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
@@ -785,12 +783,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("clicks on 'Save' button", () => {
@@ -809,8 +802,10 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("1");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
@@ -827,10 +822,12 @@ context("Purchase Supplier Update", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00003" });
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
+        cy.drCheckDocumentStatus({ status: "Pending Approval" });
         cy.ebApprove();
       });
 
@@ -883,8 +880,10 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("2");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
@@ -901,12 +900,13 @@ context("Purchase Supplier Update", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00003" });
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
+        cy.drCheckDocumentStatus({ status: "Pending Approval" });
         cy.ebApprove();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -1022,7 +1022,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("clicks on 'Save' button", () => {
@@ -1068,6 +1068,7 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("3");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
@@ -1166,8 +1167,10 @@ context("Purchase Supplier Update", () => {
         cy.dlSelectFirstDocument();
         cy.drClickReviseDocument();
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.cmpTurnOffAutosave();
         cy.get("#Title-field input").clear().arrowType("4");
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmSubmitForApproval();
         cy.ebApprove();
         cy.drCheckDocumentStatus({ status: "Current" });
