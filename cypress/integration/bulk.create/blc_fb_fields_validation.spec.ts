@@ -607,7 +607,6 @@ context("Test fb fields validation in BLC", () => {
       cy.wait(30 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 9 });
-      cy.pause();
     });
 
     context("Verify WIP records", () => {
@@ -619,7 +618,6 @@ context("Test fb fields validation in BLC", () => {
 
         it("Select first record", () => {
           cy.dlSelectFirstDocument();
-          cy.pause();
         });
 
         it("Verify title", () => {
@@ -675,7 +673,6 @@ context("Test fb fields validation in BLC", () => {
 
         it("Select first record", () => {
           cy.dlSelectFirstDocument();
-          cy.pause();
         });
 
         it("Verify title", () => {
@@ -731,7 +728,6 @@ context("Test fb fields validation in BLC", () => {
 
         it("Select first record", () => {
           cy.dlSelectFirstDocument();
-          cy.pause();
         });
 
         it("Verify title", () => {
@@ -766,7 +762,6 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify checkbox group", () => {
-          cy.pause();
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
             .should("not.have.attr", "disabled");
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
