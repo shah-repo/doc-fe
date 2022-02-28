@@ -45,7 +45,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
       >
         <Text message={label} />
       </Button>
-      <LoadMore />
+      <LoadMore fill={disable ? Colors.hint_gray : Colors.navy}/>
     </Box>
   )
   ; };
