@@ -101,7 +101,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(trainingActions.loadTrainingList());
+      dispatch(trainingActions.loadTrainingList({}));
     }
   };
   const pendingTraineesNames = pendingTrainees
