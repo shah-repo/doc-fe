@@ -14,6 +14,7 @@ const styles = makeStyles(() =>
       "bottom": "0%",
       "font-family": "Sora",
       "font-weight": 600,
+      "fontSize": "10px",
       "letter-spacing": "0.5px",
       "text-transform": "uppercase",
       "color": Colors.navy,
@@ -31,10 +32,10 @@ interface Props {
   label?: string;
   id? : string;
 }
-export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = false, onLoadMore, position = "right", label = "common.load.more", id = "boxLoadMore" }) => {
+export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = false, onLoadMore, position = "left", label = "common.load.more", id = "boxLoadMore" }) => {
   const classes = styles();
   return (
-    <Box style={{ float: position }}>
+    <Box style={{ float: position }} mt={5}>
       <Button
         onClick={() => onLoadMore()}
         className={classes.loadMoreButton}
