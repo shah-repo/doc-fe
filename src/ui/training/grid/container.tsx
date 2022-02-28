@@ -9,10 +9,10 @@ import { TRAINING_RECORDS_SEARCH_URL } from "../../../state/ducks/training/const
 import { DEFAULT_TRAINING_RECORD_QUERY, TrainingRecordQuery } from "../../../state/ducks/training/types";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
+import { DataStateProps } from "../../components/KendoGrid/interfaces";
 import useDialog from "../../hooks/useDialog";
 import TrainingDetails from "../details/TrainingDetails";
 import gridConfiguration from "./column.definition";
-import { DataStateProps } from "./interfaces";
 import { TrainingListPresenter } from "./presenter";
 import KendoGridStyles from "./presenter.styles";
 

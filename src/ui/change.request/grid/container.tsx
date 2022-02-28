@@ -9,10 +9,10 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
+import { DataStateProps } from "../../components/KendoGrid/interfaces";
 import { canEditChangeRequest } from "../utils/helpers";
 import { changeRequestEditPath, changeRequestPreviewPath } from "../utils/paths";
 import gridConfiguration from "./column.definition";
-import { DataStateProps } from "./interfaces";
 import { DocumentListPresenter } from "./presenter";
 
 export const CR_TABLE_NAME = "changeRequests";
