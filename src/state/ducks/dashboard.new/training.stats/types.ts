@@ -35,7 +35,7 @@ export interface TrainingStatsListApiResponse {
   total: number;
 }
 
-export interface TrainingStats {
+interface TrainingStats {
   user: User;
   id: string;
   status: TrainingStatusTypes;

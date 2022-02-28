@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   trainingStatsActions,
-  trainingStatsSelectors
+  trainingStatsSelectors,
 } from "../../../state/ducks/dashboard.new/training.stats";
 import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
