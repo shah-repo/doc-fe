@@ -1,45 +1,44 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 import { orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { AsyncTaskActions } from "../../state/ducks/async.tasks";
-import { ASYNC_TASK } from "../../state/ducks/async.tasks/constants";
-import { GetAsyncTaskResponse } from "../../state/ducks/async.tasks/types";
+import { AsyncTaskActions } from "../../../state/ducks/async.tasks";
+import { GetAsyncTaskResponse } from "../../../state/ducks/async.tasks/types";
 import {
   EffectiveDateFormValues, PasswordFormValues,
-} from "../change.request/form/types";
-import { toastError } from "../components/notifications";
-import { TableDataProps, TablePanelStateProps } from "../components/table/types";
-import Text from "../components/Text";
-import useActionCreator from "../hooks/useActionCreator";
-import useAsync from "../hooks/useAsync";
-import useDialog from "../hooks/useDialog";
-import { styles } from "./async.tasks.styles";
-import PasswordDialogueContainer from "./dialogs/PasswordDialogue";
-import DateForm from "./forms/date.form/date.form";
-import EmptyForm from "./forms/empty.form/empty.form";
-import PasswordExpirationEmailSpecificForm from "./forms/password.expiration.email.specific/password.expiration.email.specific.form";
-import PasswordExpirationForm from "./forms/password.expiration.form/password.expiration.form";
-import TimeTravelCompany from "./forms/time.travel.company.form/time.travel.company.form";
-import TimeTravelForm from "./forms/time.travel.form/time.travel.form";
-import TimeTravelUser from "./forms/time.travel.user.form/time.travel.user.form";
-import UUIDBasedForm from "./forms/uuid.form/uuid.form";
-import gridConfiguration from "./kendo/column.definition";
-import { dropDownOptions } from "./kendo/helper";
-import { KendoPanel } from "./kendo/KendoPanel";
-import { SQS_TYPES, TimeTravelProps } from "./types";
+} from "../../change.request/form/types";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
+import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
+import useDialog from "../../hooks/useDialog";
+import Colors from "../../layout/theme/utils/colors";
+import PasswordDialogueContainer from "../dialogs/PasswordDialogue";
+import DateForm from "../forms/date.form/date.form";
+import EmptyForm from "../forms/empty.form/empty.form";
+import PasswordExpirationEmailSpecificForm from "../forms/password.expiration.email.specific/password.expiration.email.specific.form";
+import PasswordExpirationForm from "../forms/password.expiration.form/password.expiration.form";
+import TimeTravelCompany from "../forms/time.travel.company.form/time.travel.company.form";
+import TimeTravelForm from "../forms/time.travel.form/time.travel.form";
+import TimeTravelUser from "../forms/time.travel.user.form/time.travel.user.form";
+import UUIDBasedForm from "../forms/uuid.form/uuid.form";
+import { SQS_TYPES, TimeTravelProps } from "../types";
+import { dropDownOptions } from "./helper";
+import { KendoPresenterProps } from "./interfaces";
+import { styles } from "./presenter.styles";
 
-interface Props {
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  data: TableDataProps<GetAsyncTaskResponse>;
-}
 
-const AsyncTasksPresenter: React.FunctionComponent<Props> = ({
+export function AsyncTasksPresenter({
   tableName,
-  data,
   tableCriteria,
-}) => {
+  schema,
+  columns,
+  onRowClick,
+  queryUrl,
+}: KendoPresenterProps) {
+
   const classes = styles();
   const [type, setType] = React.useState("");
   const [payload, setPayload] = React.useState("");
@@ -162,35 +161,36 @@ const AsyncTasksPresenter: React.FunctionComponent<Props> = ({
     }
   };
   return (
-    <Grid container className={classes.root}>
-      <Grid item>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="sqs-messages-type-select-outlined-label">
-            <Text translation="async.tasks.type" />
-          </InputLabel>
-          <Select
-            labelId="sqs-messages-type-select-outlined-label"
-            id="sqs-messages-type-select-outlined"
-            value={type}
-            className={classes.optionSelect}
-            onChange={handleChange}
-          >
-            {orderBy(dropDownOptions, ["text"], ["asc"]).map((data, index) => (
-              <MenuItem key={data.value} value={data.text}>
-                {data.text}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {type &&
+    <Box p={2} style={{ background: Colors.background_white }}>
+      <Grid container>
+        <Grid item xs={12}>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="sqs-messages-type-select-outlined-label">
+              <Text translation="async.tasks.type" />
+            </InputLabel>
+            <Select
+              labelId="sqs-messages-type-select-outlined-label"
+              id="sqs-messages-type-select-outlined"
+              value={type}
+              className={classes.optionSelect}
+              onChange={handleChange}
+            >
+              {orderBy(dropDownOptions, ["text"], ["asc"]).map((data, index) => (
+                <MenuItem key={data.value} value={data.text}>
+                  {data.text}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {type &&
         [
           SQS_TYPES.UPDATE_BILLS,
           SQS_TYPES.RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES,
           SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS,
         ].includes(SQS_TYPES[type]) && (
-          <EmptyForm {...{ handleEmptyFormSubmit }} key={type}/>
-        )}
-        {type &&
+            <EmptyForm {...{ handleEmptyFormSubmit }} key={type}/>
+          )}
+          {type &&
         [
           SQS_TYPES.TRAINING_RECORDS_STATUS,
           SQS_TYPES.TRAINING_RECORDS_REFRESH,
@@ -204,57 +204,62 @@ const AsyncTasksPresenter: React.FunctionComponent<Props> = ({
           SQS_TYPES.USAGE_REPORT,
           SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS,
         ].includes(SQS_TYPES[type]) && (
-          <DateForm {...{ handleDateFormSubmit }} key={type}/>
-        )}
-        {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
-          <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
-        )}
-        {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
-          <PasswordExpirationEmailSpecificForm key={type} {...{ handlePasswordExpirationEmailSpecificFormSubmit }} />
-        )}
-        {type &&
+            <DateForm {...{ handleDateFormSubmit }} key={type}/>
+          )}
+          {SQS_TYPES.UPDATE_USERS_AND_TEST_PASSWORD_EXPIRE === type && (
+            <PasswordExpirationForm {...{ handlePasswordExpirationFormSubmit }} />
+          )}
+          {SQS_TYPES.SEND_PASSWORD_EXPIRATION_EMAILS_SPECIFIC === type && (
+            <PasswordExpirationEmailSpecificForm key={type} {...{ handlePasswordExpirationEmailSpecificFormSubmit }} />
+          )}
+          {type &&
         [
           SQS_TYPES.RECALC_COMPLIANCE_FOR_ON_EQ_RELEASE,
           SQS_TYPES.PRECALC_PAGE_DETAILS,
         ].includes(SQS_TYPES[type]) && (
-          <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
-        )}
-        {type &&
+            <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
+          )}
+          {type &&
         [
           SQS_TYPES.TIME_TRAVEL_USER_SESSION,
         ].includes(SQS_TYPES[type]) && (
-          <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
-        )}
-        {type &&
+            <TimeTravelForm {...{ handleTimeTravelFormSubmit }} key={type}/>
+          )}
+          {type &&
         [
           SQS_TYPES.TIME_TRAVEL_COMPANY,
         ].includes(SQS_TYPES[type]) && (
-          <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type}/>
-        )}
-        {type &&
+            <TimeTravelCompany {...{ handleTimeTravelCompany }} key={type}/>
+          )}
+          {type &&
         [
           SQS_TYPES.TIME_TRAVEL_USER,
         ].includes(SQS_TYPES[type]) && (
-          <TimeTravelUser {...{ handleTimeTravelUser }} key={type}/>
-        )}
-        <PasswordDialogueContainer
-          transition="approve"
-          asyncState={async.asyncState}
-          onSubmit={onSubmit}
-          transitionDialog={transitionDialog}
-          label=""
-        />
+            <TimeTravelUser {...{ handleTimeTravelUser }} key={type}/>
+          )}
+          <PasswordDialogueContainer
+            transition="approve"
+            asyncState={async.asyncState}
+            onSubmit={onSubmit}
+            transitionDialog={transitionDialog}
+            label=""
+          />
+        </Grid>
+        <Grid item xs>
+          <GridTitle translation="async.task.table.history" />
+        </Grid>
+        <Grid item xs={12}>
+          <KendoGrid<GetAsyncTaskResponse>
+            tableName={tableName}
+            tableCriteria={tableCriteria}
+            schema={schema}
+            exportDataChanges={() => ""}
+            onRowClick={onRowClick}
+            queryUrl={queryUrl}
+            defaultPayloadData={{}}
+          />
+        </Grid>
       </Grid>
-      <Grid item={true}>
-        <KendoPanel<GetAsyncTaskResponse>
-          gridConfiguration={gridConfiguration}
-          queryUrl={ASYNC_TASK}
-          gridData={data}
-          tableName={tableName}
-          tableCriteria={tableCriteria}
-        />
-      </Grid>
-    </Grid>
+    </Box>
   );
-};
-export default AsyncTasksPresenter;
+}

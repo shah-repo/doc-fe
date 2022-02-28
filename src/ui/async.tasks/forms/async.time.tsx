@@ -1,7 +1,7 @@
 import { Grid, TextField } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
-import { styles } from "../async.tasks.styles";
+import { styles } from "../grid/presenter.styles";
 import { AsyncProps } from "../types";
 
 const AsyncTime: React.FunctionComponent<AsyncProps> = ({
