@@ -36,8 +36,6 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   const history = useHistory();
   const { categoryName, docTypeId } = match.params;
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
-  // const currentUsersName = useSelector(authSelectors.currentUserName);
-
   const getStatusesAction = useActionCreator(documentRevisionsActions.getDocRevStatuses);
   const [statuses, saveStatuses] = useState<DocumentRevisionStatus[]>([]);
   const async = useAsync({
@@ -46,21 +44,14 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     },
   });
   const getStatuses = () => async.start(getStatusesAction, async, documentRevisionQueryStatus(), [], categoryName);
-
-
   /** If true, documents are filtered by category. If false, documents are filtered by type. */
   const isByCategory = match.path.includes(DOCUMENT_BY_CATEGORY_LIST_URL);
-
   const documentType = useSelector(documentTypeSelectors.byId)?.[docTypeId];
   const documentCategory = useSelector(pageDetailsSelectors.byCategory)?.[categoryName];
-
   const TABLE_NAME = isByCategory
     ? `documentsByCategoryList-${categoryName}`
     : `documentsByTypeList-${documentType?.documentTypeAcronym}`;
-
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
-
-  // const isPO = checkIsDocumentPO(documentType?.groupOptions);
   const intl = useIntl();
 
   if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
