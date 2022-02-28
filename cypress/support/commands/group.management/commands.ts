@@ -135,7 +135,7 @@ Cypress.Commands.add("grpNavigateToGroupManagement", () => {
 });
 
 Cypress.Commands.add("grpAddTag", (params: {tag: string}) => {
-  cy.get(`td[role="gridcell"] input`).eq(3).arrowType(params.tag);
+  cy.get(`td[role="gridcell"] input`).eq(3).scrollIntoView().arrowType(params.tag);
   cy.get("li.k-item").contains(params.tag).arrowClick();
 });
 
@@ -233,7 +233,7 @@ Cypress.Commands.add("grpSelectOfficial", () => {
 });
 
 Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
-  cy.get(`td[role="gridcell"] input`).eq(0).arrowType(params.name);
+  cy.get(`td[role="gridcell"] input`).eq(0).clear().arrowType(params.name);
 });
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
@@ -259,6 +259,7 @@ Cypress.Commands.add("grpSaveGroup", () => {
     cy.get(`td[role="gridcell"] button`).eq(0).arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("grpSaveGroupPatch", () => {
@@ -305,7 +306,7 @@ Cypress.Commands.add("grpTypeMembers", (...names: string[]) => {
 
 Cypress.Commands.add("grpAddParentGroups", (...groups: string[]) => {
   groups.forEach((name) => {
-    cy.get(`td[role="gridcell"] input`).eq(4).arrowType(name);
+    cy.get(`td[role="gridcell"] input`).eq(4).scrollIntoView().arrowType(name);
     cy.get("li.k-item").contains(name).arrowClick();
   });
 });

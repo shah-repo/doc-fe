@@ -723,22 +723,22 @@ context("All regular users on new dashboard", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(1)
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(0)
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(1)
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(0)
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(1).arrowClick();
+      cy.get("button[aria-label=close]").eq(0).arrowClick();
     });
   });
 

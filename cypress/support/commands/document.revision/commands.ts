@@ -156,7 +156,8 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
   cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
     cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
@@ -408,7 +409,8 @@ Cypress.Commands.add("drSaveDocumentWithoutaudit", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
@@ -424,6 +426,8 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastErro
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
@@ -498,7 +502,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 
 Cypress.Commands.add("drClickReviseDocument", () => {
   cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  cy.progressBarShouldAppear();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 

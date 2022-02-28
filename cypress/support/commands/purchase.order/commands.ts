@@ -81,10 +81,14 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 });
 
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+
   cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
   });
+
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
