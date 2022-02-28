@@ -16,7 +16,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { ApplicationState } from "../../../state/reducers";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoCellTemplates, KendoColumn } from "../../components/common/kendo/types";
-import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
+import { DataStateProps, KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 import { TableColumnProps } from "../../components/table/column/types";
 import { DOCUMENT_BY_CATEGORY_LIST_URL, HOME_URL } from "../../constants/urls";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
@@ -26,7 +26,6 @@ import useAsync from "../../hooks/useAsync";
 import { isTranslation } from "../../translations/types";
 import { RouteParams } from "../utils/types";
 import { columnSearchConfiguration, getStaticColumns } from "./helpers";
-import { DataStateProps } from "./interfaces";
 import { DocumentTypePresenter } from "./presenter";
 
 const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<RouteParams>> = ({

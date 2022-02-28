@@ -18,9 +18,8 @@ import { documentEditPath, documentPreviewPath } from "../utils/paths";
 import gridConfiguration from "./column.definition";
 import { DocumentListPresenter } from "./presenter";
 
-export const TABLE_NAME = "documentRevisions";
-
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
+  const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
