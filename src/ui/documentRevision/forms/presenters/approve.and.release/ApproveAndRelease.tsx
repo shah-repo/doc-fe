@@ -2,7 +2,7 @@ import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } 
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -104,6 +104,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     documentType: { id: "" },
   };
   let initialGroups: Group[] = [];
+  const showApprovers = !isQms ? needsSignature : isQms;
 
   // MARK: @actions
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
@@ -165,20 +166,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
-  // MARK: @effects
-  useEffect(() => {
-    if (!docRevId) {
-      return;
-    }
-    asyncGroups.start(
-      getGroupsByStage,
-      docRevId,
-      asyncGroups,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docRevId]);
-
-
   // MARK: @helpers
   const initialValuesAR = (values: any): any => ({
     title: intl.formatMessage({ id: "documentRevision.releasing" }, { docId, title }),
@@ -226,17 +213,20 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         setCheckedGroups,
         initialGroups,
       }}
+      asyncGetDocTypeState={asyncGetDocTypeByGroup.asyncState}
     />
   );
 
   // MARK: @methods
   const openDialog = () => {
     async.reset();
-    asyncGroups.start(
-      getGroupsByStage,
-      docRevId,
-      asyncGroups,
-    );
+    if (showApprovers && docRevId) {
+      asyncGroups.start(
+        getGroupsByStage,
+        docRevId,
+        asyncGroups,
+      );
+    }
     asyncGetDocTypeByGroup.start(
       getDocTypeByGroupAction,
       { docTypeGroupOption: "CHANGE_REQUEST" },
