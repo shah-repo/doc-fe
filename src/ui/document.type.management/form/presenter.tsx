@@ -38,7 +38,7 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   const formik = useFormikContext();
 
   const groupValue = (values.group as unknown as OptionType)?.value;
-  isLHR = isLHR || GroupWithGroupOptions[groupValue]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
+  isLHR = isLHR || GroupWithGroupOptions[groupValue]?.includes(DOC_TYPE_GROUP_OPTION.BASE_LHR);
 
   useEffect(() => {
     if (isLHR) { return; }
