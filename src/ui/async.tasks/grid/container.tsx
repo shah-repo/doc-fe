@@ -55,10 +55,7 @@ const AsyncTasksContainer: React.FunctionComponent<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableCriteria.queryDict]);
 
-  const onRowClick = () => {
-    // eslint-disable-next-line no-console
-    console.log("Row Click!");
-  };
+  const onRowClick = () => void 0;
 
   return (
     <AsyncTasksPresenter
