@@ -11,7 +11,7 @@ const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
 const newCompanyAbbr = "NC-" + randomNumberForCompany;
-const apiCreatedCompany = {
+const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
 };
@@ -671,6 +671,10 @@ context("DAM approvals in LHR", () => {
 
       it("Create new document from form", () => {
         cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Enters title 'New Company'", () => {

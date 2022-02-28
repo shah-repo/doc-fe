@@ -824,9 +824,9 @@ context("Revising Documents assigned as Training material", () => {
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[1].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 2);
       cy.trClearFilters();
