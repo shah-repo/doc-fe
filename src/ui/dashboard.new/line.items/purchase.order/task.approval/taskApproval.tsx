@@ -2,9 +2,7 @@
 import {
   Avatar,
   Box,
-  Grid,
-  Link,
-  ListItemAvatar,
+  Grid, ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -28,6 +26,8 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
+import DocId from "../../common/DocId/presenter";
+import DocTitle from "../../common/DocTitle/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
@@ -198,59 +198,25 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={
+                  <DocId
+                    url={
                       docId
                         ? documentVersionPath(docRevId || "", docDocumentId)
                         : "#"
                     }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                    docId={docId}
+                  />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
+                  <DocTitle
+                    url={
+                      docRevId
+                        ? documentVersionPath(docRevId || "", docDocumentId)
+                        : "#"
                     }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={
-                        docRevId
-                          ? documentVersionPath(docRevId || "", docDocumentId)
-                          : "#"
-                      }
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid
