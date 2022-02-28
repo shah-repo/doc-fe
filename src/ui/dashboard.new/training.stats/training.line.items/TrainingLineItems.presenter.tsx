@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
 import Text from "../../../components/Text";
+import { LoadMoreButton } from "../../LoadMoreButton";
 import TrainingItem from "./TrainingItem";
 import { styles } from "./TrainingLineItems.styles";
 
@@ -12,12 +13,15 @@ interface TabPanelProps {
   index: number;
   value: number;
   panelData: {
+    id: string;
     docTitle: string;
     user: { avatar: Nullable<string>; name: string; initialColor: string };
     docId: string;
     status: string;
     dueOn: string;
   }[];
+  overallLimit: number;
+  onLoadMoreData: () => void;
 }
 
 const TabPanel: React.FunctionComponent<TabPanelProps> = ({
@@ -25,15 +29,20 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   value,
   index,
   panelData,
+  overallLimit,
+  onLoadMoreData,
   ...other
 }) => {
   const classes = styles();
+  const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsList);
+
   const renderItems = () => (
-    <List className={classes.listRoot}>
+    value === index && <List className={classes.listRoot}>
       {panelData.map((data, index) => (
         <>
           <TrainingItem
             key={index}
+            id={data.id}
             avatar={data.user.avatar}
             initialColor={data.user.initialColor}
             name={data.user.name.split(" ")[0]}
@@ -45,6 +54,9 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
           <Divider />
         </>
       ))}
+      {totalTrainingData > 0 &&
+        <LoadMoreButton onLoadMore={onLoadMoreData} id={`trainingListBoxLoadMore`} />
+      }
     </List>
   );
 
@@ -64,26 +76,45 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
 
 interface TrainingLineItemsProps {
   tabValue: number;
+  overallLimit: number;
+  onLoadMoreData: () => void;
 }
 
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
-  (props) => {
-    const overdueItems = useSelector(
-      trainingStatsSelectors.overdueTrainingData
-    );
-    const dueInSevenItems = useSelector(trainingStatsSelectors.dueTrainingData);
-    const all = overdueItems.concat(dueInSevenItems);
+  ({ tabValue, overallLimit, onLoadMoreData }) => {
+    const trainingStatsList = useSelector(trainingStatsSelectors.trainingStatsList);
     const classes = styles();
     return (
-      <Box component="div" className={classes.root}>
-        <TabPanel value={props.tabValue} index={0} panelData={all}>
+      <Box component="div" className={classes.root} >
+        <TabPanel
+          key={0}
+          value={tabValue}
+          index={0}
+          panelData={trainingStatsList}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
+        >
           <Text translation="training.stats.all" />
         </TabPanel>
-        <TabPanel value={props.tabValue} index={2} panelData={dueInSevenItems}>
-          <Text translation="common.duein7days" />
-        </TabPanel>
-        <TabPanel value={props.tabValue} index={1} panelData={overdueItems}>
+        <TabPanel
+          key={1}
+          value={tabValue}
+          index={1}
+          panelData={trainingStatsList}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
+        >
           <Text translation="common.overdue" />
+        </TabPanel>
+        <TabPanel
+          key={2}
+          value={tabValue}
+          index={2}
+          panelData={trainingStatsList}
+          overallLimit={overallLimit}
+          onLoadMoreData={onLoadMoreData}
+        >
+          <Text translation="common.duein7days" />
         </TabPanel>
       </Box>
     );

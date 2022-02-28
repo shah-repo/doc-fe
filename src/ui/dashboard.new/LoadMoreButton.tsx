@@ -41,7 +41,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
         className={classes.loadMoreButton}
         disableRipple
         disabled={disable}
-        id= {id}
+        id={id}
       >
         <Text message={label} />
       </Button>

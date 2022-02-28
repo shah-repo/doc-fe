@@ -27,5 +27,5 @@ export const linearScale = (domain: number[], range: number[]) => {
 
 export const scrollToBottom = (selector) => {
   const el = document.querySelector<HTMLElement>(selector);
-el?.scrollIntoView({ behavior: "smooth" });
+  el?.scrollIntoView({ behavior: "smooth" });
 };
