@@ -104,7 +104,6 @@ export * from "./FBEditorCustomControl/FBEditorCustomControl.types";
 // export {
 //   default as FBEditorInstructionsDocument } from "./FBEditorInstructionsDocument/FBEditorInstructionsDocument";
 export { default as FBEditorLabel } from "./FBEditorLabel/FBEditorLabel";
-export * from "./FBEditorLHRStep/FBEditorLHRStep.types";
 // export { default as FBEditorMediaAlbum } from "./FBEditorMediaAlbum/FBEditorMediaAlbum";
 // export { default as FBEditorOptionGroup } from "./FBEditorOptionGroup/FBEditorOptionGroup";
 export { default as FBEditorOptions } from "./FBEditorOptions/FBEditorOptions";
@@ -343,6 +342,8 @@ export { default as FBWorkspaceBottomBar } from "./FBWorkspaceBottomBar/FBWorksp
 export * from "./FBWorkspaceBottomBar/FBWorkspaceBottomBar.types";
 export { default as FBWorkspaceTplActions } from "./FBWorkspaceTplActions/FBWorkspaceTplActions";
 export * from "./FBWorkspaceTplActions/FBWorkspaceTplActions.types";
+/* export { default as FBZIPUpload } from "./FBZIPUpload/FBZIPUpload";*/
+export * from "./FBZIPUpload/FBZIPUpload.types";
 export { default as FB } from "./helpers/FB";
 export * from "./helpers/FBFieldName";
 

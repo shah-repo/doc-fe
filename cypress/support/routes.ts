@@ -30,6 +30,7 @@ export enum CyRoutes {
   GetDocumentTypes = "GetDocumentTypes",
   GetChangeRequests = "GetChangeRequests",
   ChangeRequestApprove = "ChangeRequestApprove",
+  ChangeRequestApproveNew = "ChangeRequestApproveNew",
   ARPreview = "ARPreview",
   GroupsPost = "GroupsPost",
   GroupsPatch = "GroupsPatch",
@@ -40,6 +41,7 @@ export enum CyRoutes {
   GetProposedDocId = "GetProposedDocId",
   PatchCancelDocRev = "PatchCancelDocRev",
   GetPendingActions = "GetPendingActions",
+  GetDashboardFeed  = "GetDashboardFeed",
   PostCloseAR = "PostCloseAR",
   PostApproveAR = "PostApproveAR",
   GetRequiredApprovers = "GetRequiredApprovers",
@@ -60,6 +62,7 @@ export enum CyRoutes {
   ReleaseDocRevWithoutAr = "ReleaseDocRevWithoutAr",
   GetDocumentType = "GetDocumentType",
   PostRejectCR = "PostRejectCR",
+  PostRejectCRNew = "PostRejectCRNew",
   GetSpecificDocumentType = "GetSpecificDocumentType",
   PostWithdrawChangeRequests = "PostWithdrawChangeRequests",
   GetDocTypeGroupOptions = "GetDocTypeGroupOptions",
@@ -97,6 +100,7 @@ export enum CyRoutes {
   GetTrainingRecord = "GetTrainingRecord",
   PostCompleteTraining = "PostCompleteTraining",
   PatchUsersMe = "PatchUsersMe",
+  PostExportRev = "PostExportRev",
 }
 
 export const routes: ICyRoutes =   {
@@ -457,6 +461,15 @@ export const routes: ICyRoutes =   {
       responseTimeout: 30 * 1000,
     },
   },
+  PostRejectCRNew: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/*/reject",
+    },
+    callConfig: {
+      responseTimeout: 15 * 1000,
+    },
+  },
   ReleaseDocRev: {
     requestConfig: {
       method: "POST",
@@ -586,6 +599,15 @@ export const routes: ICyRoutes =   {
   ChangeRequestApprove: {
     requestConfig: {
       method: "POST",
+      url: "/api/v1/approvals/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 25 * 1000,
+    },
+  },
+  ChangeRequestApproveNew: {
+    requestConfig: {
+      method: "POST",
       url: "/api/v1/change_requests/*/approve",
     },
     callConfig: {
@@ -668,6 +690,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/pending_actions",
+    },
+  },
+  GetDashboardFeed: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/dashboard_feed",
     },
   },
   PostCloseAR: {
@@ -814,6 +842,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/training_record/*/complete",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  PostExportRev: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/export/revision/*/email",
     },
     callConfig: {
       responseTimeout: 30 * 1000,

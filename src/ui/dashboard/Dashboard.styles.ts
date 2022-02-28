@@ -1,4 +1,3 @@
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const styles = makeStyles((theme: Theme) =>
@@ -29,5 +28,5 @@ export const styles = makeStyles((theme: Theme) =>
       margin: theme.spacing(2),
       fontFamily: "Open Sans, sans-serif;",
     },
-  },
-  ));
+  })
+);

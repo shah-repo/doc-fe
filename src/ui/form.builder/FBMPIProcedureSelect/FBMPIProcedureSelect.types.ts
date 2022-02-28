@@ -8,6 +8,10 @@ export type FBMPIProcedureSelectProps =
 & {
   type: FBProcedureItemType;
   unitDisabled?: boolean;
+  selectedEQ?: any;
+  isOptionDisabled?: (option: any) => any;
+  renderOptionWithDate?: (option: any) => any;
+  onChange?: () => void;
 };
 
 export interface FBMPIProcedureSelectValue {
@@ -22,4 +26,21 @@ export interface FBMPIProcedureSelectValue {
   quantity?: number;
   unit?: string;
   lotPart?: string;
+  pmDueDate?: string;
+  calDueDate?: string;
+}
+
+export enum EQStatus {
+  NoInfo = "No Info",
+  Inactive = "Inactive",
+  Retired = "Retired",
+  Active = "Active",
+  ActiveCalibrated = "Active Calibrated",
+  ActiveNoCalRequired = "Active No Cal Required",
+}
+
+export interface FBSelectedEQ {
+  status: EQStatus;
+  pmDate?: string;
+  calDate?: string;
 }

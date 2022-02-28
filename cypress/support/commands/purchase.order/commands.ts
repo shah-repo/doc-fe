@@ -5,6 +5,7 @@ import { integer } from "aws-sdk/clients/cloudfront";
 import { DocumentRevisionEditRequestBody } from "../../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
+
 export { };
 
 declare global {
@@ -50,6 +51,7 @@ declare global {
       poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
       poAMCheckForAlertMessage(): Chainable<Subject>;
       poRejectAR(params: {password: string}): Chainable<Subject>;
+      poRejectARNew(params: {password: string}): Chainable<Subject>;
       poVerifyStatus(params: {status: string}): Chainable<Subject>;
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
@@ -57,6 +59,7 @@ declare global {
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
+      poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
     }
   }
 }
@@ -78,10 +81,14 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 });
 
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+
   cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
   });
+
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
@@ -193,14 +200,14 @@ Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
 
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-    cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+    cy.get("tr.k-master-row").contains(params.item).arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.itemValue).should("exist");
+  cy.get("tr.k-master-row").first().contains(params.itemValue).should("exist");
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
@@ -295,9 +302,17 @@ Cypress.Commands.add("poAMCheckForAlertMessage", () => {
 });
 
 Cypress.Commands.add("poRejectAR", (params: {password: string}) => {
-  cy.get("button[aria-label=reject]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowClick().arrowType(params.password);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("poRejectARNew", (params: {password: string}) => {
+  cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+  cy.get(`[data-cy="transition.action.password"]`).arrowClick().arrowType(params.password);
+  cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
@@ -336,4 +351,9 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
     }
   });
 });
+
+Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string }) => {
+  cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
+});
+
 

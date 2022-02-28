@@ -15,7 +15,8 @@
   "compilerOptions": {
     "types": [
       "cypress",
-      "node"
+      "node",
+      "cypress-real-events"
     ]
   },
 }

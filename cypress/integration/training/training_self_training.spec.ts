@@ -13,6 +13,7 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let developersGroup;
+let dateAfterEmailSouldArrive;
 
 
 context("Self training test", () => {
@@ -673,14 +674,18 @@ context("Self training test", () => {
       cy.get("button>span").should("contain.text", "Send To Email");
     });
 
+    it("Click 'Send To Email'", () => {
+      dateAfterEmailSouldArrive = new Date();
+      cy.sendToEmail();
+      cy.wait(5000);
+    });
+
     it("Check if 'Send To Email' button is working", () => {
-      cy.get("button>span").contains("Send To Email").arrowClick();
-      const currentDate = new Date();
-      cy.imapVerifyLastEmailContains({ userEmail: USERS[1].email, content: USERS[1].name, date: currentDate });
       cy.imapVerifyLastEmailContains(
         {
           userEmail: USERS[1].email,
-          content: "Your documents are ready for download. Link will expire in 4 hours.", date: currentDate,
+          content: "Your documents are ready for download. Link will expire in 4 hours.",
+          date: dateAfterEmailSouldArrive,
         });
     });
   });
@@ -728,8 +733,7 @@ context("Self training test", () => {
 
     it("Check if next available TRN ID added", () => {
       cy.trLandingPagetrId({ trId: "TRN-00002" });
-      cy.get(".ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn").eq(0).invoke("text")
-        .should("contain", "TRN-00002");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", "TRN-00002");
       cy.trClearFilters();
     });
 

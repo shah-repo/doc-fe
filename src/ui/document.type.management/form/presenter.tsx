@@ -1,10 +1,11 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
-import { Field, FormikProps } from "formik";
-import React from "react";
+import { Field, FormikProps, useFormikContext } from "formik";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { DocumentType, DOC_TYPE_GROUP, REVISION_STAGE_OPTIONS } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DOC_TYPE_GROUP, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions, REVISION_STAGE_OPTIONS } from "../../../state/ducks/documentRevisions/documentType/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
+import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import CheckboxField from "../../components/forms/fields/Checkbox";
 import InputField from "../../components/forms/fields/Input";
 import { required, validator } from "../../components/forms/fields/validators";
@@ -18,6 +19,7 @@ interface Props extends FormikProps<DocumentType> {
   handleTransition: () => void;
   transitionLabel: Translation;
   disabled: boolean;
+  isLHR?: boolean;
 }
 
 const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
@@ -27,10 +29,22 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
   handleTransition,
   transitionLabel,
   disabled,
+  isLHR,
+  values,
   ...props
 }) => {
   const classes = styles();
   const intl = useIntl();
+  const formik = useFormikContext();
+
+  const groupValue = (values.group as unknown as OptionType)?.value;
+  isLHR = isLHR || GroupWithGroupOptions[groupValue]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
+
+  useEffect(() => {
+    if (isLHR) { return; }
+    formik.setFieldValue("equipmentEnforceProd", false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLHR]);
 
   const autoSizerRenderer = (props) =>
     <Field name={props.name}>
@@ -95,6 +109,11 @@ const DocumentTypeFormPresenter: React.FunctionComponent<Props> = ({
             label="common.default.training"
             checkboxProps={{ disabled }}
           />
+          {isLHR && <CheckboxField
+            name="equipmentEnforceProd"
+            label="common.equipmentEnforceProd"
+            checkboxProps={{ disabled }}
+          />}
         </Grid>
         <InputField
           name="startingNumber"

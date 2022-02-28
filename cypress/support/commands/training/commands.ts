@@ -10,7 +10,7 @@ export { };
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      trVerifyElementByColumnName(params: { name: string; el: string }): Chainable<Subject>;
+      trVerifyElementByColumnName(params: { name: string }): Chainable<Subject>;
       trFilterDocListByNameAndSelect(params: { title: string }): Chainable<Subject>;
       trApproveAR(): Chainable<Subject>;
       trClearFilters(): Chainable<Subject>;
@@ -32,12 +32,12 @@ declare global {
   }
 }
 
-Cypress.Commands.add("trVerifyElementByColumnName", (params: { name: string; el: string }) => {
-  cy.get(`#${params.el}`).parent().parent().parent().parent().should("contain.text", params.name);
+Cypress.Commands.add("trVerifyElementByColumnName", (params: { name: string}) => {
+  cy.get(`[aria-rowindex="1"]>th>span>span`).should("contain.text", params.name);
 });
 
 Cypress.Commands.add("trSelectFirstDocument", () => {
-  cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>div>div").arrowClick();
+  cy.get(`[data-grid-row-index="0"]`).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -46,7 +46,7 @@ Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string 
   cy.trClearFiltersNoWait();
   cy.listLoadingElementShouldNotExist();
   cy.trLandingPageDocRevTitle({ title: params.title });
-  cy.get(".ReactVirtualized__Table__rowColumn").contains(params.title).arrowClick();
+  cy.get(`[data-grid-row-index]`).contains(params.title).arrowClick();
 });
 
 Cypress.Commands.add("trClearFilters", () => {
@@ -64,7 +64,9 @@ Cypress.Commands.add("trClearFiltersNoWait", () => {
 Cypress.Commands.add("trApproveAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostApproveAR, CyRoutes.ARPreview], () => {
-      cy.get("button[aria-label=approve]").first().arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
@@ -76,7 +78,9 @@ Cypress.Commands.add("trApproveAR", () => {
 Cypress.Commands.add("trRejectAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostRejectCR], () => {
-      cy.get("button[aria-label=reject]").first().arrowClick();
+      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
@@ -108,28 +112,28 @@ Cypress.Commands.add("trApproveTraining", () => {
 });
 
 Cypress.Commands.add("trLandingPageUsername", (params: {username}) => {
-  cy.get("#userName").clear().arrowType(params.username).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType(params.username).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDocRevTitle", (params: {title}) => {
-  cy.get("#docRevTitle").clear().arrowType(params.title).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.title).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
-  cy.get("#docId").clear().arrowType(params.docId).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed}) => {
-  cy.get("#mui-component-select-completedAtAfter").arrowClick();
-  cy.get("ul[role=listbox] > li").contains(params.completed).arrowClick();
-  cy.listLoadingElementShouldNotExist();
+Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.completed).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageOwner", (params: {owner}) => {
-  cy.get("#owner").clear().arrowType(params.owner).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.owner).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -141,16 +145,16 @@ Cypress.Commands.add("trLandingPageClearFilter", () => {
 });
 
 Cypress.Commands.add("trLandingPageName", (params: {name}) => {
-  cy.get("#name").clear().arrowType(params.name).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.name).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPagetrId", (params: {trId}) => {
-  cy.get("#trId").clear().arrowType(params.trId).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.trId).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageDynamicParams", (params: {dynamicParams}) => {
-  cy.get("[name^=dynamicParams]").clear().arrowType(params.dynamicParams).wait(500);
+  cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.dynamicParams).wait(500);
   cy.listLoadingElementShouldNotExist();
 });

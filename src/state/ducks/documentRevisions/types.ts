@@ -45,6 +45,7 @@ export interface DocumentRevisionDocument {
   };
   smartReferencesTo?: SmartReference[];
   smartReferencesFrom?: SmartReference[];
+  typeSpecificConfig?: TypeSpecificConfig;
 }
 
 export interface SecurityList {
@@ -82,6 +83,8 @@ interface Precalc {
   formDocId: string;
   revision: number;
   po_amount?: string;
+  cali_due_date?: string;
+  pm_due_date?: string;
 }
 
 interface DocumentsInLHRS {
@@ -338,4 +341,11 @@ export interface UpdateFormFieldMapping {
 export interface UpdateFormRequestBody {
   mapping: UpdateFormFieldMapping[];
   formToBeUsed: Id;
+}
+
+interface TypeSpecificConfig {
+  eqProdEnforceConfig: {
+    date: string;
+    value: boolean;
+  };
 }

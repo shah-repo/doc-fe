@@ -13,6 +13,18 @@ let secondEmployee;
 const groupName = `Group ${moment().format("X")}`;
 
 context("Autocomplete 'Official Groups' test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -71,23 +83,19 @@ context("Autocomplete 'Official Groups' test", () => {
       });
 
       it("Select 'Official' radio button", () => {
-        cy.get("input[value=\"official\"]").arrowClick();
+        cy.grpSelectOfficial();
       });
 
       it("Enter Group Name " + groupName, () => {
-        cy.get("#Group-groupName").arrowType(groupName);
+        cy.grpEnterGroupName({ name: groupName });
       });
 
       it("Select Members", () => {
-        cy.get("#Group-members").arrowClick().arrowType("{downarrow}{enter}");
+        cy.grpTypeMembers(USERS[3].name);
       });
 
       it("Click Save button", () => {
-        cy.get("#Group-createGroup").arrowClick();
-      });
-
-      it("Close dialog box", () => {
-        cy.get("#DialogContent-close").arrowClick();
+        cy.grpSaveGroup();
       });
     });
 
@@ -182,7 +190,7 @@ context("Autocomplete 'Official Groups' test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 9);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 10);
         });
       });
     });

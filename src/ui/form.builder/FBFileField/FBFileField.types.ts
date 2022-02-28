@@ -12,4 +12,5 @@ export type FBFileFieldProps =
   onUploadClick?: () => void;
   fileFieldState?: FBFileFieldState;
   loading?: boolean;
+  typeToAccept?: string;
 };

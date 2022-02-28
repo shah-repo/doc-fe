@@ -270,7 +270,7 @@ context("LHR flow", () => {
               {
                 documentTypeName: "LHR template",
                 documentTypeAcronym: "LHRT-",
-                group: "FORM",
+                group: "LHRT",
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -1528,10 +1528,6 @@ context("LHR flow", () => {
             cy.fbSelectItemFromNewFieldList({ field: "LHR Step" });
           });
           cy.listLoadingElementShouldNotExist();
-          cy.get("[data-cy=\"editorConfig.filters.documentType\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Manufacturing Process Instructions Test").arrowClick();
-          cy.get("[data-cy=\"editorConfig.filters.revisionStatus\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Released").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.fbAddNewFieldButton();
           });
@@ -1733,11 +1729,7 @@ context("LHR flow", () => {
       context("Start LHRs #1", () => {
         it("Click 'START MPI'", () => {
           SystemRequirement("REQ-3210");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(0).arrowClick();
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.mpiStartStep({ stepNumber: 1 });
         });
 
         it("Turn off autosave", () => {
@@ -2036,10 +2028,7 @@ context("LHR flow", () => {
     context("Complete LHRs #2 in LHR", () => {
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.start.mpi\"]").eq(1).arrowClick();
-        });
-
+        cy.mpiStartStep({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
@@ -2305,7 +2294,7 @@ context("LHR flow", () => {
 
       it("Verify LHRt document is present on list", () => {
         SystemRequirement("REQ-3360");
-        cy.get("div[title]").eq(0).should("have.text", "LHRt document");
+        cy.dlVerifyFilterByDocTitle({ docTitle: "LHRt document" });
         cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       });
     });

@@ -37,7 +37,7 @@ const toArrayOfIds = (data: any[] | null) => {
 };
 
 export const toMembersOptions = (values: GetEmployeeResponse[]): OptionType[] => values.map((employee) => ({
-  label: employee.user.name,
+  label: employee.user.name.trim(),
   value: employee.id,
 }));
 

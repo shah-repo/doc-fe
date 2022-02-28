@@ -1,3 +1,4 @@
+import { chain, filter, find } from "lodash";
 import { createSelector } from "reselect";
 import Config from "../../../config";
 import { ThemeEnv } from "../../../ui/layout/theme/utils/types";
@@ -5,6 +6,8 @@ import { ApplicationState } from "../../reducers";
 import { WHITE_LABEL_DEFAULT } from "./constants";
 
 const getSelectedCompany = (state: ApplicationState) => state.company.selectedCompany;
+const companyIdSelector = (state: ApplicationState) => state.company.companyMine.id;
+const companyNameSelector = (state: ApplicationState) => state.company.companyMine.name;
 const slackTeamId = (state: ApplicationState) => state.company.selectedCompany.teamId;
 const isSlackIntegrationEnabled = (state: ApplicationState) => state.company.selectedCompany.slackIntegrationEnabled;
 const isHelloSignIntegrationEnabled = (state: ApplicationState) =>
@@ -31,12 +34,25 @@ const getCompanyMaxRevisionStage = (state: ApplicationState) => state.company.co
 const getAutosaveEnabled = (state: ApplicationState) => state.company.autosaveConfig.autosaveEnabled;
 const getRedlineActive = (state: ApplicationState) => state.company.redlineConfig.redlineActive;
 
+const getNavigationTitle = (state: ApplicationState, category: string) => {
+  const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
+  const subMenuItems = chain(state.company.companyMine.navigation)
+    .filter({ type: "MENU" })
+    .map("menu")
+    .flatten()
+    .value();
+  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  return menuItem?.label;
+};
+
 export default {
   getWhiteLabeling,
   isSlackIntegrationEnabled,
   isDropboxEnabled,
   slackTeamId,
   getSelectedCompany,
+  companyIdSelector,
+  companyNameSelector,
   getCompanyMine,
   isHelloSignIntegrationEnabled,
   getNavigationItems,
@@ -45,4 +61,5 @@ export default {
   getAllWhiteLabeling,
   getAutosaveEnabled,
   getRedlineActive,
+  getNavigationTitle,
 };

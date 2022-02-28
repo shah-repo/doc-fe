@@ -2,9 +2,10 @@ import { cloneDeep, concat, get, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentForm, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -22,6 +23,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     getLot,
     getProcedureLocale,
     getProcedureValues,
+    isDateOverdue,
     loading,
     dialogState,
     multiplier = 1,
@@ -38,8 +40,9 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
   }: T) => {
 
     // MARK: @config
+    const dispatch = useDispatch();
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
-    const { document } = workspaceState || {};
+    const { document, id } = workspaceState || {};
     const { version, status } = document || {};
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
@@ -84,6 +87,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             data.smartReferencesTo :
             uniqBy(concat(data.smartReferencesTo, data.document.smartReferencesTo), "id");
           setFilteredParts(refs);
+          id && dispatch(documentRevisionsActions.reload(id));
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,6 +95,13 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
 
     // MARK: @helpers
+    isDateOverdue = (date?: string) => {
+      if (!date) {
+        return;
+      }
+      return Date.parse(date) < Date.parse(new Date().toLocaleString());
+    };
+
     const setFilteredParts = (data) => {
       const partsSelected = data.reduce((selected, ref) => {
         if (ref?.metadata?.fieldId === name
@@ -100,6 +111,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             ...ref?.metadata,
             refId: ref?.id,
             overrideDocId: ref?.toDocRev?.document.docId,
+            pmDueDate: ref.toDocRev?.precalc.pm_due_date,
+            calDueDate: ref.toDocRev?.precalc.cali_due_date,
           });
         }
         return selected;
@@ -209,6 +222,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       getLot,
       getProcedureLocale,
       getProcedureValues,
+      isDateOverdue,
       mpiProcedureState,
       isPreview,
       dialogState,

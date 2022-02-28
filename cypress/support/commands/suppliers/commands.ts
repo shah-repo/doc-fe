@@ -11,6 +11,8 @@ declare global {
       supCreateNew(): Chainable<Subject>;
       supClickOnSpecificSupplierFileFromList(params: {item: string}): Chainable<Subject>;
       supCheckForSuggestedForms(...list: string[]): Chainable<Subject>;
+      supFilterByDocTitle(params: {docTitle: string }): Chainable<Subject>;
+      supFilterById(params: {docId: string }): Chainable<Subject>;
     }
   }
 }
@@ -30,7 +32,9 @@ Cypress.Commands.add("supCreateNew", () => {
 });
 
 Cypress.Commands.add("supClickOnSpecificSupplierFileFromList", (params: {item: string}) => {
-  cy.get("[class*=\"ReactVirtualized__Table__row \"]").contains(params.item).arrowClick();
+  cy.get("tr.k-master-row").contains(params.item).arrowClick();
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
@@ -38,4 +42,12 @@ Cypress.Commands.add("supCheckForSuggestedForms", (...list: string[]) => {
   list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
+});
+
+Cypress.Commands.add("supFilterByDocTitle", (params: {docTitle: string }) => {
+  cy.get(`[aria-colindex="2"] input`).clear().arrowType(params.docTitle).wait(500);
+});
+
+Cypress.Commands.add("supFilterById", (params: {docId: string }) => {
+  cy.get(`[aria-colindex="1"] input`).clear().arrowType(params.docId).wait(500);
 });

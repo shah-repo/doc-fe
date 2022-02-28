@@ -51,7 +51,7 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 
 Cypress.Commands.add("navigToDashboard", () => {
   cy.wrapWithWaitOnApiCall(
-    CyRoutes.GetPendingActions,
+    CyRoutes.GetDashboardFeed,
     () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
     });
@@ -59,6 +59,7 @@ Cypress.Commands.add("navigToDashboard", () => {
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
   cy.get("a[href=\"/document_type_management\"]").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToRecords", () => {
@@ -71,7 +72,7 @@ Cypress.Commands.add("navigToRecords", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToParts", () => {
@@ -84,7 +85,7 @@ Cypress.Commands.add("navigToParts", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLots", () => {
@@ -97,7 +98,7 @@ Cypress.Commands.add("navigToLots", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToLHR", () => {
@@ -110,21 +111,21 @@ Cypress.Commands.add("navigToLHR", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToEquipment", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
@@ -140,7 +141,7 @@ Cypress.Commands.add("navigToDocumentList", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirmPopup: boolean }) => {
@@ -171,8 +172,9 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
       ],
     });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
+
 
 Cypress.Commands.add("navigToWorkOrders", () => {
   cy.navigToNestedItem({
@@ -181,25 +183,27 @@ Cypress.Commands.add("navigToWorkOrders", () => {
       NavigationItems.MANUFACTURING,
     ],
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToPurchaseOrder", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.SUPPLIER_MANAGEMENT,
-      NavigationItems.SUPPLIER_LIST,
-    ],
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+    cy.navigToNestedItem({
+      navigItems: [
+        NavigationItems.DASHBOARD,
+        NavigationItems.SUPPLIER_MANAGEMENT,
+        NavigationItems.SUPPLIER_LIST,
+      ],
+    });
   });
-  cy.listLoadingElementShouldNotExist();
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 
@@ -210,7 +214,6 @@ Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[
     const [first, second, ...other] = params.navigItems;
     cy.get("body").then(($body) => {
       if ($body.find("[data-cy=\"navigation." + second + "\"]").length === 0) {
-
         cy.navigClickOnItem({ navigItem: first });
         cy.navigToNestedItem({ navigItems: [second, ...other] });
       } else {

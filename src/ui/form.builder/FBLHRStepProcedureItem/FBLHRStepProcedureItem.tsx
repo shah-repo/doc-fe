@@ -24,6 +24,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   multiplier = 1,
   type,
   value = [],
+  isPendingChange,
 }) => (
   <FBProvider {...{ dialogState }}>
     <Box mt={2}>
@@ -90,7 +91,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                     }}
                   />
                 </Box>
-                {!isPreview && (item.type || item.paramsId) && (
+                {(!isPreview || isPendingChange ) && (item.type || item.paramsId) && (
                   <>
                     <Box>
                       <IconButton

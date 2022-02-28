@@ -1031,7 +1031,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Add an Approval", () => {
-          cy.pmAddApproverOnApprovalsList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
 
         it("Save PO", () => {
@@ -1262,44 +1262,52 @@ context("Receivable test with Page Details", () => {
       });
     });
 
-    it("Navig to receiving", { retries: 2 }, () => {
+    it("Auth logout", () => {
+      cy.authLogout();
+    });
+
+    it("Auth login first user", () => {
+      cy.authLogin({ email: USERS[1].email });
+    });
+
+    it("Select company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Navigate to receiving", () => {
       cy.navigToReceivableList();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-        cy.reload();
-      });
-      cy.get("[aria-label=\"precalc.po-docId-in-receiving\"]").should("have.text", "PO #");
     });
 
     it("Verify Receipt ID", () => {
-      cy.get("div[aria-colindex=\"1\"]").should("have.text", "RCT-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "RCT-00001");
     });
 
     it("Verify Receipt Record State", () => {
-      cy.get("div[aria-colindex=\"2\"]").should("have.text", "WIP");
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "WIP");
     });
 
     it("Verify Owner", () => {
-      cy.get("div[aria-colindex=\"3\"]").should("have.text", USERS[1].name);
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
     });
 
     it("Verify PO #", () => {
-      cy.get("div[aria-colindex=\"4\"]").should("have.text", "POT-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "POT-00001");
     });
 
     it("Verify Released Date", () => {
-      cy.get("div[aria-colindex=\"5\"]").should("have.text", "");
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "");
     });
 
     it("Verify Supplier", () => {
-      cy.get("div[aria-colindex=\"6\"]").should("have.text", "API Supplier Document");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "API Supplier Document");
     });
 
     it("Verify Part Number/Rev", () => {
-      cy.get("div[aria-colindex=\"7\"]").should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
     });
 
     it("Verify PO Status", () => {
-      cy.get("div[aria-colindex=\"8\"]").should("have.text", "Open");
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", "Open");
     });
   });
 
@@ -1331,35 +1339,35 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify Receipt ID", () => {
-      cy.get("div[aria-colindex=\"1\"]").should("have.text", "RCT-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "RCT-00001");
     });
 
     it("Verify Receipt Record State", () => {
-      cy.get("div[aria-colindex=\"2\"]").should("have.text", "Released");
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "Released");
     });
 
     it("Verify Owner", () => {
-      cy.get("div[aria-colindex=\"3\"]").should("have.text", USERS[1].name);
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[1].name);
     });
 
     it("Verify PO #", () => {
-      cy.get("div[aria-colindex=\"4\"]").should("have.text", "POT-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "POT-00001");
     });
 
     it("Verify Released Date", () => {
-      cy.get("div[aria-colindex=\"5\"]").should("have.text", receivingReleasedDate);
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", receivingReleasedDate);
     });
 
     it("Verify Supplier", () => {
-      cy.get("div[aria-colindex=\"6\"]").should("have.text", "API Supplier Document");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "API Supplier Document");
     });
 
     it("Verify Part Number/Rev", () => {
-      cy.get("div[aria-colindex=\"7\"]").should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
     });
 
     it("Verify PO Status", () => {
-      cy.get("div[aria-colindex=\"8\"]").should("have.text", "Open");
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", "Open");
     });
   });
 

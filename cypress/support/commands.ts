@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // import "../../node_modules/cypress-movie/src/arrow
+import path from "path";
+import { Result } from "pdf-parse";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -26,6 +28,9 @@ declare global {
         text: string,
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
+      unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
+      pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
+      sendToEmail(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
@@ -48,6 +53,7 @@ declare global {
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
       listLoadingElementShouldNotExist(): Chainable<Subject>;
+      landingPageLoadingElementShouldNotExist(): Chainable<Subject>;
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
     }
@@ -127,6 +133,10 @@ Cypress.Commands.add("listLoadingElementShouldNotExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("not.exist");
 });
 
+Cypress.Commands.add("landingPageLoadingElementShouldNotExist", () => {
+  cy.get("div.k-loading-image", { timeout: 40000 }).should("not.exist");
+});
+
 Cypress.Commands.add("listLoadingElementShouldExist", () => {
   cy.get("div.MuiCircularProgress-root", { timeout: 40000 }).should("exist");
 });
@@ -157,6 +167,35 @@ Cypress.Commands.add("downloadFile", (params: { url: string; directory: string; 
     cookies,
     fileName: params.fileName,
   }));
+});
+
+Cypress.Commands.add("unzipFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
+      cy.task("unzipFile", {
+        directory: params.directory,
+        cookies,
+        fileName: params.fileName,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: string} ) => {
+  cy.getCookies().then((cookies) => {
+    cy.readFile(path.join(params.directory, params.fileName)).then(() => {
+      cy.task("pdfparseFile", {
+        directory: params.directory,
+        cookies,
+        fileName: params.fileName,
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("sendToEmail", () => {
+  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  cy.get("div.Toastify__toast-container").should("exist");
 });
 
 Cypress.Commands.add("myCompanies", (token: string) => {

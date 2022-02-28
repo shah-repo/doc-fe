@@ -19,6 +19,8 @@ const DEFAULTS = {
   ENV_NAME: "",
   DATADOG_APPLICATION_ID: "",
   DATADOG_CLIENT_TOKEN: "",
+  DATADOG_ENABLED: false,
+  DATADOG_SAMPLE_RATE: "0",
   CONSOLE_TOAST: false,
   PREVENT_DOC_TYPE_MANAGEMENT_EDIT: false,
 };
@@ -112,7 +114,11 @@ class Config {
   }
 
   public static get DatadogEnabled(): boolean {
-    return ![this.DatadogApplicationId, this.DatadogClientToken].includes("fake");
+    return this.get("DATADOG_ENABLED") === "true";
+  }
+
+  public static get DatadogSampleRate() {
+    return this.getNumber("DATADOG_SAMPLE_RATE");
   }
 
   public static get EnvironmentName(): string {

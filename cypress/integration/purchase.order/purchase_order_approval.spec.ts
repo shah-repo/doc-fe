@@ -330,12 +330,14 @@ context("PO approval test", () => {
       cy.unClick();
     });
 
-    it("Add an Approval", () => {
-
+    it("Add an Approval and save", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
       });
+      cy.poSaveDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check approval icon if it's colored", () => {
@@ -402,7 +404,6 @@ context("PO approval test", () => {
     });
 
     it("Add an Approval", () => {
-
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
@@ -425,18 +426,15 @@ context("PO approval test", () => {
 
     it("Check for PO notification on dashboard", () => {
       SystemRequirement("REQ-2150", "REQ-3860", "REQ-2210");
-      cy.arCheckDashboardPONotificationExistance({ shouldExist: true });
-      cy.get("[data-cy=\"pendingActionsPO\"]").should("contain.text", "PURCHASE ORDER: PO-00001, Rev A")
-        .and("contain.text", USERS[2].name).and("contain.text", "$380.00");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}needs your approval forPO-00001` });
+      cy.dashToggleMoreDetailsForListItemNumber({ listItemNumb: 0 });
+      cy.get("div").contains("Total:USD 380.00")
+        .should("exist");
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
-      cy.get("[data-cy=\"transition-reject\"]").first().arrowClick();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-        cy.get("#AlertDialog-continueButton").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.dashToggleMoreDetailsForListItemNumber({ listItemNumb: 0 });
+      cy.dashRejectApprovalForListItem({ listItem: `${USERS[2].name}needs your approval forPO-00001` });
     });
 
     it("Navigate to Doc List", () => {

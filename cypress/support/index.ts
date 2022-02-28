@@ -17,6 +17,7 @@
 import "cypress-file-upload";
 import "cypress-localstorage-commands";
 import "cypress-promise/register";
+import "cypress-real-events/support";
 import "cypress-xpath";
 import "../../node_modules/cypress-movie/src/arrow";
 import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
@@ -27,6 +28,7 @@ import "./commands/attachments/commands";
 import "./commands/auth/commands";
 import "./commands/company.replica/commands";
 import "./commands/company/commands";
+import "./commands/dashboard/commands";
 import "./commands/document.list/commands";
 import "./commands/document.revision/commands";
 import "./commands/engineering.build/commands";
@@ -68,6 +70,12 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   if (err.message.includes("Cannot read property 'data' of undefined")) {
     // eslint-disable-next-line no-console
     console.log("Ignoring 'Cannot read property 'data' of undefined' error");
+    return false;
+  }
+
+  if (err.message.includes("scheduledForDeletion")) {
+    // eslint-disable-next-line no-console
+    console.log("Ignoring 'Cannot read properties of undefined (reading 'scheduledForDeletion')'");
     return false;
   }
   return true;

@@ -5,4 +5,5 @@ export type FBLHRStepProcedureItemProps =
 & {
   multiplier?: number;
   lhrStepIndex?: number;
+  isPendingChange: boolean;
 };

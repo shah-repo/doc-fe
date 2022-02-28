@@ -17,6 +17,7 @@ import NewUserSetPasswordContainer from "../users/SignUp/NewUserSetPassword.cont
 import SetForgotPasswordContainer from "../users/SignUp/SetForgotPassword.container";
 import SignUpContainer from "../users/SignUp/SignUp.container";
 import styles from "./App.styles";
+import { DataDog } from "./DataDog";
 import Layout from "./Layout";
 
 type Props = WithStyles<typeof styles>;
@@ -24,6 +25,7 @@ type Props = WithStyles<typeof styles>;
 const Routes: React.FunctionComponent<Props> = ({ classes }) => (
   <div>
     <ToastContainer autoClose={false} />
+    <DataDog />
     <Switch>
       <Route
         path={LOGIN_URL}

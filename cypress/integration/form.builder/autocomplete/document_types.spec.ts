@@ -13,6 +13,18 @@ let adminEmployee;
 let adminLoginResponse;
 
 context("Autocomplete 'Document types' test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       SystemRequirement("REQ-0400", "REQ-0420", "REQ-0440");
@@ -181,7 +193,7 @@ context("Autocomplete 'Document types' test", () => {
         });
 
         it("Verify count in the list", () => {
-          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 23);
+          cy.get(".MuiAutocomplete-popper ul li").should("have.length", 24);
         });
       });
     });
