@@ -16,9 +16,8 @@ import { DataStateProps } from "./interfaces";
 import { TrainingListPresenter } from "./presenter";
 import KendoGridStyles from "./presenter.styles";
 
-export const TABLE_NAME = "training";
-
 const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () => {
+  const TABLE_NAME = "training";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
