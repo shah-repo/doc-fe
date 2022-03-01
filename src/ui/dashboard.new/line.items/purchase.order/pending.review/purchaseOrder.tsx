@@ -231,7 +231,11 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle url={documentVersionPath(docRevId || "", docDocumentId)} docRevVersion={docRevVersion} docRevName={docRevName} />
+                  <DocTitle
+                    url={documentVersionPath(docRevId || "", docDocumentId)}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
                 <Grid item={true}>
                   <Typography

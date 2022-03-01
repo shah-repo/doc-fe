@@ -226,7 +226,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle url={documentVersionPath(docRevId || "", docDocumentId)} docRevVersion={docRevVersion} docRevName = {docRevName} />
+                  <DocTitle
+                    url={documentVersionPath(docRevId || "", docDocumentId)}
+                    docRevVersion={docRevVersion} docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid
