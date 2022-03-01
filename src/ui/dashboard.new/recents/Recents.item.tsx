@@ -1,8 +1,6 @@
 import {
   Box,
-  Grid,
-  Link,
-  ListItemIcon,
+  Grid, ListItemIcon,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -18,8 +16,9 @@ import {
 } from "../../../state/ducks/dashboard.new/recents/types";
 import { changeRequestEditPath } from "../../../ui/change.request/utils/paths";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
+import ApprovalTitle from "../line.items/common/ApprovalTitle/presenter";
+import DocId from "../line.items/common/DocId/presenter";
 import { StyledListItem } from "../line.items/common/StyledListItem";
-import { StyleTooltip } from "../line.items/common/StyleTooltip";
 import {
   DocTypeGroups,
 } from "../line.items/common/types";
@@ -68,78 +67,18 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
           >
             <Grid item={true}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <Link
-                  href={changeRequestEditPath(itemId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    {docId}
-                  </Typography>
-                </Link>
+                <DocId url={changeRequestEditPath(itemId)}  docId={docId}/>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <Link
-                  href={documentVersionPath(docRevId || "", itemId)}
-                  color="inherit"
-                  className={classes.link}
-                >
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.typography}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    {docId}
-                  </Typography>
-                </Link>
+                <DocId url={documentVersionPath(docRevId || "", itemId)}  docId={docId}/>
               )}
             </Grid>
             <Grid zeroMinWidth item={true} className={classes.truncateText}>
               {docTypeGroup === DocTypeGroups.CHANGE_REQUEST && (
-                <StyleTooltip title={docTitle} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
-                  <Link
-                    href={changeRequestEditPath(itemId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {docTitle}
-                    </Typography>
-                  </Link>
-                </StyleTooltip>
+                <ApprovalTitle url={changeRequestEditPath(itemId)} title={docTitle}/>
               )}
               {docTypeGroup !== DocTypeGroups.CHANGE_REQUEST && (
-                <StyleTooltip title={docTitle} placement="top-start" arrow PopperProps={{ popperOptions: {} }}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", itemId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={classes.typographyBold}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {docTitle}
-                    </Typography>
-                  </Link>
-                </StyleTooltip>
+                <ApprovalTitle url={documentVersionPath(docRevId || "", itemId)} title={docTitle}/>
               )}
             </Grid>
             <Grid
