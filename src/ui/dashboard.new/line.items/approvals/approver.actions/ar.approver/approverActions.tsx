@@ -3,9 +3,7 @@ import {
   Box,
   Collapse,
   Grid,
-  IconButton,
-  Link,
-  List,
+  IconButton, List,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -27,7 +25,9 @@ import { changeRequestEditPath } from "../../../../../change.request/utils/paths
 import { getInitalsFromName } from "../../../../../components/icons/avatar/helpers";
 import Text from "../../../../../components/Text";
 import Colors from "../../../../../layout/theme/utils/colors";
+import ApprovalTitle from "../../../common/ApprovalTitle/presenter";
 import { getDocIcon } from "../../../common/DocIcon";
+import DocId from "../../../common/DocId/presenter";
 import { HoverStyleChip } from "../../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../../common/NormalStyleChipApprovalApproved";
@@ -244,7 +244,8 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid> */}
                 <Grid item={true}>
-                  <Link
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
+                  {/* <Link
                     href={changeRequestEditPath(arChangeRequestId)}
                     color="inherit"
                     className={classes.link}
@@ -258,7 +259,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     >
                       {arId}
                     </Typography>
-                  </Link>
+                  </Link> */}
                 </Grid>
                 {/* {arTitle && (
                   <Grid item={true}>
@@ -274,7 +275,8 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={arTitle}/>
+                  {/* <StyleTooltip
                     title={arTitle}
                     placement="top-start"
                     arrow
@@ -295,7 +297,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                         {arTitle}
                       </Typography>
                     </Link>
-                  </StyleTooltip>
+                  </StyleTooltip> */}
                 </Grid>
               </Grid>
               <Grid

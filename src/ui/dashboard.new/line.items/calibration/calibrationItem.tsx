@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
-  Grid,
-  Link,
-  ListItemIcon,
+  Grid, ListItemIcon,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -14,6 +12,8 @@ import { ReactComponent as PinSolidIcon } from "../../../../assets/images/pin_so
 import { ActionTypes } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../components/Text";
 import { documentVersionPath } from "../../../document.revision/utils/paths";
+import DocId from "../common/DocId/presenter";
+import DocTitle from "../common/DocTitle/presenter";
 import { StyledListItem } from "../common/StyledListItem";
 import { StyleTooltip } from "../common/StyleTooltip";
 import { styles } from "./calibrationItem.styles";
@@ -87,59 +87,24 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <Link
-                    href={
-                      docId
+                  <DocId url={
+                    docId
+                      ? documentVersionPath(docRevId || "", docDocumentId)
+                      : "#"
+                  } docId={docId} />
+
+                </Grid>
+                <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                  <DocTitle
+                    url={
+                      docRevId
                         ? documentVersionPath(docRevId || "", docDocumentId)
                         : "#"
                     }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typographyBold} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={
-                        docRevId
-                          ? documentVersionPath(docRevId || "", docDocumentId)
-                          : "#"
-                      }
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
+
                 </Grid>
                 <Grid item={true}>
                   <Typography

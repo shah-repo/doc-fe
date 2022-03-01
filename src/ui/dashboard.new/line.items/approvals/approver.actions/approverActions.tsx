@@ -1,8 +1,6 @@
 import {
   Avatar,
-  Grid,
-  Link,
-  ListItemAvatar,
+  Grid, ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -19,6 +17,8 @@ import { getInitalsFromName } from "../../../../components/icons/avatar/helpers"
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import Colors from "../../../../layout/theme/utils/colors";
+import DocId from "../../common/DocId/presenter";
+import DocTitle from "../../common/DocTitle/presenter";
 import { HoverStyleChip } from "../../common/HoverStyleChipApprovalApproved";
 import { HoverStyleChip as RejectedHoverStyleChip } from "../../common/HoverStyleChipApprovalRejected";
 import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
@@ -210,21 +210,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid> */}
                 <Grid item={true}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId= {docId}/>
                 </Grid>
                 {/* {docRevName && (
                   <Grid item={true}>
@@ -240,36 +226,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={documentVersionPath(docRevId || "", docDocumentId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <>
-                          <Text translation="dashboard.revision" />
-                          &nbsp;{docRevVersion} {docRevName}
-                        </>
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <DocTitle url={documentVersionPath(docRevId || "", docDocumentId)} docRevVersion={docRevVersion} docRevName = {docRevName} />
                 </Grid>
               </Grid>
               <Grid
