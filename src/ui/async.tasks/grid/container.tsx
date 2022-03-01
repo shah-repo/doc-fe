@@ -31,7 +31,7 @@ const AsyncTasksContainer: React.FunctionComponent<
           queryDict: {
             dataState,
           },
-          columnConfig: JSON.stringify(gridConfiguration.columns),
+          columnConfig: JSON.stringify(columns),
         },
         TABLE_NAME
       )
