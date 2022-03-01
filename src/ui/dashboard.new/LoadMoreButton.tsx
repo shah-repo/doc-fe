@@ -19,6 +19,7 @@ const styles = makeStyles(() =>
       "text-transform": "uppercase",
       "color": Colors.navy,
       "margin": 0,
+      "margin-top": 2,
       "&:hover": {
         backgroundColor: "transparent",
       },
