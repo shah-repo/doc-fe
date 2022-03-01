@@ -418,7 +418,7 @@ export function KendoPanel<T extends { id?: string }>({
   const itemChange = ({ dataItem, field, value }: GridItemChangeEvent) => {
     // For Update
     const grp = typeof value === "boolean" ? dataItem.group : value;
-    const isLHR = GroupWithGroupOptions[grp]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
+    const isLHR = GroupWithGroupOptions[grp]?.includes(DOC_TYPE_GROUP_OPTION.BASE_LHR);
     let newData: DocumentType[] = [];
     if (dataItem.id) {
       newData = map(actualData, (item) => {

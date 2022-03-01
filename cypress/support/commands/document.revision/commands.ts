@@ -409,7 +409,8 @@ Cypress.Commands.add("drSaveDocumentWithoutaudit", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   cy.checkToastMessage({ exists: false });
-
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastError", () => {
@@ -425,6 +426,8 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastErro
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
