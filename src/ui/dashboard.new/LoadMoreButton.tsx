@@ -19,6 +19,7 @@ const styles = makeStyles(() =>
       "text-transform": "uppercase",
       "color": Colors.navy,
       "margin": 0,
+      "margin-top": 2,
       "&:hover": {
         backgroundColor: "transparent",
       },
@@ -45,7 +46,7 @@ export const LoadMoreButton: React.FunctionComponent<Props>  = ({ disable = fals
       >
         <Text message={label} />
       </Button>
-      <LoadMore />
+      <LoadMore fill={disable ? Colors.hint_gray : Colors.navy}/>
     </Box>
   )
   ; };
