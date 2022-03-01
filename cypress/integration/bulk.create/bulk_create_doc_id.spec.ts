@@ -92,7 +92,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
     });
 
-    context("[API]Update BLC document type to have WIP status", () => {
+    context("[API]Create documents for bulk create", () => {
       it("[API]Login first tester", (done: any) => {
         cy.authApiLogin({
           email: USERS[1].email,
