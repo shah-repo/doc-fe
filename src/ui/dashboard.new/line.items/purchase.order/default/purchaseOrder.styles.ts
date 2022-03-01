@@ -13,7 +13,11 @@ export const styles = makeStyles(() =>
       paddingLeft: "25px",
     },
     link: {
-      color: Colors.black,
+      "color": Colors.black,
+      "textDecoration": "none",
+      "&:hover": {
+        textDecoration: "underline",
+      },
     },
     linkTextColor: {
       color: Colors.navy,

@@ -5,6 +5,7 @@ import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
 
@@ -14,23 +15,25 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   getOptionLabel,
   renderOption,
   filterOptions,
+  debounceFilterInput,
   groupBy,
   refresh,
   filterSelectedOptions = false,
   freeSolo = false,
   multiple = false,
   options,
+  modifiedOptions,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",
   placeholder,
   disabled,
   loading,
+  groupByKey,
   value,
   inputStyle = {},
   ...props
 }) => {
-
   const { workspaceState } = FB.useStores();
   return (
     <>
@@ -56,12 +59,14 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
             renderOption,
             filterSelectedOptions,
             groupBy,
-            options,
             multiple,
             defaultValue,
             freeSolo,
             filterOptions,
           }}
+          options={modifiedOptions}
+          onInputChange={debounceFilterInput}
+          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">

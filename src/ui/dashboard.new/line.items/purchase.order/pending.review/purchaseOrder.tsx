@@ -12,6 +12,7 @@ import {
 import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
 import { ReactComponent as DownloadPdfIcon } from "../../../../../assets/images/download_pdf.svg";
@@ -33,6 +34,8 @@ import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import Colors from "../../../../layout/theme/utils/colors";
 import { getStatusLabel } from "../../common/DocIcon";
+import DocId from "../../common/DocId/presenter";
+import DocTitle from "../../common/DocTitle/presenter";
 import DownloadHtmlPreview from "../../common/DownloadHtmlPreview";
 import { HoverStyleChip } from "../../common/HoverStyleChipPendingReview";
 import { NormalStyleChip } from "../../common/NormalStyleChipPendingReview";
@@ -226,51 +229,14 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             <>
               <Grid container={true} wrap="nowrap" alignItems="center">
                 <Grid item={true}>
-                  <Link
-                    href={documentVersionPath(docRevId || "", docDocumentId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={documentVersionPath(docRevId || "", docDocumentId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <DocTitle
+                    url={documentVersionPath(docRevId || "", docDocumentId)}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
                 <Grid item={true}>
                   <Typography
@@ -493,8 +459,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
-                      <Link
-                        href={
+                      <RouterLink
+                        to={
                           poItem.rtext
                             ? documentVersionPath(
                               purchaseOrderSupplierDocRevId || "",
@@ -503,6 +469,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                             : "#"
                         }
                         color="inherit"
+                        className={classes.link}
                       >
                         <Typography
                           component="span"
@@ -512,7 +479,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                         >
                           {poItem.rtext}
                         </Typography>
-                      </Link>
+                      </RouterLink>
                     </Grid>
                   </Grid>
                 </StyledListItem>

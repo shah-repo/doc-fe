@@ -249,10 +249,6 @@ context("Mpi Template", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create MPI document", () => {
@@ -263,6 +259,10 @@ context("Mpi Template", () => {
 
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -456,6 +456,10 @@ context("Mpi Template", () => {
 
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
     });
 

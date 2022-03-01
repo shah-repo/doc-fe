@@ -3,7 +3,6 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -100,12 +99,13 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Open Group Management", () => {
-      cy.navigClickOnItem({ navigItem: NavigationItems.GROUP_MANAGEMENT });
+      cy.grpNavigateToGroupManagement();
     });
   });
 
   context("Add Group One", () => {
     it("Open 'Add Group' dialog", () => {
+      cy.wait(1500);
       cy.grpClickAddGroup();
     });
 
@@ -132,6 +132,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Add Group Two", () => {
     it("Open 'Add Group' dialog", () => {
+      cy.wait(1500);
       cy.grpClickAddGroup();
     });
 
@@ -338,9 +339,9 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Approve & Release Document", () => {
-    // it("clicks on 'Save' button", () => {
-    //   cy.drClickCreateDocumentWithApiCallForForms();
-    // });
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
