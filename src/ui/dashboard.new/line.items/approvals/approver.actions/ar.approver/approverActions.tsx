@@ -245,21 +245,6 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 </Grid> */}
                 <Grid item={true}>
                   <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
-                  {/* <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {arId}
-                    </Typography>
-                  </Link> */}
                 </Grid>
                 {/* {arTitle && (
                   <Grid item={true}>
@@ -276,28 +261,6 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)} title={arTitle}/>
-                  {/* <StyleTooltip
-                    title={arTitle}
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={changeRequestEditPath(arChangeRequestId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {arTitle}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip> */}
                 </Grid>
               </Grid>
               <Grid
