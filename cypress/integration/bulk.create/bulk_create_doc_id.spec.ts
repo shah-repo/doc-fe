@@ -102,89 +102,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
         });
       });
 
-      it("Change fields config in BLC document type", () => {
-        cy.drUpdateDocumentTypeName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          id: BLCdocumentType[0].id,
-          payload: {
-            fieldsConfig: {
-              D: {
-                visible: false,
-                required: false,
-              },
-              E: {
-                label: "Record Type",
-                visible: false,
-                required: true,
-              },
-              F: {
-                label: "Record ID",
-                visible: false,
-                required: true,
-              },
-              G: {
-                visible: false,
-                required: false,
-              },
-              I: {
-                visible: false,
-              },
-              J: {
-                visible: false,
-              },
-              K: {
-                label: "Void",
-                visible: true,
-              },
-              L: {
-                label: "Correction",
-                visible: true,
-              },
-              N: {
-                label: "Approve and Release",
-                visible: true,
-              },
-              O: {
-                label: "Record History",
-                visible: true,
-              },
-              R: {
-                visible: false,
-              },
-              S: {
-                label: "Update Record",
-                visible: true,
-              },
-              A1: {
-                label: "WIP",
-                visible: true,
-              },
-              A2: {
-                label: "Voided",
-                visible: true,
-              },
-              A3: {
-                label: "Archive",
-                visible: true,
-              },
-              P1: {
-                label: "WIP",
-                visible: true,
-              },
-              P2: {
-                label: "Voided",
-                visible: true,
-              },
-              P3: {
-                label: "Archive",
-                visible: true,
-              },
-            },
-          },
-        });
-      });
-
       it("[API]Create Bulk Create form", (done: any) => {
         cy.grpGetGroupByName({
           sessionId: loginResponse.sessionId,
@@ -450,6 +367,91 @@ context("Bulk create public, private and reserved doc-ids", () => {
             employeeId: adminEmployee.id,
             sessionId: loginResponse.sessionId,
           });
+        });
+      });
+    });
+
+    context("[WIP]Create documents for bulk create", () => {
+      it("Change fields config in BLC document type", () => {
+        cy.drUpdateDocumentTypeName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          id: BLCdocumentType[0].id,
+          payload: {
+            fieldsConfig: {
+              D: {
+                visible: false,
+                required: false,
+              },
+              E: {
+                label: "Record Type",
+                visible: false,
+                required: true,
+              },
+              F: {
+                label: "Record ID",
+                visible: false,
+                required: true,
+              },
+              G: {
+                visible: false,
+                required: false,
+              },
+              I: {
+                visible: false,
+              },
+              J: {
+                visible: false,
+              },
+              K: {
+                label: "Void",
+                visible: true,
+              },
+              L: {
+                label: "Correction",
+                visible: true,
+              },
+              N: {
+                label: "Approve and Release",
+                visible: true,
+              },
+              O: {
+                label: "Record History",
+                visible: true,
+              },
+              R: {
+                visible: false,
+              },
+              S: {
+                label: "Update Record",
+                visible: true,
+              },
+              A1: {
+                label: "WIP",
+                visible: true,
+              },
+              A2: {
+                label: "Voided",
+                visible: true,
+              },
+              A3: {
+                label: "Archive",
+                visible: true,
+              },
+              P1: {
+                label: "WIP",
+                visible: true,
+              },
+              P2: {
+                label: "Voided",
+                visible: true,
+              },
+              P3: {
+                label: "Archive",
+                visible: true,
+              },
+            },
+          },
         });
       });
     });
