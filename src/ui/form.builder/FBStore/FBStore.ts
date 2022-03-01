@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { action, observable, set } from "mobx";
 import { FBAuditData } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -7,6 +7,11 @@ import FBRequest from "../FBApi/FBApi.request";
 // needs such as audit
 class FBStore {
   @observable public audit = new FBRequest<FBAuditData[], null>(FBEndpoint.DocumentRevisionAudit);
+  @observable public isHistoryTabSelected: boolean | undefined;
+  @action public setIsHistoryTabSelected = (flag) => {
+    set(this, "isHistoryTabSelected", flag);
+  };
+  @action public getIsHistoryTabSelected = () => this.isHistoryTabSelected;
 }
 
 export default new FBStore();
