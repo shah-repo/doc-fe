@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
 import { ReactComponent as AttachmentIcon } from "../../../../../assets/images/attachment.svg";
@@ -453,8 +454,8 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                       </Typography>
                     </Grid>
                     <Grid item md={9} sm={6}>
-                      <Link
-                        href={
+                      <RouterLink
+                        to={
                           poItem.rtext
                             ? documentVersionPath(
                               purchaseOrderSupplierDocRevId || "",
@@ -463,6 +464,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                             : "#"
                         }
                         color="inherit"
+                        className={classes.link}
                       >
                         <Typography
                           component="span"
@@ -472,7 +474,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                         >
                           {poItem.rtext}
                         </Typography>
-                      </Link>
+                      </RouterLink>
                     </Grid>
                   </Grid>
                 </StyledListItem>
