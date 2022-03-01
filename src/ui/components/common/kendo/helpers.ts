@@ -185,3 +185,12 @@ export const pagerSettings: GridPagerSettings = {
   pageSizes: [25, 50, 75, 100, 500],
   previousNext: true,
 };
+
+export const hideFilterOperatorTooltip = () => {
+  const selector = document.querySelectorAll(".k-filtercell-operator span [role='listbox']");
+  if (!isEmpty(selector)) {
+    selector.forEach((item) => {
+      item.setAttribute("title", "");
+    });
+  }
+};

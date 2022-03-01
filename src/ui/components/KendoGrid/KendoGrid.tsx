@@ -36,8 +36,7 @@ import ColumnHeader from "../common/kendo/ColumnHeader";
 import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
 import {
   DisplayText,
-  hideColumnTitleOnResize,
-  orderByLockedState,
+  hideColumnTitleOnResize, orderByLockedState,
   pagerSettings,
   setColumnWidth,
   TranslatedText,
@@ -80,6 +79,7 @@ export function KendoGrid<T extends any>({
       if (tableCriteria.columnConfig) {
         setColumns(JSON.parse(tableCriteria.columnConfig));
       }
+      // hideFilterOperatorTooltip();
     }
   }, [didMount, tableCriteria]);
 

@@ -24,7 +24,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideFilterOperatorTooltip, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
@@ -140,6 +140,7 @@ export function KendoPanel<T extends { id?: string }>({
     setIsLoading(true);
     const newDataState = processWithGroups(actualData, dataState);
     setDataState(dataState);
+    hideFilterOperatorTooltip();
     setResultState(newDataState);
 
     each(initialDataState.filter?.filters as FilterDescriptor[], ({ field, value }) => {

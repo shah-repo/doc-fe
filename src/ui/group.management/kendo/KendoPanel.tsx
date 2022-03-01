@@ -41,7 +41,7 @@ import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideFilterOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
@@ -293,6 +293,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     setIsLoading(true);
     setNoDataMessage(<span />);
     dispatch(tableSearchActions.setData([], tableName));
+    hideFilterOperatorTooltip();
     dispatch(
       tableSearchActions.setSearchCriteria(
         {
@@ -325,6 +326,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           setNoDataMessage(<NoDataFound />);
         }
         dispatch(tableSearchActions.setData(data, tableName));
+
         setIsLoading(false);
         setFireAPI(false);
       })
