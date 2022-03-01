@@ -310,11 +310,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid> */}
                 <Grid item={true}>
-                  <DocId url={
-                    docId
-                      ? documentVersionPath(docRevId || "", docDocumentId)
-                      : "#"
-                  } docId={docId}/>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#" }
+                    docId={docId}
+                  />
                 </Grid>
                 {/* {docRevName && (
                   <Grid item={true}>
@@ -330,11 +329,11 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )} */}
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle url={
-                    docRevId
-                      ? documentVersionPath(docRevId || "", docDocumentId)
-                      : "#"
-                  }  docRevVersion={docRevVersion} docRevName={docRevName} />
+                  <DocTitle
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid

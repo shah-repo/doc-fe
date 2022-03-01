@@ -282,23 +282,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <DocId url={
-                    docId
-                      ? documentVersionPath(docRevId || "", docDocumentId)
-                      : "#"
-                  } docId={docId}/>
-
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docId={docId}
+                  />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={
-                      docRevId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     docRevVersion={docRevVersion}
-                    docRevName={docRevName}/>
-
+                    docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid

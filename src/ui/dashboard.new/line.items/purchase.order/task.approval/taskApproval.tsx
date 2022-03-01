@@ -2,7 +2,8 @@
 import {
   Avatar,
   Box,
-  Grid, ListItemAvatar,
+  Grid,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -199,21 +200,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 </Grid>
                 <Grid item={true}>
                   <DocId
-                    url={
-                      docId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     docId={docId}
                   />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={
-                      docRevId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />

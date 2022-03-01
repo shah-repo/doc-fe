@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
-  Grid, ListItemIcon,
+  Grid,
+  ListItemIcon,
   ListItemText,
   Typography,
 } from "@material-ui/core";
@@ -87,20 +88,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <DocId url={
-                    docId
-                      ? documentVersionPath(docRevId || "", docDocumentId)
-                      : "#"
-                  } docId={docId} />
-
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docId={docId}
+                  />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <DocTitle
-                    url={
-                      docRevId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
                     docRevVersion={docRevVersion}
                     docRevName={docRevName}
                   />

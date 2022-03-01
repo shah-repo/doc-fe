@@ -1,6 +1,7 @@
 import {
   Avatar,
-  Grid, ListItemAvatar,
+  Grid,
+  ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
