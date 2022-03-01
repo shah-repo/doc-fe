@@ -18,6 +18,10 @@ const styles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.secondary.contrastText,
       width: "100%",
       marginBottom: 20,
+      display: "flex",
+      justifyContent: "center",
+      height: "25px",
+      alignItems: "center",
     },
     evnTxt: {
       textAlign: "center",
@@ -26,13 +30,17 @@ const styles = makeStyles((theme: Theme) =>
       letterSpacing: 0,
       fontFamily: "Sora",
     },
-    evnTxtDev: {
+    devtheme: {
       background: Colors.light_slate_blue,
     },
-    evnTxtDemo: {
+    demotheme: {
       background: Colors.cerulean,
     },
+    sandboxtheme: {
+      background: Colors.blaze_orange,
+    },
     logo: {
+      maxWidth: "100%",
       marginTop: 20,
       paddingLeft: 24,
       paddingRight: 24,
