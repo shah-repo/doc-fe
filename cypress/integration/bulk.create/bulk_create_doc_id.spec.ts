@@ -371,7 +371,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
     });
 
-    context("[WIP]Create documents for bulk create", () => {
+    context("[API]Update BLC document type", () => {
       it("Change fields config in BLC document type", () => {
         cy.drUpdateDocumentTypeName({
           sessionId: loginResponse.sessionId,
