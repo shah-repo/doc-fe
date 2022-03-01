@@ -16,11 +16,12 @@ import gridConfiguration from "./column.definition";
 import { TrainingListPresenter } from "./presenter";
 import KendoGridStyles from "./presenter.styles";
 
+export const TRAINING_TABLE_NAME = "training";
+
 const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () => {
-  const TABLE_NAME = "training";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
-  const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
+  const tableCriteria = useSelector(getTableCriteria(TRAINING_TABLE_NAME));
   const classes = KendoGridStyles();
 
   const setSearchStatus = (
@@ -37,7 +38,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
           },
           columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        TABLE_NAME
+        TRAINING_TABLE_NAME
       )
     );
   };
@@ -75,7 +76,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
   return (
     <>
       <TrainingListPresenter
-        tableName={TABLE_NAME}
+        tableName={TRAINING_TABLE_NAME}
         tableCriteria={tableCriteria}
         schema={schema}
         columns={gridConfiguration.columns}
