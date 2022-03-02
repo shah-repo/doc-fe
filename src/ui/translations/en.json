@@ -1172,7 +1172,7 @@
   "training.stats.all": "ALL",
   "training.stats.title": "TRAININGS OUTSTANDING",
   "training.stats.totalOutstanding": "Total Outstanding",
-  "async.tasks.type": "Type",
+  "async.tasks.type": "Select Task Type",
   "async.tasks.timestamp": "Date & Time",
   "async.tasks.user.emails": "User Emails",
   "async.tasks.last.email.sent": "Last Password Email Sent Date & Time",

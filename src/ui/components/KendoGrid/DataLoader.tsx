@@ -40,8 +40,16 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
   const lastSuccess = React.useRef<string>("");
   const pending = React.useRef<string>("");
   const odString = `${toODataString(updatedDataState)}&$table="${tableName}"`;
-  const requestDataIfNeeded = () => {
-    if (pending.current || odString === lastSuccess.current) {
+
+  React.useEffect(() => {
+    if (tableCriteria.forceUpdate) {
+      requestDataIfNeeded(tableCriteria.forceUpdate);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableCriteria.forceUpdate]);
+
+  const requestDataIfNeeded = (flag?: boolean) => {
+    if (!flag && (pending.current || odString === lastSuccess.current)) {
       return;
     }
     pending.current = odString;
@@ -49,6 +57,7 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
       tableSearchActions.setSearchCriteria(
         {
           ...tableCriteria,
+          forceUpdate: false,
           apiError: "",
         },
         tableName
