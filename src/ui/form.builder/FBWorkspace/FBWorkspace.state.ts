@@ -233,9 +233,9 @@ class FBWorkspaceState extends FBSchemaState {
             urlValues: { documentId: id },
             method: "get",
           });
-          if (FBStore?.isHistoryTabSelected) {
-            this.loadAudit = true;
-          }
+        }
+        if (FBStore?.isHistoryTabSelected) {
+          this.loadAudit = true;
         }
         this.documentRevApi.onSuccess();
       }
