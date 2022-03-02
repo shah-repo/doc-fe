@@ -11,7 +11,6 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../.
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
-import ListBoxComponent from "../../../components/common/autocomplete/ListBoxComponent";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
@@ -114,33 +113,56 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   }, [documentReferences]);
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
+  const [offset, setOffset] = React.useState(0);
+  const limit = 100;
+
+  useEffect(() => {
+    const queryParams = {
+      offset,
+      limit,
+      searchText: inputValue || null,
+      fields: "name,document.docId",
+    };
+    loadAction([], queryParams);
+  }, [inputValue, offset]);
 
   useEffect(() => {
     if (loadAsyncState.status === AsyncStatus.Success) {
-      filterOptions(null, inputValue);
+      filterOptions();
     }
   }, [loadAsyncState]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-    loadAction();
-  }, [open]);
-
-  const filterOptions = (event: any, inputVal: any) => {
-    if (inputVal && inputVal.length > 2) {
-      setInputValue(inputVal);
+  const filterOptions = () => {
+    if (inputValue) {
       const updatedOptions = options.filter(
-        (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
+        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
       );
       setModifiedOptions(updatedOptions);
-    } else if (!inputVal) {
-      setInputValue(inputVal);
+    } else {
       setModifiedOptions(options);
     }
   };
-  const debounceFunction = debounce(filterOptions, 1000);
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputVal && inputVal.length > 2) {
+      setInputValue(inputVal);
+    } else if (!inputVal) {
+      setInputValue(inputVal);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000);
+
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) ===
+      listboxNode.clientHeight
+    ) {
+      const nextOffset = offset + limit;
+      setOffset(nextOffset);
+    }
+  };
 
   return (
     <Field {...fieldProps} label={undefined}>
@@ -196,7 +218,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onInputChange={debounceFunction}
         multiple
         disableClearable
-        ListboxComponent={ListBoxComponent}
+        ListboxProps={{ onScroll }}
         open={open}
         onOpen={() => {
           setOpen(true);
