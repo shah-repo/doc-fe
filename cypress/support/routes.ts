@@ -15,6 +15,7 @@ type ICyRoutes = {[key in keyof typeof CyRoutes]: {
 export enum CyRoutes {
   GetAttachmentsAttached = "GetAttachmentsAttached",
   GetAttachments = "GetAttachments",
+  CancelDraft = "CancelDraft",
   EmployeesGet = "EmployeesGet",
   EmployeesPost = "EmployeesPost",
   GroupsGet = "GroupsGet",
@@ -230,6 +231,16 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "PATCH",
       url: "/api/v1/document_revisions/upgradeToReleasedForm/*",
+    },
+    callConfig: {
+      responseTimeout: 20 * 1000,
+      requestTimeout: 20 * 1000,
+    },
+  },
+  CancelDraft: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/document_revisions/cancel/*",
     },
     callConfig: {
       responseTimeout: 20 * 1000,

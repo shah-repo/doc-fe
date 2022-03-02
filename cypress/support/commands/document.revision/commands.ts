@@ -37,6 +37,7 @@ declare global {
       drFilterDocListByDocIdAndStatus(params: { docId: string; status: string }): Chainable<Subject>;
       drChangeOwner(params: { employee: string }): Chainable<Subject>;
       drChangeOwnerFromMenu(params: { employee: string }): Chainable<Subject>;
+      drCancelDraftFromMenu(): Chainable<Subject>;
       drClickReviseDocument(): Chainable<Subject>;
       drClickTrainingRequired(): Chainable<Subject>;
       drCheckTypeOfRevisionChangeOptions(): Chainable<Subject>;
@@ -469,6 +470,14 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
 Cypress.Commands.add("drChangeOwnerFromMenu", (params: { employee: string }) => {
   cy.get("#HeaderMenuButton").arrowClick();
   cy.drChangeOwner({ employee: params.employee });
+});
+
+Cypress.Commands.add("drCancelDraftFromMenu", () => {
+  cy.get("#HeaderMenuButton").arrowClick();
+  cy.get("[data-cy=\"cancelDraftButton\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.CancelDraft], () => {
+    cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  });
 });
 
 Cypress.Commands.add("drClickUpgradeForm", () => {
