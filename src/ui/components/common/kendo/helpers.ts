@@ -188,15 +188,12 @@ export const pagerSettings: GridPagerSettings = {
 
 
 export const hideOperatorTooltip = () => {
-  const selector = document.querySelectorAll(".k-dropdown-operator .k-dropdown-wrap");
-  if (selector) {
-    selector.forEach((item) => {
-      item.setAttribute("title", "");
-    });
-  }
+  document.querySelectorAll(".k-dropdown-operator .k-dropdown-wrap")?.forEach((item) => {
+    item.setAttribute("title", "");
+  });
   setTimeout(() => {
-    document.querySelectorAll(".k-master-row.k-alt").forEach((item) => {
-      item.setAttribute("class", "k-master-row");
-    });
+      document.querySelectorAll(".k-master-row.k-alt")?.forEach((item) => {
+        item.setAttribute("class", "k-master-row");
+      });
   });
 };
