@@ -5,6 +5,7 @@ import {
   MultiSelectFilterChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridCellProps } from "@progress/kendo-react-grid";
+import { filter, map } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -17,6 +18,7 @@ import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 import KendoGridStyles from "../styles";
+import { AddUserManage } from "../types";
 
 interface GroupOptions {
   label: string;
@@ -31,12 +33,18 @@ interface GroupOptions {
   isOfficial: boolean;
 }
 
-export const GroupsCell = ({
-  dataItem,
-  rowType,
-  colSpan,
-  columnIndex,
-}: GridCellProps) => {
+interface GroupsProps extends GridCellProps {
+  upgridData?: AddUserManage;
+}
+
+export const GroupsCell = (props: GroupsProps) => {
+  const {
+    dataItem,
+    rowType,
+    colSpan,
+    columnIndex,
+    upgridData,
+  } = props;
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
@@ -44,8 +52,15 @@ export const GroupsCell = ({
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
   React.useEffect(() => {
+    const upDatedGroupIds = map(upgridData?.groups, "id");
+    const selectedGroups = filter(groupOptions, (o) => (upDatedGroupIds.includes(o.value)));
     setData(groupOptions);
     setResult(defaultGroups);
+    if (selectedGroups.length) {
+      setResult(selectedGroups as any);
+    } else {
+      setResult(defaultGroups);
+    }
   }, [groupOptions, defaultGroups, dataItem.id]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {

@@ -3,14 +3,15 @@ import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const NameCell = ({
-  dataItem,
-  rowType,
-  colSpan,
-  style,
-  className,
-  columnIndex,
-}: GridCellProps) => {
+export const NameCell = (props: GridCellProps) => {
+  const {
+    dataItem,
+    rowType,
+    colSpan,
+    style,
+    className,
+    columnIndex,
+  } = props;
   const updateNameField = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dataItem.name = target?.value;
   };

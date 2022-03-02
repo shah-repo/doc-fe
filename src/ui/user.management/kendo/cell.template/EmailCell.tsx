@@ -3,14 +3,15 @@ import { GridCellProps } from "@progress/kendo-react-grid";
 import React from "react";
 import Tooltip from "../../../components/common/kendo/Tooltip";
 
-export const EmailCell = ({
-  dataItem,
-  rowType,
-  colSpan,
-  columnIndex,
-  style,
-  className,
-}: GridCellProps) => {
+export const EmailCell  = (props: GridCellProps) => {
+  const {
+    dataItem,
+    rowType,
+    colSpan,
+    columnIndex,
+    style,
+    className,
+  } = props;
   const updateEmailField = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dataItem.email = target.value;
   };
