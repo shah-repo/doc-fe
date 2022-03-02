@@ -37,6 +37,7 @@ import ColumnShowHideMenu from "../common/kendo/ColumnShowHideMenu";
 import {
   DisplayText,
   hideColumnTitleOnResize,
+  hideOperatorTooltip,
   orderByLockedState,
   pagerSettings,
   setColumnWidth,
@@ -325,6 +326,9 @@ export function KendoGrid<T extends any>({
     data: resultState.data,
     collapsedIds: collapsedState,
   });
+
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
 
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
