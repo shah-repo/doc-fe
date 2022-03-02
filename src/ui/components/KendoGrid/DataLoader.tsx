@@ -9,7 +9,6 @@ import { authActions } from "../../../state/ducks/auth";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { hideFilterOperatorTooltip } from "../common/kendo/helpers";
 import { getDynamicPayloadItems, updateDataState } from "./DataLoader.util";
 import { DataLoaderProps } from "./interfaces";
 
@@ -78,7 +77,6 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
         } else {
           requestDataIfNeeded();
         }
-        hideFilterOperatorTooltip();
       }).catch((exception) => {
         if (axios.isCancel(exception)) {
           return;

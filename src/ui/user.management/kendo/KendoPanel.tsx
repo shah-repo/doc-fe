@@ -33,7 +33,7 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, hideFilterOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -266,7 +266,6 @@ export function KendoPanel<T>({
           setNoDataMessage(<NoDataFound />);
         }
         dispatch(tableSearchActions.setData(data, tableName));
-        hideFilterOperatorTooltip();
         setIsLoading(false);
         setFireAPI(false);
       })
