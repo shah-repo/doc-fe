@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds
+  setGroupIds,
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -12,7 +12,7 @@ import {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
-  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar
+  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy, startCase } from "lodash";
