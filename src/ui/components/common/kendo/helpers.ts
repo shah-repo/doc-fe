@@ -194,4 +194,9 @@ export const hideOperatorTooltip = () => {
       item.setAttribute("title", "");
     });
   }
+  setTimeout(() => {
+    document.querySelectorAll(".k-master-row.k-alt").forEach((item) => {
+      item.setAttribute("class", "k-master-row");
+    });
+  });
 };
