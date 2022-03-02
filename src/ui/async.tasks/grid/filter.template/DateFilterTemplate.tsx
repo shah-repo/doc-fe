@@ -26,7 +26,7 @@ export const DateFilterTemplate = ({
           MomentFormats.AsyncTasksDefaultDateTimeFormatter
         )
         : "",
-      operator: isValueExists ? "eq" : "",
+      operator: isValueExists ? "lte" : "",
       syntheticEvent,
     });
   };

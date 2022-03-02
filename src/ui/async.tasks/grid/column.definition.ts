@@ -25,7 +25,7 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     width: 25,
     cell: KendoCellTemplates.DURATION,
-    filterCell: KendoGridFilterCell.CREATED_AT,
+    filterCell: KendoGridFilterCell.ASYNC_CREATED_AT,
   },
   {
     field: "duration",

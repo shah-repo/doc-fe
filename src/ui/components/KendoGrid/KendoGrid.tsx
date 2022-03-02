@@ -221,7 +221,7 @@ export function KendoGrid<T extends any>({
     [KendoGridFilterCell.STATE]: StateFilter,
     [KendoGridFilterCell.TASKTYPE]: TaskTypeFilter,
     [KendoGridFilterCell.STATUS]: AsyncStatusFilter,
-    [KendoGridFilterCell.CREATED_AT]: AsyncDateFilter,
+    [KendoGridFilterCell.ASYNC_CREATED_AT]: AsyncDateFilter,
   };
 
   const sortedColumnDefinitions = orderByLockedState(columns, []);
