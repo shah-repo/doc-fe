@@ -3,7 +3,7 @@ import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -17,7 +17,7 @@ import {
   GridFilterCellProps,
   GridNoRecords,
   GridRowClickEvent,
-  GridToolbar,
+  GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, set, sortBy, startCase } from "lodash";
@@ -34,14 +34,14 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { userManagementActions } from "../../../state/ducks/userManagement";
 import {
   GetEmployeeResponse,
-  LoadCompanyGroup,
+  LoadCompanyGroup
 } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
@@ -50,7 +50,7 @@ import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
-  TablePanelStateProps,
+  TablePanelStateProps
 } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -520,6 +520,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
   };
+
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
 
   const tableRenderer = ({ width }: Size) => (
     <>

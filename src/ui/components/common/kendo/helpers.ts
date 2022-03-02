@@ -185,3 +185,13 @@ export const pagerSettings: GridPagerSettings = {
   pageSizes: [25, 50, 75, 100, 500],
   previousNext: true,
 };
+
+
+export const hideOperatorTooltip = () => {
+  const selector = document.querySelectorAll(".k-dropdown-operator .k-dropdown-wrap");
+  if (selector) {
+    selector.forEach((item) => {
+      item.setAttribute("title", "");
+    });
+  }
+};

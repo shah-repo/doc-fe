@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
-  setGroupIds,
+  setGroupIds
 } from "@progress/kendo-react-data-tools";
 import {
   Grid as KendoGrid,
@@ -12,7 +12,7 @@ import {
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDataStateChangeEvent,
-  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
+  GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { find, isEmpty, map, sortBy, startCase } from "lodash";
@@ -33,7 +33,7 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
@@ -461,6 +461,9 @@ export function KendoPanel<T>({
     gridData.unshift(newDataItem);
     setResultState(processWithGroups(gridData, dataState));
   };
+
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
 
   const tableRenderer = ({ width }: Size) => (
     <>
