@@ -326,6 +326,12 @@ export function KendoGrid<T extends any>({
     collapsedIds: collapsedState,
   });
 
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  const selector = document.querySelector(".k-dropdown-operator .k-dropdown-wrap");
+  if (selector) {
+    selector.setAttribute("title", "");
+  }
+
   // Render Kendo Columns
   const renderKendoGrid = ({ width }: Size) => (
     <>
