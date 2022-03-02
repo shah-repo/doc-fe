@@ -8,6 +8,7 @@ import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/du
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
+import FBStore from "../../../form.builder/FBStore/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -46,7 +47,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   });
   const updateDocAsync = useAsync({
     onSuccess: () => {
-      dispatch(documentRevisionsActions.loadAudit(docRevId));
+      if ( FBStore?.getIsHistoryTabSelected()) {
+        dispatch(documentRevisionsActions.loadAudit(docRevId));
+      }
       releaseRecord();
     },
   });

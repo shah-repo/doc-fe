@@ -5,7 +5,6 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../s
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import { FBSchemaProps } from "../../form.builder";
-import FBStore from "../../form.builder/FBStore/FBStore";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
 import AuditPresenter from "./Audit.presenter";
@@ -42,12 +41,6 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
   documentTypeId,
   selectedDocument,
 }) => {
-  useEffect(() => {
-    FBStore.setIsHistoryTabSelected(true);
-    return () => {
-      FBStore.setIsHistoryTabSelected(false);
-    };
-  }, []);
   useEffect(() => {
     if (documentRevisionId) {
       loadAudit(documentRevisionId);

@@ -228,12 +228,12 @@ class FBWorkspaceState extends FBSchemaState {
         this.setDirty(false);
         this.setFormInputData(data);
         if (!isEmpty(this.getItemsByType("inlineapproval"))) {
+          FBStore.audit.set({
+            url: FBEndpoint.DocumentRevisionAudit,
+            urlValues: { documentId: id },
+            method: "get",
+          });
           if (FBStore?.getIsHistoryTabSelected()) {
-            FBStore.audit.set({
-              url: FBEndpoint.DocumentRevisionAudit,
-              urlValues: { documentId: id },
-              method: "get",
-            });
             this.loadAudit = true;
           }
         }
