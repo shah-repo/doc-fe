@@ -41,7 +41,6 @@ const styles = makeStyles((theme: Theme) =>
     },
     logo: {
       maxWidth: "100%",
-      marginTop: 20,
       paddingLeft: 24,
       paddingRight: 24,
     },

@@ -24,7 +24,9 @@ const Logo: React.FunctionComponent<Props> = ({
         </div>
       )}
       <img
+        id="logo"
         src={logo}
+        style={{ marginTop: showEnvironment ? 0 : 20 }}
         className={classes.logo}
         alt="Company logo"
       />
