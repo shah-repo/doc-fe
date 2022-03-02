@@ -233,7 +233,7 @@ class FBWorkspaceState extends FBSchemaState {
             urlValues: { documentId: id },
             method: "get",
           });
-          if (FBStore?.getIsHistoryTabSelected()) {
+          if (FBStore?.isHistoryTabSelected) {
             this.loadAudit = true;
           }
         }

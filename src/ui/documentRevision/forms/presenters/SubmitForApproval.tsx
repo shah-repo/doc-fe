@@ -47,7 +47,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   });
   const updateDocAsync = useAsync({
     onSuccess: () => {
-      if ( FBStore?.getIsHistoryTabSelected()) {
+      if ( FBStore?.isHistoryTabSelected) {
         dispatch(documentRevisionsActions.loadAudit(docRevId));
       }
       releaseRecord();
