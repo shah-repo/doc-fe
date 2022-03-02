@@ -2,9 +2,10 @@
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
+import { TIME_ZONE } from "../../../common/utils/date";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
 import { TRAINING_RECORDS_SEARCH_URL } from "../../../state/ducks/training/constants";
-import { documentRevisionEffectiveDateOption, dueDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
+import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import { DateFields } from "../../training/kendo/types";
 
@@ -45,10 +46,11 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.COMPLETED_AT);
       }
       if (dueOnField) {
-        const duOnOptions = dueDateOption();
-        payload.dueOnBefore = find(duOnOptions, { text: dueOnField.value })?.value;
         if (dueOnField.value === CompletedOnDateOptions.NEXT_WEEK) {
-          payload.dueOnAfter = moment().toISOString();
+          payload.dueOnBefore = moment().tz(TIME_ZONE).add(7, "d").startOf("day").toISOString();
+          payload.dueOnAfter = moment().tz(TIME_ZONE).startOf("day").toISOString();
+        } else if (dueOnField.value === CompletedOnDateOptions.OVERDUE) {
+          payload.dueOnBefore = moment().tz(TIME_ZONE).add(-1, "d").endOf("day").toISOString();
         }
         payload.isCompleted = "false";
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.DUE_ON);
