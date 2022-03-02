@@ -255,9 +255,11 @@ Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string
 });
 
 Cypress.Commands.add("arClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PostChangeRequestsSearch, () => {
     cy.get("[data-cy=\"clearFilter\"]").arrowClick();
   });
+
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
@@ -315,7 +317,7 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick();
-      cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
+      cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
       cy.unClick();
     });
   cy.progressBarShouldNotExist();
@@ -367,7 +369,7 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
   cy.progressBarShouldNotExist();

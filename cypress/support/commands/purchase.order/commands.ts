@@ -60,6 +60,7 @@ declare global {
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
+      poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
     }
   }
 }
@@ -85,7 +86,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 
   cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
 
   cy.listLoadingElementShouldNotExist();
@@ -129,13 +130,13 @@ Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
 
 Cypress.Commands.add("poSelectUnits", () => {
   cy.get("[name=\"units\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains("Each").arrowClick();
+  cy.get("ul > li[role=option]").contains("Each").arrowClick();
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
   cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"glCode\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains("code 1").arrowClick();
+  cy.get("ul > li[role=option]").contains("code 1").arrowClick();
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
@@ -356,4 +357,13 @@ Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string 
   cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
 });
 
+Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
+  cy.listLoadingElementShouldNotExist();
+
+  cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType(`${params.supplier}`).wait(1000)
+    .arrowType("{downarrow}{enter}");
+
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
 

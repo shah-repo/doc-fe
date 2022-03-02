@@ -276,7 +276,7 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?: { approverName?: string; toastifyExists?: boolean }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();
@@ -351,7 +351,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExi
     routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
-    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApprovers];
+    routesToWait = [CyRoutes.PostOrPatchDocRev];
   }
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {

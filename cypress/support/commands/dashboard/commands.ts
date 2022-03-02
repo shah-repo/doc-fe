@@ -49,7 +49,7 @@ Cypress.Commands.add("dashRejectApprovalForListItem", (params: { listItem: strin
     .find(`[data-cy="transition-reject"]`).first()
     .arrowClick();
 
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDashboardFeed], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDashboardFeedSearch], () => {
     cy.get("div[role=dialog] button").eq(1).arrowClick();
   });
 

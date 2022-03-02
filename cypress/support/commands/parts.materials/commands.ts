@@ -128,7 +128,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 
   cy.get("[data-cy^=\"fb-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
 
   cy.listLoadingElementShouldNotExist();
