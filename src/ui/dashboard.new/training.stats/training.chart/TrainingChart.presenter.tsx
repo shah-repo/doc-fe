@@ -48,9 +48,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         value:
           dueInSeven === 0
             ? dueInSevenScaledCount
-            : overDueScaledCount === totalScaledCount
-              ? totalScaledCount
-              : totalScaledCount,
+            : totalScaledCount,
         name: TrainingStatusChartLabelTypes.DUE,
         itemStyle: {
           color: Colors.latest_yellow_varient,
