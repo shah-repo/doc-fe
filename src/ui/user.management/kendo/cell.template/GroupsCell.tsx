@@ -34,17 +34,16 @@ interface GroupOptions {
 }
 
 interface GroupsProps extends GridCellProps {
-  upgridData?: AddUserManage;
+  updatedGridData?: AddUserManage;
 }
 
-export const GroupsCell = (props: GroupsProps) => {
-  const {
-    dataItem,
-    rowType,
-    colSpan,
-    columnIndex,
-    upgridData,
-  } = props;
+export const GroupsCell = ({
+  dataItem,
+  rowType,
+  colSpan,
+  columnIndex,
+  updatedGridData,
+}: GroupsProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
@@ -52,8 +51,8 @@ export const GroupsCell = (props: GroupsProps) => {
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
   React.useEffect(() => {
-    const upDatedGroupIds = map(upgridData?.groups, "id");
-    const selectedGroups = filter(groupOptions, (o) => (upDatedGroupIds.includes(o.value)));
+    const upDatedGroupIds = map(updatedGridData?.groups, "id");
+    const selectedGroups = filter(groupOptions, (o) => upDatedGroupIds.includes(o.value));
     setData(groupOptions);
     setResult(defaultGroups);
     if (selectedGroups.length) {
@@ -61,7 +60,7 @@ export const GroupsCell = (props: GroupsProps) => {
     } else {
       setResult(defaultGroups);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupOptions, defaultGroups, dataItem.id]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
@@ -101,7 +100,10 @@ export const GroupsCell = (props: GroupsProps) => {
           defaultValue={defaultGroups}
         />
       ) : (
-        <ExpandableTemplate items={dataItem.groups.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />
+        <ExpandableTemplate
+          items={dataItem.groups.split(",")}
+          dataId={`${dataItem.id}-${columnIndex}`}
+        />
       )}
     </td>
   );

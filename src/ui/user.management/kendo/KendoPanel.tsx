@@ -114,17 +114,17 @@ export function KendoPanel<T>({
   };
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
-  const [upgridData, setUpGridData] = useState<AddUserManage>();
+  const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
       queryApi();
     },
     onError: (error) => {
-      if (gridData.length && get(gridData, "[0].inEdit") && upgridData) {
-        set(gridData, "[0].name", upgridData.user.name);
-        set(gridData, "[0].email", upgridData.user.email);
-        set(gridData, "[0].groups", upgridData.groups);
-        set(gridData, "[0].id", upgridData.user.id);
+      if (gridData.length && get(gridData, "[0].inEdit") && updatedGridData) {
+        set(gridData, "[0].name", updatedGridData.user.name);
+        set(gridData, "[0].email", updatedGridData.user.email);
+        set(gridData, "[0].groups", updatedGridData.groups);
+        set(gridData, "[0].id", updatedGridData.user.id);
         const newDataState = processWithGroups(gridData, dataState);
         setResultState(newDataState);
       }
@@ -135,7 +135,7 @@ export function KendoPanel<T>({
 
   const handleCreate = (values: AddUserManage) => {
     setIsLoading(true);
-    setUpGridData(values);
+    setUpdatedGridData(values);
     async.start(addEmployeeAction, values, async);
   };
 
@@ -143,7 +143,7 @@ export function KendoPanel<T>({
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
-    setUpGridData(undefined);
+    setUpdatedGridData(undefined);
   };
 
   let initialDataState: State;
@@ -314,7 +314,7 @@ export function KendoPanel<T>({
           )
         );
       }).finally(() => {
-        setUpGridData(undefined);
+        setUpdatedGridData(undefined);
       });
   };
 
@@ -397,7 +397,7 @@ export function KendoPanel<T>({
     status: SignUpFilterCell,
   };
   const userGroups = (props: GridCellProps) =>
-    <GroupsCell {...props} upgridData ={upgridData} />;
+    <GroupsCell {...props} updatedGridData ={updatedGridData} />;
 
   const fieldToCellMapping = {
     "user.name": NameCell,
