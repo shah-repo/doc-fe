@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
@@ -114,17 +114,14 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
   const [offset, setOffset] = React.useState(0);
-  const limit = 100;
-
-  useEffect(() => {
-    const queryParams = {
-      offset,
-      limit,
-      searchText: inputValue || null,
-      fields: "name,document.docId",
-    };
-    loadAction([], queryParams);
-  }, [inputValue, offset]);
+  const limit = 25;
+  const queryParams: DocRevQueryParam = {
+    offset,
+    limit,
+    searchText: null,
+    fields: "name,document.docId",
+    status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.PendingChange],
+  };
 
   useEffect(() => {
     if (loadAsyncState.status === AsyncStatus.Success) {
@@ -146,8 +143,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     if (inputVal && inputVal.length > 2) {
       setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0, inputVal);
     } else if (!inputVal) {
       setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0);
     }
   };
 
@@ -161,7 +162,20 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     ) {
       const nextOffset = offset + limit;
       setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
     }
+  };
+
+  const queryApi = (offset: number, searchText?: string) => {
+    queryParams.offset = offset;
+    queryParams.searchText = searchText || null;
+    loadAction([], queryParams);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+    setOffset(0);
+    queryApi(0);
   };
 
   return (
@@ -220,13 +234,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         disableClearable
         ListboxProps={{ onScroll }}
         open={open}
-        onOpen={() => {
-          setOpen(true);
-        }}
+        onOpen={onOpen}
         onClose={() => {
           setOpen(false);
         }}
-        loading={ loading }
+        loading={loading}
       />
     </Field>
   ); };
