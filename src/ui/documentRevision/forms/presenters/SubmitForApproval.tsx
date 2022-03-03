@@ -1,12 +1,14 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import { FB, FBFormState, FBProvider, FBSubmitButton, FBTextField } from "../../../form.builder";
+import FBStore from "../../../form.builder/FBStore/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -31,6 +33,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   currentDocumentType,
 }) => {
   const classes = styles();
+  const dispatch = useDispatch();
   const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
@@ -44,6 +47,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   });
   const updateDocAsync = useAsync({
     onSuccess: () => {
+      if ( FBStore?.isHistoryTabSelected) {
+        dispatch(documentRevisionsActions.loadAudit(docRevId));
+      }
       releaseRecord();
     },
   });

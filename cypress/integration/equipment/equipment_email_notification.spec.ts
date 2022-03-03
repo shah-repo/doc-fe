@@ -198,7 +198,6 @@ context("Test Equipment maintenance email notifications", () => {
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5q",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],

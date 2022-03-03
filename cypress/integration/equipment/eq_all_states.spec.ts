@@ -183,7 +183,6 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],
@@ -199,7 +198,6 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
-                      fields: [],
                       type: "calibration",
                     },
                     editorProperties: [],

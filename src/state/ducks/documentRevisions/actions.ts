@@ -79,7 +79,6 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
-    dispatch(loadAudit(id));
     dispatch(documentRevisionSet(documentRevision));
     // dispatch(documentRevisionSet(undefined, body, id));
   },
