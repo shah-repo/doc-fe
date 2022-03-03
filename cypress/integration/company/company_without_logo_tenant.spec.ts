@@ -1409,58 +1409,16 @@ context("Create Company Without Logo Golden Tenant", () => {
       SystemRequirement("REQ-3540");
       cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
-
-    it("Error message on upload Users List with incorrect email in JSON", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "incorrect_users.csv", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-      cy.checkToastMessageContains({ message: "email must be an email" });
-      cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
-      cy.get("[data-cy=\"remove-incorrect_users.csv\"]").arrowClick({ force: true });
-    });
-
-    it("Error message on upload Users List file other than json or csv", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "test.docx", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-      cy.checkToastMessageContains({ message: "has to be either CSV or JSON file!" });
-      cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
-      cy.get("[data-cy=\"remove-test.docx\"]").arrowClick({ force: true });
-    });
-
     it("Upload Users List JSON", () => {
       SystemRequirement("REQ-3550");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
-
-    it("Refresh Seed documents input", () => {
-      SystemRequirement("REQ-3570");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[name^=seed-documents-to-be-included-]>div>div:nth-child(2)>button").arrowClick();
-      });
-      cy.listLoadingElementShouldNotExist();
+    it("Verify the empty fields for white label", () => {
+      cy.get(".MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-formControl").should("have.value", "");
     });
-
-    it("Add Seed documents", () => {
-      SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
+    it("Verify the empty fields for logo", () => {
+      cy.get(".MuiBox-root").should("have.value", "");
     });
-
-    it("Error message on upload incorrect DAM JSON", () => {
-      cy.get("[data-cy=\"remove-dam.json\"]").arrowClick({ force: true });
-      cy.atchUploadDOMJSONForNCO({ fileName: "incorrect_dam.json", queue: 0 });
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-      cy.checkToastMessageContains({ message: "User email: enlil1.testmail+cy2@gmail.com is not users.csv" });
-      cy.checkToastMessageContains({ message: "Group name: QA1 is not in default NCO groups list" });
-      cy.closeAllAlertMessages();
-      cy.get("[data-cy=\"ApproveAndRelease-cancelButton\"]").arrowClick();
-      cy.get("[data-cy=\"remove-incorrect_dam.json\"]").arrowClick({ force: true });
-    });
-
     it("Upload correct DAM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
     });
