@@ -54,7 +54,6 @@ export const GroupsCell = ({
     const upDatedGroupIds = map(updatedGridData?.groups, "id");
     const selectedGroups = filter(groupOptions, (o) => upDatedGroupIds.includes(o.value));
     setData(groupOptions);
-    setResult(defaultGroups);
     if (selectedGroups.length) {
       setResult(selectedGroups as any);
     } else {
