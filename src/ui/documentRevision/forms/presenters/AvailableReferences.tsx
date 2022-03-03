@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentGroupOptionsType, QueryParams } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
@@ -114,17 +114,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
   const [offset, setOffset] = React.useState(0);
-  const limit = 100;
-
-  useEffect(() => {
-    const queryParams = {
-      offset,
-      limit,
-      searchText: inputValue || null,
-      fields: "name,document.docId",
-    };
-    loadAction([], queryParams);
-  }, [inputValue, offset]);
+  const limit = 25;
+  const queryParams: QueryParams = {
+    offset,
+    limit,
+    searchText: null,
+    fields: "name,document.docId",
+  };
 
   useEffect(() => {
     if (loadAsyncState.status === AsyncStatus.Success) {
@@ -145,9 +141,17 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     if (inputVal && inputVal.length > 2) {
+      setOffset(0);
       setInputValue(inputVal);
+      queryParams.offset = 0;
+      queryParams.searchText = inputVal;
+      loadAction([], queryParams);
     } else if (!inputVal) {
+      setOffset(0);
       setInputValue(inputVal);
+      queryParams.offset = 0;
+      queryParams.searchText = null;
+      loadAction([], queryParams);
     }
   };
 
@@ -161,6 +165,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     ) {
       const nextOffset = offset + limit;
       setOffset(nextOffset);
+      queryParams.offset = nextOffset;
+      queryParams.searchText = inputValue || null;
+      loadAction([], queryParams);
     }
   };
 
@@ -222,6 +229,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         open={open}
         onOpen={() => {
           setOpen(true);
+          setOffset(0);
+          queryParams.offset = 0;
+          queryParams.searchText = null;
+          loadAction([], queryParams);
         }}
         onClose={() => {
           setOpen(false);

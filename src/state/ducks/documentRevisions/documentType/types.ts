@@ -470,3 +470,10 @@ export enum DisplayFieldType{
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;
+
+export interface QueryParams {
+  offset: number;
+  limit: number;
+  searchText: Nullable<string>;
+  fields: "name,document.docId";
+}
