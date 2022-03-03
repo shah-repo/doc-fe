@@ -24,7 +24,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
@@ -527,6 +527,9 @@ export function KendoPanel<T extends { id?: string }>({
     data: resultState.data,
     collapsedIds: collapsedState,
   });
+
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
 
   return (
     <>

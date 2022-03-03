@@ -158,7 +158,7 @@ context("Mpi/Qpi flow", () => {
                   {
                     name: "approvals-built-in",
                     type: "approvals",
-                    index: 5,
+                    index: 2,
                     label: "Approvals",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
