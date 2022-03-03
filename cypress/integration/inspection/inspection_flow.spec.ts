@@ -1099,7 +1099,7 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
+          cy.get("ul>li[role=option]").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1119,7 +1119,7 @@ context("Inspection flow", () => {
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("1.0").arrowClick();
+          cy.get("ul>li[role=option]").contains("1.0").arrowClick();
           cy.get("[value=\"includeInInspection\"]").check();
           cy.get("[value=\"includeInFaiInspection\"]").check();
           cy.fbAddField();
@@ -1163,12 +1163,12 @@ context("Inspection flow", () => {
 
       it("Select make vs buy", () => {
         cy.get("[id$=\"make-vs-buy\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
+        cy.get("ul>li[role=option]").contains("Make").arrowClick();
       });
 
       it("Select unit of measure", () => {
         cy.get("[id$=\"unit-of-measure\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Batch").arrowClick();
+        cy.get("ul>li[role=option]").contains("Batch").arrowClick();
       });
 
       it("Select traceability required", () => {

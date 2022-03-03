@@ -252,10 +252,10 @@ context("Autocomplete 'Lots' test", () => {
             if (response.body.length > 0 ) {
               const lots = response.body;
               lots.forEach((lot) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", `${lot.document.docId} - rev ${lot.displayRevision} - ${lot.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

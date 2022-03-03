@@ -1183,7 +1183,7 @@ context("LHR flow", () => {
     it("Select 'Material one' for Part lot", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"lot_part\"]").arrowType("Material one");
-      cy.get("ul[role=listbox]>li").contains("Material one").arrowClick();
+      cy.get("ul>li[role=option]").contains("Material one").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -1481,7 +1481,7 @@ context("LHR flow", () => {
         SystemRequirement("REQ-3131");
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1593,10 +1593,10 @@ context("LHR flow", () => {
             .eq(0).arrowClick();
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Material three").arrowClick();
+          cy.get("ul>li[role=option]").contains("Material three").arrowClick();
           cy.get("[name=\"quantity\"]").arrowType("3");
           cy.get("[data-cy=\"unit\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Day(s)").arrowClick();
+          cy.get("ul>li[role=option]").contains("Day(s)").arrowClick();
           cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         });
 
@@ -1605,7 +1605,7 @@ context("LHR flow", () => {
             .eq(1).arrowClick();
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Equipment three").arrowClick();
+          cy.get("ul>li[role=option]").contains("Equipment three").arrowClick();
           cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         });
       });
@@ -1763,7 +1763,7 @@ context("LHR flow", () => {
         it(`Select lot 'LOT #${lotDateSuffix}01'`, () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("input[data-cy=usedOverride]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains(`LOT #${lotDateSuffix}01`).arrowClick();
+          cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01`).arrowClick();
         });
 
         it("Select quantity in lot dialog", () => {
@@ -1789,7 +1789,7 @@ context("LHR flow", () => {
         it("Select 'Equipment one'", () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"usedOverride\"]").arrowClick();
-          cy.get("ul[role=listbox]>li").contains("Equipment one").arrowClick();
+          cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
         });
 
         it("Click 'SAVE' on select equipment dialog", () => {
@@ -1816,7 +1816,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3220");
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
           });
         });
 
@@ -1937,7 +1937,7 @@ context("LHR flow", () => {
         it("Add an Approval", () => {
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
           });
         });
 
@@ -2117,7 +2117,7 @@ context("LHR flow", () => {
           SystemRequirement("REQ-3220");
           cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
           });
         });
 

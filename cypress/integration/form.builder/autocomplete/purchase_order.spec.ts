@@ -318,7 +318,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -416,11 +416,11 @@ context("Autocomplete 'Purchase Order' test", () => {
             if (response.body.length > 0 ) {
               const purchaseOrders = response.body;
               purchaseOrders.forEach((purchaseOrder) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${purchaseOrder.document.docId} - rev ${purchaseOrder.displayRevision} - ${purchaseOrder.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

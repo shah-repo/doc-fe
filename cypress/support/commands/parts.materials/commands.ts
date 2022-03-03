@@ -51,16 +51,16 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
 
 
   cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.materialDoc).arrowClick();
 
   if (params.partLotDoc) {
     cy.get("[data-cy=\"partLot\"]").arrowClick();
-    cy.get("ul[role=\"listbox\"]>li").contains(params.partLotDoc).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.partLotDoc).arrowClick();
   }
 
   cy.get("[name=\"quantity\"]").arrowType(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.typeOfMaterial).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   });
@@ -81,7 +81,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
 
   cy.get("[name=\"quantity\"]").arrowType(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.typeOfMaterial).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   });
@@ -90,7 +90,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
 Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
   cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.equipmentDoc).arrowClick();
   cy.unClick();
 
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {

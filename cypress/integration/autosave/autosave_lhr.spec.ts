@@ -489,7 +489,7 @@ context("Autosave LHR", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
 
@@ -648,14 +648,14 @@ context("Autosave LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick({ force: true });
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick({ force: true });
         });
       });
 
       it("Add second Approver'", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick({ force: true });
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick({ force: true });
         });
       });
 

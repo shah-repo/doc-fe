@@ -499,7 +499,7 @@ context("LHR Upgrade", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
 
@@ -635,7 +635,7 @@ context("LHR Upgrade", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 

@@ -176,7 +176,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
   cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-  cy.get("ul[role=listbox]>li").contains(params.status).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.status).arrowClick();
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -294,7 +294,7 @@ Cypress.Commands.add("poAMApproveButton", () => {
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
   cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains("PO Approval sig").should("exist");
+  cy.get("ul>li[role=option]").contains("PO Approval sig").should("exist");
 });
 
 Cypress.Commands.add("poAMCheckForAlertMessage", () => {

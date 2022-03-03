@@ -204,10 +204,10 @@ context("Autocomplete 'Document revisions (all versions)' test", () => {
             if (response.body.length > 0 ) {
               const allDocRevs = response.body;
               allDocRevs.forEach((docRev) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", `${docRev.document.docId} - rev ${docRev.displayRevision} - ${docRev.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

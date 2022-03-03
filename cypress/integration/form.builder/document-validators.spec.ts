@@ -493,7 +493,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     it(`Select '${requiredWithFieldLabel}' field`, () => {
       SystemRequirement("FB-0260");
       cy.get("[data-cy=\"validators.required_without.name\"]").arrowClick();
-      cy.get("ul[role=listbox]>li").contains(requiredWithFieldLabel).arrowClick();
+      cy.get("ul>li[role=option]").contains(requiredWithFieldLabel).arrowClick();
     });
 
     it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
@@ -689,7 +689,7 @@ field is empty: Add text field`, () => {
 
     it("Select 'Required doctypes", () => {
       cy.get(`[data-cy^="required-doctypes"]`).arrowClick();
-      cy.get("ul[role=listbox]>li").contains("Equipment").arrowClick();
+      cy.get("ul>li[role=option]").contains("Equipment").arrowClick();
     });
   });
 

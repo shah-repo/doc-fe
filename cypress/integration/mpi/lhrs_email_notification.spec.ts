@@ -1044,7 +1044,7 @@ context("LHRs email notifications", () => {
         SystemRequirement("REQ-3220");
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
       });
 

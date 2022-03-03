@@ -1397,7 +1397,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
         });
       });
 
@@ -2018,7 +2018,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -2055,7 +2055,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -2287,7 +2287,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

@@ -181,11 +181,11 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
             if (response.body.length > 0 ) {
               const draftDocRevs = response.body;
               draftDocRevs.forEach((draftDocRev) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${draftDocRev.document.docId} - rev ${draftDocRev.displayRevision} - ${draftDocRev.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

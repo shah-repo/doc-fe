@@ -981,7 +981,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -1209,7 +1209,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
     });
 

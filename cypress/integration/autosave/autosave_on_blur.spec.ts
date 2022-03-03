@@ -1077,7 +1077,7 @@ context("Autosave on blur", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.unClick();
       });

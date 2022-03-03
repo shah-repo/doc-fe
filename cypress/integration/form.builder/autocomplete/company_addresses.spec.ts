@@ -173,10 +173,10 @@ context("Autocomplete 'Company addresses' test", () => {
             if (response.body.addresses.length > 0 ) {
               const addresses = response.body.addresses;
               addresses.forEach((address) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", address);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.addresses.length);
                 });

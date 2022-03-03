@@ -989,7 +989,7 @@ context("LHR Build type flow", () => {
     it("Select 'Material one' for Part lot", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"lot_part\"]").arrowType("Material one");
-      cy.get("ul[role=listbox]>li").contains("Material one").arrowClick();
+      cy.get("ul>li[role=option]").contains("Material one").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -1107,7 +1107,7 @@ context("LHR Build type flow", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
 

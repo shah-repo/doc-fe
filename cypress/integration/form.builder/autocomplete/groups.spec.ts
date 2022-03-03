@@ -173,9 +173,9 @@ context("Autocomplete 'Groups' test", () => {
             if (response.body.length > 0 ) {
               const groups = response.body;
               groups.forEach((group) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", group.name);
+                cy.get("ul>li[role=option]").should("contain.text", group.name);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

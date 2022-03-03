@@ -936,7 +936,7 @@ context("Receivable test with Page Details", () => {
 
       it("Select Requestor", () => {
         cy.get("[data-cy^=requestor]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.unClick();
       });
 

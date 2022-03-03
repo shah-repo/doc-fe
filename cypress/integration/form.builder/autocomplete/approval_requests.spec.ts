@@ -199,9 +199,9 @@ context("Autocomplete 'Approval requests' test", () => {
             if (response.body.length > 0 ) {
               const approvalRequests = response.body;
               approvalRequests.forEach((ar) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", ar.crId);
+                cy.get("ul>li[role=option]").should("contain.text", ar.crId);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

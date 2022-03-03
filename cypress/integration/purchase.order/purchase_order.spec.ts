@@ -712,7 +712,7 @@ context("PO test", () => {
     context("Verify autosave of Requestor change while PO status autosave is in process", () => {
       it("Select PO Status", () => {
         cy.get("[id$=\"po-status-built-in\"]").eq(0).arrowClick({ force: true });
-        cy.get("ul[role=listbox]>li").contains("Open").arrowClick({ force: true });
+        cy.get("ul>li[role=option]").contains("Open").arrowClick({ force: true });
         cy.unClick();
       });
 
@@ -771,7 +771,7 @@ context("PO test", () => {
       it("Check PO status contains 'Open', 'Closed', 'Cancelled'", () => {
         SystemRequirement("REQ-1470");
         cy.get("[id$=\"select-po-status-built-in\"]").eq(0).arrowClick();
-        cy.get("ul[role=listbox]>li").should("contain", "Open")
+        cy.get("ul>li[role=option]").should("contain", "Open")
           .and("contain", "Closed")
           .and("contain", "Cancelled");
         cy.unClick();
@@ -779,7 +779,7 @@ context("PO test", () => {
 
       it("Select 'Open' for PO status", () => {
         cy.get("[id$=\"po-status-built-in\"]").eq(0).arrowClick({ force: true });
-        cy.get("ul[role=listbox]>li").contains("Open").arrowClick({ force: true });
+        cy.get("ul>li[role=option]").contains("Open").arrowClick({ force: true });
       });
 
       it("delete line item and check for autosave", () => {
@@ -791,7 +791,7 @@ context("PO test", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -870,7 +870,7 @@ context("PO test", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1058,7 +1058,7 @@ context("PO test", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1128,7 +1128,7 @@ context("PO test", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

@@ -519,7 +519,7 @@ context("Procedure and parts flow test", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
 
     it("Check 100% override", () => {

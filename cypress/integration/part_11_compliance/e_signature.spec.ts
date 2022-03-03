@@ -346,12 +346,12 @@ context("E-signature test", () => {
 
     it("Verify email adress and full name is displayed", () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick();
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfFirstUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfSecondUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfThirdUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfFirstUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfSecondUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfThirdUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfFirstUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfSecondUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfThirdUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfFirstUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfSecondUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfThirdUserToSignUp);
       cy.unClick();
     });
 

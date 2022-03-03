@@ -228,10 +228,10 @@ context("Autocomplete 'Part Number in WO' test", () => {
             if (response.body.length > 0 ) {
               const parts = response.body;
               parts.forEach((part) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", `${part.document.docId} - rev ${part.displayRevision} - ${part.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

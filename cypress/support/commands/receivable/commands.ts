@@ -138,12 +138,12 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
   cy.get("[data-cy*=receivable]").scrollIntoView().wait(2000);
   cy.get("[data-cy*=receivable]").arrowClick();
-  cy.get("ul[role=listbox]>li").should("have.length", params.numberOfOpenPOs);
+  cy.get("ul>li[role=option]").should("have.length", params.numberOfOpenPOs);
 });
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
   cy.get("[data-cy*=receivable]").arrowClick();
-  cy.get("ul[role=listbox]>li").contains(params.poTitle).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.poTitle).arrowClick();
 });
 
 Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: PurchaseOrderItem[]}) => {
