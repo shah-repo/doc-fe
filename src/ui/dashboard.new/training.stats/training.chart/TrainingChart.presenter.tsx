@@ -24,9 +24,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       if (value === 0) { return 0; }
       return Math.floor(scaleNumber(value));
     };
+    const overDueScaledCount = getScaledValue(overdue);
+    const totalScaledCount = getScaledValue(totalCount);
+    const dueInSevenScaledCount = getScaledValue(dueInSeven);
     const data = [
       {
-        value: getScaledValue(overdue),
+        value: overDueScaledCount,
         name: TrainingStatusChartLabelTypes.OVERDUE,
         itemStyle: {
           color: Colors.latest_red_varient,
@@ -39,7 +42,12 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         },
       },
       {
-        value: dueInSeven === 0 ? getScaledValue(dueInSeven) : getScaledValue(totalCount),
+        value:
+          dueInSeven === 0
+            ? dueInSevenScaledCount
+            : overDueScaledCount === totalScaledCount
+              ? dueInSevenScaledCount
+              : totalScaledCount,
         name: TrainingStatusChartLabelTypes.DUE,
         itemStyle: {
           color: Colors.latest_yellow_varient,
@@ -76,7 +84,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     };
     DoughnutChartOptions.title = defaultTitle;
     DoughnutChartOptions.series.data = data;
-    DoughnutChartOptions.series.max = getScaledValue(totalCount) + 0.001;
+    DoughnutChartOptions.series.max = totalScaledCount + 0.001;
     let myChart;
     const classes = styles();
     const updateChart = useCallback(
