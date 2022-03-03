@@ -61,6 +61,7 @@ export const GroupsCell = (props: GroupsProps) => {
     } else {
       setResult(defaultGroups);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupOptions, defaultGroups, dataItem.id]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
