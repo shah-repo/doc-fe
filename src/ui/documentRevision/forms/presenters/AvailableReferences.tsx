@@ -142,17 +142,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
     if (inputVal && inputVal.length > 2) {
-      setOffset(0);
       setInputValue(inputVal);
-      queryParams.offset = 0;
-      queryParams.searchText = inputVal;
-      loadAction([], queryParams);
+      setOffset(0);
+      queryApi(0, inputVal);
     } else if (!inputVal) {
-      setOffset(0);
       setInputValue(inputVal);
-      queryParams.offset = 0;
-      queryParams.searchText = null;
-      loadAction([], queryParams);
+      setOffset(0);
+      queryApi(0);
     }
   };
 
@@ -166,10 +162,20 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     ) {
       const nextOffset = offset + limit;
       setOffset(nextOffset);
-      queryParams.offset = nextOffset;
-      queryParams.searchText = inputValue || null;
-      loadAction([], queryParams);
+      queryApi(nextOffset, inputValue);
     }
+  };
+
+  const queryApi = (offset: number, searchText?: string) => {
+    queryParams.offset = offset;
+    queryParams.searchText = searchText || null;
+    loadAction([], queryParams);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+    setOffset(0);
+    queryApi(0);
   };
 
   return (
@@ -228,17 +234,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         disableClearable
         ListboxProps={{ onScroll }}
         open={open}
-        onOpen={() => {
-          setOpen(true);
-          setOffset(0);
-          queryParams.offset = 0;
-          queryParams.searchText = null;
-          loadAction([], queryParams);
-        }}
+        onOpen={onOpen}
         onClose={() => {
           setOpen(false);
         }}
-        loading={ loading }
+        loading={loading}
       />
     </Field>
   ); };
