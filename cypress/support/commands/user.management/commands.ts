@@ -47,7 +47,7 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
-  cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").eq(1)
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").eq(0)
     .arrowClick();
 });
 
@@ -68,6 +68,7 @@ Cypress.Commands.add("usrClickSaveButton", () => {
     cy.get("button>span>svg>path").eq(1).arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {

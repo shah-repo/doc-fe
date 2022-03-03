@@ -194,6 +194,10 @@ context("Records email popup modal", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document" });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter title Record title: " + recordTitle, () => {
       cy.drEnterDocumentTitle({ name: recordTitle });
     });
@@ -202,16 +206,22 @@ context("Records email popup modal", () => {
       cy.drEnterDocumentDescription({ description: "Record from New form template for approval" });
     });
 
-    it("Select approver'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy*=fb-approvals-]").arrowType(FIRST_USER.name + "{downarrow}{enter}");
-        cy.get("[data-cy*=fb-approvals-]").arrowType(SECOND_USER.name + "{downarrow}{enter}");
-        cy.get("[data-cy*=fb-approvals-]").arrowType(THIRD_USER.name + "{downarrow}{enter}");
+    it("Select approver", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
+        cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
+      });
+
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
+        cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
+      });
+
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
+        cy.pmAddApproverOnApproverList({ approver: THIRD_USER.name });
       });
     });
 
     it("Save Record'", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Finalize and release button click'", () => {
@@ -345,7 +355,7 @@ context("Records email popup modal", () => {
 
       it("Check if pop-up modal has pending with all the approvers", () => {
         cy.get("h2").should("contain.text", "PENDING (2)");
-        cy.get("[class^=makeStyles-iconupdown-]").eq(1).arrowClick();
+        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']>svg").eq(3).arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);
