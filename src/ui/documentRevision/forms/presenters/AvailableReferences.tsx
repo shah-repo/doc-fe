@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType, QueryParams } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
@@ -115,11 +115,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const [ModifiedOptions, setModifiedOptions] = useState(options);
   const [offset, setOffset] = React.useState(0);
   const limit = 25;
-  const queryParams: QueryParams = {
+  const queryParams: DocRevQueryParam = {
     offset,
     limit,
     searchText: null,
     fields: "name,document.docId",
+    status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.PendingChange],
   };
 
   useEffect(() => {
