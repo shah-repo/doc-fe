@@ -29,7 +29,10 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
     const dueInSevenScaledCount = getScaledValue(dueInSeven);
     const data = [
       {
-        value: overDueScaledCount === totalScaledCount ? overDueScaledCount - 1 : overDueScaledCount,
+        value:
+          overDueScaledCount === totalScaledCount
+            ? overDueScaledCount - dueInSevenScaledCount
+            : overDueScaledCount,
         name: TrainingStatusChartLabelTypes.OVERDUE,
         itemStyle: {
           color: Colors.latest_red_varient,
