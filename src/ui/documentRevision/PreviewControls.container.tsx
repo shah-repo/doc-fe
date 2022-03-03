@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
+import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { StyledButton } from "./forms/presenters/StyledListButton";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
@@ -178,16 +179,33 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (!hasAccess) {
       return (
         <div style={{ display: "flex" }}>
-          <Box alignSelf="center" id="PreviewControlsContainer-warning">
-            <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
-            <Text translation="document.security.warning" />
+          <Box
+            alignSelf="center"
+            id="PreviewControlsContainer-warning"
+            color={Colors.white}
+            alignContent="center"
+          >
+            <Grid container={true} alignItems="center">
+              <Grid item >
+                <WarningIcon
+                  style={{ marginRight: 10, width: "20px", height: "20px" }}
+                />
+              </Grid>
+              <Grid item >
+                <Text translation="document.security.warning" />
+              </Grid>
+            </Grid>
           </Box>
-          {!isEmailSent &&
-            <Button color="secondary" variant="outlined" onClick={onSubmit}
-              id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
+          {!isEmailSent && (
+            <StyledButton
+              color="primary"
+              onClick={onSubmit}
+              id="PreviewControlsContainer-access"
+              data-cy="PreviewControlsContainer-access"
+            >
               <Text translation="document.request.access" />
-            </Button>
-          }
+            </StyledButton>
+          )}
         </div>
       );
     }
