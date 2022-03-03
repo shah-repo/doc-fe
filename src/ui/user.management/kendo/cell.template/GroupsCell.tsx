@@ -100,10 +100,7 @@ export const GroupsCell = ({
           defaultValue={defaultGroups}
         />
       ) : (
-        <ExpandableTemplate
-          items={dataItem.groups.split(",")}
-          dataId={`${dataItem.id}-${columnIndex}`}
-        />
+        <ExpandableTemplate items={dataItem.groups.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );
