@@ -31,15 +31,18 @@ const Header: React.FunctionComponent<Props> = ({
           color: Colors.white,
           background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
         }}
+        display="flex"
+        alignContent="center"
+        alignItems="center"
       >
         <Box
-          height="100%"
-          width={150}
-          mr="18%"
           style={{
             backgroundRepeat: "no-repeat",
             backgroundImage: `url(${EnlilLogo})`,
-            float: "right",
+            left: "61%",
+            right: "20.42%",
+            position: "absolute",
+            paddingTop: "48px",
           }}
         />
         <Grid
@@ -47,16 +50,17 @@ const Header: React.FunctionComponent<Props> = ({
           alignItems="flex-end"
           justify="flex-end"
         >
-          {canToggleCustomLabels &&
+          <Grid item>
+            {canToggleCustomLabels &&
           <FormControlLabel
             control={<Switch name="toggleCustomLabels" checked={customLabelsValue} onChange={toggleCustomLabels} />}
             label="Show customizable labels"
           />
-          }
-          <Box position={"absolute"}>
+            }
+          </Grid>
+          <Grid item>
             <AutosaveToggle/>
-          </Box>
-
+          </Grid>
         </Grid>
       </Box>
     );
