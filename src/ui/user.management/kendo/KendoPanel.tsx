@@ -15,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, sortBy, startCase } from "lodash";
+import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -114,11 +114,20 @@ export function KendoPanel<T>({
   };
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
+  const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
       queryApi();
     },
     onError: (error) => {
+      if (gridData.length && get(gridData, "[0].inEdit") && updatedGridData) {
+        set(gridData, "[0].name", updatedGridData.user.name);
+        set(gridData, "[0].email", updatedGridData.user.email);
+        set(gridData, "[0].groups", updatedGridData.groups);
+        set(gridData, "[0].id", updatedGridData.user.id);
+        const newDataState = processWithGroups(gridData, dataState);
+        setResultState(newDataState);
+      }
       setIsLoading(false);
       toastError(error as string);
     },
@@ -126,6 +135,7 @@ export function KendoPanel<T>({
 
   const handleCreate = (values: AddUserManage) => {
     setIsLoading(true);
+    setUpdatedGridData(values);
     async.start(addEmployeeAction, values, async);
   };
 
@@ -133,6 +143,7 @@ export function KendoPanel<T>({
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
+    setUpdatedGridData(undefined);
   };
 
   let initialDataState: State;
@@ -302,6 +313,8 @@ export function KendoPanel<T>({
             tableName
           )
         );
+      }).finally(() => {
+        setUpdatedGridData(undefined);
       });
   };
 
@@ -383,11 +396,13 @@ export function KendoPanel<T>({
     active: BooleanFilterCell,
     status: SignUpFilterCell,
   };
+  const userGroups = (props: GridCellProps) =>
+    <GroupsCell {...props} updatedGridData ={updatedGridData} />;
 
   const fieldToCellMapping = {
     "user.name": NameCell,
     "user.email": EmailCell,
-    "groups": GroupsCell,
+    "groups": userGroups,
     "active": ActiveDropdown,
     "status": SignedCell,
     "": commandCell,
