@@ -1385,6 +1385,7 @@ context("Create Company Without Logo Golden Tenant", () => {
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
       cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
     });
+
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
       cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
     });
@@ -1402,18 +1403,22 @@ context("Create Company Without Logo Golden Tenant", () => {
       SystemRequirement("REQ-3540");
       cy.atchUploadNavigationJSONForNCO({ fileName: "navigation.json", queue: 0 });
     });
+
     it("Upload Users List JSON", () => {
       SystemRequirement("REQ-3550");
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
     });
+
     it("Verify the empty fields for white label", () => {
       cy.get("[data-cy^=\"default-background-\"]>div>input").should("have.text", "");
       cy.get("[data-cy^=\"primary-\"]>div>input").should("have.text", "");
       cy.get("[data-cy^=\"secondary-\"]>div>input").should("have.text", "");
     });
+
     it("Upload correct DAM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "dam.json", queue: 0 });
     });
+
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
@@ -1424,6 +1429,7 @@ context("Create Company Without Logo Golden Tenant", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
+
     it("Log out user", () => {
       cy.authLogout();
     });
@@ -1439,12 +1445,15 @@ context("Create Company Without Logo Golden Tenant", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
     });
+
     it("Verify default Background company color", () => {
       cy.get("#navigation").should("have.css", "background-color", "rgb(18, 27, 33)");
     });
+
     it("Logo field is empty and Verify default company logo", () => {
       cy.get("img[alt=\"Logo\"]").should("have.attr", "src", "/logo_enlil.svg");
     });
+
     it("Verify left default Background company color", () => {
       cy.get("#navigation").should("have.css", "background-color", "rgb(18, 27, 33)");
     });
@@ -1503,6 +1512,7 @@ context("Create Company Without Logo Golden Tenant", () => {
         .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
 
     });
+
     it("Verify that tabs are lighter color when they are hovered over on Training", () => {
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9).should("have.css", "background-color", "rgb(18, 27, 33)");
       cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9)
