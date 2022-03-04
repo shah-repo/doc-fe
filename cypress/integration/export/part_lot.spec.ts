@@ -214,13 +214,13 @@ context("Export Part Lot", () => {
                     index: 0,
                     label: "Initial Quantity",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     editorProperties: [],
                     validationAttribute: "Initial Quantity",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_usable_quantity",
@@ -228,13 +228,13 @@ context("Export Part Lot", () => {
                     index: 1,
                     label: "Usable Quantity",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     editorProperties: [],
                     validationAttribute: "Usable Quantity",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_expiry_date",
@@ -242,12 +242,12 @@ context("Export Part Lot", () => {
                     index: 2,
                     label: "Expiration Date",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     validationAttribute: "Expiration Date",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_part",
@@ -257,7 +257,7 @@ context("Export Part Lot", () => {
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
-                    deleteInFormDisabled: true
+                    deleteInFormDisabled: true,
                   },
                   {
                     name: "100-inspection-override",
@@ -267,18 +267,18 @@ context("Export Part Lot", () => {
                     options: [
                       {
                         text: "100% Inspection Override",
-                        value: "100% Inspection Override"
-                      }
+                        value: "100% Inspection Override",
+                      },
                     ],
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     validationMode: "default",
                     editorProperties: [],
                     validationAttribute: "100% Inspection Override",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     label: "form.builder.approvals",
@@ -453,13 +453,13 @@ context("Export Part Lot", () => {
                     index: 0,
                     label: "Initial Quantity",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     editorProperties: [],
                     validationAttribute: "Initial Quantity",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_usable_quantity",
@@ -467,13 +467,13 @@ context("Export Part Lot", () => {
                     index: 1,
                     label: "Usable Quantity",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     editorProperties: [],
                     validationAttribute: "Usable Quantity",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_expiry_date",
@@ -481,12 +481,12 @@ context("Export Part Lot", () => {
                     index: 2,
                     label: "Expiration Date",
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     validationAttribute: "Expiration Date",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     name: "lot_part",
@@ -496,7 +496,7 @@ context("Export Part Lot", () => {
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
-                    deleteInFormDisabled: true
+                    deleteInFormDisabled: true,
                   },
                   {
                     name: "100-inspection-override",
@@ -506,18 +506,18 @@ context("Export Part Lot", () => {
                     options: [
                       {
                         text: "100% Inspection Override",
-                        value: "100% Inspection Override"
-                      }
+                        value: "100% Inspection Override",
+                      },
                     ],
                     applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW"
+                      "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
                     validationMode: "default",
                     editorProperties: [],
                     validationAttribute: "100% Inspection Override",
                     deleteInFormDisabled: true,
-                    applicableValidationSchema: true
+                    applicableValidationSchema: true,
                   },
                   {
                     label: "form.builder.approvals",
@@ -594,7 +594,7 @@ context("Export Part Lot", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall({requiredApproversDocRev: true});
+      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
     });
   });
 
@@ -1233,7 +1233,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({requiredApproversDocRev: true});
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       });
     });
 
@@ -1391,7 +1391,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({requiredApproversDocRev: true});
+        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
       });
     });
 
