@@ -20,7 +20,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
   return (
-    <Header status={documentRevision.status} displayStatus={documentRevision.displayStatus}>
+    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
       {documentRevision &&
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}

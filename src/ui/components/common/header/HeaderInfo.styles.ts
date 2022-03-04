@@ -21,7 +21,7 @@ export const styles = makeStyles((theme: Theme) =>
       cursor: "pointer",
     },
     GREEN_STATUS: {
-      color: Colors.light_forest_green,
+      color: Colors.green_blue,
     },
     PENDING_STATUS: {
       color: Colors.school_bus_yellow,
@@ -58,7 +58,7 @@ export const styles = makeStyles((theme: Theme) =>
       height: "8px",
     },
     statusIconReleased: {
-      background: Colors.light_green,
+      background: Colors.green_blue,
     },
     statusIconCanceled: {
       background: Colors.medium_red,

@@ -15,7 +15,7 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     GREEN_STATUS: {
-      background: Colors.light_forest_green,
+      background: Colors.green_blue,
     },
     PENDING_STATUS: {
       background: Colors.school_bus_yellow,
@@ -46,7 +46,8 @@ interface Props{
 const Header: React.FunctionComponent<Props> = ({ children, status, displayStatus }) => {
   const classes = styles();
 
-  if (SM.isNewLayout) {
+  const isCreateUrl = SM.pathname.includes("document_revision/create");
+  if (SM.isNewLayout && !isCreateUrl) {
     return (
       <Box
         minHeight={60}

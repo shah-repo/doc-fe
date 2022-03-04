@@ -58,6 +58,7 @@ enum Colors {
   olivine = "#9EB774",
   carla="#E6FCD9",
   light_forest_green="#4C9646",
+  green_blue="#0DB78D",
   light_forest_green_border="#509849",
   // yellow
   light_yellow = "#FFF3CD",
