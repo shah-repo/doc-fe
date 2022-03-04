@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
+import "moment-timezone";
+import moment from "moment-timezone";
+import path from "path";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -16,6 +19,21 @@ let employeeLoginAdmin;
 let employeeLoginFirst;
 let employeeLoginSecond;
 let employeeLoginThird;
+let arId;
+let arIdRev1;
+let releasedFormId;
+let emailsFromInbox;
+const pages = ["", "", ""];
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+
 
 const ADMIN_USER = USERS[10];
 const FIRST_USER = USERS[11];
@@ -121,15 +139,430 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
+
+    it("Upload attachment 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Add Checkbox group", () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
+      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
+      cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
+      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
+      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
   });
 
-  context("Save DAM And Approve & Release Document", () => {
+  context("Save DAM form", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
+  });
 
+  context("Verify `Draft DAM request form` title", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should("have.text", "Form DAM");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for dfaft DAM request form notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing DAM request form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify pdf file length more than 500 bytes", () => {
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-1-Form-DAM.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for draft DAM request form", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${releasedFormId}-1-Form-DAM.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            pages[1] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of draft DAM request form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nForm DAM/);
+
+        expect(el).match(/Output Document Type\nDocument Approval Matrix/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/APPROVAL ROLES/);
+
+        expect(el).match(/APPROVAL MATRIX/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Effective Date: N\/A/);
+
+        expect(el).match(/Page 1 of 2/);
+      }
+    });
+
+    it("Verify page 2 of released DAM request form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Effective Date: N\/A/);
+
+        expect(el).match(/Page 2 of 2/);
+      }
+    });
+  });
+
+  context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Verify `Released DAM request form` title", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "Form DAM");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+        arId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for released DAM request form notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify that zip file containing pdf downloaded", () => {
+    it("Download zip file containing DAM request form", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("unzip and extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify zip file length more than 500 bytes", () => {
+      const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
+        `${releasedFormId}-1-Form-DAM.pdf`);
+      cy.readFile(pdffile).its("length").should("be.gt", 500);
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content for released DAM request form", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${releasedFormId}-1-Form-DAM.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            pages[1] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of released DAM request form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nForm DAM/);
+
+        expect(el).match(/Output Document Type\nDocument Approval Matrix/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/APPROVAL ROLES/);
+
+        expect(el).match(/APPROVAL MATRIX/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/PREFIX\nINTERNAL\nTYPE\nDOCUMENT\nTYPE\nTRAINING\nREQUIRED\nNEEDS\nSIGNATURE\nCATEGORY\nAPPROVALS\nNUMERIC\nAPPROVALS\nNUMERIC\nALPHA\nAPPROVALS\nALPHA\nAPPROVALS\nADMINISTRATIVE/);
+
+        expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+      }
+    });
+
+    it("Verify page 2 of released DAM request form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 2/);
+      }
     });
   });
 
@@ -147,6 +580,15 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it(`Type a description: ${DAMDocument}`, () => {
       cy.drEnterDocumentDescription({ description: DAMDocument });
     });
+
+    it("Upload attachment 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Checkbox option 2 checked", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
   });
 
   context(`Add New Role: ${roleOne}`, () => {
@@ -314,13 +756,501 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  context("Approve & Release Document", () => {
+  context("Clicks on 'Save' button", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
+    it("Check doc Draft status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
+      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for draft document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing document notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content draft document", () => {
+    it("Extract texts from PDF file content draft document", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-1-DAM-Document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for draft document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 1\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/AR ID\nNone/);
+
+        tmpRegex = new
+        RegExp( `Description\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 2 for draft document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 1\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/APPROVAL ROLES/);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole One\nApproval Groups\nApproving Users\n${FIRST_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole Two\nApproval Groups\nApproving Users\n${SECOND_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole Three\nApproval Groups\nApproving Users\n${THIRD_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        tmpRegex = new RegExp( `Checkbox\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 3 for draft document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 1\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Check doc rev 1 released status", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
+      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+        arIdRev1 = x.text();
+      });
+    });
+
+    it("Revise document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
+        cy.drClickReviseDocument();
+      });
+      cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
+    });
+
+    it("Clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("'Approve and Release' the document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Check revised doc released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", `${DAMDocument}`);
+      cy.get("#HeaderInfo-docId").contains("DAM-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+        arId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for release document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing document notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+
+    it("Verify attached file length more than 500 bytes", () => {
+      const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
+        downloadFile.replace(".zip", ""), "image.jpg");
+      cy.readFile(attachedFile).its("length").should("be.gt", 500);
+    });
+  });
+
+  context("Verify PDF file content release document", () => {
+    it("Extract texts from PDF file content release document", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-2-DAM-Document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for released document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 2\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Description\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 2 for released document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 2\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/APPROVAL ROLES/);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole One\nApproval Groups\nApproving Users\n${FIRST_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole Two\nApproval Groups\nApproving Users\n${SECOND_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Approval Role\nRole Three\nApproval Groups\nApproving Users\n${THIRD_USER.name}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        tmpRegex = new RegExp( `Checkbox\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+
+    it("Verify page 3 for released document", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new
+        RegExp( `Document Approval Matrix\n${releasedFormId}, Revision 2\n${DAMDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/TEXT FIELD/);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+        tmpRegex = new RegExp( `${arId}2N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `${arIdRev1}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
     });
   });
 
@@ -469,12 +1399,324 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
     });
 
+    it("Check approval request document draft status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
+      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+  });
+
+  context("Verify email for approval request document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for approval request ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing document notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content document", () => {
+    it("Extract texts from PDF file content document", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-AR-Document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for approval request document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Description\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        expect(el).match(/Role One/);
+        expect(el).match(/Role Two/);
+        expect(el).match(/Role Three/);
+
+        tmpRegex = new
+        RegExp( `${FIRST_USER.name} \n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${SECOND_USER.name} \n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${THIRD_USER.name} \n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/DRAFT/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
+  });
+
+  context("Send To Review", () => {
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
 
     it("Verify AR status is 'In Review'", () => {
       cy.arVerifyStatus({ status: "In Review" });
+    });
+
+    it("Check AR status in review and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "In Review");
+      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
+      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+  });
+
+  context("Verify email for In Review approval request document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for approval request ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing document notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_inreview.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content document", () => {
+    it("Extract texts from PDF file content document", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-AR-Document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for In Review approval request document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Description\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        expect(el).match(/Role One/);
+        expect(el).match(/Role Two/);
+        expect(el).match(/Role Three/);
+
+        tmpRegex = new
+        RegExp( `${FIRST_USER.name} | PENDING ${docRelDate}\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${SECOND_USER.name} | PENDING ${docRelDate}\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${THIRD_USER.name} | PENDING ${docRelDate}\n\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/IN_REVIEW/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
     });
   });
 
@@ -586,6 +1828,162 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Close Approval Request", () => {
       cy.arCloseAR();
     });
+
+    it("Check Approval Request closed status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Closed");
+      cy.get("#HeaderInfo-name").should("have.text", `${ARDocument}`);
+      cy.get("#HeaderInfo-docId").contains("AR-").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.sendToEmail();
+    });
+  });
+
+  context("Verify email for approval request document notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for approval request ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: ADMIN_USER.email,
+          contains: [`Hello <b>${ADMIN_USER.name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            company.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify zip file downloaded", () => {
+    it("Download zip file containing document notification", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_closed.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file document content", () => {
+    it("Extract texts from PDF file document content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-AR-Document.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(1);
+        expect(cdata.text).match(/Page 1 of 1/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 1")) {
+            pages[0] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 for closed document", () => {
+      const el = pages[0];
+
+      if (el.includes("Page 1 of 1")) {
+        tmpRegex = new
+        RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `Description\n${ARDocument}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #1\nDocument\nDD00004 - rev 1 - Document One\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        // eslint-disable-next-line max-len
+        expect(el).match(/DOCUMENT #2\nDocument\nCD00005 - rev 1 - Document Two\nDescription of change\ndescription\nJustification of change\njustification/);
+
+        expect(el).match(/Role One/);
+        expect(el).match(/Role Two/);
+        expect(el).match(/Role Three/);
+
+        tmpRegex = new
+        RegExp( `${FIRST_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${SECOND_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new
+        RegExp( `${THIRD_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/CLOSED/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 1/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
+        expect(el).not.match(tmpRegex);
+      }
+    });
   });
 
   context(`Open created documents, ${documentOne} and ${documentTwo}`, () => {
@@ -622,5 +2020,4 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arVerifyStatus({ status: "Released" });
     });
   });
-
 });
