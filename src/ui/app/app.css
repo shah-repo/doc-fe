@@ -340,3 +340,7 @@ td#kendo-expandable-column[role="gridcell"] {
 .k-grid-header thead tr th .k-icon.k-i-arrow-s {
   color: var(--almost_black);
 }
+
+.k-list-container .k-list-scroller {
+  min-width: 140px;
+}
