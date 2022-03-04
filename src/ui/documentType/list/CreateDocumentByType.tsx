@@ -142,7 +142,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   const [forms, setForms] = useState<DocumentTypeByIdForm[]>([]);
   const buttonLabel = isByCategory ? labelName : label;
   const isRecord = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.RECORD;
-  const isLHR = categoryName?.toUpperCase() === DOC_TYPE_GROUP_OPTION.ENLIL_LHR;
+  const isLHR = categoryName?.toUpperCase() === "LHR";
 
   const closeMultipleFormDialog = () => {
     multipleFormDialog.close();
