@@ -754,7 +754,7 @@ Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean})
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params?: { toastifyExists: boolean }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
   cy.progressBarShouldNotExist();

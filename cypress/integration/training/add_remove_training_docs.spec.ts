@@ -720,7 +720,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .arrowType("Training Curriculum test{downarrow}{enter}");
       });
@@ -770,7 +770,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -778,7 +778,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -878,7 +878,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
+        CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
