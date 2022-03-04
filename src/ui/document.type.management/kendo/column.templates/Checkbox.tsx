@@ -46,7 +46,7 @@ export const CheckboxCell: React.FunctionComponent<GridCellProps> = ({
   if (rowType === "groupHeader") {
     return null;
   }
-  const isLHR = GroupWithGroupOptions[dataItem.group]?.includes(DOC_TYPE_GROUP_OPTION.LHR);
+  const isLHR = GroupWithGroupOptions[dataItem.group]?.includes(DOC_TYPE_GROUP_OPTION.BASE_LHR);
   return (
     <td colSpan={colSpan}
       style= {style}

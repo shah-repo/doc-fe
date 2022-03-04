@@ -10,15 +10,20 @@ import useAsync from "../../../../hooks/useAsync";
 
 interface Props {
   revisionId: string;
+  canAccess: boolean;
 }
 
-const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId }) => {
+const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess }) => {
   const intl = useIntl();
   const async = useAsync({
     onSuccess: () => {
       toastSuccess(intl.formatMessage({ id: "common.send.to.email.success" }));
     },
     onError: () => {
+      if (!canAccess) {
+        toastError(intl.formatMessage({ id: "common.send.to.email.no.access" }));
+        return;
+      }
       toastError(intl.formatMessage({ id: "common.send.to.email.error" }));
     },
   });
