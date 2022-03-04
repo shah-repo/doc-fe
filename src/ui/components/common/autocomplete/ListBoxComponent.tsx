@@ -3,12 +3,19 @@ import { ListChildComponentProps, VariableSizeList } from "react-window";
 
 const LISTBOX_PADDING = 8; // px
 const OuterElementContext = createContext({});
+const InnerElementContext = createContext({});
 
 const OuterElementType = forwardRef<HTMLDivElement>((props, ref) => {
   const outerProps = useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
 OuterElementType.displayName = "OuterElementType";
+
+const InnerElementType = forwardRef<HTMLDivElement>((props, ref) => {
+  const outerProps = useContext(InnerElementContext);
+  return <ul {...props} {...outerProps} style={{ height: "auto" }} />;
+});
+InnerElementType.displayName = "InnerElementType";
 
 const renderRow = (props: ListChildComponentProps) => {
   const { data, index, style } = props;
@@ -55,7 +62,7 @@ const ListBoxComponent = forwardRef<HTMLDivElement>(function ListBoxComponent(pr
           width="100%"
           ref={listRef}
           outerElementType={OuterElementType}
-          innerElementType="ul"
+          innerElementType={InnerElementType}
           itemSize={itemSize}
           overscanCount={5}
           itemCount={itemCount}
