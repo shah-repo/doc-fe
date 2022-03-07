@@ -92,7 +92,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <Fragment>
-      <StyledMenuListItem  button>
+      <StyledMenuListItem  button alignItems="flex-start">
         <StyledMenuListIcon>
           <ChangeOwnerIcon />
         </StyledMenuListIcon>

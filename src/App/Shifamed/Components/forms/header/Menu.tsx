@@ -61,6 +61,9 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
               style={{
                 display: menuItem?.props?.shouldDisplay === false ? "none" : "block",
                 backgroundColor: Colors.white,
+                margin: "0px",
+                padding: "0px",
+                width: "240px",
               }}
               key={index}
             >

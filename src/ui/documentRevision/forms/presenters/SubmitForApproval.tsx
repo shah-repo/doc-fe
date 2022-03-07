@@ -12,7 +12,6 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
 import { styles } from "./FinalizeAndRelease.styles";
-import { StyledButton } from "./StyledListButton";
 
 interface Props {
   docRevId: string;
@@ -81,14 +80,15 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <StyledButton
-        color="primary"
+      <Button
+        color="secondary"
+        variant="outlined"
         onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
         id="ApproveAndRelease-button"
         data-cy="ApproveAndRelease-button"
       >
         <Text message={isObsolete ? "common.void" : label} />
-      </StyledButton>
+      </Button>
       <Dialog
         open={voidRecordDialog.isOpen}
       >

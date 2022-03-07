@@ -43,7 +43,7 @@ const CancelButton: React.FunctionComponent<Props> = ({
     <>
       {
         canShowCancelButton &&
-       ( <StyledMenuListItem button>
+       ( <StyledMenuListItem button alignItems="flex-start">
          <StyledMenuListIcon>
            <VoidDocumentIcon />
          </StyledMenuListIcon>
@@ -52,6 +52,10 @@ const CancelButton: React.FunctionComponent<Props> = ({
            data-cy="cancelDraftButton"
            primary={<Text translation="common.cancel.draft" />}
            onClick={dialog.open}
+           style={{
+            fontFamily: "Sora",
+            fontSize: "14px",
+          }}
          />
        </StyledMenuListItem>)
       }
