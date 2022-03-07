@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
@@ -45,6 +45,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     headerBoxProps={{ maxHeight: "30%" }}
     contentBoxProps={{ minHeight: "calc(100% - 30%)", height: "100%" }}
     values={formValues.values}
+    leftSidebar={DocumentRevisionLeftPanel}
     header= {
       <DocumentRevisionHeader
         {...{ bannerPortal, shouldShowUpgrade }}
