@@ -22,17 +22,6 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
   const hasErrors = !isEmpty(errors);
   const isActive = asyncState.status === AsyncStatus.Active;
 
-  // if (SM.isNewLayout) {
-  //   return  <StyledButton
-  //     type="submit"
-  //     color="primary"
-  //     data-cy={dataCy}
-  //     disabled={hasErrors || isActive}
-  //     {...buttonProps}
-  //   >
-  //     <Text message={label} />
-  //   </StyledButton>;
-  // }
   return (
     <Button
       type="submit"

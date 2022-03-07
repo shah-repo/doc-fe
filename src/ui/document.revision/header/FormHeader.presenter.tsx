@@ -2,6 +2,7 @@ import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
+import NewDocRevActions from "../../../App/Shifamed/Components/forms/presenters/Actions";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../components/common/header/subtitles";
@@ -44,11 +45,15 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
             {lastSavedTimestamp &&
             <Box>
               Last saved: &nbsp;
-              {lastSavedTimestamp || "01:55:26 AM"}
+              {lastSavedTimestamp}
             </Box>
             }
           </Box>
-          <DocRevActions {...{ isCreateDocumentDisabled }}/>
+          {SM.isNewLayout ? (
+            <NewDocRevActions {...{ isCreateDocumentDisabled }} />
+          ) : (
+            <DocRevActions {...{ isCreateDocumentDisabled }} />
+          )}
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} />
