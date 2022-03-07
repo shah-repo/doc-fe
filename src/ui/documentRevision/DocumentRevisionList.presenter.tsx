@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -109,20 +110,21 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
         className={classes.linkTitle}
         activeClassName={classes.activeLinkTitle}
       >
-        <div
-          data-cy={"revision"}>
+        <Typography component="span" data-cy={"revision"} className={classes.linkTitle}>
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
           {
             isStatusVisible &&
-            <CustomLabelTooltip {...{ tooltipConfig }}>
-              <>
-              &nbsp; - <Text message={displayStatus} />
-              </>
-            </CustomLabelTooltip>
+            <Typography component="span" className={classes.displayStatus}>
+              <CustomLabelTooltip {...{ tooltipConfig }}>
+                <>
+                &nbsp; - <Text message={displayStatus} />
+                </>
+              </CustomLabelTooltip>
+            </Typography>
           }
-        </div>
+        </Typography>
       </NavLink>
       <NavLink
         to={link}

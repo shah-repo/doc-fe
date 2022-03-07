@@ -13,9 +13,9 @@ export const styles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     linkTitle: {
-      color: theme.palette.text.primary,
+      color: Colors.dark_blue,
       textDecoration: "none",
-      fontWeight: theme.typography.fontWeightBold,
+      fontWeight: 500,
     },
     activeLinkTitle: {
       color: theme.palette.primary.main,
@@ -33,6 +33,12 @@ export const styles = makeStyles((theme: Theme) =>
       "&.MuiExpansionPanelDetails-root": {
         display: "block",
       },
+    },
+    displayStatus: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSize: "14px",
+      fontWeight: "normal",
     },
   }),
 );
