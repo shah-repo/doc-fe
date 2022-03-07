@@ -1600,8 +1600,11 @@ context("Create company with golden tenant", () => {
 
     it("Add Seed documents", () => {
       SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001");
+      cy.get("ul>li[role=option]").contains("SEED-00001").arrowClick();
+      cy.unClick();
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002");
+      cy.get("ul>li[role=option]").contains("SEED-00002").arrowClick();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -1851,7 +1854,7 @@ context("Create company with golden tenant", () => {
 
     it("Click exit DAM", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
         });
     });
@@ -1944,7 +1947,6 @@ context("Create company with golden tenant", () => {
         .and("contain.text", "REMOTE_VALIDATORS_REFRESH")
         .and("contain.text", "GROUP_DELETE")
         .and("contain.text", "DOC_REV_OBS_TO_RELEASED")
-        .and("contain.text", "COMPANY_DROPBOX_INTEGRATION")
         .and("contain.text", "COMPANY_UPDATE_CURRENT");
       cy.get("[id=\"Group-addTags\"]").should("contain.text", "NAVIGATION_WITH_RESTRICTED_DOC_TYPES")
         .and("contain.text", "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES")

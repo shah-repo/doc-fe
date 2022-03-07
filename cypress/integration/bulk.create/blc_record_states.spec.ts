@@ -804,6 +804,8 @@ context("Bulk create record headers", () => {
 
     context("Add correct type and release bulk create", () => {
       it("Select correct document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick().arrowType("{backspace}");
+        cy.unClick();
         cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
         cy.get("ul>li[role=option]").contains("Test Document Type").arrowClick();
       });
