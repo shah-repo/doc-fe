@@ -4,7 +4,7 @@ import moment from "moment";
 import React from "react";
 import { MomentFormats } from "../../../../common/utils/date";
 import Tooltip from "../../../components/common/kendo/Tooltip";
-import KendoGridStyles from "../styles";
+import { styles } from "../presenter.styles";
 
 export const DurationCell = ({
   dataItem,
@@ -13,7 +13,7 @@ export const DurationCell = ({
   columnIndex,
   field,
 }: GridCellProps) => {
-  const classes = KendoGridStyles();
+  const classes = styles();
   if (rowType === "groupHeader") {
     return null;
   }

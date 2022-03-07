@@ -1,84 +1,99 @@
+import { chain } from "lodash";
 import { pagerSettings } from "../../components/common/kendo/helpers";
-import { KendoColumn, KendoGridConfiguration, PageState } from "../../components/common/kendo/types";
+import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
+import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 
 const columns: KendoColumn[] = [
   {
     field: "taskType",
     title: "async.task.type",
     show: true,
-    filter: "text",
-    groupable: false,
+    groupable: true,
     locked: false,
     orderIndex: 1,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 30,
+    filterCell: KendoGridFilterCell.TASKTYPE,
   },
   {
     field: "createdAt",
     title: "async.tasks.timestamp",
     show: true,
-    filter: "text",
     groupable: false,
     locked: false,
     orderIndex: 2,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 25,
+    cell: KendoCellTemplates.DURATION,
+    filterCell: KendoGridFilterCell.ASYNC_CREATED_AT,
   },
   {
     field: "duration",
     title: "async.task.duration",
     show: true,
-    filter: "text",
+    filter: "numeric",
     groupable: false,
     locked: false,
     orderIndex: 3,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 20,
+    cell: KendoCellTemplates.DURATION,
   },
   {
     field: "nextTaskTypes",
     title: "async.task.next.task.types",
     show: true,
-    filter: "text",
+    filterable: false,
     groupable: false,
     locked: false,
     orderIndex: 4,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 15,
   },
   {
     field: "status",
     title: "async.task.status",
     show: true,
-    filter: "text",
-    groupable: false,
+    groupable: true,
     locked: false,
     orderIndex: 5,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 20,
+    filterCell: KendoGridFilterCell.STATUS,
   },
   {
     field: "employee.user.name",
     title: "common.name",
     show: true,
     filter: "text",
-    groupable: false,
     locked: false,
+    width: 20,
+    groupable: true,
+    cell: KendoCellTemplates.USER_AVATAR,
+    showColumnMenu: true,
     orderIndex: 6,
-    showColumnMenu: false,
+    extraFields: ["owner.user.avatar", "owner.user.initialColor"],
   },
   {
     field: "employee.user.email",
     title: "common.email",
     show: true,
     filter: "text",
-    groupable: false,
+    groupable: true,
     locked: false,
     orderIndex: 7,
-    showColumnMenu: false,
+    showColumnMenu: true,
+    width: 20,
   },
 ];
 
-const initialDataState: PageState = { skip: 0, take: 25 };
 const gridConfiguration: KendoGridConfiguration = {
+  groupableFields: chain(columns)
+    .filter({ groupable: true })
+    .map("field")
+    .value(),
   columns,
   pagerSettings,
-  initialDataState,
 };
 
 export default gridConfiguration;
