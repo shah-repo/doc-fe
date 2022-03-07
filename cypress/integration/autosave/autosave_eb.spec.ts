@@ -205,7 +205,7 @@ context("Autosave EB test", () => {
 
     it("Add attachment and check autosave", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.elUploadAttachment({
           fileName: "image.jpg",
           el: "fb-mediaalbum-upload-",

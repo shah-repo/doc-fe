@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -338,16 +337,12 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add Approver on document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Verify status is 'In Review'", () => {

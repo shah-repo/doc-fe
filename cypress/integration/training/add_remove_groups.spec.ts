@@ -840,7 +840,7 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });

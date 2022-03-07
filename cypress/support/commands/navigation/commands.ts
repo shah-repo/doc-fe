@@ -65,15 +65,14 @@ Cypress.Commands.add("navigToDocTypeManagement", () => {
 });
 
 Cypress.Commands.add("navigToRecords", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevDocTypeCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL,
-        NavigationItems.RECORDS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
   });
+
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -222,14 +221,12 @@ Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[
 });
 
 Cypress.Commands.add("navigToTrainingRecords", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.TRAINING,
-        NavigationItems.TRAINING_RECORDS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.TRAINING,
+      NavigationItems.TRAINING_RECORDS,
+    ],
   });
 });
 

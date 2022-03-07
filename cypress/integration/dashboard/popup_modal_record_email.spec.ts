@@ -207,17 +207,11 @@ context("Records email popup modal", () => {
     });
 
     it("Select approver", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
-        cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: FIRST_USER.name });
 
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
-        cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
 
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAudit, () => {
-        cy.pmAddApproverOnApproverList({ approver: THIRD_USER.name });
-      });
+      cy.pmAddApproverOnApproverList({ approver: THIRD_USER.name });
     });
 
     it("Save Record'", () => {

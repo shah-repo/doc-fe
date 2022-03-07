@@ -1161,7 +1161,7 @@ context("LHR flow", () => {
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -1424,9 +1424,7 @@ context("LHR flow", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -1612,9 +1610,7 @@ context("LHR flow", () => {
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {
@@ -1667,9 +1663,7 @@ context("LHR flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Add note to'End Quantity'", () => {
@@ -1821,9 +1815,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Complete step", () => {
@@ -1912,7 +1904,7 @@ context("LHR flow", () => {
         });
 
         it("Click Revise on LHRs #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           });
         });
@@ -1929,9 +1921,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Add an Approval", () => {
@@ -1942,9 +1932,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Complete step", () => {
@@ -2009,9 +1997,7 @@ context("LHR flow", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check lot number", () => {
@@ -2106,9 +2092,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
 
@@ -2122,9 +2106,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Complete step", () => {
@@ -2205,9 +2187,7 @@ context("LHR flow", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -2251,7 +2231,7 @@ context("LHR flow", () => {
         });
 
         it("Click Revise on LHR", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           });
         });
@@ -2267,9 +2247,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Complete step", () => {

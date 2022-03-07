@@ -494,9 +494,11 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
+      cy.listLoadingElementShouldNotExist();
+
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
     });
@@ -690,7 +692,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Enters description 'EB description'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
         });
         cy.progressBarShouldNotExist();

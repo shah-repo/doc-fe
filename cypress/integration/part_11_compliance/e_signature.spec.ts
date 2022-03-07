@@ -412,11 +412,7 @@ context("E-signature test", () => {
     });
 
     it("Enters description 'EB description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drEnterDocumentDescription({ description: "EB description" });
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drEnterDocumentDescriptionWithWait({ description: "EB description" });
     });
 
     it("Add first approver to EB document", () => {

@@ -122,7 +122,6 @@ context("Autocomplete 'Parts' test", () => {
 
       it("Clicks on 'Add new part' button", () => {
         cy.wrapWithWaitOnApiCalls([
-          CyRoutes.GetRequiredApprovers,
           CyRoutes.DocPreview], () => {
           cy.ptClickCreateNewPart();
         });

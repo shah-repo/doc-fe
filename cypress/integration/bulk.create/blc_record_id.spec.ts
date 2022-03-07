@@ -463,9 +463,7 @@ context("Bulk create public, private and reserved record-ids", () => {
     });
 
     it("Click create new from form button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     context("Fill Bulk creation document atributes", () => {
@@ -743,9 +741,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Click create new from form button", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-          cy.drCreateNewDocumentFromForm();
-        });
+        cy.drCreateNewDocumentFromForm();
       });
 
       context("Fill Bulk creation document atributes", () => {
@@ -840,9 +836,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Clicks on 'Test Private Pool' type", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-            cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
-          });
+          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
         });
 
         it("Verify assigned record ID is one not reserved in BLC", () => {
@@ -874,9 +868,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Clicks on 'Test Private Pool' type", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-            cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
-          });
+          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Private Pool" });
         });
 
         it("Verify assigned record ID is one released reserved in BLC", () => {

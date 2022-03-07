@@ -1436,10 +1436,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
@@ -1497,10 +1494,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {

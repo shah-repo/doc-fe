@@ -645,18 +645,11 @@ context("Autosave LHR", () => {
 
     context("Add/remove approver and check autosave", () => {
       it("Add first Approver'", () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick({ force: true });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
 
       it("Add second Approver'", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick({ force: true });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Remove second Approver'", () => {

@@ -799,23 +799,14 @@ context("PO test", () => {
 
       it("Click 'Submit for Approval' button", () => {
         SystemRequirement("REQ-1490");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApproval();
       });
 
       it("Click 'Approve' button", () => {
         dateOfStepCompletion = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfStepCompletionOneMinuteLater = moment().add(1, "minutes")
           .tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
-        cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it("Check if approver ID and date time are recorded", () => {
@@ -878,20 +869,11 @@ context("PO test", () => {
 
     it("Click 'Submit for Approval' button", () => {
       SystemRequirement("REQ-1490");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApproval();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.EmployeesGet], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.ebApprove();
     });
 
     it("Check PO status is 'Closed'", () => {
@@ -1073,20 +1055,11 @@ context("PO test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApproval();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.EmployeesGet], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.ebApprove();
     });
 
     it("Check PO status is 'Closed'", () => {
@@ -1126,12 +1099,7 @@ context("PO test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click 'Void' button", () => {
@@ -1145,12 +1113,7 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-        CyRoutes.EmployeesGet], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.ebApprove();
     });
 
     it("Check PO status is 'Cancelled'", () => {

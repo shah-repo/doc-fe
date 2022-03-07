@@ -59,7 +59,7 @@ Cypress.Commands.add("recAPICreateReceivable", (params: {
 });
 
 Cypress.Commands.add("recCreateNew", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.progressBarShouldNotExist();

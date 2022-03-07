@@ -775,11 +775,7 @@ context("Training by Groups", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.pmSubmitForApproval();
     });
 
     it("Click Approve", () => {
@@ -826,7 +822,7 @@ context("Training by Groups", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
         CyRoutes.GetRequiredApprovers,
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });

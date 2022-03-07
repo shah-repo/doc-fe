@@ -599,9 +599,7 @@ context("Training notification test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click Submit for Approval", () => {

@@ -433,9 +433,7 @@ context("Mpi Template", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -619,9 +617,7 @@ context("Mpi Template", () => {
 
       context("Release LHRt document", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {

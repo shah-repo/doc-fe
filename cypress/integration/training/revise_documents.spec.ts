@@ -784,7 +784,7 @@ context("Revising Documents assigned as Training material", () => {
       cy.drClickReviseDocument();
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -794,8 +794,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });

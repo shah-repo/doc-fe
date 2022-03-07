@@ -341,8 +341,7 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApprovers], () => {
+    CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
     cy.get("div[id^=react-select]").contains(params.poType).arrowClick();

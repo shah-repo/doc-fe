@@ -795,7 +795,7 @@ context("Forced training flow", () => {
     it("Select 'One-Time Training Test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .type("One-Time Training Test{downarrow}{enter}");
       });

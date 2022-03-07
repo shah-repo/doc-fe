@@ -446,13 +446,10 @@ Cypress.Commands.add("arRejectComfirmationARNew", () => {
 });
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.ARPreview,
-    CyRoutes.SessionDetails,
-    CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetAutocompleteOptions], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.ARPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
+
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

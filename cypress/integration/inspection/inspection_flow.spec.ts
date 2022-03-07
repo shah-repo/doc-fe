@@ -1143,10 +1143,8 @@ context("Inspection flow", () => {
       });
 
       it("Click 'ADD NEW PART'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet], () => {
-          cy.recCreateRecordFromLandingPage();
-          cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
-        });
+        cy.recCreateRecordFromLandingPage();
+        cy.inspecSelectRecordFormFromMultiSelect({ recordType: "Test Subassembly" });
       });
 
       it("Enter title 'New Part for inspection'", () => {

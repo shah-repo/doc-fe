@@ -401,9 +401,7 @@ context("Test fb fields validation in BLC", () => {
     });
 
     it("Click create new from form button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.EmployeesGet, () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     context("Fill Bulk creation document atributes", () => {

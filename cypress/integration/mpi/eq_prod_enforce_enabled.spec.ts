@@ -1952,7 +1952,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           cy.listLoadingElementShouldAppear();
         });
@@ -2174,7 +2174,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           cy.listLoadingElementShouldAppear();
         });

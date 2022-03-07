@@ -967,7 +967,7 @@ context("LHR Build type flow", () => {
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -1194,9 +1194,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'START MPI'", () => {
@@ -1289,9 +1287,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'START MPI'", () => {
@@ -1323,11 +1319,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Complete step", () => {
@@ -1355,13 +1347,8 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
-
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
@@ -1404,9 +1391,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click 'START MPI'", () => {
@@ -1438,11 +1423,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Complete step", () => {
@@ -1470,11 +1451,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for approval", () => {
@@ -1505,7 +1482,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -1530,7 +1507,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -1555,7 +1532,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -1584,7 +1561,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
       cy.progressBarShouldNotExist();

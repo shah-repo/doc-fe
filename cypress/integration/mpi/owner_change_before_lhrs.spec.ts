@@ -968,11 +968,9 @@ context("Change owner before starting LHRs", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-          cy.url().then((url: any) => {
-            lhrDocUrl = url;
-          });
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.url().then((url: any) => {
+          lhrDocUrl = url;
         });
       });
     });
@@ -1022,9 +1020,7 @@ context("Change owner before starting LHRs", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Verify status is WIP", () => {
@@ -1088,9 +1084,7 @@ context("Change owner before starting LHRs", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 

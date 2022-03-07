@@ -441,9 +441,7 @@ context("LHR Upgrade", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -516,9 +514,7 @@ context("LHR Upgrade", () => {
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {
@@ -551,11 +547,9 @@ context("LHR Upgrade", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.url().then((url: any) => {
-          lhrDocUrl = url;
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
       });
     });
   });
@@ -640,9 +634,7 @@ context("LHR Upgrade", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Complete step", () => {

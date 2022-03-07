@@ -225,7 +225,7 @@ Cypress.Commands.add("drClearDocumentTitle", () => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
     cy.unClick();
   });
@@ -575,9 +575,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-  });
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -647,9 +645,9 @@ Cypress.Commands.add("drNewTypeTrainingSelect", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseDialog", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-  });
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+
+  cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });
 

@@ -107,8 +107,7 @@ Cypress.Commands.add("equipClickCreateNew", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.GetDocumentType,
     CyRoutes.GetSpecificDocumentType,
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApprovers], () => {
+    CyRoutes.DocPreview], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.progressBarShouldNotExist();
