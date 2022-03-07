@@ -29,7 +29,7 @@ import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
-import OwnerChanger from "./change.owner/container";
+import FormOwnerChangerContainer from "./change.owner/container";
 import ExportToEmail from "./ExportToEmail";
 import FormSubmitButton from "./SubmitButton";
 import { SubmitForApproval } from "./SubmitForApproval";
@@ -190,7 +190,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <OwnerChanger requestId={values.id} requestType={RequestType.Document} />
+    <FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} />
   );
 
   return (

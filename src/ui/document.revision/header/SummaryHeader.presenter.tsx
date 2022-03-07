@@ -1,6 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { SM } from "../../../App";
+import FormOwnerChangerContainer from "../../../App/Shifamed/Components/forms/presenters/change.owner/container";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -50,7 +51,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         />
         {SM.isNewLayout ? <HeaderMenu>
           {canChangeOwnerShip && (
-            <OwnerChangerContainer
+            <FormOwnerChangerContainer
               requestId={documentRevision.id}
               requestType={RequestType.Document}
             />

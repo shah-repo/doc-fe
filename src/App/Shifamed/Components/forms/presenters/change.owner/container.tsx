@@ -16,7 +16,7 @@ interface OwnProps {
   requestType: RequestType;
 }
 
-const OwnerChangerContainer: React.FC<OwnProps> = ({
+const FormOwnerChangerContainer: React.FC<OwnProps> = ({
   requestId,
   requestType,
 }) => {
@@ -90,4 +90,4 @@ const OwnerChangerContainer: React.FC<OwnProps> = ({
   );
 };
 
-export default OwnerChangerContainer;
+export default FormOwnerChangerContainer;
