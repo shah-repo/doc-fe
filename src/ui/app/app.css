@@ -82,6 +82,14 @@ body {
   color: var(--navy);
 }
 
+.k-grid-header .k-i-sort-asc-sm:before {
+  content: "\e017";
+}
+
+.k-grid-header .k-i-sort-desc-sm:before {
+  content: "\e019";
+}
+
 td[role="gridcell"] {
   white-space: nowrap;
 }
