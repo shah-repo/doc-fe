@@ -22,6 +22,7 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  gray_goose ="##CCD4D9",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -60,6 +61,7 @@ enum Colors {
   light_forest_green="#4C9646",
   green_blue="#0DB78D",
   light_forest_green_border="#509849",
+  dark_jungle_green="#162229",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",

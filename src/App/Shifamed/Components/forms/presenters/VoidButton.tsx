@@ -1,4 +1,3 @@
-import { ListItemText } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { ReactComponent as VoidDocumentIcon } from "../../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
@@ -12,6 +11,7 @@ import useAsync from "../../../../../ui/hooks/useAsync";
 import useDialog from "../../../../../ui/hooks/useDialog";
 import { StyledMenuListIcon } from "./StyledMenuListIcon";
 import { StyledMenuListItem } from "./StyledMenuListItem";
+import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 interface Props {
   documentRevision: DocumentRevision | undefined;
@@ -45,13 +45,9 @@ const VoidButton: React.FunctionComponent<Props> = ({
         <StyledMenuListIcon>
           <VoidDocumentIcon />
         </StyledMenuListIcon>
-        <ListItemText
+        <StyledMenuListItemText
           primary={<Text translation="common.void" />}
           onClick={dialog.open}
-          style={{
-            fontFamily: "Sora",
-            fontSize: "14px",
-          }}
         />
       </StyledMenuListItem>
       <AlertDialog

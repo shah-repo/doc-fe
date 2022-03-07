@@ -1,4 +1,5 @@
-import Button, { ButtonProps } from "@material-ui/core/Button";
+import { Button } from "@material-ui/core";
+import { ButtonProps } from "@material-ui/core/Button";
 import { FormikErrors } from "formik";
 import { isEmpty } from "lodash";
 import * as React from "react";
@@ -21,7 +22,6 @@ const SubmitButton: React.FunctionComponent<SubmitButtonProps> = ({
 }) => {
   const hasErrors = !isEmpty(errors);
   const isActive = asyncState.status === AsyncStatus.Active;
-
   return (
     <Button
       type="submit"

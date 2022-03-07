@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SM } from "../../App";
+import FormExportToEmail from "../../App/Shifamed/Components/forms/presenters/export.to.email/ExportToEmail";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -228,6 +230,18 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
+  const renderExportToEmail = () =>
+    SM.isNewLayout ? (
+      <FormExportToEmail
+        revisionId={documentRevision.id}
+        canAccess={documentRevision.document.canAccess}
+      />
+    ) : (
+      <ExportToEmail
+        revisionId={documentRevision.id}
+        canAccess={documentRevision.document.canAccess}
+      />
+    );
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
@@ -240,10 +254,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable && <ExportToEmail
-        revisionId={documentRevision.id}
-        canAccess={documentRevision.document.canAccess}
-      />}
+      {isExportable && renderExportToEmail()}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>

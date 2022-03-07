@@ -50,6 +50,13 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
           vertical: "bottom",
           horizontal: "center",
         }}
+        style = {{
+          padding: "5px 0px",
+          border: `1px solid ${Colors.gray_goose}`,
+          boxSizing: "border-box",
+          boxShadow: "0px 10px 30px rgba(22, 34, 41, 0.15)",
+          borderRadius: "4px",
+        }}
       >
         {children.map((menuItem, index) => {
           if (!menuItem) {

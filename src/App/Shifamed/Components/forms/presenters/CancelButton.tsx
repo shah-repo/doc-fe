@@ -1,4 +1,3 @@
-import { ListItemText } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
 import { ReactComponent as VoidDocumentIcon } from "../../../../../assets/images/void_document.svg";
@@ -13,6 +12,7 @@ import useAsync from "../../../../../ui/hooks/useAsync";
 import useDialog from "../../../../../ui/hooks/useDialog";
 import { StyledMenuListIcon } from "./StyledMenuListIcon";
 import { StyledMenuListItem } from "./StyledMenuListItem";
+import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -47,15 +47,11 @@ const CancelButton: React.FunctionComponent<Props> = ({
          <StyledMenuListIcon>
            <VoidDocumentIcon />
          </StyledMenuListIcon>
-         <ListItemText
+         <StyledMenuListItemText
            id="cancelDraftButton"
            data-cy="cancelDraftButton"
            primary={<Text translation="common.cancel.draft" />}
            onClick={dialog.open}
-           style={{
-            fontFamily: "Sora",
-            fontSize: "14px",
-          }}
          />
        </StyledMenuListItem>)
       }

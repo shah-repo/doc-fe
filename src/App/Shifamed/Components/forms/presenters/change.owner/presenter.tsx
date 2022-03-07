@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogTitle, FormControl, IconButton, ListItemText, Typography } from "@material-ui/core";
+import { Box, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
 import React, { Fragment } from "react";
@@ -13,6 +13,7 @@ import SubmitButton from "../../../../../../ui/components/forms/SubmitButton";
 import Text from "../../../../../../ui/components/Text";
 import { StyledMenuListIcon } from "../StyledMenuListIcon";
 import { StyledMenuListItem } from "../StyledMenuListItem";
+import { StyledMenuListItemText } from "../StyledMenuListITemText";
 
 
 interface OwnProps {
@@ -96,15 +97,11 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
         <StyledMenuListIcon>
           <ChangeOwnerIcon />
         </StyledMenuListIcon>
-        <ListItemText
+        <StyledMenuListItemText
           id="OwnerChangerPresenter-changeOwner"
           data-cy="changeOwner"
           primary={<Text translation="change.owner" />}
           onClick={openDialog}
-          style={{
-            fontFamily: "Sora",
-            fontSize: "14px",
-          }}
         />
       </StyledMenuListItem>
       {dialogRenderer()}
