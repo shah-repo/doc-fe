@@ -3,7 +3,7 @@ import { DataProps } from "../../../state/ducks/common/types";
 import { DocumentRevisionStatus, Reference as Model } from "../../../state/ducks/documentRevisions/types";
 import { getReferenceToSummary } from "../utils/references.helpers";
 import { ReferenceSummary } from "../utils/types";
-import ReferencePresenter from "./reference.presenter";
+import ReferencePresenter from "./reference.presenter.new";
 
 interface OwnProps {
   status: DocumentRevisionStatus;

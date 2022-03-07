@@ -250,6 +250,7 @@
   "common.target.date": "Target Date",
   "common.approvers": "Approvers",
   "common.referenced.by": "Referenced By",
+  "common.general.info": "General Info",
   "common.references": "References",
   "common.previous.build": "Previous Build",
   "common.next.build": "Next Build",

@@ -1,5 +1,5 @@
 
-type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory" | "formMigration";
+type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory" | "formMigration" | "references";
 
 export interface Sidebar {
   icon: JSX.Element;

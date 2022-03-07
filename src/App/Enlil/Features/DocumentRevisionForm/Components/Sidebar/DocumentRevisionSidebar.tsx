@@ -7,6 +7,7 @@ import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
 import { ReactComponent as BadgeIcon } from "../../../../../../../src/assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../../../../../../src/assets/images/bookmark.svg";
 import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
+import { ReactComponent as EyeIcon } from "../../../../../../../src/assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../../../../../src/assets/images/history.svg";
 import { ReactComponent as MigrationIcon } from "../../../../../../../src/assets/images/migration.svg";
 import { ReactComponent as NoteIcon } from "../../../../../../../src/assets/images/note.svg";
@@ -15,6 +16,7 @@ import AccessPermissionsContainer from "../../../../../../ui/documentRevision/ac
 import DocumentRevisionAuditContainer from "../../../../../../ui/documentRevision/audit/Audit.container";
 import DocumentRevisionListContainer from "../../../../../../ui/documentRevision/DocumentRevisionList.container";
 import ChangeDocumentFormContainer from "../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container";
+import ReferencesContainer from "../../../../../../ui/documentRevision/References/References.container";
 import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks";
 import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/RevisionHistory";
 import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
@@ -83,6 +85,17 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         >
           <SidebarContainer
             sidebarList={[
+              {
+                icon: <EyeIcon />,
+                type: "references",
+                details: {
+                  shouldShow: true,
+                  title: "References",
+                  component: (
+                    <ReferencesContainer selectedDocument={selectedDocument} />
+                  ),
+                },
+              },
               {
                 icon: <NoteIcon />,
                 type: "note",
