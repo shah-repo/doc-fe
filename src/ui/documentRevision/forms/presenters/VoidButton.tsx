@@ -1,10 +1,11 @@
-import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React, { useMemo } from "react";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
+import FormMessage from "../../../components/forms/FormMessage";
+import FormProgress from "../../../components/forms/FormProgress";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -35,16 +36,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <ListItem
-        button
-        disabled={async.asyncState.status === AsyncStatus.Active}
-      >
-        <ListItemIcon>
-          <VoidDocumentIcon />
-        </ListItemIcon>
-        <ListItemText primary={<Text translation="common.void" />} onClick={dialog.open}/>
-      </ListItem>
-      {/* <Box position="absolute" marginTop="-50px">
+      <Box position="absolute" marginTop="-50px">
         <FormMessage asyncState={async.asyncState} />
         <FormProgress asyncState={async.asyncState} />
       </Box>
@@ -56,7 +48,7 @@ const VoidButton: React.FunctionComponent<Props> = ({
         disabled={async.asyncState.status === AsyncStatus.Active}
       >
         <Text translation="common.void" />
-      </Button> */}
+      </Button>
       <AlertDialog
         confirmAction={voidDocument}
         message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}

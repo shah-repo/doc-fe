@@ -35,6 +35,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         data-cy="HeaderMenuButton"
         id="HeaderMenuButton"
         style={{ color: Colors.white }}
+        disableRipple
       >
         <MoreVertIcon />
       </IconButton>
@@ -58,7 +59,7 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
             <MenuItem
               onClick={handleClose}
               style={{
-                display: menuItem.props.shouldDisplay === false ? "none" : "block",
+                display: menuItem?.props?.shouldDisplay === false ? "none" : "block",
                 backgroundColor: Colors.white,
               }}
               key={index}

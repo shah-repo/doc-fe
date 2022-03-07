@@ -11,20 +11,16 @@ import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisi
 import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
-import OwnerChanger from "../../../../../ui/components/common/owner.changer/container";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../../../ui/components/forms/CopyEBButton";
-import SubmitButton from "../../../../../ui/components/forms/SubmitButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import ApproveAndRelease from "../../../../../ui/documentRevision/forms/presenters/approve.and.release/ApproveAndRelease";
-import CancelButton from "../../../../../ui/documentRevision/forms/presenters/CancelButton";
 import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
 import ExportToEmail from "../../../../../ui/documentRevision/forms/presenters/export.to.email/ExportToEmail";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import { SubmitForApproval } from "../../../../../ui/documentRevision/forms/presenters/SubmitForApproval";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
-import VoidButton from "../../../../../ui/documentRevision/forms/presenters/VoidButton";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../../../../ui/documentRevision/helpers/records";
@@ -34,8 +30,10 @@ import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../..
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
 import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
+import CancelButton from "./CancelButton";
+import OwnerChanger from "./change.owner/container";
 import FormSubmitButton from "./SubmitButton";
-
+import VoidButton from "./VoidButton";
 
 const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const formik = useFormikContext();
@@ -200,17 +198,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       <Observer>
         {() => (
           <>
-            {SM.isNewLayout ? <FormSubmitButton
-              asyncState={asyncState}
-              label={isDisabled ?
-                "common.save" :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-              data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-            /> : <SubmitButton
+            {<FormSubmitButton
               asyncState={asyncState}
               label={isDisabled ?
                 "common.save" :
@@ -226,7 +214,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       </Observer>
       {
         !redlineActive &&
-      <span>
+      <>
         {(isStatusReleased || isStatusInDraft) && serializedCSV &&
           <ExportToCSVButton
             {...{ documentRevision }}
@@ -303,7 +291,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
         </HeaderMenu>
-      </span>
+      </>
       }
     </>
   );

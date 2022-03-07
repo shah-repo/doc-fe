@@ -1,7 +1,6 @@
-import { ListItemText } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
-import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
@@ -11,8 +10,6 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { checkIsDocumentRecord } from "../../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft } from "../../helpers/documentRevisionStatus";
-import { StyledMenuListIcon } from "./StyledMenuListIcon";
-import { StyledMenuListItem } from "./StyledMenuListItem";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -43,20 +40,9 @@ const CancelButton: React.FunctionComponent<Props> = ({
     <>
       {
         canShowCancelButton &&
-        // <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
-        //   <Text translation="common.cancel.draft" />
-        // </Button>
-       ( <StyledMenuListItem button>
-         <StyledMenuListIcon>
-           <VoidDocumentIcon />
-         </StyledMenuListIcon>
-         <ListItemText
-           id="cancelDraftButton"
-           data-cy="cancelDraftButton"
-           primary={<Text translation="common.cancel.draft" />}
-           onClick={dialog.open}
-         />
-       </StyledMenuListItem>)
+        <Button id="cancelDraftButton" data-cy="cancelDraftButton" variant="outlined" onClick={dialog.open}>
+          <Text translation="common.cancel.draft" />
+        </Button>
       }
       <AlertDialog
         confirmAction={handleCancelDraft}

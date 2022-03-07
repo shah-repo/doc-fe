@@ -51,15 +51,15 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
     return (
       <Box
         minHeight={60}
-        borderTop={1}
         borderColor={Colors.medium_gray}
         bgcolor="white"
         py={1}
         px={2}
+        alignContent="center"
       >
         <Grid container={true} className={`${classes.headerSection} ${
           classes[statusClassMapping[displayStatus || status || ""]]
-        }`}>
+        }`} alignItems="center">
           {children}
         </Grid>
       </Box>

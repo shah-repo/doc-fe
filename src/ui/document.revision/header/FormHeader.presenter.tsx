@@ -39,7 +39,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
         displayStatus={documentRevision.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
       />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>{type}
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">{type}
         <Grid container={true} alignItems="flex-end" justify="flex-end">
           <Box alignSelf="center">
             {lastSavedTimestamp &&
