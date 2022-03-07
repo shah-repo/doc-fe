@@ -43,7 +43,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
   if (SM.isNewLayout) {
     return (
       <Box display="flex" height="100%">
-        <Box width={55} textAlign="center" mr={1.5}>
+        <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
               <Box key={item.details.title}>
@@ -61,7 +61,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
             )
           )}
         </Box>
-        <Box flexGrow={1} overflow="auto">
+        <Box flexGrow={1} overflow="auto" margin={0.5}>
           {sidebarList[indexNumber].details.component}
         </Box>
       </Box>

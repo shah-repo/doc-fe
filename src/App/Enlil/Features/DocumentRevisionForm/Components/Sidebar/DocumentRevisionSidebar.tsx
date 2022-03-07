@@ -47,20 +47,25 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         bgcolor="white"
         width={_documentRevisionSidebarState?.open ? 300 : 55}
         borderColor={Colors.medium_gray}
-        borderLeft={0.5}
         style={{
           transition: _documentRevisionSidebarState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
+          background: "#FFFFFF",
+          boxShadow: "inset -1px 0px 0px #CCD4D9",
+          borderRadius: "7px 0px 0px 7px",
         }}
       >
         <Box
           display="flex"
-          height={56}
+          height={48}
           alignItems="center"
+          marginTop="10px"
         >
-          <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
-            {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
-            {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
-          </IconButton>
+          <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
+            <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
+              {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
+              {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
+            </IconButton>
+          </Box>
           {_documentRevisionSidebarState?.open && (
             <Typography variant="button">
               <SMText
@@ -72,7 +77,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         </Box>
         <SMBox
           display="flex"
-          p={0.5}
           stretchY="calc(100% - 56px)"
           borderTop={1}
           borderColor={Colors.medium_gray}
