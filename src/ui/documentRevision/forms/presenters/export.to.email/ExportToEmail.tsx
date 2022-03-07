@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useIntl } from "react-intl";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
@@ -5,7 +6,6 @@ import { toastError, toastSuccess } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import { StyledButton } from "../StyledListButton";
 
 
 interface Props {
@@ -36,9 +36,9 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess }
 
   return (
     <>
-      <StyledButton data-cy="exportToEmail" color="primary" onClick={handleClick}>
+      <Button data-cy="exportToEmail" variant="outlined" color="secondary" onClick={handleClick}>
         <Text translation="common.send.to.email" />
-      </StyledButton>
+      </Button>
     </>
   );
 };

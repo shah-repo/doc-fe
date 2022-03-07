@@ -1,4 +1,4 @@
-import { createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
+import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
@@ -31,7 +31,6 @@ import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
-import { StyledButton } from "../StyledListButton";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
 
 interface Props {
@@ -325,14 +324,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   return (
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
-        <StyledButton
-          color="primary"
+        <Button
+          color="secondary"
+          variant="outlined"
           onClick={isRecord ? alertDialog.open :  openDialog}
           id="ApproveAndRelease-button"
           data-cy="ApproveAndRelease-button"
         >
           <Text message={isRecord ? "record.finalize.and.release" : label} />
-        </StyledButton>
+        </Button>
       </CustomLabelTooltip>
       {
         dialog.isOpen &&

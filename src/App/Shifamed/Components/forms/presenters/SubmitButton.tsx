@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import * as React from "react";
 import { AsyncState, AsyncStatus } from "../../../../../state/types";
 import Text from "../../../../../ui/components/Text";
-import { StyledButton } from "../../../../../ui/documentRevision/forms/presenters/StyledListButton";
+import { StyledButton } from "./StyledListButton";
 
 export interface SubmitButtonProps extends ButtonProps {
   asyncState: AsyncState;
