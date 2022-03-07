@@ -61,7 +61,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
             )
           )}
         </Box>
-        <Box flexGrow={1} overflow="auto" margin={1.875}>
+        <Box flexGrow={1} overflow="auto">
           {sidebarList[indexNumber].details.component}
         </Box>
       </Box>

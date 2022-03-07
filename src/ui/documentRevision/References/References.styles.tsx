@@ -39,6 +39,12 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       textTransform: "uppercase",
     },
+    secondaryText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSize: "12px",
+      color: Colors.font_gray,
+    },
     released: {
       fontFamily: "Sora",
       fontStyle: "normal",

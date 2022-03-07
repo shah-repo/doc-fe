@@ -3,22 +3,28 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      margin: theme.spacing(0, 2, 0, 0),
-    },
     details: {
       overflowY: "auto",
       maxHeight: "50vw",
     },
+    noPaddingMargin: {
+      margin: "0px",
+      padding: "0px",
+    },
+    auditListItem: {
+      margin: "0px",
+      padding: "0px",
+      marginBottom: "20px",
+    },
     changeContainer: {
       borderBottom: "1px solid lightgray",
-      padding: theme.spacing(1, 0),
-      background: "#fff",
+      padding: theme.spacing(2),
     },
     auditValue: {
-      color: theme.palette.primary.main,
-      fontWeight: 500,
+      fontSize: "14px",
+      fontFamily: "Sora",
       wordBreak: "break-word",
+      color: Colors.almost_black,
     },
     owner: {
       color: theme.palette.text.primary,
@@ -40,8 +46,28 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
       marginLeft: theme.spacing(1),
     },
-    list: {
-      margin: theme.spacing(0, 1, 0, 1),
+    avatar: {
+      width: "35px",
+      height: "35px",
+      fontSize: "12px",
+      fontWeight: 600,
+      color: Colors.white,
+      fontFamily: "Sora",
+      textTransform: "uppercase",
+    },
+    generalInfo: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "21px",
+      color: Colors.almost_black,
+    },
+    secondaryText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontSize: "12px",
+      color: Colors.font_gray,
     },
   }),
 );

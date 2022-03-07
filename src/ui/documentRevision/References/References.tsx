@@ -16,7 +16,7 @@ const References = ({
 }) => {
   const classes = styles();
   return (
-    <Box>
+    <Box margin={2}>
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
@@ -39,6 +39,7 @@ const References = ({
                 component="span"
                 variant="body2"
                 color="textPrimary"
+                className={classes.secondaryText}
               >
                 Owner
               </Typography>

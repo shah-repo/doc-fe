@@ -49,7 +49,7 @@ DocumentRevisionListContainerProps
 
   return (
     <div className={classes.container}>
-      <List>
+      <List disablePadding>
         {
           documentRevisions.map((documentRevision) => (
             <DocumentRevisionListPresenter
