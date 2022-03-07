@@ -19,7 +19,7 @@ import AttachmentsField from "../../document.revision/form/attachments";
 import Title from "../../document.revision/form/title";
 import FormHeader from "../../document.revision/header/FormHeader";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FB, FBEBPart, FBSchemaProps } from "../../form.builder";
+import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import { DocumentCloneType } from "../Clone.container";
@@ -66,9 +66,8 @@ interface Props extends FormikProps<DocumentRevisionFormValues> {
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
-  isOutput: boolean;
   lastSavedTimestamp?: string;
-  originScheme?: FBSchemaProps[];
+  mode: FBWorkspaceMode;
 }
 
 export interface FormHeaderContext {
@@ -113,9 +112,8 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   pmFormId,
   releasedDocRev,
   redlineActive,
-  isOutput,
   lastSavedTimestamp,
-  originScheme,
+  mode,
 }) => {
   useScrollIntoView();
   const classes = styles();
@@ -259,6 +257,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
+
+  useEffect(() => {
+    workspaceState?.setMode(mode);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   return (
     <Grid
