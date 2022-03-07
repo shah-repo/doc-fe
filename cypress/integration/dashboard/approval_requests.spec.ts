@@ -868,8 +868,8 @@ context("Approval request form", () => {
     });
 
     it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).trigger("mouseover");
+      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiBox-root").eq(0)
         .find("svg").eq(0).arrowClick();
 
       cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");

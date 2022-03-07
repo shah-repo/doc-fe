@@ -864,7 +864,7 @@ context("Autosave on blur", () => {
     });
 
     it("Enters title 'New document from form'", () => {
-      cy.drEnterDocumentTitle({ name: "New document from form" });
+      cy.drEnterDocumentTitleWithWait({ name: "New document from form" });
     });
 
     it("Enters description 'New document from form description'", () => {
@@ -920,7 +920,7 @@ context("Autosave on blur", () => {
     it("Remove Autocomplete field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy^=fb-autocomplete-]").click();
-        cy.get("[name^=fb-autocomplete-]>div>div:nth-child(1)>div>div>button").eq(0).click();
+        cy.get("[name^=fb-autocomplete-] button").eq(0).click();
         cy.unClick();
       });
     });

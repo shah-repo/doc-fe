@@ -316,9 +316,9 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
-      cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick();
+      cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
       cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
-      cy.unClick();
+      cy.unClick().wait(500);
     });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
