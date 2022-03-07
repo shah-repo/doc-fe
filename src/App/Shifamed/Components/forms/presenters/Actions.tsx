@@ -11,7 +11,6 @@ import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisi
 import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
-import HeaderMenu from "../../../../../ui/components/common/header/Menu";
 import OwnerChanger from "../../../../../ui/components/common/owner.changer/container";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
 import CopyEBButton from "../../../../../ui/components/forms/CopyEBButton";
@@ -33,6 +32,7 @@ import { isDocumentNumericRelease } from "../../../../../ui/documentRevision/hel
 import { InspectionControlsContainer } from "../../../../../ui/documentRevision/InspectionControls/InspectionControls.container";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../../../../ui/form.builder/FBInput/FBInput.wrap";
 import useShouldUpgradeToLatest from "../../../../../ui/hooks/useShouldUpgradeToLatest";
+import HeaderMenu from "../header/Menu";
 import { withNewActionButton } from "./ActionButton.wrap";
 import FormSubmitButton from "./SubmitButton";
 

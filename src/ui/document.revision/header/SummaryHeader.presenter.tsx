@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { SM } from "../../../App";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -47,14 +48,18 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
           canShowCreateVersionButton={canShowCreateVersionButton}
           hasAccess={documentRevision.document.canAccess}
         />
-        <HeaderMenu>
+        {SM.isNewLayout ? <HeaderMenu>
           {canChangeOwnerShip && (
             <OwnerChangerContainer
               requestId={documentRevision.id}
               requestType={RequestType.Document}
             />
-          )}
-        </HeaderMenu>
+          )} </HeaderMenu> :  canChangeOwnerShip && (
+          <OwnerChangerContainer
+            requestId={documentRevision.id}
+            requestType={RequestType.Document}
+          />
+        )}
       </Grid>
     </Grid>
   </Header>
