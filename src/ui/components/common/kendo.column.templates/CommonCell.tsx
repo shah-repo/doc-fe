@@ -23,9 +23,9 @@ export const CommonCell = ({
   if (field === "precalc.lhr_end_accepted_quantity" && value === -1) {
     formattedValue = "N/A";
   }
-  // if (field === "precalc.po_amount") {
-  //   formattedValue = get(dataItem, "precalc.po_amount_org");
-  // }
+  if (field === "precalc.po_amount") {
+    formattedValue = get(dataItem, "precalc.po_amount_org");
+  }
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });

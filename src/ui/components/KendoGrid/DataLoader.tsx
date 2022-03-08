@@ -27,7 +27,6 @@ export const DataLoader = ({ dataState, onDataReceived, schema, tableName, query
     data = { ...data, documentTypeCategory };
   }
   data = getDynamicPayloadItems(queryUrl, data);
-  console.log("debug :: data", data);
   const requestConfig: AxiosRequestConfig = {
     method: "post",
     url: queryUrl,

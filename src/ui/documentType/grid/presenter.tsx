@@ -68,7 +68,6 @@ export function DocumentTypePresenter({
     dataToBeExported: TableDataProps<DocumentRevision>
   ) => {
     let copyDate = cloneDeep(dataToBeExported);
-    console.log("debug :: dataToBeExported", dataToBeExported);
     copyDate = map(copyDate, (record: any) => {
       if (has(record, "precalc.lhr_end_accepted_quantity")) {
         if (record.precalc.lhr_end_accepted_quantity === -1) {
@@ -76,10 +75,10 @@ export function DocumentTypePresenter({
           record.precalc.lhr_end_accepted_quantity = "N/A";
         }
       }
-      // if (has(record, "precalc.po_amount")) {
-      //   // eslint-disable-next-line @typescript-eslint/camelcase
-      //   record.precalc.po_amount = record.precalc.po_amount_org;
-      // }
+      if (has(record, "precalc.po_amount")) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        record.precalc.po_amount = record.precalc.po_amount_org;
+      }
       return record;
     });
     setDataToBeExported(copyDate);

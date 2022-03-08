@@ -1,4 +1,5 @@
 import { GridCellProps } from "@progress/kendo-react-grid";
+import { get } from "lodash";
 import React, { ReactElement } from "react";
 import { useIntl } from "react-intl";
 import { DisplayText, TranslatedText } from "../kendo/helpers";
@@ -56,16 +57,16 @@ const CellRender = (td: ReactElement | null, {
         </>
       );
     }
-    // if (dataItem.field === "precalc.po_amount") {
-    //   const rowObject = dataItem.items[0];
-    //   const value = get(rowObject, "precalc.po_amount_org");
-    //   children = (
-    //     <>
-    //       {td.props.children?.props?.children[0]}{" "}
-    //       {value}
-    //     </>
-    //   );
-    // }
+    if (dataItem.field === "precalc.po_amount") {
+      const rowObject = dataItem.items[0];
+      const value = get(rowObject, "precalc.po_amount_org");
+      children = (
+        <>
+          {td.props.children?.props?.children[0]}{" "}
+          {value}
+        </>
+      );
+    }
     return React.cloneElement(td, td.props, children);
   }
   return td;

@@ -310,21 +310,11 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       .then((resp) => {
         resp.data = resp.data.map((el) => ({
           ...el,
-          memberNames:
-            el.employees
-              .map((e) => e.user.name.trimLeft().trimEnd())
-              .sort()
-              .join(", ") || "",
-          parentName:
-            el.parents
-              .map((e) => e.name.trimLeft().trimEnd())
-              .sort()
-              .join(", ") || "",
+          memberNames: el.employees.map((e) => e.user.name.trimLeft().trimEnd()).sort().join(", ") || "",
+          parentName: el.parents.map((e) => e.name.trimLeft().trimEnd()).sort().join(", ") || "",
           formattedTags: el?.tags?.sort().join(", ") || "",
           formattedPermissions: el?.permissions?.sort().join(", ") || "",
-          groupType: el?.isOfficial
-            ? getTranslatedText(TranslatedText[DisplayText.OFFICIAL])
-            : getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
+          groupType: el?.isOfficial ? "official" : "unofficial",
         }));
         return resp;
       })
@@ -434,15 +424,15 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const GroupTypeFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
     {...props}
     data={[{
-      text: getTranslatedText(TranslatedText[DisplayText.OFFICIAL]),
-      value: getTranslatedText(TranslatedText[DisplayText.OFFICIAL]),
+      text: getTranslatedText("common.official"),
+      value: "official",
     }, {
-      text: getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
-      value: getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
+      text: getTranslatedText("common.unofficial"),
+      value: "unofficial",
     }]}
     defaultItem={{
       text: getTranslatedText(TranslatedText[DisplayText.ALL]),
-      value: getTranslatedText(TranslatedText[DisplayText.ALL]),
+      value: "All",
     }}
   />;
 
