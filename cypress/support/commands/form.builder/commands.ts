@@ -76,8 +76,9 @@ declare global {
 }
 
 Cypress.Commands.add("fbAutocompleteType", (params: { autocompleteOption: string }) => {
-  cy.get("[data-cy=\"optionId\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.autocompleteOption).arrowClick();
+  cy.get("[data-cy=\"optionId\"]").arrowType(params.autocompleteOption);
+  cy.wait(1000);
+  cy.get("[data-cy=\"optionId\"]").arrowType("{downarrow}{enter}");
 });
 
 Cypress.Commands.add("dtSelectDefaultRevisionStage", (params: { defaultRevisionStage: string }) => {

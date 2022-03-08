@@ -173,7 +173,7 @@ context("Autocomplete 'Supplier list' test", () => {
           });
 
           it("Select 'Supplier lists' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Supplier list{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Supplier list" });
           });
 
           it("Click 'Add' button", () => {

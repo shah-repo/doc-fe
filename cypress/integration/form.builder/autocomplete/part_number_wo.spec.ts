@@ -196,7 +196,7 @@ context("Autocomplete 'Part Number in WO' test", () => {
           });
 
           it("Select 'Available Parts Documents' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Part Number in WO{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Part Number in WO" });
           });
 
           it("Click 'Add' button", () => {

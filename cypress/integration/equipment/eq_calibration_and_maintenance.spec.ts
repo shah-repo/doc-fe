@@ -591,6 +591,8 @@ context("Equipment maintenance and calibration", () => {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
         }
 
+        cy.wait(500);
+
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
           .each(($el) => {
@@ -655,6 +657,7 @@ context("Equipment maintenance and calibration", () => {
         }
 
         cy.wait(500);
+
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
           .each(($el) => {

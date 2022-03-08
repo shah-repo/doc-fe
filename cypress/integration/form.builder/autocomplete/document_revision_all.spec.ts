@@ -160,7 +160,7 @@ context("Autocomplete 'Document revisions (all versions)' test", () => {
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document revisions (all versions){downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document revisions (all versions)" });
           });
 
           it("Click 'Add' button", () => {

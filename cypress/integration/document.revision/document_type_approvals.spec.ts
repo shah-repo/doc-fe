@@ -584,9 +584,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Select 'Numeric' revision stage", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Add approver to approvals", () => {
@@ -625,7 +623,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Fill document description", () => {
-        cy.drEnterDocumentDescription({ description: "Suppliers address" });
+        cy.drEnterDocumentDescriptionWithWait({ description: "Suppliers address" });
       });
 
       it("Click 'Save' document", () => {
@@ -633,10 +631,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Add approver to approvals", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
       it("Submit for approvals and check enfocment", () => {

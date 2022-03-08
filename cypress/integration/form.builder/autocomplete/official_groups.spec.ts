@@ -142,7 +142,7 @@ context("Autocomplete 'Official Groups' test", () => {
           });
 
           it("Select 'Official Groups' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Official Groups{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Official Groups" });
           });
 
           it("Click 'Add' button", () => {

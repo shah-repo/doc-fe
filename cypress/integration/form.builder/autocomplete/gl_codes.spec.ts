@@ -142,7 +142,7 @@ context("Autocomplete 'GL code' test", () => {
           });
 
           it("Select 'GL codes' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("GL codes{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "GL codes" });
           });
 
           it("Click 'Add' button", () => {

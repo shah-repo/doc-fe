@@ -151,10 +151,8 @@ Cypress.Commands.add("dlVerifyFilterByStatus", (params: {status: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByEffectiveDate", (params: {effectiveDate: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevs, () => {
-    cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
-    cy.get("li").contains(params.effectiveDate).arrowClick().wait(500);
-  });
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
+  cy.get("li").contains(params.effectiveDate).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -166,11 +164,11 @@ Cypress.Commands.add("dlVerifyFilterClear", () => {
   cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select Type");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
   cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "Select State");
-  cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "Select Item");
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).should("have.text", "All");
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).should("have.text", "All");
 });
 
 function getListItemNumber(text: string) {
@@ -188,7 +186,7 @@ Cypress.Commands.add("dlVerifyDocCounter", (params: {docCounterNumber: integerTy
 });
 
 Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string}) => {
-  cy.get("div[aria-rowindex=1]>div.ReactVirtualized__Table__rowColumn:nth-child(3)>div>a>div>div")
+  cy.get("tr.k-master-row>td").eq(2)
     .trigger("mouseover");
   cy.get("div[role=tooltip]>div").should("have.text", params.description);
 });

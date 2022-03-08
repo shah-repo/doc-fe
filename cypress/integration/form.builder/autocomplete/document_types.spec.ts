@@ -150,7 +150,7 @@ context("Autocomplete 'Document types' test", () => {
           });
 
           it("Select 'Document typess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document types{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document types" });
           });
 
           it("Click 'Add' button", () => {

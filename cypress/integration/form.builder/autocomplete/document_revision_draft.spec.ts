@@ -150,7 +150,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revisions In Draft without Records{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document Revisions In Draft without Records" });
           });
 
           it("Click 'Add' button", () => {

@@ -142,7 +142,7 @@ context("Autocomplete 'Company addresses' test", () => {
           });
 
           it("Select 'Company addressess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Company addresses{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Company addresses" });
           });
 
           it("Click 'Add' button", () => {

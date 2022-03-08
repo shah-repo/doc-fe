@@ -221,7 +221,7 @@ context("Autocomplete 'Lots' test", () => {
           });
 
           it("Select 'Lots' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Lots{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Lots" });
           });
 
           it("Click 'Add' button", () => {

@@ -378,7 +378,7 @@ context("Autocomplete 'Purchase Order' test", () => {
           });
 
           it("Select 'Purchase Order' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Purchase Order list{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Purchase Order list" });
           });
 
           it("Click 'Add' button", () => {

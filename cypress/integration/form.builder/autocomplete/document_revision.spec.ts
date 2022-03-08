@@ -160,7 +160,7 @@ context("Autocomplete 'Document Revision' test", () => {
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document Revision" });
           });
 
           it("Click 'Add' button", () => {

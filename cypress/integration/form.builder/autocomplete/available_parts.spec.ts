@@ -196,7 +196,7 @@ context("Autocomplete 'Available Parts' test", () => {
           });
 
           it("Select 'Available Parts' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Available Parts{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Available Parts" });
           });
 
           it("Click 'Add' button", () => {

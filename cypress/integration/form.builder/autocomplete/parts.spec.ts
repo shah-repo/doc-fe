@@ -198,7 +198,7 @@ context("Autocomplete 'Parts' test", () => {
           });
 
           it("Select 'Partss' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Parts{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Parts" });
           });
 
           it("Click 'Add' button", () => {

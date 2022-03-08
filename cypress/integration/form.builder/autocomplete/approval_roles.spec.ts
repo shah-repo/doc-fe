@@ -110,7 +110,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click Save button", () => {
-        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Approve and release FORM document", () => {
@@ -202,7 +202,7 @@ context("Autocomplete 'Approval Roles' test", () => {
           });
 
           it("Select 'Approval Roles' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Approval Roles{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Approval Roles" });
           });
 
           it("Click 'Add' button", () => {

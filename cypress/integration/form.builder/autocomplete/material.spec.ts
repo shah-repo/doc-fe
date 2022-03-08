@@ -154,7 +154,7 @@ context("Autocomplete 'Material' test", () => {
           });
 
           it("Select 'Material' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Materials{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Materials" });
           });
 
           it("Click 'Add' button", () => {
