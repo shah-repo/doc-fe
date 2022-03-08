@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransition } from "../../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import { toastError } from "../../../../components/notifications";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -33,7 +34,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   const async = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     },
     onError: (error) => {
       toastError(error as string);

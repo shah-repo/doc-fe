@@ -944,7 +944,7 @@ context("Sorting test", () => {
                           deleteDisabled: true,
                           name: "fb-approvals-kn7fbu5l",
                           uniqueSchemaItem: true,
-                          index: 0,
+                          index: 1,
                         }],
                       },
                     },
@@ -987,7 +987,7 @@ context("Sorting test", () => {
                             },
                           },
                           formInput: {
-                            "receivable-kdptzei2": createdPODocument.id,
+                            "receivable-kdptzei2": { id: createdPODocument.id },
                           },
                         },
                         employeeId: adminEmployee.id,
@@ -1029,7 +1029,7 @@ context("Sorting test", () => {
                                 },
                               },
                               formInput: {
-                                "receivable-kdptzei2": createdPODocument.id,
+                                "receivable-kdptzei2": { id: createdPODocument.id },
                               },
                             },
                             employeeId: adminEmployee.id,

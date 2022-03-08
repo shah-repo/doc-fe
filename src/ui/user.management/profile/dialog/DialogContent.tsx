@@ -1,12 +1,10 @@
 import { Box, Button, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as SlackLogo } from "../../../../assets/images/slack_full_logo.svg";
 import { getTableCriteria } from "../../../../common/utils/selectors";
 import { attachmentsActions } from "../../../../state/ducks/attachments";
-import { authSelectors } from "../../../../state/ducks/auth";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import { companySelectors } from "../../../../state/ducks/company";
 import { tableSearchActions } from "../../../../state/ducks/tableSearch";
@@ -15,11 +13,8 @@ import { GetEmployeeResponse } from "../../../../state/ducks/userManagement/type
 import { AsyncState } from "../../../../state/types";
 import { OptionType } from "../../../components/forms/fields/Autocomplete/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
-import { toastError } from "../../../components/notifications";
 import Text from "../../../components/Text";
-import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import EnableDropboxButton from "../../EnableDropboxButton/EnableDropboxButton";
 import styles from "../../profile/UserProfile.styles";
 import { toEmployeeActiveStatusEditRequestBody } from "../../utils/transform";
 import AcctCodes from "../AddressesAndCodes/AcctCodes";
@@ -62,14 +57,6 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-export interface DropboxResponse {
-  code: number;
-  status: string;
-  data: {
-    url: string;
-  };
-}
-
 const DialogContent: React.FunctionComponent<Props> = ({
   canManageUsers,
   employeeGroups,
@@ -101,7 +88,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const classes = styles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const intl = useIntl();
 
   const TABLE_NAME = "userManagement";
 
@@ -109,18 +95,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const companyMine = useSelector(companySelectors.getCompanyMine);
   const { helloSignIntegrationEnabled } = companyMine;
-
-  const isCompanyDropboxEnabled = useSelector(companySelectors.isDropboxEnabled);
-  const isEmployeeDropboxEnabled = useSelector(authSelectors.isDropboxEnabled);
-  const dropboxAsync = useAsync<DropboxResponse>({
-    onSuccess: (data?: DropboxResponse) => {
-      window.open(data?.data.url);
-    },
-    onError: (error) => {
-      toastError(intl.formatMessage({ id: "dropbox.connection.error" }));
-    },
-  });
-  const enableDropboxAction = useActionCreator(userManagementActions.enableDropbox);
 
   // this is a hack for back button to redirect to user management table
   useEffect(() => () => {
@@ -272,12 +246,6 @@ const DialogContent: React.FunctionComponent<Props> = ({
         />
         <Box display="flex" alignItems="flex-end" mt={2}>
           {canUpdateCompany && <HelloSignAccess helloSignStatus={helloSignIntegrationEnabled}/>}
-          {/* Employee Dropbox button */}
-          <EnableDropboxButton
-            shouldDisplayButton={Boolean(isCompanyDropboxEnabled)}
-            disabled={Boolean(isEmployeeDropboxEnabled)}
-            {...{ dropboxAsync, enableDropboxAction }}
-          />
           {slackIntegrationEnabled && slackTeamId && !slackUserId && (
             <div>
               <Typography variant="h4" className={classes.integrations}>

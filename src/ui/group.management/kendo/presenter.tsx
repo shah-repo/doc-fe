@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
@@ -11,7 +11,6 @@ import AddGroup from "../add.group/Group";
 import GroupsDisplay from "../display.groups/GroupsDisplay";
 import gridConfiguration from "./column.definition";
 import { KendoPanel } from "./KendoPanel";
-import KendoGridStyles from "./styles";
 
 interface Props {
   tableName: string;
@@ -35,7 +34,6 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
   selectedGroup,
   canCreateGroups,
 }) => {
-  const classes = KendoGridStyles();
   const [refreshTable, setRefreshTable] = useState(false);
   const closeDialog = (flag: boolean | undefined) => {
     if (flag) {
@@ -45,31 +43,34 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     editGroupsDialog.close();
   };
   return (
-    <Grid container={true} className={classes.cRoot}>
-      <Grid xs item={true}>
-        <KendoPanel<LoadCompanyGroup>
-          gridConfiguration={gridConfiguration}
-          queryUrl={GROUPS_URL}
-          tableName={tableName}
-          onSelect={({ dataItem }) => () => handlePermission(dataItem)}
-          refreshTable={refreshTable}
-          canCreateGroups={canCreateGroups}
-          gridData={tableData}
-          tableCriteria={tableCriteria}
+    <Box p={2}>
+      <Grid container={true}>
+        <Grid item={true} xs>
+          <KendoPanel<LoadCompanyGroup>
+            gridConfiguration={gridConfiguration}
+            queryUrl={GROUPS_URL}
+            tableName={tableName}
+            onSelect={({ dataItem }) => () => handlePermission(dataItem)}
+            refreshTable={refreshTable}
+            canCreateGroups={canCreateGroups}
+            gridData={tableData}
+            tableCriteria={tableCriteria}
+          />
+        </Grid>
+        <GroupsDisplay
+          closeDialog={previewGroupsDialog.close}
+          isOpen={previewGroupsDialog.isOpen}
+          selectedGroup={selectedGroup}
+        />
+        <AddGroup
+          isOpen={editGroupsDialog.isOpen}
+          closeDialog={closeDialog}
+          selectedGroup={selectedGroup}
+          title={"group.management.edit.group"}
         />
       </Grid>
-      <GroupsDisplay
-        closeDialog={previewGroupsDialog.close}
-        isOpen={previewGroupsDialog.isOpen}
-        selectedGroup={selectedGroup}
-      />
-      <AddGroup
-        isOpen={editGroupsDialog.isOpen}
-        closeDialog={closeDialog}
-        selectedGroup={selectedGroup}
-        title={"group.management.edit.group"}
-      />
-    </Grid>
-  ); };
+    </Box>
+  );
+};
 
 export default GroupManagementKendoPresenter;

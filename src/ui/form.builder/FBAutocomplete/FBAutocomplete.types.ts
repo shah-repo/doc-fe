@@ -19,4 +19,6 @@ export type FBAutocompleteProps =
    disabledOptions?: string[];
    groupByKey?: string;
    inputStyle?: any;
+   modifiedOptions?: any[];
+   debounceFilterInput?: (event: React.ChangeEvent<{}>, value: any) => void;
  };

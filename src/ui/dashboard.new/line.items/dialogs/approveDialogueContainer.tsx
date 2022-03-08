@@ -7,6 +7,7 @@ import {
   ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../state/ducks/dashboard.new/my.feeds/constants";
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
@@ -51,7 +52,7 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       } else {
         transitionDialog.close();
       }
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     },
     onError: (error) => {
       transitionDialog.close();

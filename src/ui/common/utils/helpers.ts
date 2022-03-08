@@ -1,3 +1,6 @@
+import { chain, set } from "lodash";
+import { KendoColumn } from "../../components/common/kendo/types";
+
 export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
   if (!text) {
     return text;
@@ -8,4 +11,18 @@ export const removeLastCharacterIfNotAlphaNumeric = (text = "") => {
     return text.slice(0, -1);
   }
   return text;
+};
+
+export const getSchemaFromColumns = (columns: KendoColumn[]) => {
+  const schemaObjFieldsObj = {};
+  const fields = chain(columns)
+    .map((o) => [o.field, o.tooltipField, o.extraFields])
+    .flattenDeep()
+    .compact()
+    .sort()
+    .value();
+  fields.forEach((field) => {
+    set(schemaObjFieldsObj, field.toString(), true);
+  });
+  return [schemaObjFieldsObj];
 };

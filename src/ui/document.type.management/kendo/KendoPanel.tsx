@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import { FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
@@ -24,11 +24,12 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
@@ -527,33 +528,38 @@ export function KendoPanel<T extends { id?: string }>({
     collapsedIds: collapsedState,
   });
 
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
+
   return (
     <>
       <Grid>
         {isLoading && <Loader />}
-        <Grid container justify="space-between">
-          <Grid item>
-            <Typography className={classes.title}>
-              <Text translation="documenttype.management" />
-            </Typography>
-          </Grid>
-          <Grid item style={{ marginBottom: 8 }}>
-            <Button
-              onClick={exportDAMDialog.open}
-              variant="outlined"
-              className={classes.exportBtn}
-            >
-              <Text translation={"common.export.dam.details"} />
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={addNewRowObject}
-              className={ disabled ? classes.disabledAddBtn : classes.addBtn}
-              {...{ disabled }}
-            >
-              <Text translation={"common.add.document.type"} />
-            </Button>
-          </Grid>
+        <Grid item>
+          <Box mb={2}>
+            <Grid container={true}>
+              <Grid item xs>
+                <GridTitle translation="documenttype.management" />
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={exportDAMDialog.open}
+                  variant="outlined"
+                  className={classes.exportBtn}
+                >
+                  <Text translation={"common.export.dam.details"} />
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={addNewRowObject}
+                  className={ disabled ? classes.disabledAddBtn : classes.addBtn}
+                  {...{ disabled }}
+                >
+                  <Text translation={"common.add.document.type"} />
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item={true}>
           <KendoGlobalization>

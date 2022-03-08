@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import FBStore from "../../form.builder/FBStore/FBStore";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import SidebarPresenter from "./Sidebar.presenter";
 import { Sidebar } from "./types";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];
@@ -17,6 +18,10 @@ export const SidebarContainer: React.FunctionComponent<
   setOpen,
 }) => {
   const [indexNumber, setIndex] = useState(0);
+  useEffect(() => {
+    const selectedTab = sidebarList[indexNumber].type;
+    FBStore.setSelectedTab(selectedTab);
+  }, [indexNumber, sidebarList]);
   const inputRef = useRef(null);
   useScrollIntoView();
   const onDrawerToggle = () => {

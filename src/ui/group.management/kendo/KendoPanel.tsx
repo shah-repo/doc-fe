@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -41,17 +41,17 @@ import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
   TablePanelStateProps,
 } from "../../components/table/types";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
@@ -521,6 +521,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     setResultState(newDataState);
   };
 
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
+
   const tableRenderer = ({ width }: Size) => (
     <>
       <KendoGlobalization>
@@ -566,21 +569,21 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.group.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container={true} alignItems="center">
+          <Grid item xs>
+            <GridTitle translation="navigation.group.management" />
+          </Grid>
+          <Grid item>
+            {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+          </Grid>
         </Grid>
-        <Grid item  style={{ marginBottom: 10 }}>
-          {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {renderBody()}
-      </>
-    </>
+      </Grid>
+    </Box>
   );
 }
