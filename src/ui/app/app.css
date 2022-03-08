@@ -1,20 +1,20 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
 
 :root {
-  --navy: #011fbb;
-  --almost_black: #080b11;
-  --alabaster: #f9fbff;
-  --medium-grey: #7d7e81;
-  --water: #eef3ff;
-  --soft-peach: #ebedf2;
-  --zeron: #f5f8ff;
-  --white: #ffffff;
+  --navy: #011FBB;
+  --almost_black: #080B11;
+  --alabaster: #F9FBFF;
+  --medium-grey: #7D7E81;
+  --water: #EEF3FF;
+  --soft-peach: #EBEDF2;
+  --zeron: #F5F8FF;
+  --white: #FFFFFF;
   --font-family: "Sora";
-  --font_gray: #767b87;
-  --iron-gray: #d3d3e2;
-  --light-gray: #ccd4d9;
-  --dawn: #a2a2a2;
-  --lavender-mist: #e2e8f0;
+  --font_gray: #767B87;
+  --iron-gray: #D3D3E2;
+  --light-gray: #CCD4D9;
+  --dawn: #A2A2A2;
+  --lavender-mist: #E2E8F0;
 }
 
 body {
@@ -318,7 +318,7 @@ td#kendo-expandable-column[role="gridcell"] {
   border-radius: 4px;
 }
 
-.k-columnmenu-item > .k-icon.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-grid-menu-icon  {
   color: transparent;
   height: 16px;
   width: 18px;
@@ -326,17 +326,17 @@ td#kendo-expandable-column[role="gridcell"] {
   font-size: 14px;
   margin-right: 10px;
 }
-.k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon  {
   background: url("../../assets/images/freeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon  {
   background: url("../../assets/images/unfreeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon {
+.k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon  {
   background: url("../../assets/images/hide.svg");
   background-repeat: no-repeat;
 }
