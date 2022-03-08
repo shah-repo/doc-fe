@@ -1,0 +1,32 @@
+[
+  {
+    "tab": "Favourite",
+    "subTab": [
+      {
+        "tab": "Section",
+        "isFavorite": true
+      },
+      {
+        "tab": "Text",
+        "isFavorite": true
+      }
+    ]
+  },
+  {
+    "tab": "Sections",
+    "subTab": [
+      {
+        "tab": "Section",
+        "isFavorite": true
+      },
+      {
+        "tab": "Sub Section",
+        "isFavorite": false
+      },
+      {
+        "tab": "Steps",
+        "isFavorite": false
+      }
+    ]
+  }
+]

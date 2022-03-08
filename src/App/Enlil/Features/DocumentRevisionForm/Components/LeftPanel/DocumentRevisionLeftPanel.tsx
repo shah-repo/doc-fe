@@ -4,21 +4,8 @@ import KeyboardTabIcon from "@material-ui/icons/KeyboardTab";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionLeftPanelProps, SMBox, SMText } from "../../../../..";
-import { ReactComponent as BadgeIcon } from "../../../../../../../src/assets/images/badge.svg";
-import { ReactComponent as BookmarkIcon } from "../../../../../../../src/assets/images/bookmark.svg";
-import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
-import { ReactComponent as TimelineIcon } from "../../../../../../../src/assets/images/history.svg";
-import { ReactComponent as MigrationIcon } from "../../../../../../../src/assets/images/migration.svg";
-import { ReactComponent as NoteIcon } from "../../../../../../../src/assets/images/note.svg";
-import { ChangeRequest } from "../../../../../../state/ducks/changeRequest/types";
-import AccessPermissionsContainer from "../../../../../../ui/documentRevision/accessPermissions/AccessPermissions.container";
-import DocumentRevisionAuditContainer from "../../../../../../ui/documentRevision/audit/Audit.container";
-import DocumentRevisionListContainer from "../../../../../../ui/documentRevision/DocumentRevisionList.container";
-import ChangeDocumentFormContainer from "../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container";
-import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks";
-import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/RevisionHistory";
-import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
+import LeftPresenter from "./Components/presenter";
 import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.wrap";
 
 const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPanelProps> = ({
@@ -77,7 +64,8 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPan
           borderTop={1}
           borderColor={Colors.medium_gray}
         >
-          <SidebarContainer
+          <LeftPresenter/>
+          {/* <SidebarContainer
             sidebarList={[
               {
                 icon: <NoteIcon />,
@@ -192,7 +180,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPan
               },
             ]
             }
-          />
+          /> */}
         </SMBox>
       </Box>
     )}
