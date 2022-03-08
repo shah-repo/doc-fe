@@ -31,6 +31,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     selectContainer: {
       display: "flex",
+      justifyContent: "space-between",
       marginTop: 16,
       marginBottom: 16,
       padding: 5,
@@ -47,6 +48,40 @@ export const styles = makeStyles((theme: Theme) =>
         borderBottom: `1px solid ${theme.palette.common.white}`,
         transition: "none",
       },
+    },
+    hideBorder: {
+      "&.MuiExpansionPanel-root:before": {
+        display: "none",
+      },
+    },
+    itemTitle: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "21px",
+      color: Colors.almost_black,
+    },
+    userName: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "14px",
+      lineHeight: "21px",
+      color: Colors.almost_black,
+    },
+    avatar: {
+      width: "30px",
+      height: "30px",
+      fontSize: "12px",
+      fontWeight: 600,
+      color: Colors.white,
+      fontFamily: "Sora",
+      textTransform: "uppercase",
+    },
+    avatarSection: {
+      display: "flex",
+      alignItems: "center",
     },
   }),
 );
