@@ -1,5 +1,5 @@
 import { createStyles, fade, makeStyles } from "@material-ui/core";
-import Colors from "../layout/theme/utils/colors";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme) =>
   createStyles({
@@ -41,6 +41,9 @@ export const styles = makeStyles((theme) =>
     optionSelect: {
       fontFamily: "Sora",
       fontSize: 14,
+    },
+    groupCell: {
+      whiteSpace: "pre-wrap",
     },
   })
 );

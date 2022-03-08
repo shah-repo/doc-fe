@@ -58,30 +58,3 @@ export const AsyncStatus = [
   { value: "COMPLETE", text: "COMPLETE" },
   { value: "ERROR", text: "ERROR" },
 ];
-
-export const NEXT_TASK = [
-  {
-    value: "RECALC_COMPLIANCE_FOR_EQUIPMENTS",
-    text: "RECALC_COMPLIANCE_FOR_EQUIPMENTS",
-  },
-  {
-    value: "RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES",
-    text: "RECALC_GROUP_TO_EMPLOYEE_ALL_COMPANIES",
-  },
-  { value: "TRAINING_RECORDS_REFRESH", text: "TRAINING_RECORDS_REFRESH" },
-  { value: "TRAINING_RECORDS_STATUS", text: "TRAINING_RECORDS_STATUS" },
-  {
-    value: "PRECALC_DOC_TYPE_FOR_COMPANY",
-    text: "PRECALC_DOC_TYPE_FOR_COMPANY",
-  },
-  { value: "UPDATE_BILLS", text: "UPDATE_BILLS" },
-  { value: "CLOSE_CR_BY_EFFECTIVE_DATE", text: "CLOSE_CR_BY_EFFECTIVE_DATE" },
-  {
-    value: "SEND_PASSWORD_EXPIRATION_EMAILS",
-    text: "SEND_PASSWORD_EXPIRATION_EMAILS",
-  },
-  {
-    value: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS",
-    text: "SEND_EMAILS_FOR_UPCOMING_DUE_DATES_IN_EQS",
-  },
-];

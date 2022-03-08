@@ -17,7 +17,8 @@ export enum KendoCellTemplates {
   DATE_COMPLETED="DateCompleted",
   DATE_INFO="DateInfo",
   COMMON_CELL="CommonCell",
-  DOCUMENT_TYPE="DocumentTypeCellTemplate"
+  DOCUMENT_TYPE="DocumentTypeCellTemplate",
+  DURATION="DurationCell"
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings;

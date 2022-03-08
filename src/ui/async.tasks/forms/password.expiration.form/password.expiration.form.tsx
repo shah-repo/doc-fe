@@ -36,7 +36,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
       <Grid container={true} spacing={0}>
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
-            fullWidth
             id="datetime-local"
             label={<Text translation="async.tasks.password.update" />}
             type="datetime-local"
@@ -50,7 +49,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
             id="datetime-local"
-            fullWidth
             label={<Text translation="async.tasks.last.email.sent" />}
             type="datetime-local"
             defaultValue={defaultDate}
@@ -63,7 +61,6 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
         <Grid item={true} sm={12} className={classes.mt8}>
           <TextField
             id="filled-textarea"
-            fullWidth
             label={<Text translation="async.tasks.user.emails" />}
             multiline
             onChange={handleUserEmailsChange}
