@@ -463,10 +463,13 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
+
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release the part", () => {
@@ -518,10 +521,13 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApprovers], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
+
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify that a new revision has been created", () => {

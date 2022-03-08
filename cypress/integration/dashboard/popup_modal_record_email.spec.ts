@@ -300,7 +300,7 @@ context("Records email popup modal", () => {
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
             "I sent a request for approval on\r\n",
-            "RD-00003\r\n                                        Record document from newly created form",
+            "RD-00003 Record document from newly created form",
             "Thank you,",
           ],
         }];
