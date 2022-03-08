@@ -8,6 +8,7 @@ import { toastError } from "../../components/notifications";
 import { checkIsDocumentLHR } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import DocumentTypeSockets from "../DocumentTypeSockets";
 import { toDocumentTypeBody, toDocumentTypeIntialValues } from "../transform";
 import DocumentTypeFormPresenter from "./presenter";
 
@@ -46,10 +47,13 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   };
 
   const render = (props: FormikProps<any>) => (
-    <DocumentTypeFormPresenter
-      {...{ handleTransition, transitionLabel, disabled, isLHR }}
-      {...props}
-    />
+    <>
+      <DocumentTypeSockets />
+      <DocumentTypeFormPresenter
+        {...{ handleTransition, transitionLabel, disabled, isLHR }}
+        {...props}
+      />
+    </>
   );
 
   return (
