@@ -314,6 +314,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           parentName: el.parents.map((e) => e.name.trimLeft().trimEnd()).sort().join(", ") || "",
           formattedTags: el?.tags?.sort().join(", ") || "",
           formattedPermissions: el?.permissions?.sort().join(", ") || "",
+          groupType: el?.isOfficial ? "official" : "unofficial",
         }));
         return resp;
       })
@@ -420,14 +421,14 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const permissionCell = (props: GridCellProps) =>
     <PermissionsCell {...props} isOfficial={Official} />;
 
-  const BooleanFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
+  const GroupTypeFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
     {...props}
     data={[{
       text: getTranslatedText("common.official"),
-      value: true,
+      value: "official",
     }, {
       text: getTranslatedText("common.unofficial"),
-      value: false,
+      value: "unofficial",
     }]}
     defaultItem={{
       text: getTranslatedText(TranslatedText[DisplayText.ALL]),
@@ -436,13 +437,13 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   />;
 
   const filterCellMapping = {
-    isOfficial: BooleanFilterCell,
+    groupType: GroupTypeFilterCell,
   };
 
   const fieldToCellMapping = {
     "memberNames": employeeCell,
     "name": NameCell,
-    "isOfficial": groupCell,
+    "groupType": groupCell,
     "formattedPermissions": permissionCell,
     "parentName": parentCell,
     "formattedTags": tagCell,
