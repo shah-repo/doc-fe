@@ -129,10 +129,7 @@ Cypress.Commands.add("navigToEquipment", () => {
 });
 
 Cypress.Commands.add("navigToDocumentList", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetDocRevStatusesCategory,
-    CyRoutes.GetDocumentTypes],
-  () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,
@@ -161,7 +158,6 @@ Cypress.Commands.add("navigToDocumentListWithUnsavedChanges", (params: { confirm
 
 Cypress.Commands.add("navigToApprovalRequestList", () => {
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.GetChangeRequests,
     CyRoutes.GetDocTypeGroupOptions],
   () => {
     cy.navigToNestedItem({
