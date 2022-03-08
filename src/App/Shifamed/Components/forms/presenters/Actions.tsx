@@ -266,10 +266,6 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             </Observer>
           )
         }
-        {isExportable && <ExportToEmail
-          revisionId={documentRevision.id}
-          canAccess={documentRevision.document.canAccess}
-        />}
         <HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
@@ -290,6 +286,10 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
           {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
+          {isExportable && <ExportToEmail
+            revisionId={documentRevision.id}
+            canAccess={documentRevision.document.canAccess}
+          />}
         </HeaderMenu>
       </>
       }
