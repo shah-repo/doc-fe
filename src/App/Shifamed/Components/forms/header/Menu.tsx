@@ -1,7 +1,7 @@
 import { IconButton, MenuItem } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React from "react";
+import { ReactComponent as MoreVerticalIcon } from "../../../../../assets/images/more_vertical.svg";
 import Colors from "../../../../../ui/layout/theme/utils/colors";
 
 interface Props {
@@ -34,10 +34,10 @@ const HeaderMenu: React.FunctionComponent<Props> = ({ children }) => {
         onClick={handleClick}
         data-cy="HeaderMenuButton"
         id="HeaderMenuButton"
-        style={{ color: Colors.white }}
+        style={{ color: Colors.white, marginRight: "20px" }}
         disableRipple
       >
-        <MoreVertIcon />
+        <MoreVerticalIcon />
       </IconButton>
       <Menu
         id="HeaderMenu"

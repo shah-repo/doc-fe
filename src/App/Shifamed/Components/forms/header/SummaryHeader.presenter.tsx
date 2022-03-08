@@ -44,7 +44,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
     />
 
     <Grid item={true} xs={6}>
-      <Grid container={true} alignItems="flex-end" justify="flex-end">
+      <Grid container={true} alignItems="center" justify="flex-end">
         <ControlsContainer
           documentRevision={documentRevision}
           canShowCreateVersionButton={canShowCreateVersionButton}

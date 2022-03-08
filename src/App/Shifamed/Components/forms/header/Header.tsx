@@ -56,6 +56,7 @@ const NewHeader: React.FunctionComponent<Props> = ({ children, status, displaySt
         py={1}
         px={2}
         alignContent="center"
+        alignItems="center"
       >
         <Grid container={true} className={`${classes.headerSection} ${
           classes[statusClassMapping[displayStatus || status || ""]]

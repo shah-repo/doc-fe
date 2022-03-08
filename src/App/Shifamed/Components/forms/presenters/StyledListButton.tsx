@@ -7,7 +7,7 @@ const styles = () => ({
     margin: "0px",
   },
   label: {
-    padding: "6px",
+    padding: "10.5px 20px",
     fontFamily: "Sora",
     fontStyle: "normal",
     fontWeight: 600,
