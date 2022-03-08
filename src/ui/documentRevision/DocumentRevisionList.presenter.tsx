@@ -107,29 +107,36 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     >
       <NavLink
         to={link}
-        className={classes.linkTitle}
+        className={isSelected ? classes.activeLinkBox : classes.inActiveLinkBox}
         activeClassName={classes.activeLinkTitle}
       >
-        <Typography component="span" data-cy={"revision"} className={classes.linkTitle}>
+        <Typography
+          component="span"
+          data-cy={"revision"}
+          className={
+            isSelected ? classes.activeLinkBox : classes.inActiveLinkBox
+          }
+        >
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
-          {
-            isStatusVisible &&
+          {isStatusVisible && (
             <Typography component="span" className={classes.displayStatus}>
               <CustomLabelTooltip {...{ tooltipConfig }}>
                 <>
-                &nbsp; - <Text message={displayStatus} />
+                  &nbsp; - <Text message={displayStatus} />
                 </>
               </CustomLabelTooltip>
             </Typography>
-          }
+          )}
         </Typography>
       </NavLink>
       <NavLink
         to={link}
         key={documentRevision.id}
-        className={classes.linkBody}
+        className={
+          isSelected ? classes.activeLinkBody : classes.inActiveLinkBody
+        }
       >
         <SummaryInfo
           dataCy={"common.docId"}
@@ -137,20 +144,19 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           value={docId}
         />
         {!isRecord && (
-          <SummaryInfo
-            label="common.title"
-            value={documentRevision.name}
-          />
+          <SummaryInfo label="common.title" value={documentRevision.name} />
         )}
         <SummaryInfo
-          label={isRecord && (isReleased || isVoided) ? recordOwnerLabel : "common.owner"}
+          label={
+            isRecord && (isReleased || isVoided)
+              ? recordOwnerLabel
+              : "common.owner"
+          }
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
           label={isRecord ? recordDateLabel : "common.effective.date"}
-          value={
-            <DateFormatter value={getDateValue()}/>
-          }
+          value={<DateFormatter value={getDateValue()} />}
         />
       </NavLink>
     </div>

@@ -12,8 +12,16 @@ export const styles = makeStyles((theme: Theme) =>
       width: theme.spacing(31.5),
       flexGrow: 1,
     },
-    linkTitle: {
+    activeLinkBox: {
       color: Colors.navy,
+      textDecoration: "none",
+      fontWeight: 600,
+      fontFamily: "Sora",
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
+    inActiveLinkBox: {
+      color: Colors.font_gray,
       textDecoration: "none",
       fontWeight: 600,
       fontFamily: "Sora",
@@ -24,9 +32,16 @@ export const styles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
       fontWeight: theme.typography.fontWeightBold,
     },
-    linkBody: {
+    activeLinkBody: {
       textDecoration: "none",
-      color: theme.palette.text.primary,
+      color: Colors.almost_black,
+      fontFamily: "Sora",
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
+    inActiveLinkBody: {
+      textDecoration: "none",
+      color: Colors.font_gray,
       fontFamily: "Sora",
       fontSize: "14px",
       lineHeight: "24px",
