@@ -572,6 +572,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                     <PendingReview
                       key={index}
                       id={pendingAction.id}
+                      arChangeRequestId={pendingAction.arChangeRequestId}
                       type={pendingAction.type}
                       arId={pendingAction.arId}
                       title={pendingAction?.arTitle}
