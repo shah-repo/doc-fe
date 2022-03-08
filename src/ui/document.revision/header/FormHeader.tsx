@@ -11,9 +11,9 @@ const FormHeader: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) =>
   SM.isNewLayout ? (
-    <FormHeaderPresenter {...{ isCreateDocumentDisabled }} />
-  ) : (
     <NewFormHeaderPresenter {...{ isCreateDocumentDisabled }} />
+  ) : (
+    <FormHeaderPresenter {...{ isCreateDocumentDisabled }} />
   );
 
 export default FormHeader;

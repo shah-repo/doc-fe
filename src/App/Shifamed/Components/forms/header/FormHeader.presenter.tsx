@@ -2,7 +2,6 @@ import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import Header from "../../../../../ui/components/common/header/Header";
-import HeaderInfo from "../../../../../ui/components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import FormMessage from "../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../ui/components/forms/FormProgress";
@@ -11,6 +10,7 @@ import DocRevActions from "../../../../../ui/documentRevision/forms/presenters/A
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
 import SM from "../../../Utils/SM/SM";
 import NewDocRevActions from "../presenters/Actions";
+import HeaderInfo from "./HeaderInfo";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -29,8 +29,6 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
         isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
         }
         status={documentRevision.status}
-        displayRevision={documentRevision?.displayRevision}
-        group={documentRevision?.document?.documentType?.group}
         id={documentRevision.document.docId}
         name={documentRevision.name}
         documentTypeId={documentRevision?.document?.documentType.id}

@@ -1,11 +1,8 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { SM } from "../../../App";
-import FormOwnerChangerContainer from "../../../App/Shifamed/Components/forms/presenters/change.owner/container";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
-import HeaderMenu from "../../components/common/header/Menu";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import OwnerChangerContainer from "../../components/common/owner.changer/container";
 import { RequestType } from "../../components/common/owner.changer/helpers/types";
@@ -23,7 +20,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => (
-  <Header displayStatus={documentRevision.displayStatus} status={documentRevision.status}>
+  <Header>
     <HeaderInfo
       revisionStage={documentRevision.revisionStage}
       groupOptions={documentRevision.document.documentType.groupOptions}
@@ -31,8 +28,6 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
       }
       status={documentRevision.status}
-      group={documentRevision?.document?.documentType?.group}
-      displayRevision={documentRevision?.displayRevision}
       id={documentRevision.document.docId}
       name={documentRevision.name}
       documentTypeId={documentRevision?.document?.documentType.id}
@@ -49,13 +44,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
           canShowCreateVersionButton={canShowCreateVersionButton}
           hasAccess={documentRevision.document.canAccess}
         />
-        {SM.isNewLayout ? <HeaderMenu>
-          {canChangeOwnerShip && (
-            <FormOwnerChangerContainer
-              requestId={documentRevision.id}
-              requestType={RequestType.Document}
-            />
-          )} </HeaderMenu> :  canChangeOwnerShip && (
+        {canChangeOwnerShip && (
           <OwnerChangerContainer
             requestId={documentRevision.id}
             requestType={RequestType.Document}

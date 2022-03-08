@@ -2,7 +2,6 @@ import { Box, Grid, LinearProgress } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
-import NewDocRevActions from "../../../App/Shifamed/Components/forms/presenters/Actions";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../components/common/header/subtitles";
@@ -21,7 +20,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
   return (
-    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
+    <Header>
       {documentRevision &&
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}
@@ -29,8 +28,6 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
         isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
         }
         status={documentRevision.status}
-        displayRevision={documentRevision?.displayRevision}
-        group={documentRevision?.document?.documentType?.group}
         id={documentRevision.document.docId}
         name={documentRevision.name}
         documentTypeId={documentRevision?.document?.documentType.id}
@@ -39,7 +36,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
         displayStatus={documentRevision.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
       />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">{type}
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12}>
         <Grid container={true} alignItems="flex-end" justify="flex-end">
           <Box alignSelf="center">
             {lastSavedTimestamp &&
@@ -49,11 +46,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocumentD
             </Box>
             }
           </Box>
-          {SM.isNewLayout ? (
-            <NewDocRevActions {...{ isCreateDocumentDisabled }} />
-          ) : (
-            <DocRevActions {...{ isCreateDocumentDisabled }} />
-          )}
+          <DocRevActions {...{ isCreateDocumentDisabled }}/>
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} />

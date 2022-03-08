@@ -1,7 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
-import HeaderMenu from "../../../../../ui/components/common/header/Menu";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
@@ -9,6 +8,7 @@ import ControlsContainer from "../../../../../ui/documentRevision/PreviewControl
 import FormOwnerChangerContainer from "../presenters/change.owner/container";
 import NewHeader from "./Header";
 import NewHeaderInfo from "./HeaderInfo";
+import HeaderMenu from "./Menu";
 
 interface Props {
   documentRevision: DocumentRevision;
