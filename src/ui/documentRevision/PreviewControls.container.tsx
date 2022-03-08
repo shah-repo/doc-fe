@@ -4,7 +4,9 @@ import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { SM } from "../../App";
+import NewCloneEBButton from "../../App/Shifamed/Components/forms/presenters/CopyEBButton";
 import FormExportToEmail from "../../App/Shifamed/Components/forms/presenters/export.to.email/ExportToEmail";
+import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -26,7 +28,6 @@ import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { StyledButton } from "./forms/presenters/StyledListButton";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
@@ -132,13 +133,26 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          <StyledButton
-            color="primary"
-            onClick={cloneDocument}
-            id="PreviewControlsContainer-revise"
-            data-cy="updateRecord" >
-            <Text message={reviseLabel} />
-          </StyledButton>
+          {SM.isNewLayout ? (
+            <StyledButton
+              color="secondary"
+              variant="outlined"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={reviseLabel} />
+            </StyledButton>
+          ) : (
+            <Button
+              color="primary"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={reviseLabel} />
+            </Button>
+          )}
         </CustomLabelTooltip>
       );
     }
@@ -150,15 +164,28 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+      if (SM.isNewLayout) {
+        return (
+          <StyledButton
+            color="primary"
+            onClick={cloneOutputDocument}
+            id="PreviewControlsContainer-createNew"
+            data-cy="PreviewControlsContainer-createNew"
+          >
+            <Text translation={"common.create.new"} />
+          </StyledButton>
+        );
+      }
       return (
-        <StyledButton
-          color="primary"
+        <Button
+          color="secondary"
+          variant="outlined"
           onClick={cloneOutputDocument}
           id="PreviewControlsContainer-createNew"
           data-cy="PreviewControlsContainer-createNew"
         >
           <Text translation={"common.create.new"} />
-        </StyledButton>
+        </Button>
       );
     }
   };
@@ -242,13 +269,19 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         canAccess={documentRevision.document.canAccess}
       />
     );
+  const rendenCloneEBButton = () => {
+    if ((isStatusReleased || isStatusInDraft) && canCopy) {
+      return SM.isNewLayout ? <NewCloneEBButton
+        {...{ documentRevision }}
+      /> :  <CopyEBButton
+        {...{ documentRevision }}
+      />;
+    }
+  };
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
-      {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <CopyEBButton
-          {...{ documentRevision }}
-        />}
+      {rendenCloneEBButton()}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&

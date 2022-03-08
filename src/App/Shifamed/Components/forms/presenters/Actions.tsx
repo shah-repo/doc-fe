@@ -12,7 +12,6 @@ import { DOC_TYPE_GROUP_OPTION } from "../../../../../state/ducks/documentRevisi
 import { DocumentRevision, RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
-import CopyEBButton from "../../../../../ui/components/forms/CopyEBButton";
 import { isOperator } from "../../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRevision/forms/DocumentRevisionForm.container";
 import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
@@ -30,6 +29,7 @@ import { withNewActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";
 import FormOwnerChangerContainer from "./change.owner/container";
+import NewCloneEBButton from "./CopyEBButton";
 import ExportToEmail from "./ExportToEmail";
 import FormSubmitButton from "./SubmitButton";
 import { SubmitForApproval } from "./SubmitForApproval";
@@ -220,7 +220,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             {...{ documentRevision }}
           />}
         {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <CopyEBButton
+        <NewCloneEBButton
           {...{ documentRevision }}
         />}
         <InspectionControlsContainer {...{ documentRevision }} />
