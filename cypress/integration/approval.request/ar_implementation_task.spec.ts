@@ -218,7 +218,8 @@ context("Approval request implementation tasks", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[2].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[2].email}`).wait(1000)
+        .arrowType("{downarrow}{enter}");
       cy.poAddDateRequired();
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
