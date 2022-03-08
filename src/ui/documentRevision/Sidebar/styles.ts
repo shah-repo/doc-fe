@@ -109,7 +109,7 @@ export default makeStyles((theme: Theme) =>
     },
     linkButton: {
       textDecoration: "none",
-      color: Colors.dark_blue,
+      color: Colors.navy,
       fontSize: "14px",
     },
   })

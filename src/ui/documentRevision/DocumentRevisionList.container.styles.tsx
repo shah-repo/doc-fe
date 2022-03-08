@@ -13,9 +13,12 @@ export const styles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     linkTitle: {
-      color: Colors.dark_blue,
+      color: Colors.navy,
       textDecoration: "none",
-      fontWeight: 500,
+      fontWeight: 600,
+      fontFamily: "Sora",
+      fontSize: "14px",
+      lineHeight: "24px",
     },
     activeLinkTitle: {
       color: theme.palette.primary.main,
@@ -24,7 +27,9 @@ export const styles = makeStyles((theme: Theme) =>
     linkBody: {
       textDecoration: "none",
       color: theme.palette.text.primary,
-      lineHeight: "25px",
+      fontFamily: "Sora",
+      fontSize: "14px",
+      lineHeight: "24px",
     },
     selected: {
       background: Colors.background_blue,

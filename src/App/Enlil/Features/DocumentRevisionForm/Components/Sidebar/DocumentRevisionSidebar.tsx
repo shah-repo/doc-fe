@@ -17,7 +17,7 @@ import DocumentRevisionAuditContainer from "../../../../../../ui/documentRevisio
 import DocumentRevisionListContainer from "../../../../../../ui/documentRevision/DocumentRevisionList.container";
 import ChangeDocumentFormContainer from "../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container";
 import ReferencesContainer from "../../../../../../ui/documentRevision/References/References.container";
-import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks";
+import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks.new";
 import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/RevisionHistory";
 import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
@@ -47,7 +47,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
       <Box
         height="100%"
         bgcolor="white"
-        width={_documentRevisionSidebarState?.open ? 300 : 55}
+        width={_documentRevisionSidebarState?.open ? 281 : 48}
         borderColor={Colors.medium_gray}
         style={{
           transition: _documentRevisionSidebarState?.open
@@ -71,23 +71,25 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
               {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
             </IconButton>
           </Box>
-          {_documentRevisionSidebarState?.open && (
-            <Typography
-              style={{
-                fontFamily: "Sora",
-                fontStyle: "normal",
-                fontWeight: 600,
-                fontSize: "14px",
-                lineHeight: "18px",
-                color: "#162229",
-              }}
-            >
-              <SMText
-                boxProps={{ flexGrow: 1, ml: 2 }}
-                label={title || _documentRevisionSidebarState.title}
-              />
-            </Typography>
-          )}
+          <Box width={233}>
+            {_documentRevisionSidebarState?.open && (
+              <Typography
+                style={{
+                  fontFamily: "Sora",
+                  fontStyle: "normal",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#162229",
+                }}
+              >
+                <SMText
+                  boxProps={{ flexGrow: 1, ml: 2 }}
+                  label={title || _documentRevisionSidebarState.title}
+                />
+              </Typography>
+            )}
+          </Box>
         </Box>
         <SMBox
           display="flex"

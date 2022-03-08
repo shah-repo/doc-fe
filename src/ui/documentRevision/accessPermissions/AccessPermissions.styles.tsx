@@ -67,7 +67,7 @@ export const styles = makeStyles((theme: Theme) =>
       fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "14px",
-      lineHeight: "21px",
+      lineHeight: "18px",
       color: Colors.almost_black,
     },
     avatar: {

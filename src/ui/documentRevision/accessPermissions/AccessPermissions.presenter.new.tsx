@@ -187,7 +187,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   return (
     <Box flexGrow={1}>
       <List disablePadding>
-        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "15px", paddingTop: "0px" }}>
+        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "15px", paddingTop: "0px", width: "233px" }}>
           <ListItemText>
             <Typography className={classes.itemTitle}>
               <Text translation="document.revision.selected.users" />
@@ -229,7 +229,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           justify="space-between"
                           alignItems="center"
                           container
-                          style={{ paddingTop: "15px" }}
+                          style={{ paddingTop: "15px", width: "203px" }}
                         >
                           <Grid item className={classes.avatarSection}>
                             <Avatar
@@ -242,6 +242,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               component="span"
                               variant="body2"
                               color="textPrimary"
+                              className={classes.userName}
                               style={{ marginLeft: "7px" }}
                             >
                               {e.user.name}
@@ -259,7 +260,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             </ListItem>
           </List>
         </Collapse>
-        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "18px", paddingTop: "0px" }}>
+        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "15px", paddingTop: "0px", width: "233px" }}>
           <ListItemText>
             <Typography className={classes.itemTitle}>
               <Text translation="document.revision.selected.groups" />
@@ -299,13 +300,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       justify="space-between"
                       alignItems="center"
                       container
-                      style={{ paddingTop: "15px" }}
+                      style={{ paddingTop: "15px", width: "203px" }}
                     >
                       <Grid item className={classes.avatarSection}>
                         <Typography
                           component="span"
                           variant="body2"
                           color="textPrimary"
+                          className={classes.userName}
                         >
                           {e.name}
                         </Typography>
@@ -340,7 +342,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           justify="space-between"
                           alignItems="center"
                           container
-                          style={{ paddingTop: "15px" }}
+                          style={{ paddingTop: "15px", width: "203px" }}
                         >
                           <Grid item className={classes.avatarSection}>
                             <Avatar
