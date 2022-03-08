@@ -353,7 +353,8 @@ context("Validators tests", () => {
 
     it(`Select 'Order' field`, () => {
       SystemRequirement("FB-0240");
-      cy.get("[data-cy=\"validators.required_if_in.name\"]").arrowType(`Order{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_if_in.name\"]").arrowType(`Order`).wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it(`Check required if 'First' 'Second'`, () => {
@@ -421,7 +422,9 @@ context("Validators tests", () => {
 
     it(`Select '${requiredFieldLabel}' field`, () => {
       SystemRequirement("FB-0230");
-      cy.get("[data-cy=\"validators.required_if.name\"]").arrowType(`${requiredFieldLabel}{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_if.name\"]")
+        .arrowType(`${requiredFieldLabel}`).wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it(`Type value as '${requiredIfFieldValue}'`, () => {
@@ -458,7 +461,8 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it(`Select 'Required doctypes' field`, () => {
-      cy.get("[data-cy=\"validators.required_with.name\"]").arrowType(`Required doctypes{downarrow}{enter}`);
+      cy.get("[data-cy=\"validators.required_with.name\"]").arrowType(`Required doctypes`).wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it(`Make '${requiredWithFieldLabel}' field required, if 'Required doctypes' 
@@ -531,7 +535,8 @@ field is empty: Add text field`, () => {
 
     it("Select Released status", () => {
       SystemRequirement("FB-0270");
-      cy.get("[data-cy=\"validators.required_document_status.name\"]").arrowType("Draft{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_status.name\"]").arrowType("Draft").wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
@@ -554,7 +559,8 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Document revision' as options", () => {
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision").wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it("Open validations", () => {
@@ -568,7 +574,8 @@ field is empty: Add text field`, () => {
 
     it("Select Clinical Protocol", () => {
       SystemRequirement("FB-0280");
-      cy.get("[data-cy=\"validators.required_document_type.name\"]").arrowType("Clinical Protocol{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_type.name\"]").arrowType("Clinical Protocol").wait(1000)
+        .arrowType("{downarrow}{enter}");
     });
 
     it("Add autocomplete", () => {
