@@ -46,12 +46,12 @@ export const GroupCell = ({
     dataItem.isOfficial = Selectedvalue.value === intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] });
     setOfficial(dataItem.isOfficial);
   };
-  const valueSelected = localizedData.filter((e) => {
+  const valueSelected = localizedData.find((e) => {
     const groupType = isOfficial
       ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
       : intl.formatMessage({ id: TranslatedText[DisplayText.UNOFFICIAL] });
     return e.value === groupType;
-  })[0];
+  });
 
   if (rowType === "groupHeader") {
     return null;
@@ -74,13 +74,7 @@ export const GroupCell = ({
           value={valueSelected}
         />
       ) : (
-        <Tooltip
-          data ={groupData === intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
-            ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
-            : intl.formatMessage({
-              id: TranslatedText[DisplayText.UNOFFICIAL],
-            })}
-        />
+        <Tooltip data={groupData} />
       )}
     </td>
   );

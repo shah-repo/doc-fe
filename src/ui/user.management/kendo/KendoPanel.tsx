@@ -155,7 +155,7 @@ export function KendoPanel<T>({
       filter:
         {
           logic: "and",
-          filters: [{ field: "active", operator: "eq", value: true }],
+          filters: [],
         },
       skip: 0,
       take: 25,
@@ -265,10 +265,15 @@ export function KendoPanel<T>({
             .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el?.user?.confirmed && !el?.user?.locked
-            ? getTranslatedText("user.management.signed.up")
-            : el?.user?.locked ? getTranslatedText("reset.password") :
-              getTranslatedText("user.management.resend.signup.email"),
+          status:
+            el?.user?.confirmed && !el?.user?.locked
+              ? getTranslatedText("user.management.signed.up")
+              : el?.user?.locked
+                ? getTranslatedText("reset.password")
+                : getTranslatedText("user.management.resend.signup.email"),
+          active: el?.active
+            ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
+            : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -360,15 +365,15 @@ export function KendoPanel<T>({
     />
   ;
 
-  const BooleanFilterCell = (props: GridFilterCellProps) => (
+  const ActiveFilterCell = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
       data={[{
         text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
-        value: true,
+        value: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
       }, {
         text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
-        value: false,
+        value: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
       }]}
       defaultItem={{
         text: getTranslatedText(TranslatedText[DisplayText.ALL]),
@@ -393,7 +398,7 @@ export function KendoPanel<T>({
 
   const filterCellMapping = {
     groups: GroupDropdown,
-    active: BooleanFilterCell,
+    active: ActiveFilterCell,
     status: SignUpFilterCell,
   };
   const userGroups = (props: GridCellProps) =>
