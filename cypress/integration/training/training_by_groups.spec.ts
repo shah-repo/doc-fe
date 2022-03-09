@@ -820,8 +820,7 @@ context("Training by Groups", () => {
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers,
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });

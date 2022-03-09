@@ -349,6 +349,7 @@ context("Record inline Flow", () => {
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
           cy.recFilterByTitle({ revision: "Record Document Revision" });
+          cy.wait(1000);
           cy.recFilterByStatus({ status: "Released" });
           cy.wrapWithWaitOnApiCalls([
             CyRoutes.DocPreview,
