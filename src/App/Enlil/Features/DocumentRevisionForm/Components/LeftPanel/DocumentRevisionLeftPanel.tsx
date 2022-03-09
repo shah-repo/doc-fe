@@ -10,11 +10,13 @@ import LeftPresenter from "./Components/presenter";
 import styles from "./DocumentRevisionLeftPanel.styles";
 import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.wrap";
 
-const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPanelProps> = ({
+const DocumentRevisionLeftPanel: React.FunctionComponent<
+  DocumentRevisionLeftPanelProps
+> = ({
   _documentRevisionFormState,
   _documentRevisionLeftPanelState,
   title,
-}) =>  {
+}) => {
   const classes = styles();
   return (
     <Observer>
@@ -26,32 +28,44 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPan
           borderColor={Colors.medium_gray}
           borderLeft={0.5}
           style={{
-            transition: _documentRevisionLeftPanelState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
+            transition: _documentRevisionLeftPanelState?.open
+              ? "all .2s ease-in-out"
+              : " all .2s ease-in-out",
           }}
         >
           <Box
+            pl={1}
             display="flex"
             height={45}
             alignItems="center"
             justifyContent="space-between"
           >
             {_documentRevisionLeftPanelState?.open && (
-              <Typography className={classes.titleText}><Text translation="form.builder.library" /></Typography>
+              <Typography className={classes.titleText}>
+                <Text translation="form.builder.library" />
+              </Typography>
             )}
-            <IconButton disableRipple disableFocusRipple onClick={_documentRevisionLeftPanelState?.setOpen}>
+            <IconButton
+              disableRipple
+              disableFocusRipple
+              onClick={_documentRevisionLeftPanelState?.setOpen}
+            >
               {_documentRevisionLeftPanelState?.open && <CloseIcon />}
-              {!_documentRevisionLeftPanelState?.open && <KeyboardBackspaceIcon />}
+              {!_documentRevisionLeftPanelState?.open && (
+                <KeyboardBackspaceIcon />
+              )}
             </IconButton>
           </Box>
-          <SMBox
-            display="flex"
-            p={0.5}
-            stretchY="calc(100% - 56px)"
-            borderTop={1}
-            borderColor={Colors.medium_gray}
-          >
-            <LeftPresenter/>
-          </SMBox>
+          {_documentRevisionLeftPanelState?.open && (
+            <SMBox
+              display="flex"
+              stretchY="calc(100% - 56px)"
+              borderTop={1}
+              borderColor={Colors.medium_gray}
+            >
+              <LeftPresenter />
+            </SMBox>
+          )}
         </Box>
       )}
     </Observer>

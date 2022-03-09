@@ -7,20 +7,22 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
+    newAlignment: string
   ) => {
     setAlignment(newAlignment);
   };
   return (
-    <div style={{
-      // position: "absolute",
-      width: "290px",
-      height: "52px",
-      // left: "10px",
-      // top: "64px",
-      background: "#EBEDF2",
-      borderRadius: "100px",
-    }}>
+    <div
+      style={{
+        // position: "absolute",
+        width: "270px",
+        height: "52px",
+        // left: "10px",
+        // top: "64px",
+        background: "#EBEDF2",
+        borderRadius: "100px",
+      }}
+    >
       <ToggleButtonGroup
         color="primary"
         // it will return string
@@ -31,17 +33,18 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
           position: "absolute",
         }}
       >
-        <ToggleButton value="fieldConfig"
+        <ToggleButton
+          value="fieldConfig"
           style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             padding: "12px 24px",
             position: "absolute",
-            width: "158px",
+            width: "138px",
             height: "42px",
             left: "5px",
-            top: "6px",
+            top: "5px",
             background: "#FFFFFF",
             boxShadow: "0px 2px 5px rgba(204, 212, 217, 0.8)",
             borderRadius: "100px",
@@ -51,10 +54,13 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
             fontWeight: "bold",
             fontSize: "14px",
             lineHeight: "18px",
-          }}>
-        Field Config</ToggleButton>
+          }}
+        >
+          Field Config
+        </ToggleButton>
 
-        <ToggleButton value="setRules1"
+        <ToggleButton
+          value="setRules1"
           style={{
             display: "flex",
             flexDirection: "row",
@@ -63,8 +69,8 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
             position: "absolute",
             width: "115px",
             height: "42px",
-            top: "6px",
-            left: "169px",
+            top: "5px",
+            left: "146px",
             border: 0,
             // background: "red",
             color: "#767B87",
@@ -73,7 +79,10 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
             fontWeight: "bold",
             fontSize: "14px",
             lineHeight: "18px",
-          }}>Set Rules</ToggleButton>
+          }}
+        >
+          Set Rules
+        </ToggleButton>
       </ToggleButtonGroup>
     </div>
   );

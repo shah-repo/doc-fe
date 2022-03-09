@@ -1,4 +1,11 @@
-import { Box, Collapse, IconButton, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Box,
+  Collapse,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
 import React from "react";
@@ -19,7 +26,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   const [listData, setListData] = React.useState<any>([]);
   React.useEffect(() => {
     setListData(createPickerState());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Create picker List to show Icon
@@ -61,7 +68,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       data.push(newObj);
     });
     const favList = createFavouriteList(data);
-    return { dataList: data, favouriteList: [{ tab: "favourite", subTab: flatMap(favList) }] };
+    return {
+      dataList: data,
+      favouriteList: [{ tab: "favourite", subTab: flatMap(favList) }],
+    };
   };
 
   const createFavouriteList = (data) => {
@@ -78,42 +88,44 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     setOpen({ [selectedTab]: !open[selectedTab] });
   };
 
-
-  const createList = (data) => (data.map((tab) => (<><ListItem button
-    onClick={() => {
-      handleClick(tab.tab);
-    }}
-    className={classes.listItemBtn}
-  >
-    <ListItemText>
-      <FBLabel label={`form.builder.${tab.tab}`} />
-    </ListItemText>
-    {open[tab.tab] ? <ExpandMore /> : <ExpandLess />}
-  </ListItem>
-  <Collapse  in={open[tab.tab]}  timeout="auto" unmountOnExit>
-    <Box  className={classes.outerBox}>
-      <List className={classes.listStyle} >
-        {tab.subTab.map((stab) => (<>
-          <ListItem
-            className={classes.listItemStyle}
-          >
-            <IconButton disableRipple={true}>
-              <SectionIcon />
-            </IconButton>
-            <ListItemText
-              primary={stab.tab}
-              // primaryTypographyProps={{
-              // fontFamily: "Sora",
-              // fontSize: "14px",
-              // fontStyle: "normal",
-              // fontWeight: "normal",
-              // lineHeight: "18px",
-              // letterSpacing: "0px",
-              // textAlign: "left",
-              // marginLeft: "6px",
-              // }}
-            />
-            {/* <ListItemText>
+  const createList = (data) =>
+    data.map((tab) => (
+      <>
+        <ListItem
+          button
+          onClick={() => {
+            handleClick(tab.tab);
+          }}
+          className={classes.listItemBtn}
+        >
+          <ListItemText>
+            <FBLabel label={`form.builder.${tab.tab}`} />
+          </ListItemText>
+          {open[tab.tab] ? <ExpandMore /> : <ExpandLess />}
+        </ListItem>
+        <Collapse in={open[tab.tab]} timeout="auto" unmountOnExit>
+          <Box className={classes.outerBox}>
+            <List className={classes.listStyle}>
+              {tab.subTab.map((stab) => (
+                <>
+                  <ListItem className={classes.listItemStyle}>
+                    <IconButton disableRipple={true}>
+                      <SectionIcon />
+                    </IconButton>
+                    <ListItemText
+                      primary={stab.tab}
+                      // primaryTypographyProps={{
+                      // fontFamily: "Sora",
+                      // fontSize: "14px",
+                      // fontStyle: "normal",
+                      // fontWeight: "normal",
+                      // lineHeight: "18px",
+                      // letterSpacing: "0px",
+                      // textAlign: "left",
+                      // marginLeft: "6px",
+                      // }}
+                    />
+                    {/* <ListItemText>
               {controlPickerState?.picker(stab.tab, index)}
               {!controlPickerState?.picker(stab.tab, index) && (
                 <FBButton
@@ -124,25 +136,22 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                 />
               )}
             </ListItemText> */}
-            <IconButton edge="end" disableRipple={true}>
-              {stab.isFavorite ? <FavoriteIcon/>  : <StarIcon/>}
-            </IconButton>
-          </ListItem></>)
-        )}
-
-      </List>
-
-    </Box>
-  </Collapse></>
-  )
-  ));
+                    <IconButton edge="end" disableRipple={true}>
+                      {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
+                    </IconButton>
+                  </ListItem>
+                </>
+              ))}
+            </List>
+          </Box>
+        </Collapse>
+      </>
+    ));
   return (
-    <>
-      <List>
-        {listData.favouriteList && createList(listData.favouriteList)}
-        {listData.dataList && createList(listData.dataList)}
-      </List>
-    </>
+    <List>
+      {listData.favouriteList && createList(listData.favouriteList)}
+      {listData.dataList && createList(listData.dataList)}
+    </List>
   );
 };
 

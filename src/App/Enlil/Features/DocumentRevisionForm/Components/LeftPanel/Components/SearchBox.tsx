@@ -7,7 +7,7 @@ const SearchBox: React.FunctionComponent = () => (
   <Box
     style={{
       // position: "absolute",
-      padding: "20px 20px 20px 12px",
+      // padding: "20px 20px 20px 12px",
       height: "36px",
       display: "flex",
       alignItems: "center",
@@ -17,15 +17,11 @@ const SearchBox: React.FunctionComponent = () => (
       boxSizing: "border-box",
     }}
   >
-    <IconButton type="submit"
-      size="small"
-      disableRipple>
+    <IconButton type="submit" size="small" disableRipple>
       <SearchIcon />
     </IconButton>
     {/* Can use existing code */}
-    <InputBase
-      placeholder="Search"
-    />
+    <InputBase placeholder="Search" />
   </Box>
 );
 

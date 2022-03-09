@@ -7,16 +7,27 @@ import ToggleButtonLeft from "./ToggleButtonLeft";
 const LeftPresenter: React.FunctionComponent = () => (
   <Box>
     {/* Toogle Button */}
-    <Box style={{ paddingTop: "10px" }}>
-      <ToggleButtonLeft/>
+    <Box
+      padding="20px 0px 10px 0px"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <ToggleButtonLeft />
     </Box>
     {/* Search Box */}
-    <Box style={{ paddingTop: "10px" }}>
-      <SearchBox/>
+    <Box
+      padding="10px 0px 20px 0px"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <SearchBox />
     </Box>
-    {/* <Box> */}
-    <ListPanel/>
-    {/* </Box> */}
+    {/* List Panel  */}
+    <Box>
+      <ListPanel />
+    </Box>
   </Box>
 );
 
