@@ -28,7 +28,7 @@ export type DocumentRevisionLeftPanelProps =
 
 export interface DocumentRevisionLeftPanelStateProps {
   setOpen: () => void;
-  setTitle: (title: string) => void;
+  setTitle?: (title: string) => void;
   open: boolean;
-  title: string;
+  title?: string;
 }

@@ -584,6 +584,7 @@
   "form.builder.add.description": "Add Description",
   "form.builder.edit.description": "Edit Description",
   "form.builder": "Form Builder",
+  "form.builder.library": "Form Builder Library",
   "form.builder.details": "Details",
   "form.builder.create": "Create a Form",
   "form.builder.name": "Form Name",
