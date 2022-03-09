@@ -349,8 +349,8 @@ context("FORM Field test", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
-        cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
           cy.fbAddNewFieldButton();
