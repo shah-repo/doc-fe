@@ -720,7 +720,7 @@ Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
     cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
   });
-  cy.get(`[data-cy="field-securityEmployees"]`).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
@@ -736,9 +736,11 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
 
 Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
   groups.forEach((group) => {
-    cy.get(`[data-cy="field-securityGroups"]`).autocompleteSelect(`${group}`);
+    cy.get(`[data-cy="field-securityGroups"]`).arrowType(group);
+    cy.get("div[id^=react-select]").contains(group).arrowClick();
   });
-  cy.get(`[data-cy="field-securityGroups"]`).arrowClick();
+
+  cy.unClick();
 });
 
 Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
