@@ -1,6 +1,8 @@
-import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Box, Button, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as MigrateIcon } from "../../../assets/images/migrate-icon.svg";
 import { getFormattedDateString } from "../../../common/utils/date";
+import Date from "../../components/Date";
 import Text from "../../components/Text";
 import ReferencedByContainer from "../../document.revision/summary/referencedBy.container";
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container";
@@ -13,14 +15,19 @@ const References = ({
   deprecatedAt,
   referenceTo,
   released,
+  formDocument,
 }) => {
   const classes = styles();
   return (
-    <Box margin={2}>
+    <Box margin={1.875}>
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
-      <ListItem alignItems="flex-start" disableGutters className={classes.listItem}>
+      <ListItem
+        alignItems="flex-start"
+        disableGutters
+        className={classes.listItem}
+      >
         <ListItemAvatar>
           <Avatar
             className={classes.avatar}
@@ -29,10 +36,11 @@ const References = ({
           />
         </ListItemAvatar>
         <ListItemText
-          primary={(
+          primary={
             <Typography className={classes.generalInfo}>
               {owner.user.name}
-            </Typography>)}
+            </Typography>
+          }
           secondary={
             <React.Fragment>
               <Typography
@@ -55,11 +63,37 @@ const References = ({
       <ReferencedByContainer dataProp={referencedBy} />
       <Box>
         <Typography component="span" className={classes.releaseDate}>
-          Release Date
+          <Text translation="documentRevision.form.release.date" />
         </Typography>
         <Typography className={classes.released}>
-          {getFormattedDateString(released as string, "YYYY-MM-DD")}
+          {released
+            ? getFormattedDateString(released as string, "YYYY-MM-DD")
+            : "None"}
         </Typography>
+      </Box>
+      <Box pt={2.5}>
+        <Typography component="span" className={classes.releaseDate}>
+          <Text translation="output.info" />
+        </Typography>
+        <Typography className={classes.released}>
+          {` ${formDocument.docId}, `}
+          <Text message="common.revision" />
+          {` ${formDocument.version}, `}
+          <Date value={formDocument.effectiveDate} />
+        </Typography>
+      </Box>
+      <Box display="flex" pt={1.25} alignItems="center">
+        <Button
+          disableRipple
+          disableFocusRipple
+          variant="contained"
+          className={classes.migrateForm}
+          startIcon={<Box mr={0.25}><MigrateIcon /></Box>}
+        >
+          <Typography component="span" className={classes.migrateFormText}>
+            <Text message="common.form.migration" />
+          </Typography>
+        </Button>
       </Box>
     </Box>
   );

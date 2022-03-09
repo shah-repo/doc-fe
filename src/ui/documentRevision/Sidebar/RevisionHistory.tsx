@@ -74,7 +74,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                   {/* <div className={classes.titleOfRevision}>{changeRequest.owner.user.name}</div>
                   <DateTime value={changeRequest.createdAt as string} /> */}
                 </Box>
-                <Box mt={1.25}>
+                <Box mt={1.875}>
                   <Box color={Colors.font_gray} fontSize={12}>
                     <Text translation="common.crid" />
                   </Box>
@@ -87,7 +87,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                     <span>{changeRequest.crId}</span>
                   </Link>
                 </Box>
-                <Box mt={1.25}>
+                <Box mt={1.875}>
                   <Box color={Colors.font_gray} fontSize={12}>
                     <Text translation="cr.title" />
                   </Box>
@@ -95,7 +95,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                     {changeRequest.title}
                   </Box>
                 </Box>
-                <Box mt={1.25}>
+                <Box mt={1.875}>
                   <Box color={Colors.font_gray} fontSize={12}>
                     <Text translation="form.builder.description.of.change" />
                   </Box>
@@ -105,7 +105,7 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
                     )}
                   </Box>
                 </Box>
-                <Box mt={1.25} mb={2}>
+                <Box mt={1.875} mb={2}>
                   <Box color={Colors.font_gray} fontSize={12}>
                     <Text translation="form.builder.justification.of.change" />
                   </Box>

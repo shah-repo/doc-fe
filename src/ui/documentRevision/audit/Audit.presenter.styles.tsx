@@ -14,7 +14,7 @@ export const styles = makeStyles((theme: Theme) =>
     auditListItem: {
       margin: "0px",
       padding: "0px",
-      marginBottom: "20px",
+      marginBottom: "15px",
     },
     changeContainer: {
       borderBottom: "1px solid lightgray",

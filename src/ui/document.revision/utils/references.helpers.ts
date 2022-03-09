@@ -43,7 +43,7 @@ const getCorrectDocRev = (
 export const getReferenceToSummary = (dataProp: Reference[], status: DocumentRevisionStatus, deprecatedAt: string) => {
   const summaries: ReferenceSummary[] = [];
 
-  dataProp.forEach((ref) => {
+  dataProp && dataProp.forEach((ref) => {
     const docRev = getCorrectDocRev(status, deprecatedAt, ref.documentRevisions);
 
     if (!docRev) {

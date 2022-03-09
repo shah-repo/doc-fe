@@ -36,7 +36,7 @@ const styles = makeStyles((theme) =>
       fontFamily: "Sora",
     },
     marginBottom12: {
-      marginBottom: "16px",
+      marginBottom: "20px",
     },
     marginBottom6: {
       marginBottom: "6px",

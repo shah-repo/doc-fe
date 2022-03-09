@@ -8,6 +8,7 @@ const ReferencesPresenter = ({
   deprecatedAt,
   referenceTo,
   released,
+  formDocument,
 }) => (
   <References
     owner={owner}
@@ -16,6 +17,7 @@ const ReferencesPresenter = ({
     deprecatedAt={deprecatedAt}
     referenceTo={referenceTo}
     released={released}
+    formDocument={formDocument}
   />
 );
 

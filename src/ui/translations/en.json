@@ -472,6 +472,7 @@
   "documentRevision.revise.RC": "Update Record",
   "documentRevision.revise.SUP": "Update Record",
   "documentRevision.form.references": "References",
+  "documentRevision.form.release.date": "Release Date",
   "documentRevision.form.processChange": "Process change",
   "documentRevision.form.nextRevision": "Next Revision",
   "documentRevision.form.nextRevision.PO": "Correction/Update",

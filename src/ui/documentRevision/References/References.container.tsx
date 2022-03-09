@@ -8,15 +8,23 @@ interface ReferencesProps {
 
 const ReferencesContainer = ({
   selectedDocument,
-}: ReferencesProps) => (
-  <ReferencesPresenter
-    owner={selectedDocument?.owner}
-    status={selectedDocument?.status}
-    referencedBy={selectedDocument?.children}
-    deprecatedAt={selectedDocument?.deprecatedAt}
-    referenceTo={selectedDocument?.referenceTo}
-    released={selectedDocument?.releasedAt}
-  />
-);
+}: ReferencesProps) => {
+  const formDocument = {
+    version: selectedDocument?.version,
+    effectiveDate: selectedDocument?.effectiveDate,
+    docId: selectedDocument?.document?.docId,
+  };
+  return (
+    <ReferencesPresenter
+      owner={selectedDocument?.owner}
+      status={selectedDocument?.status}
+      referencedBy={selectedDocument?.children}
+      deprecatedAt={selectedDocument?.deprecatedAt}
+      referenceTo={selectedDocument?.referenceTo}
+      released={selectedDocument?.releasedAt}
+      formDocument={formDocument}
+    />
+  );
+};
 
 export default ReferencesContainer;
