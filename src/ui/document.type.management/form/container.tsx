@@ -44,13 +44,12 @@ const DocumentTypeFormContainer: React.FunctionComponent<Props> = ({
   const handleTransition = () => {
     dispatch(documentTypeActions.deleteDocumentType(id));
   };
+
   const render = (props: FormikProps<any>) => (
-    <>
-      <DocumentTypeFormPresenter
-        {...{ handleTransition, transitionLabel, disabled, isLHR }}
-        {...props}
-      />
-    </>
+    <DocumentTypeFormPresenter
+      {...{ handleTransition, transitionLabel, disabled, isLHR }}
+      {...props}
+    />
   );
 
   return (
