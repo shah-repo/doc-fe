@@ -1,5 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
@@ -24,7 +25,8 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   canChangeOwnerShip,
   canShowCreateVersionButton,
 }) => {
-
+  const location = useLocation();
+  // console.log("current location:: debug", location);
   const groupOptions = documentRevision.document?.documentType?.groupOptions;
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   return (<NewHeader
@@ -38,7 +40,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         documentRevision.formDocument?.formTemplate?.schema
       )}
       status={documentRevision.status}
-      group={documentRevision?.document?.documentType?.group}
+      group={location.state}
       displayRevision={documentRevision?.displayRevision}
       id={documentRevision.document.docId}
       name={documentRevision.name}

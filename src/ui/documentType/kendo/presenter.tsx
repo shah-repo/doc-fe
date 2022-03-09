@@ -31,6 +31,7 @@ interface Props {
   dynamicColumns: KendoColumn[];
   isByCategory: boolean;
   documentCategory: PageDetails;
+  categoryName?: string;
 }
 
 const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
@@ -43,6 +44,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
   isByCategory,
   documentCategory,
   tableCriteria,
+  categoryName,
 }) => {
   const classes = KendoGridStyles();
   const [dataToBeExported, setDataToBeExported] = useState(providedData);
@@ -126,6 +128,7 @@ const DocumentByTypeListPresenter: React.FunctionComponent<Props> = ({
           queryUrl={queryUrl}
           normalizrSchema={[docRevSch]}
           exportDataChanges={handleExportData}
+          categoryName={categoryName}
         />
       </Grid>
     </Grid>

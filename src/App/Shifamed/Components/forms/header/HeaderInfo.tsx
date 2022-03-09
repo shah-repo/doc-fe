@@ -1,6 +1,9 @@
 import { Chip, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { ReactComponent as MPIIcon } from "../../../../../assets/images/mpi_white.svg";
 import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../../state/ducks/documentRevisions/documentType/types";
@@ -12,6 +15,11 @@ import { checkIsDocumentMPIOutput } from "../../../../../ui/documentRevision/hel
 import { useDocumentStatus } from "../../../../../ui/hooks/docCustomization/useCustomization";
 import { styles } from "./HeaderInfo.styles";
 import { StyledBreadcrumb } from "./StyledBreadcrumb";
+
+interface LocationStateProps {
+  lable: string;
+  pathname: string;
+}
 
 interface Props {
   status: string;
@@ -25,7 +33,7 @@ interface Props {
   isInlineApproval?: boolean;
   displayStatus?: string;
   displayRevision?: string;
-  group?: string;
+  group?: LocationStateProps;
   subtitle?: any;
 }
 
@@ -39,11 +47,17 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
   subtitle,
   displayRevision,
 }) => {
+  const history = useHistory();
   const { label } = useDocumentStatus(documentTypeId, status);
   const classes = styles();
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
+
+  const returnToList = () => {
+    const pathname = group;
+    group?.pathname && history.push(pathname);
+  };
 
   const titleRenderer = () => {
     const stepRegex = /Step #[0-9]+/;
@@ -58,7 +72,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
           alignItems="center"
         >
           <MPIIcon className={classes.icon}/>
-          <Grid item={true}>{group}</Grid>
+          <Grid onClick={returnToList} item={true}>{group?.lable}</Grid>
         </Grid>
       </Typography>
       {isTypeMpiOutput && mpiOutputTitle ?

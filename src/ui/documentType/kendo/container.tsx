@@ -188,6 +188,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
         isByCategory={isByCategory}
         documentCategory={documentCategory}
         documentType={documentType}
+        categoryName={categoryName}
       />
     </div>
   );
