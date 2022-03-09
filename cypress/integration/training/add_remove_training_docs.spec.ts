@@ -777,8 +777,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.PostDocRevInReview], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
