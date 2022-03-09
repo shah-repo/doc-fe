@@ -3,7 +3,7 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import React from "react";
 
 const ToggleButtonLeft: React.FunctionComponent = () => {
-  const [alignment, setAlignment] = React.useState("setRules");
+  const [alignment, setAlignment] = React.useState("fieldConfig");
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
@@ -35,13 +35,16 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
       >
         <ToggleButton
           value="fieldConfig"
+          disableFocusRipple
+          disableRipple
           style={{
+            textTransform: "none",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             padding: "12px 24px",
             position: "absolute",
-            width: "138px",
+            width: "143px",
             height: "42px",
             left: "5px",
             top: "5px",
@@ -60,17 +63,20 @@ const ToggleButtonLeft: React.FunctionComponent = () => {
         </ToggleButton>
 
         <ToggleButton
-          value="setRules1"
+          value="setRules"
+          disableFocusRipple
+          disableRipple
           style={{
+            textTransform: "none",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             // padding: "12px 24px",
             position: "absolute",
-            width: "115px",
+            width: "105px",
             height: "42px",
             top: "5px",
-            left: "146px",
+            left: "150px",
             border: 0,
             // background: "red",
             color: "#767B87",
