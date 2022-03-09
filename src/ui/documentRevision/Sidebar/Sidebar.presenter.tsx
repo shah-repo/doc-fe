@@ -7,8 +7,8 @@ import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
 import { FB } from "../../form.builder";
-import styles from "./styles";
-import { Sidebar } from "./types";
+import styles from "./styles.new";
+import { Sidebar } from "./types.new";
 
 interface Props {
   isDrawerOpen: boolean;
@@ -43,7 +43,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
   if (SM.isNewLayout) {
     return (
       <Box display="flex" height="100%">
-        <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
+        <Box width={55} textAlign="center" mr={1.5}>
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
               <Box key={item.details.title}>
@@ -61,7 +61,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
             )
           )}
         </Box>
-        <Box width={233} display="flex" flexGrow={1} overflow="auto">
+        <Box flexGrow={1} overflow="auto">
           {sidebarList[indexNumber].details.component}
         </Box>
       </Box>

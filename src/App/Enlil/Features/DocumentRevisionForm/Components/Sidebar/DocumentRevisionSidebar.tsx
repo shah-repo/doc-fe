@@ -7,7 +7,6 @@ import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
 import { ReactComponent as BadgeIcon } from "../../../../../../../src/assets/images/badge.svg";
 import { ReactComponent as BookmarkIcon } from "../../../../../../../src/assets/images/bookmark.svg";
 import { ReactComponent as CRIcon } from "../../../../../../../src/assets/images/cr.svg";
-import { ReactComponent as EyeIcon } from "../../../../../../../src/assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../../../../../src/assets/images/history.svg";
 import { ReactComponent as MigrationIcon } from "../../../../../../../src/assets/images/migration.svg";
 import { ReactComponent as NoteIcon } from "../../../../../../../src/assets/images/note.svg";
@@ -16,8 +15,7 @@ import AccessPermissionsContainer from "../../../../../../ui/documentRevision/ac
 import DocumentRevisionAuditContainer from "../../../../../../ui/documentRevision/audit/Audit.container";
 import DocumentRevisionListContainer from "../../../../../../ui/documentRevision/DocumentRevisionList.container";
 import ChangeDocumentFormContainer from "../../../../../../ui/documentRevision/forms/presenters/change.document.form/ChangeDocumentForm.container";
-import ReferencesContainer from "../../../../../../ui/documentRevision/References/References.container";
-import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks.new";
+import Bookmarks from "../../../../../../ui/documentRevision/Sidebar/Bookmarks";
 import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/RevisionHistory";
 import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
@@ -47,69 +45,40 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
       <Box
         height="100%"
         bgcolor="white"
-        width={_documentRevisionSidebarState?.open ? 281 : 48}
+        width={_documentRevisionSidebarState?.open ? 300 : 55}
         borderColor={Colors.medium_gray}
+        borderLeft={0.5}
         style={{
-          transition: _documentRevisionSidebarState?.open
-            ? "all .2s ease-in-out"
-            : " all .2s ease-in-out",
-          background: "#FFFFFF",
-          boxShadow: "0px 1px 0px #CCD4D9",
-          borderRadius: "7px 7px 0px 7px",
-          marginRight: "10px",
+          transition: _documentRevisionSidebarState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
         }}
       >
         <Box
           display="flex"
-          height={48}
+          height={56}
           alignItems="center"
-          marginTop="10px"
         >
-          <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
-            <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
-              {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
-              {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
-            </IconButton>
-          </Box>
-          <Box width={233}>
-            {_documentRevisionSidebarState?.open && (
-              <Typography
-                style={{
-                  fontFamily: "Sora",
-                  fontStyle: "normal",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  lineHeight: "18px",
-                  color: "#162229",
-                }}
-              >
-                <SMText
-                  boxProps={{ flexGrow: 1, ml: 2 }}
-                  label={title || _documentRevisionSidebarState.title}
-                />
-              </Typography>
-            )}
-          </Box>
+          <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
+            {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
+            {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
+          </IconButton>
+          {_documentRevisionSidebarState?.open && (
+            <Typography variant="button">
+              <SMText
+                boxProps={{ flexGrow: 1, ml: 2, fontSize: "button" }}
+                label={title || _documentRevisionSidebarState.title}
+              />
+            </Typography>
+          )}
         </Box>
         <SMBox
           display="flex"
+          p={0.5}
           stretchY="calc(100% - 56px)"
           borderTop={1}
           borderColor={Colors.medium_gray}
         >
           <SidebarContainer
             sidebarList={[
-              {
-                icon: <EyeIcon />,
-                type: "references",
-                details: {
-                  shouldShow: true,
-                  title: "References",
-                  component: (
-                    <ReferencesContainer selectedDocument={selectedDocument} />
-                  ),
-                },
-              },
               {
                 icon: <NoteIcon />,
                 type: "note",

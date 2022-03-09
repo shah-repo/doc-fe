@@ -9,42 +9,21 @@ export const styles = makeStyles((theme: Theme) =>
     linkContainer: {
       borderBottom: `1px solid ${theme.palette.text.hint}`,
       padding: theme.spacing(2),
-      width: theme.spacing(31.5),
-      flexGrow: 1,
+      width: theme.spacing(27),
     },
-    activeLinkBox: {
-      color: Colors.navy,
+    linkTitle: {
+      color: theme.palette.text.primary,
       textDecoration: "none",
-      fontWeight: 600,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
-    },
-    inActiveLinkBox: {
-      color: Colors.font_gray,
-      textDecoration: "none",
-      fontWeight: 600,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
+      fontWeight: theme.typography.fontWeightBold,
     },
     activeLinkTitle: {
       color: theme.palette.primary.main,
       fontWeight: theme.typography.fontWeightBold,
     },
-    activeLinkBody: {
+    linkBody: {
       textDecoration: "none",
-      color: Colors.almost_black,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
-    },
-    inActiveLinkBody: {
-      textDecoration: "none",
-      color: Colors.font_gray,
-      fontFamily: "Sora",
-      fontSize: "14px",
-      lineHeight: "24px",
+      color: theme.palette.text.primary,
+      lineHeight: "25px",
     },
     selected: {
       background: Colors.background_blue,
@@ -53,12 +32,6 @@ export const styles = makeStyles((theme: Theme) =>
       "&.MuiExpansionPanelDetails-root": {
         display: "block",
       },
-    },
-    displayStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontSize: "14px",
-      fontWeight: "normal",
     },
   }),
 );

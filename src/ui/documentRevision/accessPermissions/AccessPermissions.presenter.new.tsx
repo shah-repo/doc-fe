@@ -13,7 +13,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
-import { styles } from "./AccessPermissions.styles";
+import { styles } from "./AccessPermissions.styles.new";
 
 interface OwnProps {
   availableApprovers: OptionType[];

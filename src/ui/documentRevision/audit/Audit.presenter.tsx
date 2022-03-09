@@ -1,4 +1,4 @@
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
 import { has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -9,6 +9,7 @@ import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import AuditFactory from "../../components/AuditFactory";
+import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
@@ -56,33 +57,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <ListItem alignItems="flex-start" disableGutters className={classes.auditListItem}>
-            <ListItemAvatar>
-              <Avatar
-                className={classes.avatar}
-                alt={name}
-                src={owner.user.avatar || ""}
-              />
-            </ListItemAvatar>
-            <ListItemText
-              primary={(
-                <Typography className={classes.generalInfo}>
-                  {name}
-                </Typography>)}
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="textPrimary"
-                    className={classes.secondaryText}
-                  >
-                    Owner
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>
+          <div className={classes.dateContainer}>
+            <div className={classes.owner} data-cy={`owner-${key}`}>{name}</div>
+            <DateTime value={change.timestamp} format={MomentFormats.DateTime} data-cy={`time-${key}`}/>
+          </div>
           {renderChanges(audit[groupId], key)}
         </Box>
       );
@@ -95,7 +73,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const singleFields: JSX.Element[] = [];
     let key = 0;
 
-    orderBy(audits, ["field"]).forEach((change: Audit, index, array) => {
+    orderBy(audits, ["field"]).forEach((change: Audit, index) => {
       change.groupKey = groupKey;
       const isFBField = has(change, "fbSchemaItem");
       const isSmartRef = change.field.split(".").includes("smartRefs");
@@ -334,31 +312,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               });
           }
         }
-        singleFields.push(
-          <Box
-            mb={1}
-            key={`${change.groupId}-${index}`}
-            className={
-              index === array.length - 1
-                ? classes.noPaddingMargin
-                : classes.auditListItem
-            }
-          >
+        singleFields.push((
+          <Box mb={1} key={`${change.groupId}-${index}`}>
             <Box>
               {!isFBField && !isSmartRef && (
-                <Typography
-                  variant="subtitle1"
-                  style={{
-                    fontSize: "12px",
-                    fontFamily: "Sora",
-                    color: "#767B87",
-                  }}
-                >
-                  <Text
-                    dataCy={`change-key-${groupKey}-${key}`}
-                    message={`documentRevision.audit.${change.field}.${change.type}`}
-                  />
-                </Typography>
+                <Text
+                  dataCy={`change-key-${groupKey}-${key}`}
+                  message={`documentRevision.audit.${change.field}.${change.type}`}
+                />
               )}
               {(isFBField || isSmartRef) && (
                 <FBText
@@ -368,13 +329,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               )}
             </Box>
             <div className={classes.auditValue}>
-              <AuditFactory
-                audit={change}
-                dataCy={`change-value-${groupKey}-${key}`}
-              />
+              <AuditFactory audit={change} dataCy={`change-value-${groupKey}-${key}`} />
             </div>
           </Box>
-        );
+        ));
         key++;
       }
     });
@@ -425,8 +383,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   };
 
   return (
-    <div>
-      {!audit && <Box className={classes.revisionContainer}>
+    <div className={classes.container}>
+      {audit && <Box className={classes.revisionContainer}>
         <Typography variant="subtitle1" className={classes.title}>
           <Text message={"common.revision"} />
           &nbsp;
@@ -439,7 +397,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           }
         </Typography>
       </Box>}
-      <List disablePadding>{audit && renderAuditGroup()}</List>
+      <List className={classes.list}>{audit && renderAuditGroup()}</List>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { Typography } from "@material-ui/core";
 import classNames from "classnames";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -107,36 +106,28 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     >
       <NavLink
         to={link}
-        className={isSelected ? classes.activeLinkBox : classes.inActiveLinkBox}
+        className={classes.linkTitle}
         activeClassName={classes.activeLinkTitle}
       >
-        <Typography
-          component="span"
-          data-cy={"revision"}
-          className={
-            isSelected ? classes.activeLinkBox : classes.inActiveLinkBox
-          }
-        >
+        <div
+          data-cy={"revision"}>
           <Text message={verPrefix} />
           &nbsp;
           {versionNumber}
-          {isStatusVisible && (
-            <Typography component="span" className={classes.displayStatus}>
-              <CustomLabelTooltip {...{ tooltipConfig }}>
-                <>
-                  &nbsp; - <Text message={displayStatus} />
-                </>
-              </CustomLabelTooltip>
-            </Typography>
-          )}
-        </Typography>
+          {
+            isStatusVisible &&
+            <CustomLabelTooltip {...{ tooltipConfig }}>
+              <>
+              &nbsp; - <Text message={displayStatus} />
+              </>
+            </CustomLabelTooltip>
+          }
+        </div>
       </NavLink>
       <NavLink
         to={link}
         key={documentRevision.id}
-        className={
-          isSelected ? classes.activeLinkBody : classes.inActiveLinkBody
-        }
+        className={classes.linkBody}
       >
         <SummaryInfo
           dataCy={"common.docId"}
@@ -144,19 +135,20 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
           value={docId}
         />
         {!isRecord && (
-          <SummaryInfo label="common.title" value={documentRevision.name} />
+          <SummaryInfo
+            label="common.title"
+            value={documentRevision.name}
+          />
         )}
         <SummaryInfo
-          label={
-            isRecord && (isReleased || isVoided)
-              ? recordOwnerLabel
-              : "common.owner"
-          }
+          label={isRecord && (isReleased || isVoided) ? recordOwnerLabel : "common.owner"}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
           label={isRecord ? recordDateLabel : "common.effective.date"}
-          value={<DateFormatter value={getDateValue()} />}
+          value={
+            <DateFormatter value={getDateValue()}/>
+          }
         />
       </NavLink>
     </div>
