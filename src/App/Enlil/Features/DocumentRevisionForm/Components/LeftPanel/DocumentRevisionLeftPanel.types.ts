@@ -5,7 +5,7 @@ import { DocumentRevision, FBDocumentRevisionProps } from "../../../../../../sta
 
 export type DocumentRevisionLeftPanelProps =
 & RouteComponentProps
-& Pick<SMProviderProps, "_documentRevisionFormState" | "_documentRevisionSidebarState">
+& Pick<SMProviderProps, "_documentRevisionFormState" | "_documentRevisionLeftPanelState">
 & Pick<DocumentRevisionFormProps, "documentRevisions">
 & Pick<Partial<DocumentRevisionFormStateProps>,
   "documentTypeId" |

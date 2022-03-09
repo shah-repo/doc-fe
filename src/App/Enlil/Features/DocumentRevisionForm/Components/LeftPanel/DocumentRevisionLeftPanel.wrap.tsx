@@ -18,7 +18,7 @@ export const withDocumentRevisionLeftPanelWrap = <T extends DocumentRevisionLeft
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    _documentRevisionSidebarState,
+    _documentRevisionLeftPanelState,
     documentRevisions,
     docRevsWithoutCanceled,
     documentRevisionId,
@@ -34,7 +34,7 @@ export const withDocumentRevisionLeftPanelWrap = <T extends DocumentRevisionLeft
   }: T) => {
 
     // MARK: @config
-    _documentRevisionSidebarState = SM.useRef(DocumentRevisionLeftPanelState);
+    _documentRevisionLeftPanelState = SM.useRef(DocumentRevisionLeftPanelState);
     const { _documentRevisionFormState } = SM.useStores();
 
     const { documentTypeId, documentId, docId } = _documentRevisionFormState || {};
@@ -86,11 +86,11 @@ export const withDocumentRevisionLeftPanelWrap = <T extends DocumentRevisionLeft
     // MARK: @methods
 
     return (
-      <SMProvider {...{ _documentRevisionSidebarState }}>
+      <SMProvider {...{ _documentRevisionLeftPanelState }}>
         <Component
           {...props as T}
           {...{
-            _documentRevisionSidebarState,
+            _documentRevisionLeftPanelState,
             _documentRevisionFormState,
             documentTypeId,
             documentRevisions,

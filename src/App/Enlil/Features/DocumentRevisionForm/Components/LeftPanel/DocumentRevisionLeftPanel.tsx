@@ -10,33 +10,19 @@ import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.w
 
 const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPanelProps> = ({
   _documentRevisionFormState,
-  _documentRevisionSidebarState,
+  _documentRevisionLeftPanelState,
   title,
-  documentTypeId = "",
-  docRevsWithoutCanceled,
-  documentRevisionId = "",
-  isInlineApproval = false,
-  selectedDocument,
-  documentRevisions,
-  showFormMigration,
-  formDocument,
-  documentId = "",
-  canAccess,
-  isRecord = false,
-  isNewOutput = false,
-  docId = "",
-  intl,
 }) =>  (
   <Observer>
     {() => (
       <Box
         height="100%"
         bgcolor="white"
-        width={_documentRevisionSidebarState?.open ? 300 : 55}
+        width={_documentRevisionLeftPanelState?.open ? 300 : 55}
         borderColor={Colors.medium_gray}
         borderLeft={0.5}
         style={{
-          transition: _documentRevisionSidebarState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
+          transition: _documentRevisionLeftPanelState?.open ? "all .2s ease-in-out" : " all .2s ease-in-out",
         }}
       >
         <Box
@@ -44,15 +30,15 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPan
           height={56}
           alignItems="center"
         >
-          <IconButton onClick={_documentRevisionSidebarState?.setOpen}>
-            {_documentRevisionSidebarState?.open && <KeyboardTabIcon />}
-            {!_documentRevisionSidebarState?.open && <KeyboardBackspaceIcon />}
+          <IconButton onClick={_documentRevisionLeftPanelState?.setOpen}>
+            {_documentRevisionLeftPanelState?.open && <KeyboardTabIcon />}
+            {!_documentRevisionLeftPanelState?.open && <KeyboardBackspaceIcon />}
           </IconButton>
-          {_documentRevisionSidebarState?.open && (
+          {_documentRevisionLeftPanelState?.open && (
             <Typography variant="button">
               <SMText
                 boxProps={{ flexGrow: 1, ml: 2, fontSize: "button" }}
-                label={title || _documentRevisionSidebarState.title}
+                label={title || _documentRevisionLeftPanelState.title}
               />
             </Typography>
           )}
@@ -65,122 +51,6 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<DocumentRevisionLeftPan
           borderColor={Colors.medium_gray}
         >
           <LeftPresenter/>
-          {/* <SidebarContainer
-            sidebarList={[
-              {
-                icon: <NoteIcon />,
-                type: "note",
-                details: {
-                  shouldShow: true,
-                  title: intl?.formatMessage({
-                    id: `document.revision.docVersion.${_documentRevisionFormState?.documentTypeAcronym}`,
-                    defaultMessage: "document.revision.docVersion",
-                  }) || "",
-                  component: (
-                    <DocumentRevisionListContainer
-                      documentRevisions={docRevsWithoutCanceled || []}
-                      selectedDocumentRevision={documentRevisionId}
-                      documentTypeId={documentTypeId}
-                      {
-                        ...{
-                          isInlineApproval,
-                          isRecord,
-                          documentId,
-                          docId,
-                          documentRevisionId,
-                        }
-                      }
-                    />
-                  ),
-                },
-              },
-              {
-                icon: <TimelineIcon />,
-                type: "history",
-                details: {
-                  shouldShow: Boolean(documentRevisionId),
-                  dataCy: "timeline-icon",
-                  title: intl?.formatMessage({
-                    id: "document.revision.history",
-                  }) || "",
-                  component: (documentRevisionId && selectedDocument) ? (
-                    <DocumentRevisionAuditContainer
-                      documentTypeId={documentTypeId}
-                      {...{
-                        documentRevisionId,
-                        selectedDocument,
-                      }}
-                    />
-                  ) : null,
-                },
-              },
-              {
-                icon: <BadgeIcon />,
-                type: "permissions",
-                details: {
-                  shouldShow: Boolean(documentRevisionId && canAccess && !isNewOutput),
-                  dataCy: "permission-icon",
-                  title: intl?.formatMessage({
-                    id: "document.access.permissions",
-                  }) || "",
-                  component: (documentRevisionId && canAccess && !isNewOutput) ? (
-                    <AccessPermissionsContainer
-                      documentRevisionId={documentRevisionId}
-                      documentId={documentId}
-                      canAccess={canAccess}
-                      documentTypeId={documentTypeId}
-                      withoutCurrentUser={true}
-                    />
-                  ) : null,
-                },
-              },
-              {
-                icon: <BookmarkIcon />,
-                type: "bookmarks",
-                details: {
-                  shouldShow: true,
-                  dataCy: "bookmark-icon",
-                  title: intl?.formatMessage({
-                    id: "document.revision.bookmarks",
-                  }) || "",
-                  component: <Bookmarks />,
-                },
-              },
-              {
-                icon: <CRIcon />,
-                type: "crHistory",
-                details: {
-                  shouldShow: true,
-                  dataCy: "cr-icon",
-                  title: intl?.formatMessage({
-                    id: "document.revision.cr.history",
-                  }) || "",
-                  component: <RevisionHistory changeRequests={documentRevisions?.map((e) =>
-                    e.changeRequest) as ChangeRequest[]} />,
-                },
-              },
-              {
-                icon: <MigrationIcon />,
-                type: "formMigration",
-                details: {
-                  shouldShow: showFormMigration,
-                  dataCy: "form-migration-icon",
-                  title: intl?.formatMessage({
-                    id: "common.form.migration",
-                  }) || "",
-                  component: showFormMigration ? (
-                    <ChangeDocumentFormContainer
-                      docRevId={documentRevisionId || ""}
-                      documentTypeId={documentTypeId}
-                      sourceSchema={formDocument?.formTemplate?.schema || []}
-                      sourceFormId={formDocument?.id || ""}
-                    />
-                  ) : null,
-                },
-              },
-            ]
-            }
-          /> */}
         </SMBox>
       </Box>
     )}
