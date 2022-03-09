@@ -689,8 +689,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Required doctypes", () => {
-      cy.get(`[data-cy^="required-doctypes"]`).arrowClick();
-      cy.get("ul>li[role=option]").contains("Equipment").arrowClick();
+      cy.get(`[data-cy^="required-doctypes"]`).autocompleteSelect("Equipment");
     });
   });
 

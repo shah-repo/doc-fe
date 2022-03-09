@@ -266,7 +266,7 @@ context("Document Operators Access Test", () => {
         cy.reload();
         cy.progressBarShouldAppear();
       });
-      cy.listLoadingElementShouldExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
