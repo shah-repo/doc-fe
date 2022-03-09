@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import SidebarPresenter from "./Sidebar.presenter.new";
-import { Sidebar } from "./types";
+import { Sidebar } from "./types.new";
 
 interface SidebarContainerProps {
   sidebarList: Sidebar[];

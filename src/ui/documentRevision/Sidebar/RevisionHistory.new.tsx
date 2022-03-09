@@ -14,7 +14,7 @@ import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { FBMapWrapper } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
-import styles from "./styles";
+import styles from "./styles.new";
 
 interface SidebarPresenterProps {
   changeRequests: ChangeRequest[];
