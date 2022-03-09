@@ -2,12 +2,11 @@ import { Box, IconButton } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
+import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 
 const SearchBox: React.FunctionComponent = () => (
   <Box
     style={{
-      // position: "absolute",
-      // padding: "20px 20px 20px 12px",
       height: "36px",
       display: "flex",
       alignItems: "center",
@@ -18,9 +17,8 @@ const SearchBox: React.FunctionComponent = () => (
     }}
   >
     <IconButton type="submit" size="small" disableRipple>
-      <SearchIcon />
+      <SearchIcon style={{ color: Colors.navy, margin: "2px 0px 0px 8px", fontSize: "20px" }}/>
     </IconButton>
-    {/* Can use existing code */}
     <InputBase placeholder="Search" />
   </Box>
 );

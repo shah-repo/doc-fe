@@ -3,16 +3,15 @@ import {
   Collapse,
   IconButton,
   List,
-  ListItem,
-  ListItemText,
+  ListItem, ListItemText, Typography,
 } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
 import React from "react";
 import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 import { ReactComponent as SectionIcon } from "../../../../../../../assets/images/section.svg";
 import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
-import { FBLabel } from "../../../../../../../ui/form.builder";
+import Text from "../../../../../../../ui/components/Text";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
 import styles from "./ListPanel.styles";
@@ -44,9 +43,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   */
   const createPickerState = () => {
     const data: any = [];
-    let newObj: any = { tab: "", editors: [], subTab: [], isFavourite: [] };
     each(pickers, function(value, key) {
-      newObj = { tab: "", editors: [], subTab: [], isFavourite: [] };
+      const newObj = { tab: "", editors: [], subTab: [], isFavourite: [] };
       newObj.tab = key;
       newObj.editors = value;
       const subTabList: any = [];
@@ -70,7 +68,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     const favList = createFavouriteList(data);
     return {
       dataList: data,
-      favouriteList: [{ tab: "favourite", subTab: flatMap(favList) }],
+      favouriteList: [{ tab: "favorites", subTab: flatMap(favList) }],
     };
   };
 
@@ -96,12 +94,16 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
           onClick={() => {
             handleClick(tab.tab);
           }}
+          style={tab.tab === "favorites" ? { borderTop: 0 } : {}}
           className={classes.listItemBtn}
         >
           <ListItemText>
-            <FBLabel label={`form.builder.${tab.tab}`} />
+            {/* <FBLabel label={`form.builder.${tab.tab}`} /> */}
+            <Typography className={classes.listItemText}>
+              <Text message={`form.builder.${tab.tab}`} />
+            </Typography>
           </ListItemText>
-          {open[tab.tab] ? <ExpandMore /> : <ExpandLess />}
+          {open[tab.tab] ? <ExpandMore /> : <ChevronRight />}
         </ListItem>
         <Collapse in={open[tab.tab]} timeout="auto" unmountOnExit>
           <Box className={classes.outerBox}>

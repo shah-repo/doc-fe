@@ -1,6 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-
 export default makeStyles((theme: Theme) =>
   createStyles({
     outerBox: {
@@ -13,20 +12,18 @@ export default makeStyles((theme: Theme) =>
     listStyle: {
       padding: 0,
       background: "#E5E5E5",
-
     },
     listItemBtn: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "0px 10px 0px 5px",
+      padding: "0px 10px 0px 15px",
       width: "300px",
       height: "50px",
       background: "white",
       boxShadow: "0px 1px 0px #CCD4D9",
-      borderTop: "1px solid #CCD4D9", // I aaded this need to check if required and put conditional
-      // 0px 1px 0px #CCD4D9
+      borderTop: "1px solid #CCD4D9", // need to check if required and put conditional
     },
     listItemStyle: {
       padding: "3px",
@@ -37,25 +34,20 @@ export default makeStyles((theme: Theme) =>
       borderRadius: "3px",
       marginBottom: "8px",
     },
-    listItemText:
-      {
-        fontFamily: "Sora",
-        fontStyle: "normal",
-        fontWeight: "normal",
-        fontSize: "12px",
-        lineHeight: "15px",
-        display: "flex",
-        alignItems: "center",
-        textAlign: "center",
-        textTransform: "uppercase",
-        color: "#080B11",
-        flex: "none",
-        order: 0,
-        flexGrow: 0,
-        margin: "0px 10px",
-        paddingTop: "10px",
-
-      },
-
+    listItemText: {
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      fontSize: "12px",
+      lineHeight: "15px",
+      display: "flex",
+      alignItems: "center",
+      textAlign: "center",
+      textTransform: "uppercase",
+      color: "#080B11",
+      flex: "none",
+      order: 0,
+      flexGrow: 0,
+    },
   })
 );

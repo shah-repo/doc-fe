@@ -585,6 +585,7 @@
   "form.builder.edit.description": "Edit Description",
   "form.builder": "Form Builder",
   "form.builder.library": "Form Builder Library",
+  "form.builder.favorites": "Favorites",
   "form.builder.details": "Details",
   "form.builder.create": "Create a Form",
   "form.builder.name": "Form Name",
@@ -1209,6 +1210,5 @@
   "documenttype.view.config": "View Field config",
   "sm.general": "General",
   "sm.overview": "Overview",
-  "just.now": "Just now",
-  "form.builder.favourite": "Favourite"
+  "just.now": "Just now"
 }
