@@ -1,12 +1,8 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { SM } from "../../App";
-import NewCloneEBButton from "../../App/Shifamed/Components/forms/presenters/CopyEBButton";
-import FormExportToEmail from "../../App/Shifamed/Components/forms/presenters/export.to.email/ExportToEmail";
-import { StyledButton } from "../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { ReactComponent as WarningIcon } from "../../assets/images/warning.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
@@ -26,7 +22,6 @@ import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
-import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
@@ -133,26 +128,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          {SM.isNewLayout ? (
-            <StyledButton
-              color="secondary"
-              variant="outlined"
-              onClick={cloneDocument}
-              id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
-            >
-              <Text message={reviseLabel} />
-            </StyledButton>
-          ) : (
-            <Button
-              color="primary"
-              onClick={cloneDocument}
-              id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
-            >
-              <Text message={reviseLabel} />
-            </Button>
-          )}
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={cloneDocument}
+            id="PreviewControlsContainer-revise"
+            data-cy="updateRecord" >
+            <Text message={reviseLabel} />
+          </Button>
         </CustomLabelTooltip>
       );
     }
@@ -164,18 +147,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-      if (SM.isNewLayout) {
-        return (
-          <StyledButton
-            color="primary"
-            onClick={cloneOutputDocument}
-            id="PreviewControlsContainer-createNew"
-            data-cy="PreviewControlsContainer-createNew"
-          >
-            <Text translation={"common.create.new"} />
-          </StyledButton>
-        );
-      }
       return (
         <Button
           color="secondary"
@@ -208,33 +179,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     if (!hasAccess) {
       return (
         <div style={{ display: "flex" }}>
-          <Box
-            alignSelf="center"
-            id="PreviewControlsContainer-warning"
-            color={Colors.white}
-            alignContent="center"
-          >
-            <Grid container={true} alignItems="center">
-              <Grid item >
-                <WarningIcon
-                  style={{ marginRight: 10, width: "20px", height: "20px" }}
-                />
-              </Grid>
-              <Grid item >
-                <Text translation="document.security.warning" />
-              </Grid>
-            </Grid>
+          <Box alignSelf="center" id="PreviewControlsContainer-warning">
+            <WarningIcon style={{ marginRight: 10, width: "20px", height: "20px" }} />
+            <Text translation="document.security.warning" />
           </Box>
-          {!isEmailSent && (
-            <StyledButton
-              color="primary"
-              onClick={onSubmit}
-              id="PreviewControlsContainer-access"
-              data-cy="PreviewControlsContainer-access"
-            >
+          {!isEmailSent &&
+            <Button color="secondary" variant="outlined" onClick={onSubmit}
+              id="PreviewControlsContainer-access" data-cy="PreviewControlsContainer-access" >
               <Text translation="document.request.access" />
-            </StyledButton>
-          )}
+            </Button>
+          }
         </div>
       );
     }
@@ -257,37 +211,22 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
-  const renderExportToEmail = () =>
-    SM.isNewLayout ? (
-      <FormExportToEmail
-        revisionId={documentRevision.id}
-        canAccess={documentRevision.document.canAccess}
-      />
-    ) : (
-      <ExportToEmail
-        revisionId={documentRevision.id}
-        canAccess={documentRevision.document.canAccess}
-      />
-    );
-  const rendenCloneEBButton = () => {
-    if ((isStatusReleased || isStatusInDraft) && canCopy) {
-      return SM.isNewLayout ? <NewCloneEBButton
-        {...{ documentRevision }}
-      /> :  <CopyEBButton
-        {...{ documentRevision }}
-      />;
-    }
-  };
   return (
     <>
       {!isLastVersionObsolete() && renderCloneButton()}
-      {rendenCloneEBButton()}
+      {(isStatusReleased || isStatusInDraft) && canCopy &&
+        <CopyEBButton
+          {...{ documentRevision }}
+        />}
       {renderOutputButton()}
       {renderNoAccessWarning()}
       {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
         renderWithdrawSubmissionButton()}
       <InspectionControlsContainer {...{ documentRevision }} />
-      {isExportable && renderExportToEmail()}
+      {isExportable && <ExportToEmail
+        revisionId={documentRevision.id}
+        canAccess={documentRevision.document.canAccess}
+      />}
       <DownloadHTML pdf={documentRevision.pdf} />
       <PDFSocket {...{ documentRevision }}/>
     </>

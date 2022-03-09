@@ -3,12 +3,15 @@ import React from "react";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import { generateSubtitle } from "../../../../../ui/components/common/header/subtitles";
 import { RequestType } from "../../../../../ui/components/common/owner.changer/helpers/types";
+import { checkIsDocumentExportable } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isFormWithInlineApproval } from "../../../../../ui/documentRevision/helpers/records";
-import ControlsContainer from "../../../../../ui/documentRevision/PreviewControls.container";
+import ControlsContainer from "../../../../Enlil/Features/DocumentRevision/PreviewControls.container";
 import FormOwnerChangerContainer from "../presenters/change.owner/container";
+import ExportToEmail from "../presenters/ExportToEmail";
 import NewHeader from "./Header";
 import NewHeaderInfo from "./HeaderInfo";
 import HeaderMenu from "./Menu";
+
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -20,8 +23,11 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
-}) => (
-  <NewHeader
+}) => {
+
+  const groupOptions = documentRevision.document?.documentType?.groupOptions;
+  const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
+  return (<NewHeader
     displayStatus={documentRevision.displayStatus}
     status={documentRevision.status}
   >
@@ -57,12 +63,16 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                 requestId={documentRevision.id}
                 requestType={RequestType.Document}
               />
-            )}{" "}
+            )}
+            {isExportable && <ExportToEmail
+              revisionId={documentRevision.id}
+              canAccess={documentRevision.document.canAccess}
+            />}
           </HeaderMenu>
         }
       </Grid>
     </Grid>
   </NewHeader>
-);
+  ); };
 
 export default NewSummaryHeaderPresenter;
