@@ -119,7 +119,7 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
         cy.fbAddNewFieldButton();
       });

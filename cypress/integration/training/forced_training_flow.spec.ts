@@ -706,7 +706,7 @@ context("Forced training flow", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .type("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -723,7 +723,7 @@ context("Forced training flow", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -735,8 +735,8 @@ context("Forced training flow", () => {
     });
 
     it("Select Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Select Approver", () => {
@@ -797,7 +797,7 @@ context("Forced training flow", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .type("One-Time Training Test{downarrow}{enter}");
+          .autocompleteSelect("One-Time Training Test");
       });
     });
 
@@ -814,7 +814,7 @@ context("Forced training flow", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").type("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
 
     it("Select force training option 'Yes'", () => {
@@ -822,9 +822,9 @@ context("Forced training flow", () => {
     });
 
     it("Select Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[2].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").type(`${USERS[3].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
     });
 
     it("Select Approver", () => {

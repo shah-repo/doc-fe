@@ -851,9 +851,7 @@ context("Procedure and parts flow test", () => {
     context("Choose a part and approve EB", () => {
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").arrowType("Part for EB document")
-            .wait(1000)
-            .arrowType("{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
         });
         cy.progressBarShouldNotExist();
       });

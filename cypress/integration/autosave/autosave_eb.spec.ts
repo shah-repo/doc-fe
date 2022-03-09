@@ -229,10 +229,10 @@ context("Autosave EB test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
       });
-      cy.get("[data-cy=\"title\"]").arrowType("Part document{downarrow}{enter}");
+      cy.get("[data-cy=\"title\"]").autocompleteSelect("Part document");
       cy.get("[data-cy=\"partLot\"]").arrowType("test");
       cy.get("[name=\"quantity\"]").arrowType("2");
-      cy.get("[data-cy=\"unit\"]").arrowType("Day{downarrow}{enter}");
+      cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 

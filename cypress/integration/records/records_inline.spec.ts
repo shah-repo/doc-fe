@@ -188,7 +188,7 @@ context("Record inline Flow", () => {
           () => {
             cy.listLoadingElementShouldNotExist();
             cy.get("[name*=\"fb-ia-inline-field\"] input")
-              .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
+              .autocompleteSelect("enlil.testmail+cy2");
           });
       });
 
@@ -196,7 +196,7 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-              .type("enlil.testmail+cy2{downarrow}{enter}", { force: true });
+              .autocompleteSelect("enlil.testmail+cy2");
           });
       });
 

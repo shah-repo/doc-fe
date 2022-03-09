@@ -419,7 +419,7 @@ context("PO test with default enlil form", () => {
         });
 
         it("Select 'SUP-00003' Supplier ", () => {
-          cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00003{downarrow}{enter}");
+          cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
         });
 
         it("Select 'Customer Company' for Ship To", () => {

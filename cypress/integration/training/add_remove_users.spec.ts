@@ -685,7 +685,7 @@ context("Add/Remove users from Training Curriculum", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -708,7 +708,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select document 'released doc1' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc1{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -724,10 +724,10 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[3].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[4].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[4].name}`);
     });
 
     it("Save training", () => {
@@ -806,7 +806,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Add new User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[7].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[7].name}`);
     });
 
     it(`Remove users ${USERS[1].name} and ${USERS[3].name}`, () => {

@@ -353,8 +353,7 @@ context("Validators tests", () => {
 
     it(`Select 'Order' field`, () => {
       SystemRequirement("FB-0240");
-      cy.get("[data-cy=\"validators.required_if_in.name\"]").arrowType(`Order`).wait(1000)
-        .arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_if_in.name\"]").autocompleteSelect(`Order`);
     });
 
     it(`Check required if 'First' 'Second'`, () => {
@@ -423,8 +422,7 @@ context("Validators tests", () => {
     it(`Select '${requiredFieldLabel}' field`, () => {
       SystemRequirement("FB-0230");
       cy.get("[data-cy=\"validators.required_if.name\"]")
-        .arrowType(`${requiredFieldLabel}`).wait(1000)
-        .arrowType("{downarrow}{enter}");
+        .autocompleteSelect(`${requiredFieldLabel}`);
     });
 
     it(`Type value as '${requiredIfFieldValue}'`, () => {
@@ -461,8 +459,7 @@ field text equals '${requiredIfFieldValue}': Add text field`, () => {
     });
 
     it(`Select 'Required doctypes' field`, () => {
-      cy.get("[data-cy=\"validators.required_with.name\"]").arrowType(`Required doctypes`).wait(1000)
-        .arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_with.name\"]").autocompleteSelect(`Required doctypes`);
     });
 
     it(`Make '${requiredWithFieldLabel}' field required, if 'Required doctypes' 
@@ -521,7 +518,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Document revision' as options", () => {
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
     });
 
     it("Open validations", () => {
@@ -535,8 +532,7 @@ field is empty: Add text field`, () => {
 
     it("Select Released status", () => {
       SystemRequirement("FB-0270");
-      cy.get("[data-cy=\"validators.required_document_status.name\"]").arrowType("Draft").wait(1000)
-        .arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_status.name\"]").autocompleteSelect("Draft");
     });
 
     it("Add autocomplete", () => {
@@ -559,8 +555,7 @@ field is empty: Add text field`, () => {
     });
 
     it("Select 'Document revision' as options", () => {
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision").wait(1000)
-        .arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
     });
 
     it("Open validations", () => {
@@ -574,8 +569,7 @@ field is empty: Add text field`, () => {
 
     it("Select Clinical Protocol", () => {
       SystemRequirement("FB-0280");
-      cy.get("[data-cy=\"validators.required_document_type.name\"]").arrowType("Clinical Protocol").wait(1000)
-        .arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"validators.required_document_type.name\"]").autocompleteSelect("Clinical Protocol");
     });
 
     it("Add autocomplete", () => {
@@ -745,7 +739,7 @@ field is empty: Add text field`, () => {
     it("Select 'Required doctypes", () => {
       SystemRequirement("FB-0250");
 
-      cy.get(`[data-cy^="required-doctypes-"]`).arrowType("Equipment{downarrow}{enter}");
+      cy.get(`[data-cy^="required-doctypes-"]`).autocompleteSelect("Equipment");
     });
 
     it("Should show error for 'required with' field", () => {
@@ -793,7 +787,7 @@ field is empty: Add text field`, () => {
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType("AR Form{downarrow}{enter}");
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect("AR Form");
       });
     });
 
@@ -809,7 +803,7 @@ field is empty: Add text field`, () => {
     it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).arrowType(`${documentRevisionName}{downarrow}{enter}`);
+        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect(`${documentRevisionName}`);
       });
     });
   });
@@ -817,7 +811,7 @@ field is empty: Add text field`, () => {
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType("AR Form{downarrow}{enter}").wait(500);
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect("AR Form").wait(500);
         cy.unClick();
       });
     });
@@ -830,7 +824,7 @@ field is empty: Add text field`, () => {
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).arrowType(`${csDocTitle}{downarrow}{enter}`);
+        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect(`${csDocTitle}`);
       });
     });
   });

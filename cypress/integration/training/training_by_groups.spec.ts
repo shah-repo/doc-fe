@@ -725,7 +725,7 @@ context("Training by Groups", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -748,7 +748,7 @@ context("Training by Groups", () => {
     });
 
     it("Select document 'released doc1' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc1{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -764,8 +764,8 @@ context("Training by Groups", () => {
     });
 
     it("Select Groups to train 'Group1 and Group2'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group1{downarrow}{enter}");
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group2{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
     });
 
     it("Save training", () => {
@@ -832,7 +832,7 @@ context("Training by Groups", () => {
     });
 
     it("Add new Group to train 'Group3'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").arrowType("Group3{downarrow}{enter}");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
     });
 
     it("Remove group Group1", () => {

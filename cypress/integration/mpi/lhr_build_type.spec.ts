@@ -1132,7 +1132,7 @@ context("LHR Build type flow", () => {
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();

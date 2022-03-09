@@ -1511,7 +1511,7 @@ context("LHR flow", () => {
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -1541,7 +1541,7 @@ context("LHR flow", () => {
             CyRoutes.GetAutocompleteOptions,
             CyRoutes.PatchDocRev], () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy^=\"lhr-step\"]").arrowType("MPI created with API{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();

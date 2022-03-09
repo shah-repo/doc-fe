@@ -688,7 +688,7 @@ context("Training for same document that was first released and then revised and
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -711,7 +711,7 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select document 'released document' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released document{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released document");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -727,8 +727,8 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Save training", () => {

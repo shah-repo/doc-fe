@@ -76,9 +76,7 @@ declare global {
 }
 
 Cypress.Commands.add("fbAutocompleteType", (params: { autocompleteOption: string }) => {
-  cy.get("[data-cy=\"optionId\"]").arrowType(params.autocompleteOption);
-  cy.wait(1000);
-  cy.get("[data-cy=\"optionId\"]").arrowType("{downarrow}{enter}");
+  cy.get("[data-cy=\"optionId\"]").autocompleteSelect(params.autocompleteOption);
 });
 
 Cypress.Commands.add("dtSelectDefaultRevisionStage", (params: { defaultRevisionStage: string }) => {
@@ -334,7 +332,7 @@ Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label:
   }
   cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
   cy.fbEnterNameValue({ name: "label", value: params.label });
-  cy.get("[data-cy=\"optionId\"]").arrowType(`${params.name}{downarrow}{enter}`);
+  cy.get("[data-cy=\"optionId\"]").autocompleteSelect(`${params.name}`);
   cy.fbAddNewFieldButton();
 });
 

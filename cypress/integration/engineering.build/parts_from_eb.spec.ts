@@ -278,7 +278,7 @@ context("Parts from EB flow test", () => {
 
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").arrowType(EXISTING_PART_NAME + "{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect(EXISTING_PART_NAME);
         });
       });
 

@@ -698,7 +698,7 @@ context("PO test", () => {
       it("Select Document Type 'Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
           cy.listLoadingElementShouldNotExist();
-          cy.get("[name=\"document.documentType.id\"]").arrowType("{downarrow}{enter}");
+          cy.get("[name=\"document.documentType.id\"]").autocompleteSelect("");
         });
       });
 
@@ -724,7 +724,7 @@ context("PO test", () => {
           });
         }).as("response");
 
-        cy.get("[data-cy^=\"requestor-\"]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+        cy.get("[data-cy^=\"requestor-\"]").autocompleteSelect(`${USERS[1].name}`);
         cy.wait("@response", { responseTimeout: 60 * 1000 });
       });
     });
@@ -738,7 +738,7 @@ context("PO test", () => {
       });
 
       it("Select Supplier", () => {
-        cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType(`${documentSupplierRevisionName}{downarrow}{enter}`);
+        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect(`${documentSupplierRevisionName}`);
         cy.unClick();
       });
 
@@ -970,7 +970,7 @@ context("PO test", () => {
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00004{downarrow}{enter}");
+      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00004");
     });
 
     it("Check currency options dropdown", () => {

@@ -146,7 +146,7 @@ Cypress.Commands.add("ptClickCreateNewPart", () => {
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.DocPreview], () => {
-    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowType(params.partForm + "{downarrow}{enter}");
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").autocompleteSelect(params.partForm);
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

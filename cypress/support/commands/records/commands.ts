@@ -77,7 +77,7 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
 
     cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
     if (params.recordForm) {
-      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").autocompleteSelect(params.recordForm);
     }
   });
   cy.progressBarShouldNotExist();
@@ -132,7 +132,7 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
 
     cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
     if (params.recordForm) {
-      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowType(params.recordForm + "{downarrow}{enter}");
+      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").autocompleteSelect(params.recordForm);
     }
     cy.progressBarShouldAppear();
   });

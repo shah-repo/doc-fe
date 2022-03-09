@@ -294,7 +294,7 @@ Cypress.Commands.add("arCloseAR", () => {
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
-  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowType(params.name + "{downarrow}{enter}").wait(500);
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {

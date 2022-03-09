@@ -256,13 +256,13 @@ Cypress.Commands.add("poAMEnterLimit", (params: {limit: string}) => {
 
 Cypress.Commands.add("poAMSelectUsers", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[name=\"signatures.0.employees\"]").arrowType(item + "{downarrow}{enter}");
+    cy.get("[name=\"signatures.0.employees\"]").autocompleteSelect(item);
   });
 });
 
 Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[id=\"approvals\"]").arrowType(item + "{downarrow}{enter}");
+    cy.get("[id=\"approvals\"]").autocompleteSelect(item);
   });
 });
 
@@ -359,8 +359,7 @@ Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string 
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
   cy.listLoadingElementShouldNotExist();
 
-  cy.get("[data-cy^=\"po-supplier-built-in\"]").arrowType(`${params.supplier}`).wait(1000)
-    .arrowType("{downarrow}{enter}");
+  cy.get("[data-cy^=\"po-supplier-built-in\"]").autocompleteSelect(`${params.supplier}`);
 
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();

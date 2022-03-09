@@ -653,7 +653,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
@@ -810,7 +810,7 @@ context("Autosave on blur", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-      cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
@@ -912,7 +912,7 @@ context("Autosave on blur", () => {
 
     it("Select Autocomplete field and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+        cy.get("[data-cy^=fb-autocomplete-]").autocompleteSelect("FM-000");
         cy.unClick();
       });
     });
@@ -993,7 +993,7 @@ context("Autosave on blur", () => {
     });
 
     it("Select PO receivable and check for autosave", () => {
-      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").arrowType("POT-0000{downarrow}{enter}");
+      cy.get("[data-cy^=\"porec-fb-receive-purchase-order-\"]").autocompleteSelect("POT-0000");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.unClick();
       });
@@ -1099,7 +1099,7 @@ context("Autosave on blur", () => {
       cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("#fb-mpiprocedure-ref-description").arrowClick({ force: true }).arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").arrowType(`${USERS[1].email}{downarrow}{enter}`);
+      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
       cy.get("[name=\"dueDate\"]").parent().find("button").arrowClick({ force: true });
       // eslint-disable-next-line max-len
       cy.xpath(
@@ -1112,7 +1112,7 @@ context("Autosave on blur", () => {
 
     it("Select REQ and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=\"fb-select-doc-\"]").arrowType("FM-00001{downarrow}{enter}");
+        cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
         cy.unClick();
       });
     });
@@ -1209,7 +1209,7 @@ context("Autosave on blur", () => {
       }).as("response");
 
       cy.unClick();
-      cy.get("[data-cy^=fb-autocomplete-]").arrowType("FM-000{downarrow}{enter}");
+      cy.get("[data-cy^=fb-autocomplete-]").autocompleteSelect("FM-000");
       cy.unClick();
 
       cy.wait("@response", { responseTimeout: 90 * 1000 });

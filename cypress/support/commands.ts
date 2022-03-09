@@ -27,7 +27,7 @@ declare global {
       arrowType(
         text: string,
         options?: Partial<Cypress.TypeOptions>): Chainable<Subject>;
-      autocompleteSelect(text: string): Chainable<Subject>;
+      autocompleteSelect(text: string, options?: {force?: boolean}): Chainable<Subject>;
       downloadFile(params: { url: string; directory: string; fileName: string}): Chainable<Subject>;
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
@@ -309,8 +309,9 @@ Cypress.Commands.add("arrowType", { prevSubject: "element" }, (
 
 Cypress.Commands.add("autocompleteSelect", { prevSubject: "element" }, (
   subject: JQuery<HTMLElement>,
-  text: string ) => {
-  cy.wrap(subject).arrowType(text).wait(1500).arrowType("{downarrow}{enter}");
+  text: string,
+  options?: {force?: boolean} ) => {
+  cy.wrap(subject).arrowType(text,  options).wait(1500).arrowType("{downarrow}{enter}",  options);
 });
 
 // Cypress.Commands.overwrite("click", (originalFn, element, options) => {

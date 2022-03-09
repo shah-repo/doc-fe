@@ -162,7 +162,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[data-cy=\"referenceTo\"]").arrowClick().arrowType(item + "{downarrow}{enter}");
+    cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(item);
   });
 });
 
@@ -283,7 +283,7 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?
   cy.listLoadingElementShouldNotExist();
   if (params !== undefined && params.approverName !== undefined)
   {
-    cy.get("[data-cy='field-approvals']").arrowType(`${params.approverName}{downarrow}{enter}`);
+    cy.get("[data-cy='field-approvals']").autocompleteSelect(`${params.approverName}`);
   }
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.unClick();
@@ -528,8 +528,8 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
-  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").arrowType(`${params.username}{downarrow}{enter}`, { force: true })
-    .wait(500);
+  cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
+    .autocompleteSelect(`${params.username}`, { force: true });
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy='add-user'").eq(2).arrowClick();
   });
@@ -718,7 +718,7 @@ Cypress.Commands.add("drSelectPermissionTab", () => {
 
 Cypress.Commands.add("drSelectUser", (...users: string[]) => {
   users.forEach((user) => {
-    cy.get(`[data-cy="field-securityEmployees"]`).arrowType(`${user}{downarrow}{enter}`);
+    cy.get(`[data-cy="field-securityEmployees"]`).autocompleteSelect(`${user}`);
   });
   cy.get(`[data-cy="field-securityEmployees"]`).arrowClick();
 });
@@ -736,7 +736,7 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
 
 Cypress.Commands.add("drSelectGroup", (...groups: string[]) => {
   groups.forEach((group) => {
-    cy.get(`[data-cy="field-securityGroups"]`).arrowType(`${group}{downarrow}{enter}`);
+    cy.get(`[data-cy="field-securityGroups"]`).autocompleteSelect(`${group}`);
   });
   cy.get(`[data-cy="field-securityGroups"]`).arrowClick();
 });

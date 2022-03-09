@@ -722,7 +722,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -745,7 +745,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select document 'released doc1' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc1{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -753,7 +753,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select document 'released doc2' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc2{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc2");
     });
 
     it("Enter training refresh period days", () => {
@@ -765,8 +765,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Save training", () => {
@@ -868,7 +868,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select document 'released doc3' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc3{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc3");
     });
 
     it("Remove document 'released doc2' to be trained on", () => {

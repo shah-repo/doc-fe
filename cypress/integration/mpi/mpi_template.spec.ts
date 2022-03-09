@@ -325,7 +325,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-          cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+          cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
           cy.fbAddNewFieldButton();
         });
 
@@ -509,7 +509,7 @@ context("Mpi Template", () => {
           cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
           cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
           cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-          cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+          cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
           cy.fbAddNewFieldButton();
         });
 

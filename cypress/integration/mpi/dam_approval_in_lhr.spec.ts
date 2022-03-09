@@ -1554,7 +1554,7 @@ context("DAM approvals in LHR", () => {
 
       it(`Add ${USERS[4].name} in approving users`, () => {
         cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).arrowType(`${USERS[4].name}{downarrow}{enter}`);
+          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[4].name}`);
       });
 
       it("Click the save button", () => {
@@ -1713,7 +1713,7 @@ context("DAM approvals in LHR", () => {
 
       it(`Add owner ${USERS[1].name} in approving users`, () => {
         cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).arrowType(`${USERS[1].name}{downarrow}{enter}`);
+          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[1].name}`);
       });
 
       it("Click the save button", () => {
