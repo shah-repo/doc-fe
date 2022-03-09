@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { IotService } from "../../../common/utils/iot/mqttClient";
+import DocumentTypeSockets from "../../document.type.management/DocumentTypeSockets";
 import ChangeRequestListSockets from "./ChangeRequestListSockets";
 
 const SocketsContainer: React.FunctionComponent = () => {
@@ -8,7 +9,12 @@ const SocketsContainer: React.FunctionComponent = () => {
     iotService.unsubscribeAll();
   }, []);
 
-  return <ChangeRequestListSockets />;
+  return (
+    <>
+      <ChangeRequestListSockets />
+      <DocumentTypeSockets />
+    </>
+  );
 };
 
 export default SocketsContainer;
