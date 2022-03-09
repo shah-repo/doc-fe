@@ -58,7 +58,6 @@ export class IotService {
 
   public subscribeToTopic(topic: string, notif: any): any {
     if (this.isConnected()) {
-      console.log("CONNECTED SOCKET :::", topic);
       this.subscribe(topic, notif);
       return;
     }

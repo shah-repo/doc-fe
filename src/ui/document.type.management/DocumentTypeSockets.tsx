@@ -27,7 +27,6 @@ const DocumentTypeSockets: React.FunctionComponent = () => {
   const loadAction = useActionCreator(documentTypeActions.loadList);
   const async = useAsync();
   const loadData = () => {
-    console.log('SUB LOAD ::', );
     async.start(loadAction);
   };
   useMqttSubscription(subscribe, unsubscribe);
