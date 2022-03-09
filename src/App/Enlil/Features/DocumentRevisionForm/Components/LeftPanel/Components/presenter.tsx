@@ -25,7 +25,7 @@ const LeftPresenter: React.FunctionComponent = () => (
       <SearchBox />
     </Box>
     {/* List Panel  */}
-    <Box>
+    <Box height="calc(100vh - 235px)" overflow="auto">
       <ListPanel />
     </Box>
   </Box>

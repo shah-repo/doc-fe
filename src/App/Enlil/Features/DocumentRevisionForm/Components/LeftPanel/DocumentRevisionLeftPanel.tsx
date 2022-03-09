@@ -59,7 +59,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
           {_documentRevisionLeftPanelState?.open && (
             <SMBox
               display="flex"
-              stretchY="calc(100% - 56px)"
+              stretchY="calc(100vh - 86px)"
               borderTop={1}
               borderColor={Colors.medium_gray}
             >
