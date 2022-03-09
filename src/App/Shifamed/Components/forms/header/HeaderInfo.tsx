@@ -6,7 +6,7 @@ import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisi
 import { DocumentGroupOptionsType } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
-import { statusClassMapping } from "../../../../../ui/components/common/kendo/helpers";
+import { FormHeaderStatusClassMapping } from "../../../../../ui/components/common/kendo/helpers";
 import Text from "../../../../../ui/components/Text";
 import { checkIsDocumentMPIOutput } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { useDocumentStatus } from "../../../../../ui/hooks/docCustomization/useCustomization";
@@ -64,6 +64,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
     //   <Typography variant="h6" id="HeaderInfo-docId" className={classes.id} component="span">
     //     {id}
     //   </Typography>;
+    console.log("displayStatus || label ::", displayStatus, label);
     return <StyledBreadcrumb separator="›" >
       <Typography className={classes.groupSection} style={{ marginLeft: "5px" }}>
         <Grid
@@ -96,7 +97,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
               <Chip
                 size="small"
                 className={`${classes.chip} ${
-                  classes[statusClassMapping[displayStatus || label || ""]]
+                  classes[FormHeaderStatusClassMapping[displayStatus || label || ""]]
                 }`}
                 label={displayStatus || label}
               />

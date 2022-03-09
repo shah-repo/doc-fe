@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,6 @@ import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
-import DownloadHTML from "../../../../ui/document.revision/summary/download.html";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
 import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -28,6 +27,7 @@ import useActionCreator from "../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../ui/hooks/useAsync";
 import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
+import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -131,8 +131,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         <CustomLabelTooltip {...{ tooltipConfig }}>
           {
             <StyledButton
-              color="secondary"
-              variant="outlined"
+              color="primary"
               onClick={cloneDocument}
               id="PreviewControlsContainer-revise"
               data-cy="updateRecord"
@@ -216,14 +215,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const renderWithdrawSubmissionButton = () =>
     <>
-      <Button
-        color="secondary"
-        variant="outlined"
+      <StyledButton
+        color="primary"
         onClick={dialog.open}
         data-cy="document.revision.withdraw.alert"
       >
         <Text message={"withdraw submission"} />
-      </Button>
+      </StyledButton>
       <AlertDialog
         confirmAction={withdrawAction}
         message={"document.revision.withdraw.alert"}

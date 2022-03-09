@@ -23,11 +23,20 @@ export const styles = makeStyles((theme: Theme) =>
     GREEN_STATUS: {
       color: Colors.green_blue,
     },
+    RED_STATUS: {
+      color: Colors.latest_red_varient,
+    },
+    CLOSED_STATUS: {
+      color: Colors.dawn,
+    },
     PENDING_STATUS: {
       color: Colors.school_bus_yellow,
     },
     GRAY_STATUS: {
       color: Colors.mandy,
+    },
+    WIP_STATUS: {
+      color: Colors.raven,
     },
     undefined: {
       color: Colors.dodger_blue,

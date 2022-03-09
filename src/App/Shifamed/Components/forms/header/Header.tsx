@@ -5,7 +5,7 @@ import React from "react";
 import { SM } from "../../../..";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { DRAWER_WIDTH } from "../../../../../ui/app/NavigationLink.styles";
-import { statusClassMapping } from "../../../../../ui/components/common/kendo/helpers";
+import { FormHeaderStatusClassMapping } from "../../../../../ui/components/common/kendo/helpers";
 import Colors from "../../../../../ui/layout/theme/utils/colors";
 
 const styles = makeStyles((theme: Theme) =>
@@ -17,11 +17,20 @@ const styles = makeStyles((theme: Theme) =>
     GREEN_STATUS: {
       background: Colors.green_blue,
     },
+    RED_STATUS: {
+      background: Colors.latest_red_varient,
+    },
+    CLOSED_STATUS: {
+      background: Colors.dawn,
+    },
     PENDING_STATUS: {
       background: Colors.school_bus_yellow,
     },
     GRAY_STATUS: {
       background: Colors.mandy,
+    },
+    WIP_STATUS: {
+      background: Colors.raven,
     },
     undefined: {
       background: Colors.dodger_blue,
@@ -59,7 +68,7 @@ const NewHeader: React.FunctionComponent<Props> = ({ children, status, displaySt
         alignItems="center"
       >
         <Grid container={true} className={`${classes.headerSection} ${
-          classes[statusClassMapping[displayStatus || status || ""]]
+          classes[FormHeaderStatusClassMapping[displayStatus || status || ""]]
         }`} alignItems="center">
           {children}
         </Grid>

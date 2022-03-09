@@ -14,6 +14,7 @@ const styles = () => ({
     fontSize: "12px",
     lineHeight: "15px",
     backgroundColor: Colors.white,
+    color: Colors.navy,
     borderRadius: "6px",
   },
 });

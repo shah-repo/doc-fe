@@ -23,6 +23,7 @@ enum Colors {
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
   gray_goose ="##CCD4D9",
+  raven = "#767B87",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",
@@ -48,6 +49,7 @@ enum Colors {
   latest_red_varient = "#EC2B00",
   trinary_red = "#F14822",
   mandy = "#EB4770",
+  dawn="#A2A2A2",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
