@@ -12,7 +12,6 @@ import editorProperties from "./editorProperties.json";
 import editorPropertiesControl from "./editorPropertiesControl.json";
 import eqMaintenanceOptions from "./eqMaintenanceOptions.json";
 import icons from "./icons.json";
-import leftPanelSectionList from "./leftPanelSectionList.json";
 import partTypeOptions from "./partTypeOptions.json";
 import passTypeOptions from "./passTypeOptions.json";
 import requirementOptions from "./requirementOptions.json";
@@ -120,10 +119,6 @@ class FBData {
   public static icons(color?: string): Record<FBIconType, FBIconConfig[]> {
     const compiled = template(JSON.stringify(icons));
     return JSON.parse(compiled({ color }));
-  }
-  // TODO: Remove once get API
-  public static get leftPanelSectionList(): any {
-    return leftPanelSectionList;
   }
 }
 

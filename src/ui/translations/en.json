@@ -1208,5 +1208,6 @@
   "documenttype.view.config": "View Field config",
   "sm.general": "General",
   "sm.overview": "Overview",
-  "just.now": "Just now"
+  "just.now": "Just now",
+  "form.builder.favourite": "Favourite"
 }
