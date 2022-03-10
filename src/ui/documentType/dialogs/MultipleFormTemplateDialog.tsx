@@ -44,7 +44,6 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   const [parts, setParts] = useState<DocumentRevision[]>([]);
 
-
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
 
