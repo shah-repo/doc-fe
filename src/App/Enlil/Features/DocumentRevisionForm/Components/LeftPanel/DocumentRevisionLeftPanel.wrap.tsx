@@ -35,7 +35,7 @@ export const withDocumentRevisionLeftPanelWrap = <T extends DocumentRevisionLeft
 
     // MARK: @config
     _documentRevisionLeftPanelState = SM.useRef(DocumentRevisionLeftPanelState);
-    const { _documentRevisionFormState } = SM.useStores();
+    const { _documentRevisionFormState, _formState } = SM.useStores();
 
     const { documentTypeId, documentId, docId } = _documentRevisionFormState || {};
     isNewOutput = match.path === DOCUMENT_REVISION_OUTPUT_URL;
@@ -92,6 +92,7 @@ export const withDocumentRevisionLeftPanelWrap = <T extends DocumentRevisionLeft
           {...{
             _documentRevisionLeftPanelState,
             _documentRevisionFormState,
+            _formState,
             documentTypeId,
             documentRevisions,
             docRevsWithoutCanceled,

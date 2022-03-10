@@ -12,16 +12,18 @@ import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.w
 const DocumentRevisionLeftPanel: React.FunctionComponent<
   DocumentRevisionLeftPanelProps
 > = ({
-  _documentRevisionFormState,
   _documentRevisionLeftPanelState,
-  title,
+  _documentRevisionFormState,
+  _formState,
 }) => {
   const classes = styles();
   return (
     <Observer>
       {() => (
         <>
-          {_documentRevisionFormState?.leftPanelOpen && (
+          {(_formState?.mode === "design" ||
+            _formState?.mode === "formDesign") &&
+            _documentRevisionFormState?.leftPanelOpen && (
             <Box
               height="100%"
               bgcolor="white"
