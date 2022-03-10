@@ -33,7 +33,7 @@ const Tooltip: React.FunctionComponent<Props> = ({
       enterDelay={1000}
       title={
         <Typography component={"p"} className={`${classes.tooltip}`}>
-          {tooltipContent ? convertHtmlEntities(tooltipContent.replace(/\n/g, "")) : data}
+          {tooltipContent ? convertHtmlEntities(tooltipContent.replace(/(<([^>]+)>|\/n)/g, "")) : data}
         </Typography>
       }
       placement={placement}

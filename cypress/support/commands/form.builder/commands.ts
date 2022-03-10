@@ -45,7 +45,7 @@ declare global {
       fbCheckFields(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
-      fbEnterNameValue(params: { name: string; value: string }): Chainable<Subject>;
+      fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;

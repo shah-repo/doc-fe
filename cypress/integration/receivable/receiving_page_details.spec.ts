@@ -252,12 +252,6 @@ context("Receivable test with Page Details", () => {
                     ],
                     validationAttribute: "Requestor",
                     deleteInFormDisabled: true,
-                    sampleItemsIndicator: {
-                      id: "",
-                      enabled: false,
-                      serialNumber: 0,
-                      sampleSection: false,
-                    },
                     applicableValidationSchema: true,
                   },
                   {
@@ -298,12 +292,6 @@ context("Receivable test with Page Details", () => {
                     ],
                     validationAttribute: "Order Date",
                     deleteInFormDisabled: true,
-                    sampleItemsIndicator: {
-                      id: "",
-                      enabled: false,
-                      serialNumber: 0,
-                      sampleSection: false,
-                    },
                     applicableValidationSchema: true,
                   },
                   {
@@ -507,8 +495,7 @@ context("Receivable test with Page Details", () => {
                 outputDocumentTypes: [{
                   id: supplierDocumentType[0].id,
                 }],
-                schema: [{
-                }],
+                schema: [],
               },
 
             },

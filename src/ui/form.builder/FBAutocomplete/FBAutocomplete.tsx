@@ -1,12 +1,14 @@
-import { Box, Chip, IconButton, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
-import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
+import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
+import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
 import { withFBAutocomplete } from "./FBAutocomplete.wrap";
+import { StyledAutoComplete } from "./StyledAutoComplete";
 
 const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   onInputChange,
@@ -14,24 +16,27 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   getOptionLabel,
   renderOption,
   filterOptions,
+  debounceFilterInput,
   groupBy,
   refresh,
   filterSelectedOptions = false,
   freeSolo = false,
   multiple = false,
   options,
+  modifiedOptions,
   defaultValue,
   includeQRScan,
   optionLabelKey = "",
   placeholder,
   disabled,
   loading,
+  groupByKey,
   value,
   inputStyle = {},
   ...props
 }) => {
-
   const { workspaceState } = FB.useStores();
+  const CustomPopper = (props) => <Popper {...props} placement="bottom-start" />;
   return (
     <>
       {includeQRScan && (
@@ -48,20 +53,22 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
         disabled={props.name === "approvers" ? false : disabled}
       >
         {/* hack for autocomplete, options are rendered after component is already shown */}
-        <Autocomplete
-
+        <StyledAutoComplete
           {...{
             getOptionDisabled,
             getOptionLabel,
             renderOption,
             filterSelectedOptions,
             groupBy,
-            options,
             multiple,
             defaultValue,
             freeSolo,
             filterOptions,
           }}
+          PopperComponent={CustomPopper}
+          options={modifiedOptions}
+          onInputChange={debounceFilterInput}
+          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
           renderInput={(params: RenderInputParams) => (
             <Box display="flex">
               <Box width="100%">

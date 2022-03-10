@@ -406,8 +406,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                 outputDocumentTypes: [{
                   id: supplierDocumentType[0].id,
                 }],
-                schema: [{
-                }],
+                schema: [],
               },
 
             },
@@ -852,7 +851,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                       deleteDisabled: false,
                       name: "fb-po-approvals-kqqix31p",
                       uniqueSchemaItem: true,
-                      index: 2,
+                      index: 1,
                     }],
                   },
                 },

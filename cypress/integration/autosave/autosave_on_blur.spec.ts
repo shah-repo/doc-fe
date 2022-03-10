@@ -524,7 +524,7 @@ context("Autosave on blur", () => {
                             },
                           },
                           formInput: {
-                            "receivable-kdptzei2": createdPODocument.id,
+                            "receivable-kdptzei2": { id: createdPODocument.id },
                           },
                         },
                         employeeId: adminEmployee.id,
@@ -566,7 +566,7 @@ context("Autosave on blur", () => {
                                 },
                               },
                               formInput: {
-                                "receivable-kdptzei2": createdPODocument.id,
+                                "receivable-kdptzei2": { id: createdPODocument.id },
                               },
                             },
                             employeeId: adminEmployee.id,

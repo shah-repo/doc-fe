@@ -28,7 +28,7 @@ export interface DocumentRevisionFormValues extends FBDocumentRevisionProps {
   parentEquipment?: {id: string};
   childrenParts?: { id: string }[];
   equipmentSection?: string;
-  redline?: string;
+  redline?: boolean;
 }
 
 export interface ApproveAndReleaseFormValues {
