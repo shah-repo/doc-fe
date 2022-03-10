@@ -63,6 +63,7 @@ export interface DocumentRevisionFormStateProps {
   setFormMode: SMFormStateProps["setMode"];
   setFormAutosave: SMFormStateProps["setAutosave"];
   setDisabledAction: (disabledAction: boolean) =>  void;
+  setLeftPanelOpen: () => void;
   isHeaderHidden: boolean;
   documentRevision?: DocumentRevision;
   revisionChangeType?: RevisionChangeType;
@@ -84,4 +85,5 @@ export interface DocumentRevisionFormStateProps {
   formSchema: FBSchemaProps[];
   referenceValue: Id[];
   schema: FBSchemaProps[];
+  leftPanelOpen: boolean;
 }

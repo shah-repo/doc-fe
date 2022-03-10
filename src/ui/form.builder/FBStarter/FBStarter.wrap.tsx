@@ -1,5 +1,6 @@
 import React from "react";
 import { FB, FBControlPicker, FBStarterProps } from "..";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 
 export const withFBStarter = <T extends FBStarterProps>(
   Component: React.FunctionComponent<T>,
@@ -10,8 +11,11 @@ export const withFBStarter = <T extends FBStarterProps>(
   }: T) => {
 
     const { dialogState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
 
     onClick = (index?: number) => {
+      // console.log("_documentRevisionFormState::", _documentRevisionFormState?.leftPanelOpen);
+      if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       dialogState?.config({
         open: true,
         maxWidth: "sm",

@@ -24,11 +24,11 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
         <Box
           height="100%"
           bgcolor="white"
-          width={_documentRevisionLeftPanelState?.open ? 300 : 55}
+          width={_documentRevisionFormState?.leftPanelOpen ? 300 : 55}
           borderColor={Colors.medium_gray}
           borderLeft={0.5}
           style={{
-            transition: _documentRevisionLeftPanelState?.open
+            transition: _documentRevisionFormState?.leftPanelOpen
               ? "all .2s ease-in-out"
               : " all .2s ease-in-out",
           }}
@@ -40,7 +40,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
             alignItems="center"
             justifyContent="space-between"
           >
-            {_documentRevisionLeftPanelState?.open && (
+            {_documentRevisionFormState?.leftPanelOpen && (
               <Typography className={classes.titleText}>
                 <Text translation="form.builder.library" />
               </Typography>
@@ -48,15 +48,15 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
             <IconButton
               disableRipple
               disableFocusRipple
-              onClick={_documentRevisionLeftPanelState?.setOpen}
+              onClick={_documentRevisionFormState?.setLeftPanelOpen}
             >
-              {_documentRevisionLeftPanelState?.open && <CloseIcon />}
-              {!_documentRevisionLeftPanelState?.open && (
+              {_documentRevisionFormState?.leftPanelOpen && <CloseIcon />}
+              {!_documentRevisionFormState?.leftPanelOpen && (
                 <KeyboardBackspaceIcon />
               )}
             </IconButton>
           </Box>
-          {_documentRevisionLeftPanelState?.open && (
+          {_documentRevisionFormState?.leftPanelOpen && (
             <SMBox
               display="flex"
               justifyContent="center"
