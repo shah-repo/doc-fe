@@ -173,15 +173,15 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   const employeeSelectOptions = availableApprovers.filter((val) => !securityEmployeesIds.includes(val.value));
   const operatorsSelectOptions = availableApprovers.filter((val) => !operatorsIds.includes(val.value));
 
-  const [open, setOpen] = React.useState(true);
-  const [open1, setOpen1] = React.useState(true);
+  const [usersOpen, setUsersOpen] = React.useState(true);
+  const [groupsOpen, setGroupsOpen] = React.useState(true);
 
   const handleClick = () => {
-    setOpen(!open);
+    setUsersOpen(!usersOpen);
   };
 
-  const handleClick1 = () => {
-    setOpen1(!open1);
+  const handleGroupClick = () => {
+    setGroupsOpen(!groupsOpen);
   };
 
   return (
@@ -194,14 +194,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             </Typography>
           </ListItemText>
           <ListItemSecondaryAction>
-            {open ? (
+            {usersOpen ? (
               <ExpandLess onClick={handleClick} />
             ) : (
               <ExpandMore onClick={handleClick} />
             )}
           </ListItemSecondaryAction>
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={usersOpen} timeout="auto" unmountOnExit>
           <List disablePadding>
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
@@ -267,14 +267,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             </Typography>
           </ListItemText>
           <ListItemSecondaryAction>
-            {open1 ? (
-              <ExpandLess onClick={handleClick1} />
+            {groupsOpen ? (
+              <ExpandLess onClick={handleGroupClick} />
             ) : (
-              <ExpandMore onClick={handleClick1} />
+              <ExpandMore onClick={handleGroupClick} />
             )}
           </ListItemSecondaryAction>
         </ListItem>
-        <Collapse in={open1} timeout="auto" unmountOnExit>
+        <Collapse in={groupsOpen} timeout="auto" unmountOnExit>
           <List disablePadding>
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
