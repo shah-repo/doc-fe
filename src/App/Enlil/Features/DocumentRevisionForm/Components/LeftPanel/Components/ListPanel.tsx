@@ -178,8 +178,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                     <IconButton disableRipple={true}>
                       {stab.icon}
                     </IconButton>
-                    <ListItemText key={stab.tab} className={classes.listSubItem}>
-                      <Typography className={classes.listItemText}>
+                    <ListItemText key={stab.tab}>
+                      <Typography className={classes.listSubItem}>
                         <Text message={`form.builder.${stab.tab}`} />
                       </Typography>
                     </ListItemText>
