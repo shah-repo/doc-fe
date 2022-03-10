@@ -832,6 +832,7 @@ context("Training for same document that was first released and then revised and
 
     it("Select AR", () => {
       cy.arFilterARListByNameAndStatus({ title: "Approved document", status: "IN_REVIEW" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve AR", () => {

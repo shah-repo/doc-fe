@@ -283,7 +283,8 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?
   cy.listLoadingElementShouldNotExist();
   if (params !== undefined && params.approverName !== undefined)
   {
-    cy.get("[data-cy='field-approvals']").autocompleteSelect(`${params.approverName}`);
+    cy.get("[data-cy='field-approvals']").arrowType(params.approverName);
+    cy.get("[id^='react-select-']").contains(params.approverName).arrowClick();
   }
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.unClick();

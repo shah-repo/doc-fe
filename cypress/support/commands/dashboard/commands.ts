@@ -26,10 +26,8 @@ Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listIt
 });
 
 Cypress.Commands.add("dashGoToListItemFromDashboard", (params: { listItem: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-    cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).find("a").first().arrowClick();
-    cy.progressBarShouldAppear();
-  });
+  cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).find("a").first().arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
