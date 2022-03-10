@@ -10,9 +10,9 @@ interface OwnProps {
   deprecatedAt?: string;
 }
 
-export type Props = OwnProps & DataProps<Model[]>;
+type Props = OwnProps & DataProps<Model[]>;
 
-export const ReferenceToContainer: React.FunctionComponent<Props> = ({
+const ReferenceToContainer: React.FunctionComponent<Props> = ({
   dataProp,
   status,
   deprecatedAt = "",
