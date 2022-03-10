@@ -9,7 +9,29 @@ import { ChevronRight, ExpandMore } from "@material-ui/icons";
 import { each, flatMap } from "lodash";
 import React from "react";
 import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
-import { ReactComponent as SectionIcon } from "../../../../../../../assets/images/section.svg";
+import { ReactComponent as Approvals } from "../../../../../../../assets/images/leftPanel/approvals.svg";
+import { ReactComponent as AutoCompleteIcon } from "../../../../../../../assets/images/leftPanel/auto_complete.svg";
+import { ReactComponent as BlankTplformIcon } from "../../../../../../../assets/images/leftPanel/blank_t_pl_form.svg";
+import { ReactComponent as CheckboxIcon } from "../../../../../../../assets/images/leftPanel/checkbox_group.svg";
+import { ReactComponent as CheckPointIcon } from "../../../../../../../assets/images/leftPanel/check_point.svg";
+import { ReactComponent as DatePickerIcon } from "../../../../../../../assets/images/leftPanel/date_picker.svg";
+import { ReactComponent as EquipmentIcon } from "../../../../../../../assets/images/leftPanel/equipment.svg";
+import { ReactComponent as FileuploadIcon } from "../../../../../../../assets/images/leftPanel/fileupload.svg";
+import { ReactComponent as HyperlinkIcon } from "../../../../../../../assets/images/leftPanel/hyperlink.svg";
+import { ReactComponent as ParagraphIcon } from "../../../../../../../assets/images/leftPanel/paragraph.svg";
+import { ReactComponent as POApprovalMatrixIcon } from "../../../../../../../assets/images/leftPanel/po_approval_matrix.svg";
+import { ReactComponent as ProcedureIcon } from "../../../../../../../assets/images/leftPanel/procedure.svg";
+import { ReactComponent as QuantityIcon } from "../../../../../../../assets/images/leftPanel/quantity.svg";
+import { ReactComponent as RadiogroupIcon } from "../../../../../../../assets/images/leftPanel/radio_group.svg";
+import { ReactComponent as SectionIcon } from "../../../../../../../assets/images/leftPanel/section.svg";
+import { ReactComponent as SelectIcon } from "../../../../../../../assets/images/leftPanel/select.svg";
+import { ReactComponent as StepsectionIcon } from "../../../../../../../assets/images/leftPanel/step_section.svg";
+import { ReactComponent as SubsectionIcon } from "../../../../../../../assets/images/leftPanel/sub_section.svg";
+import { ReactComponent as SupplierIcon } from "../../../../../../../assets/images/leftPanel/supplier.svg";
+import { ReactComponent as TextfieldwithrangeIcon } from "../../../../../../../assets/images/leftPanel/textfield_with_range.svg";
+import { ReactComponent as TextEditorIcon } from "../../../../../../../assets/images/leftPanel/text_editor.svg";
+import { ReactComponent as TextfieldIcon } from "../../../../../../../assets/images/leftPanel/text_field.svg";
+import { ReactComponent as TimerIcon } from "../../../../../../../assets/images/leftPanel/timer.svg";
 import { ReactComponent as StarIcon } from "../../../../../../../assets/images/starIcon.svg";
 import Text from "../../../../../../../ui/components/Text";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
@@ -28,16 +50,56 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const IconMapping = {
+    section: <SectionIcon/>,
+    subsection: <SubsectionIcon/>,
+    stepsection: <StepsectionIcon/>,
+    textfield: <TextfieldIcon/>,
+    checkboxgroup: <CheckboxIcon/>,
+    autocomplete: <AutoCompleteIcon/>,
+    texteditor: <TextEditorIcon/>,
+    datepicker: <DatePickerIcon/>,
+    hyperlink: <HyperlinkIcon/>,
+    select: <SelectIcon/>,
+    radiogroup: <RadiogroupIcon/>,
+    paragraph: <ParagraphIcon/>,
+    fileupload: <FileuploadIcon/>,
+    blanktplform: <BlankTplformIcon/>,
+    quantity: <QuantityIcon/>,
+    timer: <TimerIcon/>,
+    poApprovalMatrix: <POApprovalMatrixIcon/>,
+    instructionsmediaupload: <FileuploadIcon/>,
+    evidencemediaupload: <FileuploadIcon/>,
+    procedure: <ProcedureIcon/>,
+    mpiprocedure: <ProcedureIcon/>,
+    eqmaintenance: <EquipmentIcon/>,
+    textfieldwithrange: <TextfieldwithrangeIcon/>,
+    supplier: <SupplierIcon/>,
+    lhrstep: <StepsectionIcon/>,
+    approvals: <Approvals/>,
+    // TODO: Check Custom Control
+    // customcontrol: <FileuploadIcon/>,
+    instructionsdocument: <ProcedureIcon/>,
+    selectdocument: <SelectIcon/>,
+    checkpoint: <CheckPointIcon/>,
+    createlabel: <CheckPointIcon/>,
+    task: <CheckPointIcon/>,
+    // TODO: Check Custom Control
+    // action: <FileuploadIcon/>,
+  };
+
   // Create picker List to show Icon
   /*
             Expected Response object
             [{"tab": "Favourite",
                 "subTab": [{
                     "tab": "Section",
+                    icon: "",
                     "isFavorite": true
                   },
                   {
                     "tab": "Text",
+                    icon: "",
                     "isFavorite": true
                   }] }]
   */
@@ -49,14 +111,16 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       newObj.editors = value;
       const subTabList: any = [];
       const isFavourite: any = [];
-      each(value, function(val, k) {
+      each(value, function(val: string, k) {
         subTabList.push({
           tab: val,
+          icon: IconMapping[val],
           isFavorite: k % 2 === 0 ? true : false,
         });
         if (k % 2 === 0 ? true : false) {
           isFavourite.push({
             tab: val,
+            icon: IconMapping[val],
             isFavorite: true,
           });
         }
@@ -97,8 +161,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
           style={tab.tab === "favorites" ? { borderTop: 0 } : {}}
           className={classes.listItemBtn}
         >
-          <ListItemText>
-            {/* <FBLabel label={`form.builder.${tab.tab}`} /> */}
+          <ListItemText key={tab.tab}>
             <Typography className={classes.listItemText}>
               <Text message={`form.builder.${tab.tab}`} />
             </Typography>
@@ -112,33 +175,14 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                 <>
                   <ListItem className={classes.listItemStyle}>
                     <IconButton disableRipple={true}>
-                      <SectionIcon />
+                      {stab.icon}
                     </IconButton>
-                    <ListItemText
-                      primary={stab.tab}
-                      // primaryTypographyProps={{
-                      // fontFamily: "Sora",
-                      // fontSize: "14px",
-                      // fontStyle: "normal",
-                      // fontWeight: "normal",
-                      // lineHeight: "18px",
-                      // letterSpacing: "0px",
-                      // textAlign: "left",
-                      // marginLeft: "6px",
-                      // }}
-                    />
-                    {/* <ListItemText>
-              {controlPickerState?.picker(stab.tab, index)}
-              {!controlPickerState?.picker(stab.tab, index) && (
-                <FBButton
-                  color="default"
-                  label={`form.builder.${stab.tab as string}`}
-                  dataCy={`form.builder.${stab.tab as string}`}
-                  onClick={openEditor && openEditor({ type: stab.tab, index })}
-                />
-              )}
-            </ListItemText> */}
-                    <IconButton edge="end" disableRipple={true}>
+                    <ListItemText key={stab.tab} className={classes.listSubItem}>
+                      <Typography className={classes.listItemText}>
+                        <Text message={`form.builder.${stab.tab}`} />
+                      </Typography>
+                    </ListItemText>
+                    <IconButton disableRipple={true}>
                       {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
                     </IconButton>
                   </ListItem>
@@ -150,10 +194,12 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       </>
     ));
   return (
-    <List>
-      {listData.favouriteList && createList(listData.favouriteList)}
-      {listData.dataList && createList(listData.dataList)}
-    </List>
+    <>
+      <List>
+        {listData.favouriteList && createList(listData.favouriteList)}
+        {listData.dataList && createList(listData.dataList)}
+      </List>
+    </>
   );
 };
 

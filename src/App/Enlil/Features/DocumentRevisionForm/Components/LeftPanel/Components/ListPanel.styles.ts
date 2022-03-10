@@ -43,11 +43,21 @@ export default makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       textAlign: "center",
-      textTransform: "uppercase",
+      textTransform: "capitalize",
       color: "#080B11",
       flex: "none",
       order: 0,
       flexGrow: 0,
+    },
+    listSubItem: {
+      fontFamily: "Sora",
+      fontSize: "14px",
+      fontStyle: "normal",
+      fontWeight: "normal",
+      lineHeight: "18px",
+      letterSpacing: "0px",
+      textAlign: "left",
+      marginLeft: "6px",
     },
   })
 );

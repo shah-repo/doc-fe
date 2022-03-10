@@ -1,8 +1,8 @@
 import { Box } from "@material-ui/core";
 import React from "react";
+import LeftPanelTabs from "./LeftPanelTabs";
 import ListPanel from "./ListPanel";
 import SearchBox from "./SearchBox";
-import ToggleButtonLeft from "./ToggleButtonLeft";
 
 const LeftPresenter: React.FunctionComponent = () => (
   <Box>
@@ -13,7 +13,7 @@ const LeftPresenter: React.FunctionComponent = () => (
       justifyContent="center"
       alignItems="center"
     >
-      <ToggleButtonLeft />
+      <LeftPanelTabs />
     </Box>
     {/* Search Box */}
     <Box
