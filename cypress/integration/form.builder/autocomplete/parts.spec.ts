@@ -72,15 +72,6 @@ context("Autocomplete 'Parts' test", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[1].email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -101,6 +92,7 @@ context("Autocomplete 'Parts' test", () => {
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      // cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
     });
 
     it("Enters title 'New Part Form'", () => {
@@ -148,7 +140,7 @@ context("Autocomplete 'Parts' test", () => {
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}" );
+      cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType("Checkbox{downarrow}{enter}");
       cy.get(`input[type="checkbox"][value="3"]`).last().check();
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
@@ -609,6 +601,13 @@ context("Autocomplete 'Parts' test", () => {
         cy.navigToParts();
       });
 
+      // it("Clicks on 'Add new part' button", () => {
+      //   cy.wrapWithWaitOnApiCall(
+      //     CyRoutes.DocPreview, () => {
+      //       cy.ptClickCreateNewPart();
+      //     });
+      // });
+
       it("Clicks on 'Add new part' button", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.GetRequiredApprovers,
@@ -627,6 +626,24 @@ context("Autocomplete 'Parts' test", () => {
 
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select make vs buy", () => {
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
+      });
+
+      it("Select traceability required", () => {
+        cy.get("[value=\"Traceability required\"]").check();
+      });
+
+      it("Select 'No' for Serialized option", () => {
+        cy.get("[name=\"serialized\"][value=\"Yes\"]").check();
+      });
+
+      it("Select serialization", () => {
+        cy.get("[id$=\"select-serialization\"]").arrowClick();
+        cy.get("ul[role=listbox]>li").contains("Select Provided Serialization").arrowClick();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -1047,6 +1064,7 @@ context("Autocomplete 'Parts' test", () => {
 
         it("Click create document", () => {
           cy.cmpClickCreateNewDocument();
+          // cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
         });
 
         it("Enter document title 'FORM document'", () => {
