@@ -346,6 +346,6 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
 }
 
-.k-list-container .k-list-scroller {
-  min-width: 160px;
+.k-list-container .k-popup .k-list .k-item {
+  white-space: nowrap;
 }
