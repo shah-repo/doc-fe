@@ -799,8 +799,8 @@ context("Add/Remove users from Training Curriculum", () => {
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -846,9 +846,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("clear filers", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-        cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      });
+      cy.trClearFilters();
     });
 
     it(`Training record for ${USERS[1].name} should be present`, () => {
