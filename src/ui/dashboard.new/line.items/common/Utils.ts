@@ -24,3 +24,8 @@ export const linearScale = (domain: number[], range: number[]) => {
   };
   return scale;
 };
+
+export const scrollToBottom = (selector) => {
+  const el = document.querySelector<HTMLElement>(selector);
+  el?.scrollIntoView({ behavior: "smooth" });
+};

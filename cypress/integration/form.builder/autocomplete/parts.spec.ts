@@ -122,7 +122,6 @@ context("Autocomplete 'Parts' test", () => {
 
       it("Clicks on 'Add new part' button", () => {
         cy.wrapWithWaitOnApiCalls([
-          CyRoutes.GetRequiredApprovers,
           CyRoutes.DocPreview], () => {
           cy.ptClickCreateNewPart();
         });
@@ -199,7 +198,7 @@ context("Autocomplete 'Parts' test", () => {
           });
 
           it("Select 'Partss' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Parts{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Parts" });
           });
 
           it("Click 'Add' button", () => {
@@ -230,10 +229,10 @@ context("Autocomplete 'Parts' test", () => {
             if (response.body.length > 0 ) {
               const parts = response.body;
               parts.forEach((part) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", part.document.docId);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

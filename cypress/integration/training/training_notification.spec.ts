@@ -3,6 +3,7 @@
 
 import moment from "moment";
 import "moment-timezone";
+import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
@@ -18,17 +19,13 @@ let developersGroup;
 let releasedFormId;
 let trnId;
 let emailsFromInbox;
-let cdata;
 let downloadUrl;
 let tmpRegex;
 let downloadFile;
 let fileId;
-
-const downloaddDirectory  = "cypress/downloads";
+let dateAfterEmailShouldArrive;
 
 const dateOffset = (5 * 1000);
-let dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
@@ -160,7 +157,6 @@ context("Training notification test", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -174,7 +170,6 @@ context("Training notification test", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -555,9 +550,9 @@ context("Training notification test", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -580,7 +575,7 @@ context("Training notification test", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -596,7 +591,7 @@ context("Training notification test", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it("Select Approver", () => {
@@ -604,15 +599,13 @@ context("Training notification test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
     });
@@ -731,7 +724,6 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.sendToEmail();
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -739,12 +731,15 @@ context("Training notification test", () => {
         message: "File will be sent to your email shortly.",
       });
     });
+
+    it("Close training dialog", () => {
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
+    });
   });
 
   context("Verify email for pending training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date();
-      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -790,29 +785,30 @@ context("Training notification test", () => {
     it("Download zip file containing pending training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  trnId + filetime + ".zip";
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${trnId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
     });
@@ -820,10 +816,9 @@ context("Training notification test", () => {
     it("Verify PDF file for pending training notification", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
 
@@ -889,19 +884,22 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       cy.sendToEmail();
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
     });
+
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
     });
+
+    it("Close training dialog", () => {
+      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
+    });
   });
 
   context("Verify email for completed training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date();
-      dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -913,6 +911,7 @@ context("Training notification test", () => {
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
+
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
@@ -946,29 +945,30 @@ context("Training notification test", () => {
     it("Download zip file containing completed training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`)
-        .as("short_url");
-      cy.get("@short_url").then(($response) => {
-        downloadUrl = $response.body.url;
-        const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-        downloadFile  =  trnId + filetime + ".zip";
-        cy.downloadFile({
-          url: downloadUrl,
-          directory: downloaddDirectory,
-          fileName: downloadFile,
-        });
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${trnId}${filetime}.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
       });
     });
 
     it("Verify file size of the downloaded zip file", () => {
-      const zipfile = downloaddDirectory + "/" + downloadFile;
-      cy.readFile(`${zipfile}`).its("length").should("be.gt", 500);
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
 
     it("extract pdf file from zip file", () => {
       cy.unzipFile(
         {
-          directory: downloaddDirectory,
+          directory: CONFIG.DOWNLOADS_DIR,
           fileName: downloadFile,
         });
     });
@@ -976,10 +976,9 @@ context("Training notification test", () => {
     it("Verify PDF file for completed training notification", () => {
       cy.pdfparseFile(
         {
-          directory: downloaddDirectory + "/" + downloadFile.replace(".zip", ""),
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
           fileName: `${trnId}.pdf`,
-        }).then((content) => {
-        cdata = content;
+        }).then((cdata) => {
         tmpRegex = new RegExp( "Training Record", "gi" );
         expect(cdata.text).match(tmpRegex);
 

@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -15,11 +15,12 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, sortBy, startCase } from "lodash";
+import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
+import { AutoSizer, Size } from "react-virtualized";
 import * as generateUuid from "uuid/v4";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -32,19 +33,18 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
 import AddEmployeeContainer from "../add.employee/container";
-import EnableDropboxButton from "../EnableDropboxButton/EnableDropboxButton";
 import { CommandCell } from "./cell.template/CommandCell";
 import { DropdownFilterCell } from "./cell.template/DropdownFilterCell";
 import { EmailCell } from "./cell.template/EmailCell";
@@ -64,10 +64,6 @@ export function KendoPanel<T>({
   tableCriteria,
   queryUrl = "",
   onSelect,
-  hasDropboxPermission,
-  dropboxAsync,
-  enableDropboxAction,
-  isCompanyDropboxEnabled,
 }: UserManagementProps<Partial<GetEmployeeResponse>>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
@@ -118,11 +114,20 @@ export function KendoPanel<T>({
   };
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
+  const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
       queryApi();
     },
     onError: (error) => {
+      if (gridData.length && get(gridData, "[0].inEdit") && updatedGridData) {
+        set(gridData, "[0].name", updatedGridData.user.name);
+        set(gridData, "[0].email", updatedGridData.user.email);
+        set(gridData, "[0].groups", updatedGridData.groups);
+        set(gridData, "[0].id", updatedGridData.user.id);
+        const newDataState = processWithGroups(gridData, dataState);
+        setResultState(newDataState);
+      }
       setIsLoading(false);
       toastError(error as string);
     },
@@ -130,6 +135,7 @@ export function KendoPanel<T>({
 
   const handleCreate = (values: AddUserManage) => {
     setIsLoading(true);
+    setUpdatedGridData(values);
     async.start(addEmployeeAction, values, async);
   };
 
@@ -137,6 +143,7 @@ export function KendoPanel<T>({
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
+    setUpdatedGridData(undefined);
   };
 
   let initialDataState: State;
@@ -306,6 +313,8 @@ export function KendoPanel<T>({
             tableName
           )
         );
+      }).finally(() => {
+        setUpdatedGridData(undefined);
       });
   };
 
@@ -387,23 +396,25 @@ export function KendoPanel<T>({
     active: BooleanFilterCell,
     status: SignUpFilterCell,
   };
+  const userGroups = (props: GridCellProps) =>
+    <GroupsCell {...props} updatedGridData ={updatedGridData} />;
 
   const fieldToCellMapping = {
     "user.name": NameCell,
     "user.email": EmailCell,
-    "groups": GroupsCell,
+    "groups": userGroups,
     "active": ActiveDropdown,
     "status": SignedCell,
     "": commandCell,
   };
 
-  const columnRenderer = () => (
+  const columnRenderer = (gridWidth: number) => (
     sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
         title={startCase(getTranslatedText(column.title))}
-        minResizableWidth={100}
+        minResizableWidth={200}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
         filterCell={
@@ -421,6 +432,7 @@ export function KendoPanel<T>({
             )
             : undefined
         }
+        width={setColumnWidth(column.width as number, gridWidth)}
       />
     )));
 
@@ -465,11 +477,15 @@ export function KendoPanel<T>({
     setResultState(processWithGroups(gridData, dataState));
   };
 
-  const tableRenderer = () => (
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
+
+  const tableRenderer = ({ width }: Size) => (
     <>
       <KendoGlobalization>
         <KendoGrid
           className={`${classes.kGrid} no-row-pointer`}
+          style={{ width: `${width}px` }}
           data={result}
           total={resultState.total}
           pageable={gridConfiguration.pagerSettings}
@@ -498,34 +514,28 @@ export function KendoPanel<T>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {columnRenderer()}
+          {columnRenderer(width)}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
       {isLoading && <Loader/>}
     </>
   );
+  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.user.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container justify="space-between" alignItems="center">
+          <GridTitle translation="navigation.user.management" />
+          <Grid item>
+            <AddEmployeeContainer addGroup={addNew} />
+          </Grid>
         </Grid>
-        <Grid item className={classes.dropboxButton}>
-          <EnableDropboxButton
-            shouldDisplayButton={hasDropboxPermission}
-            {...{ dropboxAsync, enableDropboxAction }}
-            disabled={Boolean(isCompanyDropboxEnabled)}
-          />
-          <AddEmployeeContainer addGroup={addNew} />
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
-        {tableRenderer()}
-      </>
-    </>
+        {renderBody()}
+      </Grid>
+    </Box>
   );
 }

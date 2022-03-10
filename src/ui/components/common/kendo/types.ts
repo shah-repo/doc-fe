@@ -4,6 +4,8 @@ import { GridCellProps, GridColumnMenuProps, GridFilterCellProps, GridPagerSetti
 import { schema } from "normalizr";
 import { ComponentType } from "react";
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
+import { DTMCellTemplates } from "../../../document.type.management/kendo/config";
+import { KendoGridFilterCell } from "../../KendoGrid/interfaces";
 
 interface KendoTableSearchQueryType {
   [key: string]: any;
@@ -14,7 +16,9 @@ export enum KendoCellTemplates {
   STATUS="Status",
   DATE_COMPLETED="DateCompleted",
   DATE_INFO="DateInfo",
-  COMMON_CELL="CommonCell"
+  COMMON_CELL="CommonCell",
+  DOCUMENT_TYPE="DocumentTypeCellTemplate",
+  DURATION="DurationCell"
 }
 export interface KendoColumn {
   sortable?: ColumnSortSettings;
@@ -25,7 +29,7 @@ export interface KendoColumn {
   format?: string;
   filter?: "boolean" | "numeric" | "text" | "date" ;
   groupable?: boolean;
-  filterCell?: ComponentType<GridFilterCellProps> | string;
+  filterCell?: ComponentType<GridFilterCellProps> | KendoGridFilterCell | DTMCellTemplates;
   cell?: string;
   locked?: boolean;
   width?: number | string;
@@ -37,26 +41,13 @@ export interface KendoColumn {
   resizable?: boolean;
   showTooltip?: boolean;
   tooltipField?: string;
-}
-
-export interface DropdownFilterDefaultItem {
-  text: string;
-  value: string;
+  extraFields?: string[];
 }
 export interface PageState {
   skip: number;
   take: number;
   group?: GroupDescriptor[];
 }
-
-export interface DateFilterStateChangeProps {
-  selectedItem?: {
-    text: string;
-    value: string;
-  };
-  parentField?: string;
-}
-
 export interface KendoGridConfiguration {
   groupableFields?: string[];
   columns: KendoColumn[];
@@ -64,7 +55,7 @@ export interface KendoGridConfiguration {
   initialDataState? : PageState;
 }
 
-export interface KendoGridCriteria {
+interface KendoGridCriteria {
   queryDict: KendoTableSearchQueryType;
   apiError: string;
   forceUpdate: boolean;
@@ -72,7 +63,7 @@ export interface KendoGridCriteria {
   columnConfig?: string;
 }
 
-export interface DocumentTypeOptions{
+interface DocumentTypeOptions{
   text: string;
   value: string;
 }

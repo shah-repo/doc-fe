@@ -2,7 +2,10 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import moment from "moment-timezone";
+import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -13,6 +16,19 @@ let multipleCompanies;
 let adminEmployee;
 let secondEmployee;
 let developersGroup;
+let releasedFormId;
+let emailsFromInbox;
+const pages = ["", "", ""];
+let downloadUrl;
+let tmpRegex;
+let downloadFile;
+let dateAfterEmailShouldArrive;
+let fileId;
+let arId;
+
+const dateOffset = (5 * 1000);
+const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 context("Repeat Training with Training Curriculum", () => {
   before(() => {
@@ -142,7 +158,6 @@ context("Repeat Training with Training Curriculum", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -156,7 +171,6 @@ context("Repeat Training with Training Curriculum", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -612,6 +626,26 @@ context("Repeat Training with Training Curriculum", () => {
     });
   });
 
+  context("Created document with training required", () => {
+    it("Form with Released status", () => {
+      cy.navigToDocumentList();
+      cy.cmpClickCreateNewDocument();
+      cy.drEnterDocumentTitle({ name: "released form" });
+      cy.drEnterDocumentDescription({ description: "test description" });
+      cy.drSelectDocumentType({ documentType: "Form" });
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.drClickTrainingRequired();
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+      cy.drCheckDocumentStatus({ status: "Released" });
+    });
+  });
+
+
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -621,12 +655,12 @@ context("Repeat Training with Training Curriculum", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter document title 'Test training form title'", () => {
-      cy.drEnterDocumentTitle({ name: "Test training form title" });
+    it("Enter document title 'Test Form-Training Curriculum Refresh-Repeat'", () => {
+      cy.drEnterDocumentTitle({ name: "Test Form-Training Curriculum Refresh-Repeat" });
     });
 
-    it("Enter document description 'Test training description'", () => {
-      cy.drEnterDocumentDescription({ description: "Test training description" });
+    it("Enter document description 'Test Refresh Repeat Print export'", () => {
+      cy.drEnterDocumentDescription({ description: "Test Refresh Repeat Print export" });
     });
 
     it("Select 'Form' document type", () => {
@@ -639,6 +673,46 @@ context("Repeat Training with Training Curriculum", () => {
 
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
+      cy.unClick();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).contains("Add a Field").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+      cy.get("button[data-cy=\"form.builder.radiogroup\"]").contains("Radio Button group").arrowClick();
+      cy.fbEnterNameValue({ name: "label", value: "Radio BTN req" });
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Select Field", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocDynamicForm, () => {
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).contains("Add a Field").arrowClick({ force: true });
+      });
+      cy.get("[data-cy=\"form.builder.select\"]").contains("Select").arrowClick();
+      cy.fbEnterNameValue({ name: "label", value: "Select" });
+      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
+      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.get("input[value^=\"visibility\"]").check();
+      cy.get(`input[name="validators.required_if"]`).first().check();
+      cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("Radio BTN req" );
+      cy.get(`input[type="checkbox"][value="2"]`).last().check();
+      cy.fbAddNewFieldButton();
     });
 
     it("Click create document", () => {
@@ -649,6 +723,226 @@ context("Repeat Training with Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
+    });
+  });
+
+  context("Verify Refresh/Repeat Training form title report", () => {
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "Test Form-Training Curriculum Refresh-Repeat");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").then((x) => {
+        arId = x.text();
+      });
+      cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+  });
+
+  context("Verify email for training released notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify PDF file downloaded", () => {
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile(
+        {
+          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+          fileName: `${releasedFormId}-1-Test-Form-Training-Curriculum-Refresh-Repeat.pdf`,
+        }).then((cdata) => {
+        expect(cdata.numpages).eq(3);
+        expect(cdata.text).match(/Page 1 of 3/);
+        expect(cdata.text).match(/Page 2 of 3/);
+        expect(cdata.text).match(/Page 3 of 3/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 3")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 3")) {
+            pages[1] = element;
+          }
+          if (element.includes("Page 3 of 3")) {
+            pages[2] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of training form", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 3")) {
+        tmpRegex = new
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\nTest Refresh Repeat Print export/);
+
+        tmpRegex = new RegExp( `Output Document Type\\nTraining Curriculum test`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/PERIODIC TRAINING/);
+
+        expect(el).match(/Documents to Train on/);
+
+        expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
+
+        expect(el).match(/Training Frequency \(in days\)/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 3/);
+      }
+    });
+
+    it("Verify page 2 of training form", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 3")) {
+        tmpRegex = new
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train/);
+
+        expect(el).match(/Users to Train \(if applicable\)/);
+
+        tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Select/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 3/);
+      }
+    });
+
+    it("Verify page 3 of training form", () => {
+      const el = pages[2];
+      if (el.includes("Page 3 of 3")) {
+        tmpRegex = new
+        RegExp( `Form\n${releasedFormId}, Revision 1\nTEST FORM-TRAINING CURRICULUM REFRESH-REPEAT`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
+
+        tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 3 of 3/);
+      }
     });
   });
 
@@ -665,22 +959,27 @@ context("Repeat Training with Training Curriculum", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
-    it("Enter training title 'Training title'", () => {
-      cy.drEnterDocumentTitle({ name: "Test training title" });
+    it("Enter training title 'Training Curricula'", () => {
+      cy.drEnterDocumentTitle({ name: "Training Curricula" });
     });
 
-    it("Enter description 'Training description'", () => {
-      cy.drEnterDocumentDescription({ description: "Training description" });
+    it("Enter description 'test training curricula refresh / repeat'", () => {
+      cy.drEnterDocumentDescription({ description: "test training curricula refresh / repeat" });
     });
 
     it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.get("[data-cy=\"common.Numeric\"]").first().arrowClick();
+      cy.get("label").contains("Numeric").first().arrowClick();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Verify training options document types", () => {
@@ -689,7 +988,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Select document to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("AR Form{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -700,9 +999,18 @@ context("Repeat Training with Training Curriculum", () => {
       cy.get("[name=training-validity]").arrowType("1");
     });
 
+    it("Select Groups to train 'Owner as approver'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Owner as approver");
+    });
+
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("radio button group option 3 checked", () => {
+      cy.get("[data-cy=\"Radio BTN req\"]").arrowClick();
+      cy.get("label").contains("3").arrowClick();
     });
 
     it("Select Approver", () => {
@@ -713,12 +1021,374 @@ context("Repeat Training with Training Curriculum", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
 
+    it("Check doc Draft status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Draft");
+      cy.get("#HeaderInfo-name").should("have.text", "Training Curricula");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.sendToEmail();
+    });
+  });
+
+  context("Verify email for draft training notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify PDF file downloaded", () => {
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_draft.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            pages[1] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of draft document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new
+        RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/PERIODIC TRAINING/);
+
+        expect(el).match(/Documents to Train on\n1 - AR Form/);
+
+        expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
+
+        expect(el).match(/Training Frequency \(in days\)\n1/);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train\nOwner as approver/);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+      }
+    });
+
+    it("Verify page 2 of draft document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new
+        RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| DRAFT`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Draft/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 2/);
+      }
+    });
+  });
+
+  context("Submit for approval", () => {
     it("Click Submit for Approval", () => {
       cy.contains("Submit for approval").arrowClick();
     });
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+    });
+
+    it("Check doc Released status and click on Send To Email", () => {
+      cy.get("#HeaderInfo-status").should("have.text", "Released");
+      cy.get("#HeaderInfo-name").should("have.text", "Training Curricula");
+      cy.get("#HeaderInfo-docId").then((x) => {
+        releasedFormId = x.text();
+      });
+      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+      cy.sendToEmail();
+    });
+  });
+
+  context("Verify email for draft training notification", () => {
+    it("Get emails", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        wait_time_sec: 5,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        max_wait_time_sec: 50,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+        after: dateAfterEmailShouldArrive,
+        subject: `Export for document ${releasedFormId}`,
+      };
+
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
+        if (emails) {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
+        }
+        else {
+          assert.fail("No email found");
+        }
+      });
+    });
+
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
+            "Your documents are ready for download.",
+            "<button type=\"button\">DOWNLOAD</button>",
+            createdCompany.id],
+        }];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
+  context("Verify PDF file downloaded", () => {
+    it("Extract download link from gmail", () => {
+      expect(downloadUrl).contains("exported_file_download");
+      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
+
+      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
+        if (res.body !== "") {
+          downloadUrl = res.body.url;
+          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
+          downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+          cy.downloadFile({
+            url: downloadUrl,
+            directory: CONFIG.DOWNLOADS_DIR,
+            fileName: downloadFile,
+          });
+        }
+      });
+    });
+
+    it("Verify file size of the downloaded zip file", () => {
+      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
+      cy.readFile(zipfile).its("length").should("be.gt", 500);
+    });
+
+    it("extract pdf file from zip file", () => {
+      cy.unzipFile(
+        {
+          directory: CONFIG.DOWNLOADS_DIR,
+          fileName: downloadFile,
+        });
+    });
+  });
+
+  context("Verify PDF file content", () => {
+    it("Extract texts from PDF file content", () => {
+      cy.pdfparseFile({
+        directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
+        fileName: `${releasedFormId}-1-Training-Curricula.pdf`,
+      }).then((cdata) => {
+        expect(cdata.numpages).eq(2);
+        expect(cdata.text).match(/Page 1 of 2/);
+        expect(cdata.text).match(/Page 2 of 2/);
+        tmpRegex = new RegExp( "\\n\\n");
+        const arr = cdata.text.split(tmpRegex);
+        arr.forEach((element) => {
+          if (element.includes("Page 1 of 2")) {
+            pages[0] = element;
+          }
+          if (element.includes("Page 2 of 2")) {
+            pages[1] = element;
+          }
+        });
+      });
+    });
+
+    it("Verify page 1 of released document", () => {
+      const el = pages[0];
+      if (el.includes("Page 1 of 2")) {
+        tmpRegex = new
+        RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Description\ntest training curricula refresh \/ repeat/);
+
+        expect(el).match(/Attachments\nimage.jpg/);
+
+        expect(el).match(/PERIODIC TRAINING/);
+
+        expect(el).match(/Documents to Train on\n1 - AR Form/);
+
+        expect(el).match(/Refresh\/repeat training periodically\?\n Yes/);
+
+        expect(el).match(/Training Frequency \(in days\)\n1/);
+
+        expect(el).match(/TRAINEES DETAILS/);
+
+        expect(el).match(/Groups to Train\nOwner as approver/);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 1 of 2/);
+      }
+    });
+
+    it("Verify page 2 of released document", () => {
+      const el = pages[1];
+      if (el.includes("Page 2 of 2")) {
+        tmpRegex = new
+        RegExp( `Training Curriculum test\n${releasedFormId}, Revision 1\nTRAINING CURRICULA`, "gi" );
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Radio BTN req\\n 1\\s+2\\s+3`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).not.match(/Select/);
+
+        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required`, "gi");
+        expect(el).not.match(tmpRegex);
+
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Released/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Form Info: FM-00003, Revision 1, ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        expect(el).match(/Page 2 of 2/);
+      }
     });
   });
 

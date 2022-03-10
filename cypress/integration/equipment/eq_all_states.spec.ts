@@ -183,7 +183,6 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],
@@ -199,7 +198,6 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
-                      fields: [],
                       type: "calibration",
                     },
                     editorProperties: [],
@@ -209,14 +207,6 @@ context("Equipment maintenance for checking History in all states", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
-                  },
-                  {
-                    label: "form.builder.approvals",
-                    type: "approvals",
-                    deleteDisabled: true,
-                    name: "fb-approvals-kycyk1n8",
-                    uniqueSchemaItem: true,
-                    index: 5,
                   },
                 ],
               },
@@ -1160,14 +1150,6 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     context("Verify for IN REVIEW Numeric Equipment", () => {
-      it("Add approval to direct approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      });
-
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
@@ -1182,7 +1164,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     context("Verify for Approved Numeric Equipment", () => {
       it("Approve Equipment", () => {
-        cy.ebApprove();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
       context("Verify Maintenance History is changed to History", () => {

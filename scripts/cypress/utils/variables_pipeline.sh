@@ -21,7 +21,9 @@ export DIR_JUNIT="test-results/$CI_BUILD_ID/junit"
 export DIR_REPORTS="test-results/$CI_BUILD_ID/reports"
 export DIR_SCREENSHOTS_REPORT="test-results/$CI_BUILD_ID/reports/screenshots"
 export DIR_VIDEOS_REPORT="test-results/$CI_BUILD_ID/reports/videos"
+export DIR_DOWNLOADS="test-results/$CI_BUILD_ID/reports/downloads"
 
+export CYPRESS_DOWNLOADS_DIR=$DIR_DOWNLOADS
 export CYPRESS_VIDEOS_FOLDER=$DIR_VIDEOS_REPORT
 export CYPRESS_SCREENSHOTS_FOLDER=$DIR_SCREENSHOTS_REPORT
 export CYPRESS_SCREENSHOTS_DIR=$DIR_SCREENSHOTS_REPORT

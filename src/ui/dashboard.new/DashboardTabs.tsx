@@ -29,7 +29,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  const feedItems = useSelector(dashboardMyFeedsSelectors.myFeedsList);
+  const feedItems: any = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
     <Box marginTop={1}>
@@ -61,7 +61,7 @@ const DashboardTabs: React.FunctionComponent = () => {
                 variant="inherit"
                 className={classes.tabItemCount}
               >
-                    ({feedItems?.length || 0})
+                    ({feedItems.total || 0})
               </Typography>
             </Box>
           }

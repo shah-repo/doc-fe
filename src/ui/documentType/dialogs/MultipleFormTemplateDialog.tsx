@@ -1,12 +1,16 @@
 import { Button, Dialog, DialogContent, DialogTitle, Grid, Typography } from "@material-ui/core";
 import PostAddTwoToneIcon from "@material-ui/icons/PostAddTwoTone";
 import { FormikProps } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import { DialogHandler } from "../../hooks/useDialog";
 import { docIdAsyncContext } from "../list/CreateDocumentByType";
 import { styles } from "./FormListDialog/FormListDialog.styles";
@@ -19,7 +23,9 @@ interface DocumentTypeDialogProps extends FormikProps<any> {
   handleTemplateSelection: (id: string) => void;
   isRecord: boolean;
   closeMultipleFormDialog: () => void;
+  isLHR: boolean;
 }
+
 const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProps> = ({
   dialog,
   formIds,
@@ -31,16 +37,50 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
   resetForm,
   isRecord,
   closeMultipleFormDialog,
+  isLHR,
 }) => {
   const classes = styles();
-  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
-  const docIdAsyncState = React.useContext(docIdAsyncContext);
 
+  const [parts, setParts] = useState<DocumentRevision[]>([]);
+
+  const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
+  const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
+
+  const docIdAsyncState = React.useContext(docIdAsyncContext);
   const activeDocTypes = documentTypes.filter((type) => type.active);
 
   const handleSelect = (id: string) => {
     handleSelection(id);
   };
+
+  const fetchAvailablePartsAsync = useAsync({
+    onSuccess: (data: DocumentRevision[] = []) => {
+      setParts(data);
+    },
+  });
+
+  useEffect(() => {
+    if (!isLHR) {
+      return;
+    }
+
+    fetchAvailablePartsAsync.start(
+      fetchAvailablePartsAction,
+      fetchAvailablePartsAsync,
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLHR]);
+
+  const renderPartLabel = (form: DocumentTypeByIdForm) => {
+    const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;
+    const partDocRev = parts.find((part) => part.document.id === id);
+
+    if (!partDocRev) {
+      return form.name;
+    }
+    return `(${partDocRev?.document.docId} rev ${partDocRev?.displayRevision} - ${partDocRev?.name}) ${form.name}`;
+  };
+
   return (
     <>
       {dialog.isOpen &&
@@ -91,7 +131,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               size="sm"
               autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
               options={formIds.map((form) => ({
-                label: form.name,
+                label: isLHR ? renderPartLabel(form) : form.name,
                 value: form.id,
               }))}
               onClick={(option) => handleTemplateSelection(option.value)}

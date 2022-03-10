@@ -144,17 +144,21 @@ context("Equipment maintenance and calibration", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }, (req) => {
-          req.reply((res) => {
-            if (res.body) {
-              const response = res.body;
-              pmSchemaFieldName = response.formTemplate.schema[4].name;
-              calibrationSchemaFieldName = response.formTemplate.schema[5].name;
-            }
-          });
-        }).as("response");
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
 
-        cy.drClickCreateDocumentWithApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            pmSchemaFieldName = response.formTemplate.schema[3].name;
+            calibrationSchemaFieldName = response.formTemplate.schema[4].name;
+          }
+        });
+
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release Bulk create form", () => {
@@ -338,21 +342,12 @@ context("Equipment maintenance and calibration", () => {
       cy.unClick();
     });
 
-    it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Click 'Submit for approval'", () => {
-      cy.pmSubmitForApproval();
-    });
-
     it("Approve and release document", () => {
-      cy.ebApprove();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
@@ -435,7 +430,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
@@ -517,11 +512,14 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
 
     context("Verify Maintenance History is changed to History", () => {
       it("Verify for pm", () => {
@@ -569,7 +567,15 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drClickReviseDocument();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Change 'Completion Date' to 10 days prior", () => {
@@ -584,6 +590,8 @@ context("Equipment maintenance and calibration", () => {
         if (!monthYearText.includes(month)) {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
         }
+
+        cy.wait(500);
 
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
@@ -624,7 +632,15 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click revise on maintenance record", () => {
-      cy.drClickReviseDocument();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drClickReviseDocument();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Change 'Completion Date' to 10 days later", () => {
@@ -639,6 +655,8 @@ context("Equipment maintenance and calibration", () => {
         if (!monthYearText.includes(month)) {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
         }
+
+        cy.wait(500);
 
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
@@ -672,7 +690,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify Due date calculation", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
         cy.visit(equipmentURL);
       });
     });

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -25,6 +25,7 @@ import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
 import { groupManagementActions } from "../../../state/ducks/groupManagement";
@@ -40,17 +41,17 @@ import { store } from "../../../state/store";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
   TablePanelStateProps,
 } from "../../components/table/types";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
@@ -448,13 +449,14 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     "": commandCell,
   };
 
-  const columnRenderer = () => (
+
+  const columnRenderer = (gridWidth: number) => (
     sortBy(columnDefinitions, ["orderIndex"]).map((column, idx) => (
       <GridColumn
         key={idx}
         {...column}
         title={startCase(getTranslatedText(column.title))}
-        minResizableWidth={100}
+        minResizableWidth={200}
         cell={fieldToCellMapping[column.field]
           ? fieldToCellMapping[column.field] : undefined}
         filterCell={
@@ -472,6 +474,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
             )
             : undefined
         }
+        width={setColumnWidth(column.width as number, gridWidth)}
       />
     )));
 
@@ -518,11 +521,15 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     setResultState(newDataState);
   };
 
-  const tableRenderer = () => (
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
+
+  const tableRenderer = ({ width }: Size) => (
     <>
       <KendoGlobalization>
         <KendoGrid
           className={`${classes.kGrid} no-row-pointer`}
+          style={{ width: `${width}px` }}
           data={result}
           editField={editField}
           total={resultState.total}
@@ -552,29 +559,31 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
               </Grid>
             </Grid>
           </GridToolbar>
-          {columnRenderer()}
+          {columnRenderer(width)}
           <GridNoRecords>{noDataMessage}</GridNoRecords>
         </KendoGrid>
       </KendoGlobalization>
       {isLoading && <Loader/>}
     </>
   );
+  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
+
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.group.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container={true} alignItems="center">
+          <Grid item xs>
+            <GridTitle translation="navigation.group.management" />
+          </Grid>
+          <Grid item>
+            {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+          </Grid>
         </Grid>
-        <Grid item  style={{ marginBottom: 10 }}>
-          {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
-        {tableRenderer()}
-      </>
-    </>
+        {renderBody()}
+      </Grid>
+    </Box>
   );
 }

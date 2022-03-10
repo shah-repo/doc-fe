@@ -39,19 +39,21 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty, index, ownerName } = change;
-      const name =  ownerName || ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
+      const { owner, ownerUser, ownerThirdParty, index } = change;
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
+      const children = renderChanges(audit[groupId], key).props.children;
       if (audit[groupId].filter((change) =>
         change.field !== "approvals.status" || change.nextValue !== ApprovalStatus.Abandoned
       ).length === 0) {
         return null;
       }
 
-      if (change.field.includes("-built-in")) {
+      if (index && children[index]?.length === 0) {
         return null;
       }
 
-      if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
+      // With this we avoid rendering blank logs in history
+      if (isEmpty(children?.filter((item) => !isEmpty(item) || item === true))) {
         return null;
       }
 

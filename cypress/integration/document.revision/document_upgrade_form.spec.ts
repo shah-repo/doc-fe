@@ -384,9 +384,7 @@ context("Document form upgrade", () => {
 
     context("Release updated form", () => {
       it("Save the form", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release", () => {
@@ -431,9 +429,7 @@ context("Document form upgrade", () => {
 
     context("Release updated form", () => {
       it("Save the form", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release", () => {
@@ -480,9 +476,7 @@ context("Document form upgrade", () => {
 
     context("Release updated document", () => {
       it("Save the form", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocAggregatedAudit, () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Approve and release", () => {

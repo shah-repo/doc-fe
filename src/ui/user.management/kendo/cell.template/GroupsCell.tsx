@@ -5,6 +5,7 @@ import {
   MultiSelectFilterChangeEvent,
 } from "@progress/kendo-react-dropdowns";
 import { GridCellProps } from "@progress/kendo-react-grid";
+import { filter, map } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -15,8 +16,9 @@ import {
 } from "../../../../state/ducks/auth/types";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
-import Tooltip from "../../../components/common/kendo/Tooltip";
+import ExpandableTemplate from "../../../components/common/kendo/ExpandableTemplate";
 import KendoGridStyles from "../styles";
+import { AddUserManage } from "../types";
 
 interface GroupOptions {
   label: string;
@@ -31,12 +33,17 @@ interface GroupOptions {
   isOfficial: boolean;
 }
 
+interface GroupsProps extends GridCellProps {
+  updatedGridData?: AddUserManage;
+}
+
 export const GroupsCell = ({
   dataItem,
   rowType,
   colSpan,
   columnIndex,
-}: GridCellProps) => {
+  updatedGridData,
+}: GroupsProps) => {
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
   const defaultGroups = useSelector(userManagementSelectors.getDefaultGroups);
   const classes = KendoGridStyles();
@@ -44,8 +51,15 @@ export const GroupsCell = ({
   const [data, setData] = React.useState<GroupOptions[]>([]);
 
   React.useEffect(() => {
+    const upDatedGroupIds = map(updatedGridData?.groups, "id");
+    const selectedGroups = filter(groupOptions, (o) => upDatedGroupIds.includes(o.value));
     setData(groupOptions);
-    setResult(defaultGroups);
+    if (selectedGroups.length) {
+      setResult(selectedGroups as any);
+    } else {
+      setResult(defaultGroups);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupOptions, defaultGroups, dataItem.id]);
 
   const updateGroupField = ({ target }: MultiSelectChangeEvent) => {
@@ -67,6 +81,7 @@ export const GroupsCell = ({
 
   return (
     <td
+      id="kendo-expandable-column"
       colSpan={colSpan}
       role="gridcell"
       data-grid-col-index={columnIndex}
@@ -84,7 +99,7 @@ export const GroupsCell = ({
           defaultValue={defaultGroups}
         />
       ) : (
-        <Tooltip data={dataItem.groups} />
+        <ExpandableTemplate items={dataItem.groups.split(",")} dataId={`${dataItem.id}-${columnIndex}`} />
       )}
     </td>
   );

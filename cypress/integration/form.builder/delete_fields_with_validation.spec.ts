@@ -9,6 +9,18 @@ let loginResponse;
 let employeeLoginFirst;
 
 context("Field validations test", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
@@ -123,7 +135,7 @@ context("Field validations test", () => {
       });
 
       it(`Select required if radio button field`, () => {
-        cy.get(`[data-cy="validators.required_if.name"]`).arrowType(`Radio buttons{downarrow}{enter}`);
+        cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(`Radio buttons`);
       });
 
       it(`Click value option1`, () => {
@@ -183,7 +195,7 @@ context("Field validations test", () => {
       });
 
       it(`Select required if in Checkbox field`, () => {
-        cy.get(`[data-cy="validators.required_if_in.name"]`).arrowType(`Checkbox field{downarrow}{enter}`);
+        cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(`Checkbox field`);
       });
 
       it(`Click value option1`, () => {
@@ -243,7 +255,7 @@ context("Field validations test", () => {
       });
 
       it(`Select required with Select field`, () => {
-        cy.get(`[data-cy="validators.required_with.name"]`).arrowType(`Select field{downarrow}{enter}`);
+        cy.get(`[data-cy="validators.required_with.name"]`).autocompleteSelect(`Select field`);
       });
 
       it("Click add to add Select field to form", () => {
@@ -269,7 +281,7 @@ context("Field validations test", () => {
       });
 
       it("Select option Document revisions to Autocomplete field", () => {
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document revisions{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document revisions");
       });
 
       it("Click add to add Autocomplete field to form", () => {
@@ -299,7 +311,7 @@ context("Field validations test", () => {
       });
 
       it(`Select Required without Autocomplete field`, () => {
-        cy.get(`[data-cy="validators.required_without.name"]`).arrowType(`Autocomplete field{downarrow}{enter}`);
+        cy.get(`[data-cy="validators.required_without.name"]`).autocompleteSelect(`Autocomplete field`);
       });
 
       it("Click add to add text field 4 to form", () => {
