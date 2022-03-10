@@ -361,6 +361,7 @@ export interface DocumentType {
 interface DocumentForms {
   id: string;
   docId?: string;
+  documentType?: DocumentType;
 }
 
 export interface DocumentTypeByIdForm {

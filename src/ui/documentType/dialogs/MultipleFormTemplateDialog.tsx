@@ -9,6 +9,7 @@ import AutocompleteField from "../../components/forms/fields/Autocomplete/Autoco
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
+import { checkIsDocumentLHRT } from "../../documentRevision/helpers/checkDocumentGroup";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { DialogHandler } from "../../hooks/useDialog";
@@ -70,16 +71,44 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       fetchAvailablePartsAsync,
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLHR]);
+
+  const checkForPart = (form: DocumentTypeByIdForm) => {
+    const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;
+    return parts.find((part) => part.document.id === id);
+  };
 
   const renderPartLabel = (form: DocumentTypeByIdForm) => {
-    const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;
-    const partDocRev = parts.find((part) => part.document.id === id);
+    const partDocRev = checkForPart(form);
 
     if (!partDocRev) {
       return form.name;
     }
     return `(${partDocRev?.document.docId} rev ${partDocRev?.displayRevision} - ${partDocRev?.name}) ${form.name}`;
+  };
+
+  const renderOptions = () => {
+    if (!isLHR) {
+      return formIds.map((form) => ({
+        label: form.name,
+        value: form.id,
+      }));
+    }
+
+    const LHRForms = formIds.filter((form) => {
+      const partDocRev = checkForPart(form);
+      const isLHRT = checkIsDocumentLHRT(form.document.documentType?.groupOptions);
+
+      if ((isLHRT && partDocRev) || (!isLHRT && !partDocRev)) {
+        return form;
+      }
+    });
+
+    return LHRForms.map((form) => ({
+      label: renderPartLabel(form),
+      value: form.id,
+    }));
+
   };
 
   return (
@@ -131,10 +160,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
               name="selectForm"
               size="sm"
               autocompleteProps={{ id: "MultipleFormTemplate-selectDocType" }}
-              options={formIds.map((form) => ({
-                label: isLHR ? renderPartLabel(form) : form.name,
-                value: form.id,
-              }))}
+              options={renderOptions()}
               onClick={(option) => handleTemplateSelection(option.value)}
               label={isRecord ? "record.select.template" : "supplier.select.form"}
               data-cy={isRecord ? "record.select.template" : "supplier.select.form"}
