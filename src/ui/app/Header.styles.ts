@@ -5,11 +5,32 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export default (theme: Theme) =>
   createStyles({
+    newAppBar: {
+      background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
+      color: Colors.white,
+    },
     appBar: {
       background: "linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)",
       marginLeft: DRAWER_WIDTH,
       fontSize: "1rem",
       color: Colors.white,
+    },
+    newLogo: {
+      backgroundRepeat: "no-repeat",
+      backgroundImage: `url(${EnlilLogo})`,
+      left: "61%",
+      right: "20.42%",
+      position: "absolute",
+      paddingTop: "48px",
+    },
+    topScrollBarBox: {
+      color: Colors.white,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: "12px",
+      display: "flex",
+      textTransform: "uppercase",
     },
     GREEN_STATUS: {
       background: Colors.green_blue,

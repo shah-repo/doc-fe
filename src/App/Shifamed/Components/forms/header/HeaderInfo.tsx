@@ -1,4 +1,4 @@
-import { Chip, Grid, Typography } from "@material-ui/core";
+import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -13,6 +13,7 @@ import { FormHeaderStatusClassMapping } from "../../../../../ui/components/commo
 import Text from "../../../../../ui/components/Text";
 import { checkIsDocumentMPIOutput } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { useDocumentStatus } from "../../../../../ui/hooks/docCustomization/useCustomization";
+import Colors from "../../../../../ui/layout/theme/utils/colors";
 import { styles } from "./HeaderInfo.styles";
 import { StyledBreadcrumb } from "./StyledBreadcrumb";
 
@@ -72,7 +73,9 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
           alignItems="center"
         >
           <MPIIcon className={classes.icon}/>
-          <Grid onClick={returnToList} item={true}>{group?.lable}</Grid>
+          <Link underline="hover" onClick={returnToList} style={{ color: Colors.white, cursor: "Pointer" }}>
+            <Grid  item={true}>{group?.lable}</Grid>
+          </Link>
         </Grid>
       </Typography>
       {isTypeMpiOutput && mpiOutputTitle ?
