@@ -1451,7 +1451,7 @@ context("Create Company Without Logo Golden Tenant", () => {
     });
 
     it("Logo field is empty and Verify default company logo", () => {
-      cy.get("img[alt=\"Logo\"]").should("have.attr", "src", "/logo_enlil.svg");
+      cy.get(`img[alt="Company logo"]`).should("have.attr", "src", "/logo_enlil.svg");
     });
 
     it("Verify left default Background company color", () => {
@@ -1521,7 +1521,7 @@ context("Create Company Without Logo Golden Tenant", () => {
     });
 
     it("Verify the Dev logo", () => {
-      cy.get("img[alt=\"Logo\"]").should("have.attr", "src", "/logo_enlil.svg");
+      cy.get(`img[alt="Company logo"]`).should("have.attr", "src", "/logo_enlil.svg");
     });
 
     it("Verify the profile dropdown", () => {

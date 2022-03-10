@@ -41,7 +41,7 @@ export enum CyRoutes {
   GetProposedDocId = "GetProposedDocId",
   PatchCancelDocRev = "PatchCancelDocRev",
   GetPendingActions = "GetPendingActions",
-  GetDashboardFeed  = "GetDashboardFeed",
+  PostDashboardFeedSearch  = "PostDashboardFeedSearch",
   PostCloseAR = "PostCloseAR",
   PostApproveAR = "PostApproveAR",
   GetRequiredApprovers = "GetRequiredApprovers",
@@ -101,6 +101,7 @@ export enum CyRoutes {
   PostCompleteTraining = "PostCompleteTraining",
   PatchUsersMe = "PatchUsersMe",
   PostExportRev = "PostExportRev",
+  PostChangeRequestsSearch = "PostChangeRequestsSearch",
 }
 
 export const routes: ICyRoutes =   {
@@ -692,10 +693,10 @@ export const routes: ICyRoutes =   {
       url: "/api/v1/pending_actions",
     },
   },
-  GetDashboardFeed: {
+  PostDashboardFeedSearch: {
     requestConfig: {
-      method: "GET",
-      url: "/api/v1/dashboard_feed",
+      method: "POST",
+      url: "/api/v1/dashboard_feed/search",
     },
   },
   PostCloseAR: {
@@ -772,6 +773,12 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/change_requests**",
+    },
+  },
+  PostChangeRequestsSearch: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/change_requests/search",
     },
   },
   PostDocRev: {

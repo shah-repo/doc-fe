@@ -356,9 +356,7 @@ context("Mpi/Qpi test", () => {
       context("Release MPI", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -421,9 +419,7 @@ context("Mpi/Qpi test", () => {
       context("Release QPI document", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release QPI document", () => {
