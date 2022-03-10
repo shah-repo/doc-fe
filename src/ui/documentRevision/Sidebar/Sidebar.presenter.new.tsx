@@ -61,8 +61,8 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
         <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
-              <StyledTooltip title={item.details.title}>
-                <Box key={item.details.title}>
+              <Box key={item.details.title}>
+                <StyledTooltip title={item.details.title}>
                   <IconButton
                     data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
                     ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
@@ -72,8 +72,8 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                     {(!loading || item.type !== "bookmarks") && item.icon}
                     {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
                   </IconButton>
-                </Box>
-              </StyledTooltip>
+                </StyledTooltip>
+              </Box>
             )
           )}
         </Box>

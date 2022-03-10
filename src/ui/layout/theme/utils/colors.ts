@@ -72,6 +72,8 @@ enum Colors {
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
   bright_gray="#EBEDF2",
+  light_gray_border="#CCD4D9",
+  dark_jungle_green="#162229",
 }
 
 export default Colors;
