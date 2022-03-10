@@ -26,10 +26,10 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     isFB = !isUndefined(formFB);
     const {
       setIsScorlled,
-      setSelectedType,
+      setSelectedDocRevDisplayStatus,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     } = React.useContext(FormScrolledContext)!;
-    setSelectedType(documentRevision?.displayStatus);
+    setSelectedDocRevDisplayStatus(documentRevision?.displayStatus);
 
     // MARK: @state
     useEffect(() => {

@@ -16,7 +16,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 interface FormScrolledContext{
   setIsScorlled: any;
-  setSelectedType: any;
+  setSelectedDocRevDisplayStatus: any;
 }
 
 export let FormScrolledContext = React.createContext<FormScrolledContext| undefined>(undefined);
@@ -28,10 +28,10 @@ const Header: React.FunctionComponent<Props> = ({
   canToggleCustomLabels,
 }) => {
   const [isScorlled, setIsScorlled] = useState<boolean>(false);
-  const [selectedType, setSelectedType] = useState<string>("");
+  const [selectedDocRevDisplayStatus, setSelectedDocRevDisplayStatus] = useState<string>("");
   FormScrolledContext = React.createContext<FormScrolledContext | undefined>({
     setIsScorlled,
-    setSelectedType,
+    setSelectedDocRevDisplayStatus,
   });
 
   if (SM.isNewLayout) {
@@ -74,11 +74,11 @@ const Header: React.FunctionComponent<Props> = ({
             <Collapse in={isScorlled}>
               <Box
                 height={40}
-                className={`${classes[FormHeaderStatusClassMapping[selectedType]]} ${classes.topScrollBarBox}`}
+                className={`${classes[FormHeaderStatusClassMapping[selectedDocRevDisplayStatus]]} ${classes.topScrollBarBox}`}
                 alignItems="center"
                 justifyContent="center"
               >
-                {selectedType?.toUpperCase() === "DRAFT" ? "DRAFT - EDIT MODE" : selectedType}
+                { selectedDocRevDisplayStatus}
               </Box>
             </Collapse>
           </>
