@@ -529,6 +529,7 @@ context("PO test", () => {
     it("Uploads text.docx", () => {
       SystemRequirement("REQ-1350");
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.progressBarShouldAppear();
     });
 
     it("Click on 'Add item' button", () => {
@@ -690,15 +691,15 @@ context("PO test", () => {
       it("Enter Supplier Description 'Supplier Description'", () => {
         cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
         cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear()
-          .arrowType("Supplier Description");
-        cy.get("[data-cy=\"description\"]>div").arrowClick();
+          .arrowType("Supplier Description").wait(500);
+        cy.unClick();
         cy.checkToastMessage({ exists: false });
       });
 
       it("Select Document Type 'Supplier'", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
           cy.listLoadingElementShouldNotExist();
-          cy.get("[name=\"document.documentType.id\"]").autocompleteSelect("");
+          cy.get("[name=\"document.documentType.id\"]").autocompleteSelect("Supplier");
         });
       });
 
