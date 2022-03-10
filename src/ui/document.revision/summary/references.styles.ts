@@ -30,6 +30,12 @@ export const styles = makeStyles((theme: Theme) =>
     },
     link: {
       textDecoration: "none",
+      color: Colors.navy,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 400,
+      fontSize: "14px",
+      lineHeight: "17.64px",
     },
     header: {
       fontSize: "12px",
@@ -72,14 +78,6 @@ export const styles = makeStyles((theme: Theme) =>
       "&.groupsGrid": {
         padding: "11px 5px 10px 10px",
       },
-    },
-    userName: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 400,
-      fontSize: "14px",
-      lineHeight: "18px",
-      color: Colors.navy,
     },
     deleteIcon: {
       display: "flex",

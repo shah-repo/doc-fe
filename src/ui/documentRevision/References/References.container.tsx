@@ -31,7 +31,7 @@ const ReferencesContainer = ({
     <ReferencesPresenter
       owner={selectedDocument?.owner}
       status={selectedDocument?.status}
-      referencedBy={selectedDocument?.children}
+      referencedBy={selectedDocument?.document.referencedBy}
       deprecatedAt={selectedDocument?.deprecatedAt}
       referenceTo={selectedDocument?.referenceTo}
       released={selectedDocument?.releasedAt}

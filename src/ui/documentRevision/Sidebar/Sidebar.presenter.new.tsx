@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, Drawer, IconButton, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Drawer, IconButton, makeStyles, TooltipProps, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -6,7 +6,8 @@ import { SM } from "../../../App";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
-import { FB } from "../../form.builder";
+import { FB, FBTooltip } from "../../form.builder";
+import Colors from "../../layout/theme/utils/colors";
 import styles from "./styles.new";
 import { Sidebar } from "./types.new";
 
@@ -20,6 +21,20 @@ interface Props {
   onDrawerToggle: () => void;
   loading?: boolean;
 }
+
+const tooltipClasses = makeStyles(() => ({
+  tooltip: {
+    backgroundColor: Colors.almost_black,
+  },
+  arrow: {
+    color: Colors.almost_black,
+  },
+}));
+
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipClasses();
+  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
+};
 
 const SidebarPresenter: React.FunctionComponent<Props> = ({
   isDrawerOpen,
@@ -46,17 +61,19 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
         <Box width={48} textAlign="center" style={{ borderRight: "1px solid rgb(212, 219, 225)" }}>
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
-              <Box key={item.details.title}>
-                <IconButton
-                  data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
-                  ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
-                  onClick={() => handleMenuIconClick(index)}
-                  className={classes.iconButtonNew}
-                >
-                  {(!loading || item.type !== "bookmarks") && item.icon}
-                  {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
-                </IconButton>
-              </Box>
+              <StyledTooltip title={item.details.title}>
+                <Box key={item.details.title}>
+                  <IconButton
+                    data-cy={item.details.dataCy !== undefined ? item.details.dataCy : "sss"}
+                    ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
+                    onClick={() => handleMenuIconClick(index)}
+                    className={classes.iconButtonNew}
+                  >
+                    {(!loading || item.type !== "bookmarks") && item.icon}
+                    {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
+                  </IconButton>
+                </Box>
+              </StyledTooltip>
             )
           )}
         </Box>

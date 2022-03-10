@@ -1,4 +1,4 @@
-import { Box, Grid, ListItem, Tooltip, Typography } from "@material-ui/core";
+import { Box, Grid, ListItem, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as DeleteIcon } from "../../../assets/images/delete_icon.svg";
@@ -9,6 +9,7 @@ import { styles } from "./references.styles";
 
 interface OwnProps {
   label: string;
+  fromReferencedBy?: boolean;
 }
 
 type Props = OwnProps & DataProps<Model[]>;
@@ -16,6 +17,7 @@ type Props = OwnProps & DataProps<Model[]>;
 const ReferencePresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
+  fromReferencedBy,
 }) => {
   const classes = styles();
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -35,25 +37,22 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               component="span"
               variant="body2"
               color="textPrimary"
-              className={classes.userName}
             >
               {
-                <Tooltip title={reference.title} id="ChangeRequestLink-tootlip">
-                  <Link
-                    className={classes.link}
-                    to={reference.url}
-                    target="_blank"
-                    id="ReferencePresenter-link"
-                  >
-                    {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
-                  </Link>
-                </Tooltip>
+                <Link
+                  className={classes.link}
+                  to={reference.url}
+                  target="_blank"
+                  id="ReferencePresenter-link"
+                >
+                  {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
+                </Link>
               }
             </Typography>
           </Grid>
-          <Grid item className={classes.deleteIcon}>
+          {!fromReferencedBy && <Grid item className={classes.deleteIcon}>
             <DeleteIcon onClick={() => handleDelete()} />
-          </Grid>
+          </Grid>}
         </Grid>
       </Box>
     ));

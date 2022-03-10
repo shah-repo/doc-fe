@@ -13,7 +13,7 @@ const ReferencedByContainer: React.FunctionComponent<Props> = ({
   const refSummary: ReferenceSummary[] = useMemo(() => getReferencedBySummary(dataProp), [dataProp]);
 
   return (
-    <ReferencePresenter label="common.referenced.by" dataProp={refSummary} />
+    <ReferencePresenter fromReferencedBy={true} label="common.referenced.by" dataProp={refSummary} />
   );
 };
 
