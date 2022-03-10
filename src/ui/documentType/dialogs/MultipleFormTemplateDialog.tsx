@@ -103,11 +103,6 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       }
     });
 
-    LHRForms.map((form) => {
-      const partDocRev = checkForPart(form);
-      console.log(form.name, partDocRev?.status);
-    });
-
     return LHRForms.map((form) => ({
       label: renderPartLabel(form),
       value: form.id,
