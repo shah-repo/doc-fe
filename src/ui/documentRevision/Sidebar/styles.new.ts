@@ -68,6 +68,10 @@ export default makeStyles((theme: Theme) =>
       },
     },
     iconButtonNew: {
+      "width": "36px",
+      "height": "30px",
+      "padding": "0px",
+      "margin": "9px 6px 0px 6px",
       "&:hover, &:focus, li.active > a": {
         "background": Colors.light_blue,
         "borderRadius": "5px",

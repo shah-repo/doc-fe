@@ -79,10 +79,13 @@ export const styles = makeStyles((theme: Theme) =>
     avatarSection: {
       display: "flex",
       alignItems: "center",
+      maxWidth: "167px",
     },
     deleteIcon: {
       display: "flex",
       alignItems: "center",
+      visibility: "hidden",
+      paddingLeft: "5px",
     },
     listItem: {
       paddingLeft: "15px",
@@ -91,17 +94,17 @@ export const styles = makeStyles((theme: Theme) =>
       width: "233px",
     },
     collapseListItem: {
-      margin: "0px 15px 0px 15px",
+      padding: "0px 15px 0px 15px",
     },
     selectedUsersGrid: {
-      "marginTop": "15px",
+      "marginTop": "10px",
       "padding": "5px 5px 5px 10px",
       "width": "203px",
       "&:hover": {
         "background": Colors.bright_gray,
         "borderRadius": "4px",
-        "& deleteIcon": {
-          visibility: "hidden",
+        "& $deleteIcon": {
+          visibility: "visible",
         },
       },
       "&.groupsGrid": {

@@ -9,6 +9,16 @@ interface SidebarContainerProps {
   setOpen?: (value: boolean) => void;
 }
 
+interface HandleMenuClickContextProps {
+  handleMenuIconClick: (index) => void;
+  indexOfMigrationTab: number;
+  showMigration: boolean;
+}
+
+export let HandleMenuClickContext = React.createContext<HandleMenuClickContextProps | undefined>(
+  undefined
+);
+
 const SidebarContainer: React.FunctionComponent<
   SidebarContainerProps
 > = ({
@@ -18,6 +28,12 @@ const SidebarContainer: React.FunctionComponent<
 }) => {
   const [indexNumber, setIndex] = useState(0);
   const inputRef = useRef(null);
+  const showMigration = sidebarList
+    .map((e) => e.details.shouldShow && e.type)
+    .indexOf("formMigration");
+  const indexOfMigrationTab = sidebarList
+    .map((e) => e.type)
+    .indexOf("formMigration");
   useScrollIntoView();
   const onDrawerToggle = () => {
     setOpen?.(!isDrawerOpen);
@@ -38,6 +54,12 @@ const SidebarContainer: React.FunctionComponent<
     }
     setIndex(index);
   };
+
+  HandleMenuClickContext = React.createContext<HandleMenuClickContextProps | undefined>({
+    handleMenuIconClick,
+    indexOfMigrationTab,
+    showMigration: showMigration !== -1,
+  });
 
   return (
     <SidebarPresenter

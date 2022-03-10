@@ -3,8 +3,9 @@ import React from "react";
 import { ReactComponent as MigrateIcon } from "../../../assets/images/migrate-icon.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Text from "../../components/Text";
-import ReferencedByContainer from "../../document.revision/summary/referencedBy.container";
-import ReferenceToContainer from "../../document.revision/summary/referenceTo.container";
+import ReferencedByContainer from "../../document.revision/summary/referencedBy.container.new";
+import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
+import { HandleMenuClickContext } from "../Sidebar/Sidebar.container";
 import { styles } from "./References.styles";
 
 const References = ({
@@ -17,6 +18,8 @@ const References = ({
   formDocument,
 }) => {
   const classes = styles();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { handleMenuIconClick, indexOfMigrationTab, showMigration } = React.useContext(HandleMenuClickContext)!;
   return (
     <Box margin={1.875}>
       <Typography className={classes.generalInfo}>
@@ -85,19 +88,20 @@ const References = ({
             )}
         </Typography>
       </Box>
-      <Box display="flex" pt={1.25} alignItems="center">
+      {showMigration && <Box display="flex" pt={1.25} alignItems="center">
         <Button
           disableRipple
           disableFocusRipple
           variant="contained"
           className={classes.migrateForm}
           startIcon={<Box mr={0.25}><MigrateIcon /></Box>}
+          onClick={() => handleMenuIconClick(indexOfMigrationTab)}
         >
           <Typography component="span" className={classes.migrateFormText}>
             <Text message="common.form.migration" />
           </Typography>
         </Button>
-      </Box>
+      </Box>}
     </Box>
   );
 };

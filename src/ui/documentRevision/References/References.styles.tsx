@@ -3,15 +3,14 @@ import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
-    marginTop4: {
-      marginTop: "4px",
-    },
-    margin12: {
-      marginBottom: "12px",
-    },
     listItem: {
-      marginTop: "12px",
-      marginBottom: "8px",
+      "marginTop": "12px",
+      "marginBottom": "8px",
+      "& .MuiListItemAvatar-root": {
+        maxWidth: "35px",
+        minWidth: "35px",
+        marginRight: "8px",
+      },
     },
     generalInfo: {
       fontFamily: "Sora",
@@ -55,7 +54,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     migrateForm: {
       "borderRadius": "100px",
-      "width": "206px",
+      "width": "203px",
       "height": "36px",
       "backgroundColor": Colors.navy,
       "padding": "0px",

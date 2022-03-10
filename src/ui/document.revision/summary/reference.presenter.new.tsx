@@ -1,10 +1,11 @@
-import { Box, Chip, createStyles, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Box, Grid, ListItem, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ReactComponent as DeleteIcon } from "../../../assets/images/delete_icon.svg";
 import { DataProps } from "../../../state/ducks/common/types";
 import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
 import { ReferenceSummary as Model } from "../utils/types";
+import { styles } from "./references.styles";
 
 interface OwnProps {
   label: string;
@@ -12,53 +13,48 @@ interface OwnProps {
 
 type Props = OwnProps & DataProps<Model[]>;
 
-const styles = makeStyles((theme) =>
-  createStyles({
-    chip: {
-      "border": `1px solid ${Colors.medium_blue}`,
-      "borderRadius": "3px",
-      "background": Colors.light_blue,
-      "&:hover": {
-        cursor: "pointer",
-      },
-    },
-    link: {
-      textDecoration: "none",
-    },
-    header: {
-      fontSize: "12px",
-      color: Colors.almost_black,
-      fontFamily: "Sora",
-    },
-    noHeader: {
-      fontSize: "14px",
-      color: Colors.almost_black,
-      fontFamily: "Sora",
-    },
-    marginBottom12: {
-      marginBottom: "20px",
-    },
-    marginBottom6: {
-      marginBottom: "6px",
-    },
-  }));
-
 const ReferencePresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
 }) => {
   const classes = styles();
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const handleDelete = () => {};
   const referencesRenderer = () =>
     dataProp.map((reference: Model, index) => (
       <Box component="span" key={reference.id} data-cy={label}>
-        <Tooltip title={reference.title} id="ChangeRequestLink-tootlip" >
-          <Link className={classes.link} to={reference.url} target="_blank" id="ReferencePresenter-link">
-            <Chip
-              className={classes.chip}
-              label={`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
-            />
-          </Link>
-        </Tooltip>
+        <Grid
+          key={index}
+          justify="space-between"
+          alignItems="center"
+          container
+          className={classes.selectedUsersGrid}
+        >
+          <Grid item className={classes.avatarSection}>
+            <Typography
+              component="span"
+              variant="body2"
+              color="textPrimary"
+              className={classes.userName}
+            >
+              {
+                <Tooltip title={reference.title} id="ChangeRequestLink-tootlip">
+                  <Link
+                    className={classes.link}
+                    to={reference.url}
+                    target="_blank"
+                    id="ReferencePresenter-link"
+                  >
+                    {`${reference.docId} - ${reference.displayRevision} - ${reference.title}`}
+                  </Link>
+                </Tooltip>
+              }
+            </Typography>
+          </Grid>
+          <Grid item className={classes.deleteIcon}>
+            <DeleteIcon onClick={() => handleDelete()} />
+          </Grid>
+        </Grid>
       </Box>
     ));
 
