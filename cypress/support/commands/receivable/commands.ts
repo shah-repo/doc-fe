@@ -81,6 +81,7 @@ Cypress.Commands.add("recClickOnFirstReceivableOnList", () => {
 
 Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
   cy.get(`[aria-colindex="1"] input`).arrowType(params.id);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
@@ -104,6 +105,7 @@ Cypress.Commands.add("recVerifyFilterByReceivableId", (params: {recId: string })
 
 Cypress.Commands.add("recFilterByOwner", (params: {owner: string}) => {
   cy.get(`[aria-colindex="3"] input`).arrowType(params.owner).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recVerifyFilterByOwner", (params: {owner: string }) => {
@@ -122,6 +124,7 @@ Cypress.Commands.add("recVerifyFilterByState", (params: {state: string }) => {
 
 Cypress.Commands.add("recFilterByARId", (params: {arId: string}) => {
   cy.get(`[aria-colindex="5"] input`).arrowType(params.arId).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("recVerifyFilterByARId", (params: {arId: string }) => {
@@ -132,7 +135,7 @@ Cypress.Commands.add("recVerifyFilterClear", () => {
   cy.get(`[aria-colindex="1"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "");
   cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "");
-  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "Select State");
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).should("have.text", "All");
 });
 
 Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: integer}) => {
