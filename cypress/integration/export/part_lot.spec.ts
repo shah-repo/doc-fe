@@ -507,7 +507,7 @@ context("Export Part Lot", () => {
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
-                    index: 0,
+                    index: 5,
                   },
                 ],
               },
@@ -556,7 +556,7 @@ context("Export Part Lot", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
     });
 
     it("Enter title", () => {
@@ -589,7 +589,7 @@ context("Export Part Lot", () => {
   context("CSL with Last Signed status", () => {
     context("Add CSL with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).arrowType(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
       });
 
       it("Click Request Approval button", () => {
@@ -661,7 +661,7 @@ context("Export Part Lot", () => {
       });
 
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).arrowType(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${USERS[1].email}`);
       });
 
       it("Click Request Approval button", () => {
@@ -719,7 +719,7 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.drCreateNewDocumentFromForm();
+        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
       });
 
       it("Enter title", () => {
@@ -741,7 +741,7 @@ context("Export Part Lot", () => {
 
     context("Add CSL with In Review", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).arrowType(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
       });
 
       it("Save the document", () => {
@@ -777,7 +777,7 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.drCreateNewDocumentFromForm();
+        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
       });
 
       it("Enter title", () => {
