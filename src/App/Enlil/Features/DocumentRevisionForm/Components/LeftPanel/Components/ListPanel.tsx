@@ -6,7 +6,7 @@ import {
   ListItem, ListItemText, Typography,
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
-import { each, flatMap } from "lodash";
+import { cloneDeep, each, flatMap } from "lodash";
 import React from "react";
 import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 import { ReactComponent as Approvals } from "../../../../../../../assets/images/leftPanel/approvals.svg";
@@ -37,6 +37,7 @@ import Text from "../../../../../../../ui/components/Text";
 import { FBControlPickerProps } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.types";
 import { withFBControlPicker } from "../../../../../../../ui/form.builder/FBControlPicker/FBControlPicker.wrap";
 import styles from "./ListPanel.styles";
+import SearchBox from "./SearchBox";
 
 const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   controlPickerState,
@@ -193,12 +194,48 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         </Collapse>
       </>
     ));
+
+  const resetSearch = () => {
+    const actualResponeList = cloneDeep(listData);
+    listData.dataList = actualResponeList.dataList;
+    listData.favouriteList = actualResponeList.favouriteList;
+    setListData(listData);
+  };
+
+  const onSearch = (event) => {
+    let searchString = event.target.value?.trim().toLowerCase();
+    searchString = searchString.replaceAll(" ", "");
+    if (!searchString) {
+      resetSearch();
+      return;
+    }
+    listData.dataList = listData.dataList.filter((item) =>
+      (item.subTab = item.subTab.filter((tab) =>
+        tab.tab.toLowerCase().indexOf(searchString) > -1)))
+      .filter((item) => item.subTab.length);
+    listData.favouriteList = listData.favouriteList.filter((item) =>
+      (item.subTab = item.subTab.filter((tab) =>
+        tab.tab.toLowerCase().indexOf(searchString) > -1)))
+      .filter((item) => item.subTab.length);
+    setListData(listData);
+  };
+
   return (
     <>
-      <List>
-        {listData.favouriteList && createList(listData.favouriteList)}
-        {listData.dataList && createList(listData.dataList)}
-      </List>
+      <Box
+        padding="10px 0px 20px 0px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <SearchBox onSearch={onSearch}/>
+      </Box>
+      <Box height="calc(100vh - 220px)" overflow="auto">
+        <List>
+          {listData.favouriteList && createList(listData.favouriteList)}
+          {listData.dataList && createList(listData.dataList)}
+        </List>
+      </Box>
     </>
   );
 };
