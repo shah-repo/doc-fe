@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { IotService } from "../../../common/utils/iot/mqttClient";
-import DocumentTypeSockets from "../../document.type.management/DocumentTypeSockets";
 import ChangeRequestListSockets from "./ChangeRequestListSockets";
+import DocumentTypeSockets from "./DocumentTypeSockets";
+import EmployeeListSockets from "./EmployeeListSockets";
 
 const SocketsContainer: React.FunctionComponent = () => {
   useEffect(() => () => {
@@ -12,6 +13,7 @@ const SocketsContainer: React.FunctionComponent = () => {
   return (
     <>
       <ChangeRequestListSockets />
+      <EmployeeListSockets />
       <DocumentTypeSockets />
     </>
   );
