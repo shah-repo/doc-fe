@@ -20,6 +20,13 @@ export const styles = makeStyles((theme: Theme) =>
       justifyContent: "center",
       cursor: "pointer",
     },
+    title: {
+      fontFamily: "Inter",
+      fontStyle: "normal",
+      fontWeight: 600,
+      fontSize: "14px",
+      lineHeight: "24px",
+    },
     GREEN_STATUS: {
       color: Colors.green_blue,
     },

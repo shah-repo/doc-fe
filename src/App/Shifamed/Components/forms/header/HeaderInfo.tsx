@@ -130,7 +130,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
         >
           {getIcon(group?.lable as Pages)}
           <Link underline="hover" onClick={returnToList} style={{ color: Colors.white, cursor: "Pointer" }}>
-            <Grid  item={true}>{group?.lable}</Grid>
+            <Grid  item={true} className={classes.title}>{group?.lable}</Grid>
           </Link>
         </Grid>
       </Typography>
