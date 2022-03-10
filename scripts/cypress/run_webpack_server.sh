@@ -24,5 +24,4 @@ export REACT_APP_DATADOG_CLIENT_TOKEN="fake"
 export REACT_APP_DATADOG_ENABLED="false"
 export REACT_APP_DATADOG_SAMPLE_RATE="0"
 
-yarn install --frozen-lockfile
 yarn start
