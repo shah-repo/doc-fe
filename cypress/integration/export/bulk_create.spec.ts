@@ -599,15 +599,11 @@ context("Export Bulk", () => {
     });
 
     it("Select form to be used for bulk creation", () => {
-      cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-      cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").clear().arrowType("FM-00003").wait(1000);
-      cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("FM-00003");
     });
 
     it("Select document type to be used for bulk creation", () => {
-      cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-      cy.get("[data-cy=\"fb-output-document-type\"]").clear().arrowType("Bulk Import").wait(1000);
-      cy.get("[data-cy=\"fb-output-document-type\"]").arrowType("{downarrow}{enter}");
+      cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import")
     });
 
     it("Select 'yes' to have Document id column", () => {
@@ -642,7 +638,7 @@ context("Export Bulk", () => {
   context("Bulk Import Last Signed status", () => {
     context("Add Bulk Import Last Signed", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).arrowType(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
       });
 
       it("Click Request Approval button", () => {
@@ -771,15 +767,11 @@ context("Export Bulk", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").clear().arrowType("FM-00003").wait(1000);
-        cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").arrowType("{downarrow}{enter}");
+        cy.get("input[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("FM-00003");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("[data-cy=\"fb-output-document-type\"]").clear().arrowType("Bulk Import").wait(1000);
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowType("{downarrow}{enter}");
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
       });
 
       it("Select 'yes' to have Document id column", () => {
@@ -799,7 +791,7 @@ context("Export Bulk", () => {
 
     context("Add Bulk Import with In Review", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).arrowType(`${USERS[1].email }{downarrow}{enter}`);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
       });
 
       it("Save the document", () => {
