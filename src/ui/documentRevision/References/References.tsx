@@ -1,8 +1,7 @@
 import { Avatar, Box, Button, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as MigrateIcon } from "../../../assets/images/migrate-icon.svg";
-import { getFormattedDateString } from "../../../common/utils/date";
-import Date from "../../components/Date";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Text from "../../components/Text";
 import ReferencedByContainer from "../../document.revision/summary/referencedBy.container";
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container";
@@ -67,7 +66,7 @@ const References = ({
         </Typography>
         <Typography className={classes.released}>
           {released
-            ? getFormattedDateString(released as string, "YYYY-MM-DD")
+            ? getFormattedDateString(released as string, MomentFormats.YearMonthDate)
             : "None"}
         </Typography>
       </Box>
@@ -79,7 +78,11 @@ const References = ({
           {` ${formDocument.docId}, `}
           <Text message="common.revision" />
           {` ${formDocument.version}, `}
-          <Date value={formDocument.effectiveDate} />
+          {formDocument.effectiveDate &&
+            getFormattedDateString(
+              formDocument.effectiveDate,
+              MomentFormats.YearMonthDate
+            )}
         </Typography>
       </Box>
       <Box display="flex" pt={1.25} alignItems="center">

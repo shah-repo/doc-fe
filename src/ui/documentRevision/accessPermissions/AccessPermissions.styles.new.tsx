@@ -80,5 +80,33 @@ export const styles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
     },
+    deleteIcon: {
+      display: "flex",
+      alignItems: "center",
+    },
+    listItem: {
+      paddingLeft: "15px",
+      marginTop: "15px",
+      paddingTop: "0px",
+      width: "233px",
+    },
+    collapseListItem: {
+      margin: "0px 15px 0px 15px",
+    },
+    selectedUsersGrid: {
+      "marginTop": "15px",
+      "padding": "5px 5px 5px 10px",
+      "width": "203px",
+      "&:hover": {
+        "background": Colors.bright_gray,
+        "borderRadius": "4px",
+        "& deleteIcon": {
+          visibility: "hidden",
+        },
+      },
+      "&.groupsGrid": {
+        padding: "11px 5px 10px 10px",
+      },
+    },
   }),
 );

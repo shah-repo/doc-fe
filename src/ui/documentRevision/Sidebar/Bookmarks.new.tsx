@@ -39,6 +39,10 @@ const styles = makeStyles(() =>
       "& svg": {
         stroke: Colors.font_gray,
       },
+      "fontSize": "12px",
+      "fontFamily": "Sora",
+      "fontStyle": "normal",
+      "fontWeight": "normal",
     },
   }));
 

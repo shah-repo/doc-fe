@@ -5,7 +5,7 @@ import { filter, isEmpty, isEqual, some } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select, { components } from "react-select";
-import { ReactComponent as CloseIcon } from "../../../assets/images/circle-remove.svg";
+import { ReactComponent as CloseIcon } from "../../../assets/images/delete_icon.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { Owner, TypographySize } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -187,7 +187,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   return (
     <Box flexGrow={1}>
       <List disablePadding>
-        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "15px", paddingTop: "0px", width: "233px" }}>
+        <ListItem disableGutters className={classes.listItem}>
           <ListItemText>
             <Typography className={classes.itemTitle}>
               <Text translation="document.revision.selected.users" />
@@ -203,7 +203,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List disablePadding>
-            <ListItem disableGutters style={{ padding: "0px 15px 0px 15px" }}>
+            <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
                 <Box>
                   <Box width={203} height={40}>
@@ -229,7 +229,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           justify="space-between"
                           alignItems="center"
                           container
-                          style={{ paddingTop: "15px", width: "203px" }}
+                          className={classes.selectedUsersGrid}
                         >
                           <Grid item className={classes.avatarSection}>
                             <Avatar
@@ -248,7 +248,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               {e.user.name}
                             </Typography>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.deleteIcon}>
                             <CloseIcon onClick={() => handleDelete(e.id)} />
                           </Grid>
                         </Grid>
@@ -260,7 +260,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             </ListItem>
           </List>
         </Collapse>
-        <ListItem disableGutters style={{ paddingLeft: "15px", marginTop: "15px", paddingTop: "0px", width: "233px" }}>
+        <ListItem disableGutters className={classes.listItem}>
           <ListItemText>
             <Typography className={classes.itemTitle}>
               <Text translation="document.revision.selected.groups" />
@@ -276,7 +276,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
         </ListItem>
         <Collapse in={open1} timeout="auto" unmountOnExit>
           <List disablePadding>
-            <ListItem disableGutters style={{ padding: "0px 15px 0px 15px" }}>
+            <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
                 <Box>
                   <Box width={203} height={40}>
@@ -299,8 +299,8 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       key={index}
                       justify="space-between"
                       alignItems="center"
+                      className={`${classes.selectedUsersGrid} groupsGrid`}
                       container
-                      style={{ paddingTop: "15px", width: "203px" }}
                     >
                       <Grid item className={classes.avatarSection}>
                         <Typography
@@ -312,7 +312,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           {e.name}
                         </Typography>
                       </Grid>
-                      <Grid item>
+                      <Grid item className={classes.deleteIcon}>
                         <CloseIcon onClick={() => handleDelete(e.id)} />
                       </Grid>
                     </Grid>
@@ -340,9 +340,9 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                         <Grid
                           key={index}
                           justify="space-between"
+                          className={classes.selectedUsersGrid}
                           alignItems="center"
                           container
-                          style={{ paddingTop: "15px", width: "203px" }}
                         >
                           <Grid item className={classes.avatarSection}>
                             <Avatar
@@ -360,7 +360,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               {e.user.name}
                             </Typography>
                           </Grid>
-                          <Grid item>
+                          <Grid item className={classes.deleteIcon}>
                             <CloseIcon onClick={() => handleDeleteOperatorAccess(e.id)} />
                           </Grid>
                         </Grid>
