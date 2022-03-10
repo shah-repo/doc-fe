@@ -229,6 +229,12 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     setListData(filteredListData);
   };
 
+  const renderNoSearchResults = listData.dataList.length === 0 && (
+    <Typography variant="caption">
+      <Text translation="table.no.results.found" />
+    </Typography>
+  );
+
   return (
     <>
       <Box
@@ -248,6 +254,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       >
         {listData.favouriteList.length > 0 && createList(listData.favouriteList)}
         {listData.dataList.length > 0 && createList(listData.dataList)}
+        { renderNoSearchResults }
       </List>
     </>
   );
