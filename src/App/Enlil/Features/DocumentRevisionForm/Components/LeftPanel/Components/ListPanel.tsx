@@ -3,11 +3,14 @@ import {
   Collapse,
   IconButton,
   List,
-  ListItem, ListItemText, Typography,
+  ListItem,
+  ListItemText,
+  Typography,
 } from "@material-ui/core";
 import { ChevronRight, ExpandMore } from "@material-ui/icons";
-import { cloneDeep, each, flatMap } from "lodash";
+import { each, flatMap } from "lodash";
 import React from "react";
+import { useIntl } from "react-intl";
 import { ReactComponent as FavoriteIcon } from "../../../../../../../assets/images/favorite.svg";
 import { ReactComponent as Approvals } from "../../../../../../../assets/images/leftPanel/approvals.svg";
 import { ReactComponent as AutoCompleteIcon } from "../../../../../../../assets/images/leftPanel/auto_complete.svg";
@@ -45,82 +48,79 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   index = 0,
   openEditor,
 }) => {
-  const [listData, setListData] = React.useState<any>([]);
-  React.useEffect(() => {
-    setListData(createPickerState());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const intl = useIntl();
+  const classes = styles();
+  const [open, setOpen] = React.useState<any>({ favourite: true });
   const IconMapping = {
-    section: <SectionIcon/>,
-    subsection: <SubsectionIcon/>,
-    stepsection: <StepsectionIcon/>,
-    textfield: <TextfieldIcon/>,
-    checkboxgroup: <CheckboxIcon/>,
-    autocomplete: <AutoCompleteIcon/>,
-    texteditor: <TextEditorIcon/>,
-    datepicker: <DatePickerIcon/>,
-    hyperlink: <HyperlinkIcon/>,
-    select: <SelectIcon/>,
-    radiogroup: <RadiogroupIcon/>,
-    paragraph: <ParagraphIcon/>,
-    fileupload: <FileuploadIcon/>,
-    blanktplform: <BlankTplformIcon/>,
-    quantity: <QuantityIcon/>,
-    timer: <TimerIcon/>,
-    poApprovalMatrix: <POApprovalMatrixIcon/>,
-    instructionsmediaupload: <FileuploadIcon/>,
-    evidencemediaupload: <FileuploadIcon/>,
-    procedure: <ProcedureIcon/>,
-    mpiprocedure: <ProcedureIcon/>,
-    eqmaintenance: <EquipmentIcon/>,
-    textfieldwithrange: <TextfieldwithrangeIcon/>,
-    supplier: <SupplierIcon/>,
-    lhrstep: <StepsectionIcon/>,
-    approvals: <Approvals/>,
+    section: <SectionIcon />,
+    subsection: <SubsectionIcon />,
+    stepsection: <StepsectionIcon />,
+    textfield: <TextfieldIcon />,
+    checkboxgroup: <CheckboxIcon />,
+    autocomplete: <AutoCompleteIcon />,
+    texteditor: <TextEditorIcon />,
+    datepicker: <DatePickerIcon />,
+    hyperlink: <HyperlinkIcon />,
+    select: <SelectIcon />,
+    radiogroup: <RadiogroupIcon />,
+    paragraph: <ParagraphIcon />,
+    fileupload: <FileuploadIcon />,
+    blanktplform: <BlankTplformIcon />,
+    quantity: <QuantityIcon />,
+    timer: <TimerIcon />,
+    poApprovalMatrix: <POApprovalMatrixIcon />,
+    instructionsmediaupload: <FileuploadIcon />,
+    evidencemediaupload: <FileuploadIcon />,
+    procedure: <ProcedureIcon />,
+    mpiprocedure: <ProcedureIcon />,
+    eqmaintenance: <EquipmentIcon />,
+    textfieldwithrange: <TextfieldwithrangeIcon />,
+    supplier: <SupplierIcon />,
+    lhrstep: <StepsectionIcon />,
+    approvals: <Approvals />,
     // TODO: Check Custom Control
     // customcontrol: <FileuploadIcon/>,
-    instructionsdocument: <ProcedureIcon/>,
-    selectdocument: <SelectIcon/>,
-    checkpoint: <CheckPointIcon/>,
-    createlabel: <CheckPointIcon/>,
-    task: <CheckPointIcon/>,
+    instructionsdocument: <ProcedureIcon />,
+    selectdocument: <SelectIcon />,
+    checkpoint: <CheckPointIcon />,
+    createlabel: <CheckPointIcon />,
+    task: <CheckPointIcon />,
     // TODO: Check Custom Control
     // action: <FileuploadIcon/>,
   };
-
-  // Create picker List to show Icon
-  /*
-            Expected Response object
-            [{"tab": "Favourite",
-                "subTab": [{
-                    "tab": "Section",
-                    icon: "",
-                    "isFavorite": true
-                  },
-                  {
-                    "tab": "Text",
-                    icon: "",
-                    "isFavorite": true
-                  }] }]
-  */
   const createPickerState = () => {
     const data: any = [];
     each(pickers, function(value, key) {
-      const newObj = { tab: "", editors: [], subTab: [], isFavourite: [] };
+      const newObj = {
+        tab: "",
+        label: "",
+        editors: [],
+        subTab: [],
+        isFavourite: [],
+      };
       newObj.tab = key;
+      newObj.label =
+        intl.formatMessage({
+          id: `form.builder.${key}`,
+        }) || "";
       newObj.editors = value;
       const subTabList: any = [];
       const isFavourite: any = [];
       each(value, function(val: string, k) {
+        const label =
+          intl.formatMessage({
+            id: `form.builder.${val}`,
+          }) || "";
         subTabList.push({
           tab: val,
+          label,
           icon: IconMapping[val],
           isFavorite: k % 2 === 0 ? true : false,
         });
         if (k % 2 === 0 ? true : false) {
           isFavourite.push({
             tab: val,
+            label,
             icon: IconMapping[val],
             isFavorite: true,
           });
@@ -131,10 +131,19 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       data.push(newObj);
     });
     const favList = createFavouriteList(data);
-    return {
-      dataList: data,
-      favouriteList: [{ tab: "favorites", subTab: flatMap(favList) }],
-    };
+    const originalListData = { dataList: [], favouriteList: [] as any };
+    originalListData.dataList = data;
+    originalListData.favouriteList = [
+      {
+        tab: "favorites",
+        label:
+            intl.formatMessage({
+              id: "form.builder.favorites",
+            }) || "",
+        subTab: flatMap(favList),
+      },
+    ];
+    return originalListData;
   };
 
   const createFavouriteList = (data) => {
@@ -145,8 +154,8 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
     return fav;
   };
 
-  const classes = styles();
-  const [open, setOpen] = React.useState<any>({ favourite: true });
+  const [listData, setListData] = React.useState<any>(createPickerState());
+
   const handleClick = (selectedTab) => {
     setOpen({ [selectedTab]: !open[selectedTab] });
   };
@@ -164,7 +173,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         >
           <ListItemText key={tab.tab}>
             <Typography className={classes.listItemText}>
-              <Text message={`form.builder.${tab.tab}`} />
+              <Text message={tab.label} />
             </Typography>
           </ListItemText>
           {open[tab.tab] ? <ExpandMore /> : <ChevronRight />}
@@ -175,12 +184,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
               {tab.subTab.map((stab) => (
                 <>
                   <ListItem className={classes.listItemStyle}>
-                    <IconButton disableRipple={true}>
-                      {stab.icon}
-                    </IconButton>
+                    <IconButton disableRipple={true}>{stab.icon}</IconButton>
                     <ListItemText key={stab.tab}>
                       <Typography className={classes.listSubItem}>
-                        <Text message={`form.builder.${stab.tab}`} />
+                        <Text message={stab.label} />
                       </Typography>
                     </ListItemText>
                     <IconButton disableRipple={true}>
@@ -195,29 +202,31 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       </>
     ));
 
-  const resetSearch = () => {
-    const actualResponeList = cloneDeep(listData);
-    listData.dataList = actualResponeList.dataList;
-    listData.favouriteList = actualResponeList.favouriteList;
-    setListData(listData);
-  };
-
-  const onSearch = (event) => {
-    let searchString = event.target.value?.trim().toLowerCase();
-    searchString = searchString.replaceAll(" ", "");
+  const searchItem = (event) => {
+    const searchString = event?.target?.value;
+    const actualListData: any = createPickerState();
     if (!searchString) {
-      resetSearch();
+      setListData(actualListData);
       return;
     }
-    listData.dataList = listData.dataList.filter((item) =>
-      (item.subTab = item.subTab.filter((tab) =>
-        tab.tab.toLowerCase().indexOf(searchString) > -1)))
+    const filteredListData = { dataList: [], favouriteList: [] };
+    filteredListData.dataList = actualListData.dataList
+      .filter(
+        (item) =>
+          (item.subTab = item.subTab.filter(
+            (tab) => tab.label.toLowerCase().includes(searchString.toLowerCase())
+          ))
+      )
       .filter((item) => item.subTab.length);
-    listData.favouriteList = listData.favouriteList.filter((item) =>
-      (item.subTab = item.subTab.filter((tab) =>
-        tab.tab.toLowerCase().indexOf(searchString) > -1)))
+    filteredListData.favouriteList = actualListData.favouriteList
+      .filter(
+        (item) =>
+          (item.subTab = item.subTab.filter(
+            (tab) => tab.label.toLowerCase().includes(searchString.toLowerCase())
+          ))
+      )
       .filter((item) => item.subTab.length);
-    setListData(listData);
+    setListData(filteredListData);
   };
 
   return (
@@ -228,11 +237,17 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         justifyContent="center"
         alignItems="center"
       >
-        <SearchBox onSearch={onSearch}/>
+        <SearchBox onSearch={searchItem} />
       </Box>
-      <List style={{ height: "calc(100vh - 235px)", overflowY: "auto", width: "99.8%" }}>
-        {listData.favouriteList && createList(listData.favouriteList)}
-        {listData.dataList && createList(listData.dataList)}
+      <List
+        style={{
+          height: "calc(100vh - 235px)",
+          overflowY: "auto",
+          width: "99.8%",
+        }}
+      >
+        {listData.favouriteList.length > 0 && createList(listData.favouriteList)}
+        {listData.dataList.length > 0 && createList(listData.dataList)}
       </List>
     </>
   );

@@ -15,6 +15,7 @@ const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => (
       borderRadius: "100px",
       border: "1px solid #CCD4D9",
       boxSizing: "border-box",
+      paddingTop: "2px",
     }}
   >
     <IconButton type="submit" size="small" disableRipple>
