@@ -68,7 +68,7 @@ const getReferencedByUrl = (reference: Reference) => documentVersionPath(referen
 export const getReferencedBySummary = (dataProp: DocumentRevision[]): ReferenceSummary[] => {
   const summaries: ReferenceSummary[] = [];
 
-  const byDocument: { [key: string]: DocumentRevision } = dataProp.reduce((acc, docRev) =>
+  const byDocument: { [key: string]: DocumentRevision } = dataProp && dataProp.reduce((acc, docRev) =>
   {
     const { status } = docRev;
     const { id } = docRev.document;

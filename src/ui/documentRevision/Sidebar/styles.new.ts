@@ -5,6 +5,14 @@ const SIDEBAR_WIDTH = 300;
 
 export default makeStyles((theme: Theme) =>
   createStyles({
+    listItem: {
+      "padding": "13px 0px 0px 0px",
+      "& .MuiListItemAvatar-root": {
+        maxWidth: "35px",
+        minWidth: "35px",
+        marginRight: "8px",
+      },
+    },
     drawerPaper: {
       marginTop: "105px",
       position: "fixed",

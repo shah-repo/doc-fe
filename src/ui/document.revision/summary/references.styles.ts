@@ -35,6 +35,8 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "12px",
       color: Colors.almost_black,
       fontFamily: "Sora",
+      fontWeight: 600,
+      lineHeight: "15.12px",
     },
     noHeader: {
       fontSize: "14px",
@@ -53,6 +55,7 @@ export const styles = makeStyles((theme: Theme) =>
       marginRight: "10px",
     },
     selectedUsersGrid: {
+      "borderRadius": "4px",
       "background": Colors.sky_blue,
       "marginTop": "5px",
       "marginBottom": "10px",
@@ -62,8 +65,8 @@ export const styles = makeStyles((theme: Theme) =>
       "&:hover": {
         "background": Colors.bright_gray,
         "borderRadius": "4px",
-        "& deleteIcon": {
-          visibility: "hidden",
+        "& $deleteIcon": {
+          visibility: "visible",
         },
       },
       "&.groupsGrid": {
@@ -81,5 +84,6 @@ export const styles = makeStyles((theme: Theme) =>
     deleteIcon: {
       display: "flex",
       alignItems: "center",
+      visibility: "hidden",
     },
   }));

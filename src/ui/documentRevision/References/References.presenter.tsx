@@ -9,6 +9,7 @@ const ReferencesPresenter = ({
   referenceTo,
   released,
   formDocument,
+  retrain,
 }) => (
   <References
     owner={owner}
@@ -18,6 +19,7 @@ const ReferencesPresenter = ({
     referenceTo={referenceTo}
     released={released}
     formDocument={formDocument}
+    retrain={retrain}
   />
 );
 

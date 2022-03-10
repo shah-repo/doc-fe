@@ -1,5 +1,6 @@
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { generateRevisionNumber } from "../helpers/generateRevisionNumber";
 import ReferencesPresenter from "./References.presenter";
 
 interface ReferencesProps {
@@ -9,10 +10,22 @@ interface ReferencesProps {
 const ReferencesContainer = ({
   selectedDocument,
 }: ReferencesProps) => {
+  const {
+    revision,
+    subRevision,
+    revisionStage,
+    revisionChangeType,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    effectiveDate,
+  } = selectedDocument?.formDocument || {};
+
+  const version = generateRevisionNumber(revision, revisionStage as number, subRevision, revisionChangeType);
+
+  const docId = selectedDocument?.formDocument?.document?.docId;
   const formDocument = {
-    version: selectedDocument?.version,
-    effectiveDate: selectedDocument?.effectiveDate,
-    docId: selectedDocument?.document?.docId,
+    version,
+    effectiveDate,
+    docId,
   };
   return (
     <ReferencesPresenter
@@ -23,6 +36,7 @@ const ReferencesContainer = ({
       referenceTo={selectedDocument?.referenceTo}
       released={selectedDocument?.releasedAt}
       formDocument={formDocument}
+      retrain={selectedDocument?.retrain}
     />
   );
 };

@@ -16,6 +16,7 @@ const References = ({
   referenceTo,
   released,
   formDocument,
+  retrain,
 }) => {
   const classes = styles();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -64,6 +65,14 @@ const References = ({
       />
       <ReferencedByContainer dataProp={referencedBy} />
       <Box>
+        <Typography component="span" className={classes.releaseDate}>
+          <Text translation="common.training" />
+        </Typography>
+        <Typography className={classes.released}>
+          {retrain ? <Text translation="form.builder.yes" /> : <Text translation="form.builder.none" />}
+        </Typography>
+      </Box>
+      <Box pt={2.5}>
         <Typography component="span" className={classes.releaseDate}>
           <Text translation="documentRevision.form.release.date" />
         </Typography>

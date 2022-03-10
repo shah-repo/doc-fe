@@ -34,13 +34,14 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ chang
               <Box
                 flexGrow={1}
                 borderBottom="1px solid lightgray"
-                pl={2}
-                pr={2}
+                pl={1.875}
+                pr={1.875}
               >
                 <Box display="grid">
                   <ListItem
                     alignItems="flex-start"
                     disableGutters
+                    className={classes.listItem}
                   >
                     <ListItemAvatar>
                       <Avatar
