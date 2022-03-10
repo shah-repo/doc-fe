@@ -121,7 +121,7 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
   cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains(params.partNo).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {

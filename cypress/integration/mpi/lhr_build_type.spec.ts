@@ -1244,8 +1244,7 @@ context("LHR Build type flow", () => {
     });
 
     it("Goto start MPI", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevs,
-        CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(startMpiUrl);
       });
       cy.progressBarShouldNotExist();
