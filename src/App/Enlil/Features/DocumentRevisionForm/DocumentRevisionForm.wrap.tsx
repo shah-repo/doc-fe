@@ -25,6 +25,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     const {
       setIsScorlled,
+      setSelectedType,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     } = React.useContext(FormScrolledContext)!;
     useEffect(() => {
@@ -42,6 +43,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       () => {
         const documentRevision = _formState?.getValues() as DocumentRevision;
         if (!_documentRevisionFormState) { return; }
+        setSelectedType(documentRevision.displayStatus);
         _documentRevisionFormState.setDocumentRevision(documentRevision);
         // Set the FB schema
         let schema = get(documentRevision, "formTemplate.schema");

@@ -6,6 +6,8 @@ import { Observer } from "mobx-react";
 import React, { useState } from "react";
 import SM from "../../App/Shifamed/Utils/SM/SM";
 import EnlilLogo from "../../assets/images/enlil_logo.svg";
+import { FormHeaderStatusClassMapping } from "../components/common/kendo/helpers";
+import { FormHeaderContext } from "../documentRevision/forms/DocumentRevisionForm.container";
 import Colors from "../layout/theme/utils/colors";
 import AutosaveToggle from "./autosave/autosave";
 import styles from "./Header.styles";
@@ -17,6 +19,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 interface FormScrolledContext{
   setIsScorlled: any;
+  setSelectedType: any;
 }
 
 export let FormScrolledContext = React.createContext<FormScrolledContext| undefined>(undefined);
@@ -28,9 +31,13 @@ const Header: React.FunctionComponent<Props> = ({
   canToggleCustomLabels,
 }) => {
   const [isScorlled, setIsScorlled] = useState<boolean>(false);
+  const [selectedType, setSelectedType] = useState<string>("");
   FormScrolledContext = React.createContext<FormScrolledContext | undefined>({
     setIsScorlled,
+    setSelectedType,
   });
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const  context = React.useContext(FormHeaderContext);
   if (SM.isNewLayout) {
     return (
       <Observer>
@@ -50,7 +57,7 @@ const Header: React.FunctionComponent<Props> = ({
                 alignContent="center"
                 alignItems="center"
               >
-                <Box
+                {!isScorlled && <Box
                   style={{
                     backgroundRepeat: "no-repeat",
                     backgroundImage: `url(${EnlilLogo})`,
@@ -59,7 +66,7 @@ const Header: React.FunctionComponent<Props> = ({
                     position: "absolute",
                     paddingTop: "48px",
                   }}
-                />
+                />}
                 <Grid container={true} alignItems="flex-end" justify="flex-end">
                   <Grid item>
                     {canToggleCustomLabels && (
@@ -79,6 +86,27 @@ const Header: React.FunctionComponent<Props> = ({
                     <AutosaveToggle />
                   </Grid>
                 </Grid>
+              </Box>
+            </Collapse>
+            <Collapse in={isScorlled}>
+              <Box
+                height={40}
+                fontSize="1rem"
+                style={{
+                  color: Colors.white,
+                  fontFamily: "Sora",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  lineHeight: "15px",
+                  display: "flex",
+                  textTransform: "uppercase",
+                }}
+                className={classes[FormHeaderStatusClassMapping[selectedType]]}
+                alignItems="center"
+                justifyContent="center"
+              >
+                {selectedType?.toUpperCase() === "DRAFT" ? "DRAFT - EDIT MODE" : selectedType}
               </Box>
             </Collapse>
           </>
