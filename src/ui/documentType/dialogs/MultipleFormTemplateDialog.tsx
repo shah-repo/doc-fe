@@ -4,7 +4,7 @@ import { FormikProps } from "formik";
 import React, { useEffect, useState } from "react";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentType, DocumentTypeByIdForm } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import AutocompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import FormProgress from "../../components/forms/FormProgress";
 import FormWrapper from "../../components/forms/FormWrapper";
@@ -75,7 +75,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   const checkForPart = (form: DocumentTypeByIdForm) => {
     const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;
-    return parts.find((part) => part.document.id === id);
+    return parts.find((part) => part.document.id === id && part.status === DocumentRevisionStatus.Released);
   };
 
   const renderPartLabel = (form: DocumentTypeByIdForm) => {
@@ -102,6 +102,11 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       if ((isLHRT && partDocRev) || (!isLHRT && !partDocRev)) {
         return form;
       }
+    });
+
+    LHRForms.map((form) => {
+      const partDocRev = checkForPart(form);
+      console.log(form.name, partDocRev?.status);
     });
 
     return LHRForms.map((form) => ({
