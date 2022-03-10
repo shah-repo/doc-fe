@@ -51,10 +51,12 @@ Cypress.Commands.add("navigClickOnItem", (params: { navigItem: string }) => {
 
 Cypress.Commands.add("navigToDashboard", () => {
   cy.wrapWithWaitOnApiCall(
-    CyRoutes.GetDashboardFeed,
+    CyRoutes.PostDashboardFeedSearch,
     () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
     });
+
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("navigToDocTypeManagement", () => {
@@ -63,20 +65,19 @@ Cypress.Commands.add("navigToDocTypeManagement", () => {
 });
 
 Cypress.Commands.add("navigToRecords", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevDocTypeCategory, CyRoutes.GetDocRevStatusesCategory], () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.DOCUMENT_CONTROL,
-        NavigationItems.RECORDS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.RECORDS,
+    ],
   });
+
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToParts", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,
@@ -89,7 +90,7 @@ Cypress.Commands.add("navigToParts", () => {
 });
 
 Cypress.Commands.add("navigToLots", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,
@@ -102,7 +103,7 @@ Cypress.Commands.add("navigToLots", () => {
 });
 
 Cypress.Commands.add("navigToLHR", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,
@@ -115,14 +116,14 @@ Cypress.Commands.add("navigToLHR", () => {
 });
 
 Cypress.Commands.add("navigToReceivableList", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.RECEIVING });
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("navigToEquipment", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.EQUIPMENT });
   });
   cy.landingPageLoadingElementShouldNotExist();
@@ -190,7 +191,7 @@ Cypress.Commands.add("navigToPurchaseOrder", () => {
 });
 
 Cypress.Commands.add("navigToSuppliers", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,
@@ -220,19 +221,17 @@ Cypress.Commands.add("navigToNestedItem", (params: {navigItems: NavigationItems[
 });
 
 Cypress.Commands.add("navigToTrainingRecords", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-    cy.navigToNestedItem({
-      navigItems: [
-        NavigationItems.DASHBOARD,
-        NavigationItems.TRAINING,
-        NavigationItems.TRAINING_RECORDS,
-      ],
-    });
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.TRAINING,
+      NavigationItems.TRAINING_RECORDS,
+    ],
   });
 });
 
 Cypress.Commands.add("navigToTrainingCurriculums", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory, CyRoutes.GetDocRevDocTypeCategory], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
       navigItems: [
         NavigationItems.DASHBOARD,

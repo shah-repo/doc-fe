@@ -123,7 +123,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               <Grid zeroMinWidth item={true} className={classes.truncateText}>
                 <DocTitle
                   url={documentVersionPath(docRevId, docDocumentId)}
-                  docRevVersion={docRevName}
+                  docRevVersion={docRevVersion}
                   docRevName={docRevName}
                 />
               </Grid>
