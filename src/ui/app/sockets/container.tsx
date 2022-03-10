@@ -3,6 +3,7 @@ import { IotService } from "../../../common/utils/iot/mqttClient";
 import ChangeRequestListSockets from "./ChangeRequestListSockets";
 import DocumentTypeSockets from "./DocumentTypeSockets";
 import EmployeeListSockets from "./EmployeeListSockets";
+import GroupsListSockets from "./GroupsListSockets";
 
 const SocketsContainer: React.FunctionComponent = () => {
   useEffect(() => () => {
@@ -14,6 +15,7 @@ const SocketsContainer: React.FunctionComponent = () => {
     <>
       <ChangeRequestListSockets />
       <EmployeeListSockets />
+      <GroupsListSockets />
       <DocumentTypeSockets />
     </>
   );
