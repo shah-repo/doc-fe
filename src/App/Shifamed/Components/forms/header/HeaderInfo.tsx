@@ -2,9 +2,16 @@ import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
-import { ReactComponent as MPIIcon } from "../../../../../assets/images/mpi_white.svg";
+import { ReactComponent as DocumentListIconIcon } from "../../../../../assets/images/document.svg";
+import { ReactComponent as EBIcon } from "../../../../../assets/images/eb.svg";
+import { ReactComponent as EquipmentIcon } from "../../../../../assets/images/equipment.svg";
+import { ReactComponent as LHRIcon } from "../../../../../assets/images/lhr.svg";
+import { ReactComponent as LOTIcon } from "../../../../../assets/images/lot.svg";
+import { ReactComponent as PartsIcon } from "../../../../../assets/images/parts.svg";
+import { ReactComponent as PurchaseOrderIcon } from "../../../../../assets/images/purchase_order.svg";
+import { ReactComponent as ReceiveIcon } from "../../../../../assets/images/receive.svg";
+import { ReactComponent as RecordIcon } from "../../../../../assets/images/record.svg";
+import { ReactComponent as SupplierIcon } from "../../../../../assets/images/supplier.svg";
 import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
@@ -38,6 +45,24 @@ interface Props {
   subtitle?: any;
 }
 
+type Pages = "Documents List" | "Record" | "Equipment" | "Supplier" | "Purchase Order" | "Receive" |
+"Equipment Specifications" | "Parts" | "EB" | "Lhr" | "Lot" | "Training Curriculums";
+
+enum PageTypes {
+  DOCUMENTS_LIST= "Documents List",
+  RECORD= "Record",
+  EQUIPMENT= "Equipment",
+  EQUIPMENT_SPECICATIONS= "Equipment Specifications",
+  SUPPLIER= "Supplier",
+  PO= "Purchase Order",
+  RECEIVE= "Receive",
+  PARTS= "Parts",
+  EB= "EB",
+  LHR= "Lhr",
+  LOT= "Lot",
+  TRAINING_CURRICULUMS= "Training Curriculums"
+}
+
 const NewHeaderInfo: React.FunctionComponent<Props> = ({
   status,
   name,
@@ -60,6 +85,37 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
     group?.pathname && history.push(pathname);
   };
 
+  const getIcon = (page: Pages) => {
+    switch (page) {
+      case PageTypes.DOCUMENTS_LIST:
+        return <DocumentListIconIcon  className={classes.icon}/>;
+      case PageTypes.RECORD:
+        return <RecordIcon  className={classes.icon}/>;
+      case PageTypes.EQUIPMENT:
+      case PageTypes.EQUIPMENT_SPECICATIONS:
+        return <EquipmentIcon  className={classes.icon}/>;
+      case PageTypes.SUPPLIER:
+        return <SupplierIcon  className={classes.icon}/>;
+      case PageTypes.PO:
+      case PageTypes.TRAINING_CURRICULUMS:
+        return <PurchaseOrderIcon  className={classes.icon}/>;
+      case PageTypes.RECEIVE:
+        return <ReceiveIcon  className={classes.icon}/>;
+      case PageTypes.PARTS:
+        return <PartsIcon  className={classes.icon}/>;
+      case PageTypes.EB:
+        return <EBIcon  className={classes.icon}/>;
+      case PageTypes.LHR:
+        return <LHRIcon  className={classes.icon}/>;
+      case PageTypes.LOT:
+        return <LOTIcon  className={classes.icon}/>;
+
+      default:
+        return <RecordIcon  className={classes.icon}/>;
+    }
+  };
+
+
   const titleRenderer = () => {
     const stepRegex = /Step #[0-9]+/;
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
@@ -72,7 +128,7 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
           justify="flex-start"
           alignItems="center"
         >
-          <MPIIcon className={classes.icon}/>
+          {getIcon(group?.lable as Pages)}
           <Link underline="hover" onClick={returnToList} style={{ color: Colors.white, cursor: "Pointer" }}>
             <Grid  item={true}>{group?.lable}</Grid>
           </Link>

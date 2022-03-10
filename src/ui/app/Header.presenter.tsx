@@ -78,7 +78,7 @@ const Header: React.FunctionComponent<Props> = ({
                 alignItems="center"
                 justifyContent="center"
               >
-                { selectedDocRevDisplayStatus}
+                { selectedDocRevDisplayStatus }
               </Box>
             </Collapse>
           </>

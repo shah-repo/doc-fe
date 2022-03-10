@@ -53,7 +53,7 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
     history.push({
       pathname: documentEditPath(documentRevisionId, documentId),
       state: {
-        lable: "Document List",
+        lable: "Documents List",
         pathname,
       },
     });
@@ -62,7 +62,7 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
     history.push({
       pathname: documentPreviewPath(documentRevisionId, documentId),
       state: {
-        lable: "Document List",
+        lable: "Documents List",
         pathname,
       },
     });
