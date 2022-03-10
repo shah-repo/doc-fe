@@ -795,7 +795,7 @@ context("Forced training flow", () => {
     it("Select 'One-Time Training Test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("One-Time Training Test");
       });
@@ -857,6 +857,7 @@ context("Forced training flow", () => {
     it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
     });
 
