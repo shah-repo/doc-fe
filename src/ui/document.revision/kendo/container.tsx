@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useLocation } from "react-router-dom";
 import {
   getTableCriteria,
   getTableData,
@@ -20,6 +20,7 @@ import KendoGridList from "./presenter";
 
 const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }) => {
   const TABLE_NAME = "documentRevisions";
+  const { pathname } = useLocation();
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const data = useSelector(getTableData(TABLE_NAME));
   const getStatusesAction = useActionCreator(
@@ -49,10 +50,22 @@ const ListContainer: React.FunctionComponent<RouteComponentProps> = ({ history }
     );
 
   const edit = (documentRevisionId: string, documentId: string) =>
-    history.push(documentEditPath(documentRevisionId, documentId));
+    history.push({
+      pathname: documentEditPath(documentRevisionId, documentId),
+      state: {
+        lable: "Document List",
+        pathname,
+      },
+    });
 
   const preview = (documentRevisionId: string, documentId: string) =>
-    history.push(documentPreviewPath(documentRevisionId, documentId));
+    history.push({
+      pathname: documentPreviewPath(documentRevisionId, documentId),
+      state: {
+        lable: "Document List",
+        pathname,
+      },
+    });
 
   const dispatch = useDispatch();
   const setSearchStatus = (

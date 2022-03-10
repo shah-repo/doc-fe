@@ -36,7 +36,7 @@ import qs from "query-string";
 import { ComponentType, default as React, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { AutoSizer, Size } from "react-virtualized";
 import apiClient from "../../../state/apiClient";
 import { authActions } from "../../../state/ducks/auth";
@@ -74,6 +74,7 @@ import GridStyles from "./styles";
 
 interface CreateExport {
   dynamicColumns: KendoColumn[];
+  categoryName?: string;
 }
 let call;
 
@@ -86,7 +87,9 @@ export function KendoGrid<T>({
   customDataSet,
   normalizrSchema,
   exportDataChanges,
+  categoryName,
 }: KendoPanelProps<T> & CreateExport) {
+  const { pathname } = useLocation();
   const history = useHistory();
   const intl = useIntl();
   const getTranslatedText = (key: string) =>
@@ -359,7 +362,13 @@ export function KendoGrid<T>({
     if (canEdit(dataItem)) {
       urlPath = documentEditPath(dataItem.id, dataItem.document.id);
     }
-    history.push(urlPath);
+    history.push({
+      pathname: urlPath,
+      state: {
+        lable: categoryName,
+        pathname,
+      },
+    });
   };
   const onDataStateChange = React.useCallback(
     ({ dataState }: GridDataStateChangeEvent) => {
