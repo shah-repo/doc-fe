@@ -160,7 +160,7 @@ context("Autocomplete 'Employees' test", () => {
           });
 
           it("Select 'Employees' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Employees{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Employees" });
           });
 
           it("Click 'Add' button", () => {

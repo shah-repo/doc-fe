@@ -60,6 +60,7 @@ declare global {
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
+      poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
     }
   }
 }
@@ -85,7 +86,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 
   cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
 
   cy.listLoadingElementShouldNotExist();
@@ -120,7 +121,7 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
   cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains(params.partNo).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
@@ -129,13 +130,13 @@ Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
 
 Cypress.Commands.add("poSelectUnits", () => {
   cy.get("[name=\"units\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains("Each").arrowClick();
+  cy.get("ul > li[role=option]").contains("Each").arrowClick();
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
   cy.listLoadingElementShouldNotExist();
   cy.get("[name=\"glCode\"]").arrowClick();
-  cy.get("ul[role=listbox] > li").contains("code 1").arrowClick();
+  cy.get("ul > li[role=option]").contains("code 1").arrowClick();
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
@@ -175,7 +176,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
   cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-  cy.get("ul[role=listbox]>li").contains(params.status).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.status).arrowClick();
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -255,13 +256,13 @@ Cypress.Commands.add("poAMEnterLimit", (params: {limit: string}) => {
 
 Cypress.Commands.add("poAMSelectUsers", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[name=\"signatures.0.employees\"]").arrowType(item + "{downarrow}{enter}");
+    cy.get("[name=\"signatures.0.employees\"]").autocompleteSelect(item);
   });
 });
 
 Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[id=\"approvals\"]").arrowType(item + "{downarrow}{enter}");
+    cy.get("[id=\"approvals\"]").autocompleteSelect(item);
   });
 });
 
@@ -293,7 +294,7 @@ Cypress.Commands.add("poAMApproveButton", () => {
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
   cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains("PO Approval sig").should("exist");
+  cy.get("ul>li[role=option]").contains("PO Approval sig").should("exist");
 });
 
 Cypress.Commands.add("poAMCheckForAlertMessage", () => {
@@ -340,8 +341,7 @@ Cypress.Commands.add("poSelectPoFormFromMultiSelect", (params: {poType: string; 
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.wrapWithWaitOnApiCalls([
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApprovers], () => {
+    CyRoutes.DocPreview], () => {
     cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
     cy.get("div[id^=react-select]").contains(params.poType).arrowClick();
@@ -356,4 +356,12 @@ Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string 
   cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
 });
 
+Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
+  cy.listLoadingElementShouldNotExist();
+
+  cy.get("[data-cy^=\"po-supplier-built-in\"]").autocompleteSelect(`${params.supplier}`);
+
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
 

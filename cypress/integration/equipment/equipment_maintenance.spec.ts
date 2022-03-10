@@ -605,7 +605,6 @@ context("Equipment maintenance test", () => {
       it("Select 'Equipment calibration document'", () => {
         SystemRequirement("REQ-2900");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-          CyRoutes.EmployeesGet,
           CyRoutes.DocRevPreview,
           CyRoutes.AvailableMaintenanceForms,
           CyRoutes.AvailableMaintenanceForms,
@@ -629,7 +628,7 @@ context("Equipment maintenance test", () => {
 
       context("Release PM and calibration record", () => {
         it("Navigate to PM record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(pmURL);
           });
         });
@@ -653,7 +652,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Navigate to Calibration record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(calibrationURL);
           });
         });
@@ -747,7 +746,6 @@ context("Equipment maintenance test", () => {
           it("Select 'Equipment calibration document'", () => {
             SystemRequirement("REQ-2900");
             cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-              CyRoutes.EmployeesGet,
               CyRoutes.DocRevPreview,
               CyRoutes.AvailableMaintenanceForms,
               CyRoutes.AvailableMaintenanceForms,
@@ -1021,7 +1019,7 @@ context("Equipment maintenance test", () => {
 
       context("Fill new calbration form", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(equipmentURL);
           });
         });
@@ -1100,7 +1098,7 @@ context("Equipment maintenance test", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.EmployeesGet, CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(equipmentURL);
           });
         });

@@ -346,12 +346,12 @@ context("E-signature test", () => {
 
     it("Verify email adress and full name is displayed", () => {
       cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick();
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfFirstUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfSecondUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", nameOfThirdUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfFirstUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfSecondUserToSignUp);
-      cy.get("ul[role=\"listbox\"]>li").should("contain.text", emailOfThirdUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfFirstUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfSecondUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", nameOfThirdUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfFirstUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfSecondUserToSignUp);
+      cy.get("ul>li[role=option]").should("contain.text", emailOfThirdUserToSignUp);
       cy.unClick();
     });
 
@@ -412,11 +412,7 @@ context("E-signature test", () => {
     });
 
     it("Enters description 'EB description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drEnterDocumentDescription({ description: "EB description" });
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drEnterDocumentDescriptionWithWait({ description: "EB description" });
     });
 
     it("Add first approver to EB document", () => {
@@ -452,7 +448,7 @@ context("E-signature test", () => {
 
       cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.PostDashboardFeedSearch], () => {
         cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
       });
       cy.progressBarShouldNotExist();
@@ -506,7 +502,7 @@ context("E-signature test", () => {
       cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
       cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed],
+      cy.wrapWithWaitOnApiCalls([CyRoutes.ChangeRequestApprove, CyRoutes.PostDashboardFeedSearch],
         () => {
           cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
         });
@@ -619,7 +615,7 @@ context("E-signature test", () => {
         cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
         cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.ChangeRequestApprove, CyRoutes.GetDashboardFeed], () => {
+          [CyRoutes.ChangeRequestApprove, CyRoutes.PostDashboardFeedSearch], () => {
             cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
           });
         cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");

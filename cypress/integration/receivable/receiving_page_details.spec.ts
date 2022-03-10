@@ -936,7 +936,7 @@ context("Receivable test with Page Details", () => {
 
       it("Select Requestor", () => {
         cy.get("[data-cy^=requestor]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.unClick();
       });
 
@@ -946,7 +946,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Select 'SUP-00001' Supplier ", () => {
-        cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00001{downarrow}{enter}");
+        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001");
       });
 
       it("Enters description 'New Purchase Order Description'", () => {
@@ -1372,7 +1372,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Search for API PO document and select it", () => {
-      cy.get("input[data-cy^=\"porec-rece\"]").arrowType("New Purchase Order{downarrow}{enter}");
+      cy.get("input[data-cy^=\"porec-rece\"]").autocompleteSelect("New Purchase Order");
     });
 
     it("Verify requester is present on receivable", () => {

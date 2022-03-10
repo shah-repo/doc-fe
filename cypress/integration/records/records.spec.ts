@@ -259,7 +259,7 @@ context("Records flow", () => {
 
     it("Select approver'", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy*=fb-approvals-]").arrowType(USERS[2].name + "{downarrow}{enter}");
+        cy.get("[data-cy*=fb-approvals-]").autocompleteSelect(USERS[2].name);
       });
     });
 
