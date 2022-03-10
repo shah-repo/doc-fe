@@ -230,12 +230,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
       >
         <SearchBox onSearch={onSearch}/>
       </Box>
-      <Box height="calc(100vh - 220px)" overflow="auto">
-        <List>
-          {listData.favouriteList && createList(listData.favouriteList)}
-          {listData.dataList && createList(listData.dataList)}
-        </List>
-      </Box>
+      <List style={{ height: "calc(100vh - 235px)", overflowY: "auto", width: "99.8%" }}>
+        {listData.favouriteList && createList(listData.favouriteList)}
+        {listData.dataList && createList(listData.dataList)}
+      </List>
     </>
   );
 };

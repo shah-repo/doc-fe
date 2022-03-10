@@ -11,8 +11,6 @@ const SearchBox: React.FunctionComponent<Props> = ({ onSearch }) => (
   <Box
     style={{
       height: "36px",
-      display: "flex",
-      alignItems: "center",
       width: 270,
       borderRadius: "100px",
       border: "1px solid #CCD4D9",
