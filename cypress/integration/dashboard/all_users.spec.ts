@@ -723,22 +723,22 @@ context("All regular users on new dashboard", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(1)
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(0).arrowClick();
+      cy.get("div[role=presentation] button[aria-label=close]").arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(2).find(".MuiGrid-container").eq(0)
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(0).arrowClick();
+      cy.get("div[role=presentation] button[aria-label=close]").arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(1)
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(0).arrowClick();
+      cy.get("div[role=presentation] button[aria-label=close]").arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(3).find(".MuiGrid-container").eq(0)
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").eq(0).arrowClick();
+      cy.get("div[role=presentation] button[aria-label=close]").arrowClick();
     });
   });
 
@@ -764,16 +764,16 @@ context("All regular users on new dashboard", () => {
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
         cy.get("[data-cy^=requestor]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
 
       it(`Select 'Quality' for Department`, () => {
         cy.get("div[id*=department]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Quality").arrowClick();
+        cy.get("ul>li[role=option]").contains("Quality").arrowClick();
       });
 
       it("Select 'SUP-00003' Supplier ", () => {
-        cy.get("[data-cy=\"po-supplier-built-in\"]").arrowType("SUP-00003{downarrow}{enter}");
+        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
       });
 
       it("Upload attachments 'test_image.jpg'", () => {
@@ -794,17 +794,17 @@ context("All regular users on new dashboard", () => {
 
       it("Select Third party Company Address", () => {
         cy.get("input[data-cy^=third-party-company]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("API supplier").arrowClick();
+        cy.get("ul>li[role=option]").contains("API supplier").arrowClick();
       });
 
       it("Select 'FedEx 449260805' for Shipping Information", () => {
         cy.get("div[id*=select-shipping]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("FedEx 449260805").arrowClick();
+        cy.get("ul>li[role=option]").contains("FedEx 449260805").arrowClick();
       });
 
       it("Select 'Credit Card' for Terms", () => {
         cy.get("div[id*=terms]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Credit Card").arrowClick();
+        cy.get("ul>li[role=option]").contains("Credit Card").arrowClick();
       });
 
       it("Enter '1' for Quotation Number", () => {
@@ -869,7 +869,7 @@ context("All regular users on new dashboard", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
       });
 
@@ -1019,7 +1019,7 @@ context("All regular users on new dashboard", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
     });
 

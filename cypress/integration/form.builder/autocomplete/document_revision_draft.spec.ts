@@ -150,7 +150,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revisions In Draft without Records{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document Revisions In Draft without Records" });
           });
 
           it("Click 'Add' button", () => {
@@ -181,11 +181,11 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
             if (response.body.length > 0 ) {
               const draftDocRevs = response.body;
               draftDocRevs.forEach((draftDocRev) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${draftDocRev.document.docId} - rev ${draftDocRev.displayRevision} - ${draftDocRev.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

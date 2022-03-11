@@ -120,9 +120,7 @@ context("Document Approval Matrix Revise", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
   });
 

@@ -318,7 +318,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 
@@ -327,18 +327,11 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApproval();
       });
 
       it("Click 'Approve' button", () => {
-        cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove,
-          CyRoutes.EmployeesGet], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.ebApprove();
       });
     });
 
@@ -385,7 +378,7 @@ context("Autocomplete 'Purchase Order' test", () => {
           });
 
           it("Select 'Purchase Order' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Purchase Order list{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Purchase Order list" });
           });
 
           it("Click 'Add' button", () => {
@@ -416,11 +409,11 @@ context("Autocomplete 'Purchase Order' test", () => {
             if (response.body.length > 0 ) {
               const purchaseOrders = response.body;
               purchaseOrders.forEach((purchaseOrder) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text",
                     `${purchaseOrder.document.docId} - rev ${purchaseOrder.displayRevision} - ${purchaseOrder.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
