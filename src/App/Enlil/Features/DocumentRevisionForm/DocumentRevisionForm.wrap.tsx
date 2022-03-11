@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
+import { FB, FBDialog, FBDialogState, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
   Component: React.FunctionComponent<T>,
@@ -19,6 +20,14 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     // MARK: @config
     _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
     const { _formState, _tabsState } = SM.useStores();
+    const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    const editorState = FB.useRef<FBEditorState>(FBEditorState);
+    const formState = FB.useRef<FBFormState>(FBFormState, {});
+    const workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+      schema: _documentRevisionFormState?.schema,
+      mode: _formState?.mode,
+      autosave: _formState?.autosave || false,
+    });
     _documentRevisionFormState?.setFormAutosave(autosaveEnabled);
     _formState?.setAutosave(autosaveEnabled);
 
@@ -97,17 +106,20 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <Component
-          {...props as T}
-          {...{
-            onTabChange,
-            onScroll,
-            _documentRevisionFormState,
-            _tabsState,
-            _formState,
-            autosaveEnabled,
-          }}
-        />
+        <FBProvider {...{ dialogState, editorState, formState, workspaceState }}>
+          <FBDialog />
+          <Component
+            {...props as T}
+            {...{
+              onTabChange,
+              onScroll,
+              _documentRevisionFormState,
+              _tabsState,
+              _formState,
+              autosaveEnabled,
+            }}
+          />
+        </FBProvider>
       </SMProvider>
     );
   };

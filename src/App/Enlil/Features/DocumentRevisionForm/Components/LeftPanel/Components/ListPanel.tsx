@@ -50,7 +50,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
 }) => {
   const intl = useIntl();
   const classes = styles();
-  const [open, setOpen] = React.useState<any>({ favourite: true });
+  const [open, setOpen] = React.useState<any>({ favorites: true });
   const IconMapping = {
     section: <SectionIcon />,
     subsection: <SubsectionIcon />,
@@ -161,9 +161,10 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   };
 
   const createList = (data) =>
-    data.map((tab) => (
+    data.map((tab, k) => (
       <>
         <ListItem
+          key={k}
           button
           onClick={() => {
             handleClick(tab.tab);
@@ -181,20 +182,24 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
         <Collapse in={open[tab.tab]} timeout="auto" unmountOnExit>
           <Box className={classes.outerBox}>
             <List className={classes.listStyle}>
-              {tab.subTab.map((stab) => (
-                <>
-                  <ListItem className={classes.listItemStyle}>
-                    <IconButton disableRipple={true}>{stab.icon}</IconButton>
-                    <ListItemText key={stab.tab}>
-                      <Typography className={classes.listSubItem}>
-                        <Text message={stab.label} />
-                      </Typography>
-                    </ListItemText>
-                    <IconButton disableRipple={true}>
-                      {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
-                    </IconButton>
-                  </ListItem>
-                </>
+              {tab.subTab.map((stab, sk) => (
+                <ListItem
+                  key={sk}
+                  className={classes.listItemStyle}
+                  onClick={
+                    openEditor && openEditor({ type: stab.tab, index })
+                  }
+                >
+                  <IconButton disableRipple={true}>{stab.icon}</IconButton>
+                  <ListItemText key={stab.tab}>
+                    <Typography className={classes.listSubItem}>
+                      <Text message={stab.label} />
+                    </Typography>
+                  </ListItemText>
+                  <IconButton disableRipple={true}>
+                    {stab.isFavorite ? <FavoriteIcon /> : <StarIcon />}
+                  </IconButton>
+                </ListItem>
               ))}
             </List>
           </Box>
