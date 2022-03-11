@@ -1,4 +1,4 @@
-import { Box, Link } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { trainingActions } from "../../../../state/ducks/training";
 import { TrainingPlanTransition } from "../../../../state/ducks/training/types";
@@ -52,9 +52,7 @@ const TrainingControl: React.FunctionComponent<Props> = ({
 
   return (
     <Box mt={5} ml={2}>
-      <Link onClick={openDialog} style={{ fontSize: "1rem" }}>
-        <Text translation="training.acknowledge.completion.link" />
-      </Link>
+      <Text translation="training.acknowledge.completion.link" />
       <TrainingDialog
         transitionDialog={dialog}
         openDialog={openDialog}
