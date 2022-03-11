@@ -213,7 +213,7 @@ context("Records test with Inline approval", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval1" });
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -229,7 +229,7 @@ context("Records test with Inline approval", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval2" });
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
@@ -257,7 +257,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-1-]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Save Record'", () => {
@@ -347,7 +347,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-2-]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it("Save Record'", () => {
@@ -446,8 +446,8 @@ context("Records test with Inline approval", () => {
 
     it("Add approvals", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[1].name + "{downarrow}{enter}");
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowType(USERS[2].name + "{downarrow}{enter}");
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
       });
     });
 
