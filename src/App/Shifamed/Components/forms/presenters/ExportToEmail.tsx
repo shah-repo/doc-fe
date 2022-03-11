@@ -51,6 +51,7 @@ const ExportToEmail: React.FunctionComponent<Props> = ({ revisionId, canAccess }
           onClick={handleClick}
         />
       </StyledMenuListItem>
+
     </>
   );
 };

@@ -12,11 +12,11 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
+import { RequestType } from "../../../../ui/components/common/owner.changer/helpers/types";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
-import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
-import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "../../../../ui/documentRevision/InspectionControls/InspectionControls.container";
@@ -27,12 +27,16 @@ import useActionCreator from "../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../ui/hooks/useAsync";
 import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
+import HeaderMenu from "../../../Shifamed/Components/forms/header/Menu";
+import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
+import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
   canShowCreateVersionButton?: boolean;
   hasAccess: boolean;
+  canChangeOwnerShip?: boolean;
 }
 
 interface StateProps {
@@ -47,7 +51,7 @@ const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps =
 });
 
 const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess,
+  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const {
@@ -71,7 +75,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
-  // const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
+  const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
   const isLastVersionObsolete = () => {
     if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
@@ -177,6 +181,17 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       async);
   };
 
+  const emailSentButton = () => !hasAccess && !isEmailSent && (
+    <StyledButton
+      color="primary"
+      onClick={onSubmit}
+      id="PreviewControlsContainer-access"
+      data-cy="PreviewControlsContainer-access"
+    >
+      <Text translation="document.request.access" />
+    </StyledButton>
+  );
+
   const renderNoAccessWarning = () => {
     if (!hasAccess) {
       return (
@@ -198,16 +213,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               </Grid>
             </Grid>
           </Box>
-          {!isEmailSent && (
-            <StyledButton
-              color="primary"
-              onClick={onSubmit}
-              id="PreviewControlsContainer-access"
-              data-cy="PreviewControlsContainer-access"
-            >
-              <Text translation="document.request.access" />
-            </StyledButton>
-          )}
         </div>
       );
     }
@@ -229,23 +234,81 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       />
     </>;
 
+
+  const accessableButtons: string[] = [];
+
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
+    accessableButtons.push("cloneButton");
+  }
+  if ((isStatusReleased || isStatusInDraft) && canCopy) {
+    accessableButtons.push("newcloneButton");
+  }
+
+  if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
+    accessableButtons.push("outputButton");
+  }
+  if (!hasAccess) {
+    accessableButtons.push("nowarning");
+  }
+  if (!isEmailSent && !hasAccess) {
+    accessableButtons.push("emailsent");
+  }
+  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
+    accessableButtons.push("withdrawSubmission");
+  }
+
+  const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
+  const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
+  const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+
+  if (isDocumentDraft || canCreateInspection) {
+    accessableButtons.push("inspectionControl");
+  }
+  if (documentRevision.pdf) {
+    accessableButtons.push("pdf");
+  }
+  if (canChangeOwnerShip) {
+    accessableButtons.push("changeowner");
+  }
+  if (isExportable) {
+    accessableButtons.push("exportToEmail");
+  }
+  const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
+  const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
+
+  const renderbuttons = (buttons: string[]) => (
+    <>
+      {buttons.includes("cloneButton") && renderCloneButton()}
+      {buttons.includes("newcloneButton") && (
+        <NewCloneEBButton {...{ documentRevision }} />
+      )}
+      {buttons.includes("outputButton") && renderOutputButton()}
+      {buttons.includes("nowarning") && renderNoAccessWarning()}
+      {buttons.includes("emailsent") && emailSentButton()}
+      {buttons.includes("withdrawSubmission") &&
+        renderWithdrawSubmissionButton()}
+      {buttons.includes("inspectionControl") && (
+        <InspectionControlsContainer {...{ documentRevision }} />
+      )}
+      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} />}
+      {buttons.includes("changeowner") && (
+        <FormOwnerChangerContainer
+          requestId={documentRevision.id}
+          requestType={RequestType.Document}
+        />
+      )}
+      {buttons.includes("exportToEmail") && (
+        <ExportToEmail
+          revisionId={documentRevision.id}
+          canAccess={documentRevision.document.canAccess}
+        />
+      )}
+    </>
+  );
   return (
     <>
-      {!isLastVersionObsolete() && renderCloneButton()}
-      { (isStatusReleased || isStatusInDraft) && canCopy && <NewCloneEBButton
-        {...{ documentRevision }}
-      />}
-      {renderOutputButton()}
-      {renderNoAccessWarning()}
-      {isDirectApproval && isStatusInReview && isUserDocumentOwner &&
-        renderWithdrawSubmissionButton()}
-      <InspectionControlsContainer {...{ documentRevision }} />
-      {/* {isExportable && <FormExportToEmail
-        revisionId={documentRevision.id}
-        canAccess={documentRevision.document.canAccess}
-      />} */}
-      <DownloadHTML pdf={documentRevision.pdf} />
-      <PDFSocket {...{ documentRevision }}/>
+      {renderbuttons(initialButtons)}
+      <HeaderMenu>{renderbuttons(restButtons)}</HeaderMenu>
     </>
   );
 };
