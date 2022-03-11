@@ -301,8 +301,8 @@ context("Approval request email popup modal", () => {
           sentToUser: SECOND_USER.email,
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
-            "I sent a request for approval on\r\n",
-            "AR-00001\r\n                                        Approval request from newly created form",
+            "I sent a request for approval on",
+            "AR-00001 Approval request from newly created form",
             "Thank you,",
           ],
         }];

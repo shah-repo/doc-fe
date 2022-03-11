@@ -173,7 +173,7 @@ context("Autocomplete 'Equipment' test", () => {
           });
 
           it("Select 'Equipment' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Equipment{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Equipment" });
           });
 
           it("Click 'Add' button", () => {

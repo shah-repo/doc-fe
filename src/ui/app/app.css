@@ -196,7 +196,6 @@ td#kendo-expandable-column[role="gridcell"] {
   padding-bottom: 0;
 }
 
-
 .k-grid {
   font-family: var(--font-family);
   color: var(--almost_black);
@@ -347,6 +346,6 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
 }
 
-.k-list-container .k-list-scroller {
-  min-width: 140px;
+.k-list-container .k-popup .k-list .k-item {
+  white-space: nowrap;
 }

@@ -148,7 +148,7 @@ context("Autocomplete 'Approval requests' test", () => {
           });
 
           it("Select 'Approval requests' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Approval requests{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Approval requests" });
           });
 
           it("Click 'Add' button", () => {
@@ -157,7 +157,7 @@ context("Autocomplete 'Approval requests' test", () => {
 
           it("Verify autocomplete is disabled in form edit mode", () => {
             cy.get("input[data-cy^=test-label]")
-              .should("have.attr", "autocomplete", "disabled");
+              .should("have.attr", "autocomplete", "off");
             cy.get("input[data-cy^=test-label]")
               .should("have.attr", "disabled");
           });
@@ -199,9 +199,9 @@ context("Autocomplete 'Approval requests' test", () => {
             if (response.body.length > 0 ) {
               const approvalRequests = response.body;
               approvalRequests.forEach((ar) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", ar.crId);
+                cy.get("ul>li[role=option]").should("contain.text", ar.crId);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

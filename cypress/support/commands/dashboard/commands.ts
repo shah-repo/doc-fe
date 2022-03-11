@@ -26,10 +26,8 @@ Cypress.Commands.add("dashVerifyListItemNotExistsOnDashboard", (params: { listIt
 });
 
 Cypress.Commands.add("dashGoToListItemFromDashboard", (params: { listItem: string}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-    cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).find("a").first().arrowClick();
-    cy.progressBarShouldAppear();
-  });
+  cy.get("[data-cy=dashboardFeedList]>div").contains(params.listItem).find("a").first().arrowClick();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -49,7 +47,7 @@ Cypress.Commands.add("dashRejectApprovalForListItem", (params: { listItem: strin
     .find(`[data-cy="transition-reject"]`).first()
     .arrowClick();
 
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetDashboardFeed], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDashboardFeedSearch], () => {
     cy.get("div[role=dialog] button").eq(1).arrowClick();
   });
 

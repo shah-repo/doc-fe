@@ -51,16 +51,16 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
 
 
   cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.materialDoc).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.materialDoc).arrowClick();
 
   if (params.partLotDoc) {
     cy.get("[data-cy=\"partLot\"]").arrowClick();
-    cy.get("ul[role=\"listbox\"]>li").contains(params.partLotDoc).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.partLotDoc).arrowClick();
   }
 
   cy.get("[name=\"quantity\"]").arrowType(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.typeOfMaterial).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   });
@@ -81,7 +81,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
 
   cy.get("[name=\"quantity\"]").arrowType(params.numberOfMaterial.toString());
   cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.typeOfMaterial).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.typeOfMaterial).arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   });
@@ -90,7 +90,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
 Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
   cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul[role=\"listbox\"]>li").contains(params.equipmentDoc).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.equipmentDoc).arrowClick();
   cy.unClick();
 
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -126,9 +126,10 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
 
-  cy.get("[data-cy^=\"fb-approvals\"]").arrowClick();
+  cy.get(`[data-cy^="fb-approvals"]`).parent().find(`button[aria-label="Open"]`)
+    .arrowClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
+    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
   });
 
   cy.listLoadingElementShouldNotExist();
@@ -145,7 +146,8 @@ Cypress.Commands.add("ptClickCreateNewPart", () => {
 
 Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: string}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.DocPreview], () => {
-    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowType(params.partForm + "{downarrow}{enter}");
+    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").type(params.partForm);
+    cy.get(`div[id^="react-select"]`).contains(params.partForm).arrowClick();
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

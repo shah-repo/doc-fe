@@ -494,9 +494,11 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Select 'Component Specification Lot' from the dropdown", () => {
+      cy.listLoadingElementShouldNotExist();
+
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
     });
@@ -519,7 +521,7 @@ context("Procedure and parts flow test", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
 
     it("Check 100% override", () => {
@@ -690,7 +692,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Enters description 'EB description'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.drEnterDocumentDescription({ description: "EB description" });
         });
         cy.progressBarShouldNotExist();
@@ -746,7 +748,7 @@ context("Procedure and parts flow test", () => {
           materialDoc: "Part document",
           partLotDoc: "Component specification lot document",
           numberOfMaterial: 2,
-          typeOfMaterial: "gram",
+          typeOfMaterial: "Each",
         });
       });
 
@@ -755,7 +757,7 @@ context("Procedure and parts flow test", () => {
           material: "Free text material",
           partLot: "Test",
           numberOfMaterial: 3,
-          typeOfMaterial: "pounds",
+          typeOfMaterial: "Set(s)",
         });
       });
 
@@ -814,9 +816,9 @@ context("Procedure and parts flow test", () => {
       it("Verify materials are copied", () => {
         SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+          .eq(4).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 each");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(5).should("have.text", "Free text material | Test | Qty: 3 pounds");
+          .eq(5).should("have.text", "Free text material | Test | Qty: 3 sets");
 
       });
 
@@ -849,7 +851,7 @@ context("Procedure and parts flow test", () => {
     context("Choose a part and approve EB", () => {
       it("Choose an existing part from the list of available parts", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").arrowType("Part for EB document{downarrow}{enter}");
+          cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
         });
         cy.progressBarShouldNotExist();
       });
@@ -909,9 +911,9 @@ context("Procedure and parts flow test", () => {
       it("Verify materials are copied", () => {
         SystemRequirement("REQ-3020");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(2).should("contain.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 gram");
+          .eq(2).should("contain.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 each");
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(3).should("have.text", "Free text material | Test | Qty: 3 pounds");
+          .eq(3).should("have.text", "Free text material | Test | Qty: 3 sets");
       });
 
       it("Verify equipments are copied", () => {
@@ -937,7 +939,7 @@ context("Procedure and parts flow test", () => {
         cy.pmAddMaterialDocumentToProcedure({
           materialDoc: "New Material for procedure",
           numberOfMaterial: 3,
-          typeOfMaterial: "gram",
+          typeOfMaterial: "Each",
         });
 
       });
@@ -946,7 +948,7 @@ context("Procedure and parts flow test", () => {
         cy.pmAddFreeTextMaterial({
           material: "Free text material",
           numberOfMaterial: 2,
-          typeOfMaterial: "pounds",
+          typeOfMaterial: "Set(s)",
         });
 
       });
@@ -977,13 +979,13 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(0)
           .should("contain.text", "New Material for procedure")
           .should("contain.text", "Qty: 3")
-          .should("contain.text", "gram");
+          .should("contain.text", "each");
       });
 
       it("Verify 'Free text material' has increased number of materials to '5'", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
           .should("contain.text", "Free text material")
-          .should("contain.text", "Qty: 5 pounds");
+          .should("contain.text", "Qty: 5 sets");
       });
 
       it("Verify 'New Equipment for procedure' is added to equipments", () => {
@@ -1002,8 +1004,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
-              CyRoutes.DocPreview,
-              CyRoutes.GetRequiredApprovers], () =>
+              CyRoutes.DocPreview], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
             });
@@ -1102,12 +1103,12 @@ context("Procedure and parts flow test", () => {
       it("Verify 'Materials document' is removed from materials", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
           .should("contain.text", "PRT-00005 - Part document | LOT #"
-          + lotDateSuffix + "01 | Qty: 2 gram");
+          + lotDateSuffix + "01 | Qty: 2 each");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(1)
-          .should("contain.text", "Free text material | ? | Qty: 5 pounds");
+          .should("contain.text", "Free text material | ? | Qty: 5 sets");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {
@@ -1143,8 +1144,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
             const link = $el.attr("href");
             cy.wrapWithWaitOnApiCalls([
-              CyRoutes.DocPreview,
-              CyRoutes.GetRequiredApprovers], () =>
+              CyRoutes.DocPreview], () =>
             {
               cy.visit(CONFIG.FE_URL + link);
             });

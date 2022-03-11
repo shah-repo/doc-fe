@@ -15,7 +15,7 @@ const FBFilePreview: React.FunctionComponent<FBFilePreviewProps> = ({
       </video>
     )}
     {previewType === "pdf" && (
-      <object width="100%" height="100%" type="application/pdf" data={url}>
+      <object width="100%" style={{ height: "90vh" }} type="application/pdf" data={url}>
         <Text translation="common.file.not.loaded" />
       </object>
     )}
