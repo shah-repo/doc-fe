@@ -612,12 +612,12 @@ context("Test Equipment maintenance email notifications", () => {
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
         cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -834,12 +834,12 @@ context("Test Equipment maintenance email notifications", () => {
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
         cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1057,12 +1057,12 @@ context("Test Equipment maintenance email notifications", () => {
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
         cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(ADMIN_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
         cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains(FIRST_USER.name).arrowClick();
+        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
