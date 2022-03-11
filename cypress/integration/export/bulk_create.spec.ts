@@ -603,7 +603,7 @@ context("Export Bulk", () => {
     });
 
     it("Select document type to be used for bulk creation", () => {
-      cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import")
+      cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
     });
 
     it("Select 'yes' to have Document id column", () => {
