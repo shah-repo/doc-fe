@@ -1,4 +1,3 @@
-import { Button } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { attachmentsActions } from "../../../../../state/ducks/attachments";
@@ -9,6 +8,7 @@ import { toastError } from "../../../../../ui/components/notifications";
 import Text from "../../../../../ui/components/Text";
 import useActionCreator from "../../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../../ui/hooks/useAsync";
+import { StyledButton } from "./StyledListButton";
 
 interface Props {
   pdf?: PDF;
@@ -38,14 +38,14 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
 
   const isActive = async.asyncState.status === AsyncStatus.Active;
   return (
-    <Button
+    <StyledButton
       color="primary"
       data-cy="downloadHtml"
       onClick={handleClick}
       disabled={isActive}
     >
       <Text translation="common.download.html" />
-    </Button>
+    </StyledButton>
   );
 
 };
