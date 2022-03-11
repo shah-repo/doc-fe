@@ -45,6 +45,7 @@ interface Props {
   type: string;
   title: string;
   arId: string;
+  arChangeRequestId: string;
   arStatus: string;
   timestamp: string;
   pendingApprovers: {
@@ -81,6 +82,7 @@ interface Props {
 const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   id,
   arId,
+  arChangeRequestId,
   timestamp,
   docRevs,
   title,
@@ -167,10 +169,10 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <DocId  url={changeRequestEditPath(id)} docId={arId}/>
+                  <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <ApprovalTitle url={changeRequestEditPath(id)}  title={title}/>
+                  <ApprovalTitle url={changeRequestEditPath(arChangeRequestId)}  title={title}/>
                 </Grid>
                 <Grid item={true}>
                   <Typography

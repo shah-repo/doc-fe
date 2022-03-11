@@ -75,10 +75,6 @@ export function DocumentTypePresenter({
           record.precalc.lhr_end_accepted_quantity = "N/A";
         }
       }
-      if (has(record, "precalc.po_amount")) {
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        record.precalc.po_amount = record.precalc.po_amount_org;
-      }
       return record;
     });
     setDataToBeExported(copyDate);

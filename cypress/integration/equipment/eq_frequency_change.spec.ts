@@ -1051,7 +1051,7 @@ context("Equipment due date calculation while changing frequency", () => {
 
       context("Navigate to EQ-00001 and verify due dates", () => {
         it("Navigate to Equipment document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
             cy.visit(eqLowerFrequencyURL);
           });
           cy.listLoadingElementShouldNotExist();
@@ -1283,7 +1283,7 @@ context("Equipment due date calculation while changing frequency", () => {
 
         context("Navigate to EQ-00002 and verify due dates", () => {
           it("Navigate to Equipment document", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview, CyRoutes.EmployeesGet], () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
               cy.visit(eqHigherFrequencyURL);
             });
             cy.listLoadingElementShouldNotExist();
