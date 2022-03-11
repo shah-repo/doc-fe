@@ -1101,7 +1101,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {
       SystemRequirement("REQ-1830");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("POT-00001);
+        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("POT-00001");
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

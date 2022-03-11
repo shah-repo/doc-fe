@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { DataResult, process, State } from "@progress/kendo-data-query";
+import { DataResult, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
   setGroupIds,
@@ -108,8 +108,28 @@ export function KendoGrid<T extends any>({
   );
 
   const dataStateChange = (e: GridDataStateChangeEvent) => {
-    setDataState(e.dataState);
-    const groupedResultState = processWithGroups(records, e.dataState);
+    const updatedDataState = { ...e.dataState };
+    // Hack to handle excpetion. Fixes ENC-11080
+    if (updatedDataState.filter) {
+      const updatedFilters = map(updatedDataState.filter.filters, (filterObject: FilterDescriptor) => {
+        if (
+          [
+            "startswith",
+            "endswith",
+            "contains",
+            "doesnotcontain",
+            "isempty",
+            "isnotempty",
+          ].includes(filterObject.operator as string)
+        ) {
+          filterObject.value = filterObject.value || "";
+        }
+        return filterObject;
+      });
+      updatedDataState.filter.filters = updatedFilters as any;
+    }
+    setDataState(updatedDataState);
+    const groupedResultState = processWithGroups(records, updatedDataState);
     setResultState(groupedResultState);
     setNoDataMessage(<span />);
     dispatch(
@@ -117,7 +137,7 @@ export function KendoGrid<T extends any>({
         {
           ...tableCriteria,
           queryDict: {
-            dataState: e.dataState,
+            dataState: updatedDataState,
           },
         },
         tableName

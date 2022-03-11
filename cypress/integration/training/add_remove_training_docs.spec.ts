@@ -839,8 +839,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
 
-    it("clear filters", () => {
-      cy.trLandingPageClearFilter();
+    it("Clear filters", () => {
+      cy.trClearFilters();
     });
   });
 
@@ -860,8 +860,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Click on 'Revise Document'", () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks], () => {
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
