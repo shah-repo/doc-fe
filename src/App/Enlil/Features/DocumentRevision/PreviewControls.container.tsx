@@ -261,7 +261,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
 
-  if (isDocumentDraft || canCreateInspection) {
+  if (!(isDocumentDraft || canCreateInspection)) {
     accessableButtons.push("inspectionControl");
   }
   if (documentRevision.pdf) {
