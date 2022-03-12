@@ -79,42 +79,49 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
-
   const returnToList = () => {
     const pathname = group;
     group?.pathname && history.push(pathname);
   };
 
-  const getIcon = (page: Pages) => {
+  const getIconAndTitle = (page: Pages) => {
     switch (page) {
       case PageTypes.DOCUMENTS_LIST:
-        return <DocumentListIconIcon  className={classes.icon}/>;
+        return {
+          icon: <DocumentListIconIcon className={classes.icon}/>,
+        };
       case PageTypes.RECORD:
-        return <RecordIcon  className={classes.icon}/>;
+        return {
+          // TODO: Update once all headers done
+          title: "Records",
+          icon: <RecordIcon className={classes.icon}/>,
+        };
       case PageTypes.EQUIPMENT:
       case PageTypes.EQUIPMENT_SPECICATIONS:
-        return <EquipmentIcon  className={classes.icon}/>;
+        return {
+          icon: <EquipmentIcon className={classes.icon}/>,
+        };
       case PageTypes.SUPPLIER:
-        return <SupplierIcon  className={classes.icon}/>;
+        return {
+          icon: <SupplierIcon className={classes.icon}/>,
+        };
       case PageTypes.PO:
       case PageTypes.TRAINING_CURRICULUMS:
-        return <PurchaseOrderIcon  className={classes.icon}/>;
+        return { icon: <PurchaseOrderIcon className={classes.icon}/> };
       case PageTypes.RECEIVE:
-        return <ReceiveIcon  className={classes.icon}/>;
+        return { icon: <ReceiveIcon className={classes.icon}/> };
       case PageTypes.PARTS:
-        return <PartsIcon  className={classes.icon}/>;
+        return { icon: <PartsIcon className={classes.icon}/> };
       case PageTypes.EB:
-        return <EBIcon  className={classes.icon}/>;
+        return { icon: <EBIcon className={classes.icon}/> };
       case PageTypes.LHR:
-        return <LHRIcon  className={classes.icon}/>;
+        return { icon: <LHRIcon className={classes.icon}/> };
       case PageTypes.LOT:
-        return <LOTIcon  className={classes.icon}/>;
-
+        return { icon: <LOTIcon className={classes.icon}/> };
       default:
-        return <RecordIcon  className={classes.icon}/>;
+        return { icon: <RecordIcon className={classes.icon}/> };
     }
   };
-
 
   const titleRenderer = () => {
     const stepRegex = /Step #[0-9]+/;
@@ -128,9 +135,9 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
           justify="flex-start"
           alignItems="center"
         >
-          {getIcon(group?.lable as Pages)}
+          {getIconAndTitle(group?.lable as Pages).icon}
           <Link underline="hover" onClick={returnToList} style={{ color: Colors.white, cursor: "Pointer" }}>
-            <Grid  item={true} className={classes.title}>{group?.lable}</Grid>
+            <Grid  item={true} className={classes.title}>{getIconAndTitle(group?.lable as Pages)?.title ? getIconAndTitle(group?.lable as Pages)?.title : group?.lable}</Grid>
           </Link>
         </Grid>
       </Typography>
