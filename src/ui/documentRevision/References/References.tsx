@@ -15,18 +15,11 @@ import { HandleMenuClickContext } from "../Sidebar/Sidebar.container";
 import { styles } from "./References.styles";
 
 const References = ({
-  owner,
-  status,
-  referencedBy,
-  deprecatedAt,
-  referenceTo,
-  released,
-  formDocument,
-  retrain,
   selectedDocument,
   edit,
 }) => {
   const classes = styles();
+  const { owner, status, deprecatedAt, referenceTo, releasedAt, retrain, document } = selectedDocument;
   const initialValues = useMemo(() => toDocumentRevisionFormValues(selectedDocument), [selectedDocument]);
   const availableReferences = useGetAvailableReferences(initialValues);
   const isCurrentUserOperator = React.useContext(isOperator);
@@ -47,8 +40,8 @@ const References = ({
         <ListItemAvatar>
           <Avatar
             className={classes.avatar}
-            alt={owner.user.name}
-            src={owner.user.avatar}
+            alt={owner?.user?.name}
+            src={owner?.user?.avatar}
           />
         </ListItemAvatar>
         <ListItemText
@@ -85,7 +78,7 @@ const References = ({
         status={status}
         deprecatedAt={deprecatedAt}
       />}
-      {referencedBy && <ReferencedByContainer dataProp={referencedBy} />}
+      {document.referencedBy && <ReferencedByContainer dataProp={document.referencedBy} />}
       <Box>
         <Typography component="span" className={classes.releaseDate}>
           <Text translation="common.training" />
@@ -99,8 +92,8 @@ const References = ({
           <Text translation="documentRevision.form.release.date" />
         </Typography>
         <Typography className={classes.released}>
-          {released
-            ? getFormattedDateString(released as string, MomentFormats.YearMonthDate)
+          {releasedAt
+            ? getFormattedDateString(releasedAt as string, MomentFormats.YearMonthDate)
             : "None"}
         </Typography>
       </Box>

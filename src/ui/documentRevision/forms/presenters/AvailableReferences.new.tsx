@@ -217,7 +217,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onInputChange={debounceFunction}
         onChange={onChange}
         placeholder={<Text message="Select" />}
-        components={{ DropdownIndicator }}
+        components={{
+          DropdownIndicator,
+          IndicatorSeparator: () => null,
+        }}
         value={
           accessElement.value === "" || isGroup
             ? null
