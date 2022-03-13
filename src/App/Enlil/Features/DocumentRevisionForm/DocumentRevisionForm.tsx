@@ -59,7 +59,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
       {..._documentRevisionFormState?.id && _documentRevisionFormState?.documentRevision && {
         rightSidebar: (
           <Observer>
-            {() => <DocumentRevisionSidebar />}
+            {() => <DocumentRevisionSidebar edit={true} />}
           </Observer>
         ),
       }}

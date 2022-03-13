@@ -5,10 +5,12 @@ import ReferencesPresenter from "./References.presenter";
 
 interface ReferencesProps {
   selectedDocument: DocumentRevision | undefined;
+  edit: boolean | undefined;
 }
 
 const ReferencesContainer = ({
   selectedDocument,
+  edit,
 }: ReferencesProps) => {
   const {
     revision,
@@ -37,6 +39,8 @@ const ReferencesContainer = ({
       released={selectedDocument?.releasedAt}
       formDocument={formDocument}
       retrain={selectedDocument?.retrain}
+      selectedDocument={selectedDocument}
+      edit={edit}
     />
   );
 };

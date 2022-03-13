@@ -1,4 +1,5 @@
 export { default as DocumentRevisionFooter } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter";
+export { default as DocumentRevisionFooterNew } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.new";
 export { default as DocumentRevisionFooterState } from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.state";
 export * from "./Enlil/Features/DocumentRevisionForm/Components/Footer/DocumentRevisionFooter.types";
 export { default as DocumentRevisionFormHeader } from "./Enlil/Features/DocumentRevisionForm/Components/FormHeader/DocumentRevisionFormHeader";

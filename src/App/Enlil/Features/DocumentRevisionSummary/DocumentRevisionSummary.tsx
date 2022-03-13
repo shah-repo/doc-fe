@@ -38,7 +38,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       {..._documentRevisionFormState?.documentRevision && {
         rightSidebar: (
           <Observer>
-            {() => <DocumentRevisionSidebar />}
+            {() => <DocumentRevisionSidebar edit={false} />}
           </Observer>
         ),
       }}

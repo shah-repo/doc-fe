@@ -1,10 +1,16 @@
 import { Avatar, Box, Button, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useMemo } from "react";
+import { DocumentRevisionFooterNew } from "../../../App";
 import { ReactComponent as MigrateIcon } from "../../../assets/images/migrate-icon.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import Text from "../../components/Text";
 import ReferencedByContainer from "../../document.revision/summary/referencedBy.container.new";
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
+import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
+import { isOperator } from "../DocumentRevisionDisplay.container";
+import AvailableReferencesField from "../forms/presenters/AvailableReferences.new";
+import { toDocumentRevisionFormValues } from "../forms/transform";
+import { isOwner } from "../helpers/documentRevisionPermissions";
 import { HandleMenuClickContext } from "../Sidebar/Sidebar.container";
 import { styles } from "./References.styles";
 
@@ -17,8 +23,15 @@ const References = ({
   released,
   formDocument,
   retrain,
+  selectedDocument,
+  edit,
 }) => {
   const classes = styles();
+  const initialValues = useMemo(() => toDocumentRevisionFormValues(selectedDocument), [selectedDocument]);
+  const availableReferences = useGetAvailableReferences(initialValues);
+  const isCurrentUserOperator = React.useContext(isOperator);
+  const groupOptions = selectedDocument?.document.documentType.groupOptions;
+  const isDisabledInput = initialValues.id !== undefined && isCurrentUserOperator && !isOwner;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { handleMenuIconClick, indexOfMigrationTab, showMigration } = React.useContext(HandleMenuClickContext)!;
   return (
@@ -58,12 +71,21 @@ const References = ({
           }
         />
       </ListItem>
-      <ReferenceToContainer
+      {edit && <AvailableReferencesField
+        availableReferences={availableReferences}
+        documentReferences={referenceTo}
+        name="referenceTo"
+        label="documentRevision.form.references"
+        disabled={isDisabledInput}
+        documentGroupOptions={groupOptions}
+      />}
+      {referenceTo && <ReferenceToContainer
+        canEdit={edit}
         dataProp={referenceTo}
         status={status}
         deprecatedAt={deprecatedAt}
-      />
-      <ReferencedByContainer dataProp={referencedBy} />
+      />}
+      {referencedBy && <ReferencedByContainer dataProp={referencedBy} />}
       <Box>
         <Typography component="span" className={classes.releaseDate}>
           <Text translation="common.training" />
@@ -82,21 +104,7 @@ const References = ({
             : "None"}
         </Typography>
       </Box>
-      <Box pt={2.5}>
-        <Typography component="span" className={classes.releaseDate}>
-          <Text translation="output.info" />
-        </Typography>
-        <Typography className={classes.released}>
-          {` ${formDocument.docId}, `}
-          <Text message="common.revision" />
-          {` ${formDocument.version}, `}
-          {formDocument.effectiveDate &&
-            getFormattedDateString(
-              formDocument.effectiveDate,
-              MomentFormats.YearMonthDate
-            )}
-        </Typography>
-      </Box>
+      <DocumentRevisionFooterNew />
       {showMigration && <Box display="flex" pt={1.25} alignItems="center">
         <Button
           disableRipple

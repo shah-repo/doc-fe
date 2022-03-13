@@ -58,6 +58,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   isNewOutput = false,
   docId = "",
   intl,
+  edit,
 }) => {
   const styles = makeStyles(() =>
     createStyles({
@@ -164,6 +165,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                     component: (
                       <ReferencesContainer
                         selectedDocument={selectedDocument}
+                        edit={edit}
                       />
                     ),
                   },

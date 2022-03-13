@@ -43,17 +43,12 @@ export const styles = makeStyles((theme: Theme) =>
       fontFamily: "Sora",
       fontWeight: 600,
       lineHeight: "15.12px",
+      marginBottom: "10px",
     },
     noHeader: {
       fontSize: "14px",
       color: Colors.almost_black,
       fontFamily: "Sora",
-    },
-    marginBottom12: {
-      marginBottom: "20px",
-    },
-    marginBottom6: {
-      marginBottom: "6px",
     },
     avatarSection: {
       display: "flex",
