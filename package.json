@@ -1,7 +1,7 @@
 {
   "name": "doc-fe",
   "description": "DOC-POC Frontend application",
-  "version": "21.14.0",
+  "version": "22.1.0",
   "private": true,
   "dependencies": {
     "@datadog/browser-rum": ">1.12.7",
@@ -87,6 +87,7 @@
     "react-table-sticky": "^1.1.2",
     "react-toastify": "6.0.4",
     "react-virtualized": "9.21.2",
+    "react-window": "^1.8.6",
     "redux": "4.0.5",
     "redux-devtools-extension": "2.13.8",
     "redux-persist": "6.0.0",

@@ -164,7 +164,7 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
           });
 
           it("Select 'Maintenance' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Preventative Maintenance Forms{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Preventative Maintenance Forms" });
           });
 
           it("Click 'Add' button", () => {

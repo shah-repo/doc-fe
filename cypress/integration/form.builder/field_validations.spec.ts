@@ -143,7 +143,7 @@ context("Field validations test", () => {
 
       it("Select normal text field as required with validatior", () => {
         cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
+        cy.get("ul>li[role=option]").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {
@@ -179,7 +179,7 @@ context("Field validations test", () => {
 
       it("Select normal text field as required with validator", () => {
         cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
+        cy.get("ul>li[role=option]").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {
@@ -215,7 +215,7 @@ context("Field validations test", () => {
 
       it("Select normal text field as required with validator", () => {
         cy.get("input[data-cy=\"validators.required_with.name\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Normal text field").arrowClick();
+        cy.get("ul>li[role=option]").contains("Normal text field").arrowClick();
       });
 
       it("Click add to add text field to form", () => {

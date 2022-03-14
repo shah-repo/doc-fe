@@ -13,13 +13,13 @@ import { styles } from "./TrainingStats.styles";
 
 const TrainingStatsContainer: React.FunctionComponent = () => {
   const classes = styles();
-
-  const loadTrainingStatsList = useActionCreator(
-    trainingStatsActions.loadTrainingStatsList
+  // Training Chart
+  const loadTrainingStatsChart = useActionCreator(
+    trainingStatsActions.loadTrainingStatsChart
   );
 
-  const loadTrainingStatsListAsyncInfo = useSelector(
-    trainingStatsSelectors.getLoadTrainingStatsListAsyncInfo
+  const loadTrainingStatsChartAsyncInfo = useSelector(
+    trainingStatsSelectors.getLoadTrainingStatsChartAsyncInfo
   );
 
   const [tabValue, setTabValue] = React.useState(0);
@@ -27,15 +27,16 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
     setTabValue(val);
   };
   return (
-    <Box className={classes.outline} marginLeft={2} marginRight={2}>
-      <AsyncGate
-        asyncAction={loadTrainingStatsList}
-        asyncState={loadTrainingStatsListAsyncInfo}
-        startActionOnMount={true}
-      >
-        <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
-        <TrainingLineItems tabValue={tabValue} />
-      </AsyncGate>
+    <Box marginLeft={2} marginRight={2}>
+      <Box className={classes.trainingChart}>
+        <AsyncGate
+          asyncAction={loadTrainingStatsChart}
+          asyncState={loadTrainingStatsChartAsyncInfo}
+          startActionOnMount={true}>
+          <TrainingChart tabValue={tabValue} infoChangeTab={handleChildTabChange} />
+        </AsyncGate>
+      </Box>
+      <TrainingLineItems tabValue={tabValue} />
     </Box>
   );
 };

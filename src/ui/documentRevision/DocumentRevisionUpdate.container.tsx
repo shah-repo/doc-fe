@@ -84,11 +84,14 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
-      FBStore.audit.set({
-        url: FBEndpoint.DocumentRevisionAudit,
-        urlValues: { documentId: documentRevision.id },
-        method: "get",
-      });
+      if ( FBStore?.isHistoryTabSelected) {
+        dispatch(documentRevisionsActions.loadAudit(documentRevision.id ));
+        FBStore.audit.set({
+          url: FBEndpoint.DocumentRevisionAudit,
+          urlValues: { documentId: documentRevision.id },
+          method: "get",
+        });
+      }
       helpers.resetForm();
     });
   };

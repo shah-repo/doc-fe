@@ -1,5 +1,4 @@
 import axios from "axios";
-import { map, pick } from "lodash";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { CreateInspectionBody } from "../../../ui/documentRevision/InspectionControls/InspectionControls.types";
@@ -39,31 +38,7 @@ const loadList = (
     method: "get",
     asyncType: DOCUMENT_REVISION_LIST_ASYNC,
     onSuccess: (documentRevisions, dispatch) => {
-      const documentRevisionsFiltered = map(documentRevisions, (record) =>
-        pick(record, [
-          "displayStatus",
-          "precalc",
-          "id",
-          "docId",
-          "id",
-          "name",
-          "version",
-          "revision",
-          "revisionStage",
-          "revisionChangeType",
-          "name",
-          "description",
-          "displayRevision",
-          "owner",
-          "attachments",
-          "status",
-          "document",
-          "released",
-          "referenceTo",
-          "trainingRecords",
-        ])
-      );
-      dispatch(documentRevisionsList(documentRevisionsFiltered));
+      dispatch(documentRevisionsList(documentRevisions));
     },
   });
 };
@@ -104,7 +79,6 @@ ApiAction<DocumentRevision, DocumentRevisionEditRequestBody> => apiActionWithCal
   method: "patch",
   data: body,
   onSuccess: (documentRevision, dispatch) => {
-    dispatch(loadAudit(id));
     dispatch(documentRevisionSet(documentRevision));
     // dispatch(documentRevisionSet(undefined, body, id));
   },

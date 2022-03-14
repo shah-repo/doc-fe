@@ -32,6 +32,7 @@ Cypress.Commands.add("usrNavigateToUserManagement", () => {
 
 Cypress.Commands.add("usrFilterByEmail", (params: {email: string }) => {
   cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickAddEmployee", () => {
@@ -47,7 +48,7 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
-  cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").eq(1)
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button`).eq(0)
     .arrowClick();
 });
 
@@ -68,6 +69,7 @@ Cypress.Commands.add("usrClickSaveButton", () => {
     cy.get("button>span>svg>path").eq(1).arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("usrClickCloseDialogButton", () => {
@@ -76,7 +78,9 @@ Cypress.Commands.add("usrClickCloseDialogButton", () => {
 
 Cypress.Commands.add("usrCheckIfUserIsCreated", (params: {email: string}) => {
   cy.get("#clearFilter").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`th[aria-colindex="3"] input`).arrowType(params.email);
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").should("contain.text", params.email);
 });
 

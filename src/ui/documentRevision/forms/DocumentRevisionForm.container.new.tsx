@@ -253,6 +253,7 @@ DocumentRevisionFormContainerProps
         isOwner,
         autosaveEnabled,
         formInput,
+        mode,
       }}
     />
   );

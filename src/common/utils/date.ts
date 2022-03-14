@@ -21,6 +21,8 @@ export const getFormattedDateString = (date: DateTypes, format = "") =>
 
 export const getHumanizedFormat = (dateString: string) => moment.utc(dateString).local().startOf("seconds").fromNow();
 
+export const getCurrentDate = (format) => moment().tz(TIME_ZONE).format(format);
+
 export enum MomentFormats {
   MonthDateYear = "M/D/YYYY",
   MonthDateYearAlt = "MMMM D, YYYY",
@@ -35,7 +37,8 @@ export enum MomentFormats {
   DateTimeSeconds = "M/D/YYYY hh:mm:ss A",
   Time = "hh:mm:ss A",
   AsyncTasksDefaultDateTimeFormatter = "YYYY-MM-DDTHH:mm:ss",
-  YearMonthDate = "YYYY.MM.DD",
+  YearMonthDateDotNotation = "YYYY.MM.DD",
+  YearMonthDate= "YYYY-MM-DD"
 }
 
 export const toValidateIfDate = (value) => moment(value, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();

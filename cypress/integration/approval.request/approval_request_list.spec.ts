@@ -377,7 +377,7 @@ context("Approval request landing page test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0840");
-      cy.alVerifyDescriptionOnHover({ description: "\nDescription for first approval request\n" });
+      cy.alVerifyDescriptionOnHover({ description: "Description for first approval request" });
     });
   });
 });

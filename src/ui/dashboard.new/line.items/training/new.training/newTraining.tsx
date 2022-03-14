@@ -11,6 +11,7 @@ import { size } from "lodash";
 import moment from "moment";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as OverdueIcon } from "../../../../../assets/images/overdue_status.svg";
 import { ReactComponent as OverdueWhiteIcon } from "../../../../../assets/images/overdue_status_white.svg";
 import { ReactComponent as PinIcon } from "../../../../../assets/images/pin.svg";
@@ -25,6 +26,8 @@ import { tableSearchActions } from "../../../../../state/ducks/tableSearch";
 import Text from "../../../../components/Text";
 import { TRAINING_URL } from "../../../../constants/urls";
 import { CompletedOnDateOptions } from "../../../../document.revision/utils/types";
+import gridConfiguration from "../../../../training/grid/column.definition";
+import { TRAINING_TABLE_NAME } from "../../../../training/grid/container";
 import { DateFields } from "../../../../training/kendo/types";
 import TrainingEmailModal from "../../../modal.popups/email/TrainingEmailModal";
 import { HoverStyleChip } from "../../common/HoverStyleChip";
@@ -101,7 +104,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(trainingActions.loadTrainingList());
+      dispatch(trainingActions.loadTrainingList({}));
     }
   };
   const pendingTraineesNames = pendingTrainees
@@ -128,24 +131,24 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
         filters: [
           {
             field: "documentRevision.name",
-            operator: "contains",
+            operator: "eq",
             value: docRevName,
           },
           {
             field: "documentRevision.displayRevision",
-            operator: "contains",
+            operator: "eq",
             value: docRevVersion,
           },
           {
             field: "trainingPlan.document.docId",
-            operator: "contains",
+            operator: "eq",
             value: docId,
           },
         ],
       },
       sort: [
         {
-          field: "document.trId",
+          field: "trId",
           dir: "asc",
         },
       ],
@@ -160,10 +163,12 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           apiError: "",
           scrollToIndex: 0,
           forceUpdate: false,
-          kendoConfig: JSON.stringify(filterKendoConfig),
-          columnConfig: JSON.stringify([]),
+          queryDict: {
+            dataState: filterKendoConfig,
+          },
+          columnConfig: JSON.stringify(gridConfiguration.columns),
         },
-        "training"
+        TRAINING_TABLE_NAME
       )
     );
   };
@@ -194,8 +199,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={TRAINING_URL}
+                  <RouterLink
+                    to={TRAINING_URL}
                     color="inherit"
                     className={classes.link}
                     onClick={setTrainingSearchCriteria}
@@ -209,7 +214,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     >
                       {docId}
                     </Typography>
-                  </Link>
+                  </RouterLink>
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
                   <StyleTooltip
@@ -223,8 +228,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                     arrow
                     PopperProps={{ popperOptions: {} }}
                   >
-                    <Link
-                      href={TRAINING_URL}
+                    <RouterLink
+                      to={TRAINING_URL}
                       color="inherit"
                       className={classes.link}
                       onClick={setTrainingSearchCriteria}
@@ -239,7 +244,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
                         <Text translation="dashboard.revision" />
                         &nbsp;{docRevVersion} {docRevName}
                       </Typography>
-                    </Link>
+                    </RouterLink>
                   </StyleTooltip>
                 </Grid>
                 <Grid item={true}>

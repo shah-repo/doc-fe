@@ -67,6 +67,7 @@ enum Colors {
   old_lace="#FEF8EE",
   tawny="#B25F00",
   ochre="#CE8723",
+  blaze_orange="#FF6500",
   // cyan
   light_cyan="#DCF4FD",
   lochmara="#306AAC",

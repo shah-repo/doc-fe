@@ -45,7 +45,7 @@ const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProp
             <Box>{` ${_documentRevisionFooterState?.docId}`}</Box>,&nbsp;
             <SMText label="common.revision" />
             <Box>{` ${_documentRevisionFooterState?.version}`}</Box>,&nbsp;
-            <Box>{getFormattedDateString(_documentRevisionFooterState?.releasedAt, MomentFormats.YearMonthDate)}</Box>
+            <Box>{getFormattedDateString(_documentRevisionFooterState?.releasedAt, MomentFormats.YearMonthDateDotNotation)}</Box>
           </Typography>
         </Box>
       )}

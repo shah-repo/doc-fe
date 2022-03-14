@@ -93,7 +93,7 @@ const References = ({
         </Typography>
         <Typography className={classes.released}>
           {releasedAt
-            ? getFormattedDateString(releasedAt as string, MomentFormats.YearMonthDate)
+            ? getFormattedDateString(releasedAt as string, MomentFormats.YearMonthDateDotNotation)
             : "None"}
         </Typography>
       </Box>

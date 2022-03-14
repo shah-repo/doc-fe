@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Grid,
-  Link,
   ListItemAvatar,
   ListItemText,
   Typography,
@@ -20,6 +19,7 @@ import { approvalsActions } from "../../../../../state/ducks/approvals";
 import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
+import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
@@ -27,6 +27,8 @@ import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
+import DocId from "../../common/DocId/presenter";
+import DocTitle from "../../common/DocTitle/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
@@ -128,7 +130,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   const rejectDialogAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     },
     onError: (error) => {
       toastError(error as string);
@@ -197,59 +199,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   </Typography>
                 </Grid>
                 <Grid item={true}>
-                  <Link
-                    href={
-                      docId
-                        ? documentVersionPath(docRevId || "", docDocumentId)
-                        : "#"
-                    }
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {docId}
-                    </Typography>
-                  </Link>
+                  <DocId
+                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docId={docId}
+                  />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
-                    title={
-                      <>
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </>
-                    }
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={
-                        docRevId
-                          ? documentVersionPath(docRevId || "", docDocumentId)
-                          : "#"
-                      }
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyBold}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        <Text translation="dashboard.revision" />
-                        &nbsp;{docRevVersion} {docRevName}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  <DocTitle
+                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                    docRevVersion={docRevVersion}
+                    docRevName={docRevName}
+                  />
                 </Grid>
               </Grid>
               <Grid

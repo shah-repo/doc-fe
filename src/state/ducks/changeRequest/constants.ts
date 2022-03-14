@@ -7,6 +7,6 @@ export const CHANGE_REQUEST_LIST_ASYNC = "changeRequests/LIST_ASYNC";
 export const CHANGE_REQUEST_GET_AUDIT_ASYNC = "changeRequests/GET_AUDIT_ASYNC";
 
 export const CHANGE_REQUEST_ROOT_URL = "/change_requests";
-
+export const CHANGE_REQUEST_ROOT_URL_SEARCH = "/change_requests/search";
 export const CHANGE_REQUEST_LIST_APPROVERS = "changeRequests/LIST_APPROVERS";
 export const CHANGE_REQUEST_GET_APPROVERS_ASYNC = "changeRequests/GET_APPROVERS_ASYNC";
