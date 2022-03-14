@@ -22,6 +22,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { _formState } = SM.useStores();
   const location = useLocation();
+  const isCreateUrl = SM.pathname.includes("document_revision/create");
   return (
     <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
       {documentRevision &&
@@ -40,7 +41,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
         displayStatus={documentRevision.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
       />}
-      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">{type}
+      <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center">{!isCreateUrl && type}
         <Grid container={true} alignItems="center" justify="flex-end">
           <Box alignSelf="center">
             {lastSavedTimestamp &&
@@ -51,7 +52,8 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
             }
           </Box>
           {SM.isNewLayout ? (
-            <NewDocRevActions {...{ isCreateDocumentDisabled }} />
+            isCreateUrl ? <DocRevActions {...{ isCreateDocumentDisabled }} />
+              : <NewDocRevActions {...{ isCreateDocumentDisabled }} />
           ) : (
             <DocRevActions {...{ isCreateDocumentDisabled }} />
           )}
