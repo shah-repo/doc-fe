@@ -17,7 +17,7 @@ import { FormHeaderContext, isOwnerContext } from "../../../../../ui/documentRev
 import ExportToCSVButton from "../../../../../ui/documentRevision/forms/presenters/export.to.csv/ExportToCSV.button";
 import RedlineButton from "../../../../../ui/documentRevision/forms/presenters/redline/Redline.button";
 import UpgradeToLatestContainer from "../../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
-import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentRecord, hasOperatorRelease, hasRedline, hasSerializedCSV } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../../../../ui/documentRevision/helpers/records";
 import { isDocumentNumericRelease } from "../../../../../ui/documentRevision/helpers/revisionStage";
@@ -188,10 +188,145 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const accessableButtons: string[] = [];
+  const { status = "", version = 0 } = documentRevision || [];
+  const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
+  if (!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) && canShowCancelButton) {
+    accessableButtons.push("cancelButton");
+  }
 
-  const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} />
+  if (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) {
+    accessableButtons.push("approveAndReleaseButton");
+  }
+  if (isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator) {
+    accessableButtons.push("submitApprovalButton");
+  }
+  if ((isStatusReleased || isStatusInDraft) && canCopy ) {
+    accessableButtons.push("NewCloneEB");
+  }
+  if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
+    accessableButtons.push("exportCsvButton");
+  }
+  if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild))
+  {
+    accessableButtons.push("redlineButton");
+  }
+  if (shouldShowUpgrade) {
+    accessableButtons.push("upgradeContainerButton");
+  }
+  const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
+  const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
+  const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+
+  if (!(isDocumentDraft || canCreateInspection)) {
+    accessableButtons.push("inspectionControl");
+  }
+  if (canChangeOwnerShip) {
+    accessableButtons.push("changeOwner");
+  }
+  if (!(isRecord && isInlineApproval) &&
+isUserDocumentOwner && showVoidButton) {
+    accessableButtons.push("voidButton");
+  }
+  if (isRecord && isInlineApproval &&
+    isUserDocumentOwner && showVoidButtonOnInlineRecords) {
+    accessableButtons.push("voidButton");
+  }
+  if (isExportable) {
+    accessableButtons.push("exportButton");
+  }
+  const renderbuttons = (buttons: string[]) => (
+    <>
+      {
+        buttons.includes("cancelButton") && (
+          <CancelButton
+            {...{ documentRevision }}
+            setShouldDisplay={props.setCancelButtonDisplay}
+          />
+        )
+      }
+      {
+        buttons.includes("upgradeContainerButton") && (
+          <UpgradeToLatestContainer
+            formDocumentId={documentRevision?.formDocument?.document?.id}
+            docRevId={documentRevision?.id}
+            setShouldDisplay={props.setUpgradeToLastestDisplay}
+            type="button"
+            {...{
+              shouldShowUpgrade,
+            }}
+          />
+        )
+      }
+      {
+        buttons.includes("approveAndReleaseButton") &&  (<Observer>
+          {() => (
+            <ApproveAndRelease
+              id={values.id}
+              status={values.status}
+              needsSignature={_documentRevisionFormState?.docInfo.needsSignature || false}
+              isQms={_documentRevisionFormState?.docInfo.isQms || false}
+              documentName={_documentRevisionFormState?.docInfo.name || ""}
+              docRevId={values.id as string}
+              owner={documentRevision?.owner}
+              {
+                ...{
+                  isRecord,
+                  documentTypeId,
+                  revisionStage,
+                  isInlineApproval,
+                }
+              }
+            />
+          )}
+        </Observer>)
+      }
+      {
+        buttons.includes("submitApprovalButton") &&  (<SubmitForApproval
+          docRevId={values.id as string}
+          status={values.status}
+
+          docRevOwner={owner?.user.name}
+          updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
+          {
+            ...{
+              revisionChangeType,
+              currentDocumentType,
+            }
+          }
+        />)
+      }
+      {buttons.includes("inspectionControl") && (
+        <InspectionControlsContainer {...{ documentRevision }} />
+      )}
+      {
+        buttons.includes("redlineButton") && (<RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>)
+      }
+      {
+        buttons.includes("NewCloneEB") && ( <NewCloneEBButton
+          {...{ documentRevision }}
+        />)
+      }
+      {
+        buttons.includes("exportCsvButton") && (<ExportToCSVButton
+          {...{ documentRevision }}
+        />)
+      }
+      { buttons.includes("changeOwner") && values.id && (<FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} />)}
+      {
+        buttons.includes("voidButton") && (<VoidButton {...{ documentRevision }}/>)
+      }
+      {
+        buttons.includes("exportButton") && (<ExportToEmail
+          revisionId={documentRevision.id}
+          canAccess={documentRevision.document.canAccess}
+        />)
+      }
+    </>
   );
+
+  const initialButtons = accessableButtons.length >= 1 ? accessableButtons.slice(0, 1) : accessableButtons;
+  const restButtons = accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 
   return (
     <>
@@ -215,82 +350,10 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       {
         !redlineActive &&
       <>
-        {(isStatusReleased || isStatusInDraft) && serializedCSV &&
-          <ExportToCSVButton
-            {...{ documentRevision }}
-          />}
-        {(isStatusReleased || isStatusInDraft) && canCopy &&
-        <NewCloneEBButton
-          {...{ documentRevision }}
-        />}
-        <InspectionControlsContainer {...{ documentRevision }} />
-        <RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>
-        {
-          isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator && (
-            <SubmitForApproval
-              docRevId={values.id as string}
-              status={values.status}
-              docRevOwner={owner?.user.name}
-              updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
-              {
-                ...{
-                  revisionChangeType,
-                  currentDocumentType,
-                }
-              }
-            />
-          )
-        }
-        {
-          (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) && (
-            <Observer>
-              {() => (
-                <ApproveAndRelease
-                  id={values.id}
-                  status={values.status}
-                  needsSignature={_documentRevisionFormState?.docInfo.needsSignature || false}
-                  isQms={_documentRevisionFormState?.docInfo.isQms || false}
-                  documentName={_documentRevisionFormState?.docInfo.name || ""}
-                  docRevId={values.id as string}
-                  owner={documentRevision?.owner}
-                  {
-                    ...{
-                      isRecord,
-                      documentTypeId,
-                      revisionStage,
-                      isInlineApproval,
-                    }
-                  }
-                />
-              )}
-            </Observer>
-          )
-        }
-        <HeaderMenu>
-          {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
-        <CancelButton
-          {...{ documentRevision }}
-          setShouldDisplay={props.setCancelButtonDisplay}
-        />}
-          {renderChangeOwnership}
-          <UpgradeToLatestContainer
-            formDocumentId={documentRevision?.formDocument?.document?.id}
-            docRevId={documentRevision?.id}
-            setShouldDisplay={props.setUpgradeToLastestDisplay}
-            type="button"
-            {...{
-              shouldShowUpgrade,
-            }}
-          />
-          {!(isRecord && isInlineApproval) &&
-          isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
-          {isRecord && isInlineApproval &&
-          isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
-          {isExportable && <ExportToEmail
-            revisionId={documentRevision.id}
-            canAccess={documentRevision.document.canAccess}
-          />}
-        </HeaderMenu>
+        {/* Add Like */}
+        {/* <InspectionControlsContainer {...{ documentRevision }} /> */}
+        {renderbuttons(initialButtons)}
+        <HeaderMenu>{renderbuttons(restButtons)}</HeaderMenu>
       </>
       }
     </>

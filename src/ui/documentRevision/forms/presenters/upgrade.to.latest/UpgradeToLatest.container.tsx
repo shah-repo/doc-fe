@@ -1,6 +1,8 @@
 import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { SM } from "../../../../../App";
+import NewUpgradeToLatestButton from "../../../../../App/Shifamed/Components/forms/presenters/UpgradeToLatest.button";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -47,8 +49,11 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
+         SM.isNewLayout ?
+          <NewUpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
+          : ( <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/> )
       }
+
       {
         type === "banner" &&
         <UpgradeToLatestBanner {...{ onUpgradeClick, shouldShowUpgrade, bannerPortal }} />
