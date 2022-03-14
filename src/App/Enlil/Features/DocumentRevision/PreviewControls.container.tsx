@@ -263,22 +263,35 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </Box>
   );
 
-  const renderWithdrawSubmissionButton = () =>
+  const renderWithdrawSubmissionButton = (renderAsButton: boolean) =>
     <>
-      <StyledButton
+      {renderAsButton && (<StyledButton
         color="primary"
-        onClick={dialog.open}
         data-cy="document.revision.withdraw.alert"
+        onClick={dialog.open}
       >
-        <Text message={"withdraw submission"} />
+        <Text translation="changeRequest.transition.withdrawn" />
       </StyledButton>
+      )}
+      {!renderAsButton && (
+        <StyledMenuListItem button alignItems="flex-start">
+          {/* TODO: needs to add menu item icon */}
+          {/* <StyledMenuListIcon>
+            <WithdrawSubmissionIcon />
+          </StyledMenuListIcon> */}
+          <StyledMenuListItemText
+            primary={<Text translation="changeRequest.transition.withdrawn" />}
+            data-cy="document.revision.withdraw.alert"
+            onClick={dialog.open}
+          />
+        </StyledMenuListItem>
+      )}
       <AlertDialog
         confirmAction={withdrawAction}
         message={"document.revision.withdraw.alert"}
         {...{ dialog }}
       />
     </>;
-
 
   const accessableButtons: string[] = [];
 
@@ -327,7 +340,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
       {buttons.includes("requestAccessButton") && renderRequestAccessButton(renderAsButton)}
       {buttons.includes("withdrawSubmission") &&
-        renderWithdrawSubmissionButton()}
+        renderWithdrawSubmissionButton(renderAsButton)}
       {buttons.includes("inspectionControl") && (
         <InspectionControlsContainer {...{ documentRevision }} />
       )}
