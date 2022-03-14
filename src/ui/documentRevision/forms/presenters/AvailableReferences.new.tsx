@@ -212,6 +212,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         </Typography>
       </Box>
       <Select
+        isDisabled={disabled}
         filterOption={createFilter({ ignoreAccents: false })}
         options={ModifiedOptions}
         onInputChange={debounceFunction}
