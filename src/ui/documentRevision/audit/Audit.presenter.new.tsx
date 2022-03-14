@@ -9,6 +9,7 @@ import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import AuditFactory from "../../components/AuditFactory";
+import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
@@ -77,7 +78,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                     color="textPrimary"
                     className={classes.secondaryText}
                   >
-                    Owner
+                    <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} format={MomentFormats.BriefDateTime} />
                   </Typography>
                 </React.Fragment>
               }
