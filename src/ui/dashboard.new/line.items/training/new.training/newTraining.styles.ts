@@ -10,7 +10,11 @@ export const styles = makeStyles((theme: Theme) =>
       paddingLeft: "10px",
     },
     link: {
-      color: Colors.black,
+      "color": Colors.black,
+      "textDecoration": "none",
+      "&:hover": {
+        textDecoration: "underline",
+      },
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),

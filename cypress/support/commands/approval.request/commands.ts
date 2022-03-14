@@ -6,6 +6,7 @@ import { bool } from "aws-sdk/clients/signer";
 import moment from "moment";
 import "moment-timezone";
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -150,7 +151,7 @@ Cypress.Commands.add("arApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
     body: {
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
@@ -167,7 +168,7 @@ Cypress.Commands.add("approvalApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/approvals/${params.approvalsId}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
     body: {
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
@@ -255,9 +256,11 @@ Cypress.Commands.add("arCheckImplementationTaskStatus", (params: {status: string
 });
 
 Cypress.Commands.add("arClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetChangeRequests, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.PostChangeRequestsSearch, () => {
     cy.get("[data-cy=\"clearFilter\"]").arrowClick();
   });
+
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
@@ -292,7 +295,7 @@ Cypress.Commands.add("arCloseAR", () => {
 });
 
 Cypress.Commands.add("arChoseSpecificProposedDocument", (params: { name: string }) => {
-  cy.get("[data-cy=\"proposedDocumentRevision\"]").arrowType(params.name + "{downarrow}{enter}").wait(500);
+  cy.get("[data-cy=\"proposedDocumentRevision\"]").autocompleteSelect(params.name);
 });
 
 Cypress.Commands.add("arEnterDescriptionAddDocumentsDialog", (params: { description: string }) => {
@@ -314,9 +317,9 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls(
     routesToWait, () => {
-      cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick();
-      cy.get("ul[role=\"listbox\"]>li").contains(params.approver).arrowClick();
-      cy.unClick();
+      cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
+      cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+      cy.unClick().wait(500);
     });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -364,10 +367,12 @@ Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
   cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.ArAudit], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
   cy.progressBarShouldNotExist();
@@ -444,13 +449,10 @@ Cypress.Commands.add("arRejectComfirmationARNew", () => {
 });
 
 Cypress.Commands.add("arSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.ARPreview,
-    CyRoutes.SessionDetails,
-    CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetAutocompleteOptions], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.ARPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
+
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

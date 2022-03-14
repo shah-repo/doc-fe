@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
 import React, { useEffect, useMemo } from "react";
@@ -8,7 +8,7 @@ import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag, Permission } from "../../../state/ducks/auth/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { Document, DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
@@ -16,15 +16,14 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { DRAWER_WIDTH } from "../../app/Navigation.styles";
-import AsyncGate from "../../components/AsyncGate";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
-import useActionCreator from "../../hooks/useActionCreator";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
+import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
@@ -93,15 +92,10 @@ DocumentRevisionFormContainerProps
   lastSavedTimestamp,
 }) => {
   const bannerPortal = React.useRef(null);
-  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
-
   const docId = initialValues.document?.docId;
   const documentType = initialValues.document?.documentType;
   const documentTypeAcronym = initialValues.document?.documentType?.documentTypeAcronym;
   const { revisionStage } = documentRevision || {};
-
-  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
-
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
   const documentTypesById = useSelector(documentTypeSelectors.byId);
   let document = useSelector((state: ApplicationState) =>
@@ -194,6 +188,7 @@ DocumentRevisionFormContainerProps
 
   useEffect(() => {
     _formState?.setMode(mode);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
   const email = useSelector(authSelectors.currentUserEmail);
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
@@ -255,34 +250,32 @@ DocumentRevisionFormContainerProps
         isOwner,
         autosaveEnabled,
         formInput,
+        mode,
       }}
     />
   );
 
   return (
-    <AsyncGate
-      asyncState={loadAsyncState}
-      asyncAction={loadAction}
-      startActionOnMount={true}
-    >
+    <>
       <div ref={bannerPortal}
         style={{ position: "fixed", width: `calc(100% - ${DRAWER_WIDTH + SIDEBAR_WIDTH}px)`, zIndex: 1001 }}
       />
-
-      {
-        type !== "newOutput" &&
+      <Grid style={{ background: Colors.light_gray }} >
+        {
+          type !== "newOutput" &&
           <Box ml={3}>
             <ChangeRequestLink dataProp={documentRevision} />
           </Box>
-      }
-      <Formik
-        initialValues={cleanInitialValues}
-        onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
-        enableReinitialize={true}
-      >
-        {render}
-      </Formik>
-    </AsyncGate>
+        }
+        <Formik
+          initialValues={cleanInitialValues}
+          onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }
+          enableReinitialize={true}
+        >
+          {render}
+        </Formik>
+      </Grid>
+    </>
   );
 };
 

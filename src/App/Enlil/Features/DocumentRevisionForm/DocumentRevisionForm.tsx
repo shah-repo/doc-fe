@@ -39,6 +39,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   schema,
   formInput,
   autosaveEnabled,
+  mode,
 }) => (
   <SMForm
     templateBoxProps={{ stretchY: "100%" }}
@@ -106,6 +107,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       isDisabled,
                       email,
                       isOwner,
+                      mode,
                     }}
                   />
                 </SMBox>

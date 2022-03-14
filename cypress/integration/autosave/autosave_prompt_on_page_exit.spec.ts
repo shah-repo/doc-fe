@@ -112,7 +112,7 @@ context("Autosave on leaving page while data is still not saved", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.fbAddNewFieldButton();
       });
     });

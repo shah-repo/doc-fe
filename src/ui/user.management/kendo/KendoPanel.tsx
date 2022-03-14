@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { DataResult, process, State } from "@progress/kendo-data-query";
 import {
   setExpandedState,
@@ -15,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, sortBy, startCase } from "lodash";
+import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -33,14 +33,14 @@ import { ActiveDropdown } from "../../components/common/kendo.column.templates/A
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
-import { DisplayText, hideColumnTitleOnResize, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
+import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, setColumnWidth, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
+import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
-import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDidMount from "../../hooks/useDidMount";
@@ -114,11 +114,20 @@ export function KendoPanel<T>({
   };
   const addEmployeeAction = useActionCreator(userManagementActions.addEmployee);
 
+  const [updatedGridData, setUpdatedGridData] = useState<AddUserManage>();
   const async = useAsync({
     onSuccess: () => {
       queryApi();
     },
     onError: (error) => {
+      if (gridData.length && get(gridData, "[0].inEdit") && updatedGridData) {
+        set(gridData, "[0].name", updatedGridData.user.name);
+        set(gridData, "[0].email", updatedGridData.user.email);
+        set(gridData, "[0].groups", updatedGridData.groups);
+        set(gridData, "[0].id", updatedGridData.user.id);
+        const newDataState = processWithGroups(gridData, dataState);
+        setResultState(newDataState);
+      }
       setIsLoading(false);
       toastError(error as string);
     },
@@ -126,6 +135,7 @@ export function KendoPanel<T>({
 
   const handleCreate = (values: AddUserManage) => {
     setIsLoading(true);
+    setUpdatedGridData(values);
     async.start(addEmployeeAction, values, async);
   };
 
@@ -133,6 +143,7 @@ export function KendoPanel<T>({
     gridData.splice(0, 1);
     const newDataState = processWithGroups(gridData, dataState);
     setResultState(newDataState);
+    setUpdatedGridData(undefined);
   };
 
   let initialDataState: State;
@@ -144,7 +155,7 @@ export function KendoPanel<T>({
       filter:
         {
           logic: "and",
-          filters: [{ field: "active", operator: "eq", value: true }],
+          filters: [],
         },
       skip: 0,
       take: 25,
@@ -254,10 +265,15 @@ export function KendoPanel<T>({
             .map((e: { name: string }) => e.name.trimLeft().trimEnd())
             .sort()
             .join(", "),
-          status: el?.user?.confirmed && !el?.user?.locked
-            ? getTranslatedText("user.management.signed.up")
-            : el?.user?.locked ? getTranslatedText("reset.password") :
-              getTranslatedText("user.management.resend.signup.email"),
+          status:
+            el?.user?.confirmed && !el?.user?.locked
+              ? getTranslatedText("user.management.signed.up")
+              : el?.user?.locked
+                ? getTranslatedText("reset.password")
+                : getTranslatedText("user.management.resend.signup.email"),
+          active: el?.active
+            ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
+            : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -302,6 +318,8 @@ export function KendoPanel<T>({
             tableName
           )
         );
+      }).finally(() => {
+        setUpdatedGridData(undefined);
       });
   };
 
@@ -347,15 +365,15 @@ export function KendoPanel<T>({
     />
   ;
 
-  const BooleanFilterCell = (props: GridFilterCellProps) => (
+  const ActiveFilterCell = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
       data={[{
         text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
-        value: true,
+        value: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
       }, {
         text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
-        value: false,
+        value: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
       }]}
       defaultItem={{
         text: getTranslatedText(TranslatedText[DisplayText.ALL]),
@@ -380,14 +398,16 @@ export function KendoPanel<T>({
 
   const filterCellMapping = {
     groups: GroupDropdown,
-    active: BooleanFilterCell,
+    active: ActiveFilterCell,
     status: SignUpFilterCell,
   };
+  const userGroups = (props: GridCellProps) =>
+    <GroupsCell {...props} updatedGridData ={updatedGridData} />;
 
   const fieldToCellMapping = {
     "user.name": NameCell,
     "user.email": EmailCell,
-    "groups": GroupsCell,
+    "groups": userGroups,
     "active": ActiveDropdown,
     "status": SignedCell,
     "": commandCell,
@@ -462,6 +482,9 @@ export function KendoPanel<T>({
     setResultState(processWithGroups(gridData, dataState));
   };
 
+  // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
+  hideOperatorTooltip();
+
   const tableRenderer = ({ width }: Size) => (
     <>
       <KendoGlobalization>
@@ -505,21 +528,19 @@ export function KendoPanel<T>({
   );
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
-    <>
-      <Grid container justify="space-between">
-        <Grid item>
-          <Typography className={classes.title}>
-            <Text translation="navigation.user.management" />
-          </Typography>
+    <Box>
+      <Box mb={2}>
+        <Grid container justify="space-between" alignItems="center">
+          <GridTitle translation="navigation.user.management" />
+          <Grid item>
+            <AddEmployeeContainer addGroup={addNew} />
+          </Grid>
         </Grid>
-        <Grid item>
-          <AddEmployeeContainer addGroup={addNew} />
-        </Grid>
-      </Grid>
-      <>
+      </Box>
+      <Grid item xs>
         <div className={classes.errorClass}>{tableCriteria.apiError}</div>
         {renderBody()}
-      </>
-    </>
+      </Grid>
+    </Box>
   );
 }

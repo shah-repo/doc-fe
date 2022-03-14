@@ -45,7 +45,7 @@ declare global {
       fbCheckFields(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExist(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
-      fbEnterNameValue(params: { name: string; value: string }): Chainable<Subject>;
+      fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
@@ -76,8 +76,7 @@ declare global {
 }
 
 Cypress.Commands.add("fbAutocompleteType", (params: { autocompleteOption: string }) => {
-  cy.get("[data-cy=\"optionId\"]").arrowClick();
-  cy.get("ul[role=listbox]>li").contains(params.autocompleteOption).arrowClick();
+  cy.get("[data-cy=\"optionId\"]").autocompleteSelect(params.autocompleteOption);
 });
 
 Cypress.Commands.add("dtSelectDefaultRevisionStage", (params: { defaultRevisionStage: string }) => {
@@ -193,7 +192,7 @@ Cypress.Commands.add("fbSelectRadioButtonValue", (params: { value: string }) => 
 
 Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
   cy.get("[id*=\"mui-component-select-select-field-for-inline\"]").arrowClick().wait(400);
-  cy.get("ul[role=listbox]>li").contains(params.value).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.value).arrowClick();
 });
 
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
@@ -333,7 +332,7 @@ Cypress.Commands.add("fbAddAutocompleteElement", (params: { name: string; label:
   }
   cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
   cy.fbEnterNameValue({ name: "label", value: params.label });
-  cy.get("[data-cy=\"optionId\"]").arrowType(`${params.name}{downarrow}{enter}`);
+  cy.get("[data-cy=\"optionId\"]").autocompleteSelect(`${params.name}`);
   cy.fbAddNewFieldButton();
 });
 

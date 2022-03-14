@@ -66,6 +66,7 @@
   "table.no.results.found": "No results found",
   "environment.DEV_THEME": "DEVELOPMENT",
   "environment.DEMO_THEME": "DEMO",
+  "environment.SANDBOX_THEME": "SANDBOX",
   "changeRequest.title": "Document - Approval Request",
   "changeRequest.state": "Status",
   "changeRequest.create": "Create AR",
@@ -1174,7 +1175,7 @@
   "training.stats.all": "ALL",
   "training.stats.title": "TRAININGS OUTSTANDING",
   "training.stats.totalOutstanding": "Total Outstanding",
-  "async.tasks.type": "Type",
+  "async.tasks.type": "Select Task Type",
   "async.tasks.timestamp": "Date & Time",
   "async.tasks.user.emails": "User Emails",
   "async.tasks.last.email.sent": "Last Password Email Sent Date & Time",
@@ -1191,8 +1192,6 @@
   "async.task.field.error": "Should be greather than 0",
   "async.task.next.task": "Next Task",
   "async.task.table.history": "Task History",
-  "async.task.select.task.type": "Select Task Type",
-  "async.task.select.next.task": "Select Next Task",
   "async.task.type": "Task Type",
   "async.task.duration": "Duration",
   "async.task.next.task.types": "Next Task Types",
@@ -1210,5 +1209,6 @@
   "documenttype.view.config": "View Field config",
   "sm.general": "General",
   "sm.overview": "Overview",
-  "just.now": "Just now"
+  "just.now": "Just now",
+  "common.load.more": "Load More"
 }

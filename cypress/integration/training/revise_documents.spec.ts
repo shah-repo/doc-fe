@@ -143,7 +143,6 @@ context("Revising Documents assigned as Training material", () => {
                   },
                   {
                     name: "training-validity",
-                    rows: 1,
                     type: "quantity",
                     index: 3,
                     label: "Training Frequency (in days)",
@@ -157,7 +156,6 @@ context("Revising Documents assigned as Training material", () => {
                         ],
                       },
                     },
-                    placeholder: "Enter the training refresh period in days",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -686,9 +684,9 @@ context("Revising Documents assigned as Training material", () => {
     it("Select 'Training Curriculum test' as document type", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.EmployeesGet, CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
+        CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .arrowType("Training Curriculum test{downarrow}{enter}");
+          .autocompleteSelect("Training Curriculum test");
       });
     });
 
@@ -711,7 +709,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select document 'released doc1' to be trained on", () => {
-      cy.get("[data-cy=training-document-to-be-trained-on]").arrowType("released doc1{downarrow}{enter}");
+      cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -727,12 +725,12 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[1].name}{downarrow}{enter}`);
-      cy.get("[data-cy=training-select-users-to-train]").arrowType(`${USERS[2].name}{downarrow}{enter}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -785,8 +783,8 @@ context("Revising Documents assigned as Training material", () => {
     it("Clicks on revise document", () => {
       cy.drClickReviseDocument();
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.GetDocRevs, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetRequiredApprovers, CyRoutes.GetFieldLocks, CyRoutes.EmployeesGet], () => {
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -796,8 +794,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocAudit, CyRoutes.GetDocAggregatedAudit, CyRoutes.PatchDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
     });
@@ -824,9 +821,9 @@ context("Revising Documents assigned as Training material", () => {
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[1].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 2);
       cy.trClearFilters();

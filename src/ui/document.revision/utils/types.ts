@@ -1,11 +1,9 @@
 import { RouteComponentProps } from "react-router-dom";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { TrainingRecord } from "../../../state/ducks/training/types";
 import { LoadAsyncState } from "../../../state/types";
-import { SelectOption } from "../../components/forms/fields/Select";
-import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
 
 // Container
 export type ContainerProps = ContainerOwnProps & ContainerDispatchProps & ContainerStateProps;
@@ -15,9 +13,6 @@ export type ContainerStateProps = LoadAsyncState & DataProps<DocumentRevision>;
 export interface ContainerDispatchProps {
   load: typeof documentRevisionsActions.load;
 }
-
-// List
-export type ListOwnProps = RouteComponentProps;
 
 export enum ReleasedDateOptions {
   LAST_WEEK = "Last 7 days",
@@ -30,27 +25,10 @@ export enum CompletedOnDateOptions {
   PENDING = "Pending",
   OVERDUE = "Overdue",
 }
-
-// Common
-export type DocumentRevisionsUserProps = ActionProps & {
-  documentTypeOptions: SelectOption[];
-  tableName: string;
-  tableCriteria: TablePanelStateProps;
-  tableData: TableDataProps<DocumentRevision>;
-  clearFilter?: () => void;
-  statuses: DocumentRevisionStatus[];
-};
-
 export interface RouteParams {
   documentRevisionId: string;
   documentId: string;
 }
-
-interface ActionProps {
-  editDocumentRevision: (documentRevisionId: string, documentId: string) => void;
-  previewDocumentRevision: (documentRevisionId: string, documentId: string) => void;
-}
-
 export interface ReferenceSummary {
   id: string;
   url: string;
