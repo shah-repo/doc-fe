@@ -747,12 +747,20 @@ context("Bulk create record headers", () => {
           "Receivable",
           "Approval Request",
           "Test Document Type",
-          "Additional Document Type"];
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").should("have.length", 21);
-        cy.get("ul>li[role=option]").each(($document) => {
-          expect($document.text()).to.be.oneOf(documentTypeList);
+          "Additional Document Type",
+          "Paper Lot History Record",
+        ];
+
+        cy.get(`[data-cy="fb-output-document-type"]`).arrowClick();
+        cy.get("ul>li[role=option]").first().scrollIntoView().trigger("mouseover").wait(500);
+
+        documentTypeList.forEach(() => {
+          cy.get("ul>li[role=option][data-focus=true]").invoke("text").should("be.oneOf", documentTypeList);
+          cy.get(`[data-cy="fb-output-document-type"]`).type("{downarrow}");
         });
+
+        cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", "21");
+
         cy.unClick();
       });
 
@@ -804,10 +812,9 @@ context("Bulk create record headers", () => {
 
     context("Add correct type and release bulk create", () => {
       it("Select correct document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick().arrowType("{backspace}");
+        cy.get(`[name="fb-output-document-type"]`).arrowClick().find("button").eq(0).arrowClick();
         cy.unClick();
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Test Document Type").arrowClick();
+        cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Test Document Type");
       });
 
       it("Save bulk document", () => {
