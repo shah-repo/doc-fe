@@ -20,6 +20,7 @@ import { CreateInspectionBody, DocTypeOptionType, FormOptionType, InspectionCont
  */
 export const InspectionControlsContainer: React.FunctionComponent<InspectionControlsContainerProps> = ({
   documentRevision,
+  renderAsButton,
 }) => {
   // MARK: @config
   const {
@@ -141,6 +142,7 @@ export const InspectionControlsContainer: React.FunctionComponent<InspectionCont
           onFormSelect,
           onDocTypeSelect,
           isDocTypeInputDisabled,
+          renderAsButton,
         }}
       /> : <InspectionControlsPresenter
         {...{

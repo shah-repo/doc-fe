@@ -357,7 +357,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes("inspectionControl") && (
-        <InspectionControlsContainer {...{ documentRevision }} />
+        <InspectionControlsContainer {...{ documentRevision, renderAsButton }}/>
       )}
       {buttons.includes("redlineButton") && (
         <RedlineButton
@@ -365,7 +365,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes("NewCloneEB") && (
-        <NewCloneEBButton {...{ documentRevision }} renderAsButton={renderAsButton} />
+        <NewCloneEBButton {...{ documentRevision, renderAsButton }} />
       )}
       {buttons.includes("exportCsvButton") && (
         <ExportToCSVButton {...{ documentRevision }} />

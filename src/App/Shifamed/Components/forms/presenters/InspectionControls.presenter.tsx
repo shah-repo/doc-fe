@@ -3,6 +3,8 @@ import Text from "../../../../../ui/components/Text";
 import { InspectionControlsPresenterProps } from "../../../../../ui/documentRevision/InspectionControls/InspectionControls.types";
 import InspectionDialog from "../../../../../ui/documentRevision/InspectionControls/InspectionDialog/InspectionDialog";
 import { StyledButton } from "./StyledListButton";
+import { StyledMenuListItem } from "./StyledMenuListItem";
+import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 /** Buttons for creating an inspection record - presenter.
  * @param onButtonClick Action executed when user clicks on FAI or Inspection button.
@@ -15,13 +17,14 @@ const NewInspectionControlsPresenter: React.FunctionComponent<InspectionControls
   canCreateInspection,
   isDocumentDraft,
   disabled,
+  renderAsButton,
   ...props
 }) => {
   if (!isDocumentDraft || !canCreateInspection) { return null; }
 
   return (
     <>
-      <StyledButton
+      {renderAsButton && (<StyledButton
         color="primary"
         data-cy={`PreviewControlsContainer-inspection-FAI`}
         onClick={() => onButtonClick()}
@@ -29,6 +32,20 @@ const NewInspectionControlsPresenter: React.FunctionComponent<InspectionControls
       >
         <Text translation={"document.revision.fai"} />
       </StyledButton>
+      )}
+      {!renderAsButton && (
+        <StyledMenuListItem button {...{ disabled }} alignItems="flex-start">
+          {/* TODO: needs to add menu item icon */}
+          {/* <StyledMenuListIcon>
+            <InspectionControlIcon />
+          </StyledMenuListIcon> */}
+          <StyledMenuListItemText
+            primary={<Text translation="document.revision.fai" />}
+            data-cy={`PreviewControlsContainer-inspection-FAI`}
+            onClick={() => onButtonClick()}
+          />
+        </StyledMenuListItem>
+      )}
       <InspectionDialog { ...(props) } />
     </>
   );

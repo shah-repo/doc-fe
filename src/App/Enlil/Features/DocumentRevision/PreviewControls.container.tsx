@@ -335,14 +335,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
-        <NewCloneEBButton {...{ documentRevision }} renderAsButton={renderAsButton} />
+        <NewCloneEBButton {...{ documentRevision, renderAsButton }} />
       )}
       {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
       {buttons.includes("requestAccessButton") && renderRequestAccessButton(renderAsButton)}
       {buttons.includes("withdrawSubmission") &&
         renderWithdrawSubmissionButton(renderAsButton)}
       {buttons.includes("inspectionControl") && (
-        <InspectionControlsContainer {...{ documentRevision }} />
+        <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
       )}
       {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} />}
       {buttons.includes("changeowner") && (
