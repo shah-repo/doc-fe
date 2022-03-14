@@ -192,31 +192,25 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </StyledButton>
   );
 
-  const renderNoAccessWarning = () => {
-    if (!hasAccess) {
-      return (
-        <div style={{ display: "flex" }}>
-          <Box
-            alignSelf="center"
-            id="PreviewControlsContainer-warning"
-            color={Colors.white}
-            alignContent="center"
-          >
-            <Grid container={true} alignItems="center">
-              <Grid item >
-                <WarningIcon
-                  style={{ marginRight: 10, width: "20px", height: "20px", color: Colors.white }}
-                />
-              </Grid>
-              <Grid item >
-                <Text translation="document.security.warning" />
-              </Grid>
-            </Grid>
-          </Box>
-        </div>
-      );
-    }
-  };
+  const renderNoAccessWarning = () => (
+    <Box
+      alignSelf="center"
+      id="PreviewControlsContainer-warning"
+      color={Colors.white}
+      alignContent="center"
+    >
+      <Grid container={true} alignItems="center">
+        <Grid item>
+          <WarningIcon
+            style={{ marginRight: 10, width: "20px", height: "20px", color: Colors.white }}
+          />
+        </Grid>
+        <Grid item>
+          <Text translation="document.security.warning" />
+        </Grid>
+      </Grid>
+    </Box>
+  );
 
   const renderWithdrawSubmissionButton = () =>
     <>
@@ -246,9 +240,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
     accessableButtons.push("outputButton");
-  }
-  if (!hasAccess) {
-    accessableButtons.push("nowarning");
   }
   if (!isEmailSent && !hasAccess) {
     accessableButtons.push("emailsent");
@@ -283,7 +274,6 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         <NewCloneEBButton {...{ documentRevision }} />
       )}
       {buttons.includes("outputButton") && renderOutputButton()}
-      {buttons.includes("nowarning") && renderNoAccessWarning()}
       {buttons.includes("emailsent") && emailSentButton()}
       {buttons.includes("withdrawSubmission") &&
         renderWithdrawSubmissionButton()}
@@ -307,6 +297,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   );
   return (
     <>
+      {hasAccess && renderNoAccessWarning()}
       {renderbuttons(initialButtons)}
       <HeaderMenu>{renderbuttons(restButtons)}</HeaderMenu>
     </>
