@@ -8,7 +8,7 @@ import ReferencedByContainer from "../../document.revision/summary/referencedBy.
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import { isOperator } from "../DocumentRevisionDisplay.container";
-import AvailableReferencesField from "../forms/presenters/AvailableReferences.new";
+import AvailableReferencesField from "../forms/presenters/AvailableReferences.new1";
 import { toDocumentRevisionFormValues } from "../forms/transform";
 import { isOwner } from "../helpers/documentRevisionPermissions";
 import { HandleMenuClickContext } from "../Sidebar/Sidebar.container";

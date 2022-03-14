@@ -2,7 +2,7 @@ import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common/types";
-import { FBFormTemplateProps } from "../types";
+import { DocumentRevisionStatus, FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
 export enum REVISION_STAGE_OPTIONS {
@@ -455,3 +455,11 @@ export enum DisplayFieldType{
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;
+
+export interface DocRevQueryParam {
+  offset: number;
+  limit: number;
+  searchText: Nullable<string>;
+  fields: "name,document.docId";
+  status: DocumentRevisionStatus[];
+}
