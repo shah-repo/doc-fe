@@ -192,7 +192,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     </StyledButton>
   );
 
-  const renderNoAccessWarning = () => (
+  const renderNoAccessWarning = () => !hasAccess && (
     <Box
       alignSelf="center"
       id="PreviewControlsContainer-warning"
@@ -267,7 +267,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
   const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
 
-  const renderbuttons = (buttons: string[]) => (
+  const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
       {buttons.includes("cloneButton") && renderCloneButton()}
       {buttons.includes("newcloneButton") && (
@@ -291,15 +291,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
+          renderAsButton={renderAsButton}
         />
       )}
     </>
   );
   return (
     <>
-      {hasAccess && renderNoAccessWarning()}
-      {renderbuttons(initialButtons)}
-      <HeaderMenu>{renderbuttons(restButtons)}</HeaderMenu>
+      {renderNoAccessWarning()}
+      {renderActionItems(initialButtons, true)}
+      <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
     </>
   );
 };

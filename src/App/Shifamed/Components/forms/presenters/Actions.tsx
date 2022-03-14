@@ -43,15 +43,11 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const { isCreateDocumentDisabled } = props;
   const { _formState, _documentRevisionFormState } = SM.useStores();
 
-  const {
-    documentRevision,
-    values,
-    asyncState,
-    canChangeOwnerShip,
-    type,
-  } = React.useContext(FormHeaderContext)!;
+  const { documentRevision, values, asyncState, canChangeOwnerShip, type } =
+    React.useContext(FormHeaderContext)!;
   const redlineActive = useSelector(companySelectors.getRedlineActive);
-  const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
+  const { revisionStage, revisionChangeType, owner, updatedAt } =
+    documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || "";
   const schema = documentRevision?.formDocument?.formTemplate?.schema;
   const isDisabled: boolean = documentRevision?.id !== undefined;
@@ -59,7 +55,8 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isUserDocumentOwner = React.useContext(isOwnerContext);
   const isCurrentUserOperator = React.useContext(isOperator);
   const currentDocumentType = useSelector((state: ApplicationState) =>
-    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+    documentTypeSelectors.getDocumentTypeById(state, documentTypeId || "")
+  );
 
   // MARK: @helpers
   const shouldShowUpgradeForDocs = useShouldUpgradeToLatest(
@@ -71,62 +68,93 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
 
-
   React.useEffect(() => {
     _formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
-        if (schemaItem.validationMode === "visibility" || schemaItem.validationMode === "disabled") {
+        if (
+          schemaItem.validationMode === "visibility" ||
+          schemaItem.validationMode === "disabled"
+        ) {
           return !isUndefined(_formState.errors.get(schemaItem.name ?? ""));
         }
         return true;
       });
       setInlineApproval(isFormWithInlineApproval(validSchema));
-      setIsApproved(isInlineFormApproved( documentRevision, _formState, validSchema));
+      setIsApproved(
+        isInlineFormApproved(documentRevision, _formState, validSchema)
+      );
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
-  const isRecord = checkIsDocumentRecord(values.document?.documentType?.groupOptions);
-  const isDirectlyApproved = checkIsDocumentDirectApproved(values.document?.documentType?.groupOptions);
-  const isMPIOutput = checkIsDocumentMPIOutput(values.document?.documentType?.groupOptions);
+  const shouldShowUpgradeBannerForRecord =
+    getShouldShowUpgradeForRecord(documentRevision);
+  const isRecord = checkIsDocumentRecord(
+    values.document?.documentType?.groupOptions
+  );
+  const isDirectlyApproved = checkIsDocumentDirectApproved(
+    values.document?.documentType?.groupOptions
+  );
+  const isMPIOutput = checkIsDocumentMPIOutput(
+    values.document?.documentType?.groupOptions
+  );
   const isLHR = checkIsDocumentLHR(values.document?.documentType?.groupOptions);
-  const isExportable = !documentRevision?.renderHTML &&
-    checkIsDocumentExportable(documentRevision?.document?.documentType?.groupOptions);
-  const serializedCSV = hasSerializedCSV(values.document?.documentType?.groupOptions);
+  const isExportable =
+    !documentRevision?.renderHTML &&
+    checkIsDocumentExportable(
+      documentRevision?.document?.documentType?.groupOptions
+    );
+  const serializedCSV = hasSerializedCSV(
+    values.document?.documentType?.groupOptions
+  );
   const isStatusReleased = isDocumentRevisionReleased(documentRevision?.status);
-  const canCopy = checkCanBeCopied(documentRevision?.document?.documentType?.groupOptions);
+  const canCopy = checkCanBeCopied(
+    documentRevision?.document?.documentType?.groupOptions
+  );
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision?.status);
-  const docTypeHasOperatorRelease = hasOperatorRelease(currentDocumentType?.groupOptions);
-  const docTypeHasRedline = hasRedline(values.document?.documentType?.groupOptions);
-  const isLHRProductionBuild =  _formState?.isLHRProductionBuild || false;
+  const docTypeHasOperatorRelease = hasOperatorRelease(
+    currentDocumentType?.groupOptions
+  );
+  const docTypeHasRedline = hasRedline(
+    values.document?.documentType?.groupOptions
+  );
+  const isLHRProductionBuild = _formState?.isLHRProductionBuild || false;
 
   const shouldShowUpgrade =
-   ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
-    && !isLHR && !isMPIOutput;
+    ((!isRecord && shouldShowUpgradeForDocs) ||
+      (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs)) &&
+    !isLHR &&
+    !isMPIOutput;
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
-  const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
-  const showToOwnerOrOperator = isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
+  const showVoidButtonOnInlineRecords =
+    isStatusInDraft &&
+    isDocumentNumericRelease(documentRevision?.revisionStage);
+  const showToOwnerOrOperator =
+    isUserDocumentOwner || (isCurrentUserOperator && docTypeHasOperatorRelease);
 
   function isOutputSchema(): boolean {
-    const { schema: documentSchema = [] } = documentRevision?.formDocument?.formTemplate || {};
+    const { schema: documentSchema = [] } =
+      documentRevision?.formDocument?.formTemplate || {};
     const workspaceSchema = _documentRevisionFormState?.schema;
     const { groupOptions } = documentRevision?.document?.documentType || {};
     return (
-      (Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA))) &&
+      Boolean(groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA)) &&
       !isEqual(JSON.stringify(workspaceSchema), JSON.stringify(documentSchema))
     );
   }
 
   function setFBValue() {
     const workspaceSchema = _documentRevisionFormState?.schema;
-    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    const schema = workspaceSchema?.map((schemaItem) =>
+      omit(schemaItem, ["autoFocus", "autoScrollTo"])
+    );
     const values = get(formik, "values") as DocumentRevision;
     switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
-          outputDocumentTypes: (values?.outputDocumentTypes || [])
-            .map((outputDoc) => ({ id: outputDoc.value })),
+          outputDocumentTypes: (values?.outputDocumentTypes || []).map(
+            (outputDoc) => ({ id: outputDoc.value })
+          ),
           schema,
         });
         break;
@@ -135,25 +163,47 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         formik.setFieldValue("formDocument", {
           id: values?.formDocument?.id,
         });
-        if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
+        if (
+          values.revisionChangeType === RevisionChangeType.Obsolete &&
+          isRecord
+        ) {
           const newInput = {};
           keys(values?.formInput).map((key) => {
-            newInput[key] = values?.formInput && typeof values?.formInput[key] === "string" && key !== "equipment_id"
-              ? "Void"
-              : key === "equipment_id" ?  null : values?.formInput?.[key];
+            newInput[key] =
+              values?.formInput &&
+              typeof values?.formInput[key] === "string" &&
+              key !== "equipment_id"
+                ? "Void"
+                : key === "equipment_id"
+                  ? null
+                  : values?.formInput?.[key];
             return key;
           });
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput",
-            omit(newInput,
-              [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-                "partType", "childForRevise"]));
+          formik.setFieldValue(
+            "formInput",
+            omit(newInput, [
+              ...Object.keys({
+                ...COMMON_INITIAL_VALUES,
+                ...INDIVIDUAL_INITIAL_VALUES,
+              }),
+              "partType",
+              "childForRevise",
+            ])
+          );
         } else {
           // TEMPORARY FIX FOR BE VALIDATION
-          formik.setFieldValue("formInput",
-            omit(_formState?.getValues(),
-              [...Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-                "partType", "childForRevise"]));
+          formik.setFieldValue(
+            "formInput",
+            omit(_formState?.getValues(), [
+              ...Object.keys({
+                ...COMMON_INITIAL_VALUES,
+                ...INDIVIDUAL_INITIAL_VALUES,
+              }),
+              "partType",
+              "childForRevise",
+            ])
+          );
         }
         if (isOutputSchema()) {
           formik.setFieldValue("schema", schema);
@@ -185,36 +235,46 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     if (isNewVersion && isRecord) {
       onFormClick();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const accessableButtons: string[] = [];
   const { status = "", version = 0 } = documentRevision || [];
   const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
-  if (!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) && canShowCancelButton) {
+  if (
+    !(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
+    canShowCancelButton
+  ) {
     accessableButtons.push("cancelButton");
   }
 
-  if (!isRecord || (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))) {
+  if (
+    !isRecord ||
+    (isInlineApproval && isApproved && isDocumentNumericRelease(revisionStage))
+  ) {
     accessableButtons.push("approveAndReleaseButton");
   }
-  if (isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator) {
+  if (
+    isDirectlyApproved &&
+    (!isInlineApproval || revisionStage !== 1) &&
+    showToOwnerOrOperator
+  ) {
     accessableButtons.push("submitApprovalButton");
   }
-  if ((isStatusReleased || isStatusInDraft) && canCopy ) {
+  if ((isStatusReleased || isStatusInDraft) && canCopy) {
     accessableButtons.push("NewCloneEB");
   }
   if ((isStatusReleased || isStatusInDraft) && serializedCSV) {
     accessableButtons.push("exportCsvButton");
   }
-  if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild))
-  {
+  if (!(!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild)) {
     accessableButtons.push("redlineButton");
   }
   if (shouldShowUpgrade) {
     accessableButtons.push("upgradeContainerButton");
   }
-  const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
+  const docRevGroupOptions =
+    documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
 
@@ -224,138 +284,145 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   if (canChangeOwnerShip) {
     accessableButtons.push("changeOwner");
   }
-  if (!(isRecord && isInlineApproval) &&
-isUserDocumentOwner && showVoidButton) {
+  if (
+    !(isRecord && isInlineApproval) &&
+    isUserDocumentOwner &&
+    showVoidButton
+  ) {
     accessableButtons.push("voidButton");
   }
-  if (isRecord && isInlineApproval &&
-    isUserDocumentOwner && showVoidButtonOnInlineRecords) {
+  if (
+    isRecord &&
+    isInlineApproval &&
+    isUserDocumentOwner &&
+    showVoidButtonOnInlineRecords
+  ) {
     accessableButtons.push("voidButton");
   }
   if (isExportable) {
     accessableButtons.push("exportButton");
   }
-  const renderbuttons = (buttons: string[]) => (
+  const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {
-        buttons.includes("cancelButton") && (
-          <CancelButton
-            {...{ documentRevision }}
-            setShouldDisplay={props.setCancelButtonDisplay}
-          />
-        )
-      }
-      {
-        buttons.includes("upgradeContainerButton") && (
-          <UpgradeToLatestContainer
-            formDocumentId={documentRevision?.formDocument?.document?.id}
-            docRevId={documentRevision?.id}
-            setShouldDisplay={props.setUpgradeToLastestDisplay}
-            type="button"
-            {...{
-              shouldShowUpgrade,
-            }}
-          />
-        )
-      }
-      {
-        buttons.includes("approveAndReleaseButton") &&  (<Observer>
+      {buttons.includes("cancelButton") && (
+        <CancelButton
+          {...{ documentRevision }}
+          setShouldDisplay={props.setCancelButtonDisplay}
+        />
+      )}
+      {buttons.includes("upgradeContainerButton") && (
+        <UpgradeToLatestContainer
+          formDocumentId={documentRevision?.formDocument?.document?.id}
+          docRevId={documentRevision?.id}
+          setShouldDisplay={props.setUpgradeToLastestDisplay}
+          type="button"
+          {...{
+            shouldShowUpgrade,
+          }}
+        />
+      )}
+      {buttons.includes("approveAndReleaseButton") && (
+        <Observer>
           {() => (
             <ApproveAndRelease
               id={values.id}
               status={values.status}
-              needsSignature={_documentRevisionFormState?.docInfo.needsSignature || false}
+              needsSignature={
+                _documentRevisionFormState?.docInfo.needsSignature || false
+              }
               isQms={_documentRevisionFormState?.docInfo.isQms || false}
               documentName={_documentRevisionFormState?.docInfo.name || ""}
               docRevId={values.id as string}
               owner={documentRevision?.owner}
-              {
-                ...{
-                  isRecord,
-                  documentTypeId,
-                  revisionStage,
-                  isInlineApproval,
-                }
-              }
+              {...{
+                isRecord,
+                documentTypeId,
+                revisionStage,
+                isInlineApproval,
+              }}
             />
           )}
-        </Observer>)
-      }
-      {
-        buttons.includes("submitApprovalButton") &&  (<SubmitForApproval
+        </Observer>
+      )}
+      {buttons.includes("submitApprovalButton") && (
+        <SubmitForApproval
           docRevId={values.id as string}
           status={values.status}
-
           docRevOwner={owner?.user.name}
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
-          {
-            ...{
-              revisionChangeType,
-              currentDocumentType,
-            }
-          }
-        />)
-      }
+          {...{
+            revisionChangeType,
+            currentDocumentType,
+          }}
+        />
+      )}
       {buttons.includes("inspectionControl") && (
         <InspectionControlsContainer {...{ documentRevision }} />
       )}
-      {
-        buttons.includes("redlineButton") && (<RedlineButton {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}/>)
-      }
-      {
-        buttons.includes("NewCloneEB") && ( <NewCloneEBButton
-          {...{ documentRevision }}
-        />)
-      }
-      {
-        buttons.includes("exportCsvButton") && (<ExportToCSVButton
-          {...{ documentRevision }}
-        />)
-      }
-      { buttons.includes("changeOwner") && values.id && (<FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} />)}
-      {
-        buttons.includes("voidButton") && (<VoidButton {...{ documentRevision }}/>)
-      }
-      {
-        buttons.includes("exportButton") && (<ExportToEmail
+      {buttons.includes("redlineButton") && (
+        <RedlineButton
+          {...{ isUserDocumentOwner, docTypeHasRedline, isLHRProductionBuild }}
+        />
+      )}
+      {buttons.includes("NewCloneEB") && (
+        <NewCloneEBButton {...{ documentRevision }} />
+      )}
+      {buttons.includes("exportCsvButton") && (
+        <ExportToCSVButton {...{ documentRevision }} />
+      )}
+      {buttons.includes("changeOwner") && values.id && (
+        <FormOwnerChangerContainer
+          requestId={values.id}
+          requestType={RequestType.Document}
+        />
+      )}
+      {buttons.includes("voidButton") && (
+        <VoidButton {...{ documentRevision }} />
+      )}
+      {buttons.includes("exportButton") && (
+        <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
-        />)
-      }
+          renderAsButton={renderAsButton}
+        />
+      )}
     </>
   );
 
-  const initialButtons = accessableButtons.length >= 1 ? accessableButtons.slice(0, 1) : accessableButtons;
-  const restButtons = accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
+  const initialButtons =
+    accessableButtons.length >= 1
+      ? accessableButtons.slice(0, 1)
+      : accessableButtons;
+  const restButtons =
+    accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
 
   return (
     <>
       <Observer>
         {() => (
           <>
-            {<FormSubmitButton
-              asyncState={asyncState}
-              label={isDisabled ?
-                "common.save" :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-              data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-            />}
+            {
+              <FormSubmitButton
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+                onClick={onFormClick}
+                id="DocumentRevisionForm-submit"
+                data-cy={"DocumentRevisionForm-submit"}
+                disabled={
+                  isCreateDocumentDisabled ||
+                  _documentRevisionFormState?.disabledAction
+                }
+              />
+            }
           </>
         )}
       </Observer>
-      {
-        !redlineActive &&
-      <>
-        {/* Add Like */}
-        {/* <InspectionControlsContainer {...{ documentRevision }} /> */}
-        {renderbuttons(initialButtons)}
-        <HeaderMenu>{renderbuttons(restButtons)}</HeaderMenu>
-      </>
-      }
+      {!redlineActive && (
+        <>
+          {renderActionItems(initialButtons, true)}
+          <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
+        </>
+      )}
     </>
   );
 };
