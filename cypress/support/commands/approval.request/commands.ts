@@ -168,7 +168,7 @@ Cypress.Commands.add("approvalApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/approvals/${params.approvalsId}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
     body: {
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
