@@ -8,13 +8,17 @@ import { documentVersionPath } from "../../../../../ui/document.revision/utils/p
 import useActionCreator from "../../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../../ui/hooks/useAsync";
 import { StyledButton } from "./StyledListButton";
+import { StyledMenuListItem } from "./StyledMenuListItem";
+import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 interface CloneEBButtonProps extends ButtonProps {
   documentRevision: DocumentRevision;
+  renderAsButton: boolean;
 }
 
 const NewCloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
   documentRevision,
+  renderAsButton,
 }) => {
   const history = useHistory();
   const asyncClone = useAsync({
@@ -33,13 +37,29 @@ const NewCloneEBButton: React.FunctionComponent<CloneEBButtonProps> = ({
     );
   };
   return (
-    <StyledButton
-      color="primary"
-      data-cy="CloneEBButton"
-      onClick={cloneAction}
-    >
-      <Text translation="documentRevision.clone.eb" />
-    </StyledButton>
+    <>
+      {renderAsButton && ( <StyledButton
+        color="primary"
+        data-cy="CloneEBButton"
+        onClick={cloneAction}
+      >
+        <Text translation="documentRevision.clone.eb" />
+      </StyledButton>
+      )}
+      {!renderAsButton && (
+        <StyledMenuListItem button alignItems="flex-start">
+          {/* TODO: needs to add menu item icon */}
+          {/* <StyledMenuListIcon>
+            <CloneEBIcon />
+          </StyledMenuListIcon> */}
+          <StyledMenuListItemText
+            primary={<Text translation="documentRevision.clone.eb" />}
+            data-cy="CloneEBButton"
+            onClick={cloneAction}
+          />
+        </StyledMenuListItem>
+      )}
+    </>
   );
 };
 

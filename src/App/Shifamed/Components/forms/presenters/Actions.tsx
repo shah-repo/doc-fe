@@ -365,7 +365,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes("NewCloneEB") && (
-        <NewCloneEBButton {...{ documentRevision }} />
+        <NewCloneEBButton {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
       {buttons.includes("exportCsvButton") && (
         <ExportToCSVButton {...{ documentRevision }} />

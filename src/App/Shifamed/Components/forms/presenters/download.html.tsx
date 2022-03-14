@@ -43,11 +43,11 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   const isActive = async.asyncState.status === AsyncStatus.Active;
   return (
     <>
-      {!renderAsButton && (<StyledButton
+      {renderAsButton && (<StyledButton
         color="primary"
+        disabled={isActive}
         data-cy="downloadHtml"
         onClick={handleClick}
-        disabled={isActive}
       >
         <Text translation="common.download.html" />
       </StyledButton>)}
@@ -55,7 +55,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
         <StyledMenuListItem button disabled={isActive} alignItems="flex-start">
           {/* TODO: needs to add menu item icon */}
           {/* <StyledMenuListIcon>
-            <DownloadHTMLIcon />
+            <DownloadHtmlIcon />
           </StyledMenuListIcon> */}
           <StyledMenuListItemText
             primary={<Text translation="common.download.html" />}

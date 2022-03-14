@@ -31,6 +31,8 @@ import HeaderMenu from "../../../Shifamed/Components/forms/header/Menu";
 import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
+import { StyledMenuListItem } from "../../../Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../Shifamed/Components/forms/presenters/StyledMenuListITemText";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -129,20 +131,35 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
 
-  const renderCloneButton = () => {
+  const renderCloneButton = (renderAsButton) => {
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          {
-            <StyledButton
-              color="primary"
-              onClick={cloneDocument}
-              id="PreviewControlsContainer-revise"
-              data-cy="updateRecord"
-            >
-              <Text message={reviseLabel} />
-            </StyledButton>
-          }
+          <>
+            {renderAsButton && (
+              <StyledButton
+                color="primary"
+                id="PreviewControlsContainer-revise"
+                data-cy="updateRecord"
+                onClick={cloneDocument}
+              >
+                <Text message={reviseLabel} />
+              </StyledButton>
+            )}
+            {!renderAsButton && (
+              <StyledMenuListItem button alignItems="flex-start">
+                {/* TODO: needs to add menu item icon */}
+                {/* <StyledMenuListIcon>
+                  <DownloadCloneIcon />
+                </StyledMenuListIcon> */}
+                <StyledMenuListItemText
+                  primary={<Text message={reviseLabel} />}
+                  data-cy="updateRecord"
+                  onClick={cloneDocument}
+                />
+              </StyledMenuListItem>
+            )}
+          </>
         </CustomLabelTooltip>
       );
     }
@@ -269,9 +286,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
     <>
-      {buttons.includes("cloneButton") && renderCloneButton()}
+      {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
-        <NewCloneEBButton {...{ documentRevision }} />
+        <NewCloneEBButton {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
       {buttons.includes("outputButton") && renderOutputButton()}
       {buttons.includes("emailsent") && emailSentButton()}
