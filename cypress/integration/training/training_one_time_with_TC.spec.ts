@@ -938,12 +938,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select 'One-Time Training test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks, CyRoutes.GetRequiredApprovers, CyRoutes.GetDocRevs], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("One-Time Training test");
-      });
+      // eslint-disable-next-line max-len
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowType("One-Time Training test",  { force: true }).wait(1500).arrowType("{downarrow}{enter}",  { force: true });
     });
 
     it("Enter training title 'One-Time training title'", () => {
