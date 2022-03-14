@@ -183,7 +183,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Click create new to create supplier", () => {
       SystemRequirement("REQ-2330");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.supCreateNew();
       });
     });

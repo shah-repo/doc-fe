@@ -51,7 +51,7 @@ context("Document list test", () => {
             documentTypes: [
               {
                 documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
+                documentTypeAcronym: "CP-",
                 group: "OTHER",
                 isQms: true,
               },
@@ -447,7 +447,7 @@ context("Document list test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0130");
-      cy.dlVerifyDescriptionOnHover({ description: "\nTest Doc Rev Description1\n" });
+      cy.dlVerifyDescriptionOnHover({ description: "Test Doc Rev Description1" });
     });
   });
 });

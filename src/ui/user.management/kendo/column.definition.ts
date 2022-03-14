@@ -47,7 +47,7 @@ const columns: KendoColumn[] = [
     field: "active",
     title: "common.active",
     show: true,
-    filter: "boolean",
+    filter: "text",
     groupable: true,
     locked: false,
     orderIndex: 5,

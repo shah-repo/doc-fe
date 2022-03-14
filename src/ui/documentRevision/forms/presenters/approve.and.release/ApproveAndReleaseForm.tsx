@@ -42,6 +42,7 @@ interface Props extends FormikProps<ApproveAndReleaseFormValues> {
   setDocumentType: (value: string) => void;
   setSelectedInvalid: (value: boolean) => void;
   closeDialog: () => void;
+  asyncGetDocTypeState: AsyncState;
 }
 
 const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
@@ -63,6 +64,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   checkedGroups,
   setCheckedGroups,
   initialGroups,
+  asyncGetDocTypeState,
 }) => {
 
   // MARK: @selectors
@@ -153,6 +155,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
   return (
     <Form className={classes.form}>
       <FormMessage asyncState={asyncState} />
+      <FormProgress asyncState={asyncGetDocTypeState} />
       {showApprovers && (
         <Approvers
           withoutCurrentUser

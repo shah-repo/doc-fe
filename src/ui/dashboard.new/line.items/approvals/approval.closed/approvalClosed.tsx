@@ -4,7 +4,6 @@ import {
   Collapse,
   Grid,
   IconButton,
-  Link,
   List,
   ListItemIcon,
   ListItemText,
@@ -24,7 +23,9 @@ import { STATUS_TYPES_LABEL } from "../../../../../state/ducks/dashboard.new/my.
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import Text from "../../../../components/Text";
 import Colors from "../../../../layout/theme/utils/colors";
+import ApprovalTitle from "../../common/ApprovalTitle/presenter";
 import { getDocIcon } from "../../common/DocIcon";
+import DocId from "../../common/DocId/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
@@ -126,45 +127,13 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true}>
-                  <Link
-                    href={changeRequestEditPath(arChangeRequestId)}
-                    color="inherit"
-                    className={classes.link}
-                  >
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={`${classes.typography} ${classes.margin5}`}
-                      color="textPrimary"
-                      noWrap
-                    >
-                      {arId}
-                    </Typography>
-                  </Link>
+                  <DocId url={changeRequestEditPath(arChangeRequestId)} docId={arId} />
                 </Grid>
                 <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <StyleTooltip
+                  <ApprovalTitle
+                    url={changeRequestEditPath(arChangeRequestId)}
                     title={title}
-                    placement="top-start"
-                    arrow
-                    PopperProps={{ popperOptions: {} }}
-                  >
-                    <Link
-                      href={changeRequestEditPath(arChangeRequestId)}
-                      color="inherit"
-                      className={classes.link}
-                    >
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={`${classes.typographyBold} ${classes.margin5}`}
-                        color="textSecondary"
-                        noWrap
-                      >
-                        {title}
-                      </Typography>
-                    </Link>
-                  </StyleTooltip>
+                  />
                 </Grid>
                 <Grid item={true}>
                   <Typography

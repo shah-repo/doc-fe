@@ -14,7 +14,7 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
-import { FBEBPart } from "../../form.builder";
+import { FB, FBEBPart, FBWorkspaceMode } from "../../form.builder";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DocumentCloneType } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
@@ -53,12 +53,22 @@ type Props =
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
-  isOutput: boolean;
   lastSavedTimestamp?: string;
+  mode: FBWorkspaceMode;
   isDisabled: boolean;
   email: string;
   isOwner: boolean;
 };
+
+export interface FormHeaderContext {
+  documentRevision: DocumentRevision;
+  canChangeOwnerShip: boolean;
+  values: DocumentRevisionFormValues;
+  docInfo: any;
+  isDisabled: boolean;
+  email: string;
+  isOwner: boolean;
+}
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   initialValues,
@@ -85,11 +95,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   redlineActive,
   isDisabled,
   isOwner,
+  mode,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState } = SM.useStores();
   const intl = useIntl();
-
+  const { workspaceState } = FB.useStores();
 
   const { revisionChangeType } = values || {};
   const documentTypeById = documentTypesById[values.document?.documentType?.id || ""];
@@ -195,6 +206,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
       dirty = isDirty || false;
     }
   );
+
+  useEffect(() => {
+    workspaceState?.setMode(mode);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   return (
     <FormWrapper

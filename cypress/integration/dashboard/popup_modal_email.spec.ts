@@ -301,8 +301,8 @@ context("Approval request email popup modal", () => {
           sentToUser: SECOND_USER.email,
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
-            "I sent a request for approval on\r\n",
-            "AR-00001\r\n                                        Approval request from newly created form",
+            "I sent a request for approval on",
+            "AR-00001 Approval request from newly created form",
             "Thank you,",
           ],
         }];
@@ -346,7 +346,7 @@ context("Approval request email popup modal", () => {
 
       it("Check if pop-up modal has pending with all the approvers", () => {
         cy.get("h2").should("contain.text", "PENDING (2)");
-        cy.get("[class^=makeStyles-iconupdown-]").eq(1).arrowClick();
+        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']>svg").eq(4).arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);

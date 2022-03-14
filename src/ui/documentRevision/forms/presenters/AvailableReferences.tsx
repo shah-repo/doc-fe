@@ -1,4 +1,5 @@
-import { Box, Chip, TextField, Typography } from "@material-ui/core";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, map, some } from "lodash";
@@ -7,12 +8,14 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { SM } from "../../../../App";
 import { TypographyProps } from "../../../../state/ducks/common/types";
-import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import useActionCreator from "../../../hooks/useActionCreator";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 
@@ -47,6 +50,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
+
+  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const onChange = (e, value) => {
     const {
@@ -105,14 +114,70 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   }, [documentReferences]);
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
-
-  const filterOptions = (event: any, inputVal: any) => {
-    const updatedOptions = options.filter(
-      (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
-    );
-    setModifiedOptions(updatedOptions);
+  const [offset, setOffset] = React.useState(0);
+  const limit = 25;
+  const queryParams: DocRevQueryParam = {
+    offset,
+    limit,
+    searchText: null,
+    fields: "name,document.docId",
+    status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.PendingChange],
   };
-  const debounceFunction = debounce(filterOptions, 1000);
+
+  useEffect(() => {
+    if (loadAsyncState.status === AsyncStatus.Success) {
+      filterOptions();
+    }
+  }, [loadAsyncState]);
+
+  const filterOptions = () => {
+    if (inputValue) {
+      const updatedOptions = options.filter(
+        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setModifiedOptions(updatedOptions);
+    } else {
+      setModifiedOptions(options);
+    }
+  };
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputVal && inputVal.length > 2) {
+      setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0, inputVal);
+    } else if (!inputVal) {
+      setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000);
+
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) ===
+      listboxNode.clientHeight
+    ) {
+      const nextOffset = offset + limit;
+      setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
+    }
+  };
+
+  const queryApi = (offset: number, searchText?: string) => {
+    queryParams.offset = offset;
+    queryParams.searchText = searchText || null;
+    loadAction([], queryParams);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+    setOffset(0);
+    queryApi(0);
+  };
 
   return (
     <Field {...fieldProps} label={undefined}>
@@ -136,6 +201,14 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 variant="outlined"
                 InputProps={{
                   ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      { open && loading && (
+                        <CircularProgress color="inherit" size={16} />
+                      )}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
                 }}
                 inputProps={{
                   ...params.inputProps,
@@ -160,6 +233,13 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         onInputChange={debounceFunction}
         multiple
         disableClearable
+        ListboxProps={{ onScroll }}
+        open={open}
+        onOpen={onOpen}
+        onClose={() => {
+          setOpen(false);
+        }}
+        loading={loading}
       />
     </Field>
   ); };

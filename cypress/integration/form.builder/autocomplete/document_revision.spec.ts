@@ -160,7 +160,7 @@ context("Autocomplete 'Document Revision' test", () => {
           });
 
           it("Select 'Document revisions' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document Revision" });
           });
 
           it("Click 'Add' button", () => {
@@ -204,9 +204,9 @@ context("Autocomplete 'Document Revision' test", () => {
             if (response.body.length > 0 ) {
               const docRevs = response.body;
               docRevs.forEach((docRev) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", docRev.document.docId);
+                cy.get("ul>li[role=option]").should("contain.text", docRev.document.docId);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

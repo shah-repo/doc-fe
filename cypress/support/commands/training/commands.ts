@@ -14,7 +14,6 @@ declare global {
       trFilterDocListByNameAndSelect(params: { title: string }): Chainable<Subject>;
       trApproveAR(): Chainable<Subject>;
       trClearFilters(): Chainable<Subject>;
-      trClearFiltersNoWait(): Chainable<Subject>;
       trRejectAR(): Chainable<Subject>;
       trCompleteTraining(): Chainable<Subject>;
       trApproveTraining(): Chainable<Subject>;
@@ -43,21 +42,14 @@ Cypress.Commands.add("trSelectFirstDocument", () => {
 });
 
 Cypress.Commands.add("trFilterDocListByNameAndSelect", (params: { title: string }) => {
-  cy.trClearFiltersNoWait();
+  cy.trClearFilters();
   cy.listLoadingElementShouldNotExist();
   cy.trLandingPageDocRevTitle({ title: params.title });
   cy.get(`[data-grid-row-index]`).contains(params.title).arrowClick();
 });
 
 Cypress.Commands.add("trClearFilters", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
-    cy.get("button[data-cy=clearFilter]").arrowClick();
-  });
-  cy.listLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("trClearFiltersNoWait", () => {
-  cy.get("button[data-cy=clearFilter]").arrowClick().wait(500);
+  cy.get("button[data-cy=clearFilter]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 

@@ -128,7 +128,7 @@ context("FORM Field test", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
         cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -349,8 +349,8 @@ context("FORM Field test", () => {
         cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval" });
-        cy.get("[data-cy=\"editorConfig.approvers\"]").arrowType(`${USERS[1].email }{downarrow}{enter}`);
-        cy.get("[data-cy=\"editorConfig.groups\"]").arrowType("Everyone{downarrow}{enter}");
+        cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+        cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
           cy.fbAddNewFieldButton();
@@ -393,7 +393,7 @@ context("FORM Field test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.get(`[data-cy="form.builder.instructionsdocument"]`).eq(-1).arrowClick();
         cy.fbEnterNameValue({ name: "label", value: "fb-mpi" });
-        cy.get("[data-cy=\"instructionsDocument\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"instructionsDocument\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -402,7 +402,7 @@ context("FORM Field test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ field: "Select Document" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-        cy.get("[data-cy=\"options\"]").arrowType("AR Form{downarrow}{enter}");
+        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -794,7 +794,7 @@ context("FORM Field test", () => {
       });
 
       it("Select Autocomplete field value", () => {
-        cy.get("input[data-cy^=\"fb-autocomplete-\"]").arrowClick().arrowType("test title{downarrow}{enter}");
+        cy.get("input[data-cy^=\"fb-autocomplete-\"]").arrowClick().autocompleteSelect("test title");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

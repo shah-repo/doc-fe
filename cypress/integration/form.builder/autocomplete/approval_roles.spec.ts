@@ -110,7 +110,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Click Save button", () => {
-        cy.fbClickButton({ el: "DocumentRevisionForm-submit" });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Approve and release FORM document", () => {
@@ -202,7 +202,7 @@ context("Autocomplete 'Approval Roles' test", () => {
           });
 
           it("Select 'Approval Roles' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Approval Roles{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Approval Roles" });
           });
 
           it("Click 'Add' button", () => {
@@ -233,9 +233,9 @@ context("Autocomplete 'Approval Roles' test", () => {
             if (response.body.length > 0 ) {
               const roles = response.body;
               roles.forEach((role) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", role.name);
+                cy.get("ul>li[role=option]").should("contain.text", role.name);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

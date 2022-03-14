@@ -11,7 +11,7 @@ const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
 const newCompanyAbbr = "NC-" + randomNumberForCompany;
-const apiCreatedCompany = {
+const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
 };
@@ -673,6 +673,10 @@ context("DAM approvals in LHR", () => {
         cy.drCreateNewDocumentFromForm();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Enters title 'New Company'", () => {
         cy.drEnterDocumentTitle({ name: "New Company" });
       });
@@ -1095,7 +1099,7 @@ context("DAM approvals in LHR", () => {
       it("Release supplier", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1125,7 +1129,7 @@ context("DAM approvals in LHR", () => {
 
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1151,7 +1155,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1186,7 +1190,7 @@ context("DAM approvals in LHR", () => {
 
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1277,7 +1281,7 @@ context("DAM approvals in LHR", () => {
 
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1342,7 +1346,7 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

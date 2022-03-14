@@ -441,9 +441,7 @@ context("LHR Upgrade", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release MPI document", () => {
@@ -499,7 +497,7 @@ context("LHR Upgrade", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
 
@@ -509,16 +507,14 @@ context("LHR Upgrade", () => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
         });
       });
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
-          });
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {
@@ -551,11 +547,9 @@ context("LHR Upgrade", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.url().then((url: any) => {
-          lhrDocUrl = url;
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
       });
     });
   });
@@ -635,14 +629,12 @@ context("LHR Upgrade", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Complete step", () => {

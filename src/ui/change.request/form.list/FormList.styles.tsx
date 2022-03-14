@@ -60,12 +60,5 @@ export const styles = makeStyles((theme: Theme) =>
       fill: Colors.navy,
       marginRight: theme.spacing(0.625),
     },
-    title: {
-      fontWeight: 600,
-      fontSize: 24,
-      color: Colors.almost_black,
-      textTransform: "capitalize",
-      fontFamily: "Sora",
-    },
   }),
 );

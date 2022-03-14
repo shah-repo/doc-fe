@@ -233,7 +233,7 @@ Cypress.Commands.add("grpSelectOfficial", () => {
 });
 
 Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
-  cy.get(`td[role="gridcell"] input`).eq(0).arrowType(params.name);
+  cy.get(`td[role="gridcell"] input`).eq(0).clear().arrowType(params.name);
 });
 
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
@@ -259,6 +259,7 @@ Cypress.Commands.add("grpSaveGroup", () => {
     cy.get(`td[role="gridcell"] button`).eq(0).arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("grpSaveGroupPatch", () => {

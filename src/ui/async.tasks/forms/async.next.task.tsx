@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import Text from "../../components/Text";
-import { styles } from "../async.tasks.styles";
+import { styles } from "../grid/presenter.styles";
 import {
   AsyncProps,
   NEXT_TASK_TYPES,
