@@ -1,5 +1,6 @@
+import Base64 from "Base64";
 import DOMPurify from "dompurify";
-import { cloneDeep } from "lodash";
+import { cloneDeep, get } from "lodash";
 import { useEffect } from "react";
 import striptags from "striptags";
 import Config from "../../config";
@@ -20,6 +21,10 @@ export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(
 
   return copy;
 };
+
+export function encodeString(stringToEncode: string): string {
+  return Base64.btoa(stringToEncode);
+}
 
 export function downloadURI(uri, name) {
   const link = document.createElement("a");
@@ -60,3 +65,10 @@ export function deleteCookie(name) {
       ";path=/" +
       ";expires=" + new Date().toUTCString();
 }
+
+export const sortStringsByKey = (key: string) => (a, b) => {
+  a = get(a, key).toLowerCase();
+  b = get(b, key).toLowerCase();
+  if ( a === b) { return 0; }
+  return a < b ? -1 : 1;
+};

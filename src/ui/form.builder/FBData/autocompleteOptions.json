@@ -324,5 +324,15 @@
     "root": "",
     "includeRevision": "displayRevision",
     "hidden": false
+  },
+  {
+    "id": "42",
+    "label": "Released Parts",
+    "valueKey": "id",
+    "labelKey": "name",
+    "labelPrefixRoot": "document.docId",
+    "includeRevision": "displayRevision",
+    "root": "",
+    "hidden": false
   }
 ]

@@ -1436,10 +1436,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
@@ -1497,10 +1494,7 @@ context("Create company with golden tenant", () => {
     });
 
     it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
@@ -1606,8 +1600,11 @@ context("Create company with golden tenant", () => {
 
     it("Add Seed documents", () => {
       SystemRequirement("REQ-3570");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001{downarrow}{enter}");
-      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002{downarrow}{enter}");
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00001");
+      cy.get("ul>li[role=option]").contains("SEED-00001").arrowClick();
+      cy.unClick();
+      cy.get("[name^=seed-documents-to-be-included-]").arrowType("SEED-00002");
+      cy.get("ul>li[role=option]").contains("SEED-00002").arrowClick();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -1657,6 +1654,76 @@ context("Create company with golden tenant", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: multipleCompanies });
+    });
+
+    it("Verify default Background company color", () => {
+      cy.get("#navigation").should("have.css", "background-color", "rgb(18, 27, 33)");
+    });
+
+    it("Verify default company logo", () => {
+      const tmpRegex = new RegExp( `http[s]:\\/\\/.*\\/image`, "gi" );
+      cy.get("img[alt=\"Company logo\"]").invoke("attr", "src").should("match", tmpRegex);
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Dashboard", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(0)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Document Control", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(1).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(1)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Equipment", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(2).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(2)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Supplier Management", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(3).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(3)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Purchase orders", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(4).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(4)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Receiving", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(5).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(5)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Manfacturing", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(6).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(6)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on Group Management", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(7).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(7)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+
+    it("Verify that tabs are lighter color when they are hovered over on User Management", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(8).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(8)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Verify that tabs are lighter color when they are hovered over on Training", () => {
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9).should("have.css", "background-color", "rgb(18, 27, 33)");
+      cy.get(".MuiButtonBase-root.MuiListItem-root").eq(9)
+        .realHover().wait(500).should("have.css", "background-color", "rgb(50, 66, 78)");
+    });
+    it("Verify the profile dropdown", () => {
+      cy.get("[data-cy=\"header-userInitials\"]").eq(0).contains("GR").trigger("mousedown");
     });
   });
 
@@ -1787,7 +1854,7 @@ context("Create company with golden tenant", () => {
 
     it("Click exit DAM", () => {
       cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
+        [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"EditBtnDAM\"]").arrowClick();
         });
     });
@@ -1880,7 +1947,6 @@ context("Create company with golden tenant", () => {
         .and("contain.text", "REMOTE_VALIDATORS_REFRESH")
         .and("contain.text", "GROUP_DELETE")
         .and("contain.text", "DOC_REV_OBS_TO_RELEASED")
-        .and("contain.text", "COMPANY_DROPBOX_INTEGRATION")
         .and("contain.text", "COMPANY_UPDATE_CURRENT");
       cy.get("[id=\"Group-addTags\"]").should("contain.text", "NAVIGATION_WITH_RESTRICTED_DOC_TYPES")
         .and("contain.text", "CREATE_DOCS_OF_RESTRICTED_DOC_TYPES")

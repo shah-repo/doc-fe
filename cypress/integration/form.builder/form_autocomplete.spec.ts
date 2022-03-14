@@ -993,7 +993,7 @@ context("Autocomplete test", () => {
     it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
         cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
     });
@@ -1016,7 +1016,7 @@ context("Autocomplete test", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
 
     it("Check 100% override", () => {

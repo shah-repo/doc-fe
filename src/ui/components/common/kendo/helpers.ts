@@ -132,8 +132,6 @@ export enum DisplayText {
   SCHEMA,
   YES,
   NO,
-  SELECT_TASK_TYPE,
-  SELECT_NEXT_TASK,
 }
 export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.ACTIVE]: "common.active",
@@ -158,8 +156,6 @@ export const TranslatedText: { [Key in DisplayText]: Translation } = {
   [DisplayText.SCHEMA]: "common.schema",
   [DisplayText.YES]: "common.true",
   [DisplayText.NO]: "common.false",
-  [DisplayText.SELECT_TASK_TYPE]: "async.task.select.task.type",
-  [DisplayText.SELECT_NEXT_TASK]: "async.task.select.next.task",
 };
 
 export enum statusClassMapping {
@@ -201,4 +197,16 @@ export const pagerSettings: GridPagerSettings = {
   type: "numeric",
   pageSizes: [25, 50, 75, 100, 500],
   previousNext: true,
+};
+
+
+export const hideOperatorTooltip = () => {
+  document.querySelectorAll(".k-dropdown-operator .k-dropdown-wrap")?.forEach((item) => {
+    item.setAttribute("title", "");
+  });
+  setTimeout(() => {
+      document.querySelectorAll(".k-master-row.k-alt")?.forEach((item) => {
+        item.setAttribute("class", "k-master-row");
+      });
+  });
 };

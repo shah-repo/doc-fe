@@ -150,7 +150,7 @@ context("Autocomplete 'Document types' test", () => {
           });
 
           it("Select 'Document typess' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Document types{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Document types" });
           });
 
           it("Click 'Add' button", () => {
@@ -180,9 +180,9 @@ context("Autocomplete 'Document types' test", () => {
             if (response.body.length > 0 ) {
               const docTypes = response.body;
               docTypes.forEach((docType) => {
-                cy.get("ul[role=listbox]>li").should("contain.text", docType.documentTypeName);
+                cy.get("ul>li[role=option]").should("contain.text", docType.documentTypeName);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });

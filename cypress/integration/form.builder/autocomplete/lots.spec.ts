@@ -127,7 +127,7 @@ context("Autocomplete 'Lots' test", () => {
       it("Select 'Component Specification Lot' from the dropdown", () => {
         cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
 
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview, CyRoutes.GetAvailableApprovers], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
           cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
         });
       });
@@ -221,7 +221,7 @@ context("Autocomplete 'Lots' test", () => {
           });
 
           it("Select 'Lots' as options", () => {
-            cy.get("[data-cy=\"optionId\"]").arrowType("Lots{downarrow}{enter}");
+            cy.fbAutocompleteType({ autocompleteOption: "Lots" });
           });
 
           it("Click 'Add' button", () => {
@@ -252,10 +252,10 @@ context("Autocomplete 'Lots' test", () => {
             if (response.body.length > 0 ) {
               const lots = response.body;
               lots.forEach((lot) => {
-                cy.get("ul[role=listbox]>li")
+                cy.get("ul>li[role=option]")
                   .should("contain.text", `${lot.document.docId} - rev ${lot.displayRevision} - ${lot.name}`);
               });
-              cy.get("ul[role=listbox]>li")
+              cy.get("ul>li[role=option]")
                 .then(($lis) => {
                   expect($lis).to.have.length(response.body.length);
                 });
