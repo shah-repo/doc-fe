@@ -21,7 +21,7 @@ import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
 import { getRevisionStageNumber, isDocumentAlphaReleased } from "../helpers/revisionStage";
-import AvailableReferencesField from "./presenters/AvailableReferences.new1";
+import AvailableReferencesField from "./presenters/AvailableReferences";
 import DocIdInput from "./presenters/DocIdInput";
 import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";

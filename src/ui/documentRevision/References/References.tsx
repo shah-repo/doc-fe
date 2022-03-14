@@ -72,7 +72,7 @@ const References = ({
         disabled={isDisabledInput}
         documentGroupOptions={groupOptions}
       />}
-      {referenceTo && <ReferenceToContainer
+      {!edit && referenceTo && <ReferenceToContainer
         canEdit={edit}
         dataProp={referenceTo}
         status={status}

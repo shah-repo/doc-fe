@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, createStyles, makeStyles, TextField, TooltipProps, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, map, some } from "lodash";
+import { debounce, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,10 +12,12 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../.
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
-import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
+import Field, { FieldOwnProps } from "../../../components/forms/fields/Field.new";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
+import Colors from "../../../layout/theme/utils/colors";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 
@@ -40,6 +42,51 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
+const tooltipClasses = makeStyles(() => ({
+  tooltip: {
+    backgroundColor: Colors.almost_black,
+    fontSize: "12px",
+    fontFamily: "Sora",
+    fontWeight: 400,
+    maxWidth: "203px",
+  },
+  arrow: {
+    color: Colors.almost_black,
+  },
+}));
+
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipClasses();
+  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
+};
+
+const styles = makeStyles(() =>
+  createStyles({
+    label: {
+      color: Colors.almost_black,
+      fontSize: "12px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+      lineHeight: "15.12px",
+      marginBottom: "10px",
+    },
+    root: {
+      "& .MuiAutocomplete-inputRoot": {
+        paddingRight: "30px",
+      },
+    },
+    chip: {
+      whiteSpace: "normal",
+      fontSize: "12px",
+      fontFamily: "sora",
+    },
+    option: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+    },
+  })
+);
+
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,
   disabled = false,
@@ -47,6 +94,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const classes = styles();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
@@ -56,6 +104,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const truncateLable = (label) => truncate(label, { length: 30, omission: " ..." });
 
   const onChange = (e, value) => {
     const {
@@ -182,19 +231,20 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   return (
     <Field {...fieldProps} label={undefined}>
       <Box mb={0.3}>
-        <Typography variant="h5">
+        <Typography variant="h5" className={classes.label}>
           <Text message={fieldProps.label} />
         </Typography>
       </Box>
       <Autocomplete
         {...{ onChange, disabled }}
+        classes={{ option: classes.option }}
         value={value}
         options={ModifiedOptions}
         // disable filtering on client
         filterOptions={(x) => x}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
-            <Box width="100%" data-cy="referenceTo">
+            <Box width="100%" data-cy="referenceTo" className={classes.root}>
               <TextField
                 {...params}
                 fullWidth
@@ -222,11 +272,16 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         renderTags={(value, getTagProps) => (
           value?.map((option, index) => (
             <Chip
-              {...getTagProps({ index })}
               key={option.value}
-              label={option.label}
-              style={{ minHeight: "32px", height: "auto" }}
+              label={
+                <Typography className={classes.chip}>
+                  <StyledTooltip title={option.label}>
+                    <Box>{truncateLable(option.label)}</Box>
+                  </StyledTooltip>
+                </Typography>}
+              {...getTagProps({ index })}
               disabled={option.deleteDisabled}
+              style={{ height: "100%" }}
             />
           ))
         )}
