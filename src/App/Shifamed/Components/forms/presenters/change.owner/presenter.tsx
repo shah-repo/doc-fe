@@ -1,7 +1,7 @@
 import { Box, Dialog, DialogContent, DialogTitle, FormControl, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { Form, Formik } from "formik";
-import React, { Fragment } from "react";
+import React from "react";
 import { ReactComponent as ChangeOwnerIcon } from "../../../../../../assets/images/change_owner_avatar.svg";
 import { Owner } from "../../../../../../state/ducks/common/types";
 import { AsyncState } from "../../../../../../state/types";
@@ -11,10 +11,10 @@ import FormMessage from "../../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../../ui/components/forms/FormProgress";
 import SubmitButton from "../../../../../../ui/components/forms/SubmitButton";
 import Text from "../../../../../../ui/components/Text";
+import { StyledButton } from "../StyledListButton";
 import { StyledMenuListIcon } from "../StyledMenuListIcon";
 import { StyledMenuListItem } from "../StyledMenuListItem";
 import { StyledMenuListItemText } from "../StyledMenuListITemText";
-
 
 interface OwnProps {
   employees: SelectOption[];
@@ -22,6 +22,7 @@ interface OwnProps {
   currentOwner: Owner;
   asyncState: AsyncState;
   isDialogOpen: boolean;
+  renderAsButton: boolean;
   closeDialog: () => void;
   openDialog: () => void;
 }
@@ -32,6 +33,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   currentOwner,
   asyncState,
   isDialogOpen,
+  renderAsButton,
   closeDialog,
   openDialog,
 }) => {
@@ -43,7 +45,11 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       <Form>
         <FormProgress asyncState={asyncState} />
         <FormMessage asyncState={asyncState} />
-        <FormControl className="form-control" style={{ width: "100%" }} id="OwnerChangerPresenter-selectField">
+        <FormControl
+          className="form-control"
+          style={{ width: "100%" }}
+          id="OwnerChangerPresenter-selectField"
+        >
           <SelectField
             selectProps={{ id: "employee" }}
             name="employee"
@@ -57,10 +63,12 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          <SubmitButton asyncState={asyncState}
+          <SubmitButton
+            asyncState={asyncState}
             label="change.owner.update"
             id="OwnerChangerPresenter-submitButton"
-            data-cy="changeOwner-submit" />
+            data-cy="changeOwner-submit"
+          />
         </Box>
       </Form>
     </Box>
@@ -72,8 +80,17 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
       onSubmit={preventPropagation}
       onClose={closeDialog}
     >
-      <DialogTitle disableTypography style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h6"><Text translation="change.owner" /></Typography>
+      <DialogTitle
+        disableTypography
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6">
+          <Text translation="change.owner" />
+        </Typography>
         <IconButton onClick={closeDialog} style={{ padding: 0 }}>
           <CloseIcon />
         </IconButton>
@@ -92,20 +109,32 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   );
 
   return (
-    <Fragment>
-      <StyledMenuListItem  button alignItems="flex-start">
-        <StyledMenuListIcon>
-          <ChangeOwnerIcon />
-        </StyledMenuListIcon>
-        <StyledMenuListItemText
+    <>
+      {renderAsButton && (
+        <StyledButton
+          color="primary"
           id="OwnerChangerPresenter-changeOwner"
           data-cy="changeOwner"
-          primary={<Text translation="change.owner" />}
           onClick={openDialog}
-        />
-      </StyledMenuListItem>
+        >
+          <Text translation="change.owner" />
+        </StyledButton>
+      )}
+      {!renderAsButton && (
+        <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListIcon>
+            <ChangeOwnerIcon />
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            id="OwnerChangerPresenter-changeOwner"
+            data-cy="changeOwner"
+            primary={<Text translation="change.owner" />}
+            onClick={openDialog}
+          />
+        </StyledMenuListItem>
+      )}
       {dialogRenderer()}
-    </Fragment>
+    </>
   );
 };
 

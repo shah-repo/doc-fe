@@ -285,6 +285,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
         <FormOwnerChangerContainer
           requestId={documentRevision.id}
           requestType={RequestType.Document}
+          renderAsButton={renderAsButton}
         />
       )}
       {buttons.includes("exportToEmail") && (

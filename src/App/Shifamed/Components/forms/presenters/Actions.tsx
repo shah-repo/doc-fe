@@ -374,6 +374,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <FormOwnerChangerContainer
           requestId={values.id}
           requestType={RequestType.Document}
+          renderAsButton={renderAsButton}
         />
       )}
       {buttons.includes("voidButton") && (
