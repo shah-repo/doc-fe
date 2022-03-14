@@ -131,7 +131,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
 
   const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
 
-  const renderCloneButton = (renderAsButton) => {
+  const renderCloneButton = (renderAsButton: boolean) => {
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
@@ -165,21 +165,38 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     }
   };
 
-  const renderOutputButton = () => {
+  const renderOutputButton = (renderAsButton: boolean) => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
         .find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
-        <StyledButton
-          color="primary"
-          onClick={cloneOutputDocument}
-          id="PreviewControlsContainer-createNew"
-          data-cy="PreviewControlsContainer-createNew"
-        >
-          <Text translation={"common.create.new"} />
-        </StyledButton>
+        <>
+          {renderAsButton && ( <StyledButton
+            color="primary"
+            id="PreviewControlsContainer-createNew"
+            data-cy="PreviewControlsContainer-createNew"
+            onClick={cloneOutputDocument}
+          >
+            <Text translation={"common.create.new"} />
+          </StyledButton>
+          )}
+          {!renderAsButton && (
+            <StyledMenuListItem button alignItems="flex-start">
+              {/* TODO: needs to add menu item icon */}
+              {/* <StyledMenuListIcon>
+                <CreateOutputIcon />
+              </StyledMenuListIcon> */}
+              <StyledMenuListItemText
+                primary={<Text translation="common.create.new" />}
+                id="PreviewControlsContainer-createNew"
+                data-cy="PreviewControlsContainer-createNew"
+                onClick={cloneOutputDocument}
+              />
+            </StyledMenuListItem>
+          )}
+        </>
       );
     }
   };
@@ -198,15 +215,32 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       async);
   };
 
-  const emailSentButton = () => !hasAccess && !isEmailSent && (
-    <StyledButton
-      color="primary"
-      onClick={onSubmit}
-      id="PreviewControlsContainer-access"
-      data-cy="PreviewControlsContainer-access"
-    >
-      <Text translation="document.request.access" />
-    </StyledButton>
+  const renderRequestAccessButton = (renderAsButton: boolean) => !hasAccess && !isEmailSent && (
+    <>
+      {renderAsButton && (<StyledButton
+        color="primary"
+        id="PreviewControlsContainer-access"
+        data-cy="PreviewControlsContainer-access"
+        onClick={onSubmit}
+      >
+        <Text translation="document.request.access" />
+      </StyledButton>
+      )}
+      {!renderAsButton && (
+        <StyledMenuListItem button alignItems="flex-start">
+          {/* TODO: needs to add menu item icon */}
+          {/* <StyledMenuListIcon>
+            <RequestAccessIcon />
+          </StyledMenuListIcon> */}
+          <StyledMenuListItemText
+            primary={<Text translation="document.request.access" />}
+            id="PreviewControlsContainer-access"
+            data-cy="PreviewControlsContainer-access"
+            onClick={onSubmit}
+          />
+        </StyledMenuListItem>
+      )}
+    </>
   );
 
   const renderNoAccessWarning = () => !hasAccess && (
@@ -258,8 +292,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
     accessableButtons.push("outputButton");
   }
-  if (!isEmailSent && !hasAccess) {
-    accessableButtons.push("emailsent");
+  if (!hasAccess && !isEmailSent) {
+    accessableButtons.push("requestAccessButton");
   }
   if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
     accessableButtons.push("withdrawSubmission");
@@ -290,8 +324,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {buttons.includes("newcloneButton") && (
         <NewCloneEBButton {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
-      {buttons.includes("outputButton") && renderOutputButton()}
-      {buttons.includes("emailsent") && emailSentButton()}
+      {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
+      {buttons.includes("requestAccessButton") && renderRequestAccessButton(renderAsButton)}
       {buttons.includes("withdrawSubmission") &&
         renderWithdrawSubmissionButton()}
       {buttons.includes("inspectionControl") && (
