@@ -6,6 +6,7 @@ import { bool } from "aws-sdk/clients/signer";
 import moment from "moment";
 import "moment-timezone";
 import { ChangeRequestEditRequestBody } from "../../../../src/state/ducks/changeRequest/types";
+import { encodeString } from "../../../utils/context/converers";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -150,7 +151,7 @@ Cypress.Commands.add("arApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/change_requests/${params.arID}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
+      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
     body: {
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
@@ -167,7 +168,7 @@ Cypress.Commands.add("approvalApprove", (params: {
     method: "POST",
     url: `${CONFIG.BE_URL}/api/v1/approvals/${params.approvalsId}/approve`,
     headers: {
-      Authorization: `bearer_password ${params.employeeId}:${params.sessionId}:${CONFIG.DEFAULT_ENLIL_USER_PASSWORD}`,
+      Authorization: `bearer_password ${params.employeeId}:${encodeString(CONFIG.DEFAULT_ENLIL_USER_PASSWORD)}`,
     },
     body: {
       password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
