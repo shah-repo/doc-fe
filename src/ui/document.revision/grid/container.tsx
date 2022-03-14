@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
@@ -19,6 +20,8 @@ import gridConfiguration from "./column.definition";
 import { DocumentListPresenter } from "./presenter";
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
+  const intl = useIntl();
+  const title = intl.formatMessage({ id: "navigation.document.list" });
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
@@ -98,9 +101,9 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       return false;
     }
     if (canEditDocumentRevision(rowData.dataItem)) {
-      history.push(documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id));
+      history.push({ pathname: documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id), state: title });
     }
-    history.push(documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id));
+    history.push({ pathname: documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id), state: title });
   };
 
   return (

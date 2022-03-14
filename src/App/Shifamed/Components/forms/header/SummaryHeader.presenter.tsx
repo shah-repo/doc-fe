@@ -39,7 +39,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         documentRevision.formDocument?.formTemplate?.schema
               )}
               status={documentRevision.status}
-              group={location.state}
+              title={location.state}
               displayRevision={documentRevision?.displayRevision}
               id={documentRevision.document.docId}
               name={documentRevision.name}

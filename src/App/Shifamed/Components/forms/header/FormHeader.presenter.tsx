@@ -31,7 +31,7 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
         groupOptions={documentRevision.document.documentType.groupOptions}
         isInlineApproval={isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)
         }
-        group={location.state}
+        title={location.state}
         status={documentRevision.status}
         id={documentRevision.document.docId}
         name={documentRevision.name}
