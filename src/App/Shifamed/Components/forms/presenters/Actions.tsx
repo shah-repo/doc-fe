@@ -199,9 +199,6 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     accessableButtons.push("approveAndReleaseButton");
   }
   if (isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator) {
-    accessableButtons.push("SubmitForApproval");
-  }
-  if (isDirectlyApproved && (!isInlineApproval || revisionStage !== 1) && showToOwnerOrOperator) {
     accessableButtons.push("submitApprovalButton");
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy ) {
@@ -288,6 +285,7 @@ isUserDocumentOwner && showVoidButton) {
         buttons.includes("submitApprovalButton") &&  (<SubmitForApproval
           docRevId={values.id as string}
           status={values.status}
+
           docRevOwner={owner?.user.name}
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
           {
@@ -329,6 +327,7 @@ isUserDocumentOwner && showVoidButton) {
 
   const initialButtons = accessableButtons.length >= 1 ? accessableButtons.slice(0, 1) : accessableButtons;
   const restButtons = accessableButtons.length >= 1 ? accessableButtons.slice(1) : [];
+
   return (
     <>
       <Observer>
