@@ -86,7 +86,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         (canReferenceCreateInspection && isDocumentFai);
   })
     ? availableReferences.filter((ref) => !ref.deleteDisabled)
-    : availableReferences;
+    : availableReferences
+      .filter((ref) => !ref.deleteDisabled && !documentReferences.find((docRef) => docRef.id === ref.value));
 
   const defaultValue = (refs: Reference[] = []): any => refs?.map((ref) => {
     if (!ref.documentRevisions) { return { label: "", value: ref.id, deleteDisabled: false }; }
@@ -174,8 +175,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
 
   const onOpen = () => {
     setOpen(true);
-    // setOffset(0);
-    // queryApi(0);
+    setOffset(0);
+    queryApi(0);
   };
 
   return (

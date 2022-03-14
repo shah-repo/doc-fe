@@ -7,7 +7,7 @@ import HeaderInfo from "../../components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
-import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
+import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container.new";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 
