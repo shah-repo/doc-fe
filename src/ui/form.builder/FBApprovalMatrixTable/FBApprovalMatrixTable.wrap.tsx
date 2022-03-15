@@ -1,4 +1,3 @@
-import { sortBy } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { withResizeDetector } from "react-resize-detector";
@@ -44,7 +43,6 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
       if (!approvalData) {
         return;
       }
-      approvalData.approvalMatrix = sortBy(approvalData.approvalMatrix, (row) => row.docType.name?.toLowerCase());
     });
 
     return Component({
