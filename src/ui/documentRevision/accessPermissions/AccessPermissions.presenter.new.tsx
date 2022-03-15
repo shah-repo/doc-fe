@@ -10,9 +10,11 @@ import { Group } from "../../../state/ducks/auth/types";
 import { Owner, TypographySize } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
+import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
+import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./AccessPermissions.styles.new";
 
 interface OwnProps {
@@ -223,7 +225,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                   </Box>
                   {!isEmpty(securityEmployees) && (
                     <Box>
-                      {securityEmployees.map((e: Owner, index) => (
+                      {securityEmployees.map(({ id, user }: Owner, index) => (
                         <Grid
                           key={index}
                           justify="space-between"
@@ -235,9 +237,12 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                             <Avatar
                               variant="rounded"
                               className={classes.avatar}
-                              alt={e.user.name}
-                              src={e.user.avatar as string}
-                            />
+                              alt={user.name}
+                              src={user.avatar ? user.avatar : undefined}
+                              style={user.avatar ? {} : { background: user.initialColor, color: Colors.white }}
+                            >
+                              {!user.avatar && getInitalsFromName(user.name)}
+                            </Avatar>
                             <Typography
                               component="span"
                               variant="body2"
@@ -245,11 +250,11 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               className={classes.userName}
                               style={{ marginLeft: "7px" }}
                             >
-                              {e.user.name}
+                              {user.name}
                             </Typography>
                           </Grid>
                           <Grid item className={classes.deleteIcon}>
-                            <CloseIcon onClick={() => handleDelete(e.id)} />
+                            <CloseIcon cursor="pointer" onClick={() => handleDelete(id)} />
                           </Grid>
                         </Grid>
                       ))}
