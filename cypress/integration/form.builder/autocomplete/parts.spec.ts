@@ -72,6 +72,15 @@ context("Autocomplete 'Parts' test", () => {
         });
       });
     });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
   });
 
   context("Login user", () => {
