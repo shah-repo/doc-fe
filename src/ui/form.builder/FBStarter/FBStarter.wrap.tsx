@@ -10,18 +10,27 @@ export const withFBStarter = <T extends FBStarterProps>(
     ...props
   }: T) => {
 
-    const { dialogState } = FB.useStores();
+    const { dialogState, leftPanelDialogState } = FB.useStores();
     const { _documentRevisionFormState } = SM.useStores();
 
     onClick = (index?: number) => {
       // console.log("_documentRevisionFormState::", _documentRevisionFormState?.leftPanelOpen);
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
+      if (leftPanelDialogState) {
+        leftPanelDialogState?.config({
+          open: true,
+          showLeftPanelEditor: false,
+          maxWidth: "sm",
+          content: <FBControlPicker {...{ index }} />,
+        });
+      } else {
       dialogState?.config({
         open: true,
         showLeftPanelEditor: true,
         maxWidth: "sm",
         content: <FBControlPicker {...{ index }} />,
       });
+      }
     };
 
     return Component({

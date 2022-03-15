@@ -10,7 +10,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState, formState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelDialogState } = FB.useStores();
 
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
@@ -54,19 +54,36 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       }
       const { underValidation } = editorForm.props;
 
-      dialogState && dialogState.config({
-        open: true,
-        showLeftPanelEditor: true,
-        title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
-        maxWidth: "sm",
-        content: editorForm,
-        actions: (
-          <FBEditorActions
-            key={`fb-editor-actions-${type}`}
-            parentFormState={formState}
-            {...{ type, index }} />
-        ),
-      });
+      if (leftPanelDialogState) {
+        leftPanelDialogState && leftPanelDialogState.config({
+          open: true,
+          showLeftPanelEditor: true,
+          title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
+          maxWidth: "sm",
+          content: editorForm,
+          actions: (
+            <FBEditorActions
+              key={`fb-editor-actions-${type}`}
+              parentFormState={formState}
+              {...{ type, index }} />
+          ),
+        });
+      } else {
+        dialogState && dialogState.config({
+          open: true,
+          showLeftPanelEditor: true,
+          title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
+          maxWidth: "sm",
+          content: editorForm,
+          actions: (
+            <FBEditorActions
+              key={`fb-editor-actions-${type}`}
+              parentFormState={formState}
+              {...{ type, index }} />
+          ),
+        });
+
+      }
     };
 
     return Component({

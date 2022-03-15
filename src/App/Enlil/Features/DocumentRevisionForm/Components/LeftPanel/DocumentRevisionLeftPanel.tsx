@@ -20,7 +20,7 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
 }) => {
   const classes = styles();
 
-  const { dialogState } = FB.useStores();
+  const { leftPanelDialogState } = FB.useStores();
   return (
     <Observer>
       {() => (
@@ -62,8 +62,8 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
               >
                 <Observer>
                   {() => (<>
-                    {(!dialogState?.showLeftPanelEditor ||  !dialogState) && <LeftPresenter />}
-                    {dialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
+                    {(!leftPanelDialogState?.showLeftPanelEditor ||  !leftPanelDialogState) && <LeftPresenter />}
+                    {leftPanelDialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
                   </>)}
                 </Observer>
               </SMBox>
