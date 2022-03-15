@@ -29,7 +29,7 @@ const References = ({
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { handleMenuIconClick, indexOfMigrationTab, showMigration } = React.useContext(HandleMenuClickContext)!;
   return (
-    <Box margin={1.875}>
+    <Box margin={1.875} width={1}>
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
