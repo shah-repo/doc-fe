@@ -11,7 +11,7 @@ export const styles = makeStyles((theme: Theme) =>
     changeContainer: {
       borderBottom: "1px solid lightgray",
       padding: theme.spacing(1),
-      background: "#fff",
+      background: Colors.white,
     },
     auditValue: {
       color: theme.palette.primary.main,
@@ -59,13 +59,19 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "21px",
       color: Colors.almost_black,
     },
+    marginLeft7: {
+      marginLeft: "7px",
+    },
     userName: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: "normal",
-      fontSize: "14px",
-      lineHeight: "18px",
-      color: Colors.almost_black,
+      "fontFamily": "Sora",
+      "fontStyle": "normal",
+      "fontWeight": "normal",
+      "fontSize": "14px",
+      "lineHeight": "18px",
+      "color": Colors.almost_black,
+      "&.marginLeft7": {
+        marginLeft: "7px",
+      },
     },
     avatar: {
       width: "30px",

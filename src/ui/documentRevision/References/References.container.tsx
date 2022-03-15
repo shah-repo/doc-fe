@@ -1,11 +1,6 @@
 import React from "react";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import ReferencesPresenter from "./References.presenter";
-
-interface ReferencesProps {
-  selectedDocument: DocumentRevision | undefined;
-  edit: boolean | undefined;
-}
+import { ReferencesProps } from "./types";
 
 const ReferencesContainer = ({
   selectedDocument,

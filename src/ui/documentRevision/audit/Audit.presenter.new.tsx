@@ -58,7 +58,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <UserAvatarListItem name={name} owner={owner} secondaryComponent={<DateTime data-cy={`audit-time-${key}`} value={change.timestamp} format={MomentFormats.BriefDateTime} />} />
+          <UserAvatarListItem
+            name={name}
+            owner={owner}
+            secondaryComponent={
+              <DateTime
+                data-cy={`audit-time-${key}`}
+                value={change.timestamp}
+                format={MomentFormats.BriefDateTime}
+              />
+            }
+          />
           {renderChanges(audit[groupId], key)}
         </Box>
       );
@@ -243,12 +253,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (change.field.endsWith("s3link") && (change.type === "STRING_EDITED" || change.type === "STRING_NEW")) {
           singleFields.push(
             <Box mb={1} key={`${change.groupId}-${index}`}>
-              <Box>
+              <>
                 <Text
                   dataCy={`change-key-${groupKey}-${key}`}
                   message={`documentRevision.audit.s3link.${change.type}`}
                 />
-              </Box>
+              </>
               <div className={classes.auditValue}>
                 {/* Set field property to "s3link" so audit factory knows to generate downloadable link for s3links */}
                 <AuditFactory audit={{ ...change, field: "s3link" }} dataCy={`change-value-${groupKey}-${key}`} />
@@ -320,15 +330,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 : classes.auditListItem
             }
           >
-            <Box>
+            <>
               {!isFBField && !isSmartRef && (
                 <Typography
                   variant="subtitle1"
-                  style={{
-                    fontSize: "12px",
-                    fontFamily: "Sora",
-                    color: "#767B87",
-                  }}
+                  className={classes.auditKey}
                 >
                   <Text
                     dataCy={`change-key-${groupKey}-${key}`}
@@ -342,7 +348,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                   values={{ label: fbLabel }}
                 />
               )}
-            </Box>
+            </>
             <div className={classes.auditValue}>
               <AuditFactory
                 audit={change}
@@ -367,12 +373,12 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     });
 
     return (
-      <Box>
+      <>
         {singleFields}
         {attachments.length > 0 && renderGroupChanges(attachments)}
         {newReferences.length > 0 && renderGroupChanges(newReferences)}
         {deletedReferences.length > 0 && renderGroupChanges(deletedReferences)}
-      </Box>
+      </>
     );
   };
 
@@ -384,10 +390,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
-        <Box>
+        <>
           <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
             message={`documentRevision.audit.${field}.${type}`} />
-        </Box>
+        </>
         {auditGroup.map((change, index) => (
           <div
             key={change.groupId + `-${index}`}

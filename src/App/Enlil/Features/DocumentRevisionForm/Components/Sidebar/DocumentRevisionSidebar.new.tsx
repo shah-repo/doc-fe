@@ -97,6 +97,14 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           transform: `scaleX(-1)`,
         },
       },
+      tabTitle: {
+        fontFamily: "Sora",
+        fontStyle: "normal",
+        fontWeight: 600,
+        fontSize: "14px",
+        lineHeight: "18px",
+        color: Colors.dark_jungle_green,
+      },
     }));
   const classes = styles();
   return (
@@ -131,14 +139,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
             <Box width={233}>
               {_documentRevisionSidebarState?.open && (
                 <Typography
-                  style={{
-                    fontFamily: "Sora",
-                    fontStyle: "normal",
-                    fontWeight: 600,
-                    fontSize: "14px",
-                    lineHeight: "18px",
-                    color: Colors.dark_jungle_green,
-                  }}
+                  className={classes.tabTitle}
                 >
                   <SMText
                     boxProps={{ flexGrow: 1, ml: 2 }}
@@ -161,7 +162,10 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                   type: "references",
                   details: {
                     shouldShow: true,
-                    title: "References",
+                    title:
+                      intl?.formatMessage({
+                        id: "common.references",
+                      }) || "",
                     component: (
                       <ReferencesContainer
                         selectedDocument={selectedDocument}

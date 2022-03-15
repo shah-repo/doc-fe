@@ -28,25 +28,5 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.almost_black,
       marginTop: "10px",
     },
-    migrateForm: {
-      "borderRadius": "100px",
-      "width": "203px",
-      "height": "36px",
-      "backgroundColor": Colors.navy,
-      "padding": "0px",
-      "margin": "0px",
-      "&:hover": {
-        backgroundColor: Colors.navy,
-      },
-    },
-    migrateFormText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontSize: "12px",
-      fontWeight: 600,
-      lineHeight: "15.12px",
-      color: Colors.white,
-      textTransform: "capitalize",
-    },
   }),
 );

@@ -64,11 +64,11 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
     ));
 
   const referencesEmptyRenderer = () => (
-    <Box>
+    <>
       <Typography variant="h5" className={classes.noHeader} >
         <Text message="common.none"/>
       </Typography>
-    </Box>
+    </>
   );
   return (
     <Box mb={2.5}>
@@ -77,11 +77,11 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
           <Text message={label} />
         </Typography>
       </Box>
-      {fromReferencedBy && <Box>
+      {fromReferencedBy && <>
         <Typography variant="h6" className={classes.header}>
           <Text message={label} />
         </Typography>
-      </Box>}
+      </>}
       {referencesRenderer()}
       {!dataProp.length && !canEdit && !fromReferencedBy && referencesEmptyRenderer()}
       {!dataProp.length && fromReferencedBy && referencesEmptyRenderer()}

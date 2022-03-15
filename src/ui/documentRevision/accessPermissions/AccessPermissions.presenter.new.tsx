@@ -43,7 +43,6 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   label,
 }) => {
   const classes = styles();
-
   const security = {
     securityEmployees: securityEmployees.map((e: Group) => ({
       id: e.id,
@@ -85,6 +84,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
       async,
     );
   };
+
   const getList = useActionCreator(documentRevisionsActions.load);
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
   const async = useAsync({
@@ -92,24 +92,20 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
       getList(documentRevisionId);
     },
   });
-
   const initialElements = { value: "", text: "", label: "" };
   const [accessElement, saveAccessElement] = React.useState(initialElements);
   const [operator, saveOperator] = React.useState<any>(null);
-
   const isGroup = some(groupOptions, {
     label: accessElement.label, text: accessElement.text, value: accessElement.value,
   });
   const handleUpdate = (e) => {
     e.stopPropagation();
     e.preventDefault();
-
     if (isGroup) {
       const securityUpdateGroup = {
         securityEmployees: [...security.securityEmployees],
         securityGroups: [...security.securityGroups, { id: accessElement.value }],
         operators: [...security.operators],
-
       };
       async.start(
         updateAction,
@@ -118,7 +114,6 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
         async,
       );
     } else if (operator) {
-
       const securityUpdateOperator = {
         securityEmployees: [...security.securityEmployees],
         securityGroups: [...security.securityGroups],
@@ -131,13 +126,11 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
         async,
       );
       saveOperator(null);
-
     } else {
       const securityUpdateEmployee = {
         securityEmployees: [...security.securityEmployees, { id: accessElement.value }],
         securityGroups: [...security.securityGroups],
         operators: [...security.operators],
-
       };
       async.start(
         updateAction,
@@ -207,7 +200,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
           <List disablePadding>
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
-                <Box>
+                <>
                   <Box width={203} height={40}>
                     <Select
                       options={employeeSelectOptions}
@@ -224,7 +217,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                     />
                   </Box>
                   {!isEmpty(securityEmployees) && (
-                    <Box>
+                    <>
                       {securityEmployees.map(({ id, user }: Owner, index) => (
                         <Grid
                           key={index}
@@ -247,8 +240,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               component="span"
                               variant="body2"
                               color="textPrimary"
-                              className={classes.userName}
-                              style={{ marginLeft: "7px" }}
+                              className={`${classes.userName} marginLeft7`}
                             >
                               {user.name}
                             </Typography>
@@ -258,9 +250,9 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           </Grid>
                         </Grid>
                       ))}
-                    </Box>
+                    </>
                   )}
-                </Box>
+                </>
               </ListItemText>
             </ListItem>
           </List>
@@ -283,7 +275,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
           <List disablePadding>
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
-                <Box>
+                <>
                   <Box width={203} height={40}>
                     <Select
                       options={groupSelectOptions}
@@ -322,13 +314,13 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       </Grid>
                     </Grid>
                   ))}
-                </Box>
+                </>
                 {isVisible && (
                   <>
                     <Typography variant={TypographySize.md}>
                       <Text message={label || "common.operators"} />
                     </Typography>
-                    <Box>
+                    <>
                       <Box width={203} height={40}>
                         <Select
                           id="document.assing.to.sidebar"
@@ -360,7 +352,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               component="span"
                               variant="body2"
                               color="textPrimary"
-                              style={{ marginLeft: "7px" }}
+                              className={classes.marginLeft7}
                             >
                               {e.user.name}
                             </Typography>
@@ -370,7 +362,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                           </Grid>
                         </Grid>
                       ))}
-                    </Box>
+                    </>
                   </>
                 )}
               </ListItemText>

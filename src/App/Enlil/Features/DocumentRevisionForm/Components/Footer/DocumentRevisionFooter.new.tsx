@@ -42,15 +42,15 @@ const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterP
             <SMText label="output.info" />
           </Typography>
           <Typography component="div" className={classes.released}>
-            <Box>{` ${_documentRevisionFooterState?.docId}`}</Box>,&nbsp;
+            <>{_documentRevisionFooterState?.docId}</>,&nbsp;
             <SMText label="common.revision" />
-            <Box>{` ${_documentRevisionFooterState?.version}`}</Box>,&nbsp;
-            <Box>
+            <>{_documentRevisionFooterState?.version}</>,&nbsp;
+            <>
               {getFormattedDateString(
                   _documentRevisionFooterState?.releasedAt,
                   MomentFormats.YearMonthDateDotNotation
               )}
-            </Box>
+            </>
           </Typography>
         </Box>
       )}

@@ -276,7 +276,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
               label={
                 <Typography className={classes.chip}>
                   <StyledTooltip title={option.label}>
-                    <Box>{truncateLable(option.label)}</Box>
+                    <>{truncateLable(option.label)}</>
                   </StyledTooltip>
                 </Typography>}
               {...getTagProps({ index })}

@@ -62,16 +62,12 @@ const StyledTooltip = (props: TooltipProps) => {
 };
 
 const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }) => {
-
   const classes = styles();
-
   const { bookmarkState } = FB.useStores();
   const [selectedIndex, setSelectedIndex] = React.useState(undefined);
-
   useObserver(() => {
     bookmarks = bookmarkState?.bookmarks;
   });
-
   return (
     <Box p={1.875}>
       <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks || []}>
@@ -99,32 +95,28 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
                   </Box>
                 </Link>
               </Box>
-              <Box>
-                <StyledTooltip title="common.copy.link">
-                  <IconButton
-                    className={classes.iconButton}
-                    size="small"
-                    onClick={() => copy(`${link[0]}#${hash}`)}
-                  >
-                    <CopyIcon />
-                  </IconButton>
-                </StyledTooltip>
-              </Box>
+              <StyledTooltip title="common.copy.link">
+                <IconButton
+                  className={classes.iconButton}
+                  size="small"
+                  onClick={() => copy(`${link[0]}#${hash}`)}
+                >
+                  <CopyIcon />
+                </IconButton>
+              </StyledTooltip>
             </Box>
           );
         }}
       </FBMapWrapper>
-      <Box>
+      <>
         <Box
           display="flex"
           pb={1.875}
           alignItems="center"
         >
-          <Box>
-            <IconButton size="small">
-              <PlusIcon />
-            </IconButton>
-          </Box>
+          <IconButton size="small">
+            <PlusIcon />
+          </IconButton>
           <Box pl={0.5}>
             <Typography className={`${classes.label} add_section`}>
               <Text translation="form.builder.add.section" />
@@ -148,7 +140,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </>
     </Box>
   );
 };

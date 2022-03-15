@@ -21,7 +21,6 @@ const ReferenceToContainer: React.FunctionComponent<Props> = ({
 }) => {
   const refSummary: ReferenceSummary[] =
     useMemo(() => getReferenceToSummary(dataProp, status, deprecatedAt), [dataProp, status, deprecatedAt]);
-
   return (
     <ReferencePresenter label="common.references" dataProp={refSummary} canEdit={canEdit} />
   );

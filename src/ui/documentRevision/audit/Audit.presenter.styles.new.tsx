@@ -26,6 +26,11 @@ export const styles = makeStyles((theme: Theme) =>
       wordBreak: "break-word",
       color: Colors.almost_black,
     },
+    auditKey: {
+      fontSize: "12px",
+      fontFamily: "Sora",
+      color: Colors.font_gray,
+    },
     owner: {
       color: theme.palette.text.primary,
       fontWeight: 500,
