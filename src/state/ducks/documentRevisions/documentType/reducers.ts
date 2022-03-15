@@ -1,8 +1,8 @@
 import { keyBy, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../../reducers/asyncReducer";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
-import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction } from "./types";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST } from "./constants";
+import { DocRevByIdState, DocumentType, DocumentTypeAllIdsState, DocumentTypeByCategoryAction, DocumentTypeByCategoryState, DocumentTypeByIdAction, DocumentTypeByIdState, DocumentTypeListAction, TabConfigurationListAction, TabConfigurationState } from "./types";
 
 type DocumentTypeActions =  DocumentTypeListAction;
 
@@ -68,10 +68,23 @@ const docTypesByCategory = (
   }
 };
 
+const tabsConfiguration = (
+  state: TabConfigurationState = [],
+  action: TabConfigurationListAction,
+): TabConfigurationState => {
+  switch (action.type) {
+    case TAB_CONFIGURATION_LIST:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_TYPE_LIST_ASYNC),
   byId,
   allIds,
   docRevTypeId,
   docTypesByCategory,
+  tabsConfiguration,
 });

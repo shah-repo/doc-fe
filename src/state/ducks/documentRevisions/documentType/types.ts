@@ -3,7 +3,7 @@ import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common/types";
 import { FBFormTemplateProps } from "../types";
-import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
+import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST } from "./constants";
 
 export enum REVISION_STAGE_OPTIONS {
   NUMERIC = "common.Numeric",
@@ -366,6 +366,11 @@ export interface DocumentTypeByIdAction {
   payload: DocumentTypeById;
 }
 
+export interface TabConfigurationListAction {
+  type: typeof TAB_CONFIGURATION_LIST;
+  payload: TabConfiguration[];
+}
+
 export interface DocumentTypeListAction {
   type: typeof DOCUMENT_TYPE_LIST;
   payload: DocumentType[];
@@ -380,11 +385,25 @@ export interface DocumentTypeByIdState {
   [key: string]: DocumentType;
 }
 
+type TabType = "MIXED" | "DYNAMIC";
+
+export interface TabInfo {
+  labelId: string;
+  tabId: string;
+  type: TabType;
+}
+
+export interface TabConfiguration {
+  [key: string]: TabInfo[];
+}
+
 export type DocRevByIdState = DocumentTypeById;
 
 export type DocumentTypeAllIdsState = string[];
 
 export type DocumentTypeByCategoryState = DocumentType[];
+
+export type TabConfigurationState = TabConfiguration[];
 
 type FieldConfig = { [key in FieldType]?: IFieldConfigItem };
 

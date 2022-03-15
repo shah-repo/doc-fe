@@ -58,6 +58,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const transformedValues = transformMethod(values);
   let diff = getDiff(transformedValues, transformedInitialValues);
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
+
   // Added in case maintenance is created outside of EQ Maintenance
   const equipmentId = get(transformedValues, "formInput.equipment_id");
   if (!isEmpty(equipmentId)) {
@@ -81,6 +82,6 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     ...diff,
     // TEMPORARY FIX FOR BE VALIDATION
     // formInput: transformedValues.formInput,
-    formInput: omit(transformedValues.formInput, ["partType", "childForRevise"]),
+    formInput: omit(transformedValues.formInput.formInput, ["partType", "childForRevise"]),
   };
 };

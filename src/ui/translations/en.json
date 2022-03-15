@@ -1208,5 +1208,15 @@
   "documenttype.view.config": "View Field config",
   "sm.general": "General",
   "sm.overview": "Overview",
-  "just.now": "Just now"
+  "just.now": "Just now",
+  "tabId.overview": "Overview",
+  "tabId.details": "Details",
+  "tabId.specification": "Specification",
+  "tabId.procedure": "Procedure",
+  "tabId.materialsandequipment": "Materials and Equipment",
+  "tabId.approvalroles": "Approval Roles",
+  "tabId.matrixdetails": "Matrix Details",
+  "tabId.documents": "Documents",
+  "tabId.changedetails": "Change Details",
+  "tabId.general": "General"
 }
