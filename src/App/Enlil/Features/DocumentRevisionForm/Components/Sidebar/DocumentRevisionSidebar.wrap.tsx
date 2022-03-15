@@ -7,7 +7,6 @@ import { authSelectors } from "../../../../../../state/ducks/auth";
 import { documentRevisionsSelectors } from "../../../../../../state/ducks/documentRevisions";
 import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../../state/reducers";
-import { store } from "../../../../../../state/store";
 import { DOCUMENT_REVISION_OUTPUT_URL } from "../../../../../../ui/constants/urls";
 import { checkIsDocumentRecord, checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "../../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isOwner } from "../../../../../../ui/documentRevision/helpers/documentRevisionPermissions";
@@ -32,7 +31,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     intl,
     ...props
   }: T) => {
-
+    const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
     // MARK: @config
     _documentRevisionSidebarState = SM.useRef(DocumentRevisionSidebarState);
     const { _documentRevisionFormState } = SM.useStores();
@@ -41,10 +40,7 @@ export const withDocumentRevisionSidebarWrap = <T extends DocumentRevisionSideba
     isNewOutput = match.path === DOCUMENT_REVISION_OUTPUT_URL;
     intl = useIntl();
 
-    if (documentId) {
-      const getDocumentRevisions = documentRevisionsSelectors.makeGetDocumentRevisions();
-      documentRevisions = getDocumentRevisions(store.getState(), documentId);
-    }
+    documentRevisions = useSelector((state: ApplicationState) => getDocumentRevisions(state, documentId || ""));
 
     docRevsWithoutCanceled = useMemo(() => documentRevisions?.filter((docrev) =>
       docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);

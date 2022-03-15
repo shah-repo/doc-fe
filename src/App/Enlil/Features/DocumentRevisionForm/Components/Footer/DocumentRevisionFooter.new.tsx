@@ -27,7 +27,7 @@ const footerClasses = makeStyles(() => ({
   },
 }));
 
-const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProps> = ({
+const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterProps> = ({
   _documentRevisionFooterState,
 }) => {
   const classes = footerClasses();
@@ -45,7 +45,12 @@ const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProp
             <Box>{` ${_documentRevisionFooterState?.docId}`}</Box>,&nbsp;
             <SMText label="common.revision" />
             <Box>{` ${_documentRevisionFooterState?.version}`}</Box>,&nbsp;
-            <Box>{getFormattedDateString(_documentRevisionFooterState?.releasedAt, MomentFormats.YearMonthDateDotNotation)}</Box>
+            <Box>
+              {getFormattedDateString(
+                  _documentRevisionFooterState?.releasedAt,
+                  MomentFormats.YearMonthDateDotNotation
+              )}
+            </Box>
           </Typography>
         </Box>
       )}
@@ -53,4 +58,4 @@ const DocumentRevisionFooter: React.FunctionComponent<DocumentRevisionFooterProp
   );
 };
 
-export default withDocumentRevisionFooterWrap(DocumentRevisionFooter);
+export default withDocumentRevisionFooterWrap(DocumentRevisionFooterNew);
