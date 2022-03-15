@@ -7,7 +7,7 @@ import ReferencedByContainer from "../../document.revision/summary/referencedBy.
 import ReferenceToContainer from "../../document.revision/summary/referenceTo.container.new";
 import useGetAvailableReferences from "../../hooks/useGetAvailableReferences";
 import { isOperator } from "../DocumentRevisionDisplay.container";
-import AvailableReferencesField from "../forms/presenters/AvailableReferences.new1";
+import AvailableReferencesField from "../forms/presenters/AvailableReferences.new";
 import { toDocumentRevisionFormValues } from "../forms/transform";
 import { DocumentRevisionFormValues } from "../forms/types";
 import { isOwner } from "../helpers/documentRevisionPermissions";

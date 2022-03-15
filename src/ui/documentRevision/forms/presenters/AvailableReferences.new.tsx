@@ -1,20 +1,22 @@
-import { Box, createStyles, makeStyles, Typography } from "@material-ui/core";
-// import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Box, Chip, CircularProgress, createStyles, makeStyles, TextField, TooltipProps, Typography } from "@material-ui/core";
+import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, map, some } from "lodash";
+import { debounce, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Select, { components, createFilter } from "react-select";
-import { SM } from "../../../../App";
-import { ReactComponent as ArrowDownIcon } from "../../../../assets/images/arrow_down.svg";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { TypographyProps } from "../../../../state/ducks/common/types";
-import { documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
-import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, DocumentRevisionsByIdState, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
+import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field.new";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { FBTooltip } from "../../../form.builder";
+import useActionCreator from "../../../hooks/useActionCreator";
 import Colors from "../../../layout/theme/utils/colors";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
@@ -40,40 +42,49 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
-interface HandleChangeContextProps {
-  itemToRemove: (value: any) => void;
-}
+const tooltipClasses = makeStyles(() => ({
+  tooltip: {
+    backgroundColor: Colors.almost_black,
+    fontSize: "12px",
+    fontFamily: "Sora",
+    fontWeight: 400,
+    maxWidth: "203px",
+  },
+  arrow: {
+    color: Colors.almost_black,
+  },
+}));
+
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipClasses();
+  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
+};
 
 const styles = makeStyles(() =>
   createStyles({
     label: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
-      fontSize: "12px",
-      lineHeight: "15px",
       color: Colors.almost_black,
+      fontSize: "12px",
+      fontFamily: "Sora",
+      fontWeight: 600,
+      lineHeight: "15.12px",
+      marginBottom: "10px",
     },
-    customTextField: {
-      "& input::placeholder": {
-        fontFamily: "Sora",
-        fontStyle: "normal",
-        fontWeight: 400,
-        fontSize: "14px",
-        lineHeight: "20px",
-        color: Colors.font_gray,
+    root: {
+      "& .MuiAutocomplete-inputRoot": {
+        paddingRight: "30px",
       },
     },
-    autocompleteRootEle: {
-      "&.MuiAutocomplete-root": {
-        maxHeight: "40px",
-      },
+    chip: {
+      whiteSpace: "normal",
+      fontSize: "12px",
+      fontFamily: "sora",
     },
-  }));
-
-export let HandleChangeContext = React.createContext<HandleChangeContextProps | undefined>(
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  { itemToRemove: () => {} },
+    option: {
+      fontSize: "14px",
+      fontFamily: "Sora",
+    },
+  })
 );
 
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
@@ -83,17 +94,19 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const classes = styles();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
   const [value, setValue] = useState<any[]>([]);
-  const classes = styles();
-  let itemsRemove = false;
-  const initialElements = { value: "", text: "", label: "" };
-  const [accessElement, saveAccessElement] = React.useState(initialElements);
-  const isGroup = some(documentReferences, {
-    label: accessElement.label, text: accessElement.text, value: accessElement.value,
-  });
-  const onChange = (value) => {
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
+
+  const loadAction =  useActionCreator(documentRevisionsActions.loadList);
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
+  const truncateLable = (label) => truncate(label, { length: 30, omission: " ..." });
+
+  const onChange = (e, value) => {
     const {
       form: { setFieldValue, setFieldTouched, touched },
       field: { name },
@@ -101,39 +114,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
-    let newValue = value;
-    if (!itemsRemove) {
-      newValue = options.filter((el) => el.value === value.value);
-      if (_documentRevisionFormState) {
-        newValue = [
-          ...newValue,
-          ...options.filter(
-            (el) =>
-              _documentRevisionFormState.referenceValue.filter(
-                (ref) => ref.id === el.value
-              ).length
-          ),
-        ];
-      }
-      itemsRemove = false;
-      saveAccessElement(initialElements);
-    }
-    setFieldValue(name, newValue);
-    setValue(newValue);
+    setFieldValue(name, value);
+    setValue(value);
     if (!_documentRevisionFormState) { return; }
-    _documentRevisionFormState.referenceValue = map(newValue, (obj) => ({ id: obj.value }));
+    _documentRevisionFormState.referenceValue = map(value, (obj) => ({ id: obj.value }));
     submitForm();
   };
-
-  const itemToRemove = (item) => {
-    const procesedData = value.filter((e) => e.value !== item.id);
-    itemsRemove = true;
-    onChange(procesedData);
-  };
-
-  HandleChangeContext = React.createContext<HandleChangeContextProps | undefined>({
-    itemToRemove,
-  });
 
   const docRevsById = useSelector(documentRevisionsSelectors.byId);
   const isDocumentFai =
@@ -148,20 +134,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     return (isReferencePart && canDocumentCreateInspection) ||
         (canReferenceCreateInspection && isDocumentFai);
   })
-    ? availableReferences
-      .filter((ref) => !ref.deleteDisabled && !documentReferences.find((docRef) => docRef.id === ref.value))
-      .map((el) => ({
-        value: el.value,
-        text: el.label,
-        label: el.label,
-      }))
+    ? availableReferences.filter((ref) => !ref.deleteDisabled)
     : availableReferences
-      .filter((ref) => !ref.deleteDisabled && !documentReferences.find((docRef) => docRef.id === ref.value))
-      .map((el) => ({
-        value: el.value,
-        text: el.label,
-        label: el.label,
-      }));
+      .filter((ref) => !ref.deleteDisabled && !documentReferences.find((docRef) => docRef.id === ref.value));
 
   const defaultValue = (refs: Reference[] = []): any => refs?.map((ref) => {
     if (!ref.documentRevisions) { return { label: "", value: ref.id, deleteDisabled: false }; }
@@ -185,48 +160,141 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     setValue(value);
     if (!_documentRevisionFormState) { return; }
     _documentRevisionFormState.referenceValue = map(value, (obj) => ({ id: obj.value }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentReferences]);
 
   const [ModifiedOptions, setModifiedOptions] = useState(options);
-
-  const filterOptions = (inputVal) => {
-    const updatedOptions = options.filter(
-      (o) => o.label.toLowerCase().includes(inputVal.toLowerCase())
-    );
-    setModifiedOptions(updatedOptions);
+  const [offset, setOffset] = React.useState(0);
+  const limit = 25;
+  const queryParams: DocRevQueryParam = {
+    offset,
+    limit,
+    searchText: null,
+    fields: "name,document.docId",
+    status: [DocumentRevisionStatus.Released, DocumentRevisionStatus.PendingChange],
   };
-  const debounceFunction = debounce(filterOptions, 1000);
 
-  const DropdownIndicator = (props) => (
-    <components.DropdownIndicator {...props}>
-      <ArrowDownIcon />
-    </components.DropdownIndicator>
-  );
+  useEffect(() => {
+    if (loadAsyncState.status === AsyncStatus.Success) {
+      filterOptions();
+    }
+  }, [loadAsyncState]);
+
+  const filterOptions = () => {
+    if (inputValue) {
+      const updatedOptions = options.filter(
+        (o) => o.label.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      setModifiedOptions(updatedOptions);
+    } else {
+      setModifiedOptions(options);
+    }
+  };
+
+  const onInputChange = (event: React.ChangeEvent<{}>, inputVal: string) => {
+    if (inputVal && inputVal.length > 2) {
+      setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0, inputVal);
+    } else if (!inputVal) {
+      setInputValue(inputVal);
+      setOffset(0);
+      queryApi(0);
+    }
+  };
+
+  const debounceFunction = debounce(onInputChange, 1000);
+
+  const onScroll = (event: React.SyntheticEvent) => {
+    const listboxNode = event.currentTarget;
+    if (
+      Math.ceil(listboxNode.scrollHeight - listboxNode.scrollTop) ===
+      listboxNode.clientHeight
+    ) {
+      const nextOffset = offset + limit;
+      setOffset(nextOffset);
+      queryApi(nextOffset, inputValue);
+    }
+  };
+
+  const queryApi = (offset: number, searchText?: string) => {
+    queryParams.offset = offset;
+    queryParams.searchText = searchText || null;
+    loadAction([], queryParams);
+  };
+
+  const onOpen = () => {
+    setOpen(true);
+    setOffset(0);
+    queryApi(0);
+  };
 
   return (
     <Field {...fieldProps} label={undefined}>
-      <Box mb={1.25}>
+      <Box mb={0.3}>
         <Typography variant="h5" className={classes.label}>
           <Text message={fieldProps.label} />
         </Typography>
       </Box>
-      <Select
-        isDisabled={disabled}
-        filterOption={createFilter({ ignoreAccents: false })}
+      <Autocomplete
+        {...{ onChange, disabled }}
+        classes={{ option: classes.option }}
+        value={value}
         options={ModifiedOptions}
+        // disable filtering on client
+        filterOptions={(x) => x}
+        renderInput={(params: RenderInputParams) => (
+          <Box display="flex">
+            <Box width="100%" data-cy="referenceTo" className={classes.root}>
+              <TextField
+                {...params}
+                fullWidth
+                variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      { open && loading && (
+                        <CircularProgress color="inherit" size={16} />
+                      )}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
+                inputProps={{
+                  ...params.inputProps,
+                  style: { padding: "10.5px 0" },
+                }}
+              />
+            </Box>
+          </Box>
+        )}
+        renderOption={(option) => option.label}
+        renderTags={(value, getTagProps) => (
+          value?.map((option, index) => (
+            <Chip
+              key={option.value}
+              label={
+                <Typography className={classes.chip}>
+                  <StyledTooltip title={option.label}>
+                    <>{truncateLable(option.label)}</>
+                  </StyledTooltip>
+                </Typography>}
+              {...getTagProps({ index })}
+              disabled={option.deleteDisabled}
+              style={{ height: "100%" }}
+            />
+          ))
+        )}
         onInputChange={debounceFunction}
-        onChange={onChange}
-        placeholder={<Text message="Select" />}
-        components={{
-          DropdownIndicator,
-          IndicatorSeparator: () => null,
+        multiple
+        disableClearable
+        ListboxProps={{ onScroll }}
+        open={open}
+        onOpen={onOpen}
+        onClose={() => {
+          setOpen(false);
         }}
-        value={
-          accessElement.value === "" || isGroup
-            ? null
-            : accessElement
-        }
+        loading={loading}
       />
     </Field>
   ); };

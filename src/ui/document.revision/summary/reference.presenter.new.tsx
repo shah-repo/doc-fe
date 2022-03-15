@@ -1,10 +1,8 @@
 import { Box, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ReactComponent as DeleteIcon } from "../../../assets/images/delete_icon.svg";
 import { DataProps } from "../../../state/ducks/common/types";
 import Text from "../../components/Text";
-import { HandleChangeContext } from "../../documentRevision/forms/presenters/AvailableReferences.new";
 import { ReferenceSummary as Model } from "../utils/types";
 import { styles } from "./references.styles";
 
@@ -23,11 +21,6 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
   canEdit,
 }) => {
   const classes = styles();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { itemToRemove } = React.useContext(HandleChangeContext)!;
-  const handleDelete = (value) => {
-    itemToRemove(value);
-  };
   const referencesRenderer = () =>
     dataProp.map((reference: Model, index) => (
       <Box component="span" key={reference.id} data-cy={label}>
@@ -56,9 +49,6 @@ const ReferencePresenter: React.FunctionComponent<Props> = ({
               }
             </Typography>
           </Grid>
-          {!fromReferencedBy && <Grid item className={classes.deleteIcon}>
-            <DeleteIcon onClick={() => handleDelete(reference)} />
-          </Grid>}
         </Grid>
       </Box>
     ));
