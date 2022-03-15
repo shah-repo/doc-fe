@@ -751,17 +751,7 @@ context("Bulk create record headers", () => {
           "Paper Lot History Record",
         ];
 
-        cy.get(`[data-cy="fb-output-document-type"]`).arrowClick();
-        cy.get("ul>li[role=option]").first().scrollIntoView().trigger("mouseover").wait(500);
-
-        documentTypeList.forEach(() => {
-          cy.get("ul>li[role=option][data-focus=true]").invoke("text").should("be.oneOf", documentTypeList);
-          cy.get(`[data-cy="fb-output-document-type"]`).type("{downarrow}");
-        });
-
-        cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", "21");
-
-        cy.unClick();
+        cy.get(`[data-cy="fb-output-document-type"]`).verifyAutocompleteList(documentTypeList);
       });
 
       it("Select form to be used for bulk creation", () => {

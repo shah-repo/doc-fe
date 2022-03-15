@@ -343,7 +343,23 @@ Cypress.Commands.add("fbVerifyAutocompleteElementLength", (params: { el: string;
     .find(`[data-cy^="${params.el}-"]`)
     .click();
 
-  cy.get(".MuiAutocomplete-popper ul li").should("have.length", params.length);
+  if (params.length > 0) {
+    cy.get("ul>li[role=option]").first().scrollIntoView().trigger("mouseover").wait(500);
+
+    const indexNumberToVerifyLengthOfList = params.length - 1;
+    let i = 0;
+    while (i < indexNumberToVerifyLengthOfList)
+    {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(`[data-cy^="${params.el}-"]`).type("{downarrow}");
+      i++;
+    }
+
+    cy.get("ul>li[role=option]").last().should("have.attr", "data-option-index", indexNumberToVerifyLengthOfList);
+  }
+  else {
+    cy.get("ul>li[role=option]").should("not.exist");
+  }
 });
 
 Cypress.Commands.add("fbClickLabelEditHiddenBtn", (params: { label: string }) => {
