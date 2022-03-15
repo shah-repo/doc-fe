@@ -396,7 +396,7 @@ context("Mpi/Qpi test", () => {
         it("Add attachment to step #1", () => {
           cy.contains("Step #1").parentsUntil("li")
             .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachmentsAttached], () => {
             cy.elUploadAttachment({
               fileName: "test_image.jpg",
               el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
@@ -410,7 +410,7 @@ context("Mpi/Qpi test", () => {
 
         it("Add 'Material parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
             cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
           });
           cy.progressBarShouldNotExist();
@@ -423,11 +423,7 @@ context("Mpi/Qpi test", () => {
 
         it("Add 'Equipment parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
         });
 
         it("Click save document", () => {
@@ -995,7 +991,7 @@ context("Mpi/Qpi test", () => {
         it("Add attachment to step #1", () => {
           cy.contains("Step #1").parentsUntil("li")
             .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAudit], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachmentsAttached], () => {
             cy.elUploadAttachment({
               fileName: "test_image.jpg",
               el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
@@ -1009,9 +1005,7 @@ context("Mpi/Qpi test", () => {
 
         it("Add 'Material parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
-          });
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -1022,9 +1016,7 @@ context("Mpi/Qpi test", () => {
 
         it("Add 'Equipment parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
-          });
+          cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
