@@ -696,8 +696,8 @@ context("Create company via API and create Suppliers document", () => {
         });
 
         it("Rejecting request gives prompt", () => {
-          cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover");
-          cy.get(`[data-cy="transition-reject"]`).trigger("mouseover");
+          cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover").wait(1000);
+          cy.get(`[data-cy="transition-reject"]`).trigger("mouseover").wait(1000);
           cy.get(`[data-cy="transition-reject"]`).arrowClick();
         });
       });
@@ -912,9 +912,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     context(`Approve supplier with approval block for user ${USERS[2].name}`, () => {
-
       it(`Logout ${USERS[1].name}`, () => {
         cy.authLogout();
+        cy.pause();
       });
 
       it(`Login ${USERS[2].name}`, () => {
