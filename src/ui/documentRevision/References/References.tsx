@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { DocumentRevisionFooterNew } from "../../../App";
 import { ReactComponent as MigrateIcon } from "../../../assets/images/migrate-icon.svg";
@@ -11,6 +11,7 @@ import { isOperator } from "../DocumentRevisionDisplay.container";
 import AvailableReferencesField from "../forms/presenters/AvailableReferences.new1";
 import { toDocumentRevisionFormValues } from "../forms/transform";
 import { isOwner } from "../helpers/documentRevisionPermissions";
+import UserAvatarListItem from "../Sidebar/common/UserAvatarListItem";
 import { HandleMenuClickContext } from "../Sidebar/Sidebar.container";
 import { styles } from "./References.styles";
 
@@ -32,59 +33,42 @@ const References = ({
       <Typography className={classes.generalInfo}>
         <Text translation="common.general.info" />
       </Typography>
-      <ListItem
-        alignItems="flex-start"
-        disableGutters
-        className={classes.listItem}
-      >
-        <ListItemAvatar>
-          <Avatar
-            className={classes.avatar}
-            alt={owner?.user?.name}
-            src={owner?.user?.avatar}
-          />
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <Typography className={classes.generalInfo}>
-              {owner.user.name}
-            </Typography>
-          }
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                color="textPrimary"
-                className={classes.secondaryText}
-              >
-                Owner
-              </Typography>
-            </React.Fragment>
-          }
+      <UserAvatarListItem
+        name={owner.user.name}
+        owner={owner}
+        secondaryComponent={<Text translation="common.owner" />}
+      />
+      {edit && (
+        <AvailableReferencesField
+          availableReferences={availableReferences}
+          documentReferences={referenceTo}
+          name="referenceTo"
+          label="documentRevision.form.references"
+          disabled={isDisabledInput}
+          documentGroupOptions={groupOptions}
         />
-      </ListItem>
-      {edit && <AvailableReferencesField
-        availableReferences={availableReferences}
-        documentReferences={referenceTo}
-        name="referenceTo"
-        label="documentRevision.form.references"
-        disabled={isDisabledInput}
-        documentGroupOptions={groupOptions}
-      />}
-      {!edit && referenceTo && <ReferenceToContainer
-        canEdit={edit}
-        dataProp={referenceTo}
-        status={status}
-        deprecatedAt={deprecatedAt}
-      />}
-      {document.referencedBy && <ReferencedByContainer dataProp={document.referencedBy} />}
+      )}
+      {!edit && referenceTo && (
+        <ReferenceToContainer
+          canEdit={edit}
+          dataProp={referenceTo}
+          status={status}
+          deprecatedAt={deprecatedAt}
+        />
+      )}
+      {document.referencedBy && (
+        <ReferencedByContainer dataProp={document.referencedBy} />
+      )}
       <Box>
         <Typography component="span" className={classes.releaseDate}>
           <Text translation="common.training" />
         </Typography>
         <Typography className={classes.released}>
-          {retrain ? <Text translation="form.builder.yes" /> : <Text translation="form.builder.none" />}
+          {retrain ? (
+            <Text translation="form.builder.yes" />
+          ) : (
+            <Text translation="form.builder.none" />
+          )}
         </Typography>
       </Box>
       <Box pt={2.5}>
@@ -93,25 +77,34 @@ const References = ({
         </Typography>
         <Typography className={classes.released}>
           {releasedAt
-            ? getFormattedDateString(releasedAt as string, MomentFormats.YearMonthDateDotNotation)
+            ? getFormattedDateString(
+              releasedAt as string,
+              MomentFormats.YearMonthDateDotNotation
+            )
             : "None"}
         </Typography>
       </Box>
       <DocumentRevisionFooterNew />
-      {showMigration && <Box display="flex" pt={1.25} alignItems="center">
-        <Button
-          disableRipple
-          disableFocusRipple
-          variant="contained"
-          className={classes.migrateForm}
-          startIcon={<Box mr={0.25}><MigrateIcon /></Box>}
-          onClick={() => handleMenuIconClick(indexOfMigrationTab)}
-        >
-          <Typography component="span" className={classes.migrateFormText}>
-            <Text message="common.form.migration" />
-          </Typography>
-        </Button>
-      </Box>}
+      {showMigration && (
+        <Box display="flex" pt={1.25} alignItems="center">
+          <Button
+            disableRipple
+            disableFocusRipple
+            variant="contained"
+            className={classes.migrateForm}
+            startIcon={
+              <Box mr={0.25}>
+                <MigrateIcon />
+              </Box>
+            }
+            onClick={() => handleMenuIconClick(indexOfMigrationTab)}
+          >
+            <Typography component="span" className={classes.migrateFormText}>
+              <Text message="common.form.migration" />
+            </Typography>
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

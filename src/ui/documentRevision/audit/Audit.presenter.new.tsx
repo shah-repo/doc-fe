@@ -1,4 +1,4 @@
-import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Box, List, Typography } from "@material-ui/core";
 import { has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -13,6 +13,7 @@ import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
 import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder";
 import { isTranslation } from "../../translations/types";
+import UserAvatarListItem from "../Sidebar/common/UserAvatarListItem";
 import { styles } from "./Audit.presenter.styles.new";
 
 interface OwnProps {
@@ -57,33 +58,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
-          <ListItem alignItems="flex-start" disableGutters className={classes.auditListItem}>
-            <ListItemAvatar>
-              <Avatar
-                className={classes.avatar}
-                alt={name}
-                src={owner.user.avatar || ""}
-              />
-            </ListItemAvatar>
-            <ListItemText
-              primary={(
-                <Typography className={classes.generalInfo}>
-                  {name}
-                </Typography>)}
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="textPrimary"
-                    className={classes.secondaryText}
-                  >
-                    <DateTime data-cy={`audit-time-${key}`} value={change.timestamp} format={MomentFormats.BriefDateTime} />
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>
+          <UserAvatarListItem name={name} owner={owner} secondaryComponent={<DateTime data-cy={`audit-time-${key}`} value={change.timestamp} format={MomentFormats.BriefDateTime} />} />
           {renderChanges(audit[groupId], key)}
         </Box>
       );

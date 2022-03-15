@@ -46,28 +46,5 @@ export const styles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
       marginLeft: theme.spacing(1),
     },
-    avatar: {
-      width: "35px",
-      height: "35px",
-      fontSize: "12px",
-      fontWeight: 600,
-      color: Colors.white,
-      fontFamily: "Sora",
-      textTransform: "uppercase",
-    },
-    generalInfo: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontWeight: 600,
-      fontSize: "14px",
-      lineHeight: "21px",
-      color: Colors.almost_black,
-    },
-    secondaryText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
-      fontSize: "12px",
-      color: Colors.font_gray,
-    },
   }),
 );
