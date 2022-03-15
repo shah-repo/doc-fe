@@ -62,7 +62,7 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "24px",
     },
     selected: {
-      background: Colors.background_blue,
+      background: Colors.background_white,
     },
     details: {
       "&.MuiExpansionPanelDetails-root": {
