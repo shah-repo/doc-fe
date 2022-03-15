@@ -148,7 +148,7 @@ context("Checkboxes test1", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wi-ch" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
 
@@ -159,7 +159,7 @@ context("Checkboxes test1", () => {
         cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
         cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document Revision{downarrow}{enter}");
+        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbAddNewFieldButton();
 
         cy.contains("ac-wo-ch").trigger("mouseover");

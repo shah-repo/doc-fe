@@ -31,7 +31,6 @@ export interface Employee {
   company: Company;
   slackUserId: string;
   user?: User;
-  dropboxEnabled?: boolean;
 }
 
 export interface Company {
@@ -49,7 +48,6 @@ export interface Company {
   acctCodes: string[];
   navigation: NavigationItem[];
   employees?: Employee[];
-  dropboxEnabled?: boolean;
   scheduledForDeletion: boolean;
 }
 

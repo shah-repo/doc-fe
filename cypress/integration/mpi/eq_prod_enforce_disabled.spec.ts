@@ -290,7 +290,6 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
                     type: "eqmaintenance",
                     name: "pm-ki5wtk5l",
                     editorConfig: {
-                      fields: [],
                       type: "preventativeMaintenance",
                     },
                     editorProperties: [],
@@ -306,7 +305,6 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
                     type: "eqmaintenance",
                     name: "calibration-ki5wtyj0",
                     editorConfig: {
-                      fields: [],
                       type: "calibration",
                     },
                     editorProperties: [],
@@ -1589,7 +1587,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
     });
 
     it("Expand information for Equipment doc type", () => {
-      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record")
+      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains(/^Lot History Record$/)
         .eq(0).parent().find("button").eq(0).arrowClick();
     });
 
@@ -1663,16 +1661,16 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
       });
 
       it("Verify list item should have cal and pm ", () => {
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").parents("li")
+        cy.get(`ul>li[role=option]`).contains("EQ-00001").parents("li")
           .should("have.text", `EQ-00001 ▪rev 1 - Equipment document Cal Due: ${calDueDate} ▪ PM Due: ${pmDueDate} `);
       });
 
       it("Select Equipment from dropdown", () => {
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").arrowClick();
+        cy.get(`ul>li[role=option]`).contains("EQ-00001").arrowClick();
       });
 
       it("Verify selected EQ information is displayed", () => {
@@ -1716,8 +1714,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00002").arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
       it("Click save", () => {
@@ -1764,7 +1762,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           cy.listLoadingElementShouldAppear();
         });
@@ -1776,9 +1774,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Add an Approval", () => {
@@ -1786,9 +1782,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Complete step", () => {
@@ -1893,16 +1887,16 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
       });
 
       it("Verify list item should have cal and pm ", () => {
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").parents("li")
+        cy.get(`ul>li[role=option]`).contains("EQ-00001").parents("li")
           .should("have.text", `EQ-00001 ▪rev 1 - Equipment document Cal Due: ${calDueDate} ▪ PM Due: ${pmDueDate} `);
       });
 
       it("Select Equipment from dropdown", () => {
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00001").arrowClick();
+        cy.get(`ul>li[role=option]`).contains("EQ-00001").arrowClick();
       });
 
       it("Verify selected EQ information is displayed", () => {
@@ -1946,8 +1940,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Select expired equipment", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get(`div[role=dialog] button[title="Open popup"]`).arrowClick();
-        cy.get(`ul[id$="popup"]>li`).contains("EQ-00002").arrowClick();
+        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
       });
 
       it("Click save", () => {
@@ -1994,7 +1988,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     context("Revise LHRs", () => {
       it("Click Revise on LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesGet, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           cy.listLoadingElementShouldAppear();
         });
@@ -2006,9 +2000,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Add an Approval", () => {
@@ -2016,9 +2008,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Complete step", () => {

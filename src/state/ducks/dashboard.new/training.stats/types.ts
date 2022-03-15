@@ -1,5 +1,5 @@
 import { Nullable } from "../../common/types";
-import { TRAINING_STATS_LIST } from "./constants";
+import { TRAINING_STATS_CHART, TRAINING_STATS_LIST } from "./constants";
 
 export enum TrainingStatusTypes {
   OVERDUE = "OVERDUE",
@@ -29,8 +29,15 @@ interface User {
   initialColor: string;
 }
 
-export interface TrainingStats {
+export interface TrainingStatsListApiResponse {
+  results: TrainingStats[];
+  page_total: number;
+  total: number;
+}
+
+interface TrainingStats {
   user: User;
+  id: string;
   status: TrainingStatusTypes;
   dueOn: string;
   docTitle: string;
@@ -39,7 +46,21 @@ export interface TrainingStats {
 
 export interface TrainingStatsListAction {
   type: typeof TRAINING_STATS_LIST;
-  payload: TrainingStats[];
+  payload: TrainingStatsListApiResponse;
+  initialLoad?: boolean;
 }
 
-export type TrainingStatsState = TrainingStats[];
+export type TrainingStatsState = TrainingStatsListApiResponse;
+
+export interface TrainingStatsChart {
+  DUE: number;
+  OVERDUE: number;
+}
+
+export interface TrainingStatsChartAction {
+  type: typeof TRAINING_STATS_CHART;
+  payload: TrainingStatsChart;
+}
+
+export type TrainingStatsChartState = TrainingStatsChart;
+

@@ -2,7 +2,7 @@ import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
 import { Nullable } from "../../common/types";
-import { FBFormTemplateProps } from "../types";
+import { DocumentRevisionStatus, FBFormTemplateProps } from "../types";
 import { DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_LIST, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
 
 export enum REVISION_STAGE_OPTIONS {
@@ -35,6 +35,7 @@ export enum DOC_TYPE_GROUP {
   NEW_COMPANY = "NEW_COMPANY",
   SEED_DOCUMENT = "SEED_DOCUMENT",
   LHR = "LHR",
+  PAPER_LHR = "PAPER_LHR",
   PI_INSTANCE = "PI_INSTANCE",
   TRAINING_CURRICULUM = "TRAINING_CURRICULUM",
   BULK_CREATE = "BULK_CREATE",
@@ -79,7 +80,9 @@ export enum DOC_TYPE_GROUP_OPTION {
   SEED = "SEED",
   MPI = "MPI",
   MPI_OUTPUT = "MPI_OUTPUT",
-  LHR = "LHR",
+  BASE_LHR = "BASE_LHR",
+  ENLIL_LHR = "ENLIL_LHR",
+  PAPER_LHR = "PAPER_LHR",
   FB_DEFAULT_NOTES = "FB_DEFAULT_NOTES",
   OPERATOR_RELEASE = "OPERATOR_RELEASE",
   REDLINE = "REDLINE",
@@ -277,7 +280,19 @@ export const GroupWithGroupOptions = {
     DOC_TYPE_GROUP_OPTION.SEED,
   ],
   LHR: [
-    DOC_TYPE_GROUP_OPTION.LHR,
+    DOC_TYPE_GROUP_OPTION.BASE_LHR,
+    DOC_TYPE_GROUP_OPTION.ENLIL_LHR,
+    DOC_TYPE_GROUP_OPTION.RECORD,
+    DOC_TYPE_GROUP_OPTION.OWNED_INPUT,
+    DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
+    DOC_TYPE_GROUP_OPTION.GENERATE_LOT_ON_DOC_REV_CREATE,
+    DOC_TYPE_GROUP_OPTION.DIRECT_APPROVAL,
+    DOC_TYPE_GROUP_OPTION.EXPORTABLE,
+    DOC_TYPE_GROUP_OPTION.EMAILS_LHR,
+  ],
+  PAPER_LHR: [
+    DOC_TYPE_GROUP_OPTION.BASE_LHR,
+    DOC_TYPE_GROUP.PAPER_LHR,
     DOC_TYPE_GROUP_OPTION.RECORD,
     DOC_TYPE_GROUP_OPTION.OWNED_INPUT,
     DOC_TYPE_GROUP_OPTION.MUST_BE_OUTPUT,
@@ -346,6 +361,7 @@ export interface DocumentType {
 interface DocumentForms {
   id: string;
   docId?: string;
+  documentType?: DocumentType;
 }
 
 export interface DocumentTypeByIdForm {
@@ -455,3 +471,11 @@ export enum DisplayFieldType{
 }
 
 export type FieldType = InputFieldType | DisplayFieldType;
+
+export interface DocRevQueryParam {
+  offset: number;
+  limit: number;
+  searchText: Nullable<string>;
+  fields: "name,document.docId";
+  status: DocumentRevisionStatus[];
+}
