@@ -318,7 +318,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                         </Typography>
                       </Grid>
                       <Grid item className={classes.deleteIcon}>
-                        <CloseIcon onClick={() => handleDelete(e.id)} />
+                        <CloseIcon cursor="pointer" onClick={() => handleDelete(e.id)} />
                       </Grid>
                     </Grid>
                   ))}
