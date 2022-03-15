@@ -1,7 +1,7 @@
-import { Chip, Grid, Typography } from "@material-ui/core";
+import { Chip, Grid, Link, Typography } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { documentTypeSelectors } from "../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../../state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../../../state/ducks/documentRevisions/types";
@@ -10,6 +10,7 @@ import { FormHeaderStatusClassMapping } from "../../../../../ui/components/commo
 import Text from "../../../../../ui/components/Text";
 import { checkIsDocumentMPIOutput } from "../../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { useDocumentStatus } from "../../../../../ui/hooks/docCustomization/useCustomization";
+import Colors from "../../../../../ui/layout/theme/utils/colors";
 // import Colors from "../../../../../ui/layout/theme/utils/colors";
 import { styles } from "./HeaderInfo.styles";
 import { StyledBreadcrumb } from "./StyledBreadcrumb";
@@ -24,10 +25,10 @@ import { StyledBreadcrumb } from "./StyledBreadcrumb";
 // import { ReactComponent as RecordIcon } from "../../../../../assets/images/record.svg";
 // import { ReactComponent as SupplierIcon } from "../../../../../assets/images/supplier.svg";
 
-// interface LocationStateProps {
-//   lable: string;
-//   pathname: string;
-// }
+interface NavigationDetails {
+  label: string;
+  path: string;
+}
 
 interface Props {
   status: string;
@@ -41,7 +42,7 @@ interface Props {
   isInlineApproval?: boolean;
   displayStatus?: string;
   displayRevision?: string;
-  title?: string;
+  navigationDetails?: NavigationDetails;
   subtitle?: any;
 }
 
@@ -69,21 +70,20 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
   id,
   documentTypeId,
   displayStatus,
-  title,
+  navigationDetails,
   subtitle,
   displayRevision,
   groupOptions,
 }) => {
-  // const history = useHistory();
+  const history = useHistory();
   const { label } = useDocumentStatus(documentTypeId, status);
   const classes = styles();
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
-  // const returnToList = () => {
-  //   const pathname = group;
-  //   group?.pathname && history.push(pathname);
-  // };
+  const returnToList = () => {
+    history.push(navigationDetails?.path);
+  };
 
   // const getIconAndTitle = (page: Pages) => {
   //   switch (page) {
@@ -125,7 +125,6 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
   // };
 
   const titleRenderer = () => {
-    // console.log("debug:: Page Title:: ", title);
     const stepRegex = /Step #[0-9]+/;
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const mpiOutputTitle = name.match(stepRegex);
@@ -142,20 +141,15 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
             alignItems="center"
           >
             {/* {getIconAndTitle(group?.lable as Pages).icon} */}
-            {/* <Link
+            <Link
               underline="hover"
               onClick={returnToList}
               style={{ color: Colors.white, cursor: "Pointer" }}
             >
               <Grid item={true} className={classes.title}>
-                {getIconAndTitle(group?.lable as Pages)?.title
-                  ? getIconAndTitle(group?.lable as Pages)?.title
-                  : group?.lable}
+                {navigationDetails?.label}
               </Grid>
-            </Link> */}
-            <Grid item={true} className={classes.title}>
-              {title}
-            </Grid>
+            </Link>
           </Grid>
         </Typography>
         {isTypeMpiOutput && mpiOutputTitle ? (

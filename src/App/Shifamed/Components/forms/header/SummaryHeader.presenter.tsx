@@ -10,7 +10,6 @@ import ControlsContainer from "../../../../Enlil/Features/DocumentRevision/Previ
 import NewHeader from "./Header";
 import NewHeaderInfo from "./HeaderInfo";
 
-
 interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
@@ -26,43 +25,50 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   const { _documentRevisionFormState } = SM.useStores();
   return (
     <Observer>
-      {() =>  (
-        <> <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
-          <NewHeader
-            displayStatus={documentRevision.displayStatus}
-            status={documentRevision.status}
-          >
-            <NewHeaderInfo
-              revisionStage={documentRevision.revisionStage}
-              groupOptions={documentRevision.document.documentType.groupOptions}
-              isInlineApproval={isFormWithInlineApproval(
-        documentRevision.formDocument?.formTemplate?.schema
-              )}
-              status={documentRevision.status}
-              title={location.state}
-              displayRevision={documentRevision?.displayRevision}
-              id={documentRevision.document.docId}
-              name={documentRevision.name}
-              documentTypeId={documentRevision?.document?.documentType.id}
-              revisionChangeType={documentRevision?.revisionChangeType}
-              subRevision={documentRevision?.subRevision}
+      {() => (
+        <>
+          {" "}
+          <Collapse in={!_documentRevisionFormState?.isHeaderHidden}>
+            <NewHeader
               displayStatus={documentRevision.displayStatus}
-              subtitle={generateSubtitle(documentRevision)}
-            />
+              status={documentRevision.status}
+            >
+              <NewHeaderInfo
+                revisionStage={documentRevision.revisionStage}
+                groupOptions={
+                  documentRevision.document.documentType.groupOptions
+                }
+                isInlineApproval={isFormWithInlineApproval(
+                  documentRevision.formDocument?.formTemplate?.schema
+                )}
+                status={documentRevision.status}
+                navigationDetails={location.state}
+                displayRevision={documentRevision?.displayRevision}
+                id={documentRevision.document.docId}
+                name={documentRevision.name}
+                documentTypeId={documentRevision?.document?.documentType.id}
+                revisionChangeType={documentRevision?.revisionChangeType}
+                subRevision={documentRevision?.subRevision}
+                displayStatus={documentRevision.displayStatus}
+                subtitle={generateSubtitle(documentRevision)}
+              />
 
-            <Grid item={true} xs={6}>
-              <Grid container={true} alignItems="center" justify="flex-end">
-                <ControlsContainer
-                  documentRevision={documentRevision}
-                  canShowCreateVersionButton={canShowCreateVersionButton}
-                  hasAccess={documentRevision.document.canAccess}
-                  canChangeOwnerShip={canChangeOwnerShip}
-                />
+              <Grid item={true} xs={6}>
+                <Grid container={true} alignItems="center" justify="flex-end">
+                  <ControlsContainer
+                    documentRevision={documentRevision}
+                    canShowCreateVersionButton={canShowCreateVersionButton}
+                    hasAccess={documentRevision.document.canAccess}
+                    canChangeOwnerShip={canChangeOwnerShip}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </NewHeader>
-        </Collapse></>
-      )}</Observer>
-  ); };
+            </NewHeader>
+          </Collapse>
+        </>
+      )}
+    </Observer>
+  );
+};
 
 export default NewSummaryHeaderPresenter;

@@ -177,7 +177,7 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
     if (canEdit(dataItem)) {
       urlPath = documentEditPath(dataItem.id, dataItem.document.id);
     }
-    history.push({ pathname: urlPath, state: title });
+    history.push({ pathname: urlPath, state: { label: title, path: match.url } });
   };
   return (
     <DocumentTypePresenter

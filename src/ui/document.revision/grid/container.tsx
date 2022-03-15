@@ -12,6 +12,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
 import { DataStateProps } from "../../components/KendoGrid/interfaces";
+import { DOCUMENT_REVISION_LIST_URL } from "../../constants/urls";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { canEditDocumentRevision, documentRevisionQueryStatus } from "../utils/helpers";
@@ -21,7 +22,10 @@ import { DocumentListPresenter } from "./presenter";
 
 const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () => {
   const intl = useIntl();
-  const title = intl.formatMessage({ id: "navigation.document.list" });
+  const navigationDetails = {
+    label: intl.formatMessage({ id: "navigation.document.list" }),
+    path: DOCUMENT_REVISION_LIST_URL,
+  };
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
@@ -100,10 +104,11 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
     if (isEmpty(rowData.dataItem.id) || isEmpty(rowData.dataItem.document.id)) {
       return false;
     }
+    let urlPath = documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id);
     if (canEditDocumentRevision(rowData.dataItem)) {
-      history.push({ pathname: documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id), state: title });
+      urlPath = documentEditPath(rowData.dataItem.id, rowData.dataItem.document.id);
     }
-    history.push({ pathname: documentPreviewPath(rowData.dataItem.id, rowData.dataItem.document.id), state: title });
+    history.push({ pathname: urlPath, state: navigationDetails });
   };
 
   return (
