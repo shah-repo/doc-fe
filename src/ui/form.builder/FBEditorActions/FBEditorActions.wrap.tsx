@@ -20,7 +20,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     ...props
   }: T) => {
 
-    const { dialogState, workspaceState, formState } = FB.useStores();
+    const { dialogState, workspaceState, formState, leftPanelDialogState } = FB.useStores();
     const { isOutput } = workspaceState || {};
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
@@ -128,10 +128,13 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
-      dialogState?.HideLeftPanel();
+      leftPanelDialogState?.HideLeftPanel();
     };
 
-    handleCancel = () => dialogState?.closeDialog();
+    handleCancel = () => {
+      dialogState?.closeDialog();
+      leftPanelDialogState?.HideLeftPanel();
+    };
 
     return Component({
       ...(props as T),
