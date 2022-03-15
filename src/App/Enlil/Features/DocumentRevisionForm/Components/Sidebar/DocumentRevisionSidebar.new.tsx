@@ -267,6 +267,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                       }) || "",
                     component: (
                       <RevisionHistory
+                        documentId={documentId}
                         changeRequests={
                           documentRevisions?.map(
                             (e) => e.changeRequest

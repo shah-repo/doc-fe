@@ -6,9 +6,11 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -17,11 +19,19 @@ import Colors from "../../layout/theme/utils/colors";
 import styles from "./styles.new";
 
 interface SidebarPresenterProps {
+  documentId: string;
   changeRequests: ChangeRequest[];
 }
 
-const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ changeRequests }) => {
+const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ documentId, changeRequests }) => {
   const classes = styles();
+  const dispatch = useDispatch();
+  const loadDocumentAction = useCallback(() => {
+    documentId && dispatch(documentRevisionsActions.loadDocument(documentId));
+  }, [dispatch, documentId]);
+  useEffect(() => {
+    loadDocumentAction();
+  }, [loadDocumentAction, documentId]);
   return (
     <Box pt={0.4}>
       <FBMapWrapper collection={changeRequests || []}>
