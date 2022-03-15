@@ -25,6 +25,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const navigationDetails = {
     label: intl.formatMessage({ id: "navigation.document.list" }),
     path: DOCUMENT_REVISION_LIST_URL,
+    icon: "/navigation_icons/document.svg",
   };
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);

@@ -56,9 +56,6 @@ export const styles = makeStyles((theme: Theme) =>
       lineHeight: "24px",
       color: Colors.white,
     },
-    icon: {
-      margin: theme.spacing(1),
-    },
     statusDefault: {
       color: Colors.white,
       background: Colors.dark_gray,
@@ -103,5 +100,19 @@ export const styles = makeStyles((theme: Theme) =>
       alignItems: "center",
       display: "flex",
     },
+    itemIcon: {
+      color: "inherit",
+      minWidth: "30px",
+      marginLeft: "20px",
+    },
+    icon: ({ iconLink }) => ({
+      "width": 18,
+      "height": 18,
+      "backgroundColor": Colors.white,
+      "mask":
+        `url(${iconLink}) no-repeat center / contain`,
+      "-webkit-mask":
+        `url(${iconLink}) no-repeat center / contain`,
+    }),
   },
   ));

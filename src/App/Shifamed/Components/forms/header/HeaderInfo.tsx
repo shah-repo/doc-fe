@@ -28,6 +28,7 @@ import { StyledBreadcrumb } from "./StyledBreadcrumb";
 interface NavigationDetails {
   label: string;
   path: string;
+  icon: string;
 }
 
 interface Props {
@@ -46,24 +47,6 @@ interface Props {
   subtitle?: any;
 }
 
-// type Pages = "Documents List" | "Record" | "Equipment" | "Supplier" | "Purchase Order" | "Receive" |
-// "Equipment Specifications" | "Parts" | "EB" | "Lhr" | "Lot" | "Training Curriculums";
-
-// enum PageTypes {
-//   DOCUMENTS_LIST= "Documents List",
-//   RECORD= "Record",
-//   EQUIPMENT= "Equipment",
-//   EQUIPMENT_SPECICATIONS= "Equipment Specifications",
-//   SUPPLIER= "Supplier",
-//   PO= "Purchase Order",
-//   RECEIVE= "Receive",
-//   PARTS= "Parts",
-//   EB= "EB",
-//   LHR= "Lhr",
-//   LOT= "Lot",
-//   TRAINING_CURRICULUMS= "Training Curriculums"
-// }
-
 const NewHeaderInfo: React.FunctionComponent<Props> = ({
   status,
   name,
@@ -71,58 +54,17 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
   documentTypeId,
   displayStatus,
   navigationDetails,
-  subtitle,
   displayRevision,
-  groupOptions,
 }) => {
   const history = useHistory();
   const { label } = useDocumentStatus(documentTypeId, status);
-  const classes = styles();
+  const classes = styles({ iconLink: navigationDetails?.icon });
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const returnToList = () => {
     history.push(navigationDetails?.path);
   };
-
-  // const getIconAndTitle = (page: Pages) => {
-  //   switch (page) {
-  //     case PageTypes.DOCUMENTS_LIST:
-  //       return {
-  //         icon: <DocumentListIconIcon className={classes.icon}/>,
-  //       };
-  //     case PageTypes.RECORD:
-  //       return {
-  //         // TODO: Update once all headers done
-  //         title: "Records",
-  //         icon: <RecordIcon className={classes.icon}/>,
-  //       };
-  //     case PageTypes.EQUIPMENT:
-  //     case PageTypes.EQUIPMENT_SPECICATIONS:
-  //       return {
-  //         icon: <EquipmentIcon className={classes.icon}/>,
-  //       };
-  //     case PageTypes.SUPPLIER:
-  //       return {
-  //         icon: <SupplierIcon className={classes.icon}/>,
-  //       };
-  //     case PageTypes.PO:
-  //     case PageTypes.TRAINING_CURRICULUMS:
-  //       return { icon: <PurchaseOrderIcon className={classes.icon}/> };
-  //     case PageTypes.RECEIVE:
-  //       return { icon: <ReceiveIcon className={classes.icon}/> };
-  //     case PageTypes.PARTS:
-  //       return { icon: <PartsIcon className={classes.icon}/> };
-  //     case PageTypes.EB:
-  //       return { icon: <EBIcon className={classes.icon}/> };
-  //     case PageTypes.LHR:
-  //       return { icon: <LHRIcon className={classes.icon}/> };
-  //     case PageTypes.LOT:
-  //       return { icon: <LOTIcon className={classes.icon}/> };
-  //     default:
-  //       return { icon: <RecordIcon className={classes.icon}/> };
-  //   }
-  // };
 
   const titleRenderer = () => {
     const stepRegex = /Step #[0-9]+/;
@@ -140,7 +82,9 @@ const NewHeaderInfo: React.FunctionComponent<Props> = ({
             justify="flex-start"
             alignItems="center"
           >
-            {/* {getIconAndTitle(group?.lable as Pages).icon} */}
+            <Grid item={true} className={classes.itemIcon}>
+              <div className={classes.icon} />
+            </Grid>
             <Link
               underline="hover"
               onClick={returnToList}
