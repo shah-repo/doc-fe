@@ -599,6 +599,8 @@
   "form.builder.edit.field": "Edit Field",
   "form.builder.section": "Section",
   "form.builder.subsection": "Subsection",
+  "form.builder.add.section": "Add a section",
+  "form.builder.add.subsection": "Add a subsection",
   "form.builder.basics": "Basic Fields",
   "form.builder.lists": "Lists",
   "form.builder.approvals": "Approvals",

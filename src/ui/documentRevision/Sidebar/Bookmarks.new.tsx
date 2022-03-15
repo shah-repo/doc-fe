@@ -5,6 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon.svg";
+import Text from "../../components/Text";
 import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 
@@ -26,7 +27,7 @@ const styles = makeStyles(() =>
       },
     },
     iconButton: {
-      "&:hover, &:focus, li.active > a": {
+      "&:hover": {
         "background": Colors.white,
         "borderRadius": "5px",
         "& svg": {
@@ -99,15 +100,15 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
                 </Link>
               </Box>
               <Box>
-                <IconButton
-                  className={classes.iconButton}
-                  size="small"
-                  onClick={() => copy(`${link[0]}#${hash}`)}
-                >
-                  <StyledTooltip title="common.copy.link">
+                <StyledTooltip title="common.copy.link">
+                  <IconButton
+                    className={classes.iconButton}
+                    size="small"
+                    onClick={() => copy(`${link[0]}#${hash}`)}
+                  >
                     <CopyIcon />
-                  </StyledTooltip>
-                </IconButton>
+                  </IconButton>
+                </StyledTooltip>
               </Box>
             </Box>
           );
@@ -126,7 +127,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
           </Box>
           <Box pl={0.5}>
             <Typography className={`${classes.label} add_section`}>
-              Add a section
+              <Text translation="form.builder.add.section" />
             </Typography>
           </Box>
         </Box>
@@ -143,7 +144,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
           </Box>
           <Box component="span" pl={0.5}>
             <Typography className={`${classes.label} add_section`}>
-              Add a subsection
+              <Text translation="form.builder.add.subsection" />
             </Typography>
           </Box>
         </Box>
