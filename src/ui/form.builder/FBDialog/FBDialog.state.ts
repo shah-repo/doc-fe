@@ -5,6 +5,7 @@ import { FBDialogProps } from "..";
 
 class FBDialogState {
   @observable public open = false;
+  @observable public showLeftPanelEditor = false;
   @observable public maxWidth: FBDialogProps["maxWidth"] = "sm";
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
@@ -15,6 +16,10 @@ class FBDialogState {
     set(this, "open", open);
   };
 
+  @action public setShowLeftPanelEditor = (open: boolean) => {
+    set(this, "showLeftPanelEditor", open);
+  };
+
   @action public openDialog = () => {
     this.setDialog(true);
   };
@@ -23,12 +28,18 @@ class FBDialogState {
     this.reset();
     this.setDialog(false);
   };
+  @action public HideLeftPanel = () => {
+    this.reset();
+    this.setDialog(false);
+    this.setShowLeftPanelEditor(false);
+  };
 
   @action public config = (config: FBDialogProps) => {
     this.reset();
     this.props = config;
-    const { maxWidth, title, content, actions, open } = config;
+    const { maxWidth, title, content, actions, open, showLeftPanelEditor } = config;
     !isUndefined(open) && this.setDialog(open);
+    !isUndefined(showLeftPanelEditor) && this.setShowLeftPanelEditor(showLeftPanelEditor);
     this.setMaxWidth(maxWidth || this.maxWidth);
     this.setTitle(title || this.title);
     this.setActions(actions || this.actions);

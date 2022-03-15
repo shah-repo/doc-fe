@@ -18,6 +18,7 @@ export const withFBStarter = <T extends FBStarterProps>(
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       dialogState?.config({
         open: true,
+        showLeftPanelEditor: true,
         maxWidth: "sm",
         content: <FBControlPicker {...{ index }} />,
       });

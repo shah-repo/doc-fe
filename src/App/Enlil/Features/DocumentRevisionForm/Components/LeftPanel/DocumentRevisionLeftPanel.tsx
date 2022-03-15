@@ -4,7 +4,9 @@ import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionLeftPanelProps, SMBox } from "../../../../..";
 import Text from "../../../../../../ui/components/Text";
+import { FB } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
+import LeftPanelFormEditor from "./Components/LeftPanelFormEditor";
 import LeftPresenter from "./Components/presenter";
 import styles from "./DocumentRevisionLeftPanel.styles";
 import { withDocumentRevisionLeftPanelWrap } from "./DocumentRevisionLeftPanel.wrap";
@@ -17,6 +19,8 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
   _formState,
 }) => {
   const classes = styles();
+
+  const { dialogState } = FB.useStores();
   return (
     <Observer>
       {() => (
@@ -56,7 +60,12 @@ const DocumentRevisionLeftPanel: React.FunctionComponent<
                 borderTop={1}
                 borderColor={Colors.medium_gray}
               >
-                <LeftPresenter />
+                <Observer>
+                  {() => (<>
+                    {(!dialogState?.showLeftPanelEditor ||  !dialogState) && <LeftPresenter />}
+                    {dialogState?.showLeftPanelEditor && <LeftPanelFormEditor />}
+                  </>)}
+                </Observer>
               </SMBox>
             </Box>
           )}

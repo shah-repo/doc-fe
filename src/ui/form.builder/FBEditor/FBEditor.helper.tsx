@@ -56,6 +56,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
 
       dialogState && dialogState.config({
         open: true,
+        showLeftPanelEditor: true,
         title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
         maxWidth: "sm",
         content: editorForm,

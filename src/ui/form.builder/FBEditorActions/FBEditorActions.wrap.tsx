@@ -128,6 +128,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         validationAttribute: (label as string) || placeholder || validationAttribute,
       }, index);
       dialogState?.closeDialog();
+      dialogState?.HideLeftPanel();
     };
 
     handleCancel = () => dialogState?.closeDialog();
