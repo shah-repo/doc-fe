@@ -15,6 +15,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   onScroll,
   _formState,
   _documentRevisionFormState,
+  workspaceState,
   documentRevision,
   bannerPortal,
   shouldShowUpgrade,
@@ -121,7 +122,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                         ...formValues.values as unknown as DocumentRevision,
                         ...documentRevision as unknown as DocumentRevision,
                       }}
-                      {... { schema, autosaveEnabled }}
+                      {... { schema, autosaveEnabled, workspaceState }}
                       initialValues={formInput}
                     />
                   </SMBox>

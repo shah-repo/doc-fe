@@ -117,6 +117,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _tabsState,
               _formState,
               autosaveEnabled,
+              workspaceState,
             }}
           />
         </FBProvider>

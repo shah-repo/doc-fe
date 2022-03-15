@@ -1,5 +1,5 @@
 
-import { differenceBy, filter, map } from "lodash";
+import { differenceBy, filter, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -44,11 +44,17 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { bookmarkState } = FB.useStores();
     mode = _formState?.mode;
     autosave = _formState?.autosave || false;
-    workspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    const isParentWorkspaceExists = !isEmpty(workspaceState);
+    workspaceState = workspaceState ? workspaceState : FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
       schema,
       mode,
       autosave,
     });
+    if (isParentWorkspaceExists) {
+      schema && (workspaceState.schema = schema);
+      mode && (workspaceState.mode = mode);
+      workspaceState.autosave = autosave;
+    }
     const dispatch = useDispatch();
 
     // Bridging to new context
