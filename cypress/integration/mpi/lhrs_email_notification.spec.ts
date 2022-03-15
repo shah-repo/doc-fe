@@ -964,11 +964,9 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-          cy.url().then((url: any) => {
-            lhrDocUrl = url;
-          });
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.url().then((url: any) => {
+          lhrDocUrl = url;
         });
       });
     });
@@ -989,9 +987,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Verify status is WIP", () => {
@@ -1044,14 +1040,12 @@ context("LHRs email notifications", () => {
         SystemRequirement("REQ-3220");
         cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 

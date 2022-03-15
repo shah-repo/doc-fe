@@ -33,7 +33,8 @@ Cypress.Commands.add("ebEnterPartDescription", (params: { description: string })
 });
 
 Cypress.Commands.add("ebChoosePartType", (params: {partName: string}) => {
-  cy.get("[data-cy=\"document.documentType.id\"]").arrowType(params.partName + "{downarrow}{enter}");
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"document.documentType.id\"]").autocompleteSelect(params.partName);
 });
 
 Cypress.Commands.add("ebCheckIfPartIsInSummary", (params: {partName: string}) => {

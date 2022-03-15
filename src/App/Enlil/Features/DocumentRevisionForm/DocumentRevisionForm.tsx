@@ -45,6 +45,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   schema,
   formInput,
   autosaveEnabled,
+  mode,
 }) => {
   const group = documentRevision?.document?.documentType?.group || "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
@@ -122,6 +123,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           isDisabled,
                           email,
                           isOwner,
+                          mode,
                         }}
                       />}
                       {_formState?.mode !== "none" && showFBLabels &&  (

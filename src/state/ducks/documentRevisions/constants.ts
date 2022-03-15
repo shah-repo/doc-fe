@@ -10,6 +10,8 @@ export const DOCUMENT_GET_ASYNC = "documentRevisions/GET_DOCUMENT_ASYNC";
 export const DOCUMENT_SET = "documentRevisions/SET_DOCUMENT";
 
 export const DOCUMENT_REVISION_ROOT_URL = "/document_revisions";
+export const DOCUMENT_REVISION_SEARCH_ROOT_URL = "/document_revisions/search";
+
 export const DOCUMENT_ROOT_URL = "/documents";
 export const DOCUMENT_REVISION_UPGRADE_URL = `${DOCUMENT_REVISION_ROOT_URL}/upgradeToReleasedForm`;
 

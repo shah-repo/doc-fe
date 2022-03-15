@@ -9,16 +9,21 @@ import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
+import { LoadMoreButton } from "../LoadMoreButton";
 import { styles } from "./Trainings.styles";
 
 interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  onLoadMoreData: () => void;
+  overallLimit: number;
 }
 
 const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
+  onLoadMoreData,
+  overallLimit,
 }) => {
   const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
@@ -28,17 +33,16 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   const onMouseLeaveItem = () => {
     setHoverItemId("");
   };
-  const trainingItems = useSelector(trainingSelectors.trainingList);
+  const trainingItems: any = useSelector(trainingSelectors.trainingList);
 
   const renderPendingActions = () => (
     <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
-      {trainingItems.map((pendingAction, index) => {
+      {trainingItems.results.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case ActionTypes.TRAINING_STATUS_OWNER:
             return (
-              <>
+              <div key={index}>
                 <NewTraining
-                  key={index}
                   id={pendingAction.id}
                   docId={pendingAction.docId}
                   docRevId={pendingAction.docRevId}
@@ -60,15 +64,20 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
                   pinned={pendingAction.pinned}
                 />
                 <Divider />
-              </>
+              </div>
             );
           default:
             return <Text key={index} translation="common.undefined" />;
         }
       })}
+      <LoadMoreButton
+        onLoadMore={onLoadMoreData}
+        disable={overallLimit >= trainingItems.total}
+        id="trainingBoxLoadMore"
+      />
     </List>
   );
-  const renderNoPendingActions = trainingItems.length === 0 && (
+  const renderNoPendingActions = trainingItems.total === 0 && (
     <List dense>
       <ListItemText
         primary={
@@ -85,7 +94,7 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {trainingItems.length > 0 && renderPendingActions()}
+      {trainingItems.total > 0 && renderPendingActions()}
       {renderNoPendingActions}
     </>
   );

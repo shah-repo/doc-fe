@@ -1,7 +1,6 @@
 import React from "react";
 import { theme } from "../../../common/utils/helpers";
 import Text from "../../components/Text";
-import { ThemeEnv } from "../../layout/theme/utils/types";
 import styles from "./Logo.styles";
 
 interface Props {
@@ -14,27 +13,22 @@ const Logo: React.FunctionComponent<Props> = ({
   showEnvironment,
 }) => {
   const classes = styles();
-  let evnTxtColor = "";
-  if (theme === ThemeEnv.DEV_THEME) {
-    evnTxtColor = classes.evnTxtDev;
-  } else if (theme === ThemeEnv.DEMO_THEME) {
-    evnTxtColor = classes.evnTxtDemo;
-  }
+  const themeBgClass = theme.toLowerCase().replace(/(_)/g, "");
   return (
     <React.Fragment>
-      {
-        showEnvironment &&
-        <div className={`${classes.envCnt} ${evnTxtColor}`}>
+      {showEnvironment && (
+        <div className={`${classes.envCnt} ${classes[themeBgClass]}`}>
           <span className={classes.evnTxt}>
             <Text message={`environment.${theme}`} />
           </span>
         </div>
-      }
+      )}
       <img
-        className={!showEnvironment ? classes.logo : ""}
         id="logo"
         src={logo}
-        alt="Logo"
+        style={{ marginTop: showEnvironment ? 0 : 20 }}
+        className={classes.logo}
+        alt="Company logo"
       />
     </React.Fragment>
   );

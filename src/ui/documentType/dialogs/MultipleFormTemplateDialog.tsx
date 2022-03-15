@@ -43,7 +43,6 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
 
   const [parts, setParts] = useState<DocumentRevision[]>([]);
 
-
   const preventPropagation = (event: React.FormEvent) => event.stopPropagation();
   const fetchAvailablePartsAction = useActionCreator(documentRevisionsActions.fetchAvailableParts);
 
@@ -70,7 +69,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       fetchAvailablePartsAsync,
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLHR]);
 
   const renderPartLabel = (form: DocumentTypeByIdForm) => {
     const id = form.formTemplate?.schema?.find((item) => item.name === "lhr-selected-part")?.editorConfig?.id;

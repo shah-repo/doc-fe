@@ -489,7 +489,7 @@ context("Autosave LHR", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.get("ul[role=listbox]>li").contains("Part document").arrowClick();
+          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
       });
 
@@ -499,7 +499,7 @@ context("Autosave LHR", () => {
             $el.trigger("click");
           });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           });
         });
       });
@@ -645,18 +645,11 @@ context("Autosave LHR", () => {
 
     context("Add/remove approver and check autosave", () => {
       it("Add first Approver'", () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick({ force: true });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
 
       it("Add second Approver'", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.GetDocAudit], () => {
-          cy.get("ul[role=\"listbox\"]>li").contains(USERS[1].name).arrowClick({ force: true });
-        });
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Remove second Approver'", () => {

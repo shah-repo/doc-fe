@@ -333,7 +333,7 @@ context("PO approval test", () => {
     it("Add an Approval and save", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[2].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
       });
       cy.poSaveDocument();
       cy.progressBarShouldNotExist();
@@ -406,7 +406,7 @@ context("PO approval test", () => {
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul[role=\"listbox\"]>li").contains(USERS[3].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
       });
     });
 

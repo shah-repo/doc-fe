@@ -7,15 +7,13 @@ import { ReactComponent as CheckedMark } from "../../../assets/images/check_mark
 import { ReactComponent as UncheckedMark } from "../../../assets/images/uncheck_mark.svg";
 import { authSelectors } from "../../../state/ducks/auth";
 import { Group } from "../../../state/ducks/auth/types";
-import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
+import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { Approval, Owner } from "../../../state/ducks/common/types";
 import { ApplicationState } from "../../../state/reducers";
-import AsyncGate from "../../components/AsyncGate";
 import AutcompleteField from "../../components/forms/fields/Autocomplete/Autocomplete";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import Text from "../../components/Text";
 import { ApproveAndReleaseFormValues } from "../../documentRevision/forms/types";
-import useActionCreator from "../../hooks/useActionCreator";
 import { toUniqGroupOptions } from "./transform";
 
 
@@ -44,7 +42,6 @@ const Approvers: React.FunctionComponent<Props> = ({
   initialGroups,
 }) => {
   // MARK: @selectors
-  const loadApproversAsyncState = useSelector(changeRequestsSelectors.getLoadApproversAsyncState);
   const availableApprovers = useSelector((state: ApplicationState) => {
     if (withoutCurrentUser) {
       const currentUserId = authSelectors.currentUserId(state);
@@ -73,9 +70,6 @@ const Approvers: React.FunctionComponent<Props> = ({
 
   // MARK: @state
   const [selectedApprovers, setSelectedApprovers] = useState<OptionType[]>([]);
-
-  // MARK: @actions
-  const loadAvailableApproversAction = useActionCreator(changeRequestsActions.loadAvailableApprovers);
 
   // MARK: @effects
 
@@ -161,11 +155,7 @@ const Approvers: React.FunctionComponent<Props> = ({
 
   // MARK: @render
   return (
-    <AsyncGate
-      asyncState={loadApproversAsyncState}
-      asyncAction={loadAvailableApproversAction}
-      startActionOnMount={true}
-    >
+    <>
       <AutcompleteField
         name="approvals"
         label="common.approvers"
@@ -182,7 +172,7 @@ const Approvers: React.FunctionComponent<Props> = ({
         onChange={(users) => markGroupChecked(users as OptionType[])}
       />
       {documentTypeGroups && shouldShowDAMCheck && renderGroupApproversResults()}
-    </AsyncGate>
+    </>
   );
 };
 

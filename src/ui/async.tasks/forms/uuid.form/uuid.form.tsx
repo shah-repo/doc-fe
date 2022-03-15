@@ -22,7 +22,6 @@ const UUIDAsyncTaskPresenter: React.FunctionComponent<Props> = ({
       <Box display="flex" justifyContent="flex-start">
         <TextField
           id="filled-textarea"
-          fullWidth
           label={
             <Text
               translation={

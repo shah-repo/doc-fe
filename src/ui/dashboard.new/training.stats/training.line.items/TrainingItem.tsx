@@ -17,6 +17,7 @@ import Text from "../../../components/Text";
 import { styles } from "./TrainingItem.styles";
 
 interface TrainingItemProps {
+  id: string;
   avatar: Nullable<string>;
   name: string;
   initialColor: string;
@@ -27,6 +28,7 @@ interface TrainingItemProps {
 }
 
 const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
+  id,
   name,
   avatar,
   initialColor,

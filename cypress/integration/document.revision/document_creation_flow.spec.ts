@@ -314,7 +314,7 @@ context("Document Creation Flow", () => {
 
     context("Check primary attachment function", () => {
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCallAudit();
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Set attachment as primary", () => {
