@@ -1,10 +1,11 @@
-import { List } from "@material-ui/core";
+import { LinearProgress, List } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Nullable } from "../../state/ducks/common/types";
-import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision } from "../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../state/types";
 import { styles } from "./DocumentRevisionList.container.styles";
 import DocumentRevisionListPresenter from "./DocumentRevisionList.presenter.new";
 import { checkIsDocumentPO } from "./helpers/checkDocumentGroup";
@@ -36,6 +37,8 @@ DocumentRevisionListContainerProps
 }) => {
   const classes = styles();
   const dispatch = useDispatch();
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   const loadDocumentAction = useCallback(() => {
     dispatch(documentRevisionsActions.loadDocument(documentId));
   }, [dispatch, documentId]);
@@ -49,6 +52,7 @@ DocumentRevisionListContainerProps
 
   return (
     <div className={classes.container}>
+      {loading && <LinearProgress style={{ width: "100%" }} />}
       <List disablePadding>
         {
           documentRevisions.map((documentRevision) => (

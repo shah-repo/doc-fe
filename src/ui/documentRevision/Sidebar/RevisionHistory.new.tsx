@@ -1,16 +1,18 @@
 import {
   Avatar,
   Box,
+  LinearProgress,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
 } from "@material-ui/core";
 import React, { useCallback, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { AsyncStatus } from "../../../state/types";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -32,8 +34,11 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
   useEffect(() => {
     loadDocumentAction();
   }, [loadDocumentAction, documentId]);
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadDocumentAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
   return (
-    <Box pt={0.4}>
+    <Box>
+      {loading && <LinearProgress style={{ width: "100%" }} />}
       <FBMapWrapper collection={changeRequests || []}>
         {(changeRequest, index) => {
           if (!changeRequest) {

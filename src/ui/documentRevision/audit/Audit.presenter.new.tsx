@@ -1,4 +1,4 @@
-import { Box, List, Typography } from "@material-ui/core";
+import { Box, LinearProgress, List, Typography } from "@material-ui/core";
 import { has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -8,6 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { AsyncStatus } from "../../../state/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
 import Text from "../../components/Text";
@@ -36,6 +37,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const classes = styles();
   const intl = useIntl();
   const documentRevisions = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
+  const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadAuditAsyncState);
+  const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
 
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
@@ -408,6 +411,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
 
   return (
     <div>
+      {loading && <LinearProgress style={{ width: "100%" }} />}
       {!audit && <Box className={classes.revisionContainer}>
         <Typography variant="subtitle1" className={classes.title}>
           <Text message={"common.revision"} />
