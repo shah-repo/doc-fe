@@ -1,36 +1,15 @@
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionFooterProps, SMText } from "../../../../..";
 import { getFormattedDateString, MomentFormats } from "../../../../../../common/utils/date";
-import Colors from "../../../../../../ui/layout/theme/utils/colors";
+import { styles } from "./DocumentRevisionFooter.new.styles";
 import { withDocumentRevisionFooterWrap } from "./DocumentRevisionFooter.wrap";
-
-const footerClasses = makeStyles(() => ({
-  released: {
-    fontFamily: "Sora",
-    fontStyle: "normal",
-    fontSize: "14px",
-    lineHeight: "20px",
-    color: Colors.almost_black,
-    marginTop: "10px",
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  releaseDate: {
-    fontFamily: "Sora",
-    fontStyle: "normal",
-    fontWeight: 600,
-    fontSize: "12px",
-    lineHeight: "15px",
-    color: Colors.almost_black,
-  },
-}));
 
 const DocumentRevisionFooterNew: React.FunctionComponent<DocumentRevisionFooterProps> = ({
   _documentRevisionFooterState,
 }) => {
-  const classes = footerClasses();
+  const classes = styles();
   return (
     <Observer>
       {() => (
