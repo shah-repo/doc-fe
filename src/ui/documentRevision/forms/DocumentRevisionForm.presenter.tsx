@@ -27,7 +27,6 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
-import References from "./presenters/References";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -294,15 +293,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </>
         )}
       </Observer>
-      <AvailableReferencesField
+      {type === "none" && <AvailableReferencesField
         availableReferences={availableReferences}
         documentReferences={documentReferences}
         name="referenceTo"
         label="documentRevision.form.references"
         disabled={isDisabledInput}
         documentGroupOptions={groupOptions}
-      />
-      <References document={initialValues.document} />
+      />}
       <RetrainField
         revisionChangeType={values.revisionChangeType}
         isDisabled={isDisabledInput}

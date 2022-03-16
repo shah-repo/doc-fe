@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { DocumentRevisionFooter, DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
 import { FBWorkspace } from "../../../../ui/form.builder";
@@ -69,7 +69,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
         templateBoxProps={{ stretchY: "100%" }}
         headerBoxProps={{ maxHeight: "80%" }}
         contentBoxProps={{ minHeight: "20%", height: "100%" }}
-        footer={<DocumentRevisionFooter />}
         header={<DocumentRevisionFormHeader />}
       >
         <Observer>
