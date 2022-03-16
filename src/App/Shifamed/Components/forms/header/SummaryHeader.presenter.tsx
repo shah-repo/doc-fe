@@ -53,7 +53,7 @@ const NewSummaryHeaderPresenter: React.FunctionComponent<Props> = ({
                 subtitle={generateSubtitle(documentRevision)}
               />
 
-              <Grid item={true} xs={6}>
+              <Grid item={true} xs={6} style={{ paddingRight: "15px" }}>
                 <Grid container={true} alignItems="center" justify="flex-end">
                   <ControlsContainer
                     documentRevision={documentRevision}

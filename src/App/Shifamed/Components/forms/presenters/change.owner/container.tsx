@@ -14,11 +14,13 @@ import OwnerChangerPresenter from "./presenter";
 interface OwnProps {
   requestId: string;
   requestType: RequestType;
+  renderAsButton: boolean;
 }
 
 const FormOwnerChangerContainer: React.FC<OwnProps> = ({
   requestId,
   requestType,
+  renderAsButton,
 }) => {
 
   const dialog = useDialog();
@@ -86,6 +88,7 @@ const FormOwnerChangerContainer: React.FC<OwnProps> = ({
       isDialogOpen={dialog.isOpen}
       openDialog={openDialog}
       closeDialog={dialog.close}
+      renderAsButton={renderAsButton}
     />
   );
 };

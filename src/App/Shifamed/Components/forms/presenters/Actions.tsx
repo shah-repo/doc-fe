@@ -190,7 +190,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
 
   const renderChangeOwnership = canChangeOwnerShip && values.id && (
-    <FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} />
+    <FormOwnerChangerContainer requestId={values.id} requestType={RequestType.Document} renderAsButton={false} />
   );
 
   return (

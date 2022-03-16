@@ -11,6 +11,7 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
+import { RequestType } from "../../../../ui/components/common/owner.changer/helpers/types";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
 import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
@@ -26,6 +27,7 @@ import useActionCreator from "../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../ui/hooks/useAsync";
 import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
+import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
 import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
@@ -297,6 +299,13 @@ const PreviewControlsContainer: React.FunctionComponent<
         />
       )}
       <DownloadHTML pdf={documentRevision.pdf}/>
+      {canChangeOwnerShip && (
+        <FormOwnerChangerContainer
+          requestId={documentRevision.id}
+          requestType={RequestType.Document}
+          renderAsButton={true}
+        />
+      )}
       <PDFSocket {...{ documentRevision }} />
     </>
   );
