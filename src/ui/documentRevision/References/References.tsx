@@ -83,7 +83,7 @@ const References = ({
               releasedAt,
               MomentFormats.YearMonthDateDotNotation
             )
-            : "None"}
+            : <Text translation="common.none" />}
         </Typography>
       </Box>
       <DocumentRevisionFooterNew />
