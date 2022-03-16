@@ -11,7 +11,7 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     headerSection: {
-      height: "64px",
+      minHeight: "64px",
       borderRadius: "6px",
     },
     GREEN_STATUS: {
