@@ -680,7 +680,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/Output Document Type\nBulk Create/);
 
-        expect(el).match(/Attachments\nimage.jpg/);
+        expect(el).match(/Attachments/);
+
+        expect(el).match(/image.jpg/);
 
         expect(el).match(/Select Form Document For Import/);
 
@@ -690,6 +692,8 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         tmpRegex = new RegExp( `Column Document\\/Record Id\\?\\n.*Yes.*No`, "gi" );
         expect(el).match(tmpRegex);
+
+        expect(el).match(/Upload excel with data for import/);
 
         expect(el).match(/Released/);
 
@@ -708,8 +712,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
-
-        expect(el).match(/Upload excel with data for import/);
 
         expect(el).match(/MASS CREATE LOGS/);
 
@@ -967,7 +969,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Attachments\nimage.jpg/);
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
 
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
 
@@ -1204,7 +1208,9 @@ context("Bulk create public, private and reserved doc-ids", () => {
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          expect(el).match(/Attachments\nimage.jpg/);
+          expect(el).match(/Attachments/);
+
+          expect(el).match(/image.jpg/);
 
           expect(el).match(/Select Form Document For Import\nFM-00002 - 1 Document for bulk creation/);
 
