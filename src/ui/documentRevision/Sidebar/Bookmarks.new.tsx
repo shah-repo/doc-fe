@@ -5,8 +5,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon.svg";
-import Text from "../../components/Text";
 import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Bookmarks.new.styles";
@@ -67,7 +65,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
           );
         }}
       </FBMapWrapper>
-      <>
+      {/* <>
         <Box
           display="flex"
           pb={1.875}
@@ -99,9 +97,9 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks }
             </Typography>
           </Box>
         </Box>
-      </>
+      </> */}
     </Box>
   );
 };
-
+// ToDo: It will be implemented after completing the left side panel.
 export default Bookmarks;
