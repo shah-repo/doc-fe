@@ -1,3 +1,5 @@
+import { Nullable } from "../../../state/ducks/common/types";
+
 type SidebarType = "bookmarks" | "history" | "note" | "permissions" | "crHistory" | "formMigration" | "references";
 export interface Sidebar {
   icon: JSX.Element;
@@ -6,7 +8,7 @@ export interface Sidebar {
 }
 interface SidebarDetails {
   title: string;
-  component: JSX.Element | null;
+  component: Nullable<JSX.Element>;
   dataCy?: string;
   shouldShow?: boolean;
 }

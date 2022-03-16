@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, createStyles, makeStyles, TextField, TooltipProps, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, TextField, TooltipProps, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -17,9 +18,9 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
-import Colors from "../../../layout/theme/utils/colors";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
+import { styles } from "./AvailableReferences.new.styles";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -42,50 +43,10 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
-const tooltipClasses = makeStyles(() => ({
-  tooltip: {
-    backgroundColor: Colors.almost_black,
-    fontSize: "12px",
-    fontFamily: "Sora",
-    fontWeight: 400,
-    maxWidth: "203px",
-  },
-  arrow: {
-    color: Colors.almost_black,
-  },
-}));
-
 const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipClasses();
+  const classes = tooltipStyles();
   return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };
-
-const styles = makeStyles(() =>
-  createStyles({
-    label: {
-      color: Colors.almost_black,
-      fontSize: "12px",
-      fontFamily: "Sora",
-      fontWeight: 600,
-      lineHeight: "15.12px",
-      marginBottom: "10px",
-    },
-    root: {
-      "& .MuiAutocomplete-inputRoot": {
-        paddingRight: "30px",
-      },
-    },
-    chip: {
-      whiteSpace: "normal",
-      fontSize: "12px",
-      fontFamily: "sora",
-    },
-    option: {
-      fontSize: "14px",
-      fontFamily: "Sora",
-    },
-  })
-);
 
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,

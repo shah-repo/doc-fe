@@ -1,13 +1,13 @@
-import { Box, CircularProgress, Divider, Drawer, IconButton, makeStyles, TooltipProps, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Drawer, IconButton, TooltipProps, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
+import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
 import { FB, FBTooltip } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
 import styles from "./styles.new";
 import { Sidebar } from "./types.new";
 
@@ -22,17 +22,8 @@ interface Props {
   loading?: boolean;
 }
 
-const tooltipClasses = makeStyles(() => ({
-  tooltip: {
-    backgroundColor: Colors.almost_black,
-  },
-  arrow: {
-    color: Colors.almost_black,
-  },
-}));
-
 const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipClasses();
+  const classes = tooltipStyles();
   return <FBTooltip arrow placement="left" classes={classes} {...props} />;
 };
 

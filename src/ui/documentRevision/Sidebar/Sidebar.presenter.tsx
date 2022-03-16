@@ -7,8 +7,8 @@ import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
 import { FB } from "../../form.builder";
-import styles from "./styles.new";
-import { Sidebar } from "./types.new";
+import styles from "./styles";
+import { Sidebar } from "./types";
 
 interface Props {
   isDrawerOpen: boolean;

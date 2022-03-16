@@ -57,6 +57,7 @@ enum Colors {
   carla="#E6FCD9",
   light_forest_green="#4C9646",
   light_forest_green_border="#509849",
+  dark_jungle_green="#162229",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
@@ -74,7 +75,6 @@ enum Colors {
   peri_winkle_blue="#8295FA",
   bright_gray="#EBEDF2",
   light_gray_border="#CCD4D9",
-  dark_jungle_green="#162229",
 }
 
 export default Colors;

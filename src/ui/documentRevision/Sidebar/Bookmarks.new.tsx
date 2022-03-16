@@ -1,63 +1,22 @@
-import { Box, createStyles, IconButton, makeStyles, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
 import copy from "copy-to-clipboard";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon.svg";
 import Text from "../../components/Text";
 import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
+import { styles } from "./Bookmarks.new.styles";
 
 interface SidebarPresenterProps {
   bookmarks?: FBBookmarkItem[];
 }
 
-const styles = makeStyles(() =>
-  createStyles({
-    label: {
-      "fontFamily": "Sora",
-      "fontStyle": "normal",
-      "fontWeight": "normal",
-      "fontSize": "14px",
-      "lineHeight": "18px",
-      "color": Colors.almost_black,
-      "&.add_section": {
-        color: Colors.navy,
-      },
-    },
-    iconButton: {
-      "&:hover": {
-        "background": Colors.white,
-        "borderRadius": "5px",
-        "& svg": {
-          "stroke": Colors.almost_black,
-          "& rect": {
-            fill: Colors.almost_black,
-          },
-        },
-      },
-      "& svg": {
-        stroke: Colors.font_gray,
-      },
-      "fontSize": "12px",
-      "fontFamily": "Sora",
-      "fontStyle": "normal",
-      "fontWeight": "normal",
-    },
-  }));
-
-const tooltipClasses = makeStyles(() => ({
-  tooltip: {
-    backgroundColor: Colors.almost_black,
-  },
-  arrow: {
-    color: Colors.almost_black,
-  },
-}));
-
 const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipClasses();
+  const classes = tooltipStyles();
   return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };
 
