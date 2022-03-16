@@ -24,7 +24,7 @@ import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../hel
 import { getShouldShowUpgradeForRecord, isFormWithInlineApproval, isInlineFormApproved } from "../../helpers/records";
 import { isDocumentNumericRelease } from "../../helpers/revisionStage";
 import InspectionControlsContainer from "../../InspectionControls/InspectionControls.container";
-import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container.new";
+import { FormHeaderContext, isOwnerContext } from "../DocumentRevisionForm.container";
 import { withActionButton } from "./ActionButton.wrap";
 import ApproveAndRelease from "./approve.and.release/ApproveAndRelease";
 import CancelButton from "./CancelButton";

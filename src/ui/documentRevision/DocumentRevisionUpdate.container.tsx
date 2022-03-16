@@ -15,7 +15,7 @@ import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import { isOperator } from "./DocumentRevisionDisplay.container";
-import DocumentRevisionForm from "./forms/DocumentRevisionForm.container.new";
+import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";

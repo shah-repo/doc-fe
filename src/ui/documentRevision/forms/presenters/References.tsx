@@ -23,4 +23,5 @@ export const References: React.FunctionComponent<Props> = ({
   );
 };
 
-export default References;
+// TODO: Remove this in 22.3 as new component created for this
+References;

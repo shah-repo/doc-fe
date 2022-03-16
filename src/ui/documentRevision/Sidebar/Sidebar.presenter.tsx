@@ -129,4 +129,5 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SidebarPresenter;
+// TODO: Remove this in 22.3 as new component created for this
+SidebarPresenter;

@@ -8,7 +8,7 @@ import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
-import DocumentRevisionForm from "./forms/DocumentRevisionForm.container.new";
+import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
 

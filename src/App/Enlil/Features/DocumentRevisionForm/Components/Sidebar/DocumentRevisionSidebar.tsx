@@ -199,4 +199,5 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   </Observer>
 );
 
-export default withDocumentRevisionSidebarWrap(DocumentRevisionSidebar);
+// TODO: Remove this in 22.3 as new component created for this
+withDocumentRevisionSidebarWrap(DocumentRevisionSidebar);
