@@ -11,7 +11,6 @@ import FormMessage from "../../../../../../ui/components/forms/FormMessage";
 import FormProgress from "../../../../../../ui/components/forms/FormProgress";
 import SubmitButton from "../../../../../../ui/components/forms/SubmitButton";
 import Text from "../../../../../../ui/components/Text";
-import { StyledButton } from "../StyledListButton";
 import { StyledMenuListIcon } from "../StyledMenuListIcon";
 import { StyledMenuListItem } from "../StyledMenuListItem";
 import { StyledMenuListItemText } from "../StyledMenuListITemText";
@@ -22,7 +21,6 @@ interface OwnProps {
   currentOwner: Owner;
   asyncState: AsyncState;
   isDialogOpen: boolean;
-  renderAsButton: boolean;
   closeDialog: () => void;
   openDialog: () => void;
 }
@@ -33,7 +31,6 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
   currentOwner,
   asyncState,
   isDialogOpen,
-  renderAsButton,
   closeDialog,
   openDialog,
 }) => {
@@ -110,29 +107,17 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
 
   return (
     <>
-      {renderAsButton && (
-        <StyledButton
-          color="primary"
+      <StyledMenuListItem button alignItems="flex-start">
+        <StyledMenuListIcon>
+          <ChangeOwnerIcon />
+        </StyledMenuListIcon>
+        <StyledMenuListItemText
           id="OwnerChangerPresenter-changeOwner"
           data-cy="changeOwner"
+          primary={<Text translation="change.owner" />}
           onClick={openDialog}
-        >
-          <Text translation="change.owner" />
-        </StyledButton>
-      )}
-      {!renderAsButton && (
-        <StyledMenuListItem button alignItems="flex-start">
-          <StyledMenuListIcon>
-            <ChangeOwnerIcon />
-          </StyledMenuListIcon>
-          <StyledMenuListItemText
-            id="OwnerChangerPresenter-changeOwner"
-            data-cy="changeOwner"
-            primary={<Text translation="change.owner" />}
-            onClick={openDialog}
-          />
-        </StyledMenuListItem>
-      )}
+        />
+      </StyledMenuListItem>
       {dialogRenderer()}
     </>
   );
