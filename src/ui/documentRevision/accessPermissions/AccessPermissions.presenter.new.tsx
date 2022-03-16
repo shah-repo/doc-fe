@@ -201,7 +201,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
                 <>
-                  <Box width={203} height={40}>
+                  <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={employeeSelectOptions}
                       onChange={(e) => saveValue(e)}
@@ -276,7 +276,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
             <ListItem disableGutters className={classes.collapseListItem}>
               <ListItemText>
                 <>
-                  <Box width={203} height={40}>
+                  <Box width={203} height={40} fontFamily="Sora">
                     <Select
                       options={groupSelectOptions}
                       placeholder={intl.formatMessage({
@@ -317,11 +317,11 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                 </>
                 {isVisible && (
                   <>
-                    <Typography variant={TypographySize.md}>
+                    <Typography variant={TypographySize.md} className={classes.itemTitle}>
                       <Text message={label || "common.operators"} />
                     </Typography>
                     <>
-                      <Box width={203} height={40}>
+                      <Box width={203} height={40} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
                           options={operatorsSelectOptions}
