@@ -13,7 +13,7 @@ import { documentRevisionsActions, documentRevisionsSelectors } from "../../../.
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionsByIdState, DocumentRevisionStatus, Reference } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
-import Field, { FieldOwnProps } from "../../../components/forms/fields/Field.new";
+import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FBTooltip } from "../../../form.builder";
