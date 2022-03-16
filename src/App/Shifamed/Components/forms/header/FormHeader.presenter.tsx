@@ -59,28 +59,30 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
       >
         {!isCreateUrl && type}
         <Grid container={true} alignItems="center" justify="flex-end">
-          {lastSavedTimestamp && (
-            SM.isNewLayout ? (<Box
-              display="flex"
-              alignItems="center"
-              color={Colors.white}
-              className={classes.lastEdited}
-            >
-              <CloudIcon style={{ marginRight: 10 }} />
-              <Text
-                translation="form.builder.header.lastEdited"
-                values={{
-                  lastSavedTimestamp: getHumanizedFormat(lastSavedTimestamp),
-                }}
-              />
-            </Box>)
-              : (<Box alignSelf="center">
+          {lastSavedTimestamp &&
+            (SM.isNewLayout ? (
+              <Box
+                display="flex"
+                alignItems="center"
+                color={Colors.white}
+                className={classes.lastEdited}
+              >
+                <CloudIcon style={{ marginRight: 10 }} />
+                <Text
+                  translation="form.builder.header.lastEdited"
+                  values={{
+                    lastSavedTimestamp: getHumanizedFormat(lastSavedTimestamp),
+                  }}
+                />
+              </Box>
+            ) : (
+              <Box alignSelf="center">
                 <Box>
-              Last saved: &nbsp;
+                  Last saved: &nbsp;
                   {lastSavedTimestamp}
                 </Box>
-              </Box>)
-          )}
+              </Box>
+            ))}
           {SM.isNewLayout && !isCreateUrl ? (
             <NewDocRevActions {...{ isCreateDocumentDisabled }} />
           ) : (
