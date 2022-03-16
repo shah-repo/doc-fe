@@ -9,16 +9,12 @@ import Text from "../../../../../ui/components/Text";
 import useActionCreator from "../../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../../ui/hooks/useAsync";
 import { StyledButton } from "./StyledListButton";
-import { StyledMenuListItem } from "./StyledMenuListItem";
-import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 interface Props {
   pdf?: PDF;
-  renderAsButton: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
   pdf,
-  renderAsButton,
 }) => {
   const intl = useIntl();
   const action = useActionCreator(attachmentsActions.getAssetUrl);
@@ -42,29 +38,14 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
 
   const isActive = async.asyncState.status === AsyncStatus.Active;
   return (
-    <>
-      {renderAsButton && (<StyledButton
-        color="primary"
-        disabled={isActive}
-        data-cy="downloadHtml"
-        onClick={handleClick}
-      >
-        <Text translation="common.download.html" />
-      </StyledButton>)}
-      {!renderAsButton && (
-        <StyledMenuListItem button disabled={isActive} alignItems="flex-start">
-          {/* TODO: needs to add menu item icon */}
-          {/* <StyledMenuListIcon>
-            <DownloadHtmlIcon />
-          </StyledMenuListIcon> */}
-          <StyledMenuListItemText
-            primary={<Text translation="common.download.html" />}
-            data-cy="downloadHtml"
-            onClick={handleClick}
-          />
-        </StyledMenuListItem>
-      )}
-    </>
+    <StyledButton
+      color="primary"
+      disabled={isActive}
+      data-cy="downloadHtml"
+      onClick={handleClick}
+    >
+      <Text translation="common.download.html" />
+    </StyledButton>
   );
 
 };

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useIntl } from "react-intl";
-import { ReactComponent as SendToEmailIcon } from "../../../../../assets/images/send_to_email.svg";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import {
   toastError,
@@ -10,20 +9,15 @@ import Text from "../../../../../ui/components/Text";
 import useActionCreator from "../../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../../ui/hooks/useAsync";
 import { StyledButton } from "./StyledListButton";
-import { StyledMenuListIcon } from "./StyledMenuListIcon";
-import { StyledMenuListItem } from "./StyledMenuListItem";
-import { StyledMenuListItemText } from "./StyledMenuListITemText";
 
 interface Props {
   revisionId: string;
   canAccess: boolean;
-  renderAsButton: boolean;
 }
 
 const ExportToEmail: React.FunctionComponent<Props> = ({
   revisionId,
   canAccess,
-  renderAsButton,
 }) => {
   const intl = useIntl();
   const async = useAsync({
@@ -50,29 +44,13 @@ const ExportToEmail: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <>
-      {renderAsButton && (
-        <StyledButton
-          color="primary"
-          data-cy="exportToEmail"
-          onClick={handleClick}
-        >
-          <Text translation="common.send.to.email" />
-        </StyledButton>
-      )}
-      {!renderAsButton && (
-        <StyledMenuListItem button alignItems="flex-start">
-          <StyledMenuListIcon>
-            <SendToEmailIcon />
-          </StyledMenuListIcon>
-          <StyledMenuListItemText
-            primary={<Text translation="common.send.to.email" />}
-            data-cy="exportToEmail"
-            onClick={handleClick}
-          />
-        </StyledMenuListItem>
-      )}
-    </>
+    <StyledButton
+      color="primary"
+      data-cy="exportToEmail"
+      onClick={handleClick}
+    >
+      <Text translation="common.send.to.email" />
+    </StyledButton>
   );
 };
 

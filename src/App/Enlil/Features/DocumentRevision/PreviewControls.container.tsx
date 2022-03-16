@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { default as NewCloneEBButton } from "../../../../App/Shifamed/Components/forms/presenters/CopyEBButton";
-import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import NewCloneEBButton from "../../../../App/Shifamed/Components/forms/presenters/CopyEBButton";
 import { ReactComponent as WarningIcon } from "../../../../assets/images/warning_white.svg";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -12,11 +11,11 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../../../state/ducks/documents";
 import { ApplicationState } from "../../../../state/reducers";
 import AlertDialog from "../../../../ui/app/alert.dialog/AlertDialog";
-import { RequestType } from "../../../../ui/components/common/owner.changer/helpers/types";
 import { toastInfo } from "../../../../ui/components/notifications";
 import Text from "../../../../ui/components/Text";
+import PDFSocket from "../../../../ui/document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../../../../ui/document.revision/utils/paths";
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "../../../../ui/documentRevision/helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "../../../../ui/documentRevision/InspectionControls/InspectionControls.container";
@@ -27,12 +26,9 @@ import useActionCreator from "../../../../ui/hooks/useActionCreator";
 import useAsync from "../../../../ui/hooks/useAsync";
 import useDialog from "../../../../ui/hooks/useDialog";
 import Colors from "../../../../ui/layout/theme/utils/colors";
-import HeaderMenu from "../../../Shifamed/Components/forms/header/Menu";
-import FormOwnerChangerContainer from "../../../Shifamed/Components/forms/presenters/change.owner/container";
 import DownloadHTML from "../../../Shifamed/Components/forms/presenters/download.html";
 import ExportToEmail from "../../../Shifamed/Components/forms/presenters/ExportToEmail";
-import { StyledMenuListItem } from "../../../Shifamed/Components/forms/presenters/StyledMenuListItem";
-import { StyledMenuListItemText } from "../../../Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { StyledButton } from "../../../Shifamed/Components/forms/presenters/StyledListButton";
 
 interface OwnProps {
   documentRevision: DocumentRevision;
@@ -45,15 +41,31 @@ interface StateProps {
   disableCreateNewVersion: boolean;
 }
 
-type PreviewControlsContainerProps = OwnProps & StateProps & RouteComponentProps;
+type PreviewControlsContainerProps = OwnProps &
+StateProps &
+RouteComponentProps;
 
-const getDisableCreateNewVersion = documentRevisionsSelectors.makeGetDisableCreateNewVersion();
-const mapStateToProps = (state: ApplicationState, props: OwnProps): StateProps => ({
-  disableCreateNewVersion: getDisableCreateNewVersion(state, props.documentRevision.document.id),
+const getDisableCreateNewVersion =
+  documentRevisionsSelectors.makeGetDisableCreateNewVersion();
+const mapStateToProps = (
+  state: ApplicationState,
+  props: OwnProps
+): StateProps => ({
+  disableCreateNewVersion: getDisableCreateNewVersion(
+    state,
+    props.documentRevision.document.id
+  ),
 });
 
-const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainerProps> = ({
-  documentRevision, history, disableCreateNewVersion, canShowCreateVersionButton, hasAccess, canChangeOwnerShip,
+const PreviewControlsContainer: React.FunctionComponent<
+  PreviewControlsContainerProps
+> = ({
+  documentRevision,
+  history,
+  disableCreateNewVersion,
+  canShowCreateVersionButton,
+  hasAccess,
+  canChangeOwnerShip,
 }) => {
   const handleCreateDocument = useHandleCreateDoc();
   const {
@@ -71,24 +83,37 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     documentRevisionsSelectors.getDocument(state, formDocumentId)
   );
   const email = useSelector(authSelectors.currentUserEmail);
-  const isUserDocumentOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
+  const isUserDocumentOwner = documentRevision?.owner
+    ? documentRevision?.owner.user.email === email
+    : true;
   const isStatusInReview = isDocumentRevisionInReview(documentRevision.status);
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
-  const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
+  const isExportable =
+    !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
   const isLastVersionObsolete = () => {
-    if (checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)) {
+    if (
+      checkIsDocumentRecord(selectedDocument.document.documentType.groupOptions)
+    ) {
       return;
     }
     return formDocuments && getIsLastVersionObsolete(formDocuments);
   };
 
-  const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
-  && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
-    .find((type) => type.documentTypeName === "Approval Request" || type.documentTypeName === "Change Request");
+  const isAR =
+    (documentRevision.formTemplate
+      ?.outputDocumentTypes as FBOutputDocumentType[]) &&
+    (
+      documentRevision.formTemplate
+        ?.outputDocumentTypes as FBOutputDocumentType[]
+    ).find(
+      (type) =>
+        type.documentTypeName === "Approval Request" ||
+        type.documentTypeName === "Change Request"
+    );
 
   useEffect(() => {
     if (formDocumentId) {
@@ -98,14 +123,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   }, [formDocumentId]);
   const dialog = useDialog();
   const asyncWithdraw = useAsync<DocumentRevisionTransitionResponse>();
-  const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
+  const applyTransition = useActionCreator(
+    documentRevisionsActions.applyTransition
+  );
 
   const withdrawAction = () => {
     asyncWithdraw.start(
       applyTransition,
       documentRevision.id,
       "withdrawn",
-      asyncWithdraw,
+      asyncWithdraw
     );
   };
 
@@ -116,9 +143,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     },
   });
   const selectedDocument = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id));
+    documentRevisionsSelectors.getDocumentRevision(state, documentRevision.id)
+  );
 
-  const cloneDocument = () => history.push(documentNewVersionPath(documentRevision.id, documentRevision.document.id));
+  const cloneDocument = () =>
+    history.push(
+      documentNewVersionPath(documentRevision.id, documentRevision.document.id)
+    );
 
   const cloneOutputDocument = () => {
     if (isAR) {
@@ -129,79 +160,56 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     handleCreateDocument(documentRevision);
   };
 
-  const canCreate = () => canCreateNewVersion(documentRevision, disableCreateNewVersion, canShowCreateVersionButton);
+  const canCreate = () =>
+    canCreateNewVersion(
+      documentRevision,
+      disableCreateNewVersion,
+      canShowCreateVersionButton
+    );
 
-  const renderCloneButton = (renderAsButton: boolean) => {
+  const renderCloneButton = () => {
     if (hasAccess && canCreate() && showRevise) {
       return (
         <CustomLabelTooltip {...{ tooltipConfig }}>
-          <>
-            {renderAsButton && (
-              <StyledButton
-                color="primary"
-                id="PreviewControlsContainer-revise"
-                data-cy="updateRecord"
-                onClick={cloneDocument}
-              >
-                <Text message={reviseLabel} />
-              </StyledButton>
-            )}
-            {!renderAsButton && (
-              <StyledMenuListItem button alignItems="flex-start">
-                {/* TODO: needs to add menu item icon */}
-                {/* <StyledMenuListIcon>
-                  <DownloadCloneIcon />
-                </StyledMenuListIcon> */}
-                <StyledMenuListItemText
-                  primary={<Text message={reviseLabel} />}
-                  data-cy="updateRecord"
-                  onClick={cloneDocument}
-                />
-              </StyledMenuListItem>
-            )}
-          </>
+          <StyledButton
+            color="primary"
+            onClick={cloneDocument}
+            id="PreviewControlsContainer-revise"
+            data-cy="updateRecord"
+          >
+            <Text message={reviseLabel} />
+          </StyledButton>
         </CustomLabelTooltip>
       );
     }
   };
 
-  const renderOutputButton = (renderAsButton: boolean) => {
-    const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
-      && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
-        .find((type) => type.documentTypeName === "Approval Request");
+  const renderOutputButton = () => {
+    const isAR =
+      (documentRevision.formTemplate
+        ?.outputDocumentTypes as FBOutputDocumentType[]) &&
+      (
+        documentRevision.formTemplate
+          ?.outputDocumentTypes as FBOutputDocumentType[]
+      ).find((type) => type.documentTypeName === "Approval Request");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return (
-        <>
-          {renderAsButton && ( <StyledButton
-            color="primary"
-            id="PreviewControlsContainer-createNew"
-            data-cy="PreviewControlsContainer-createNew"
-            onClick={cloneOutputDocument}
-          >
-            <Text translation={"common.create.new"} />
-          </StyledButton>
-          )}
-          {!renderAsButton && (
-            <StyledMenuListItem button alignItems="flex-start">
-              {/* TODO: needs to add menu item icon */}
-              {/* <StyledMenuListIcon>
-                <CreateOutputIcon />
-              </StyledMenuListIcon> */}
-              <StyledMenuListItemText
-                primary={<Text translation="common.create.new" />}
-                id="PreviewControlsContainer-createNew"
-                data-cy="PreviewControlsContainer-createNew"
-                onClick={cloneOutputDocument}
-              />
-            </StyledMenuListItem>
-          )}
-        </>
+        <StyledButton
+          color="primary"
+          onClick={cloneOutputDocument}
+          id="PreviewControlsContainer-createNew"
+          data-cy="PreviewControlsContainer-createNew"
+        >
+          <Text translation={"common.create.new"} />
+        </StyledButton>
       );
     }
   };
 
-  const sendEmailAccessRequest = useActionCreator(documentsActions.sendEmailAccessRequest);
+  const sendEmailAccessRequest = useActionCreator(
+    documentsActions.sendEmailAccessRequest
+  );
 
   const onSubmit = () => {
     async.start(
@@ -212,164 +220,90 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
           id: selectedDocument.owner.id,
         },
       },
-      async);
+      async
+    );
   };
 
-  const renderRequestAccessButton = (renderAsButton: boolean) => !hasAccess && !isEmailSent && (
-    <>
-      {renderAsButton && (<StyledButton
-        color="primary"
-        id="PreviewControlsContainer-access"
-        data-cy="PreviewControlsContainer-access"
-        onClick={onSubmit}
-      >
-        <Text translation="document.request.access" />
-      </StyledButton>
-      )}
-      {!renderAsButton && (
-        <StyledMenuListItem button alignItems="flex-start">
-          {/* TODO: needs to add menu item icon */}
-          {/* <StyledMenuListIcon>
-            <RequestAccessIcon />
-          </StyledMenuListIcon> */}
-          <StyledMenuListItemText
-            primary={<Text translation="document.request.access" />}
-            id="PreviewControlsContainer-access"
-            data-cy="PreviewControlsContainer-access"
-            onClick={onSubmit}
-          />
-        </StyledMenuListItem>
-      )}
-    </>
-  );
+  const renderNoAccessWarning = () => {
+    if (!hasAccess) {
+      return (
+        <div style={{ display: "flex" }}>
+          <Box
+            alignSelf="center"
+            id="PreviewControlsContainer-warning"
+            color={Colors.white}
+            alignContent="center"
+          >
+            <Grid container alignItems="center">
+              <Grid item>
+                <WarningIcon
+                  style={{ marginTop: 2, marginRight: 10, width: "20px", height: "20px", color: Colors.white }}
+                />
+              </Grid>
+              <Grid item>
+                <Text translation="document.security.warning" />
+              </Grid>
+            </Grid>
+          </Box>
+          {!isEmailSent && (
+            <StyledButton
+              color="primary"
+              onClick={onSubmit}
+              id="PreviewControlsContainer-access"
+              data-cy="PreviewControlsContainer-access"
+            >
+              <Text translation="document.request.access" />
+            </StyledButton>
+          )}
+        </div>
+      );
+    }
+  };
 
-  const renderNoAccessWarning = () => !hasAccess && (
-    <Box
-      alignSelf="center"
-      id="PreviewControlsContainer-warning"
-      color={Colors.white}
-      alignContent="center"
-    >
-      <Grid container={true} alignItems="center">
-        <Grid item>
-          <WarningIcon
-            style={{ marginRight: 10, width: "20px", height: "20px", color: Colors.white }}
-          />
-        </Grid>
-        <Grid item>
-          <Text translation="document.security.warning" />
-        </Grid>
-      </Grid>
-    </Box>
-  );
-
-  const renderWithdrawSubmissionButton = (renderAsButton: boolean) =>
+  const renderWithdrawSubmissionButton = () => (
     <>
-      {renderAsButton && (<StyledButton
+      <StyledButton
         color="primary"
-        data-cy="document.revision.withdraw.alert"
         onClick={dialog.open}
+        data-cy="document.revision.withdraw.alert"
       >
-        <Text translation="changeRequest.transition.withdrawn" />
+        <Text message={"withdraw submission"} />
       </StyledButton>
-      )}
-      {!renderAsButton && (
-        <StyledMenuListItem button alignItems="flex-start">
-          {/* TODO: needs to add menu item icon */}
-          {/* <StyledMenuListIcon>
-            <WithdrawSubmissionIcon />
-          </StyledMenuListIcon> */}
-          <StyledMenuListItemText
-            primary={<Text translation="changeRequest.transition.withdrawn" />}
-            data-cy="document.revision.withdraw.alert"
-            onClick={dialog.open}
-          />
-        </StyledMenuListItem>
-      )}
       <AlertDialog
         confirmAction={withdrawAction}
         message={"document.revision.withdraw.alert"}
         {...{ dialog }}
       />
-    </>;
+    </>
+  );
 
-  const accessableButtons: string[] = [];
-
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
-    accessableButtons.push("cloneButton");
-  }
-  if ((isStatusReleased || isStatusInDraft) && canCopy) {
-    accessableButtons.push("newcloneButton");
-  }
-
-  if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
-    accessableButtons.push("outputButton");
-  }
-  if (!hasAccess && !isEmailSent) {
-    accessableButtons.push("requestAccessButton");
-  }
-  if (isDirectApproval && isStatusInReview && isUserDocumentOwner) {
-    accessableButtons.push("withdrawSubmission");
-  }
-
-  const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
-  const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
-  const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
-
-  if (!(isDocumentDraft || canCreateInspection)) {
-    accessableButtons.push("inspectionControl");
-  }
-  if (documentRevision.pdf) {
-    accessableButtons.push("pdf");
-  }
-  if (canChangeOwnerShip) {
-    accessableButtons.push("changeowner");
-  }
-  if (isExportable) {
-    accessableButtons.push("exportToEmail");
-  }
-  const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
-  const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
-
-  const renderActionItems = (buttons: string[], renderAsButton: boolean) => (
+  return (
     <>
-      {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
-      {buttons.includes("newcloneButton") && (
-        <NewCloneEBButton {...{ documentRevision, renderAsButton }} />
+      {!isLastVersionObsolete() && renderCloneButton()}
+      {(isStatusReleased || isStatusInDraft) && canCopy && (
+        <NewCloneEBButton {...{ documentRevision }} />
       )}
-      {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
-      {buttons.includes("requestAccessButton") && renderRequestAccessButton(renderAsButton)}
-      {buttons.includes("withdrawSubmission") &&
-        renderWithdrawSubmissionButton(renderAsButton)}
-      {buttons.includes("inspectionControl") && (
-        <InspectionControlsContainer {...{ documentRevision, renderAsButton }} />
-      )}
-      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} />}
-      {buttons.includes("changeowner") && (
-        <FormOwnerChangerContainer
-          requestId={documentRevision.id}
-          requestType={RequestType.Document}
-          renderAsButton={renderAsButton}
-        />
-      )}
-      {buttons.includes("exportToEmail") && (
+      {renderOutputButton()}
+      {renderNoAccessWarning()}
+      {isDirectApproval &&
+        isStatusInReview &&
+        isUserDocumentOwner &&
+        renderWithdrawSubmissionButton()}
+      <InspectionControlsContainer {...{ documentRevision }} />
+      {isExportable && (
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
-          renderAsButton={renderAsButton}
         />
       )}
-    </>
-  );
-  return (
-    <>
-      {renderNoAccessWarning()}
-      {renderActionItems(initialButtons, true)}
-      <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
+      <DownloadHTML pdf={documentRevision.pdf}/>
+      <PDFSocket {...{ documentRevision }} />
     </>
   );
 };
 
 const PreviewControlsContainerWithRouter = withRouter(PreviewControlsContainer);
 
-export default connect<StateProps, {}, OwnProps, ApplicationState>(mapStateToProps)(PreviewControlsContainerWithRouter);
+export default connect<StateProps, {}, OwnProps, ApplicationState>(
+  mapStateToProps
+)(PreviewControlsContainerWithRouter);

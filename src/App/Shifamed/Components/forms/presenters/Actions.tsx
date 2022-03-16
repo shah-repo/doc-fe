@@ -357,7 +357,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes("inspectionControl") && (
-        <InspectionControlsContainer {...{ documentRevision, renderAsButton }}/>
+        <InspectionControlsContainer {...{ documentRevision }}/>
       )}
       {buttons.includes("redlineButton") && (
         <RedlineButton
@@ -365,7 +365,7 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         />
       )}
       {buttons.includes("NewCloneEB") && (
-        <NewCloneEBButton {...{ documentRevision, renderAsButton }} />
+        <NewCloneEBButton {...{ documentRevision }} />
       )}
       {buttons.includes("exportCsvButton") && (
         <ExportToCSVButton {...{ documentRevision }} />
@@ -384,7 +384,6 @@ const NewDocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
         <ExportToEmail
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
-          renderAsButton={renderAsButton}
         />
       )}
     </>
