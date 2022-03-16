@@ -1895,7 +1895,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Select expired equipment", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+      cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
       cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
     });
 

@@ -755,13 +755,11 @@ context("Bulk create record headers", () => {
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Revised document for bulk creation").arrowClick();
+        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Revised document for bulk creation");
       });
 
-      it("Select wrong document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Suppliers").arrowClick();
+      it("Select document type to be used for bulk creation", () => {
+        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Suppliers");
       });
 
       it("Select 'no' to have Document id column", () => {
