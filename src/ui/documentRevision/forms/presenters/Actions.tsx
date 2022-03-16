@@ -50,6 +50,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     canChangeOwnerShip,
     type,
   } = React.useContext(FormHeaderContext)!;
+  const isCreateUrl = SM.pathname.includes("document_revision/create");
   const redlineActive = useSelector(companySelectors.getRedlineActive);
   const { revisionStage, revisionChangeType, owner, updatedAt } = documentRevision || {};
   const documentTypeId = documentRevision?.document?.documentType?.id || "";
@@ -270,7 +271,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           revisionId={documentRevision.id}
           canAccess={documentRevision.document.canAccess}
         />}
-        <HeaderMenu>
+        { !isCreateUrl && (<HeaderMenu>
           {!(isRecord && isInlineApproval && showVoidButtonOnInlineRecords) &&
         <CancelButton
           {...{ documentRevision }}
@@ -290,7 +291,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           isUserDocumentOwner && showVoidButton && <VoidButton {...{ documentRevision }}/>}
           {isRecord && isInlineApproval &&
           isUserDocumentOwner && showVoidButtonOnInlineRecords && <VoidButton {...{ documentRevision }}/>}
-        </HeaderMenu>
+        </HeaderMenu> )}
       </span>
       }
     </div>

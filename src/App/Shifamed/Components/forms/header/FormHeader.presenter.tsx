@@ -51,9 +51,8 @@ const NewFormHeaderPresenter: React.FunctionComponent<Props> = ({ isCreateDocume
             </Box>
             }
           </Box>
-          {SM.isNewLayout ? (
-            isCreateUrl ? <DocRevActions {...{ isCreateDocumentDisabled }} />
-              : <NewDocRevActions {...{ isCreateDocumentDisabled }} />
+          {SM.isNewLayout && !isCreateUrl ? (
+            <NewDocRevActions {...{ isCreateDocumentDisabled }} />
           ) : (
             <DocRevActions {...{ isCreateDocumentDisabled }} />
           )}
